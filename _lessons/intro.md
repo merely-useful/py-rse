@@ -2,9 +2,9 @@
 layout: default
 permalink: "/intro/"
 title: "Introduction"
-objectives:
-- "FIXME: first objective with `code`"
-- "FIXME: second objective"
+questions:
+- "FIXME: first question with `code`"
+- "FIXME: second question"
 keypoints:
 - "FIXME: first key point with *em* and `code`"
 - "FIXME: second key point"
