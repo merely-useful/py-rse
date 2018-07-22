@@ -3,13 +3,16 @@ Display a section of the table of contents.
 - title: the TOC section title.
 - toc: a section of the table of contents from _config.yml.
 - coll: the corresponding collection.
+- language: the two-letter code for the page language (e.g., 'en' for English).
 {% endcomment %}
 
 {% if include.title %}<p><strong>{{include.title}}</strong></p>{% endif %}
 <ul>
+  {% assign prefix = '/' | append: include.language | append: '/' %}
   {%- for toc_entry in include.toc -%}
     {%- for item in include.coll -%}
-      {%- if toc_entry == item.permalink -%}
+      {% assign key = item.permalink | replace: prefix, '/' %}
+      {%- if toc_entry == key -%}
   <li>{% if page.permalink == item.permalink %}<strong>{% endif %}
       <a href="{{item.permalink | relative_url}}">{{item.title}}</a>
       {% if page.permalink == item.permalink %}</strong>{% endif %}

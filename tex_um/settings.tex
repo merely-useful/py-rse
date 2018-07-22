@@ -1,0 +1,107 @@
+\usepackage{tgbonum}
+
+% Use numbers for nested lists all the way down.
+%TC:ignore
+\usepackage{enumitem}
+\setlist[enumerate,1]{label=\arabic*., ref=\arabic*}
+\setlist[enumerate,2]{label=\arabic*., ref=\arabic*}
+\setlist[enumerate,3]{label=\arabic*., ref=\arabic*}
+%TC:endignore
+
+\usepackage{longtable}
+
+\usepackage{tocloft}
+% \setlength{\cftpartnumwidth}{2em}
+% \setlength{\cftchapternumwidth}{2em}
+\setlength{\cftsectionnumwidth}{3.5em}
+
+\setlrmarginsandblock{0.5in}{0.5in}{*}
+\setulmarginsandblock{0.6in}{0.6in}{*}
+\checkandfixthelayout
+
+\usepackage{etoolbox}
+\patchcmd{\quote}{\rightmargin}{\leftmargin 1em \rightmargin}{}{}
+\AtBeginEnvironment{quote}{\itshape}
+
+\chapterstyle{southall}
+
+\setlist[enumerate]{leftmargin=2.0em}
+\setlist[itemize]{leftmargin=1.5em}
+
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+
+\usepackage{charter}
+
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+% make description items cross-referenceable
+\def\namedlabel#1#2{\begingroup
+    #2%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+\makeatother
+
+% change hanging indentation for description environment
+\makeatletter
+\renewenvironment{description}%
+  {\list{}{\leftmargin=1em % <------- Adjust this length
+    \labelwidth\z@ \itemindent-\leftmargin
+    \let\makelabel\descriptionlabel}}%
+  {\endlist}
+\makeatother
+
+% need mdframed for objectives environment
+\usepackage{mdframed}
+
+% less space between items in lists
+\tightlists
+
+% change indentation of footnotes
+\setlength{\footmarkwidth}{0em}
+\setlength{\footmarksep}{0em}
