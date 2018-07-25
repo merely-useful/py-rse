@@ -22,6 +22,7 @@ WORDS_SRC=misc/${lang}.txt
 ALL_MD=$(wildcard ${DIR_MD}/*.md)
 CHAPTERS_MD=$(filter-out ${DIR_MD}/bib.md ${DIR_MD}/index.md,${ALL_MD})
 CHAPTERS_TEX=$(patsubst ${DIR_MD}/%.md,${DIR_TEX}/inc/%.tex,${CHAPTERS_MD})
+ALL_TEX=${CHAPTERS_TEX} ${DIR_TEX}/book.tex ${DIR_TEX}/frontmatter.tex tex/settings.tex tex/macros.tex
 CHAPTERS_HTML=$(patsubst ${DIR_MD}/%.md,${DIR_WEB}/%.html,${ALL_MD})
 ALL_HTML=all-${lang}.html
 
@@ -53,7 +54,7 @@ pdf : ${DIR_TEX}/book.pdf
 ## tex        : generate LaTeX for book, but don't compile to PDF.
 tex : ${CHAPTERS_TEX}
 
-${DIR_TEX}/book.pdf : ${CHAPTERS_TEX} ${DIR_TEX}/book.bib
+${DIR_TEX}/book.pdf : ${ALL_TEX} ${DIR_TEX}/book.bib
 	@cd ${DIR_TEX} \
 	&& ${LATEX} book \
 	&& ${BIBTEX} book \
