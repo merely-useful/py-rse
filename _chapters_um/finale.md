@@ -1,7 +1,7 @@
 ---
 layout: default
-permalink: "/um/conclusion/"
-title: "Conclusion"
+permalink: "/um/finale/"
+title: "Finale"
 ---
 
 In ornare quam viverra orci sagittis eu. Blandit turpis cursus in hac

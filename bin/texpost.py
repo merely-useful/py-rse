@@ -12,7 +12,8 @@ import yaml
 
 STRINGS = [(r'\/-', '-'),
            (r'\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}', ''),
-           (r'\def\labelenumi{\arabic{enumi}.}', '')]
+           (r'\def\labelenumi{\arabic{enumi}.}', ''),
+           (r'\tightlist', '')]
 UNTEX = [('_', r'\_'), ('%', r'\%'), ('#', r'\#'), ('\n', ' ')]
 STACK = []
 
@@ -115,23 +116,26 @@ def secref(m):
 secref.pattern = rxc(r'\\protect\\hyperlink{SECTION}{(.+?)}')
 
 
-def sectionLabel(m):
+def section(m):
     title = untex(m.group(1))
     label = m.group(2)
-    return r'\section{' + title + r'}\label{' + label + '}'
-sectionLabel.pattern = rxc(r'\\hypertarget{.+?}{%\s+\\subsection{(.+?)\s*\\{\\#(s:.+?)\\}}\\label{.+?}}')
+    if label.startswith('s:'):
+        result = r'\section{' + title + r'}\label{' + label + '}'
+    else:
+        result = r'\section*{' + title + r'}'
+    return result
+section.pattern = rxc(r'\\hypertarget{.+?}{%\s+\\subsection{(.+?)}\\label{(.+?)}}')
 
 
-def sectionStar(m):
-    return r'\section*{' + m.group(1) + '}'
-sectionStar.pattern = rxc(r'\\hypertarget{.+?}{%\s*\\subsection{(.+?)}\\label{.+?}}')
-
-
-def subsectionLabel(m):
+def subsection(m):
     title = untex(m.group(1))
     label = m.group(2)
-    return r'\subsection*{' + title + r'}\label{' + label + '}'
-subsectionLabel.pattern = rxc(r'\\hypertarget{.+?}{%\s+\\subsubsection{(.+?)\s*\\{\\#(s:.+?)\\}}\\label{.+?}}')
+    if label.startswith('s:'):
+        result = r'\subsection{' + title + r'}\label{' + label + '}'
+    else:
+        result = r'\subsection*{' + title + r'}'
+    return result
+subsection.pattern = rxc(r'\\hypertarget{.+?}{%\s+\\subsubsection{(.+?)}\\label{(.+?)}}')
 
 
 def subsectionStar(m):
@@ -140,22 +144,30 @@ subsectionStar.pattern = rxc(r'\\hypertarget{.+?}{%\s+\\subsubsection{(.+?)}\\la
 
 
 FUNCS = [appref, chapref, cite, figref, figure, glossdef, glossref,
-         hyperlink, secref, sectionLabel, sectionStar,
-         subsectionLabel, subsectionStar]
+         hyperlink, secref, section, subsection]
 
 
 def hrefSub(doc, linksPath):
-    with open(linksPath, 'r') as reader:
-        defs = re.compile(r'\[(.+?)\]\s*:\s*(.+)')
-        links = [defs.search(line) for line in reader.readlines()]
-        links = dict([(m.group(1), untex(m.group(2))) for m in links if m])
+    links = readLinks(linksPath)
 
     def replaceUse(m):
-        return r'\href{' + links.get(m.group(1), 'MISSING') + '}{' + m.group(2) + '}'
+        if m.group(1) in links:
+            result = r'\href{' + links[m.group(1)] + '}{' + m.group(2) + '}'
+        else:
+            result = m.group(0)
+        return result
 
     uses = rxc(r'\\href{(.+?)}{(.+?)}')
     doc = uses.sub(replaceUse, doc)
     return doc
+
+
+def readLinks(linksPath):
+    with open(linksPath, 'r') as reader:
+        defs = re.compile(r'\[(.+?)\]\s*:\s*(.+)')
+        links = [defs.search(line) for line in reader.readlines()]
+        links = dict([(m.group(1), untex(m.group(2))) for m in links if m])
+    return links
 
 
 def untex(x):

@@ -2,20 +2,34 @@
 
 import sys
 import re
+import yaml
 
 
+CONFIG_KEYS = ['email', 'isbn', 'purchase', 'repo', 'website']
 SINGLES = [('---', r'```'),
            ('---', r'```'),
            ('{% include links.md %}', '')]
 
 
-def main():
+def main(configPath):
+    settings = readConfig(configPath)
     doc = sys.stdin.read()
+    for key in settings:
+        doc = doc.replace(key, settings[key])
     for (src, dst) in SINGLES:
         doc = doc.replace(src, dst, 1)
     for func in FUNCS:
         doc = func.pattern.sub(func, doc)
     sys.stdout.write(doc)
+
+
+def readConfig(configPath):
+    with open(configPath, 'r') as reader:
+        config = yaml.load(reader)
+    result = {}
+    for key in CONFIG_KEYS:
+        result['{{site.' + key + '}}'] = config[key]
+    return result
 
 
 def figure(m):
@@ -41,4 +55,7 @@ FUNCS = [figure]
 
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) != 2:
+        sys.stderr.write('Usage: texpre /path/to/_config.yml\n')
+        sys.exit(1)
+    main(sys.argv[1])
