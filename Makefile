@@ -8,7 +8,7 @@ JEKYLL=jekyll
 LATEX=pdflatex
 BIBTEX=bibtex
 PANDOC=pandoc
-PANDOC_FLAGS=--from=markdown --to=latex --no-highlight
+PANDOC_FLAGS=--from=markdown --to=latex
 REPO=FIXME
 
 # Language-dependent settings.

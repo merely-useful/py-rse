@@ -32,6 +32,16 @@ def readConfig(configPath):
     return result
 
 
+def codeLang(m):
+    return '```'
+codeLang.pattern = re.compile(r'```.+')
+
+
+def codeTitle(m):
+    return ''
+codeTitle.pattern = re.compile(r'{:\s+title=".+?"}')
+
+
 def figure(m):
     body = m.group(1)
     src = figure.src.search(body).group(1)
@@ -51,7 +61,7 @@ ident = "{}"
 '''
 
 
-FUNCS = [figure]
+FUNCS = [codeLang, codeTitle, figure]
 
 
 if __name__ == '__main__':
