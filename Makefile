@@ -15,11 +15,11 @@ REPO=FIXME
 DIR_MD=_chapters_${lang}
 DIR_TEX=tex_${lang}
 DIR_WEB=_site/${lang}
-BIB_SRC=files/${lang}.bib
 WORDS_SRC=misc/${lang}.txt
 
 # Filesets.
 ALL_MD=$(wildcard ${DIR_MD}/*.md)
+BIB_SRC=${DIR_TEX}/book.bib
 CHAPTERS_MD=$(filter-out ${DIR_MD}/bib.md ${DIR_MD}/index.md,${ALL_MD})
 CHAPTERS_TEX=$(patsubst ${DIR_MD}/%.md,${DIR_TEX}/inc/%.tex,${CHAPTERS_MD})
 ALL_TEX=${CHAPTERS_TEX} ${DIR_TEX}/book.tex ${DIR_TEX}/frontmatter.tex tex/settings.tex tex/macros.tex
@@ -54,7 +54,7 @@ pdf : ${DIR_TEX}/book.pdf
 ## tex        : generate LaTeX for book, but don't compile to PDF.
 tex : ${CHAPTERS_TEX}
 
-${DIR_TEX}/book.pdf : ${ALL_TEX} ${DIR_TEX}/book.bib
+${DIR_TEX}/book.pdf : ${ALL_TEX} ${BIB_SRC}
 	@cd ${DIR_TEX} \
 	&& ${LATEX} book \
 	&& ${BIBTEX} book \
@@ -69,9 +69,6 @@ ${DIR_TEX}/inc/%.tex : ${DIR_MD}/%.md bin/texpre.py bin/texpost.py _includes/lin
 	| ${PANDOC} ${PANDOC_FLAGS} -o - \
 	| bin/texpost.py _includes/links.md \
 	> $@
-
-${DIR_TEX}/book.bib : ${BIB_SRC}
-	cp $< $@
 
 ## bib        : rebuild Markdown bibliography from BibTeX source.
 bib : ${DIR_MD}/bib.md
@@ -150,7 +147,7 @@ nonascii :
 
 ## clean      : clean up junk files.
 clean :
-	@rm -rf _site ${DIR_TEX}/book.bib ${CHAPTERS_TEX} */*.aux */*.bbl */*.blg */*.log */*.out */*.toc
+	@rm -rf _site ${CHAPTERS_TEX} */*.aux */*.bbl */*.blg */*.log */*.out */*.toc
 	@find . -name .DS_Store -exec rm {} \;
 	@find . -name '*~' -exec rm {} \;
 
