@@ -1,16 +1,31 @@
 {% if include.language == 'en' %}
   {% assign chapters = site.chapters_en %}
+  {% assign licensepath = '/en/license/' %}
 {% elsif include.language == 'um' %}
   {% assign chapters = site.chapters_um %}
+  {% assign licensepath = '/um/license/' %}
 {% endif %}
 <nav>
   {% if page.root %}<strong><a href="./">{% else %}<a href="../">{% endif %}
     <img src="{{'/files/logo.svg'|relative_url}}" alt="{{site.title}} logo" width="50%" />
     <p><em>{{site.title}}</em></p>
   {% if page.root %}</a></strong>{% else %}</a>{% endif %}
+  <p>
+    ({% if page.root %}<a href="./all.html">{% else %}<a href="../all.html">{% endif %}Single page version</a>)
+  </p>
+  <hr/>
   {% include toc-section.html language=include.language coll=chapters title="Lessons" toc=site.toc.lessons %}
   <hr/>
   {% include toc-section.html language=include.language coll=chapters title="Extras"  toc=site.toc.extras %}
+  {% if site.purchase %}
+  <hr/>
+  <p>
+    <a href="{{site.purchase}}"><img src="{{'/files/lulu.gif'|relative_url}}" border="0" alt="{{site.translations[page.language].lulu}}" /></a>
+  </p>
+  <p>
+    {{site.translations[page.language].donate | replace: '^1', site.paypal}}
+  </p>
+  {% endif %}
   <hr/>
   <p>
     <a href="{{'/license/'|relative_url}}"><img src="{{'/files/cc-by.svg'|relative_url}}" alt="CC-BY License" width="80%" /></a>
@@ -19,9 +34,9 @@
     <a href="mailto:{{site.email}}"><img src="{{'/files/email.svg'|relative_url}}" alt="Email" width="20%" /></a>
     <a href="{{site.repo}}"><img src="{{'/files/github.svg'|relative_url}}" alt="GitHub" width="20%" /></a>
   </p>
-  {% unless page.title %}
+  {% if page.root %}
   <p>
     <em>{{site.translations[page.language].generated}} {{site.time|date: '%Y-%m-%d'}}.</em>
   </p>
-  {% endunless %}
+  {% endif %}
 </nav>

@@ -44,7 +44,7 @@ def main(root):
     toc = {}
     for (kind, label, slug, number) in chapters + appendices:
         toc[label] = {'number': number, 'slug': slug}
-    print('let CROSSREF = {};'.format(json.dumps(toc)))
+    print('{}{}'.format(config['marker']['crossref'], json.dumps(toc)))
 
 
 def makePaths(directory, order):

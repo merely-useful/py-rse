@@ -1,19 +1,21 @@
 # Building This Book
 
+Note: `XX` is used as a stand-in for a two-letter language code, such as `en` for English or `um` for Lorem Ipsum.
+
 To rebuild this book:
 
 - `pip install -r requirements.txt` to install required Python packages.
   - You only need to do this if you are rebuilding the bibliography and/or cross-reference database.
 
-- `make bib` to regenerate the Markdown version of the bibliography (`_chapters_XX/bib.md`) from the BibTeX version (`files/t3.bib`).
+- `make lang=XX bib` to regenerate the Markdown version of the bibliography (`_chapters_XX/bib.md`) from the BibTeX version (`files/XX.bib`).
   - You only need to do this if the bibliography has changed.
 
-- `make crossref` to regenerate the JSON cross-reference table (`files/crossref.js`) from the Markdown source files.
+- `make lang=XX crossref` to regenerate the JSON cross-reference table (`files/crossref.js`) from the Markdown source files.
   - You only need to do this if there have been changes to section numbering, figure numbering, etc.
 
-- `make site` to create HTML in `_site`.
+- `make lang=XX site` to create HTML in `_site`.
 
-- `make serve -I` to dynamically regenerate HTML and serve it on `localhost:4000`.
+- `make lang=XX serve -I` to dynamically regenerate HTML and serve it on `localhost:4000`.
 
 ## Design
 
@@ -31,7 +33,7 @@ The result is:
 
 - Chapters are stored in `_chapters_XX`, where `XX` is a two-letter language code.  The underscore in front of this name, and the corresponding entry in the `_config.yml` configuration file, tell Jekyll to treat these files as a collection so that the template can iterate over them.
 
-- The root directory contains `index.md` (the overall index page) and `index_XX.md` (the home page for language `XX`).  These files are Jekylled.
+- The root directory contains an overall index page `index.md` that simply links to language-specific pages stored in `_chapters_XX/index.md`.
 
 - The root directory also contains un-Jekylled versions of the license, the code of conduct, and the citation guide, while `_chapters_XX` contains Jekylled versions of these three files.  They are duplicated because many open source projects expect these files in the root directory with these names, but managing them as special cases was proving annoying.
 
