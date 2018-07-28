@@ -107,6 +107,10 @@ years :
 
 ## ----------------------------------------
 
+## checkgloss : check that all glossary entries are defined and used.
+checkgloss :
+	@bin/checkgloss.py ${ALL_MD}
+
 ## checklinks : check that all links in source Markdown resolve.
 checklinks :
 	@bin/checklinks.py _includes/links.md ${ALL_MD}
