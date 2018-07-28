@@ -4,8 +4,8 @@ import sys
 import re
 
 
-DEF = re.compile(r'\*\*.+?\*\*{:#(g:.+?)}')
-REF = re.compile(r'\[.+?\]\(#(g:.+?)\)')
+DEF = re.compile(r'\*\*.+?\*\*{:#(g:.+?)}', re.DOTALL)
+REF = re.compile(r'\[.+?\]\(#(g:.+?)\)', re.DOTALL)
 
 
 def main(filenames):
