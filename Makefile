@@ -22,7 +22,8 @@ ALL_MD=$(wildcard ${DIR_MD}/*.md)
 BIB_SRC=${DIR_TEX}/book.bib
 CHAPTERS_MD=$(filter-out ${DIR_MD}/bib.md ${DIR_MD}/index.md,${ALL_MD})
 CHAPTERS_TEX=$(patsubst ${DIR_MD}/%.md,${DIR_TEX}/inc/%.tex,${CHAPTERS_MD})
-ALL_TEX=${CHAPTERS_TEX} ${DIR_TEX}/book.tex ${DIR_TEX}/frontmatter.tex tex/settings.tex tex/macros.tex
+EXTRAS_TEX=$(wildcard misc/*.tex)
+ALL_TEX=${CHAPTERS_TEX} ${DIR_TEX}/book.tex ${DIR_TEX}/frontmatter.tex
 CHAPTERS_HTML=$(patsubst ${DIR_MD}/%.md,${DIR_WEB}/%.html,${ALL_MD})
 ALL_HTML=all-${lang}.html
 
