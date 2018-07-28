@@ -1,7 +1,12 @@
 ---
-layout: default
 permalink: "/um/intro/"
 title: "Introduction"
+questions:
+- "Sed turpis tincidunt id aliquet risus feugiat?"
+objectives:
+- "Nullam non nisi est sit amet facilisis magna etiam."
+keypoints:
+- "Nec nam aliquam sem et."
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

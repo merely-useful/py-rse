@@ -1,5 +1,4 @@
 ---
-layout: default
 permalink: "/um/gloss/"
 title: "Glossary"
 ---

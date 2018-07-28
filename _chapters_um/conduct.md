@@ -1,5 +1,4 @@
 ---
-layout: default
 permalink: "/um/conduct/"
 title: "Code of Conduct"
 ---

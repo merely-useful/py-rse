@@ -1,5 +1,4 @@
 ---
-layout: default
 permalink: "/um/finale/"
 title: "Finale"
 ---

@@ -11,7 +11,6 @@ import bibtexparser
 
 # Constants
 HEADER = '''---
-layout: default
 permalink: "/{}/bib/"
 title: "Bibliography"
 ---
