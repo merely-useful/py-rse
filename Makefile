@@ -31,28 +31,28 @@ ALL_HTML=all-${lang}.html
 .PHONY : commands serve site bib crossref clean
 all : commands
 
-## commands   : show all commands.
+## commands    : show all commands.
 commands :
 	@grep -h -E '^##' Makefile | sed -e 's/## //g'
 
-## serve      : run a local server.
+## serve       : run a local server.
 serve :
 	${JEKYLL} serve -I
 
-## site       : build files but do not run a server.
+## site        : build files but do not run a server.
 site :
 	${JEKYLL} build
 
-## ebook      : regenerate all-in-one versions of book.
+## ebook       : regenerate all-in-one versions of book.
 ebook : ${ALL_HTML}
 
 ${ALL_HTML} : _config.yml files/crossref.js bin/mergebook.py
 	@bin/mergebook.py ${lang} _config.yml files/crossref.js ${DIR_WEB} > $@
 
-## pdf        : build PDF version of book.
+## pdf         : build PDF version of book.
 pdf : ${DIR_TEX}/book.pdf
 
-## tex        : generate LaTeX for book, but don't compile to PDF.
+## tex         : generate LaTeX for book, but don't compile to PDF.
 tex : ${CHAPTERS_TEX}
 
 ${DIR_TEX}/book.pdf : ${ALL_TEX} ${BIB_SRC}
@@ -71,13 +71,13 @@ ${DIR_TEX}/inc/%.tex : ${DIR_MD}/%.md bin/texpre.py bin/texpost.py _includes/lin
 	| bin/texpost.py _includes/links.md \
 	> $@
 
-## bib        : rebuild Markdown bibliography from BibTeX source.
+## bib         : rebuild Markdown bibliography from BibTeX source.
 bib : ${DIR_MD}/bib.md
 
 ${DIR_MD}/bib.md : ${BIB_SRC} bin/bib2md.py
 	bin/bib2md.py ${lang} < $< > $@
 
-## crossref   : rebuild cross-reference file.
+## crossref    : rebuild cross-reference file.
 crossref : files/crossref.js
 
 files/crossref.js : bin/crossref.py _config.yml ${CHAPTERS_MD}
@@ -85,53 +85,58 @@ files/crossref.js : bin/crossref.py _config.yml ${CHAPTERS_MD}
 
 ## ----------------------------------------
 
-## authors    : list all authors.
-authors :
-	@bin/authors.py ${BIB_SRC}
+## check       : check everything.
+check :
+	@make lang=${lang} checkchars
+	@make lang=${lang} checkcites
+	@make lang=${lang} checkgloss
+	@make lang=${lang} checklabels
+	@make lang=${lang} checklinks
+	@make lang=${lang} checktoc
 
-## missing    : list all missing bibliography entries.
-missing :
+## checkchars  : look for non-ASCII characters.
+checkchars :
+	@bin/checkchars.py ${ALL_MD}
+
+## checkcites  : list all missing bibliography entries.
+checkcites :
 	@bin/checkcites.py --missing ${BIB_SRC} ${CHAPTERS_TEX}
 
-## publishers : list all publishers.
-publishers :
-	@bin/fields.py ${BIB_SRC} publisher
-
-## unused     : list all unused bibliography entries.
-unused :
-	@bin/checkcites.py --unused ${BIB_SRC} ${CHAPTERS_TEX}
-
-## years      : CSV histogram of publication years.
-years :
-	@bin/years.py ${BIB_SRC}
-
-## ----------------------------------------
-
-## checkgloss : check that all glossary entries are defined and used.
+## checkgloss  : check that all glossary entries are defined and used.
 checkgloss :
 	@bin/checkgloss.py ${ALL_MD}
 
-## checklinks : check that all links in source Markdown resolve.
+## checklabels : make sure all labels conform to standards.
+checklabels :
+	@bin/checklabels.py ${CHAPTERS_TEX}
+
+## checklinks  : check that all links in source Markdown resolve.
 checklinks :
 	@bin/checklinks.py _includes/links.md ${ALL_MD}
 
-## exercises  : count exercises per chapter.
-exercises : ${CHAPTERS_TEX}
-	@bin/exercises.py ${DIR_TEX}/book.tex
+## checktoc    : check consistency of tables of contents.
+checktoc :
+	@bin/checktoc.py _config.yml ${DIR_TEX}/book.tex ${ALL_MD}
 
-## issues     : create single-page view of all GitHub issues.
+## ----------------------------------------
+
+## authors     : list all authors.
+authors :
+	@bin/authors.py ${BIB_SRC}
+
+## issues      : create single-page view of all GitHub issues.
 issues :
 	@bin/issues.py ${REPO} | ${PANDOC} -o issues.html -
 
-## labels     : make sure all labels conform to standards.
-labels :
-	@bin/checklabels.py ${CHAPTERS_TEX}
-
-## pages      : count pages per chapter.
+## pages       : count pages per chapter.
 pages : ${DIR_TEX}/book.toc
 	@bin/pages.py < ${DIR_TEX}/book.toc
 
-## spelling   : check spelling.
+## publishers  : list all publishers.
+publishers :
+	@bin/fields.py ${BIB_SRC} publisher
+
+## spelling    : check spelling.
 spelling :
 	@grep bibnote ${BIB_SRC} \
 	| cat - ${CHAPTERS_MD} \
@@ -140,23 +145,27 @@ spelling :
 	| uniq \
 	| comm -2 -3 - ${WORDS_SRC}
 
-## words      : count words per chapter.
+## unused      : list all unused bibliography entries.
+unused :
+	@bin/checkcites.py --unused ${BIB_SRC} ${CHAPTERS_TEX}
+
+## words       : count words per chapter.
 words :
 	@wc -w ${CHAPTERS_MD} | sort -n -r
 
+## years       : CSV histogram of publication years.
+years :
+	@bin/years.py ${BIB_SRC}
+
 ## ----------------------------------------
 
-## nonascii   : look for non-ASCII characters.
-nonascii :
-	@bin/nonascii.py ${CHAPTERS_MD}
-
-## clean      : clean up junk files.
+## clean       : clean up junk files.
 clean :
 	@rm -rf _site ${CHAPTERS_TEX} */*.aux */*.bbl */*.blg */*.log */*.out */*.toc
 	@find . -name .DS_Store -exec rm {} \;
 	@find . -name '*~' -exec rm {} \;
 
-## settings   : show macro values.
+## settings    : show macro values.
 settings :
 	@echo "JEKYLL=${JEKYLL}"
 	@echo "LATEX=${LATEX}"
