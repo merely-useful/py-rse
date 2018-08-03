@@ -1,8 +1,7 @@
 ---
-layout: default
-language: "um"
 permalink: "/um/"
 root: true
+redirect_from: "/"
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
