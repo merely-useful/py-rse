@@ -1,5 +1,5 @@
 ---
-permalink: "/um/bib/"
+permalink: "/en/bib/"
 title: "Bibliography"
 ---
 

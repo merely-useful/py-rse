@@ -1,1 +1,0 @@
-let CROSSREF={"s:finale": {"number": "2", "slug": "finale"}, "s:intro": {"number": "1", "slug": "intro"}, "s:license": {"number": "A", "slug": "license"}, "s:gloss": {"number": "D", "slug": "gloss"}, "s:conduct": {"number": "B", "slug": "conduct"}, "s:citation": {"number": "C", "slug": "citation"}}

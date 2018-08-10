@@ -1,5 +1,5 @@
 ---
-permalink: "/um/license/"
+permalink: "/en/license/"
 title: "License"
 ---
 
