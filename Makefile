@@ -63,7 +63,7 @@ ${DIR_TEX}/book.pdf : ${ALL_TEX} ${BIB_SRC}
 	&& ${LATEX} book \
 	&& ${LATEX} book
 
-${DIR_TEX}/inc/%.tex : _config.yml ${DIR_MD}/%.md bin/texpre.py bin/texpost.py _includes/links.md
+${DIR_TEX}/inc/%.tex : ${DIR_MD}/%.md _config.yml bin/texpre.py bin/texpost.py _includes/links.md
 	mkdir -p ${DIR_TEX}/inc && \
 	cat $< \
 	| bin/texpre.py _config.yml \
