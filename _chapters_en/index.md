@@ -38,10 +38,15 @@ This GitHub organization contains material for three semester-long courses on co
     -   Recruiting and mentoring volunteers
     -   Marketing
 
-The titles of these courses are all quotations from [Terry Pratchett][pratchett-terry].
+The titles of these courses are all quotations from [Sir Terry Pratchett][pratchett-terry].
 The lessons are designed using the methods outlined in [[Wils2018](#CITE)],
 and styled with the [Youbou template](https://github.com/merely-useful/youbou).
 Feedback and contributions are very welcome;
 please see our [Code of Conduct](./conduct/) for guidance.
+
+<div align="center">
+  <p><img src="{{'/files/pratchett-back-in-black.png'|relative_url}}" width="400" alt="Terry Pratchett (from the BBC documentary 'Back in Black')" /></p>
+  <p><em>Coming back to where you started is not the same as never leaving.<br/>&ndash; Sir Terry Pratchett</em></p>
+</div>
 
 {% include links.md %}
