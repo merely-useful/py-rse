@@ -7,13 +7,7 @@ Do pre- and post-transformations required to produce clean LaTeX from Pandoc's M
 import sys
 import os
 import re
-from util import usage, get_crossref, get_toc
-
-CHARACTERS = [
-    ('é', r"\'{e}"),
-    ('ë', r'\"{e}'),
-    ('ö', r'\"{o}')
-]
+from util import CHARACTERS, usage, get_crossref, get_toc
 
 #-------------------------------------------------------------------------------
 
@@ -110,7 +104,7 @@ class SpecialCharacters(Base):
 
     def post(self, lines):
         def _regexpall(s):
-            for (raw, latex) in CHARACTERS:
+            for (raw, latex) in CHARACTERS.items():
                 s = s.replace(raw, latex)
             return s
         return [_regexpall(s) for s in lines]

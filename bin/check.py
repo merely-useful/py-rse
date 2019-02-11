@@ -11,10 +11,9 @@ import re
 import json
 import yaml
 from collections import Counter
-from util import get_crossref, report
+from util import CHARACTERS, get_crossref, report
 
 
-CHARACTERS = "éëö"                      # non-7-bit characters that are translated
 CHECK_PREFIX = 'check_'                 # prefix for all checking function names
 CONFIG_FILE = '_config.yml'             # Jekyll configuration file
 CROSSREF_FMT = '_data/{}_toc.json'      # cross-reference file (%language)
@@ -70,11 +69,12 @@ def check_chars(language):
     '''
     Find and report non-7-bit characters that aren't translated.
     '''
+    allowed = set(CHARACTERS.keys())
     result = set()
     for (slug, filename, body, lines) in _get_all(language):
         for (i, line) in enumerate(lines):
             for (j, char) in enumerate(line):
-                if (ord(char) > 127) and (char not in CHARACTERS):
+                if (ord(char) > 127) and (char not in allowed):
                     result.add('{} {} {}: {}'.format(filename, i+1, j+1, char))
     report('Characters', 'non-ascii', result)
 
@@ -178,14 +178,11 @@ def check_src(language):
     def _unprefix(filename):
         return filename[prefix_len:]
 
-    def _ignore(x):
-        return x.endswith('~') or ('__pycache__' in x)
-
     content = _get_all(language, remove_code_blocks=False)
     referenced = _match_body(content, r'{:\s+title="([^"]+)\s*"}')
     actual = {_unprefix(filename)
               for filename in glob.iglob('{}/**/*.*'.format(SOURCE_DIR), recursive=True)
-              if not _ignore(filename)}
+              if not _ignore_file(filename)}
     report('Source Files', 'unused', actual - referenced)
     report('Source Files', 'missing', referenced - actual)
 
@@ -197,7 +194,9 @@ def check_toc(language):
     toc = _get_toc()
     defined = {slug for section in toc for slug in toc[section]}
     defined.add('index')
-    actual = {filename.replace('.md', '') for filename in os.listdir(PROSE_DIR_FMT.format(language))}
+    actual = {filename.replace('.md', '')
+              for filename in os.listdir(PROSE_DIR_FMT.format(language))
+              if not _ignore_file(filename)}
     report('Table of Contents', 'unused', actual - defined)
     report('Table of Contents', 'missing', defined - actual)
 
@@ -240,6 +239,10 @@ def _get_toc():
     '''
     with open(CONFIG_FILE, 'r') as reader:
         return yaml.load(reader)['toc']
+
+
+def _ignore_file(x):
+    return x.endswith('~') or ('__pycache__' in x)
 
 
 def _match_body(content, pattern, flatten=None):

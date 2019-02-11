@@ -8,6 +8,14 @@ import json
 import yaml
 
 
+CHARACTERS = {
+    'ç': r"\c{c}",
+    'é': r"\'{e}",
+    'ë': r'\"{e}',
+    'ö': r'\"{o}'
+}
+
+
 def get_toc(config_path):
     '''Read the table of contents and return ToC section.'''
     with open(config_path, 'r') as reader:
