@@ -125,6 +125,10 @@ check_src :
 check_toc :
 	@bin/check.py ${lang} toc
 
+## stats          : report summary statistics of completed chapters.
+stats :
+	@bin/stats.py ${lang}
+
 ## ----------------------------------------
 
 ## spelling       : compare words against saved list.

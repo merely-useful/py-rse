@@ -5,15 +5,13 @@ Remove code blocks from stdin and echo to stdout.
 '''
 
 import sys
+from util import uncode
 
 
 def process(reader):
-    echo = True
-    for line in reader:
-        if line.startswith('```') or line.startswith('~~~'):
-            echo = not echo
-        elif echo:
-            sys.stdout.write(line)
+    lines = reader.readlines()
+    lines = uncode(lines)
+    sys.stdout.writelines(lines)
 
 
 if __name__ == '__main__':
