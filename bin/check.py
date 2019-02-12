@@ -110,8 +110,9 @@ def check_figures(language):
     '''
     def _ignore(filename):
         return filename.startswith('.') or \
-            filename.endswith('.xml') or \
-            filename.endswith('.pdf')
+            filename.endswith('.odg') or \
+            filename.endswith('.pdf') or \
+            filename.endswith('.xml')
 
     def _redundant(filename, defined):
         return filename.endswith('.png') and \
@@ -209,7 +210,9 @@ def check_toc(language):
 
     
 def _ignore_file(x):
-    return x.endswith('~') or ('__pycache__' in x)
+    return (x == '.gitkeep') or \
+        x.endswith('~') or \
+        ('__pycache__' in x)
 
 
 def _match_body(content, pattern, flatten=None):
