@@ -6,8 +6,9 @@
 -   Every file has a unique slug.  Using the English version as an example:
     -   The entry in the Jekyll configuration's table of contents is `slug`.
     -   The file's name is `./_en/slug.md` (so the file's auto-generated slug is `slug`).
-    -   The generated HTML file is `./_site/en/slug/index.html`.
-    -   The chapter ID is `s:slug` and all section IDs are `s:slug-something`.
+    -   The generated HTML file is `./_site/en/slug/index.html` (so the URL is `http://whatever/slug/`).
+    -   The chapter ID `s:slug` is inserted automatically.
+    -   All section IDs are `s:slug-something` (and must be written manually).
     -   The figure IDs are `f:slug-something`.
     -   The source for all diagrams for the file is in `./figures/slug.xml` (a [draw.io][draw-io] drawing).
     -   The PNG, SVG, and PDF versions of the diagrams are in `./figures/slug_something.suffix`.
@@ -15,7 +16,7 @@
 -   Every Markdown file's YAML must contain one field:
     -   `title`: the file's title.
 
--   Lessons must also contain:
+-   Lessons must also contain three lists (all Markdown-formatted):
     -   `questions`: a point-form list of motivating questions.
     -   `objectives`: a point-form list of learning objectives.
     -   `keypoints`: a point-form list of key points for a cheat sheet.
@@ -25,20 +26,78 @@
     -   `permalink: "/en/"` (or whatever the language is) to override the default output path defined in `_config.yml`.
     -   This file becomes `./_site/en/index.html` (or whatever the language is).
 
+-   The `index.md` file for one language should contain:
+    -   `redirect: '/'` so that going to `http://whatever/` redirects to `http://whatever/en/` (or whatever the language is).
+
 -   The goal was to use pure Jekyll to create HTML for GitHub Pages without having to commit any generated files.
-    -   Came close but failed: we can't access section headings within files in Jekyll,
-        so we wouldn't be able to refer to sections (only to chapters).
+    -   We came close, but we can't access section headings within files in Jekyll,
+        so we wouldn't be able to use cross-references to sections (only to chapters).
     -   So we need to regenerate the table of contents in `./_data/toc.json` with a compilation step and commit that.
-    -   We also use a script to regenerate the Markdown bibliography (e.g., `./_en/bib.md`) from the BibTeX source (e.g., `./tex/en/book.bib`).
+    -   Since we're doing that,
+        we also use a script to regenerate the Markdown bibliography (e.g., `./_en/bib.md`)
+        from the BibTeX source (e.g., `./tex/en/book.bib`).
+
+-   Use Pandoc with pre- and post-processing to convert HTML to LaTeX to build PDF.
+    -   Run `bin/transform.py --pre` to read the HTML in (for example) `./_site/en/.../*.html`
+        and generate a stream with markers for problematic elements.
+    -   Run this through Pandoc to do HTML-to-LaTeX conversion.
+    -   Run `bin/transform.py --post` to find and convert the markers.
+    -   It's clumsy, but easier to maintain than a custom Pandoc template
+        (we know more Python programmers than Pandoc experts).
 
 -   Use the JavaScript in `./assets/site.js` to:
-    -   Add a disclaimer to the HTML version.
+    -   Add a disclaimer to the HTML version if `site.disclaimer` is set true in `./_config.yml`.
     -   Create a table of contents for each page.
     -   Patch up classes for tables.
     -   Fix cross-references and references to bibliography items and glossary entries.
 
+-   `./_includes/summary.html` and `./_includes/toc-section.html` loop over the table of contents to match slugs to files
+    because Jekyll doesn't support lookup by field in collections.
+    -   This makes Jekyll's running time O(N^2), but there's nothing we can do about it.
+
+## Configuration Entries
+
+The top half of `./_config.yml` should look like this:
+
+```
+# Display.
+title: "A Merely Useful Template"
+subtitle: "Build a GitHub Pages Site and a Nicely-Formatted Book from the Same Source"
+editor: "Greg Wilson"
+copyrightyear: "2019"
+repo: "https://github.com/merely-useful/template"
+website: "https://merely-useful.github.io/template/"
+email: "gvwilson@third-bit.com"
+organization: https://github.com/merely-useful/
+disclaimer: true
+
+# Order for table of contents.
+toc:
+  lessons:
+  - intro
+  bib:
+  - bib
+  extras:
+  - license
+  - conduct
+  - citation
+  - contributing
+  - gloss
+  - objectives
+  - keypoints
+```
+
+The keys under `Display` should be self-explanatory.
+The keys under `toc` *must* be `lessons`, `bib`, and `extras` in that order;
+the only entry allowed under `bib` is `bib`,
+and all of the entries shown under `extras` should be there
+(though others may be added).
+The main index file (e.g., `_en/index.md`) is *not* included in the table of contents.
+
+## Typography
+
 -   Refer to glossary entries using `{% raw %}[text](#g:key){% endraw %}`.
-    -   This minimizes typing: without it, glossary entries would all need `../gloss/` in the path, which isn't horrible, but...
+    -   This minimizes typing: without it, glossary entries would all need `../gloss/` in the path.
     -   The JavaScript in `./assets/site.js` patches these references and sets the style for glossary references when the page loads.
     -   Knows which ones to patch by looking for the leading `g:` in the reference.
 
@@ -47,30 +106,36 @@
     -   Again, `./assets/site.js` turns this into links into the bibligraphy: the `#BIB` link identifies elements to be modified.
 
 -   Cross-references are written using `{% raw %}[s:whatever](#REF){% endraw %}`.
-    -   `./assets/site.js` relies on an up-to-date table of contents to fix these.
+    -   `./assets/site.js` relies on an up-to-date cross-reference file `./_data/en_toc.json` to fix these
+        (with some other language prefix in place of `en` if necessary).
 
 -   External links are `[text][link-name]`, where `link-name` is a key in `./_includes/links.md`
-    -   `./_includes/links.md` is included explicitly at the bottom of every Markdown file because including it in the template doesn't work.
+    -   `./_includes/links.md` has to be included explicitly at the bottom of every Markdown file
+        because including it in the template doesn't work
+        (links are expanded before the inclusion is processed).
 
--   Some inclusions loop over the table of contents to match slugs to files because Jekyll doesn't support lookup by key in collections.
-
--   Use Pandoc with pre- and post-processing to convert HTML to LaTeX to build PDF.
-    -   Run `bin/transform.py --pre` to read the HTML in (for example) `./_site/en/.../*.html` and generate a stream with markers for problematic elements.
-    -   Run this through Pandoc to do HTML-to-LaTeX conversion.
-    -   Run `bin/transform.py --post` to find and convert the markers.
-    -   It's clumsy, but easier to maintain than a custom Pandoc template.
-
-## Typography
+-   Use `{% raw %}{% include figure.html id="f:whatever" src="../../figures/whatever.svg" caption="Whatever" %}{% endraw %}`
+    to include a figure.
+    -   `./_includes/figure.html` translates this into HTML for use in Markdown.
+    -   `./bin/transform.py` takes care of the LaTeX.
 
 -   Use underscores rather than dashes in filenames, e.g., `a_b.md`.
-    -   Need underscores for Python source files that are being loaded.
+    -   Need underscores for Python source files that are being imported.
     -   Might as well be consistent.
+    -   Should probably switch all cross-reference keys to underscores as well...
 
 -   If you would like to add code fragments,
     please put the source in `./src/chapter/long-name.ext`.
-    Include it in a left-justified, triple-backquoted code block:
-    use `python` for Python, `r` for R, `shell` for shell commands, `html` for HTML,
-    and `text` for output (including error output), YAML, and and other things.
+    Include it in a left-justified, triple-backquoted code block.
+    -   Fenced code blocks *must* have a language type.
+    -   `html` for HTML
+    -   `js` for JavaScript and JSON
+    -   `make` for Makefiles
+    -   `python` for Python
+    -   `r` for R
+    -   `shell` for shell commands
+    -   `yaml` for YAML
+    -   `text` for output (including error output) and everything else.
 
 -   If you want to leave out sections of code,
     use `# ...explanation...` (i.e., a comment with triple dots enclosing the text)
@@ -136,21 +201,14 @@
     -   `./_layouts/default.html`: base layout (used directly only for the overall index page for the whole site).
     -   `./_layouts/lesson.html`: derived layout for all lesson pages.
 -   `./_site/`: if present, holds the HTML pages generated by Jekyll.
--   `./all/`: holds the placeholder files used for the all-in-one versions of the site (per language).
-    -   E.g., `./all/en.html` becomes `_site/en/all/index.html`.
-    -   Placed here rather than in the language directory `_en` because it needs to be handled specially.
 -   `./bin/`: scripts used to build and check the site.
     -   `./bin/bib2md.py`: convert BibTeX bibliography to Markdown.
-    -   `./bin/check_chars.py`: check for non-7-bit characters in files.
-    -   `./bin/check_cites.py`: check for unused and undefined bibliographic citations.
-    -   `./bin/check_figs.py`: check for unused and missing figures.
-    -   `./bin/check_gloss.py`: check for unused and undefined glossary entries.
-    -   `./bin/check_links.py`: check for unused and undefined links in `./_includes/links.md`.
-    -   `./bin/check_src.py`: check for unused and missing source files in `./src/`.
-    -   `./bin/check_toc.py`: check for unused or missing files compared to table of contents in `./_config.yml`.
-    -   `./bin/cites.py`: handle citations during Markdown-to-LaTeX transformation (because `sed` can't do this one step).
+    -   `./bin/check.py`: check various aspects of source files.
+    -   `./bin/get_body.py`: get the body of a page for conversion to LaTeX.
+    -   `./bin/make_toc.py`: make the JSON cross-reference file.
+    -   `./bin/stats.py`: report summary statistics on completed chapters.
     -   `./bin/transform.py`: handle HTML-to-intermediate-to-LateX transformation.
-    -   `./bin/uncode.py`: remove code blocks (used in counting words).
+    -   `./bin/uncode.py`: remove code blocks (used in spell check).
     -   `./bin/util.py`: utilities used by other scripts.
 -   `./assets/`: static files (CSS, JavaScript, images).
     -   `./assets/bootstrap.min.css`: [Bootstrap 4][bootstrap]
@@ -158,14 +216,13 @@
     -   `./assets/site.css`: custom definitions.
     -   `./assets/site.js`: used to clean up bibliographic citations and glossary entries, style tables, etc.
     -   `./assets/tango.css`: [Pygments Tango theme][pygments-tango]
+    -   `./assets/*.svg`: image files used in template (as opposed to figures).
 -   `./etc/`: holding area for files that aren't being used right now but might be (re-)added later.
 -   `./favicon.ico`: toolbar icon.
 -   `./figures/`: [draw.io][draw-io] source for figures and all exported figures.
     -   `./figures/slug.xml`: source for all diagrams in that lesson.
     -   `./figures/slug_something.suffix`: PDF, PNG, or SVG export of a single figure from the XML file.
 -   `./index.md`: overall home page for site (currently redirects to English-language version).
--   `./project/`: the running example used throughout the lessons.
-    -   Put in a sub-directory so that it can be structured the way a real project would be.
 -   `./requirements.txt`: Pip installation requirements.
     -   Run with `pip install -r requirements.txt`.
 -   `./src/`: source files used in Markdown, broken down by chapter.
