@@ -5,7 +5,7 @@ lang=en
 endif
 
 # Pick up project-specific setting for STEM.
-include config.mk
+include site.mk
 
 # Tools.
 JEKYLL=jekyll
@@ -15,6 +15,7 @@ BIBTEX=bibtex
 PYTHON=python
 
 # Language-dependent settings.
+CONFIG_YML=_config.yml
 DIR_MD=_${lang}
 PAGES_MD=$(wildcard ${DIR_MD}/*.md)
 BIB_MD=${DIR_MD}/bib.md
@@ -34,11 +35,11 @@ commands :
 	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g'
 
 ## serve          : run a local server.
-serve : ${TOC_JSON}
+serve : ${CONFIG_YML} ${TOC_JSON}
 	${JEKYLL} serve -I
 
 ## site           : build files but do not run a server.
-site : ${TOC_JSON}
+site : ${CONFIG_YML} ${TOC_JSON}
 	${JEKYLL} build
 
 ## pdf            : generate PDF from LaTeX source.
@@ -46,6 +47,9 @@ pdf : ${BOOK_PDF}
 
 ## bib            : regenerate the Markdown bibliography from the BibTeX file.
 bib : ${BIB_MD}
+
+## config         : regenerate Jekyll configuration from .config.yml and site.yml
+config : ${CONFIG_YML}
 
 ## toc            : regenerate the table of contents JSON file.
 toc : ${TOC_JSON}
@@ -71,6 +75,10 @@ ${ALL_TEX} : ${PAGES_HTML} bin/get_body.py bin/transform.py ${TOC_JSON}
 # Create all the HTML pages once the Markdown files are up to date.
 ${PAGES_HTML} : ${PAGES_MD} ${BIB_MD} ${TOC_JSON}
 	${JEKYLL} build
+
+# Create the Jekyll configuration file.
+${CONFIG_YML}: .config.yml site.yml
+	cat $^ > $@
 
 # Create the bibliography Markdown file from the BibTeX file.
 ${BIB_MD} : ${BIB_TEX} bin/bib2md.py
@@ -157,6 +165,7 @@ clean :
 
 ## settings       : show macro values.
 settings :
+	@echo "CONFIG_YML=${CONFIG_YML}"
 	@echo "JEKYLL=${JEKYLL}"
 	@echo "DIR_MD=${DIR_MD}"
 	@echo "PAGES_MD=${PAGES_MD}"
