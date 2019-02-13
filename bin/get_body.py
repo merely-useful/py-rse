@@ -7,7 +7,7 @@ Get bodies of generated pages.
 import sys
 import os
 import re
-from util import usage, get_toc
+from util import get_main_div, usage, get_toc
 
 
 def get_all(config_file, source_dir):
@@ -36,20 +36,6 @@ def make_filenames(source_dir, slugs):
     '''Turn slugs into filenames.'''
 
     return [os.path.join(source_dir, s, 'index.html') for s in slugs]
-
-
-def get_main_div(reader):
-    '''Read main div from input.'''
-
-    lines = reader.readlines()
-    start = end = None
-    for (i, line) in enumerate(lines):
-        if '<!-- begin: main -->' in line:
-            start = i
-        elif '<!-- end: main -->' in line:
-            end = i
-            break
-    sys.stdout.writelines(lines[start:end+1])
 
 
 #-------------------------------------------------------------------------------

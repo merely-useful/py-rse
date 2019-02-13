@@ -19,6 +19,20 @@ CONFIG_FILE = '_config.yml'             # Jekyll configuration file
 PROSE_FILE_FMT = '_{}/{}.md'            # lesson or appendix (%language, %slug)
 
 
+def get_main_div(reader):
+    '''Read main div from input.'''
+
+    lines = reader.readlines()
+    start = end = None
+    for (i, line) in enumerate(lines):
+        if '<!-- begin: main -->' in line:
+            start = i
+        elif '<!-- end: main -->' in line:
+            end = i
+            break
+    sys.stdout.writelines(lines[start:end+1])
+
+
 def get_toc(config_file):
     '''
     Read the table of contents and return ToC section.
