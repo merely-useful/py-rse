@@ -1,5 +1,12 @@
 # Overall Design
 
+-   Site-specific configuration is stored in:
+    -   `./site.mk`: defines the stem used for this project, e.g., `merely-useful`.
+        -   This file is included by `Makefile` automatically.
+    -   `./site.yml`: defines the site-specific Jekyll configuration values.
+        -   This file is combined with `./.config.yml` (the generic configuration values) to produce `./_config.yml`.
+        -   You *must* commit `./_config.yml` to your repository, but do *not* edit it by hand.
+
 -   Markdown source files for each human language are in a [Jekyll collection][jekyll-collections] named after the language.
     -   E.g., `_en` for English.
 
@@ -57,7 +64,7 @@
 
 ## Configuration Entries
 
-The top half of `./_config.yml` should look like this:
+`./site.yml` should look like this:
 
 ```
 # Display.
@@ -87,12 +94,23 @@ toc:
   - keypoints
 ```
 
-The keys under `Display` should be self-explanatory.
-The keys under `toc` *must* be `lessons`, `bib`, and `extras` in that order;
-the only entry allowed under `bib` is `bib`,
-and all of the entries shown under `extras` should be there
-(though others may be added).
-The main index file (e.g., `_en/index.md`) is *not* included in the table of contents.
+-   The keys under `Display` should be self-explanatory.
+-   The keys under `toc` *must* be `lessons`, `bib`, and `extras` in that order;
+    the only entry allowed under `bib` is `bib`,
+    and all of the entries shown under `extras` should be there
+    (though others may be added).
+-   The main index file (e.g., `_en/index.md`) is *not* included in the table of contents.
+-   This file is combined with `./.config.yml` to create the Jekyll configuration file `./_config.yml`,
+    which must then be committed to the Git repository.
+    (Use `make lang=whatever config` to do this explicitly,
+    or let Make take care of it when doing other tasks.)
+-   It's clumsy, but since there is no "include" mechanism for Jeykll configuration files,
+    and we can't layer those files on GitHub the way we can on the desktop using flags,
+    it's the only way to keep generic configuration values in a shareable file.
+-   Read about [Jekyll collections][jekyll-collections] to understand the following:
+    -   The use of `output: true` to force output.
+    -   The use of `permalink: /:collection/:title/` to turn `_en/something.md` into `_site/en/something/index.html`.
+    -   The use of `defaults` to specify the `lesson` layout for all the files in `_en`.
 
 ## Typography
 
@@ -163,6 +181,10 @@ The main index file (e.g., `_en/index.md`) is *not* included in the table of con
 
 ## Layout
 
+-   `./.config.yml`: generic configuration values set by the template.
+    -   This is combined with `site.yml` (described above) to produce the Jekyll configuration file `./_config.yml`.
+-   `./site.mk`: Make configuration values for this project.
+    -   This is included by `Makefile` automatically.
 -   `./README.md`: this file.
     -   Not processed by Jekyll.
 -   `./CITATION.md`, `./CONDUCT.md`, `./LICENSE.md`: how to cite, code of conduct, and license respectively.
@@ -172,22 +194,9 @@ The main index file (e.g., `_en/index.md`) is *not* included in the table of con
     -   `make` prints a list of targets.
     -   Can regenerate HTML and PDF, check file consistency, count words, etc.
     -   Use `make lang=xx` to run commands for a particular human language (e.g., `make lang=en` to build the English version).
--   `./_config.yml`: Jekyll configuration file.
-    -   Simple values defined at the top (e.g., `title` and `subtitle`).
-    -   `toc` is table of contents, and has three sub-keys:
-        -   `lessons` for the main body.
-        -   `bib` for the bibliography (single entry).
-        -   `extras` for appendices.
-        -    Each entry must match a file's slug.
-    -   Read about [Jekyll collections][jekyll-collections] to understand the following:
-        -   The use of `output: true` to force output.
-        -   The use of `permalink: /:collection/:title/` to turn `_en/something.md` into `_site/en/something/index.html`.
-        -   The use of `defaults` to specify the `lesson` layout for all the files in `_en`.
-            -   Except `toc.json`, which uses `layout: none`.
 -   `./_data/lang_toc.json`: JSON-formatted table of contents data.
 -   `./_en/`: English-language collection of Markdown files.
 -   `./_includes/`: inclusions
-    -   `./_includes/disclaimer.html`: temporary disclaimer about files being under development.
     -   `./_includes/foot.html`: everything needed in the foot of the page.
     -   `./_includes/head.html`: everything needed in the head of the page that doesn't depend on configuration variables.
     -   `./_includes/links.md`: table of Markdown-formatted links.
@@ -205,6 +214,7 @@ The main index file (e.g., `_en/index.md`) is *not* included in the table of con
     -   `./bin/bib2md.py`: convert BibTeX bibliography to Markdown.
     -   `./bin/check.py`: check various aspects of source files.
     -   `./bin/get_body.py`: get the body of a page for conversion to LaTeX.
+    -   `./bin/get_main_div.py`: get the main `div` from a single page (used for testing purposes).
     -   `./bin/make_toc.py`: make the JSON cross-reference file.
     -   `./bin/stats.py`: report summary statistics on completed chapters.
     -   `./bin/transform.py`: handle HTML-to-intermediate-to-LateX transformation.
