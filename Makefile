@@ -72,6 +72,12 @@ ${ALL_TEX} : ${PAGES_HTML} bin/get_body.py bin/transform.py ${TOC_JSON}
 	| ${PYTHON} bin/transform.py --post ${TOC_JSON} _includes \
 	> ${ALL_TEX}
 
+# Pre-process (for debugging purposes).
+pre-process:
+	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
+	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes \
+	| ${PANDOC} --wrap=preserve -f html -t latex -o -
+
 # Create all the HTML pages once the Markdown files are up to date.
 ${PAGES_HTML} : ${PAGES_MD} ${BIB_MD} ${CONFIG_YML} ${TOC_JSON}
 	${JEKYLL} build
@@ -100,6 +106,10 @@ check : ${BIB_MD} ${TOC_JSON}
 ## check_anchors  : list all incorrectly-formatted H2 anchors.
 check_anchors :
 	@bin/check.py ${lang} anchors
+
+## check_chars     : look for non-ASCII characters.
+check_chars :
+	@bin/check.py ${lang} chars
 
 ## check_cites    : list all missing or unused bibliography entries.
 check_cites : ${BIB_MD}

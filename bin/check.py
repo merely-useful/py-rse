@@ -133,7 +133,7 @@ def check_gloss(language):
     content = get_all_docs(CONFIG_FILE, language)
     used = _match_body(content, r'\[.+?\]\(#(g:.+?)\)')
     defined = _match_lines(content, r'\*\*.+?\*\*{:#(g:.+?)}')
-    report('Glossary Entries', 'undefined', defined - used)
+    report('Glossary Entries', 'unused', defined - used)
     report('Glossary Entries', 'missing', used - defined)
 
 

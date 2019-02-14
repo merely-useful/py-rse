@@ -263,10 +263,10 @@ class Figure(BaseRegexp):
     =>
     LaTeX: \begin{figure}[H]\label{f:LABEL}\centering\includegraphics{PATH}\caption{TEXT}\end{figure}
     '''
-    MATCH_HTML = r'<figure +id="(f:.+)"> *<img +src="(.+)"> *<figcaption>(.+)</figcaption> *</figure>'
-    WRITE_TEMP = r'<strong>==figure=={0}=={1}=={2}==</strong>'
-    MATCH_TEMP = r'==figure==([^=]+)==([^=]+)==([^=]+)=='
-    WRITE_LATEX = r'\begin{figure}[H]\label{{{0}}}\centering\includegraphics{{{1}}}\caption{{{2}}}\end{figure}'
+    MATCH_HTML = r'<figure\s+id="(f:.+)">\s*<img\s+src="(.+)"\s*/>\s*<figcaption>(.+)</figcaption>\s*</figure>'
+    WRITE_TEMP = r'==figure=={0}=={1}=={2}=='
+    MATCH_TEMP = r'==figure==(.+)==(.+)==(.+)=='
+    WRITE_LATEX = r'\begin{{figure}}[H]\label{{{0}}}\centering\includegraphics{{{1}}}\caption{{{2}}}\end{{figure}}'
 
 
 class Noindent(BaseRegexp):
