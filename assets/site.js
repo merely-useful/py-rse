@@ -80,7 +80,7 @@ const fixCrossRefs = () => {
 
 // Fix up solutions.
 const fixSolutions = () => {
-  Array.from(document.querySelectorAll('div.solution'))
+  Array.from(document.querySelectorAll('aside'))
     .forEach((e, i) => {
       const solutionId = `solution-${i}`
       e.setAttribute('id', solutionId)

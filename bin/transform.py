@@ -45,6 +45,46 @@ class Base(object):
         return [s.replace(before, after) for s in lines]
 
 
+class ExerciseAndSolution(Base):
+    '''
+    Turn <section>...<h3>exercise title</h3>...<aside>...</aside>...</section> into section and subsection markers.
+    '''
+
+    def pre(self, lines):
+        change = False
+        result = []
+        pat = re.compile(r'<h3[^>]*>(.+)</h3>')
+        for line in lines:
+            if '<section>' in line:
+                change = True
+            elif change and ('<h3' in line):
+                m = pat.search(line)
+                result.append('==exercise=={}=='.format(m.group(1)))
+                change = False
+            elif '<aside>' in line:
+                result.append('==solution==')
+            elif '</aside>' in line:
+                pass
+            elif '</section>' in line:
+                pass
+            else:
+                result.append(line)
+        return result
+
+    def post(self, lines):
+        result = []
+        pat = re.compile(r'==exercise==(.+)==')
+        for line in lines:
+            if '==exercise==' in line:
+                m = pat.search(line)
+                result.append('\\subsubsection*{{{}}}'.format(m.group(1)))
+            elif '==solution==' in line:
+                result.append('\\paragraph{Solution}\n')
+            else:
+                result.append(line)
+        return result
+
+
 class ReplaceInclusion(Base):
     '''
     HTML file inclusion marker: <div markdown="1" replacement="path-to-file.tex">...</div>
@@ -328,6 +368,7 @@ class Newline(BaseStringMatch):
 
 # All handlers.
 HANDLERS = [
+    ExerciseAndSolution,
     ReplaceInclusion,
     GlossaryEntry,
     CrossRef,
