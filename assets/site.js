@@ -78,6 +78,31 @@ const fixCrossRefs = () => {
     })
 }
 
+// Fix up solutions.
+const fixSolutions = () => {
+  Array.from(document.querySelectorAll('div.solution'))
+    .forEach((e, i) => {
+      const solutionId = `solution-${i}`
+      e.setAttribute('id', solutionId)
+      e.style.display = 'none'
+      const button = document.createElement('button')
+      button.classList.add('btn', 'btn-outline-primary', 'btn-sm', 'solution')
+      button.setAttribute('onclick', `showHideSolutions('${solutionId}')`)
+      button.appendChild(document.createTextNode('solution'))
+      e.parentNode.insertBefore(button, e)
+    })
+}
+
+// Show/hide solutions when button clicked.
+const showHideSolutions = (id) => {
+  const e = document.getElementById(id)
+  if (e.style.display == 'none') {
+    e.style.display = 'block'
+  } else {
+    e.style.display = 'none'
+  }
+}
+
 // Perform transformations on load (which is why this script is included at the
 // bottom of the page).
 (function(){
@@ -87,4 +112,5 @@ const fixCrossRefs = () => {
   fixBibRefs()
   fixGlossRefs()
   fixCrossRefs()
+  fixSolutions()
 })()
