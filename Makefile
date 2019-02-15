@@ -57,7 +57,7 @@ toc : ${TOC_JSON}
 # ----------------------------------------
 
 # Regenerate PDF once 'all.tex' has been created.
-${BOOK_PDF} : ${ALL_TEX}
+${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex
 	cd ${DIR_TEX} \
 	&& ${LATEX} --shell-escape -jobname=${STEM} book \
 	&& ${BIBTEX} ${STEM} \
@@ -100,11 +100,11 @@ ${DIR_HTML}/%/index.html : $(wildcard _includes/%/*.*)
 ## ----------------------------------------
 
 ## check          : check everything.
-check : ${BIB_MD} ${TOC_JSON}
+check : ${CONFIG_YML} ${BIB_MD} ${TOC_JSON}
 	@bin/check.py ${lang} all
 
 ## check_anchors  : list all incorrectly-formatted H2 anchors.
-check_anchors :
+check_anchors : ${CONFIG_YML}
 	@bin/check.py ${lang} anchors
 
 ## check_chars     : look for non-ASCII characters.
@@ -112,39 +112,39 @@ check_chars :
 	@bin/check.py ${lang} chars
 
 ## check_cites    : list all missing or unused bibliography entries.
-check_cites : ${BIB_MD}
+check_cites : ${CONFIG_YML} ${BIB_MD}
 	@bin/check.py ${lang} cites
 
 ## check_crossref : find all missing cross-references.
-check_crossref : ${TOC_JSON}
+check_crossref : ${CONFIG_YML} ${TOC_JSON}
 	@bin/check.py ${lang} crossref
 
 ## check_figures  : list all missing or unused figures.
-check_figures :
+check_figures : ${CONFIG_YML}
 	@bin/check.py ${lang} figures
 
 ## check_gloss    : check that all glossary entries are defined and used.
-check_gloss :
+check_gloss : ${CONFIG_YML}
 	@bin/check.py ${lang} gloss
 
 ## check_langs    : check that all fenced code blocks have language types.
-check_langs :
+check_langs : ${CONFIG_YML}
 	@bin/check.py ${lang} langs
 
 ## check_links    : check that all external links are defined and used.
-check_links :
+check_links : ${CONFIG_YML}
 	@bin/check.py ${lang} links
 
 ## check_src      : check source file inclusion references.
-check_src :
+check_src : ${CONFIG_YML}
 	@bin/check.py ${lang} src
 
 ## check_toc      : check consistency of tables of contents.
-check_toc :
+check_toc : ${CONFIG_YML}
 	@bin/check.py ${lang} toc
 
 ## stats          : report summary statistics of completed chapters.
-stats :
+stats : ${CONFIG_YML}
 	@bin/stats.py ${lang}
 
 ## ----------------------------------------
