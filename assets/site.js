@@ -98,10 +98,10 @@ const fixSolutions = () => {
       const solutionId = `solution-${i}`
       e.setAttribute('id', solutionId)
       e.style.display = 'none'
-      const button = document.createElement('button')
-      button.classList.add('btn', 'btn-outline-primary', 'btn-sm', 'solution')
+      const button = document.createElement('p')
+      button.innerHTML = '<span class="solution">solution</span>'
+      button.classList.add('solution')
       button.setAttribute('onclick', `showHideSolutions('${solutionId}')`)
-      button.appendChild(document.createTextNode('solution'))
       e.parentNode.insertBefore(button, e)
     })
 }
