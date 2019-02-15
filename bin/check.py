@@ -113,7 +113,7 @@ def check_figref(language):
     crossref = get_crossref(language)
     defined = {x for x in crossref.keys() if x.startswith('f:')}
     report('Figure References', 'missing', used - defined)
-    report('Figure References', 'undefined', defined - used)
+    report('Figure References', 'unused', defined - used)
 
 
 def check_figures(language):

@@ -124,6 +124,10 @@ check_cites : ${CONFIG_YML} ${BIB_MD}
 check_crossref : ${CONFIG_YML} ${TOC_JSON}
 	@bin/check.py ${lang} crossref
 
+## check_figref   : check all figure cross-references.
+check_figref : ${CONFIG_YML} ${TOC_JSON}
+	@bin/check.py ${lang} figref
+
 ## check_figures  : list all missing or unused figures.
 check_figures : ${CONFIG_YML}
 	@bin/check.py ${lang} figures
