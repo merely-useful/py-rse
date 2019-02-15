@@ -17,6 +17,7 @@ CHARACTERS = {
 }
 CONFIG_FILE = '_config.yml'             # Jekyll configuration file
 PROSE_FILE_FMT = '_{}/{}.md'            # lesson or appendix (%language, %slug)
+CROSSREF_FMT = '_data/{}_toc.json'      # cross-reference file (%language)
 
 
 def get_main_div(reader):
@@ -69,10 +70,11 @@ def get_doc(language, slug, remove_code_blocks=True):
     return (slug, filename, body, lines)
 
 
-def get_crossref(filename):
+def get_crossref(language):
     '''
-    Get the cross-reference file.
+    Get the cross-reference file for a language.
     '''
+    filename = CROSSREF_FMT.format(language)
     with open(filename, 'r') as reader:
         return json.load(reader)
 

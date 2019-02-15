@@ -401,12 +401,12 @@ HANDLERS = [
     SpecialCharacters
 ]
 
-def main(which, crossref, include_dir):
+def main(which, language, include_dir):
     '''
     Apply all pre- or post-processing handlers.
     '''
     lines = sys.stdin.readlines()
-    crossref = get_crossref(crossref)
+    crossref = get_crossref(language)
     for handler in HANDLERS:
         h = handler(crossref, include_dir)
         lines = getattr(h, which)(lines)
@@ -414,7 +414,7 @@ def main(which, crossref, include_dir):
 
 
 if __name__ == '__main__':
-    USAGE = 'transform.py [--pre | --post] crossref include_dir'
+    USAGE = 'transform.py [--pre | --post] language include_dir'
     if len(sys.argv) != 4:
         usage(USAGE)
     elif sys.argv[1] not in ['--pre', '--post']:

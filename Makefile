@@ -67,9 +67,9 @@ ${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex ${BIB_TEX}
 # Create the unified LaTeX file (separate target to simplify testing).
 ${ALL_TEX} : ${PAGES_HTML} bin/get_body.py bin/transform.py ${TOC_JSON}
 	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
-	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes \
+	| ${PYTHON} bin/transform.py --pre ${lang} _includes \
 	| ${PANDOC} --wrap=preserve -f html -t latex -o - \
-	| ${PYTHON} bin/transform.py --post ${TOC_JSON} _includes \
+	| ${PYTHON} bin/transform.py --post ${lang} _includes \
 	> ${ALL_TEX}
 
 # Pre-process (for debugging purposes).

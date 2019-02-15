@@ -22,7 +22,6 @@ from util import CHARACTERS, \
 
 
 CHECK_PREFIX = 'check_'                 # prefix for all checking function names
-CROSSREF_FMT = '_data/{}_toc.json'      # cross-reference file (%language)
 FIGURE_DIR = 'figures'                  # where figure source is stored
 LINK_FILE = '_includes/links.md'        # link definition file
 NOT_ALL = {'check_all'}                 # functions to ignore when running all
@@ -100,8 +99,21 @@ def check_crossref(language):
     '''
     content = get_all_docs(CONFIG_FILE, language)
     used = _match_lines(content, r'\[([^\]]+)\]\(#REF\)')
-    defined = set(get_crossref(CROSSREF_FMT.format(language)).keys())
+    crossref = get_crossref(language)
+    defined = {x for x in crossref.keys() if x.startswith('s:')}
     report('Cross References', 'missing', used - defined)
+
+
+def check_figref(language):
+    '''
+    Check figure references.
+    '''
+    content = get_all_docs(CONFIG_FILE, language)
+    used = _match_lines(content, r'\[([^\]]+)\]\(#FIG\)')
+    crossref = get_crossref(language)
+    defined = {x for x in crossref.keys() if x.startswith('f:')}
+    report('Figure References', 'missing', used - defined)
+    report('Figure References', 'undefined', defined - used)
 
 
 def check_figures(language):
