@@ -1,0 +1,29 @@
+{% comment %}
+Summarize all header points of one kind from all lessons. Parameters are:
+
+- language: a two-letter language code like "en".
+- h: level of heading, e.g. "h2".
+{% endcomment %}
+
+{% comment %} Select chapters based on language. {% endcomment %}
+{% assign chapters = site[include.language] %}
+
+{% comment %}
+Loop over the table of contents to find this chapter (because Jekyll does not
+support lookup by key) and pull the required block out of that lesson's header.
+{% endcomment %}
+{%- for lesson in site.toc.lessons -%}
+  {%- for chap in chapters -%}
+    {%- if lesson == chap.slug -%}
+      {%- assign which = chap[include.which] -%}
+      {%- if which -%}
+<{{include.h}}><a href="{{'/'|append: include.language|append: '/'|append: chap.slug|append: '/'|relative_url}}">{{chap.title}}</a></{{include.h}}>
+<div markdown="1">
+{% for item in which %}
+- {{item}}{% endfor %}
+</div>
+      {%- endif -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}

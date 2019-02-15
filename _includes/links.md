@@ -7,4 +7,13 @@ file is a Markdown file because Jekyll doesn't expand the link
 definitions if that's done.
 {% endcomment %}
 
+[config-email]: mailto:{{site.email}}
+[config-organization]: {{site.organization}}
+[config-repo]: {{site.repo}}
+[config-website]: {{site.website}}
+
+[covenant]: https://www.contributor-covenant.org
+
+[jekyll]: https://jekyllrb.com/
+
 [pratchett-terry]: https://www.terrypratchettbooks.com/sir-terry/

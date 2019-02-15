@@ -1,7 +1,7 @@
 ---
+layout: default
 permalink: "/"
+title: "Home Page"
 ---
 
-# {{site.title}}
-
-- [English]({{'/en/'|relative_url}})
+- [English](./en/)

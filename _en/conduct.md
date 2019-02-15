@@ -1,4 +1,6 @@
-# Code of Conduct
+---
+title: "Code of Conduct"
+---
 
 In the interest of fostering an open and welcoming environment, we as
 contributors and maintainers pledge to making participation in our project and
@@ -54,9 +56,9 @@ further defined and clarified by project maintainers.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by emailing the project team.  All complaints will be reviewed and
-investigated and will result in a response that is deemed necessary and
-appropriate to the circumstances. The project team is obligated to maintain
+reported by [emailing the project team][config-email]. All complaints will be
+reviewed and investigated and will result in a response that is deemed necessary
+and appropriate to the circumstances. The project team is obligated to maintain
 confidentiality with regard to the reporter of an incident.  Further details of
 specific enforcement policies may be posted separately.
 
@@ -69,4 +71,4 @@ members of the project's leadership.
 This Code of Conduct is adapted from the [Contributor Covenant][covenant]
 version 1.4.
 
-[covenant]: https://www.contributor-covenant.org
+{% include links.md %}
