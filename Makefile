@@ -57,7 +57,7 @@ toc : ${TOC_JSON}
 # ----------------------------------------
 
 # Regenerate PDF once 'all.tex' has been created.
-${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex
+${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex ${BIB_TEX}
 	cd ${DIR_TEX} \
 	&& ${LATEX} --shell-escape -jobname=${STEM} book \
 	&& ${BIBTEX} ${STEM} \
@@ -73,7 +73,12 @@ ${ALL_TEX} : ${PAGES_HTML} bin/get_body.py bin/transform.py ${TOC_JSON}
 	> ${ALL_TEX}
 
 # Pre-process (for debugging purposes).
-pre-process:
+test-pre:
+	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
+	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes
+
+# Pre-process with Pandoc (for debugging purposes).
+test-pandoc:
 	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
 	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes \
 	| ${PANDOC} --wrap=preserve -f html -t latex -o -

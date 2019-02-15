@@ -269,6 +269,16 @@ class Figure(BaseRegexp):
     WRITE_LATEX = '\\begin{{figure}}\n\\centering\n\\includegraphics{{{1}}}\n\\caption{{{2}}}\n\\label{{{0}}}\n\\end{{figure}}'
 
 
+class FigureRef(BaseRegexp):
+    '''
+    References to figures.
+    '''
+    MATCH_HTML = r'<a href="#FIG">(f:[^<]+)</a>'
+    WRITE_TEMP = r'==figureref=={0}=='
+    MATCH_TEMP = r'==figureref==([^=]+)=='
+    WRITE_LATEX = r'Figure~\ref{{{0}}}'
+
+
 class Noindent(BaseRegexp):
     '''
     HTML embedded command comment: <!-- == COMMMAND -->
@@ -374,6 +384,7 @@ HANDLERS = [
     GlossaryEntry,
     CrossRef,
     Figure,
+    FigureRef,
     Noindent,
     CodeBlock,
     Citation,
