@@ -134,7 +134,7 @@ class PdfToSvg(Base):
     def post(self, lines):
         return self._regexp(lines,
                             r'/figures/(.+)\.svg}',
-                            r'/figures/{{{0}}}.pdf}}')
+                            r'/figures/{0}.pdf}}')
 
 
 class SpecialCharacters(Base):
@@ -261,12 +261,12 @@ class Figure(BaseRegexp):
     '''
     HTML figure: <figure id="f:LABEL"> <img src="PATH"> <figcaption>TEXT</figcaption> </figure>
     =>
-    LaTeX: \begin{figure}[H]\label{f:LABEL}\centering\includegraphics{PATH}\caption{TEXT}\end{figure}
+    LaTeX: \begin{figure}\label{f:LABEL}\centering\includegraphics{PATH}\caption{TEXT}\end{figure}
     '''
     MATCH_HTML = r'<figure\s+id="(f:.+)">\s*<img\s+src="(.+)"\s*/>\s*<figcaption>(.+)</figcaption>\s*</figure>'
     WRITE_TEMP = r'==figure=={0}=={1}=={2}=='
     MATCH_TEMP = r'==figure==(.+)==(.+)==(.+)=='
-    WRITE_LATEX = r'\begin{{figure}}[H]\label{{{0}}}\centering\includegraphics{{{1}}}\caption{{{2}}}\end{{figure}}'
+    WRITE_LATEX = '\\begin{{figure}}\n\\centering\n\\includegraphics{{{1}}}\n\\caption{{{2}}}\n\\label{{{0}}}\n\\end{{figure}}'
 
 
 class Noindent(BaseRegexp):
@@ -320,9 +320,10 @@ class FrontMatter(BaseStringMatch):
 class MainMatter(BaseStringMatch):
     '''
     LaTeX: add \mainmatter command.
+    See https://tex.stackexchange.com/questions/369854/memoir-chapter-based-figure-numbering
     '''
     MATCH_TEMP = '==mainmatter=='
-    WRITE_LATEX = '\\mainmatter'
+    WRITE_LATEX = '\\mainmatter\n\\counterwithout{figure}{chapter}'
 
 
 class Midpoint(BaseStringMatch):

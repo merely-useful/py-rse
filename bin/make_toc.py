@@ -10,6 +10,7 @@ from util import get_toc, usage
 
 
 SECTION_PAT = re.compile(r'^##\s+.+\s+\{#(s:.+)\}', re.MULTILINE)
+FIGURE_PAT = re.compile(r'id="(f:[^"]+)"')
 
 
 def main(config_file, source_dir):
@@ -17,6 +18,7 @@ def main(config_file, source_dir):
     result = {}
 
     lessons = config['lessons']
+    figure = 1
     for (i, slug) in enumerate(lessons):
         key = str(i+1)
         result['s:{}'.format(slug)] = {
@@ -24,7 +26,7 @@ def main(config_file, source_dir):
             'text': 'Chapter',
             'value': key
         }
-        process_sections(result, source_dir, slug, key)
+        figure = process(result, source_dir, slug, key, figure)
 
     extras = config['extras']
     letters = ascii_uppercase[:len(extras)]
@@ -34,13 +36,13 @@ def main(config_file, source_dir):
             'text': 'Appendix',
             'value': key
         }
-        process_sections(result, source_dir, slug, key)
+        figure = process(result, source_dir, slug, key, figure)
 
     language = source_dir.lstrip('_')
     json.dump(result, sys.stdout)
 
 
-def process_sections(result, source_dir, slug, base):
+def process(result, source_dir, slug, base, figure_start):
     filename = os.path.join(source_dir, '{}.md'.format(slug))
     with open(filename, 'r') as reader:
         content = reader.read()
@@ -51,6 +53,14 @@ def process_sections(result, source_dir, slug, base):
             'text': 'Section',
             'value': '{}.{}'.format(base, i)
         }
+    figures = FIGURE_PAT.findall(content)
+    for (f, i) in zip(figures, range(figure_start, len(figures) + figure_start)):
+        result[f] = {
+            'slug': slug,
+            'text': 'Figure',
+            'value': '{}'.format(i)
+        }
+    return len(figures) + figure_start
 
 
 if __name__ == '__main__':
