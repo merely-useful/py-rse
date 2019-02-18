@@ -105,7 +105,7 @@ ${DIR_HTML}/%/index.html : $(wildcard _includes/%/*.*)
 ## ----------------------------------------
 
 ## check          : check everything.
-check : ${CONFIG_YML} ${BIB_MD} ${TOC_JSON}
+check : fixme ${CONFIG_YML} ${BIB_MD} ${TOC_JSON}
 	@bin/check.py ${lang} all
 
 ## check_anchors  : list all incorrectly-formatted H2 anchors.
@@ -151,6 +151,11 @@ check_src : ${CONFIG_YML}
 ## check_toc      : check consistency of tables of contents.
 check_toc : ${CONFIG_YML}
 	@bin/check.py ${lang} toc
+
+## fixme          : look for FIXME markers in pages.
+#  Output is piped to `cat` to prevent error reports if there are no FIXMEs.
+fixme :
+	@fgrep -C 1 -n FIXME ${PAGES_MD} | cat
 
 ## stats          : report summary statistics of completed chapters.
 stats : ${CONFIG_YML}

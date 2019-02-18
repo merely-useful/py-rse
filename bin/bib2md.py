@@ -193,23 +193,25 @@ def main(language):
     '''
     Main driver: read bibliography from stdin, format, and print.
     '''
-    source = bibtexparser.loads(sys.stdin.read()).entries
     print(HEADER.format(language))
-    try:
-        for entry in source:
-            for h in HANDLERS[entry['ENTRYTYPE']]:
-                if type(h) is tuple:
-                    prefix, func = h
-                    text = func(entry)
-                    if text:
-                        sys.stdout.write(prefix + text)
-                elif callable(h):
-                    sys.stdout.write(h(entry))
-                else:
-                    sys.stdout.write(h)
-            sys.stdout.write('\n\n')
-    except Exception as e:
-        sys.stderr.write('\nERROR {}:: {}\n'.format(str(e), str(entry)))
+    text = sys.stdin.read()
+    if text:
+        try:
+            source = bibtexparser.loads(text).entries
+            for entry in source:
+                for h in HANDLERS[entry['ENTRYTYPE']]:
+                    if type(h) is tuple:
+                        prefix, func = h
+                        text = func(entry)
+                        if text:
+                            sys.stdout.write(prefix + text)
+                    elif callable(h):
+                        sys.stdout.write(h(entry))
+                    else:
+                        sys.stdout.write(h)
+                sys.stdout.write('\n\n')
+        except Exception as e:
+            sys.stderr.write('\nERROR {}:: {}\n'.format(str(e), str(entry)))
     print(FOOTER)
 
 
