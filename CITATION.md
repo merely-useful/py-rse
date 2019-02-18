@@ -1,5 +1,3 @@
 # Citation
 
-Please cite this work as:
-
-> FIXME
+Please see <https://merely-useful.github.io> for citation information.
