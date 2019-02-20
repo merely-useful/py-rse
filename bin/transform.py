@@ -166,7 +166,7 @@ class CodeBlock(Base):
         lines = self._squash(lines)
         lines = self._regexp(lines,
                              r'==language==([^=]+)==\\begin{verbatim}',
-                             r'\begin{{minted}}{{{0}}}')
+                             r'\begin{{minted}}[fontsize=\small]{{{0}}}')
         lines = self._replace(lines,
                               r'\begin{verbatim}',
                               '% FIXME\n\\begin{minted}{text}')

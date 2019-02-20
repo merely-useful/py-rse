@@ -75,12 +75,12 @@ ${ALL_TEX} : ${PAGES_HTML} bin/get_body.py bin/transform.py ${TOC_JSON}
 # Pre-process (for debugging purposes).
 test-pre:
 	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
-	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes
+	| ${PYTHON} bin/transform.py --pre ${lang} _includes
 
 # Pre-process with Pandoc (for debugging purposes).
 test-pandoc:
 	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
-	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes \
+	| ${PYTHON} bin/transform.py --pre ${lang} _includes \
 	| ${PANDOC} --wrap=preserve -f html -t latex -o -
 
 # Create all the HTML pages once the Markdown files are up to date.
