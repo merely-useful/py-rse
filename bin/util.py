@@ -20,6 +20,61 @@ PROSE_FILE_FMT = '_{}/{}.md'            # lesson or appendix (%language, %slug)
 CROSSREF_FMT = '_data/{}_toc.json'      # cross-reference file (%language)
 
 
+def get_all_docs(config_file, language, with_index=True, remove_code_blocks=True):
+    '''
+    Return a list of (slug, filename, body, lines) tuples from the table of contents,
+    including ('index', 'lang/index.md', lines) unless told not to.
+    '''
+    result = []
+    if with_index:
+        result.append(get_doc(language, 'index', remove_code_blocks=remove_code_blocks))
+    toc = get_toc(config_file)
+    for section in toc:
+        result.extend([get_doc(language, s, remove_code_blocks=remove_code_blocks)
+                       for s in toc[section]])
+    return result
+
+
+def get_crossref(language):
+    '''
+    Get the cross-reference file for a language.
+    '''
+    filename = CROSSREF_FMT.format(language)
+    with open(filename, 'r') as reader:
+        return json.load(reader)
+
+
+def get_doc(language, slug, remove_code_blocks=True):
+    '''
+    Get a single document.
+    '''
+    filename = PROSE_FILE_FMT.format(language, slug)
+    with open(filename, 'r') as reader:
+        body = reader.read()
+    lines = body.split('\n')
+    if remove_code_blocks:
+        body = re.sub(r'```.+?```', '', body, flags=re.DOTALL)
+    return (slug, filename, body, lines)
+
+
+def get_funcs(module, prefix):
+    '''
+    Get all functions that match a prefix.
+    '''
+    contents = module.__dict__
+    return {name:contents[name]
+            for name in contents.keys()
+            if name.startswith(prefix)}
+
+
+def get_header(body):
+    '''
+    Extract the YAML header as a block of text.
+    '''
+    second = body.find('---', len('---'))
+    return body[3:second].strip()
+
+
 def get_main_div(reader):
     '''Read main div from input.'''
 
@@ -40,61 +95,6 @@ def get_toc(config_file):
     '''
     with open(config_file, 'r') as reader:
         return yaml.load(reader)['toc']
-
-
-def get_all_docs(config_file, language, with_index=True, remove_code_blocks=True):
-    '''
-    Return a list of (slug, filename, body, lines) tuples from the table of contents,
-    including ('index', 'lang/index.md', lines) unless told not to.
-    '''
-    result = []
-    if with_index:
-        result.append(get_doc(language, 'index', remove_code_blocks=remove_code_blocks))
-    toc = get_toc(config_file)
-    for section in toc:
-        result.extend([get_doc(language, s, remove_code_blocks=remove_code_blocks)
-                       for s in toc[section]])
-    return result
-
-
-def get_doc(language, slug, remove_code_blocks=True):
-    '''
-    Get a single document.
-    '''
-    filename = PROSE_FILE_FMT.format(language, slug)
-    with open(filename, 'r') as reader:
-        body = reader.read()
-    lines = body.split('\n')
-    if remove_code_blocks:
-        body = re.sub(r'```.+?```', '', body, flags=re.DOTALL)
-    return (slug, filename, body, lines)
-
-
-def get_crossref(language):
-    '''
-    Get the cross-reference file for a language.
-    '''
-    filename = CROSSREF_FMT.format(language)
-    with open(filename, 'r') as reader:
-        return json.load(reader)
-
-
-def get_funcs(module, prefix):
-    '''
-    Get all functions that match a prefix.
-    '''
-    contents = module.__dict__
-    return {name:contents[name]
-            for name in contents.keys()
-            if name.startswith(prefix)}
-
-
-def get_header(body):
-    '''
-    Extract the YAML header as a block of text.
-    '''
-    second = body.find('---', len('---'))
-    return body[3:second].strip()
 
 
 def is_undone(body):

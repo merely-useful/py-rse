@@ -144,6 +144,10 @@ check_langs : ${CONFIG_YML}
 check_links : ${CONFIG_YML}
 	@bin/check.py ${lang} links
 
+## check_pages    : make sure Markdown pages are properly structured.
+check_pages : ${CONFIG_YML}
+	@bin/check.py ${lang} pages
+
 ## check_src      : check source file inclusion references.
 check_src : ${CONFIG_YML}
 	@bin/check.py ${lang} src
@@ -168,8 +172,9 @@ spelling :
 	@cat ${PAGES_MD} | bin/uncode.py | aspell list | sort | uniq | comm -2 -3 - .words
 
 ## undone         : which files have not yet been done?
+#  Note: piping to 'cat' so that Make won't report an error if there are no undone chapters.
 undone :
-	@grep -l 'undone: true' _en/*.md
+	@grep -l 'undone: true' _en/*.md | cat
 
 ## ----------------------------------------
 

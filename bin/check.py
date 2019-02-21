@@ -186,6 +186,22 @@ def check_links(language):
     report('External Links', 'duplicated', duplicate)
 
 
+def check_pages(language):
+    '''
+    Check that Markdown pages are properly structured.
+    '''
+    yaml_pat = re.compile(r'\A---\n.+\n---\n.+', flags=re.DOTALL + re.MULTILINE)
+    links_pat = re.compile(r'{%\s+include\s+links.md\s+%}\s*\Z', flags=re.DOTALL + re.MULTILINE)
+    content = get_all_docs(CONFIG_FILE, language)
+    result = set()
+    for (slug, filename, body, lines) in content:
+        if not yaml_pat.match(body):
+            result.add('{}: bad YAML header'.format(filename))
+        if not links_pat.search(body):
+            result.add('{}: missing links inclusion'.format(filename))
+    report('Pages', 'issues', result)
+
+
 def check_src(language):
     '''
     Check external source files referenced in title attributes of code blocks.
