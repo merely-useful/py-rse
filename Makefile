@@ -105,7 +105,7 @@ ${DIR_HTML}/%/index.html : $(wildcard _includes/%/*.*)
 ## ----------------------------------------
 
 ## check          : check everything.
-check : fixme ${CONFIG_YML} ${BIB_MD} ${TOC_JSON}
+check : ${CONFIG_YML} ${BIB_MD} ${TOC_JSON}
 	@bin/check.py ${lang} all
 
 ## check_anchors  : list all incorrectly-formatted H2 anchors.
