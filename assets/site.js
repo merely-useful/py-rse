@@ -1,15 +1,3 @@
-// Add the disclaimer.
-const addDisclaimer = () => {
-  const container = document.querySelector('div.disclaimer')
-  if (! container) {
-    return
-  }
-  container.innerHTML = `<p>These notes are in the early stages of development.
-      Recycled material that has not been edited is shown with a twilight blue background;
-      everything in white has had a first pass,
-      but needs at least one more.</p>`
-}
-
 // Pull all H2's into div.headings, or delete div.headings.
 const makeTableOfContents = () => {
   const container = document.querySelector('div.headings')
@@ -27,10 +15,10 @@ const makeTableOfContents = () => {
   container.innerHTML = '<h2>Contents</h2><ul>\n' + items + '</ul>'
 }
 
-// Add Bootstrap striped table classes to all tables.
-const stripeTables = () => {
+// Add Bootstrap striped table classes to all tables and narrow the rows.
+const fixTables = () => {
   Array.from(document.querySelectorAll('table'))
-    .forEach(t => t.classList.add('table', 'table-striped'))
+    .forEach(t => t.classList.add('table', 'table-striped', 'table-sm'))
 }
 
 // Fix glossary reference URLs.
@@ -119,9 +107,8 @@ const showHideSolutions = (id) => {
 // Perform transformations on load (which is why this script is included at the
 // bottom of the page).
 (function(){
-  addDisclaimer()
   makeTableOfContents()
-  stripeTables()
+  fixTables()
   fixBibRefs()
   fixGlossRefs()
   fixCrossRefs()

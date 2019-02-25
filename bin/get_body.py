@@ -10,12 +10,12 @@ import re
 from util import get_main_div, usage, get_toc
 
 
-def get_all(config_file, source_dir):
+def get_all(source_dir):
     '''
     Get all lines from input files, inserting a few markers for post-processing.
     '''
 
-    toc = get_toc(config_file)
+    toc = get_toc()
 
     print('==frontmatter==\n')
     with open(os.path.join(source_dir, 'index.html')) as reader:
@@ -43,7 +43,7 @@ def make_filenames(source_dir, slugs):
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         get_main_div(sys.stdin)
-    elif len(sys.argv) == 3:
-        get_all(sys.argv[1], sys.argv[2])
+    elif len(sys.argv) == 2:
+        get_all(sys.argv[1])
     else:
-        usage('get_body.py [config_file source_dir]')
+        usage('get_body.py [source_dir]')

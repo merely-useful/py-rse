@@ -7,7 +7,7 @@ Report statistics about (completed) chapters.
 
 import sys
 import re
-from util import CONFIG_FILE, \
+from util import \
     get_all_docs, \
     is_undone, \
     uncode, \
@@ -23,7 +23,7 @@ def main(language, with_undone=False):
     '''
     overall = {}
     per_file = {}
-    for (slug, filename, body, lines) in get_all_docs(CONFIG_FILE, language):
+    for (slug, filename, body, lines) in get_all_docs(language):
         if with_undone or not is_undone(body):
             count_basic(per_file, slug, filename, body, lines)
             if slug == 'gloss':

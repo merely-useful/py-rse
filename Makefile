@@ -66,7 +66,7 @@ ${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex ${BIB_TEX}
 
 # Create the unified LaTeX file (separate target to simplify testing).
 ${ALL_TEX} : ${PAGES_HTML} bin/get_body.py bin/transform.py ${TOC_JSON}
-	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
+	${PYTHON} bin/get_body.py ${DIR_HTML} \
 	| ${PYTHON} bin/transform.py --pre ${lang} _includes \
 	| ${PANDOC} --wrap=preserve -f html -t latex -o - \
 	| ${PYTHON} bin/transform.py --post ${lang} _includes \
@@ -75,12 +75,12 @@ ${ALL_TEX} : ${PAGES_HTML} bin/get_body.py bin/transform.py ${TOC_JSON}
 # Pre-process (for debugging purposes).
 test-pre:
 	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
-	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes
+	| ${PYTHON} bin/transform.py --pre ${lang} _includes
 
 # Pre-process with Pandoc (for debugging purposes).
 test-pandoc:
 	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
-	| ${PYTHON} bin/transform.py --pre ${TOC_JSON} _includes \
+	| ${PYTHON} bin/transform.py --pre ${lang} _includes \
 	| ${PANDOC} --wrap=preserve -f html -t latex -o -
 
 # Create all the HTML pages once the Markdown files are up to date.
@@ -97,7 +97,7 @@ ${BIB_MD} : ${BIB_TEX} bin/bib2md.py
 
 # Create the JSON table of contents.
 ${TOC_JSON} : ${PAGES_MD} bin/make_toc.py
-	bin/make_toc.py _config.yml ${DIR_MD} > ${TOC_JSON}
+	bin/make_toc.py ${lang} > ${TOC_JSON}
 
 # Dependencies with HTML file inclusions.
 ${DIR_HTML}/%/index.html : $(wildcard _includes/%/*.*)
@@ -144,6 +144,10 @@ check_langs : ${CONFIG_YML}
 check_links : ${CONFIG_YML}
 	@bin/check.py ${lang} links
 
+## check_pages    : check the structure of pages.
+check_pages : ${CONFIG_YML}
+	@bin/check.py ${lang} pages
+
 ## check_src      : check source file inclusion references.
 check_src : ${CONFIG_YML}
 	@bin/check.py ${lang} src
@@ -151,6 +155,11 @@ check_src : ${CONFIG_YML}
 ## check_toc      : check consistency of tables of contents.
 check_toc : ${CONFIG_YML}
 	@bin/check.py ${lang} toc
+
+## fixme          : look for FIXME markers in pages.
+#  Output is piped to `cat` to prevent error reports if there are no FIXMEs.
+fixme :
+	@fgrep -C 1 -n FIXME ${PAGES_MD} | cat
 
 ## stats          : report summary statistics of completed chapters.
 stats : ${CONFIG_YML}
@@ -163,8 +172,9 @@ spelling :
 	@cat ${PAGES_MD} | bin/uncode.py | aspell list | sort | uniq | comm -2 -3 - .words
 
 ## undone         : which files have not yet been done?
+#  Output is piped to `cat` to prevent error reports if there are no FIXMEs.
 undone :
-	@grep -l 'undone: true' _en/*.md
+	@grep -l 'undone: true' _en/*.md | cat
 
 ## ----------------------------------------
 
