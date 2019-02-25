@@ -13,8 +13,9 @@ SECTION_PAT = re.compile(r'^##\s+.+\s+\{#(s:.+)\}', re.MULTILINE)
 FIGURE_PAT = re.compile(r'id="(f:[^"]+)"')
 
 
-def main(config_file, source_dir):
-    config = get_toc(config_file)
+def main(language):
+    config = get_toc()
+    source_dir = '_{}'.format(language)
     result = {}
 
     lessons = config['lessons']
@@ -38,7 +39,6 @@ def main(config_file, source_dir):
         }
         figure = process(result, source_dir, slug, key, figure)
 
-    language = source_dir.lstrip('_')
     json.dump(result, sys.stdout)
 
 
@@ -64,6 +64,6 @@ def process(result, source_dir, slug, base, figure_start):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        usage('make_toc.py config_file source_dir')
-    main(sys.argv[1], sys.argv[2])
+    if len(sys.argv) != 2:
+        usage('make_toc.py language')
+    main(sys.argv[1])

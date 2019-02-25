@@ -18,9 +18,10 @@ CHARACTERS = {
 CONFIG_FILE = '_config.yml'             # Jekyll configuration file
 PROSE_FILE_FMT = '_{}/{}.md'            # lesson or appendix (%language, %slug)
 CROSSREF_FMT = '_data/{}_toc.json'      # cross-reference file (%language)
+SOURCE_DIR = 'src'                      # source code inclusions
 
 
-def get_all_docs(config_file, language, with_index=True, remove_code_blocks=True):
+def get_all_docs(language, with_index=True, remove_code_blocks=True):
     '''
     Return a list of (slug, filename, body, lines) tuples from the table of contents,
     including ('index', 'lang/index.md', lines) unless told not to.
@@ -28,7 +29,7 @@ def get_all_docs(config_file, language, with_index=True, remove_code_blocks=True
     result = []
     if with_index:
         result.append(get_doc(language, 'index', remove_code_blocks=remove_code_blocks))
-    toc = get_toc(config_file)
+    toc = get_toc()
     for section in toc:
         result.extend([get_doc(language, s, remove_code_blocks=remove_code_blocks)
                        for s in toc[section]])
@@ -75,6 +76,24 @@ def get_header(body):
     return body[3:second].strip()
 
 
+def get_inclusions(content, rejoin_lines=True):
+    '''
+    Get (path, text) pairs for every named file inclusion.
+    '''
+    rejoin_pat = re.compile(r'\\\n\s*')
+    def _rejoin(text):
+        if rejoin_lines:
+            text = rejoin_pat.sub('', text)
+        return text
+
+    referenced = match_body(content,
+                            r'```(.+?)\n(.+?)```\n({:\s+title="([^"]+)\s*"})?')
+    referenced = [(path, _rejoin(inclusion))
+                  for (lang, inclusion, title, path) in referenced
+                  if title]
+    return referenced
+
+
 def get_main_div(reader):
     '''Read main div from input.'''
 
@@ -89,11 +108,19 @@ def get_main_div(reader):
     sys.stdout.writelines(lines[start:end+1])
 
 
-def get_toc(config_file):
+def get_src_file(path):
+    '''
+    Get the content of a source file given an inclusion path.
+    '''
+    with open(os.path.join(SOURCE_DIR, path), 'r') as reader:
+        return reader.read()
+
+
+def get_toc():
     '''
     Read the table of contents and return ToC section.
     '''
-    with open(config_file, 'r') as reader:
+    with open(CONFIG_FILE, 'r') as reader:
         return yaml.load(reader)['toc']
 
 
@@ -103,6 +130,17 @@ def is_undone(body):
     '''
     pat = re.compile('^undone:\s+true', flags=re.MULTILINE)
     return pat.search(get_header(body)) is not None
+
+
+def match_body(content, pattern, flags=re.DOTALL):
+    '''
+    Find all matches in all bodies.
+    '''
+    pat = re.compile(pattern, flags)
+    result = set()
+    for (slug, filename, body, lines) in content:
+        result |= set(pat.findall(body))
+    return result
 
 
 def report(title, group, values):
