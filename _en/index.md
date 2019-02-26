@@ -33,6 +33,8 @@ and the lessons are designed using the methods outlined in [[Wils2018](#CITE)].
 Feedback and contributions are very welcome;
 please see our [Code of Conduct](./conduct/) for guidance.
 
+![Concept Map](../figures/concepts.svg)
+
 ## Contributors
 
 {% include people.html %}
