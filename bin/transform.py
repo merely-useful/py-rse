@@ -218,6 +218,42 @@ class CrossRef(Base):
         return [pat.sub(f, s) for s in lines]
 
 
+class Table(Base):
+    '''
+    HTML table: <table title="TITLE" id="t:LABEL">...</table>
+    =>
+    LaTeX: \begin{table}\label{LABEL}\begin{longtable}...\end{longtable}\caption{TITLE}\end{table}
+    '''
+
+    def pre(self, lines):
+        return self._regexp(lines,
+                            r'(<table\s+title="([^"]+)"\s+id="([^"]+)">)',
+                            '==table=={2}=={1}\n{0}')
+
+    def post(self, lines):
+        pat = re.compile(r'==table==([^=]+)==(.+)')
+        result = []
+        table_id = None
+        table_caption = None
+        for line in lines:
+            m = pat.search(line)
+            if m:
+                table_id = m.group(1)
+                table_caption = m.group(2)
+            elif table_id and (r'\begin{longtable}' in line):
+                result.append('\\begin{{table}}\\label{{{0}}}\n'.format(table_id))
+                result.append(line)
+            elif table_id and (r'\end{longtable}' in line):
+                result.append(line)
+                result.append('\\caption{{{0}}}\n'.format(table_caption))
+                result.append('\\end{table}\n')
+                table_id = None
+                table_caption = None
+            else:
+                result.append(line)
+        return result
+
+
 #-------------------------------------------------------------------------------
 
 class BaseRegexp(Base):
@@ -279,6 +315,16 @@ class FigureRef(BaseRegexp):
     WRITE_LATEX = r'Figure~\ref{{{0}}}'
 
 
+class TableRef(BaseRegexp):
+    '''
+    References to tables.
+    '''
+    MATCH_HTML = r'<a href="#TBL">(t:[^<]+)</a>'
+    WRITE_TEMP = r'==tableref=={0}=='
+    MATCH_TEMP = r'==tableref==([^=]+)=='
+    WRITE_LATEX = r'Table~\ref{{{0}}}'
+
+
 class Noindent(BaseRegexp):
     '''
     HTML embedded command comment: <!-- == COMMMAND -->
@@ -333,7 +379,7 @@ class MainMatter(BaseStringMatch):
     See https://tex.stackexchange.com/questions/369854/memoir-chapter-based-figure-numbering
     '''
     MATCH_TEMP = '==mainmatter=='
-    WRITE_LATEX = '\\mainmatter\n\\counterwithout{figure}{chapter}'
+    WRITE_LATEX = '\\mainmatter\n\\counterwithout{figure}{chapter}\n\\counterwithout{table}{chapter}'
 
 
 class Midpoint(BaseStringMatch):
@@ -385,6 +431,8 @@ HANDLERS = [
     CrossRef,
     Figure,
     FigureRef,
+    Table,
+    TableRef,
     Noindent,
     CodeBlock,
     Citation,

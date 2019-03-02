@@ -55,7 +55,10 @@ const fixCrossRefs = () => {
   const prefix = document.currentScript.getAttribute('ROOT') != '' ? '.' : '..'
   const crossref = JSON.parse(document.currentScript.getAttribute('CROSSREF'))
   Array.from(document.querySelectorAll('a'))
-    .filter(e => ((e.getAttribute('href') == '#REF') || (e.getAttribute('href') == '#FIG')))
+    .filter(e => {
+      const href = e.getAttribute('href')
+      return (href == '#REF') || (href == '#FIG') || (href == '#TBL')
+    })
     .forEach(e => {
       const key = e.textContent
       const entry = crossref[key]
@@ -67,7 +70,7 @@ const fixCrossRefs = () => {
 }
 
 // Fix figure captions.
-const fixCaptions = () => {
+const fixFigureCaptions = () => {
   const prefix = document.currentScript.getAttribute('ROOT') != '' ? '.' : '..'
   const crossref = JSON.parse(document.currentScript.getAttribute('CROSSREF'))
   Array.from(document.querySelectorAll('figure'))
@@ -76,6 +79,22 @@ const fixCaptions = () => {
       const figureNum = crossref[figureId].value
       const caption = e.querySelector('figcaption')
       caption.innerHTML = `Figure ${figureNum}: ` + caption.innerHTML
+    })
+}
+
+// Fix table captions.
+const fixTableCaptions = () => {
+  const prefix = document.currentScript.getAttribute('ROOT') != '' ? '.' : '..'
+  const crossref = JSON.parse(document.currentScript.getAttribute('CROSSREF'))
+  Array.from(document.querySelectorAll('table'))
+    .filter(e => e.hasAttribute('title'))
+    .forEach(e => {
+      const tableId = e.getAttribute('id')
+      const tableNum = crossref[tableId].value
+      const title = e.getAttribute('title')
+      const caption = document.createElement('caption')
+      caption.innerHTML = `Table ${tableNum}: ${title}`
+      e.insertBefore(caption, e.childNodes[0])
     })
 }
 
@@ -112,6 +131,7 @@ const showHideSolutions = (id) => {
   fixBibRefs()
   fixGlossRefs()
   fixCrossRefs()
-  fixCaptions()
+  fixFigureCaptions()
+  fixTableCaptions()
   fixSolutions()
 })()
