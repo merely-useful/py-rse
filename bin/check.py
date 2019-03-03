@@ -143,13 +143,21 @@ def check_figures(language):
 
 def check_gloss(language):
     '''
-    Check for unused and undefined glossary entries.
+    Check for unused and undefined glossary entries and alphabetical order.
     '''
     content = get_all_docs(language)
+
     used = match_body(content, r'\[.+?\]\(#(g:.+?)\)')
     defined = _match_lines(content, r'\*\*.+?\*\*{:#(g:.+?)}')
     report('Glossary Entries', 'unused', defined - used)
     report('Glossary Entries', 'missing', used - defined)
+
+    ordered = _get_lines(content, r'\*\*(.+?)\*\*{:#g:.+?}')
+    out_of_order = set()
+    for i in range(1, len(ordered)):
+        if ordered[i] <= ordered[i-1]:
+            out_of_order.add(ordered[i])
+    report('Glossary Entries', 'out of order', out_of_order)
 
 
 def check_langs(language):
@@ -240,6 +248,18 @@ def check_toc(language):
 #-------------------------------------------------------------------------------
 
     
+def _get_lines(content, pattern):
+    '''
+    Get flattened list of lines matching pattern.
+    '''
+    pat = re.compile(pattern)
+    result = []
+    for (slug, filename, body, lines) in content:
+        for line in lines:
+            result.extend(pat.findall(line))
+    return result
+
+
 def _ignore_file(x):
     return (x == '.gitkeep') or \
         x.endswith('~') or \
