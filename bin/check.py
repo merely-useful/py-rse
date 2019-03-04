@@ -295,8 +295,9 @@ def _out_of_order(keys):
     Find keys in list that are out of order.
     '''
     result = set()
-    for i in range(1, len(keys)):
-        if keys[i].lower() <= keys[i-1].lower():
+    clean = [k.lower().replace('-', ' ') for k in keys]
+    for i in range(1, len(clean)):
+        if clean[i] < clean[i-1]:
             result.add(keys[i])
     return result
 
