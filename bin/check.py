@@ -87,13 +87,18 @@ def check_chars(language):
 
 def check_cites(language):
     '''
-    Check for unused and undefined citations.
+    Check for unused and undefined citations and for bibliography order.
     '''
+    key_pat = r'{:#b:([^}]+)}'
     content = get_all_docs(language)
+
     used = _match_lines(content, r'\[([^\]]+)\]\(#BIB\)', splitter=',')
-    defined = _match_lines(content, r'{:#b:([^}]+)}')
+    defined = _match_lines(content, key_pat)
     report('Citations', 'unused', defined - used)
     report('Citations', 'undefined', used - defined)
+
+    keys = _get_lines(content, key_pat)
+    report('Citations', 'out of order', _out_of_order(keys))
 
 
 def check_crossref(language):
@@ -152,12 +157,8 @@ def check_gloss(language):
     report('Glossary Entries', 'unused', defined - used)
     report('Glossary Entries', 'missing', used - defined)
 
-    ordered = _get_lines(content, r'\*\*(.+?)\*\*{:#g:.+?}')
-    out_of_order = set()
-    for i in range(1, len(ordered)):
-        if ordered[i] <= ordered[i-1]:
-            out_of_order.add(ordered[i])
-    report('Glossary Entries', 'out of order', out_of_order)
+    keys = _get_lines(content, r'\*\*(.+?)\*\*{:#g:.+?}')
+    report('Glossary Entries', 'out of order', _out_of_order(keys))
 
 
 def check_langs(language):
@@ -286,6 +287,17 @@ def _match_lines(content, pattern, splitter=None):
         result = {individual
                   for group in result
                   for individual in group.split(splitter)}
+    return result
+
+
+def _out_of_order(keys):
+    '''
+    Find keys in list that are out of order.
+    '''
+    result = set()
+    for i in range(1, len(keys)):
+        if keys[i].lower() <= keys[i-1].lower():
+            result.add(keys[i])
     return result
 
 
