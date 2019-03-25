@@ -176,6 +176,10 @@ spelling :
 undone :
 	@grep -l 'undone: true' _en/*.md | cat
 
+## words          : count words
+words :
+	@for i in _en/*.md; do printf '%5d %s\n' $$(bin/uncode.py $$i | wc -w) $$i; done
+
 ## ----------------------------------------
 
 ## clean          : clean up junk files.
