@@ -11,6 +11,7 @@ import yaml
 
 CHARACTERS = {
     'ç': r"\c{c}",
+    'è': r'\`{e}',
     'é': r"\'{e}",
     'ë': r'\"{e}',
     'ö': r'\"{o}'
@@ -21,17 +22,23 @@ CROSSREF_FMT = '_data/{}_toc.json'      # cross-reference file (%language)
 SOURCE_DIR = 'src'                      # source code inclusions
 
 
-def get_all_docs(language, with_index=True, remove_code_blocks=True):
+def get_all_docs(language, with_index=True, remove_code_blocks=True, include_inline_code=True):
     '''
-    Return a list of (slug, filename, body, lines) tuples from the table of contents,
-    including ('index', 'lang/index.md', lines) unless told not to.
+    Return a list of (slug, filename, body, lines) tuples from the table of contents.
+    Include ('index', 'lang/index.md', lines) unless told not to.
+    Remove fenced code blocks unless told not to.
+    Include inline code fragments unless told not to.
     '''
     result = []
     if with_index:
-        result.append(get_doc(language, 'index', remove_code_blocks=remove_code_blocks))
+        result.append(get_doc(language, 'index',
+                              remove_code_blocks=remove_code_blocks,
+                              include_inline_code=include_inline_code))
     toc = get_toc()
     for section in toc:
-        result.extend([get_doc(language, s, remove_code_blocks=remove_code_blocks)
+        result.extend([get_doc(language, s,
+                               remove_code_blocks=remove_code_blocks,
+                               include_inline_code=include_inline_code)
                        for s in toc[section]])
     return result
 
@@ -45,9 +52,10 @@ def get_crossref(language):
         return json.load(reader)
 
 
-def get_doc(language, slug, remove_code_blocks=True):
+def get_doc(language, slug, remove_code_blocks=True, include_inline_code=True):
     '''
     Get a single document.
+    FIXME: implement include_inline_code
     '''
     filename = PROSE_FILE_FMT.format(language, slug)
     with open(filename, 'r') as reader:
