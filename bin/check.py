@@ -224,7 +224,8 @@ def check_src(language):
         return filename[prefix_len:]
 
     content = get_all_docs(language, remove_code_blocks=False)
-    referenced = match_body(content, r'{:\s+title="([^"]+)\s*"[^}]*}')
+    referenced = match_body(content, r'{:\s+title="([^"]+)\s*"[^}]*}') | \
+        match_body(content, r'<!--\s+used="([^"]+)"\s+-->')
     actual = {_unprefix(filename)
               for filename in glob.iglob('{}/**/*.*'.format(SOURCE_DIR), recursive=True)
               if not _ignore_file(filename)}
