@@ -96,7 +96,7 @@ ${BIB_MD} : ${BIB_TEX} bin/bib2md.py
 	bin/bib2md.py ${lang} < ${DIR_TEX}/book.bib > ${DIR_MD}/bib.md
 
 # Create the JSON table of contents.
-${TOC_JSON} : ${PAGES_MD} bin/make_toc.py
+${TOC_JSON} : ${CONFIG_YML} ${PAGES_MD} bin/make_toc.py
 	bin/make_toc.py ${lang} > ${TOC_JSON}
 
 # Dependencies with HTML file inclusions.
@@ -175,6 +175,10 @@ spelling :
 #  Output is piped to `cat` to prevent error reports if there are no FIXMEs.
 undone :
 	@grep -l 'undone: true' _en/*.md | cat
+
+## words          : count words
+words :
+	@for i in _en/*.md; do printf '%5d %s\n' $$(bin/uncode.py $$i | wc -w) $$i; done
 
 ## ----------------------------------------
 

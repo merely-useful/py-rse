@@ -87,13 +87,18 @@ def check_chars(language):
 
 def check_cites(language):
     '''
-    Check for unused and undefined citations.
+    Check for unused and undefined citations and for bibliography order.
     '''
+    key_pat = r'{:#b:([^}]+)}'
     content = get_all_docs(language)
+
     used = _match_lines(content, r'\[([^\]]+)\]\(#BIB\)', splitter=',')
-    defined = _match_lines(content, r'{:#b:([^}]+)}')
+    defined = _match_lines(content, key_pat)
     report('Citations', 'unused', defined - used)
     report('Citations', 'undefined', used - defined)
+
+    keys = _get_lines(content, key_pat)
+    report('Citations', 'out of order', _out_of_order(keys))
 
 
 def check_crossref(language):
@@ -143,13 +148,17 @@ def check_figures(language):
 
 def check_gloss(language):
     '''
-    Check for unused and undefined glossary entries.
+    Check for unused and undefined glossary entries and alphabetical order.
     '''
     content = get_all_docs(language)
+
     used = match_body(content, r'\[.+?\]\(#(g:.+?)\)')
     defined = _match_lines(content, r'\*\*.+?\*\*{:#(g:.+?)}')
     report('Glossary Entries', 'unused', defined - used)
     report('Glossary Entries', 'missing', used - defined)
+
+    keys = _get_lines(content, r'\*\*(.+?)\*\*{:#g:.+?}')
+    report('Glossary Entries', 'out of order', _out_of_order(keys))
 
 
 def check_langs(language):
@@ -215,7 +224,8 @@ def check_src(language):
         return filename[prefix_len:]
 
     content = get_all_docs(language, remove_code_blocks=False)
-    referenced = match_body(content, r'{:\s+title="([^"]+)\s*"}')
+    referenced = match_body(content, r'{:\s+title="([^"]+)\s*"[^}]*}') | \
+        match_body(content, r'<!--\s+used="([^"]+)"\s+-->')
     actual = {_unprefix(filename)
               for filename in glob.iglob('{}/**/*.*'.format(SOURCE_DIR), recursive=True)
               if not _ignore_file(filename)}
@@ -240,6 +250,18 @@ def check_toc(language):
 #-------------------------------------------------------------------------------
 
     
+def _get_lines(content, pattern):
+    '''
+    Get flattened list of lines matching pattern.
+    '''
+    pat = re.compile(pattern)
+    result = []
+    for (slug, filename, body, lines) in content:
+        for line in lines:
+            result.extend(pat.findall(line))
+    return result
+
+
 def _ignore_file(x):
     return (x == '.gitkeep') or \
         x.endswith('~') or \
@@ -266,6 +288,18 @@ def _match_lines(content, pattern, splitter=None):
         result = {individual
                   for group in result
                   for individual in group.split(splitter)}
+    return result
+
+
+def _out_of_order(keys):
+    '''
+    Find keys in list that are out of order.
+    '''
+    result = set()
+    clean = [k.lower().replace('-', ' ') for k in keys]
+    for i in range(1, len(clean)):
+        if clean[i] < clean[i-1]:
+            result.add(keys[i])
     return result
 
 
