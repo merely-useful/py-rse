@@ -139,8 +139,11 @@ def check_figures(language):
             filename.replace('.png', '.svg') in defined
 
     content = get_all_docs(language)
-    used = _match_lines(content, r'{%\s+include\s+figure.html[^%]+src=".+/figures/([^"]+)"')
-    defined = {f for f in os.listdir(FIGURE_DIR) if not _ignore(f)}
+    by_doc = _match_lines_by_doc(content, r'{%\s+include\s+figure.html[^%]+src="([^"]+)"')
+    used = set()
+    for slug in by_doc:
+        used |= {os.path.join(FIGURE_DIR, slug, filename) for filename in by_doc[slug]}
+    defined = {f for f in glob.glob(os.path.join(FIGURE_DIR, '**/*.*')) if not _ignore(f)}
     defined -= {f for f in defined if _redundant(f, defined)}
     report('Figures', 'unused', defined - used)
     report('Figures', 'missing', used - defined)
@@ -279,15 +282,29 @@ def _match_lines(content, pattern, splitter=None):
     '''
     Find all matches in all lines, splitting and flattening if asked to do so.
     '''
-    pat = re.compile(pattern)
+    by_doc = _match_lines_by_doc(content, pattern, splitter=splitter)
     result = set()
+    for doc in by_doc:
+        result |= by_doc[doc]
+    return result
+
+
+def _match_lines_by_doc(content, pattern, splitter=None):
+    '''
+    Find all matches in all lines, splitting and flattening if asked to do so.
+    Return a dictionary of doc:match_set.
+    '''
+    pat = re.compile(pattern)
+    result = {}
     for (slug, filename, body, lines) in content:
+        temp = set()
         for line in lines:
-            result |= set(pat.findall(line))
-    if splitter is not None:
-        result = {individual
-                  for group in result
-                  for individual in group.split(splitter)}
+            temp |= set(pat.findall(line))
+        if splitter is not None:
+            temp = {individual
+                    for group in temp
+                    for individual in group.split(splitter)}
+        result[slug] = temp
     return result
 
 
