@@ -8,9 +8,7 @@ definitions if that's done.
 {% endcomment %}
 
 [config-email]: mailto:{{site.email}}
-[config-organization]: {{site.organization}}
 [config-repo]: {{site.repo}}
-[config-website]: {{site.website}}
 
 [covenant]: https://www.contributor-covenant.org
 

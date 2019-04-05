@@ -2,11 +2,9 @@
 title: "Introduction"
 ---
 
-Please see [Wils2018](#BIB) for discussion of lesson design.
+Please see [Wils2018](#BIB) for discussion of lesson design,
+and [f:intro-concepts](#FIG) for a concept map.
 
-<div align="center">
-  <p><img src="../../figures/pratchett-back-in-black.png" width="400" alt="Terry Pratchett (from the BBC documentary 'Back in Black')" /></p>
-  <p><em>Coming back to where you started is not the same as never leaving.<br/>&ndash; Sir Terry Pratchett</em></p>
-</div>
+{% include figure.html id="f:intro-concepts" src="concepts.svg" caption="Concept Map" %}
 
 {% include links.md %}

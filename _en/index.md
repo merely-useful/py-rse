@@ -4,6 +4,11 @@ redirect_from: "/"
 permalink: "/en/"
 ---
 
+<div align="center">
+  <p><img src="{{'/figures/pratchett-back-in-black.png'|relative_url}}" width="400" alt="Terry Pratchett (from the BBC documentary 'Back in Black')" /></p>
+  <p><em>Coming back to where you started is not the same as never leaving.<br/>&ndash; Sir Terry Pratchett</em></p>
+</div>
+
 This GitHub organization contains material for two semester-long courses on computing skills for researchers:
 
 1.  [One Extra Fact](https://merely-useful.github.io/one-extra-fact/):
@@ -32,8 +37,6 @@ The titles of these courses are all quotations from [Sir Terry Pratchett][pratch
 and the lessons are designed using the methods outlined in [[Wils2018](#CITE)].
 Feedback and contributions are very welcome;
 please see our [Code of Conduct](./conduct/) for guidance.
-
-![Concept Map](../figures/concepts.svg)
 
 ## Contributors
 
