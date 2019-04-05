@@ -9,6 +9,8 @@ import os
 import re
 from util import CHARACTERS, usage, get_crossref, get_toc
 
+PATH_TO_ROOT = '../../' # from TeX directory to root of project
+
 #-------------------------------------------------------------------------------
 
 class Base(object):
@@ -47,7 +49,8 @@ class Base(object):
 
 class ExerciseAndSolution(Base):
     '''
-    Turn <section>...<h3>exercise title</h3>...<aside>...</aside>...</section> into section and subsection markers.
+    Turn <section>...<h3>exercise title</h3>...<aside>...</aside>...</section>
+    into section and subsection markers.
     '''
 
     def pre(self, lines):
@@ -302,7 +305,12 @@ class Figure(BaseRegexp):
     MATCH_HTML = r'<figure\s+id="(f:.+)">\s*<img\s+src="(.+)"\s*/>\s*<figcaption>(.+)</figcaption>\s*</figure>'
     WRITE_TEMP = r'==figure=={0}=={1}=={2}=='
     MATCH_TEMP = r'==figure==(.+)==(.+)==(.+)=='
-    WRITE_LATEX = '\\begin{{figure}}\n\\centering\n\\includegraphics{{{1}}}\n\\caption{{{2}}}\n\\label{{{0}}}\n\\end{{figure}}'
+    WRITE_LATEX = r'''\begin{{figure}}
+\centering
+\includegraphics{{PATH_TO_ROOT{1}}}
+\caption{{{2}}}
+\label{{{0}}}
+\end{{figure}}'''.replace('PATH_TO_ROOT', PATH_TO_ROOT)
 
 
 class FigureRef(BaseRegexp):
