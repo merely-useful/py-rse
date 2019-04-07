@@ -96,7 +96,7 @@ test-pandoc:
 # Build Markdown from R Markdown.
 ${DIR_MD}/%.md : ${DIR_RMD}/%.Rmd
 	@bin/build.R $< $@
-	cp ${DIR_RMD}/figures/$$(basename $< .Rmd)/*.* ./figures/$$(basename $< .Rmd) || true
+	@cp ${DIR_RMD}/figures/$$(basename $< .Rmd)/*.* ./figures/$$(basename $< .Rmd) || true
 
 # Create all the HTML pages once the Markdown files are up to date.
 ${PAGES_HTML} : ${PAGES_MD} ${BIB_MD} ${CONFIG_YML} ${TOC_JSON}
