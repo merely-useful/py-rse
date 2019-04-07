@@ -4,7 +4,11 @@ $(warning Please set 'lang' with 'lang=en' or similar.)
 lang=en
 endif
 
+# Controls
+all : commands
+
 # Pick up project-specific setting for STEM.
+# (Must come after definition of 'all' to avoid confusion about default target.)
 include site.mk
 
 # Overall configuration file.
@@ -31,9 +35,6 @@ DIR_TEX=tex/${lang}
 BIB_TEX=${DIR_TEX}/book.bib
 ALL_TEX=${DIR_TEX}/all.tex
 BOOK_PDF=${DIR_TEX}/${STEM}.pdf
-
-# Controls
-all : commands
 
 ## commands       : show all commands.
 commands :
@@ -95,6 +96,7 @@ test-pandoc:
 # Build Markdown from R Markdown.
 ${DIR_MD}/%.md : ${DIR_RMD}/%.Rmd
 	@bin/build.R $< $@
+	cp ${DIR_RMD}/figures/$$(basename $< .Rmd)/*.* ./figures/$$(basename $< .Rmd) || true
 
 # Create all the HTML pages once the Markdown files are up to date.
 ${PAGES_HTML} : ${PAGES_MD} ${BIB_MD} ${CONFIG_YML} ${TOC_JSON}

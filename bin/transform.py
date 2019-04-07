@@ -141,6 +141,17 @@ class PdfToSvg(Base):
                             r'/figures/{0}.pdf}}')
 
 
+class GifToPng(Base):
+    '''
+    LaTeX: /figures/FILENAME.gif => /figures/FILENAME.png
+    '''
+
+    def post(self, lines):
+        return self._regexp(lines,
+                            r'/figures/(.+)\.gif}',
+                            r'/figures/{0}.png}}')
+
+
 class SpecialCharacters(Base):
     '''
     LaTeX: accented characters replaced by LaTeX escapes.
@@ -325,7 +336,7 @@ class FigureRmd(BaseRegexp):
     MATCH_TEMP = r'==figurermd==(.+)==(.+)=='
     WRITE_LATEX = r'''\begin{{figure}}
 \centering
-\includegraphics{{PATH_FOR_RMD/{0}}}
+\includegraphics{{PATH_FOR_RMD{0}}}
 \caption{{{1}}}
 \end{{figure}}'''.replace('PATH_FOR_RMD', PATH_FOR_RMD)
 
@@ -464,6 +475,7 @@ HANDLERS = [
     Citation,
     Newline,
     PdfToSvg,
+    GifToPng,
     Quote,
     Section,
     Subsection,

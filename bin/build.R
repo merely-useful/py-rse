@@ -13,4 +13,7 @@ if (((length(args) == 1) && (args[1] %in% c("-h", "--help"))) || (length(args) !
   message(USAGE)
   quit(status = 0)
 }
-knit(args[1], output = args[2])
+src = normalizePath(args[1])
+dst = normalizePath(args[2])
+setwd(dirname(src))
+knit(src, output = dst)
