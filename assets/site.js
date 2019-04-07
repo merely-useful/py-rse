@@ -23,8 +23,7 @@ const fixTables = () => {
 
 // Fix glossary reference URLs.
 const fixGlossRefs = () => {
-  const pageIsRoot = document.currentScript.getAttribute('ROOT') != ''
-  const bibStem = pageIsRoot ? './gloss/' : '../gloss/'
+  const bibStem = './gloss.html'
   Array.from(document.querySelectorAll('a'))
     .filter(e => e.getAttribute('href').startsWith('#g:'))
     .forEach(e => {
@@ -35,8 +34,7 @@ const fixGlossRefs = () => {
 
 // Convert bibliography citation links.
 const fixBibRefs = () => {
-  const pageIsRoot = document.currentScript.getAttribute('ROOT') != ''
-  const bibStem = pageIsRoot ? './bib/#b:' : '../bib/#b:'
+  const bibStem = './bib.html#b:'
   Array.from(document.querySelectorAll('a'))
     .filter(e => e.getAttribute('href') == '#BIB')
     .forEach(e => {
@@ -52,7 +50,6 @@ const fixBibRefs = () => {
 
 // Fix cross-reference links.
 const fixCrossRefs = () => {
-  const prefix = document.currentScript.getAttribute('ROOT') != '' ? '.' : '..'
   const crossref = JSON.parse(document.currentScript.getAttribute('CROSSREF'))
   Array.from(document.querySelectorAll('a'))
     .filter(e => {
@@ -62,7 +59,7 @@ const fixCrossRefs = () => {
     .forEach(e => {
       const key = e.textContent
       const entry = crossref[key]
-      const link = prefix + '/' + entry.slug + '/#' + key
+      const link = './' + entry.slug + '.html#' + key
       const text = entry.text + '&nbsp;' + entry.value
       e.setAttribute('href', link)
       e.innerHTML = text
@@ -71,7 +68,6 @@ const fixCrossRefs = () => {
 
 // Fix figure captions.
 const fixFigureCaptions = () => {
-  const prefix = document.currentScript.getAttribute('ROOT') != '' ? '.' : '..'
   const crossref = JSON.parse(document.currentScript.getAttribute('CROSSREF'))
   Array.from(document.querySelectorAll('figure'))
     .forEach(e => {
@@ -84,7 +80,6 @@ const fixFigureCaptions = () => {
 
 // Fix table captions.
 const fixTableCaptions = () => {
-  const prefix = document.currentScript.getAttribute('ROOT') != '' ? '.' : '..'
   const crossref = JSON.parse(document.currentScript.getAttribute('CROSSREF'))
   Array.from(document.querySelectorAll('table'))
     .filter(e => e.hasAttribute('title'))

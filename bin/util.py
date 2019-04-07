@@ -14,7 +14,15 @@ CHARACTERS = {
     'è': r'\`{e}',
     'é': r"\'{e}",
     'ë': r'\"{e}',
-    'ö': r'\"{o}'
+    'ö': r'\"{o}',
+    '✔': r'{\cmark}',
+    '✖': r'{\xmark}',
+    '…': r'{\ldots}',
+    '─': r'{---}',
+    '‘': r"'",
+    '’': r"'",
+    '⠏': r'',
+    '═': r'='
 }
 CONFIG_FILE = '_config.yml'             # Jekyll configuration file
 PROSE_FILE_FMT = '_{}/{}.md'            # lesson or appendix (%language, %slug)

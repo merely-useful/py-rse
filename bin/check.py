@@ -130,6 +130,7 @@ def check_figures(language):
     '''
     def _ignore(filename):
         return filename.startswith('.') or \
+            filename.endswith('.gif') or \
             filename.endswith('.odg') or \
             filename.endswith('.pdf') or \
             filename.endswith('.xml')
@@ -143,6 +144,7 @@ def check_figures(language):
     used = set()
     for slug in by_doc:
         used |= {os.path.join(FIGURE_DIR, slug, filename) for filename in by_doc[slug]}
+    used |= _match_lines(content, r'^!\[.+\]\(\.\./(.+)\)')
     defined = {f for f in glob.glob(os.path.join(FIGURE_DIR, '**/*.*')) if not _ignore(f)}
     defined -= {f for f in defined if _redundant(f, defined)}
     report('Figures', 'unused', defined - used)
