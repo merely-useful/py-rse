@@ -70,6 +70,7 @@ ${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex ${BIB_TEX}
 	&& ${LATEX} --shell-escape -jobname=${STEM} book \
 	&& ${BIBTEX} ${STEM} \
 	&& ${LATEX} --shell-escape -jobname=${STEM} book \
+	&& ${LATEX} --shell-escape -jobname=${STEM} book \
 	&& ${LATEX} --shell-escape -jobname=${STEM} book
 
 # Create the unified LaTeX file (separate target to simplify testing).
@@ -196,7 +197,7 @@ words :
 
 ## clean          : clean up junk files.
 clean :
-	@rm -r -f _config.yml _site dist
+	@rm -r -f _site dist
 	@find . -name '*~' -delete
 	@find . -name __pycache__ -prune -exec rm -r "{}" \;
 	@find . -name '_minted-*' -prune -exec rm -r "{}" \;
