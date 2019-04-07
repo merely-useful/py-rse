@@ -202,7 +202,6 @@ clean :
 	@find . -name '_minted-*' -prune -exec rm -r "{}" \;
 	@rm -f tex/*/all.tex tex/*/*.{aux,bbl,blg,lof,log,lot,out,toc}
 	@find . -name .DS_Store -prune -exec rm -r "{}" \;
-	@touch ${RMD_SRC} # to ensure rebuild the next time
 
 ## settings       : show macro values.
 settings :
