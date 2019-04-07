@@ -35,7 +35,7 @@ def get_all(source_dir):
 def make_filenames(source_dir, slugs):
     '''Turn slugs into filenames.'''
 
-    return [os.path.join(source_dir, s, 'index.html') for s in slugs]
+    return [os.path.join(source_dir, '{}.html'.format(s)) for s in slugs]
 
 
 #-------------------------------------------------------------------------------

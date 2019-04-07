@@ -7,6 +7,9 @@ endif
 # Pick up project-specific setting for STEM.
 include site.mk
 
+# Overall configuration file.
+CONFIG_YML=_config.yml
+
 # Tools.
 JEKYLL=jekyll
 PANDOC=pandoc
@@ -15,13 +18,15 @@ BIBTEX=bibtex
 PYTHON=python
 
 # Language-dependent settings.
-CONFIG_YML=_config.yml
 DIR_MD=_${lang}
+DIR_RMD=${lang}_rmd
+RMD_SRC=$(wildcard ${DIR_RMD}/*.Rmd)
+RMD_DST=$(patsubst ${DIR_RMD}/%.Rmd,${DIR_MD}/%.md,${RMD_SRC})
 PAGES_MD=$(wildcard ${DIR_MD}/*.md)
 BIB_MD=${DIR_MD}/bib.md
 TOC_JSON=_data/${lang}_toc.json
 DIR_HTML=_site/${lang}
-PAGES_HTML=${DIR_HTML}/index.html $(patsubst ${DIR_MD}/%.md,${DIR_HTML}/%/index.html,$(filter-out ${DIR_MD}/index.md,${PAGES_MD}))
+PAGES_HTML=$(patsubst ${DIR_MD}/%.md,${DIR_HTML}/%.html,${PAGES_MD})
 DIR_TEX=tex/${lang}
 BIB_TEX=${DIR_TEX}/book.bib
 ALL_TEX=${DIR_TEX}/all.tex
@@ -54,6 +59,9 @@ config : ${CONFIG_YML}
 ## toc            : regenerate the table of contents JSON file.
 toc : ${TOC_JSON}
 
+## rmarkdown      : rebuild Markdown source from R Markdown.
+rmarkdown : ${RMD_DST}
+
 # ----------------------------------------
 
 # Regenerate PDF once 'all.tex' has been created.
@@ -82,6 +90,10 @@ test-pandoc:
 	${PYTHON} bin/get_body.py _config.yml ${DIR_HTML} \
 	| ${PYTHON} bin/transform.py --pre ${lang} _includes \
 	| ${PANDOC} --wrap=preserve -f html -t latex -o -
+
+# Build Markdown from R Markdown.
+${DIR_MD}/%.md : ${DIR_RMD}/%.Rmd
+	@bin/build.R $< $@
 
 # Create all the HTML pages once the Markdown files are up to date.
 ${PAGES_HTML} : ${PAGES_MD} ${BIB_MD} ${CONFIG_YML} ${TOC_JSON}
@@ -188,14 +200,17 @@ clean :
 	@find . -name '*~' -delete
 	@find . -name __pycache__ -prune -exec rm -r "{}" \;
 	@find . -name '_minted-*' -prune -exec rm -r "{}" \;
-	@rm -r -f tex/*/all.tex tex/*/*.aux tex/*/*.bbl tex/*/*.blg tex/*/*.log tex/*/*.out tex/*/*.toc
+	@rm -f tex/*/all.tex tex/*/*.{aux,bbl,blg,lof,log,lot,out,toc}
 	@find . -name .DS_Store -prune -exec rm -r "{}" \;
+	@touch ${RMD_SRC} # to ensure rebuild the next time
 
 ## settings       : show macro values.
 settings :
 	@echo "CONFIG_YML=${CONFIG_YML}"
 	@echo "JEKYLL=${JEKYLL}"
 	@echo "DIR_MD=${DIR_MD}"
+	@echo "RMD_SRC=${RMD_SRC}"
+	@echo "RMD_DST=${RMD_DST}"
 	@echo "PAGES_MD=${PAGES_MD}"
 	@echo "BIB_MD=${BIB_MD}"
 	@echo "DIR_HTML=${DIR_HTML}"
