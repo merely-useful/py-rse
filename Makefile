@@ -66,7 +66,7 @@ rmarkdown : ${RMD_DST}
 # ----------------------------------------
 
 # Regenerate PDF once 'all.tex' has been created.
-${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex ${BIB_TEX}
+${BOOK_PDF} : ${ALL_TEX} tex/settings.tex ${DIR_TEX}/book.tex ${DIR_TEX}/site.tex ${BIB_TEX}
 	cd ${DIR_TEX} \
 	&& ${LATEX} --shell-escape -jobname=${STEM} book \
 	&& ${BIBTEX} ${STEM} \
