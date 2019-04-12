@@ -207,6 +207,7 @@ clean :
 	@find . -name __pycache__ -prune -exec rm -r "{}" \;
 	@find . -name '_minted-*' -prune -exec rm -r "{}" \;
 	@rm -f tex/*/all.tex tex/*/*.{aux,bbl,blg,lof,log,lot,out,toc}
+	@rm -f en_rmd/*.md
 	@find . -name .DS_Store -prune -exec rm -r "{}" \;
 
 ## settings       : show macro values.
