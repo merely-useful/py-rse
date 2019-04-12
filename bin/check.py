@@ -130,14 +130,15 @@ def check_figures(language):
     '''
     def _ignore(filename):
         return filename.startswith('.') or \
-            filename.endswith('.gif') or \
+            filename.endswith('.drawio') or \
             filename.endswith('.odg') or \
             filename.endswith('.pdf') or \
             filename.endswith('.xml')
 
     def _redundant(filename, defined):
         return filename.endswith('.png') and \
-            filename.replace('.png', '.svg') in defined
+            ((filename.replace('.png', '.svg') in defined) or \
+             (filename.replace('.png', '.gif') in defined))
 
     content = get_all_docs(language)
     by_doc = _match_lines_by_doc(content, r'{%\s+include\s+figure.html[^%]+src="([^"]+)"')
