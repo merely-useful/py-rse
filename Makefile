@@ -94,7 +94,7 @@ test-pandoc:
 	| ${PANDOC} --wrap=preserve -f html -t latex -o -
 
 # Build Markdown from R Markdown.
-${DIR_MD}/%.md : ${DIR_RMD}/%.Rmd
+${DIR_MD}/%.md : ${DIR_RMD}/%.Rmd ${DIR_RMD}/common.R
 	@bin/build.R $< $@
 	@if [ -d ${DIR_RMD}/figures/$$(basename $< .Rmd) ]; \
 	then \
