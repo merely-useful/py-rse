@@ -1,0 +1,3 @@
+-   Explain what docstrings are and add correctly-formatted docstrings to short Python programs.
+-   Extract and format documentation from docstrings using `pydoc`.
+-   Explain why consistent formatting of code is important.

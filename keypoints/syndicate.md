@@ -1,0 +1,7 @@
+- "FIXME
+- "Make data sets more useful by providing metadata.
+- "Write Python programs to download data sets using simple REST APIs.
+- "Parse CSV data using the `csv` library.
+- "Test a program that parses CSV using multiline strings.
+- "Make a function more robust by explicitly handling errors.
+- "Write Python programs that share static data sets.

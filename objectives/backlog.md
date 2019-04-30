@@ -1,0 +1,3 @@
+-   Explain what an issue tracking tool does and what it should be used for.
+-   Explain how to use labels on issues to manage work.
+-   Describe the information a well-written issue should contain.

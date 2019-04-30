@@ -1,0 +1,4 @@
+-   Explain the difference between open science, reproducible research, sustainability, and competence.
+-   Determine readiness for using this material.
+-   Explain what 'done' looks like for the computational component of a small or medium-sized research project.
+-   Determine whether a particular research project meets that standard.

@@ -1,0 +1,6 @@
+-   Include small datasets in repositories; store large ones on data sharing sites, and include metadata in the repository to locate them.
+-   An ORCID is a unique personal identifier that you can use to identify your work.
+-   A DOI is a unique identifier for a particular dataset, report, or software release.
+-   Data should be findable, accessible, interoperable, and reusable (FAIR).
+-   Use Zenodo to obtain DOIs.
+-   Publish your software as you would a paper.

@@ -1,0 +1,7 @@
+-   Create an explicit Code of Conduct for your project modelled on the Contributor Covenant.
+-   Be clear about how to report violations of the Code of Conduct and who will handle such reports.
+-   People who are not lawyers should not try to write licenses.
+-   Every project should include an explicit license to make clear who can do what with the material.
+-   People who incorporate GPL'd software into their own software must make their software also open under the GPL license; most other open licenses do not require this.
+-   The Creative Commons family of licenses allow people to mix and match requirements and restrictions on attribution, creation of derivative works, further sharing, and commercialization.
+-   Be proactive about welcoming and nurturing community members.

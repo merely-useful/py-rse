@@ -1,0 +1,931 @@
+# Automating Analyses {#s:automate}
+
+## Objectives
+
+```{r, child="objectives/automate.md"}
+```
+
+As Chapter \@ref(s:intro) said,
+Zipf's Law states that the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often,
+and so on.
+The analyses we want to do include:
+
+-   Analyze one input file to see how well it conforms to Zipf's Law.
+-   Analyze multiple input files to how well then conform in aggregate.
+-   Plot individual and aggregate word frequency distributions and expected values.
+
+The project we have inherited as a starting point contains the following:
+
+1.  The books we are analyzing are in <code>data/<em>title</em>.txt</code>.
+2.  A program called `bin/countwords.py` can read a text file
+    and produce a CSV file with two columns:
+    the words in the text
+    and the number of times that word occurs.
+3.  `bin/countwords.py` can analyze several files at once if we provide many filenames on the command line
+    or concatenate the files and send them to standard input in a pipeline
+    using something like `cat data/*.txt | bin/countwords.py`.
+4.  Another program, `bin/plotcounts.py`, will create a visualization for us
+    that shows word rank on the X axis and word counts on the Y axis.
+    (It doesn't show the actual words.)
+5.  A third program, `bin/collate.py`,
+    takes one or more CSV files as input and merges them
+    by combining the counts for words they have in common.
+6.  Finally,
+    `bin/testfit.py` will compare actual distributions against expectations
+    and give a fitting score.
+
+It's easy enough to run these programs by hand if we only want to analyze a handful of files,
+but doing this becomes tedious and error-prone as the number of files grows.
+Instead,
+we can write a shell script or another Python program to do multi-file analyses.
+Doing this documents the pipeline so that our colleagues (and future selves) can understand it,
+and enables us to re-do the entire analysis with a single command if we get new data
+or change our methods, parameters, or libraries.
+It also prevents us from making lots of little errors:
+there's no guarantee we'll get the script right the first time,
+but once we've fixed it, it will stay fixed.
+
+However,
+re-running the entire analysis every time we get a new file is inefficient:
+we don't need to re-count the words in our first thousand books
+when we add the thousand and first.
+This isn't a problem when calculations can be done quickly,
+but many can't,
+and anyway,
+the point of this chapter is to introduce a tool for handling cases in which
+we really want to avoid doing unnecessary work.
+
+What we want is a way to describe which files depend on which other files
+and how to generate or update a file when necessary.
+This is the job of a [build tool](glossary.html#build-tool).
+As the name suggests,
+a build tool's job is to build new files out of old ones.
+The most widely used build tool,
+[Make][make],
+was written in 1976 to recompile programs
+(which at the time was a slow process).
+[GNU Make][gnu-make] is a free, fast, and well-documented version of Make;
+we will use it throughout this book.
+
+> **Alternatives**
+>
+> [Many better build tools][build-tools] have been developed since Make---so many,
+> in fact,
+> that none has been able to capture more than a small fraction of potential users.
+> [Snakemake][snakemake] has a lot of fans,
+> and a future version of this tutorial might well use it.
+
+This introduction based on
+the [Software Carpentry lesson on Make][swc-make] maintained by [Gerard Capes][capes-gerard]
+and on [Jonathan Dursi][dursi-jonathan]'s [introduction to pattern rules][dursi-pattern-rules].
+
+## How can I update a file when its prerequisites change? {#s:automate-first}
+
+Make is based on three key ideas:
+
+1.  The operating system automatically records a [timestamp](glossary.html#timestamp)
+    every time a file is changed.
+    By checking this,
+    Make can tell whether files are newer or older than other files.
+2.  A programmer writes a [Makefile](glossary.html#makefile)
+    to tell Make how files depend on each other.
+    For example,
+    the Makefile could say that `results/moby_dick.csv` depends on `data/moby_dick.txt`,
+    or that `plots/aggregate.svg` depends on all of the CSV files in the `results/` directory.
+3.  The Makefile includes shell commands to create or update files that are out of date.
+    For example,
+    it could include a command to (re-)run `bin/countwords.py`
+    to create `results/moby_dick.csv` from `data/moby_dick.txt`.
+    (Make's use on shell commands is one reason for its longevity,
+    since it allows programmers to write tools for updating files
+    in whatever language they want.)
+
+Let's start by creating a file called `Makefile` that contains the following three lines:
+
+```make
+# Regenerate results for "Moby Dick"
+results/moby_dick.csv : data/moby_dick.txt
+        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+```
+{: title="automate/single_rule.mk"}
+
+The `#` character starts a comment,
+which runs to the end of a line (just as it does in Python or R).
+`results/moby_dick.csv` is the [target](glossary.html#make-target) of a [rule](glossary.html#make-rule),
+i.e., something that may need to be created or updated.
+Every rule in a Makefile has one or more targets,
+and must be written flush against the left margin.
+
+`data/moby_dick.txt` is a [prerequisite](glossary.html#make-prerequisite) in that rule,
+i.e.,
+something that the target of the rule depends on.
+A single colon separates the target from its prerequisites,
+and a rule can have any number of prerequisites---we'll see examples soon.
+
+The indented line that uses Python to run `bin/countwords.py`
+is the rule's [action](glossary.html#make-action).
+It creates or updates the target when it is out of date.
+A rule can have any number of actions,
+but they *must* be indented by a single tab character.
+Notice that the output of `bin/countwords.py` is [redirected](glossary.html#redirection) using `>`
+to create the output file:
+we will look at modifying the script in Chapter \@ref(s:configure)
+so that it can take the name of an output file as an argument.
+
+Together,
+the three parts of this rule tell Make when and how to re-create `results/moby_dick.csv`.
+To test that it works,
+run this command in the shell:
+
+```shell
+$ make
+```
+
+Make automatically looks for a file called `Makefile` and checks the rules it contains.
+In this case,
+one of three things will happen:
+
+1.  Make won't be able to find the file `data/moby_dick.csv`,
+    so it will run the script to create it.
+2.  Make will see that `data/moby_dick.txt` is newer than `results/moby_dick.csv`,
+    in which case it will run the script to update the results file.
+3.  Make will see that `results/moby_dick.csv` is newer than its prerequisite,
+    so it won't do anything.
+
+In the first two cases,
+Make will show the command it runs,
+along with anything the command prints to the screen
+via [standard output](glossary.html#stdout) or [standard error](glossary.html#stderr).
+In this case,
+there is no screen output,
+so we only see the command.
+
+> **Indentation Errors**
+>
+> If `Makefile` contains spaces instead of tabs to indent the rule's action,
+> we will see an error message like this:
+> 
+> ```text
+> Makefile:3: *** missing separator.  Stop.
+> ```
+>
+> The requirement to use tabs is a legacy of Make's origins as a student intern project,
+> and no,
+> I'm not kidding.
+
+If we run `make` again right away it doesn't re-run our script
+because we're in situation #3 from the list above:
+the target is newer than its prerequisites,
+so no action is required.
+We can check this by listing the files with their timestamps,
+ordered by how recently they have been updated:
+
+```shell
+$ ls -l -t data/moby_dick.txt results/moby_dick.csv
+```
+```text
+-rw-r--r--  1 gvwilson  staff   219107 31 Dec 08:58 results/moby_dick.csv
+-rw-r--r--  1 gvwilson  staff  1276201 31 Dec 08:58 data/moby_dick.txt
+```
+
+When Make sees that a target is newer than its prerequisites
+it displays a message like this:
+
+```text
+make: `results/moby_dick.csv' is up to date.
+```
+
+To test that Make is actually doing the right thing, we can:
+
+1.  Delete `results/moby_dick.csv` and type `make` again (situation #1).
+2.  Run the command `touch data/moby_dick.txt` to update the timestamp on the source file,
+    then run `make` (situation #2).
+
+## How can I tell Make where to find rules? {#s:automate-naming}
+
+We don't have to call our file of rules `Makefile`.
+If we want,
+we can rename the file `single_rule.mk`
+and then run it with `make -f single_rule.mk`.
+Most people don't do this in real projects,
+but in a lesson like this,
+which includes many example Makefiles,
+it comes in handy.
+
+Using `-f` doesn't change our [working directory](glossary.html#working-directory).
+If, for example, we are in `/home/gvwilson/still-magic` and run `make -f src/automate/single_rule.mk`,
+our working directory remains `/home/gvwilson/still-magic`.
+This means that Make will look for the rule's prerequisite in `/home/gvwilson/still-magic/data/moby_dick.txt`,
+not in `/home/gvwilson/still-magic/src/automate/data/moby_dick.txt`.
+
+FIXME: figure
+
+## How can I update multiple files when their prerequisites change? {#s:automate-extend}
+
+Our Makefile isn't particularly exciting so far.
+Let's add another rule to the end and save the result as `double_rule.mk`:
+
+```make
+# Regenerate results for "Moby Dick"
+results/moby_dick.csv : data/moby_dick.txt
+        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+
+# Regenerate results for "Jane Eyre"
+results/jane_eyre.csv : data/jane_eyre.txt
+        python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+```
+{: title="automate/double_rule.mk"}
+
+When we ask Make to run this file:
+
+```shell
+$ make -f double_rule.mk
+```
+
+<!-- == noindent -->
+we get this rather disappointing message:
+
+```text
+make: `results/moby_dick.csv' is up to date.
+```
+
+Nothing happens because by default Make only attempts to update
+the first target it finds in the Makefile,
+which is called the [default target](glossary.html#default-target).
+To update something else,
+we need to tell Make we want it:
+
+```shell
+$ make -f double_rule.mk results/jane_eyre.csv
+```
+
+This time Make runs:
+
+```text
+python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+```
+
+## How can I get rid of temporary files that I don't need? {#s:automate-phony}
+
+A [phony target](glossary.html#phony-target) in a Makefile
+is one that doesn't correspond to any files
+and doesn't have any prerequisites.
+Phony targets are just a way to save useful commands in a Makefile,
+but saying "just" is a bit misleading:
+what we're actually doing is recording all of the steps in our workflow,
+even if those steps don't create or update files.
+
+For example,
+let's add another target to our Makefile to delete all of the files we have generated.
+By convention this target is called `clean`,
+and ours looks like this:
+
+```make
+# Remove all generated files.
+clean :
+        rm -f results/*.csv
+```
+{: title="automate/clean.mk"}
+
+(The `-f` flag to `rm` means "force removal".
+When we use it, `rm` won't complain if the files it's trying to remove are already gone.)
+Let's run Make:
+
+```shell
+$ make -f pipeline.mk clean
+```
+
+<!-- == noindent -->
+and then use `ls` to list the contents of `results`.
+Sure enough, it's empty.
+
+Phony targets are useful as a way of documenting actions in a project,
+but there's a catch.
+Use `mkdir` to create a directory called `clean`,
+then run `make -f clean.mk clean`.
+Make will print:
+
+```text
+make: `clean' is up to date.
+```
+
+The problem is that Make finds something called `clean` and assumes that's what the rule is referring to.
+Since the rule has no prerequisites,
+it can't be out of date,
+so no actions are executed.
+
+There are two ways to solve this problem.
+The first is to make sure we don't have phony targets with the same names as files or directories.
+That works as long as our project is small and we're paying attention,
+but as the project grows,
+or we're rushing to meet a deadline
+or have inherited the project from someone else and don't realize that this might be a problem,
+it's bound to fail at exactly the worst time.
+
+A much better solution is to tell Make that the target is phony
+by putting this in the Makefile:
+
+```make
+.PHONY : clean
+```
+
+Most people declare all of their phony targets together near the top of the file,
+though some put the `.PHONY` declarations right before the rules they refer to.
+As with most other rules about programming style (Chapter \@ref(s:style)),
+consistency matters more than exactly what you do.
+
+## How can I make a target depend on several prerequisites? {#s:automate-multi}
+
+Right now,
+our Makefile says that each result file depends only on the corresponding data file.
+That's not accurate:
+in reality,
+each result also depends on the script used to generate it.
+If we change our script,
+we ought to regenerate our results and then check to see if they've changed.
+(We can rely on version control to tell us that.)
+
+Here's a modified version of the Makefile
+in which each result depends on both the data file and the script:
+
+```make
+.PHONY: clean
+
+# Regenerate results for "Moby Dick"
+results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
+	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+
+# Regenerate results for "Jane Eyre"
+results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
+	python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+
+# ...clean target as before...
+```
+{: title="automate/depend_on_script.mk"}
+
+We can test this by touching the script and then making one or the other result:
+
+```shell
+$ touch bin/countwords.py
+$ make -f depend_on_script.mk results/jane_eyre.csv
+```
+```text
+python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+```
+
+## How can I reduce the amount of typing I have to do? {#s:automate-variables}
+
+The name of our script now appears four times in our Makefile,
+which will make for a lot of typing if and when we decide to move it or rename it.
+We can fix that by defining a [variable](glossary.html#make-variable) at the top of our file
+to refer to the script,
+then using that variable in our rules:
+
+```make
+.PHONY: clean
+
+COUNT=bin/countwords.py
+
+# Regenerate results for "Moby Dick"
+results/moby_dick.csv : data/moby_dick.txt ${COUNT}
+	python ${COUNT} data/moby_dick.txt > results/moby_dick.csv
+
+# Regenerate results for "Jane Eyre"
+results/jane_eyre.csv : data/jane_eyre.txt ${COUNT}
+	python ${COUNT} data/jane_eyre.txt > results/jane_eyre.csv
+
+# ...clean target as before...
+```
+{: title="automate/define_variable.mk"}
+
+The definition takes the form `NAME=value`.
+By convention,
+variables are written in UPPER CASE
+so that they'll stand out from filenames (which are usually in lower case),
+but that's not required.
+What *is* required is using `${NAME}` to refer to the variable:
+if we write `$NAME`,
+Make interprets that as "the variable called `N` followed by the three literal characters 'AME'."
+If no variable called `N` exists,
+`$NAME` becomes `AME`,
+which is almost certainly not useful.
+
+Using variables doesn't just cut down on typing.
+They also make rules easier to understand,
+since they signal to readers that several things are always and exactly the same.
+
+## How can I make one update depend on another? {#s:automate-chain}
+
+We can re-create all the results files with a single command
+by listing multiple targets when we run Make:
+
+```shell
+$ make results/moby_dick.csv results/jane_eyre.csv
+```
+
+However,
+users have to know what files they might want to create in order to do this,
+and have to type their names exactly right.
+A better approach is to create a phony target that depends on all of the output files
+and make it the first rule in the file so that it is the default.
+By convention,
+this target is called `all`,
+and while we don't have to list all our phony targets in alphabetical order,
+it makes them a lot easier to find:
+
+```make
+.PHONY: all clean
+
+COUNT=bin/countwords.py
+
+# Regenerate all results.
+all : results/moby_dick.csv results/jane_eyre.csv
+
+# ...rules for moby_dick, jane_eyre, and clean...
+```
+{: title="automate/multi_prereq.mk"}
+
+If we run Make now,
+it sees that `all` is only "up to date" if the two CSV files are up to date,
+so it looks for a rule for each and runs each of those rules.
+
+We can draw the prerequisites defined in the Makefile as a [dependency graph](glossary.html#dependency-graph),
+with arrows showing what each target depends on.
+
+FIXME: figure
+
+Note that the Makefile doesn't define the order
+in which `results/moby_dick.csv` and `results/jane_eyre.csv` are updated,
+so Make can rebuild them in whatever order it wants.
+This is called [declarative programming](glossary.html#declarative-programming):
+we declare what outcome we want,
+and the program figures out how to achieve it.
+
+## How can I abbreviate my update rules? {#s:automate-automatic}
+
+We could add a third book to our Makefile,
+then a fourth,
+but any time we find ourselves duplicating code,
+there's almost certainly a way to write a general rule.
+In order to create these,
+though,
+we first need to learn about [automatic variables](glossary.html#automatic-variable).
+
+The first step is to use the very cryptic expression `$@` in the rule's action
+to mean "the target of the rule".
+We start with this:
+
+```make
+# Regenerate results for "Moby Dick"
+results/moby_dick.csv : data/moby_dick.txt
+        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+```
+{: title="automate/single_rule.mk"}
+
+<!-- == noindent -->
+and turn it into this:
+
+```make
+# Regenerate results for "Moby Dick"
+results/moby_dick.csv : data/moby_dick.txt
+        python bin/countwords.py data/moby_dick.txt > $@
+```
+{: title="automate/automatic_variables_wrong.mk"}
+
+<!-- == noindent -->
+`$@` is an automatic variable:
+Make defines its value for us separately in each rule.
+And yes,
+`$@` is an unfortunate name:
+something like `$TARGET` would be easier to understand,
+but we're stuck with it.
+
+Step 2 is to replace the list of prerequisites in the action with `$^`,
+which is another automatic variable meaning "all the prerequisites of the current rule":
+
+```make
+# Regenerate results for "Jane Eyre"
+results/jane_eyre.csv : data/jane_eyre.txt
+        python bin/countwords.py $^ > $@
+```
+{: title="automate/automatic_variables_wrong.mk"}
+
+But wait:
+our results files don't just have books as dependencies.
+They also depend on `bin/countwords.py`.
+What happens if we include that in the rule while using automatic variables?
+(We'll do this for a third book to keep the three rules separate in the example Makefile.)
+
+```make
+# Regenerate results for "The Time Machine" - WRONG
+results/time_machine.csv : data/time_machine.txt ${COUNT}
+        python bin/countwords.py $^ > $@
+```
+{: title="automate/automatic_variables_wrong.mk"}
+
+<!-- == noindent -->
+This doesn't do the right thing because `$^` includes *all* of the prerequisites,
+so the action tries to process the script as if it were a data file:
+
+```shell
+python bin/countwords.py data/time_machine.txt bin/countwords.py results/time_machine.csv
+```
+
+This situation comes up so often that
+Make helpfully provides another automatic variable `$<` meaning "the first prerequisite",
+which lets us rewrite our rules like this:
+
+```make
+# Regenerate results for "Janey Eyre"
+results/jane_eyre.csv : data/jane_eyre.txt ${COUNT}
+        python bin/countwords.py $< > $@
+```
+{: title="automate/automatic_variables.mk"}
+
+And yes,
+`$< > $@` is hard to read,
+even with practice,
+and `< $<` (reading the first prerequisite from [standard input](glossary.html#stdin))
+is even harder.
+Using an editor that does syntax highlighting helps (Chapter \@ref(s:tools)),
+and if you are ever designing software for other people to use,
+remember this case and don't do it.
+
+## How can I write one general rule to update many files in the same way? {#s:automate-pattern}
+
+We can now replace all the rules for generating results files
+with one [pattern rule](glossary.html#pattern-rule)
+that uses `%` as a [wildcard](glossary.html#wildcard).
+Whatever part of a filename `%` matches in the target,
+it must also match in the prerequisites,
+so the single rule:
+
+```make
+results/%.csv : data/%.txt ${COUNT}
+        python bin/countwords.py $< > $@
+```
+{: title="automate/pattern_rule.mk"}
+
+<!-- == noindent -->
+will handle *Jane Eyre*, *Moby Dick*, and *The Time Machine*.
+(Unfortunately, `%` cannot be used in rules' actions,
+which is why `$<` and `$@` are needed.)
+With this rule in place,
+our entire Makefile is reduced to:
+
+```make
+.PHONY: all clean
+
+COUNT=bin/countwords.py
+
+# Regenerate all results.
+all : results/moby_dick.csv results/jane_eyre.csv results/time_machine.csv
+
+# Regenerate result for any book.
+results/%.csv : data/%.txt ${COUNT}
+	python ${COUNT} $< > $@
+
+# Remove all generated files.
+clean :
+	rm -f results/*.csv
+```
+{: title="automate/pattern_rule.mk"}
+
+Let's delete all of the results files and re-create them all:
+
+```shell
+$ make -f pattern_rule.mk clean
+```
+```text
+rm -f results/*.csv
+```
+
+```shell
+$ make -f pattern_rule.mk all
+```
+```text
+python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+python bin/countwords.py data/time_machine.txt > results/time_machine.csv
+```
+
+We can still rebuild individual files:
+
+```shell
+$ touch data/jane_eyre.txt
+$ make -f pattern_rule.mk results/jane_eyre.csv
+```
+```text
+python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+```
+
+## How can I define sets of files automatically? {#s:automate-functions}
+
+Our "automated" analysis is still not fully automated:
+If we add another book to `raw`,
+we have to remember to add it to the `all` target in the Makefile as well.
+Once again,
+we will fix this in steps.
+
+To start,
+imagine that all the results files already exist,
+and we just want to update them.
+We can define a variable called `RESULTS` to be a list of all the results files
+using the same notation we'd use in the shell to match all the CSV files in the `results/` directory:
+
+```make
+RESULTS=results/*.csv
+```
+{: title="automate/filename_wildcard.mk"}
+
+<!-- == noindent -->
+and then make `all` depend on that:
+
+```make
+# Regenerate all results.
+all : ${RESULTS}
+```
+{: title="automate/filename_wildcard.mk"}
+
+This works,
+but only for re-creating files:
+if a results file doesn't already exist when we run Make,
+its name won't be included in `RESULTS`,
+and Make won't realize that we want to generate it.
+
+What we really want to do is generate the list of results files
+from the list of books in the `data/` directory.
+We can use a [function](glossary.html#make-function) to do this.
+The syntax is a little odd,
+because functions were added to Make long after it was first written,
+but at least they have readable names.
+Let's create a variable `DATA` that holds the names of all of our data files:
+
+```make
+DATA = $(wildcard data/*.txt)
+```
+{: title="automate/function_wildcard.mk"}
+
+<!-- == noindent -->
+This calls the function `wildcard` with the argument `data/*.txt`.
+The result is a list of all the text files in the `raw` directory,
+just as we'd get with `data/*.txt` in the shell.
+(We could use a shell wildcard here as we did when defining `RESULTS`,
+but we want to show how functions work.)
+
+Did this do the right thing?
+To check,
+we can add another phony target to the end of the file called `settings`
+that uses the shell command `echo` to print the name and value of a variable:
+
+```make
+.PHONY: all clean settings
+
+# ...everything else...
+
+# Show variables' values.
+settings :
+        echo COUNT: ${COUNT}
+        echo DATA: ${DATA}
+```
+{: title="automate/function_wildcard.mk"}
+
+Let's run this:
+
+```shell
+$ make -f function_wildcard.mk settings
+```
+```text
+echo COUNT: bin/countwords.py
+COUNT: bin/countwords.py
+echo DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+```
+
+The output appears twice because Make shows us the command it's going to run before running it.
+If we put `@` before the command,
+Make doesn't show it before running it:
+
+```make
+settings :
+	@echo COUNT: ${COUNT}
+        @echo DATA: ${DATA}
+```
+{: title="automate/function_wildcard_silent.mk"}
+
+```shell
+$ make -f function_wildcard.mk settings
+```
+```text
+COUNT: bin/countwords.py
+DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+```
+
+We now have the names of our input files,
+but what we want is the names of the corresponding output files.
+Make has another function called `patsubst` (short for "**pat**tern **subst**itution")
+that uses the same kind of patterns used in rules to do exactly this:
+
+```make
+RESULTS=$(patsubst data/%.txt,results/%.csv,${DATA})
+```
+{: title="automate/patsubst.mk"}
+
+`$(patsubst ...)` calls the pattern substitution function.
+The first argument is what to look for:
+in this case,
+a text file in the `raw` directory.
+As in a pattern rule,
+we use `%` to match the [stem](glossary.html#filename-stem) of the file's name,
+which is the part we want to keep.
+
+The second argument is the replacement we want.
+Ours uses the stem matched by `%` to construct the name of a CSV file in the `results` directory.
+Finally,
+the third argument is what we're doing substitutions in,
+which is our list of books' names.
+
+Let's check that this has worked by adding to the `settings` target
+
+```make
+settings :
+        @echo COUNT: ${COUNT}
+        @echo DATA: ${DATA}
+        @echo RESULTS: ${RESULTS}
+```
+{: title="automate/patsubst.mk"}
+```shell
+$ make -f patsubst.mk settings
+```
+```text
+COUNT: bin/countwords.py
+DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+RESULTS: results/common_sense.csv results/jane_eyre.csv results/life_of_frederick_douglass.csv results/moby_dick.csv results/sense_and_sensibility.csv results/time_machine.csv
+```
+
+Excellent:
+`DATA` has the names of all of the files we want to process
+and `RESULTS` automatically has the corresponding names of the files we want to generate.
+Let's test it:
+
+```shell
+$ make -f patsubst.mk clean
+```
+```text
+rm -f results/*.csv
+```
+```shell
+$ make -f patsubst.mk all
+```
+```text
+python bin/countwords.py data/common_sense.txt > results/common_sense.csv
+python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+python bin/countwords.py data/life_of_frederick_douglass.txt > results/life_of_frederick_douglass.csv
+python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+python bin/countwords.py data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
+python bin/countwords.py data/time_machine.txt > results/time_machine.csv
+```
+
+Our workflow is now just two steps:
+add a data file and run Make.
+As we'll see in Chapter \@ref(s:integrate),
+we can even automate the second half in some cases,
+but this is still a big improvement over running things manually,
+particularly as we start to add more steps
+(such as merging data files and generating plots).
+
+## How can I document my workflow? {#s:automate-doc}
+
+Every well-behaved program can tell people how to use it.
+If we run `make --help`, for example,
+we get a (long) list of things Make can do for us.
+
+But how can we document the workflow that our Makefile now embodies?
+One common choice is to provide a special target like `settings`
+that prints a description of available targets:
+
+```make
+.PHONY: all clean help settings
+
+# ...other definitions...
+
+# Show help.
+help :
+	@echo "all : regenerate all out-of-date results files."
+	@echo "results/*.csv : regenerate a particular results file."
+	@echo "clean : remove all generated files."
+	@echo "settings : show the values of all variables."
+	@echo "help : show this message."
+```
+{: title="automate/makefile_help.mk"}
+
+This is easy to set up and does the job,
+but once again its redundancy should worry us:
+the same information appears in both the comments on rules and the help,
+which means that authors have to remember to update the help when adding or changing rules.
+
+A better approach,
+which we will explore in more depth in Chapter \@ref(s:docs),
+is to have people format some comments in a special way
+and then extract and display those comments when asked for help.
+We'll use `##` (a double comment marker) to indicate the lines we want displayed
+and use `grep` to extract lines that start with that marker.
+We will use Make's `MAKEFILE_LIST` variable to get the path to the Makefile,
+since we may be using the `-f` flag to specify which Makefile we're using.
+With all that in place,
+our finished Makefile is:
+
+```make
+.PHONY: all clean help settings
+
+COUNT=bin/countwords.py
+DATA=$(wildcard data/*.txt)
+RESULTS=$(patsubst data/%.txt,results/%.csv,${DATA})
+
+## all : regenerate all results.
+all : ${RESULTS}
+
+## results/*.csv : regenerate result for any book.
+results/%.csv : data/%.txt ${COUNT}
+	python ${COUNT} $< > $@
+
+## clean : remove all generated files.
+clean :
+	rm -f results/*.csv
+
+## settings : show variables' values.
+settings :
+	@echo COUNT: ${COUNT}
+	@echo DATA: ${DATA}
+	@echo RESULTS: ${RESULTS}
+
+## help : show this message.
+help :
+	@grep '^##' ${MAKEFILE_LIST}
+```
+{: title="automate/makefile_grep.mk"}
+
+Let's test:
+
+```shell
+$ make -f makefile_grep.mk
+```
+```text
+## all : regenerate all results.
+## results/*.csv : regenerate result for any book.
+## clean : remove all generated files.
+## settings : show variables' values.
+## help : show this message.
+```
+
+With a bit more work we could strip off the leading `##` markers,
+but this is a good start.
+
+> **How did you know that?**
+>
+> FIXME: keep this personal?
+>
+> I had never used the variable `MAKEFILE_LIST` before writing this lesson.
+> In fact, until about 15 minutes ago, I didn't even know it existed:
+> I always had my `help` target's action `grep` for `##` in `Makefile`.
+> Once I realized that wouldn't work in this example
+> (because I'm writing lots of little Makefiles to demonstrate ideas step by step)
+> I searched online for "how to get name of Makefile in make".
+> The second hit took me to [the GNU Make documentation for other special variables][gnu-make-other-vars],
+> which told me exactly what I needed.
+> I spend anywhere from a quarter to three quarters of my time searching for things when I program these days;
+> one of the goals of these lessons is to give you an idea of what you ought to be searching for yourself
+> so that you can do this more efficiently.
+
+## Summary {#s:automate-summary}
+
+```{r automate-concept, echo=FALSE, fig.cap="Automation Concept Map"}
+if (knitr::is_latex_output()) {
+  knitr::include_graphics("figures/automate/concept.pdf")
+} else {
+  knitr::include_graphics("figures/automate/concept.svg")
+}
+```
+
+-   @Smit2011 describes the design and implementation of several build tools in detail.
+
+## Exercises {#s:automate-exercises}
+
+### Create a summary CSV file
+
+-   Add rule to Makefile to create a summary CSV file from all of the book CSV files.
+-   Careful how to write the dependencies so that it doesn't depend on itself.
+
+### Generate a plot for the top N words
+
+-   FIXME: make it depend on the summary.
+
+## Key Points
+
+```{r, child="keypoints/automate.md"}
+```
+
+```{r, child="etc/links.md"}
+```

@@ -1,0 +1,7 @@
+-   Reorganizing code in consistent ways makes errors less likely.
+-   Replace a value with a name to make code more readable and to forestall typing errors.
+-   Replace a repeated test with a flag to ensure consistency.
+-   Turn small pieces of large functions into functions in their own right, even if they are only used once.
+-   Combine functions if they are always used together on the same inputs.
+-   Use lookup tables to make decision rules easier to follow.
+-   Use comprehensions instead of loops.

@@ -1,0 +1,438 @@
+# Development Process {#s:process}
+
+## Objectives
+
+```{r, child="objectives/process.md"}
+```
+
+A [software development process](glossary.html#dev-process) is
+the steps a team goes through to create, deliver, and maintain software.
+Broadly speaking,
+software development processes can be divided into three groups:
+
+-   Chaotic: everyone's doing something,
+    but there's no overall plan or consistency.
+-   An [agile](glossary.html#agile) process
+    based on lots of short steps with frequent feedback and course correction.
+-   A [sturdy](glossary.html#sturdy) process
+    that invests a lot of effort in planning out work.
+    (This label is made up:
+    historically,
+    planning-based approaches were described first and didn't have a particular name,
+    but then agile came along and we needed one.)
+
+Most self-taught teams start with a chaotic process.
+This material is meant to help you move to something better.
+
+## What is agile development? {#s:process-agile}
+
+Agile development starts from three related premises:
+
+-   You *can't* plan a software project very far in advance
+    because requirements and technology are constantly changing.
+-   You *shouldn't* try to plan everything in advance
+    because you're going to learn what's possible,
+    and your users are going to learn what they actually want,
+    as the work progresses.
+-   You can *afford* not to lock yourself into a long-term plan
+    because software is much more malleable than concrete or steel.
+
+This approach came into prominence with the rise of the web in the 1990s:
+
+1.  The web made it possible to release software weekly, daily, or even hourly,
+    since updating a server is a lot faster,
+    and a lot less expensive,
+    than shipping CDs to thousands of people.
+2.  Multi-year development plans don't make a lot of sense
+    when everything they depend on  will be obsolete by the time work starts,
+    much less by the time it finishes.
+3.  The growth of the web was aided by, and fuelled, the growth of the open source movement.
+    People couldn't help noticing that most open source projects didn't have long-range plans,
+    but nevertheless produced high-quality software faster than many closed-source commercial projects.
+
+## What are the feedback loops in agile development? {#s:process-feedback}
+
+At its core,
+agile development relies on continuous feedback.
+Agile methods break development down into short [iterations](glossary.html#iteration),
+typically no more than two weeks long,
+and often as short as a single day.
+In each iteration,
+the team decides what to build next,
+then designs it, builds it, tests it, and delivers it.
+Feedback loops at several scales help them get this right and do it better next time.
+
+The iteration itself is the primary feedback loop.
+Users often don't know what they want until they see it,
+so short cycles are a way to avoid spending too much time building what turns out to be the wrong thing.
+Short iterations help improve efficiency in two other ways as well.
+First,
+most people can keep track of what they're doing for a few days at a time without elaborate Gantt charts,
+so short cycles allow them to spend proportionally less time coordinating with one another.
+Second, finding bugs becomes easier:
+instead of looking through weeks' or months' worth of software to find out where the problem is,
+developers usually only have to look at what's been written in the last few days.
+
+A typical working day starts with a [stand-up meeting](glossary.html#stand-up-meeting)
+where everyone in the team reports what they did since the last meeting,
+what they're planning to do next,
+and what's blocking them (if anything).
+(It's called a "stand-up" meeting because it's usually held standing up,
+which encourages people to stay focused.)
+For example,
+my report earlier this week was:
+
+-   Yesterday:
+    fixed a bug in citation handling;
+    got the Shiny example to update properly;
+    added slides to the tutorial on loading data in Shiny applications.
+-   Today:
+    update the script that checks for unused bibliography entries;
+    add tests for handling missing data files in the Shiny tutorial.
+-   Blockers:
+    should we report "no permission" separately from "missing file" in the Shiny tutorial?
+
+Stand-up meetings are another agile feedback loop.
+Each day,
+the team gets feedback on the progress they're making,
+whether they're still on track to meet the iteration's goals,
+whether the technical decisions they're making are paying off, and so on.
+The key to making this work is that each task is at most a day long.
+Anything longer is broken into sub-tasks so that there's something to report at every meeting.
+Without this rule,
+it's all too easy for someone to say, "Still working on X," several days in a row,
+so feedback and the possibility of early course correction are lost.
+
+Once the stand-up meeting is over, everyone gets back to work.
+In many agile teams,
+this means sitting with a partner and doing [pair programming](glossary.html#pair-programming).
+One person, called the driver, does the typing,
+while the other person, called the navigator,
+watches and comments;
+every hour or so, the pair switch roles.
+
+Pair programming is beneficial for several reasons.
+First,
+the navigator will often notice mistakes in the driver's code,
+or remember design decisions that the driver is too busy typing to recall.
+This is the tightest of the feedback loops that make agile work,
+since feedback is nearly continuous.
+
+Second,
+pair programming spreads knowledge around:
+every piece of code has been seen by at least two people,
+which reduces the risk of "But I didn't know" mistakes.
+It also helps people pick up new skills:
+if you have just seen someone do something with two clicks,
+you will probably do it that way when it's your turn to drive
+rather than spending two minutes doing it the way you always have.
+And finally,
+most people are less likely to check Facebook every five minutes if someone else is working with them...
+
+As well as pair programming, most agile teams use two other practices.
+[Test-driven development](glossary.html#tdd) (TDD),
+discussed in Chapter \@ref(s:unit),
+is the practice of writing unit tests *before* writing application code.
+The second is [continuous integration](glossary.html#continuous-integration).
+Every time someone commits code to the version control repository,
+an automated process checks out a clean copy of the code,
+builds it,
+runs all the tests,
+and posts the results somewhere for the whole team to see.
+If any of the tests fail,
+the continuous integration system notifies people by sending out email or texting them.
+
+We will explain how to implement continuous integration in Chapter \@ref(s:integrate).
+From a developer's point of view,
+its key benefit is that it ensures the project is always in a runnable state.
+This may not seem important if you don't have to hand it in until next week,
+but is critical as soon as two or more people are involved in development.
+It's very frustrating (and unproductive) for someone to be blocked
+because someone else has broken something but not realized it.
+
+The final key practice in agile development is the [post-mortem](glossary.html#post-mortem).
+At the end of every sprint,
+the team should get together and ask themselves what went well,
+what could be improved,
+and what new things they want to try (if any).
+
+## What are the risks associated with agile development? {#s:process-agile-risks}
+
+The biggest risk associated with agile is that
+people can use the term to excuse a process that's still actually chaotic.
+Most people don't like writing plans before they code or documenting what they've done;
+coincidentally,
+agile doesn't require them to do much of either.
+It's therefore all too common for developers to say "we're agile"
+when what they mean is "we're not going to bother doing anything we don't want to".
+In reality,
+agile requires *more* discipline, not less,
+just as improvising well requires even more musical talent than playing a score exactly.
+
+At the same time,
+many people don't like having to make decisions:
+after two decades of schooling,
+they want to be told what the assignment is and exactly what they have to do
+to get an 'A', a 'B', or whatever grade they're shooting for.
+Some become quite defensive when told that figuring out what to do is now part of their job,
+but that's as essential to agile development as it is to scientific research.
+
+Finally, FIXME: customer buy-in.
+
+## What is sturdy development? {#s:process-sturdy}
+
+As we said in the introduction,
+the alternative to agile development doesn't have a widely-accepted name;
+we call it "sturdy",
+since "traditional", "old-fashioned", and "process-heavy" all sound pejorative.
+
+Whatever it's called,
+it's key feature is planning work in advance.
+If you're going to spend three days driving across the country,
+it makes sense to spend half an hour figuring out a good route.
+Equally,
+if you're going to spend several months building a complex piece of software,
+*and you know what the final result is supposed to look like*,
+it makes sense to spend some time figuring out what you're going to do
+and how long it ought to take.
+In order to explain how to do this systematically,
+we need to look at two roles in large software projects:
+the product manager and the project manager.
+
+## What is the role of a product manager? {#s:process-product}
+
+The [product manager](glossary.html#product-manager) is
+the person responsible for the software's feature list.
+Typically,
+while developers are building Version N,
+she is talking to users in order to find out what should go into Version N+1.
+She doesn't ask them what features they want,
+because if she does,
+what she'll get is a mish-mash of buzzwords plucked from
+the lead paragraphs of popular articles.
+(Blockchain! Blockchain all the things!)
+
+Instead, she asks, "What can't you do right now that you want to?",
+"What do you find irritating in the current product?",
+and, "Why are you using other software instead of ours?"
+She then translates the answers into a list of changes
+to be considered for Version N+1.
+The product manager also talks to the software's developers
+to find out what *they* don't like about the current software
+and adds their wishes to the pile.
+Typically,
+these are things like
+"reorganize the database interface" and "clean up the build process".
+
+So, it's Monday morning.
+Version N shipped last Thursday
+(because you should never, ever ship on a Friday).
+the team has had a weekend to catch its collective breath
+and is ready to start work once again.
+(If people are so burned out from the previous round of work
+that they need a whole week to recover,
+read the discussion of crunch mode in Chapter \@ref(s:pacing).)
+At this point,
+the product manager divides up the list of desired features
+and assigns a few to each developer.
+They then have some time---typically a few days
+to a couple of weeks---to do a little research,
+write some throwaway prototype code,
+and most importantly to think.
+How could this feature be implemented?
+Is there a quick-and-dirty alternative that would only deliver half of what was asked for
+but could be done in a tenth of the time?
+What impact will each alternative have on the installation process?
+And how will the new feature be tested?
+
+This process is called [analysis and estimation](glossary.html#ae) (A&E).
+The result is a collection of short proposals,
+each typically half a page to half a dozen pages long.
+There's no set form for these,
+but they usually include whatever background information a well-informed developer is unlikely to already know,
+a discussion of the alternatives,
+lessons learned from any prototyping that was done,
+and most importantly,
+an estimate of how much time would be needed to build each alternative.
+This time includes estimates from QA (for testing),
+the technical writer (for documenting),
+the people responsible for the build and creating the installer,
+and so on.
+
+So now it's Monday morning again.
+Three weeks have gone by and all the A&E's are done.
+When the time estimates are totalled,
+they come to 700 developer-days.
+Unfortunately, there are only 240 available:
+the size of the team is fixed,
+and the next release has to be available in May.
+*This is normal:*
+there is *never* enough time to add everything that everyone wants.
+
+What the product manager does now is draw a 3x3 grid.
+The X axis is labeled "effort", the Y axis, "importance",
+and each axis is divided into "low", "medium", and "high".
+(Finer-grained divisions, such as a 1--10 scale, add no value:
+nobody has an algorithm for distinguishing priority 6 items from priority 7 items,
+and anyway, the grid is just to get conversation going.)
+Each feature's name now goes in one of the nine grid cells,
+and the product manager steps out of the way.
+
+## What is the role of a project manager? {#s:process-project}
+
+The [project manager](glossary.html#project-manager)'s role is
+to turn priorities and effort estimates into a schedule
+and then ensure that the schedule is met.
+First,
+the high-effort, low-importance features in the grid are crossed off:
+they're simply not worth doing.
+The project manager may decide to tackle some low-effort, high-value items first
+in order to ensure that if things go badly wrong,
+something useful will still have been accomplished
+Alternatively,
+she may decide to go after some high-effort items at the start,
+on the theory that if they aren't tackled early,
+they'll keep getting pushed off.
+
+Either way,
+the items on the diagonal are the ones that have to be argued over.
+Should the team tackle Feature 14 (high effort, high importance)
+or Features 18, 19, and 22 (individually lower importance, but the same total effort)?
+It can take rounds of discussion to sort this out;
+what's important is that people don't tweak effort estimates in order to squeeze things in,
+because if they do,
+the people doing the estimating will start padding their numbers in self defense.
+Since project managers aren't stupid,
+they'll shave the estimates even more,
+so developers will add even more padding,
+and pretty soon the whole thing becomes science fiction.
+
+## What are the risks associated with sturdy development? {#s:process-sturdy-risks}
+
+The hardest step in this process for beginners is coming up with time estimates.
+How can you possibly guess how long it will take to write a database interface
+if you've never used one before?
+There are two answers:
+
+-   You're not expected to pull an number out of thin air
+    (at least, not by managers who know what they're doing).
+    Instead,
+    you should budget enough time to write some throwaway code,
+    or download and try out an open source tool,
+    in order to get a feel for it.
+-   You've had to learn other new technologies before.
+    A guess based on that experience might be off by a factor of two or three,
+    but it probably won't be off by a factor of ten.
+    Even if it is,
+    it's better than no guess at all,
+    provided everyone involved knows that it's a guess.
+    (You will meet people who will be very critical every time one of your estimates is wrong.
+    In my experience,
+    they are no better at estimating than anyone else.)
+
+The more estimating you do, the better you'll get,
+and the better you are,
+the more smoothly your projects will run.
+If you're an undergraduate,
+your project will probably have to fit in one or two terms.
+You will therefore probably be asked to go around the planning loop once or twice,
+which in turn determines how much you'll be expected to deliver in each iteration.
+This is called [time boxing](glossary.html#time-boxing):
+you specify how long a cycle will last,
+then see how much work you can fit into that interval.
+
+The alternative is [feature boxing](glossary.html#feature-boxing):
+decide what you want to do,
+then build a schedule that gives you enough time to do it.
+Time boxing generally works better
+even in projects that don't have to line up with semester boundaries,
+since it encourages developers to take smaller steps,
+and allows them to give customers more frequent demos
+(which serve as course corrections).
+
+## Why, when, and how should our team start to cut corners? {#s:process-corners}
+
+Contrary to popular belief,
+a schedule's primary purpose is not to tell you what you're supposed to be doing on any given day.
+Instead,
+it is is to tell you when you should start cutting corners.
+Suppose,
+for example,
+that you have ten weeks in order to accomplish some task.
+Five weeks after you start,
+you've only done the first third of work.
+You have several options:
+
+Ignore the problem.
+:   This is very popular, but doesn't actually solve the problem.
+
+Work longer hours.
+:   This is also very popular,
+    but as Chapter \@ref(s:pacing) explains,
+    it is self-defeating.
+
+Enlarge the team.
+:   This is a good strategy if you're peeling carrots,
+    but usually doesn't work on other kinds of projects
+    because it takes more time to bring someone up to speed
+    than it does to do the work yourself.
+
+Move the deadline back.
+:   Product groups and research teams often do this
+    (usually in combination with the previous solution),
+    but it usually isn't an option for course projects.
+    Instructors have to submit marks at the end of the term,
+    and conference deadlines are fixed as well;
+    sometimes,
+    whatever hasn't been done by the due date
+    might as well not be done at all.
+
+Cut corners.
+:   The best approach is to update the schedule
+    to reflect the rate at which you're *actually* working,
+    then drop features that it tells you can't be finished in time.
+
+Let's go back to our example.
+At the start of the project you believed it would take ten weeks.
+You're now at week five,
+but you've done only the first four weeks' worth of work,
+so your estimates for how long tasks would take
+were too optimistic by about 25%.
+You should therefore go back to your schedule and add 1/4 to each task's estimate.
+That inevitably means that some of the things you originally planned to do
+now spill off the end of your ten-week window.
+That's OK;
+it's a shame you won't get to them,
+but at least you can start taking action now
+rather than trying to recover from a disaster.
+
+People will thank you for this.
+"I'm sorry, we're not going to have the frobnosticator for May 1"
+is OK in January,
+since it gives whoever was counting on the frobnosticator time to make other plans.
+It is *not* OK on April 30;
+neither is saying that it's "done", but full of bugs.
+
+These calculations are the responsibility of the project manager.
+Her job is to make sure everyone is doing what they're supposed to be doing,
+to shield the team from interruptions (there are *always* interruptions),
+and to track the team's progress.
+She periodically compares how much has actually been done
+with how much was supposed to be done and adjusts plans accordingly.
+
+Taking scheduling seriously is one of the things that distinguishes good teams from bad ones.
+It's unfortunate that most students only get to do it once or twice in their courses,
+since you only really see the benefits with practice,
+but even a couple of rounds of practice can make a big difference.
+
+## Summary {#s:process-summary}
+
+FIXME: summarize process
+
+## Key Points
+
+```{r, child="keypoints/process.md"}
+```
+
+```{r, child="etc/links.md"}
+```

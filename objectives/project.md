@@ -1,0 +1,2 @@
+-   Describe and justify Noble's Rules for organizing projects.
+-   Explain the purpose of README, LICENSE, CONDUCT, and CITATION files.

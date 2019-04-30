@@ -1,0 +1,6 @@
+-   Explain the purpose of a Code of Conduct and the essential features an effective one must have.
+-   Explain why adding licensing information to a repository is important.
+-   Explain differences in licensing and social expectations.
+-   Choose an appropriate license.
+-   Explain where and how to communicate licensing.
+-   Explain steps a project lead can take to be a good ally.

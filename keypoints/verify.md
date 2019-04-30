@@ -1,0 +1,4 @@
+-   Programmers should use tolerances when comparing floating-point numbers (not just in tests).
+-   Test the data structures used in plotting rather than the plots themselves.
+-   Check that parametric or non-parametric statistics of data do not differ from saved values by more than a specified tolerance.
+-   Infer constraints on data and then check that subsequent data sets obey these constraints.

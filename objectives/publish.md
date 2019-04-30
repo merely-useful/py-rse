@@ -1,0 +1,5 @@
+-   Explain what to include in publications, and where to publish large, medium, and small datasets.
+-   Explain what DOIs and ORCIDs are.
+-   Get an ORCID.
+-   Describe the FAIR Principles and determine whether a dataset conforms to them.
+-   Obtain DOIs for datasets, reports, and software packages.
