@@ -1,9 +1,16 @@
-# Code Style and Review {#s:style}
+# Code Style and Review {#style}
 
-## Objectives
+## Questions {#style-questions}
+
+```{r, child="questions/style.md"}
+```
+
+## Objectives {#style-objectives}
 
 ```{r, child="objectives/style.md"}
 ```
+
+## Introduction {#style-intro}
 
 To paraphrase @Dobz1973,
 nothing in software development makes sense except in light of human psychology.
@@ -32,7 +39,7 @@ as small as one @Petr2014.
 This lesson will look at the mechanics of code review
 and present some short examples of the kinds of things reviewers should look for.
 
-## What are the standard rules of good style for Python programs? {#s:style-pep8}
+## What are the standard rules of good style for Python programs? {#style-pep8}
 
 The single most important rule of style is to be consistent,
 both internally and with other programs.
@@ -87,13 +94,13 @@ or whose purpose isn't immediately clear
 The order of items in each file should be:
 
 -   The [shebang](glossary.html#shebang) line (because it has to come first to work).
--   The file's documentation string (Chapter \@ref(s:style)).
+-   The file's documentation string (Chapter \@ref(style)).
 -   All of the `import` statements, one per line.
 -   Constant definitions.
 -   Function definitions.
 -   If the file can be run as a program,
     the `if __name__ == '__main__'` statement discussed in
-    Section \@ref(s:package-import).
+    Section \@ref(package-import).
 
 ### Do not comment and uncomment sections of code to change behavior.
 
@@ -101,7 +108,7 @@ If you need to do something in some runs of the program and not do it in others,
 use an `if` statement to enable or disable that block of code.
 It's much more reliable---you're far less likely to accidentally comment out one too many lines---and
 you may find that you want to leave those conditional sections in the finished program
-for logging purposes (Chapter \@ref(s:logging)).
+for logging purposes (Chapter \@ref(logging)).
 
 ### Keep functions short.
 
@@ -109,16 +116,16 @@ Nothing should be more than a page long
 or have more than three levels of indentation because of nested loops and conditionals.
 Anything longer or more deeply nested will be hard for readers to fit into [working memory](glossary.html#working-memory);
 when you find yourself needing to break these limits,
-extract a function (Section \@ref(s:refactor-extract-function)).
+extract a function (Section \@ref(refactor-extract-function)).
 
 ### Handle special cases at the start of the function.
 
 This helps readers mentally get them out of the way
 and focus on the "normal" case.
-Section \@ref(s:refactor-short-circuits)
+Section \@ref(refactor-short-circuits)
 discusses this in more detail.
 
-## How can I check that code follows style guidelines? {#s:style-check}
+## How can I check that code follows style guidelines? {#style-check}
 
 Checking that code conforms to guidelines like the ones above can be time consuming,
 but luckily it doesn't have to be done by hand.
@@ -131,6 +138,7 @@ that will do this.
 For example,
 this program is supposed to count the number of stop words in a document:
 
+<!-- src="style/count_stops_1.py" -->
 ```python
 stops = ['a', 'A', 'the', 'The', 'and']
 
@@ -153,7 +161,6 @@ lines = sys.stdin.readlines()
 n = count(lines)
 print('number', n)
 ```
-{: title="style/count_stops_1.py"}
 
 <!-- == noindent -->
 When we run this command:
@@ -176,6 +183,7 @@ src/style/count_stops_before.py:15:1: E402 module level import not at top of fil
 
 Fixing these issues gives us this:
 
+<!-- src="style/count_stops_2.py" -->
 ```python
 import sys
 
@@ -200,14 +208,13 @@ lines = sys.stdin.readlines()
 n = count(lines)
 print('number', n)
 ```
-{: title="style/count_stops_2.py"}
 
 This program gets a clean bill of health,
 so it's worth looking at in more detail.
 Here are things that should be changed:
 
 -   The commented-out `print` statements should either be removed
-    or turned into proper logging statements (Chapter \@ref(s:logging)).
+    or turned into proper logging statements (Chapter \@ref(logging)).
 -   The variables `ln`, `i`, and `j` should be given clearer names.
 -   The outer loop in `count` loops over the indices of the line list
     rather than over the lines.
@@ -232,6 +239,7 @@ Here are things that should be changed:
 After making all these changes,
 our little program looks like this:
 
+<!-- src="style/count_stops_3.py" -->
 ```python
 import sys
 
@@ -252,13 +260,12 @@ if __name__ == '__main__':
     n = count(sys.stdin)
     print('number', n)
 ```
-{: title="style/count_stops_3.py"}
 
-## How should I review someone else's code: {#s:style-github}
+## How should I review someone else's code: {#style-github}
 
 FIXME: how to review on GitHub.
 
-## How should I collaborate with people when doing code reviews? {#s:style-how}
+## How should I collaborate with people when doing code reviews? {#style-how}
 
 How you review is just as important as what you look for:
 being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
@@ -284,7 +291,7 @@ Look for algorithmic problems first.
     The first pass over any change hould therefore look for algorithmic problems.
     Are the calculations right?
     Are any rare cases going to be missed?
-    Are errors being caught and handled Chapter \@ref(s:logging)?
+    Are errors being caught and handled Chapter \@ref(logging)?
 
 Use a rubric.
 :   Linters are great,
@@ -347,7 +354,7 @@ Thank your reviewers.
 :   If someone has taken the time to read your code carefully,
     thank them for doing it.
 
-## In what order should functions be defined? {#s:style-order}
+## In what order should functions be defined? {#style-order}
 
 When encountering code for the first time,
 most people scan it from top to bottom.
@@ -360,7 +367,7 @@ After reading that function,
 someone should have a good idea of what the program does in what order.
 Three common patterns that people might match against are:
 
-1.  Figure out what the user has asked it to do (Chapter \@ref(s:configure)).
+1.  Figure out what the user has asked it to do (Chapter \@ref(configure)).
 2.  Read all input data.
 3.  Process it.
 4.  Write output.
@@ -405,7 +412,7 @@ this is a good practice even if they're only used by one program,
 since it signals even more clearly which functions are in the "structural" layer
 and which are in the "utility" layer.
 
-## How can I specify default values for functions' parameters? {#s:style-defaults}
+## How can I specify default values for functions' parameters? {#style-defaults}
 
 [Working memory](glossary.html#working-memory) can only hold a few items at once:
 initial estimates in the 1950s put the number at 7 plus or minus 2 @Mill1956,
@@ -413,7 +420,7 @@ and more recent estimates put it as low as 4 or 5.
 If your function requires two dozen parameters,
 the odds are very good that users will frequently forget them
 or put them in the wrong order.
-One solution is to give parameters default values (Chapter \@ref(s:style));
+One solution is to give parameters default values (Chapter \@ref(style));
 another is to bundle them together so that (for example)
 people pass three `point` objects instead of nine separate `x`, `y`, and `z` values.
 
@@ -484,7 +491,7 @@ def collect(new_value, accumulator=None):
     return accumulator
 ```
 
-## How can I write functions to handle a variable number of arguments? {#s:style-varargs}
+## How can I write functions to handle a variable number of arguments? {#style-varargs}
 
 We can often make programs simpler by writing functions that take a variable number of arguments,
 just like `print` and `max`.
@@ -499,13 +506,13 @@ and pass that as the argument.
 By convention,
 this argument is called `args`:
 
+<!-- src="style/find_limits.py" -->
 ```python
 def find_limits(*args):
     print(args)
 
 find_limits(1, 3, 5, 2, 4)
 ```
-{: title="style/find_limits.py"}
 ```text
 (1, 3, 5, 2, 4)
 ```
@@ -513,6 +520,7 @@ find_limits(1, 3, 5, 2, 4)
 This catch-all parameter can be used with regular parameters,
 but must come last in the parameter list to avoid ambiguity:
 
+<!-- src="style/select_outside.py" -->
 ```python
 def select_outside(low, high, *values):
     result = []
@@ -523,7 +531,6 @@ def select_outside(low, high, *values):
 
 print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
 ```
-{: title="style/select_outside.py"}
 ```text
 [-0.2, -0.5, 1.7]
 ```
@@ -536,6 +543,7 @@ When this is used,
 the function is given a [dictionary](glossary.html#dictionary) of names and values
 rather than a list:
 
+<!-- src="style/set_options.py" -->
 ```python
 def set_options(tag, **kwargs):
     result = '<{}'.format(tag)
@@ -551,19 +559,19 @@ print(set_options('p', align='center', size='150%'))
 <h1 color="blue"/>
 <p align="center" size="150%"/>
 ```
-{: title="style/set_options.py"}
 
 <!-- == noindent -->
 Notice that the names of parameters are not quoted:
 the call is `color='blue'` and not `'color'='blue'`.
 
-## How can I pass an unknown number of parameters? {#s:style-starargs}
+## How can I pass an unknown number of parameters? {#style-starargs}
 
 We can use the inverse of `*args` and `*kwargs` to match a list of values to arguments.
 In this case,
 we put the single `*` in front of the list when *calling* the function
 rather than in front of the parameter when *defining* it:
 
+<!-- src="style/trim_value.py" -->
 ```python
 def trim_value(data, low, high):
     print(data, "with", low, "and", high)
@@ -571,23 +579,22 @@ def trim_value(data, low, high):
 parameters = ['some matrix', 'lower bound', 'upper bound']
 trim_value(*parameters)
 ```
-{: title="style/trim_value.py"}
 ```text
 some matrix with lower bound and upper bound
 ```
 
-## How can I get values out of structured data more easily? {#s:style-destructure}
+## How can I get values out of structured data more easily? {#style-destructure}
 
 Modern programming languages have lots of other tools to make life more convenient for programmers.
 One that's particularly useful is [destructuring](glossary.html#destructuring):
 
+<!-- src="style/destructuring.py" -->
 ```python
 [first, [second, third]] = [1, [2, 3]]
 print(first)
 print(second)
 print(third)
 ```
-{: title="style/destructuring.py"}
 ```text
 1
 2
@@ -599,6 +606,7 @@ if the variables on the left are arranged in the same way as the values on the r
 Python will automatically unpack the values and assign them correctly.
 This is particularly useful when looping over lists of structured values:
 
+<!-- src="style/looping.py" -->
 ```python
 people = [
     [['Kay', 'McNulty'], 'mcnulty@eniac.org'],
@@ -608,14 +616,13 @@ people = [
 for [[first, last], email] in people:
     print('{} {} <{}>'.format(first, last, email))
 ```
-{: title="style/looping.py"}
 ```text
 Kay McNulty <mcnulty@eniac.org>
 Betty Jennings <jennings@eniac.org>
 Marlyn Wescoff <mwescoff@eniac.org>
 ```
 
-## Summary {#s:style-summary}
+## Summary {#style-summary}
 
 George Orwell laid out [six rules for good writing][orwells-rules],
 the last and most important of which is,
@@ -626,11 +633,11 @@ but there are probably fewer of them than you think.
 
 FIXME: create concept map for review.
 
-## Exercises {#s:style-exercises}
+## Exercises {#style-exercises}
 
 FIXME: create exercises for review.
 
-## Key Points
+## Key Points {#style-keypoints}
 
 ```{r, child="keypoints/style.md"}
 ```

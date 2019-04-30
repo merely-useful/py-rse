@@ -1,9 +1,16 @@
-# Unit Testing {#s:unit}
+# Unit Testing {#unit}
 
-## Objectives
+## Questions {#unit-questions}
+
+```{r, child="questions/unit.md"}
+```
+
+## Objectives {#unit-objectives}
 
 ```{r, child="objectives/unit.md"}
 ```
+
+## Introduction {#unit-intro}
 
 [Term frequency-inverse document frequency][tf-idf] (TF-IDF)
 is a way to determine how relevant a document is in a search.
@@ -36,7 +43,7 @@ This lesson therefore introduces some key ideas and tools.
 This material is drawn in part from
 [Testing and Continuous Integration with Python][huff-testing].
 
-## What are realistic goals for testing? {#s:unit-goals}
+## What are realistic goals for testing? {#unit-goals}
 
 Any discussion of software and correctness has to start with two ideas.
 The first is that no amount of testing can ever prove that a piece of code is correct.
@@ -72,7 +79,7 @@ for values we have put in the same class---but
 this approach reduces the number of tests we have to write
 *and* makes it easier for the next person reading our code to understand what it does.
 
-## What does a systematic software testing framework look like? {#s:unit-systematic}
+## What does a systematic software testing framework look like? {#unit-systematic}
 
 A framework for software testing has to:
 
@@ -127,7 +134,7 @@ or pass when it should fail.
 This means that every test should start from a freshly-generated fixture
 rather than using the output of previous tests.
 
-## How can I manage tests systematically? {#s:unit-pytest}
+## How can I manage tests systematically? {#unit-pytest}
 
 A [test framework](glossary.html#test-framework) is a library that provides us with functions that help us write tests,
 and includes a [test runner](glossary.html#test-runner) that will find tests,
@@ -148,6 +155,7 @@ we could test the `count_words` function by putting the following code in `test_
 
 <!-- used="unit/tf_idf.py" -->
 
+<!-- src="unit/test_count.py" -->
 ```python
 from tf_idf import count_word
 
@@ -163,7 +171,6 @@ def test_two_words():
 def test_trailing_punctuation():
    assert count_words("anothers' word") == {'anothers' : 1, 'word' : 1}
 ```
-{: title="unit/test_count.py"}
 
 The fixture in the last test is the string `"anothers' word"`,
 and the expected result is the dictionary `{'anothers' : 1, 'word' : 1}`.
@@ -222,7 +229,7 @@ That said,
 fitting tests into this framework sometimes requires a few tricks,
 which we will explore in the sections that follow.
 
-## How can I tell if my software failed as it was supposed to? {#s:unit-exception}
+## How can I tell if my software failed as it was supposed to? {#unit-exception}
 
 Many errors in production systems happen because people don't test their error handling code.
 @Yuan2014 found that almost all (92%) of catastrophic system failures
@@ -236,6 +243,7 @@ we run the risk of a [silent error](glossary.html#silent-error).
 
 We can check for exceptions manually using this pattern:
 
+<!-- src="unit/test_exception_manual.py" -->
 ```python
 # Expect count_words to raise ValueError for empty input.
 def test_text_not_empty():
@@ -245,7 +253,6 @@ def test_text_not_empty():
     except ValueError:
         pass
 ```
-{: title="unit/test_exception_manual.py"}
 
 <!-- == noindent -->
 This code runs the test (i.e., calls `count_words`)
@@ -268,6 +275,7 @@ We can use `pytest.raises` with Python's `with` keyword
 to say that we expect a particular exception to be raised in that code block,
 and should report an error if one isn't raised:
 
+<!-- src="unit/test_exception_with.py" -->
 ```python
 import pytest
 
@@ -275,7 +283,6 @@ def test_text_not_empty():
     with pytest.raises(ValueError):
         count_words('')
 ```
-{: title="unit/test_exception_with.py"}
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.6.5, pytest-3.5.1, py-1.5.3, pluggy-0.6.0
@@ -302,7 +309,7 @@ The output tells us that `count_words` doesn't raise an exception when given an 
 so we should either decide that the count in this case is zero,
 or go back and fix our function.
 
-## How can I test software that includes randomness? {#s:unit-random}
+## How can I test software that includes randomness? {#unit-random}
 
 Data scientists use a lot of random numbers;
 testing code that relies on them makes use of the fact that they aren't actually random.
@@ -335,6 +342,7 @@ if the value `TESTING_DATE` has been set,
 and if not,
 it returns the number of weeks from `start to the current (unpredictable) date:
 
+<!-- src="unit/wrappers.py" -->
 ```python
 import datetime
 
@@ -347,18 +355,17 @@ def weeks_since_01(start):
         current = datetime.date.today()
     return round((current - start).days / DAYS_PER_WEEK)
 ```
-{: title="unit/wrappers.py"}
 
 <!-- == noindent -->
 If this code is in a file called `wrappers.py`,
 we would use it like this:
 
+<!-- src="unit/demo_test_weeks.py" -->
 ```python
 print('current', wrappers.weeks_since_01(datetime.date(2018, 8, 1)))
 wrappers.TESTING_DATE = datetime.date(2018, 8, 30)
 print('fixed', wrappers.weeks_since_01(datetime.date(2018, 8, 1)))
 ```
-{: title="unit/demo_test_weeks.py"}
 ```text
 current 25
 fixed 4
@@ -375,6 +382,7 @@ so it's OK to refer to values that are added afterward.
 
 Here's what defining a wrapper function looks like:
 
+<!-- src="unit/wrappers.py" -->
 ```python
 def weeks_since_02(start):
     current = weeks_since_02.testing_date
@@ -383,24 +391,23 @@ def weeks_since_02(start):
     return round((current - start).days / DAYS_PER_WEEK)
 weeks_since_02.testing_date = None
 ```
-{: title="unit/wrappers.py"}
 
 <!-- == noindent -->
 and here's how we would use it:
 
+<!-- src="unit/demo_test_weeks.py" -->
 ```python
 # demo_test_weeks.py
 print('first', weeks_since_02(datetime.date(2018, 8, 1)))
 weeks_since_02.testing_date = datetime.date(2018, 8, 30)
 print('second', weeks_since_02(datetime.date(2018, 8, 1)))
 ```
-{: title="unit/demo_test_weeks.py"}
 ```text
 current 25
 fixed 4
 ```
 
-## How can I test software that does I/O? {#s:unit-io}
+## How can I test software that does I/O? {#unit-io}
 
 A lot of early books on unit testing said that tests shouldn't rely on external files,
 both because file I/O was slow and because those files could easily get lost.
@@ -421,6 +428,7 @@ which is what Python's `StringIO` module does.
 A `StringIO` object has the same methods as a file object,
 but reads and writes text in memory instead of bytes on disk:
 
+<!-- src="unit/stringio_example.py" -->
 ```python
 from io import StringIO
 
@@ -429,7 +437,6 @@ for word in 'first second third'.split():
     writer.write('{}\n'.format(word))
 print(writer.getvalue())
 ```
-{: title="unit/stringio_example.py"}
 ```text
 first
 second
@@ -439,6 +446,7 @@ third
 `StringIO` objects can also be initialized with some data that a program can read.
 (Notice that the lengths reported below include the newline character at the end of each line.)
 
+<!-- src="unit/stringio_example.py" -->
 ```python
 DATA = '''first
 second
@@ -447,7 +455,6 @@ third'''
 for line in StringIO(DATA):
     print(len(line))
 ```
-{: title="unit/stringio_example.py"}
 ```text
 6
 7
@@ -455,7 +462,7 @@ for line in StringIO(DATA):
 ```
 
 In order to use `StringIO` in tests,
-we may need to refactor our code a bit (Chapter \@ref(s:refactor)).
+we may need to refactor our code a bit (Chapter \@ref(refactor)).
 It's common to have a function open a file,
 read its contents,
 and return the result like this:
@@ -501,11 +508,12 @@ def process(reader, writer):
 After moving the reading and writing into `process`,
 we can easily pass in a couple of `StringIO` objects for testing.
 
-## How can I tell which parts of my software have (not) been tested? {#s:unit-coverage}
+## How can I tell which parts of my software have (not) been tested? {#unit-coverage}
 
 Take a moment to study the code shown below.
 Can you tell which lines are and aren't being executed?
 
+<!-- src="unit/demo_coverage.py" -->
 ```python
 def first(left, right):
     if left < right:
@@ -528,7 +536,6 @@ def main():
 if __name__ == '__main__':
     main()
 ```
-{: title="unit/demo_coverage.py"}
 
 <!-- == noindent -->
 The answer is probably "no",
@@ -569,9 +576,9 @@ you can use `coverage html` to generate an HTML listing:
 FIXME: include unit/coverage.html
 
 A more advanced tool called a [profiler](glossary.html#profiler) can give you even more information;
-we will discuss profilers briefly in Section \@ref(s:tools-profiler).
+we will discuss profilers briefly in Section \@ref(tools-profiler).
 
-## Summary {#s:unit-summary}
+## Summary {#unit-summary}
 
 One practice we haven't described in this section is [test-driven development](glossary.html#tdd) (TDD).
 Rather than writing code and then writing tests,
@@ -596,13 +603,13 @@ so it's possible that we are measuring the wrong things.
 
 FIXME: create concept map for unit testing
 
-## Exercises {#s:unit-exercises}
+## Exercises {#unit-exercises}
 
 ### Handle the wrong kind of exception
 
 -   FIXME: modify explicit exception testing code to handle the wrong kind of exception.
 
-## Key Points
+## Key Points {#unit-keypoints}
 
 ```{r, child="keypoints/unit.md"}
 ```

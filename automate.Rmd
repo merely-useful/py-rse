@@ -1,11 +1,18 @@
-# Automating Analyses {#s:automate}
+# Automating Analyses {#automate}
 
-## Objectives
+## Questions {#automate-questions}
+
+```{r, child="questions/automate.md"}
+```
+
+## Objectives {#automate-objectives}
 
 ```{r, child="objectives/automate.md"}
 ```
 
-As Chapter \@ref(s:intro) said,
+## Introduction {#automate-intro}
+
+As Chapter \@ref(intro) said,
 Zipf's Law states that the second most common word in a body of text
 appears half as often as the most common,
 the third most common appears a third as often,
@@ -81,7 +88,7 @@ This introduction based on
 the [Software Carpentry lesson on Make][swc-make] maintained by [Gerard Capes][capes-gerard]
 and on [Jonathan Dursi][dursi-jonathan]'s [introduction to pattern rules][dursi-pattern-rules].
 
-## How can I update a file when its prerequisites change? {#s:automate-first}
+## How can I update a file when its prerequisites change? {#automate-first}
 
 Make is based on three key ideas:
 
@@ -104,12 +111,12 @@ Make is based on three key ideas:
 
 Let's start by creating a file called `Makefile` that contains the following three lines:
 
-```make
+<!-- src="automate/single_rule.mk" -->
+```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 ```
-{: title="automate/single_rule.mk"}
 
 The `#` character starts a comment,
 which runs to the end of a line (just as it does in Python or R).
@@ -131,7 +138,7 @@ A rule can have any number of actions,
 but they *must* be indented by a single tab character.
 Notice that the output of `bin/countwords.py` is [redirected](glossary.html#redirection) using `>`
 to create the output file:
-we will look at modifying the script in Chapter \@ref(s:configure)
+we will look at modifying the script in Chapter \@ref(configure)
 so that it can take the name of an output file as an argument.
 
 Together,
@@ -203,7 +210,7 @@ To test that Make is actually doing the right thing, we can:
 2.  Run the command `touch data/moby_dick.txt` to update the timestamp on the source file,
     then run `make` (situation #2).
 
-## How can I tell Make where to find rules? {#s:automate-naming}
+## How can I tell Make where to find rules? {#automate-naming}
 
 We don't have to call our file of rules `Makefile`.
 If we want,
@@ -222,12 +229,13 @@ not in `/home/gvwilson/still-magic/src/automate/data/moby_dick.txt`.
 
 FIXME: figure
 
-## How can I update multiple files when their prerequisites change? {#s:automate-extend}
+## How can I update multiple files when their prerequisites change? {#automate-extend}
 
 Our Makefile isn't particularly exciting so far.
 Let's add another rule to the end and save the result as `double_rule.mk`:
 
-```make
+<!-- src="automate/double_rule.mk" -->
+```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
@@ -236,7 +244,6 @@ results/moby_dick.csv : data/moby_dick.txt
 results/jane_eyre.csv : data/jane_eyre.txt
         python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
-{: title="automate/double_rule.mk"}
 
 When we ask Make to run this file:
 
@@ -267,7 +274,7 @@ This time Make runs:
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I get rid of temporary files that I don't need? {#s:automate-phony}
+## How can I get rid of temporary files that I don't need? {#automate-phony}
 
 A [phony target](glossary.html#phony-target) in a Makefile
 is one that doesn't correspond to any files
@@ -282,12 +289,12 @@ let's add another target to our Makefile to delete all of the files we have gene
 By convention this target is called `clean`,
 and ours looks like this:
 
-```make
+<!-- src="automate/clean.mk" -->
+```
 # Remove all generated files.
 clean :
         rm -f results/*.csv
 ```
-{: title="automate/clean.mk"}
 
 (The `-f` flag to `rm` means "force removal".
 When we use it, `rm` won't complain if the files it's trying to remove are already gone.)
@@ -333,10 +340,10 @@ by putting this in the Makefile:
 
 Most people declare all of their phony targets together near the top of the file,
 though some put the `.PHONY` declarations right before the rules they refer to.
-As with most other rules about programming style (Chapter \@ref(s:style)),
+As with most other rules about programming style (Chapter \@ref(style)),
 consistency matters more than exactly what you do.
 
-## How can I make a target depend on several prerequisites? {#s:automate-multi}
+## How can I make a target depend on several prerequisites? {#automate-multi}
 
 Right now,
 our Makefile says that each result file depends only on the corresponding data file.
@@ -350,7 +357,8 @@ we ought to regenerate our results and then check to see if they've changed.
 Here's a modified version of the Makefile
 in which each result depends on both the data file and the script:
 
-```make
+<!-- src="automate/depend_on_script.mk" -->
+```
 .PHONY: clean
 
 # Regenerate results for "Moby Dick"
@@ -363,7 +371,6 @@ results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
 
 # ...clean target as before...
 ```
-{: title="automate/depend_on_script.mk"}
 
 We can test this by touching the script and then making one or the other result:
 
@@ -375,7 +382,7 @@ $ make -f depend_on_script.mk results/jane_eyre.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I reduce the amount of typing I have to do? {#s:automate-variables}
+## How can I reduce the amount of typing I have to do? {#automate-variables}
 
 The name of our script now appears four times in our Makefile,
 which will make for a lot of typing if and when we decide to move it or rename it.
@@ -383,7 +390,8 @@ We can fix that by defining a [variable](glossary.html#make-variable) at the top
 to refer to the script,
 then using that variable in our rules:
 
-```make
+<!-- src="automate/define_variable.mk" -->
+```
 .PHONY: clean
 
 COUNT=bin/countwords.py
@@ -398,7 +406,6 @@ results/jane_eyre.csv : data/jane_eyre.txt ${COUNT}
 
 # ...clean target as before...
 ```
-{: title="automate/define_variable.mk"}
 
 The definition takes the form `NAME=value`.
 By convention,
@@ -416,7 +423,7 @@ Using variables doesn't just cut down on typing.
 They also make rules easier to understand,
 since they signal to readers that several things are always and exactly the same.
 
-## How can I make one update depend on another? {#s:automate-chain}
+## How can I make one update depend on another? {#automate-chain}
 
 We can re-create all the results files with a single command
 by listing multiple targets when we run Make:
@@ -435,7 +442,8 @@ this target is called `all`,
 and while we don't have to list all our phony targets in alphabetical order,
 it makes them a lot easier to find:
 
-```make
+<!-- src="automate/multi_prereq.mk" -->
+```
 .PHONY: all clean
 
 COUNT=bin/countwords.py
@@ -445,7 +453,6 @@ all : results/moby_dick.csv results/jane_eyre.csv
 
 # ...rules for moby_dick, jane_eyre, and clean...
 ```
-{: title="automate/multi_prereq.mk"}
 
 If we run Make now,
 it sees that `all` is only "up to date" if the two CSV files are up to date,
@@ -463,7 +470,7 @@ This is called [declarative programming](glossary.html#declarative-programming):
 we declare what outcome we want,
 and the program figures out how to achieve it.
 
-## How can I abbreviate my update rules? {#s:automate-automatic}
+## How can I abbreviate my update rules? {#automate-automatic}
 
 We could add a third book to our Makefile,
 then a fourth,
@@ -477,22 +484,22 @@ The first step is to use the very cryptic expression `$@` in the rule's action
 to mean "the target of the rule".
 We start with this:
 
-```make
+<!-- src="automate/single_rule.mk" -->
+```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 ```
-{: title="automate/single_rule.mk"}
 
 <!-- == noindent -->
 and turn it into this:
 
-```make
+<!-- src="automate/automatic_variables_wrong.mk" -->
+```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > $@
 ```
-{: title="automate/automatic_variables_wrong.mk"}
 
 <!-- == noindent -->
 `$@` is an automatic variable:
@@ -505,12 +512,12 @@ but we're stuck with it.
 Step 2 is to replace the list of prerequisites in the action with `$^`,
 which is another automatic variable meaning "all the prerequisites of the current rule":
 
-```make
+<!-- src="automate/automatic_variables_wrong.mk" -->
+```
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt
         python bin/countwords.py $^ > $@
 ```
-{: title="automate/automatic_variables_wrong.mk"}
 
 But wait:
 our results files don't just have books as dependencies.
@@ -518,12 +525,12 @@ They also depend on `bin/countwords.py`.
 What happens if we include that in the rule while using automatic variables?
 (We'll do this for a third book to keep the three rules separate in the example Makefile.)
 
-```make
+<!-- src="automate/automatic_variables_wrong.mk" -->
+```
 # Regenerate results for "The Time Machine" - WRONG
 results/time_machine.csv : data/time_machine.txt ${COUNT}
         python bin/countwords.py $^ > $@
 ```
-{: title="automate/automatic_variables_wrong.mk"}
 
 <!-- == noindent -->
 This doesn't do the right thing because `$^` includes *all* of the prerequisites,
@@ -537,23 +544,23 @@ This situation comes up so often that
 Make helpfully provides another automatic variable `$<` meaning "the first prerequisite",
 which lets us rewrite our rules like this:
 
-```make
+<!-- src="automate/automatic_variables.mk" -->
+```
 # Regenerate results for "Janey Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt ${COUNT}
         python bin/countwords.py $< > $@
 ```
-{: title="automate/automatic_variables.mk"}
 
 And yes,
 `$< > $@` is hard to read,
 even with practice,
 and `< $<` (reading the first prerequisite from [standard input](glossary.html#stdin))
 is even harder.
-Using an editor that does syntax highlighting helps (Chapter \@ref(s:tools)),
+Using an editor that does syntax highlighting helps (Chapter \@ref(tools)),
 and if you are ever designing software for other people to use,
 remember this case and don't do it.
 
-## How can I write one general rule to update many files in the same way? {#s:automate-pattern}
+## How can I write one general rule to update many files in the same way? {#automate-pattern}
 
 We can now replace all the rules for generating results files
 with one [pattern rule](glossary.html#pattern-rule)
@@ -562,11 +569,11 @@ Whatever part of a filename `%` matches in the target,
 it must also match in the prerequisites,
 so the single rule:
 
-```make
+<!-- src="automate/pattern_rule.mk" -->
+```
 results/%.csv : data/%.txt ${COUNT}
         python bin/countwords.py $< > $@
 ```
-{: title="automate/pattern_rule.mk"}
 
 <!-- == noindent -->
 will handle *Jane Eyre*, *Moby Dick*, and *The Time Machine*.
@@ -575,7 +582,8 @@ which is why `$<` and `$@` are needed.)
 With this rule in place,
 our entire Makefile is reduced to:
 
-```make
+<!-- src="automate/pattern_rule.mk" -->
+```
 .PHONY: all clean
 
 COUNT=bin/countwords.py
@@ -591,7 +599,6 @@ results/%.csv : data/%.txt ${COUNT}
 clean :
 	rm -f results/*.csv
 ```
-{: title="automate/pattern_rule.mk"}
 
 Let's delete all of the results files and re-create them all:
 
@@ -621,7 +628,7 @@ $ make -f pattern_rule.mk results/jane_eyre.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I define sets of files automatically? {#s:automate-functions}
+## How can I define sets of files automatically? {#automate-functions}
 
 Our "automated" analysis is still not fully automated:
 If we add another book to `raw`,
@@ -635,19 +642,19 @@ and we just want to update them.
 We can define a variable called `RESULTS` to be a list of all the results files
 using the same notation we'd use in the shell to match all the CSV files in the `results/` directory:
 
-```make
+<!-- src="automate/filename_wildcard.mk" -->
+```
 RESULTS=results/*.csv
 ```
-{: title="automate/filename_wildcard.mk"}
 
 <!-- == noindent -->
 and then make `all` depend on that:
 
-```make
+<!-- src="automate/filename_wildcard.mk" -->
+```
 # Regenerate all results.
 all : ${RESULTS}
 ```
-{: title="automate/filename_wildcard.mk"}
 
 This works,
 but only for re-creating files:
@@ -663,10 +670,10 @@ because functions were added to Make long after it was first written,
 but at least they have readable names.
 Let's create a variable `DATA` that holds the names of all of our data files:
 
-```make
+<!-- src="automate/function_wildcard.mk" -->
+```
 DATA = $(wildcard data/*.txt)
 ```
-{: title="automate/function_wildcard.mk"}
 
 <!-- == noindent -->
 This calls the function `wildcard` with the argument `data/*.txt`.
@@ -680,7 +687,8 @@ To check,
 we can add another phony target to the end of the file called `settings`
 that uses the shell command `echo` to print the name and value of a variable:
 
-```make
+<!-- src="automate/function_wildcard.mk" -->
+```
 .PHONY: all clean settings
 
 # ...everything else...
@@ -690,7 +698,6 @@ settings :
         echo COUNT: ${COUNT}
         echo DATA: ${DATA}
 ```
-{: title="automate/function_wildcard.mk"}
 
 Let's run this:
 
@@ -708,12 +715,12 @@ The output appears twice because Make shows us the command it's going to run bef
 If we put `@` before the command,
 Make doesn't show it before running it:
 
-```make
+<!-- src="automate/function_wildcard_silent.mk" -->
+```
 settings :
 	@echo COUNT: ${COUNT}
         @echo DATA: ${DATA}
 ```
-{: title="automate/function_wildcard_silent.mk"}
 
 ```shell
 $ make -f function_wildcard.mk settings
@@ -728,10 +735,10 @@ but what we want is the names of the corresponding output files.
 Make has another function called `patsubst` (short for "**pat**tern **subst**itution")
 that uses the same kind of patterns used in rules to do exactly this:
 
-```make
+<!-- src="automate/patsubst.mk" -->
+```
 RESULTS=$(patsubst data/%.txt,results/%.csv,${DATA})
 ```
-{: title="automate/patsubst.mk"}
 
 `$(patsubst ...)` calls the pattern substitution function.
 The first argument is what to look for:
@@ -749,13 +756,13 @@ which is our list of books' names.
 
 Let's check that this has worked by adding to the `settings` target
 
-```make
+<!-- src="automate/patsubst.mk" -->
+```
 settings :
         @echo COUNT: ${COUNT}
         @echo DATA: ${DATA}
         @echo RESULTS: ${RESULTS}
 ```
-{: title="automate/patsubst.mk"}
 ```shell
 $ make -f patsubst.mk settings
 ```
@@ -790,13 +797,13 @@ python bin/countwords.py data/time_machine.txt > results/time_machine.csv
 
 Our workflow is now just two steps:
 add a data file and run Make.
-As we'll see in Chapter \@ref(s:integrate),
+As we'll see in Chapter \@ref(integrate),
 we can even automate the second half in some cases,
 but this is still a big improvement over running things manually,
 particularly as we start to add more steps
 (such as merging data files and generating plots).
 
-## How can I document my workflow? {#s:automate-doc}
+## How can I document my workflow? {#automate-doc}
 
 Every well-behaved program can tell people how to use it.
 If we run `make --help`, for example,
@@ -806,7 +813,8 @@ But how can we document the workflow that our Makefile now embodies?
 One common choice is to provide a special target like `settings`
 that prints a description of available targets:
 
-```make
+<!-- src="automate/makefile_help.mk" -->
+```
 .PHONY: all clean help settings
 
 # ...other definitions...
@@ -819,7 +827,6 @@ help :
 	@echo "settings : show the values of all variables."
 	@echo "help : show this message."
 ```
-{: title="automate/makefile_help.mk"}
 
 This is easy to set up and does the job,
 but once again its redundancy should worry us:
@@ -827,7 +834,7 @@ the same information appears in both the comments on rules and the help,
 which means that authors have to remember to update the help when adding or changing rules.
 
 A better approach,
-which we will explore in more depth in Chapter \@ref(s:docs),
+which we will explore in more depth in Chapter \@ref(docs),
 is to have people format some comments in a special way
 and then extract and display those comments when asked for help.
 We'll use `##` (a double comment marker) to indicate the lines we want displayed
@@ -837,7 +844,8 @@ since we may be using the `-f` flag to specify which Makefile we're using.
 With all that in place,
 our finished Makefile is:
 
-```make
+<!-- src="automate/makefile_grep.mk" -->
+```
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
@@ -865,7 +873,6 @@ settings :
 help :
 	@grep '^##' ${MAKEFILE_LIST}
 ```
-{: title="automate/makefile_grep.mk"}
 
 Let's test:
 
@@ -899,7 +906,7 @@ but this is a good start.
 > one of the goals of these lessons is to give you an idea of what you ought to be searching for yourself
 > so that you can do this more efficiently.
 
-## Summary {#s:automate-summary}
+## Summary {#automate-summary}
 
 ```{r automate-concept, echo=FALSE, fig.cap="Automation Concept Map"}
 if (knitr::is_latex_output()) {
@@ -911,7 +918,7 @@ if (knitr::is_latex_output()) {
 
 -   @Smit2011 describes the design and implementation of several build tools in detail.
 
-## Exercises {#s:automate-exercises}
+## Exercises {#automate-exercises}
 
 ### Create a summary CSV file
 
@@ -922,7 +929,7 @@ if (knitr::is_latex_output()) {
 
 -   FIXME: make it depend on the summary.
 
-## Key Points
+## Key Points {#automate-keypoints}
 
 ```{r, child="keypoints/automate.md"}
 ```

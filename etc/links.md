@@ -1,7 +1,6 @@
-[config-email]: mailto:{{site.email}}
-[config-organization]: {{site.organization}}
-[config-repo]: {{site.repo}}
-[config-website]: {{site.website}}
+[config-email]: mailto:gvwilson@third-bit.com
+[config-repo]: https://github.com/merely-useful/merely-useful.github.io/
+[config-website]: https://merely-useful.github.io/
 
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
