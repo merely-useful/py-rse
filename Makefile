@@ -7,7 +7,6 @@ HTML=_book/index.html
 PDF=_book/${STEM}.pdf
 
 CHAPTERS= \
-intro.Rmd \
 shell.Rmd \
 automate.Rmd \
 syndicate.Rmd \
