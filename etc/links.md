@@ -67,7 +67,6 @@
 [noller-a-lot-happens]: http://jessenoller.com/blog/2015/9/27/a-lot-happens
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
 
-[one-extra-fact]: https://merely-useful.github.io/one-extra-fact/
 [orcid]: https://orcid.org/
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osi-license-list]: http://opensource.org/licenses
