@@ -1,0 +1,2 @@
+-   Use `virtualenv` to create a separate virtual environment for each project.
+-   Use `pip` to create a distributable package containing your project's software, documentation, and data.

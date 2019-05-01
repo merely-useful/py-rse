@@ -1,0 +1,4 @@
+- "Explain what a software development process is.
+- "Define the key features of an agile development process.
+- "Describe the key roles in a planning-based software development process.
+- "Explain the true purpose of a schedule.

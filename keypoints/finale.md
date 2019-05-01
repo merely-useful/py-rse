@@ -1,0 +1,10 @@
+-   Programs are data.
+-   Computers don't understand anything.
+-   Programming is about creating and combining abstractions.
+-   Every redundancy in software is an abstraction trying to be born.
+-   Create models for computers and views for human beings.
+-   Paranoia makes us productive.
+-   Things that don't change are easier to understand than things that do.
+-   Better algorithms are better than better hardware.
+-   Distributed is different.
+-   Privacy, security, fairness, and responsibility can't be added after the fact.

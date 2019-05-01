@@ -1,0 +1,33 @@
+-   Infants born to women with HIV receiving an HIV test within two months of birth, 2009-2017
+    -   `Infant_HIV_Testing_2017.xlsx`
+        -   What is this?: Excel spreadsheet with summarized data.
+        -   Source(s): UNICEF, <https://data.unicef.org/resources/dataset/hiv-aids-statistical-tables/>
+        -   Last Modified: July 2018 (according to website)
+        -   Contact: Greg Wilson <greg.wilson@rstudio.com>
+        -   Spatial Applicability: global
+        -   Temporal Applicability: 2009-2017
+    -   `infant_hiv.csv`
+        -   What is this?: CSV export from `Infant_HIV_Testing_2017.xlsx`
+    -   Notes
+        -   Data is not tidy: some rows are descriptive comments, others are blank separators between sections, and column headers are inconsistent.
+        -   Use `tidy_infant_hiv()` to tidy this data.
+-   Maternal health indicators disaggregated by age
+    -   `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
+        -   What is this?: Excel spreadsheet with summarized data.
+        -   Source(s): UNICEF, <https://data.unicef.org/resources/dataset/maternal-health-data/>
+        -   Last Modified: July 2018 (according to website)
+        -   Contact: Greg Wilson <greg.wilson@rstudio.com>
+        -   Spatial Applicability: global
+        -   Temporal Applicability: 2000-2014
+    -   `at_health_facilities.csv`
+        -   What is this?: percentage of births at health facilities by country, year, and mother's age
+        -   Source(s): single sheet from `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
+    -   `c_sections.csv`
+        -   What is this?: percentage of Caesarean sections by country, year, and mother's age
+        -   Source(s): single sheet from `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
+    -   `skilled_attendant_at_birth.csv`
+        -   What is this?: percentage of births with skilled attendant present by country, year, and mother's age
+        -   Source(s): single sheet from `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
+    -   Notes
+        -   Data is not tidy: some rows are descriptive comments, others are blank separators between sections, and column headers are inconsistent.
+        -   Use `tidy_maternal_health_adolescents()` to tidy this data.

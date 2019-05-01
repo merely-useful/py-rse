@@ -1,0 +1,5 @@
+-   Explain what realistic technical and social goals for software testing are.
+-   Explain what a test runner is.
+-   Explain what a text fixture is.
+-   Write and run unit tests using Python's `pytest` test runner.
+-   Check test coverage using Python's `coverage` module.

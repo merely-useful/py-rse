@@ -1,0 +1,646 @@
+# Code Style and Review {#style}
+
+## Questions {#style-questions}
+
+```{r, child="questions/style.md"}
+```
+
+## Objectives {#style-objectives}
+
+```{r, child="objectives/style.md"}
+```
+
+## Introduction {#style-intro}
+
+To paraphrase @Dobz1973,
+nothing in software development makes sense except in light of human psychology.
+This is particularly true when we look at programming style.
+Computers don't need to understand programs in order to execute them,
+but people do in order to create them, maintain them, and fix them.
+The more clearly those programs are laid out,
+the easier it is to find things and make sense of them.
+This lesson therefore describes some widely-used rules of Python programming style,
+and some features of the language that you can use to make your programs more flexible and more readable.
+
+The biggest benefit of having a second person work on a programming project
+is therefore not getting twice as much code written,
+but having code reviewed.
+Study after study over more than 40 years has shown that code review is the most effective way to find bugs in software
+@Faga1976,@Faga1986,@Cohe2010@Bacc2013.
+Despite this,
+it still isn't common in research software development,
+in part because it isn't part of the culture @Sega2005,
+but also because code review is mostly useful
+when the reviewers understand the problem domain well enough to comment on algorithms and design choices
+rather than indentation and variable naming,
+and the number of people who can do that for a research project is typically very small---sometimes
+as small as one @Petr2014.
+
+This lesson will look at the mechanics of code review
+and present some short examples of the kinds of things reviewers should look for.
+
+## What are the standard rules of good style for Python programs? {#style-pep8}
+
+The single most important rule of style is to be consistent,
+both internally and with other programs.
+Python's standard style is called [PEP-8][pep-8];
+the term "PEP" is short for "Python Enhancement Proposal",
+and PEP-8 has become the most widely used standard for Python coding.
+Some of its rules are listed below,
+along with others borrowed from "[Code Smells and Feels][code-smells-and-feels]":
+
+FIXME: add before-and-after examples for each of these.
+
+### Always indent code blocks using 4 spaces, and use spaces instead of tabs.
+
+### Do not put spaces inside parentheses
+
+I.e., don't write <code>(&nbsp;1+2&nbsp;)</code>.
+This applies to function calls as well:
+do not write <code>max(&nbsp;a,&nbsp;b&nbsp;)</code>.
+
+### Always use spaces around comparisons like `>` and `<=`.
+
+Use your own judgment for spacing around common arithmetic operators like `+` and `/`.
+
+### Use `ALL_CAPS_WITH_UNDERSCORES` for constants.
+
+### Use `lower_case_with_underscores` for the names of functions and variables.
+
+This naming convention is sometimes called [pothole case](glossary.html#pothole-case).
+You should only use [`CamelCase`](glossary.html#camel-case) for classes,
+which are outside the scope of this lesson.
+
+### Put two blank links between each function definition.
+
+This helps them stand out.
+
+### Avoid abbreviations in function and variable names.
+
+They can be ambiguous,
+and can be be hard for non-native speakers to understand.
+This rule doesn't necessarily you will have to do more typing:
+a good programming editor will [auto-complete](glossary.html#auto-completion) names for you.
+
+### Use short names for short-lived local variables but longer names for things with wider scope.
+
+Loop indices @Beni2017 can be `i` and `j` (provided the loop is only a few lines long).
+Anything that is used at a greater distance
+or whose purpose isn't immediately clear
+(such as a function) should have a longer name.
+
+### Put everything in a file in order.
+
+The order of items in each file should be:
+
+-   The [shebang](glossary.html#shebang) line (because it has to come first to work).
+-   The file's documentation string (Chapter \@ref(style)).
+-   All of the `import` statements, one per line.
+-   Constant definitions.
+-   Function definitions.
+-   If the file can be run as a program,
+    the `if __name__ == '__main__'` statement discussed in
+    Section \@ref(package-import).
+
+### Do not comment and uncomment sections of code to change behavior.
+
+If you need to do something in some runs of the program and not do it in others,
+use an `if` statement to enable or disable that block of code.
+It's much more reliable---you're far less likely to accidentally comment out one too many lines---and
+you may find that you want to leave those conditional sections in the finished program
+for logging purposes (Chapter \@ref(logging)).
+
+### Keep functions short.
+
+Nothing should be more than a page long
+or have more than three levels of indentation because of nested loops and conditionals.
+Anything longer or more deeply nested will be hard for readers to fit into [working memory](glossary.html#working-memory);
+when you find yourself needing to break these limits,
+extract a function (Section \@ref(refactor-extract-function)).
+
+### Handle special cases at the start of the function.
+
+This helps readers mentally get them out of the way
+and focus on the "normal" case.
+Section \@ref(refactor-short-circuits)
+discusses this in more detail.
+
+## How can I check that code follows style guidelines? {#style-check}
+
+Checking that code conforms to guidelines like the ones above can be time consuming,
+but luckily it doesn't have to be done by hand.
+Most languages have tools that will check code style rules and report violations.
+These are often called [linters](glossary.html#linter),
+after an early tool called `[lint][lint]` that found lint (or fluff) in C code.
+Python has a tool that used to be called `pep8`
+and is now called `pycodestyle`
+that will do this.
+For example,
+this program is supposed to count the number of stop words in a document:
+
+<!-- src="style/count_stops_1.py" -->
+```python
+stops = ['a', 'A', 'the', 'The', 'and']
+
+def count(ln):
+    n = 0
+    for i in range(len(ln)):
+        line = ln[i]
+        stuff = line.split()
+        for word in stuff:
+            # print(word)
+            j = stops.count(word)
+            if (j > 0) == True:
+                n = n + 1
+    return n
+
+import sys
+
+lines = sys.stdin.readlines()
+# print('number of lines', len(lines))
+n = count(lines)
+print('number', n)
+```
+
+<!-- == noindent -->
+When we run this command:
+
+```shell
+$ pycodestyle count_stops.py
+```
+
+<!-- == noindent -->
+it prints this report:
+
+```text
+src/style/count_stops_before.py:3:1: E302 expected 2 blank lines, found 1
+src/style/count_stops_before.py:11:24: E712 comparison to True should be 'if cond is True:' or 'if cond:'
+src/style/count_stops_before.py:12:13: E101 indentation contains mixed spaces and tabs
+src/style/count_stops_before.py:12:13: W191 indentation contains tabs
+src/style/count_stops_before.py:15:1: E305 expected 2 blank lines after class or function definition, found 1
+src/style/count_stops_before.py:15:1: E402 module level import not at top of file
+```
+
+Fixing these issues gives us this:
+
+<!-- src="style/count_stops_2.py" -->
+```python
+import sys
+
+stops = ['a', 'A', 'the', 'The', 'and']
+
+
+def count(ln):
+    n = 0
+    for i in range(len(ln)):
+        line = ln[i]
+        stuff = line.split()
+        for word in stuff:
+            # print(word)
+            j = stops.count(word)
+            if j > 0:
+                n = n + 1
+    return n
+
+
+lines = sys.stdin.readlines()
+# print('number of lines', len(lines))
+n = count(lines)
+print('number', n)
+```
+
+This program gets a clean bill of health,
+so it's worth looking at in more detail.
+Here are things that should be changed:
+
+-   The commented-out `print` statements should either be removed
+    or turned into proper logging statements (Chapter \@ref(logging)).
+-   The variables `ln`, `i`, and `j` should be given clearer names.
+-   The outer loop in `count` loops over the indices of the line list
+    rather than over the lines.
+    It should do the latter
+    (which will allow us to get rid of the variable `i`).
+-   There's no reason to store the result of `line.split` in a temporary variable:
+    the inner loop of `count` can use it directly.
+-   Rather than counting how often a word occurs in the list of stop words
+    and then adding 1 to `n`,
+    we can create a set of stop words and use a simple membership test.
+    This will be more readable *and* more efficient.
+-   Since the set of stop words is a global variable,
+    it should be written in upper case.
+-   We should use `+=` to increment the counter `n`.
+-   Rather than reading the input into a list of lines and then looping over that,
+    we can give `count` a stream and have it process the lines one by one.
+-   Since we might want to use `count` in other programs some day,
+    we should put the two lines at the bottom that handle input
+    into a conditional
+    so that they aren't executed when this script is imported.
+
+After making all these changes,
+our little program looks like this:
+
+<!-- src="style/count_stops_3.py" -->
+```python
+import sys
+
+
+STOPS = {'a', 'A', 'the', 'The', 'and'}
+
+
+def count(reader):
+    n = 0
+    for line in reader:
+        for word in line.split():
+            if word in STOPS:
+                n += 1
+    return n
+
+
+if __name__ == '__main__':
+    n = count(sys.stdin)
+    print('number', n)
+```
+
+## How should I review someone else's code: {#style-github}
+
+FIXME: how to review on GitHub.
+
+## How should I collaborate with people when doing code reviews? {#style-how}
+
+How you review is just as important as what you look for:
+being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
+or avoid having you review their work.
+Equally,
+being defensive when someone offers suggestions politely and sincerely is very human,
+but can stunt your development as a programmer.
+
+Lots of people have written guidelines for doing reviews,
+which are also useful when reviewing written work @Quen2018,@Sank2018.
+A few key points are:
+
+Work in small increments.
+:   As @Cohe2010 and others have found,
+    code review is most effective when done in short bursts.
+    That means that change requests should also be short:
+    anything that's more than a couple of screens long
+    should be broken into smaller pieces.
+
+Look for algorithmic problems first.
+:   Code review isn't just (or even primarily) about style:
+    its real purpose is to find bugs before they can affect anyone.
+    The first pass over any change hould therefore look for algorithmic problems.
+    Are the calculations right?
+    Are any rare cases going to be missed?
+    Are errors being caught and handled Chapter \@ref(logging)?
+
+Use a rubric.
+:   Linters are great,
+    but can't decide when someone should have used a lookup table instead of conditionals.
+    A list of things to check for can make review faster and more comprehensible,
+    especially when you can copy-and-paste or drag-and-drop specific comments
+    onto specific lines
+    (something that GitHub unfortunately doesn't yet support).
+
+Ask for clarification.
+:   If you don't understand something,
+    or don't understand why the author did it,
+    ask.
+    (And when the author explains it,
+    think about suggesting that the explanation ought to be documented somewhere.)
+
+Offer alternatives.
+:   Telling authors that something is wrong is helpful;
+    telling them what they might do instead is more so.
+
+Don't be sarcastic or disparaging.
+:   "Did you maybe think about *testing* this garbage?"
+    is a Code of Conduct violation in any well-run project.
+
+Don't present opinions as facts.
+:   "Nobody uses X any more" might be true.
+    If it is,
+    the person making the claim ought to be able to point at download statistics
+    or a Google Trends search;
+    if they can't,
+    they should say,
+    "I don't think anybody uses X any more" and explain why they think that.
+
+Don't feign surprise or pass judgment.
+:   "Gosh, didn't you know [some obscure fact]?" isn't helpful;
+    neither is, "Geez, why don't you [some clever trick] here?"
+
+Don't overwhelm people with details.
+:   If someone has used the letter `x` as a variable name in several places,
+    and they shouldn't have,
+    comment on the first two or three and simply put a check beside the others---the reader
+    won't need the comment repeated.
+
+Don't ask people to do extra work.
+:   Nobody enjoys fixing bugs and style violations.
+    Asking them to add a few features while they're at it is rude.
+
+Don't let people break these rules just because they're frequent contributors or in positions of power.
+:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
+    If you let people be rude to one another,
+    *that* is your culture.
+
+Be specific in replies to reviewers.
+:   If someone has suggested a better variable name,
+    you can probably simply fix it.
+    If someone has suggested a major overhaul to an algorithm,
+    you should reply to their comment to point at the commit that includes the fix.
+
+Thank your reviewers.
+:   If someone has taken the time to read your code carefully,
+    thank them for doing it.
+
+## In what order should functions be defined? {#style-order}
+
+When encountering code for the first time,
+most people scan it from top to bottom.
+If that code is a program or script,
+rather than a library,
+its main function should be put first,
+and should probably be called `main`.
+
+After reading that function,
+someone should have a good idea of what the program does in what order.
+Three common patterns that people might match against are:
+
+1.  Figure out what the user has asked it to do (Chapter \@ref(configure)).
+2.  Read all input data.
+3.  Process it.
+4.  Write output.
+
+<!-- == noindent -->
+or:
+
+1.  Figure out what the user has asked for.
+2.  For each input file:
+    1.  Read.
+    2.  Process.
+    3.  Write file-specific output (if any).
+3.  Write summary output (if any).
+
+<!-- == noindent -->
+or:
+
+1.  Figure out what the user has asked for.
+2.  Repeatedly:
+    1.  Wait for user input.
+    2.  Do what the user has asked.
+3.  Exit when a "stop" command of some sort is received.
+
+Each step in each of the outlines above usually becomes a function.
+Those functions depend on others,
+some of which are written to break code into comprehensible chunks and are then called just once,
+others of which are utilities that may be called many times from many different places.
+
+FIXME: figure
+
+Different people order these differently;
+our preferred order is:
+
+1.  Put all of the single-use functions in the first half of the file
+    in the order in which they are likely to be called.
+2.  Put all of the multi-use utility functions in the bottom of the file in alphabetical order.
+
+If any of those utility functions are used by other scripts or programs,
+they should go in a file of their own.
+In fact,
+this is a good practice even if they're only used by one program,
+since it signals even more clearly which functions are in the "structural" layer
+and which are in the "utility" layer.
+
+## How can I specify default values for functions' parameters? {#style-defaults}
+
+[Working memory](glossary.html#working-memory) can only hold a few items at once:
+initial estimates in the 1950s put the number at 7 plus or minus 2 @Mill1956,
+and more recent estimates put it as low as 4 or 5.
+If your function requires two dozen parameters,
+the odds are very good that users will frequently forget them
+or put them in the wrong order.
+One solution is to give parameters default values (Chapter \@ref(style));
+another is to bundle them together so that (for example)
+people pass three `point` objects instead of nine separate `x`, `y`, and `z` values.
+
+A third approach (which can be combined with the preceding two)
+is to specify default values for some of the parameters.
+Doing this gives users control over everything
+while also allowing them to ignore details;
+it also codifies what you consider "normal" for the function.
+
+For example,
+suppose we are comparing images to see if they are the same or different.
+We can specify two kinds of tolerance:
+how large a difference in color value to notice,
+and how many differences above that threshold to tolerate
+(as a percentage of the total number of pixels).
+By default,
+any color difference is considered significant,
+and only 1% of pixels are allowed to differ:
+
+```python
+def image_diff(left, right, per_pixel=0, fraction=0.01):
+    # ...implementation...
+```
+
+<!-- == noindent -->
+When this function is called using `image_diff(old, new)`,
+those default values apply.
+However,
+it can also be called like this:
+
+-   `image_diff(old, new, per_pixel=2)`
+    allows pixels to differ slightly without those differences being significant.
+-   `image_diff(old, new, fraction=0.05)` allows more pixels to differ.
+-   `image_diff(old, new, per_pixel=1, fraction=0.005)`
+    raises the per-pixel threshold but decrease number of allowed differences.
+
+Default parameter values make code easier to understand and use,
+but there is a subtle trap.
+When Python executes a function definition like this:
+
+```python
+def collect(new_value, accumulator=set()):
+    accumulator.add(new_value)
+    return accumulator
+```
+
+<!-- == noindent -->
+it calls `set()` to create a new empty set,
+and then uses that set as the default value for `accumulator` every time the function is called.
+It does *not* call `set()` anew for each call,
+so all calls using the default will share the same set:
+
+```python
+>>> collect('first')
+{'first'}
+>>> collect('second')
+{'first', 'second'}
+```
+
+A common way to avoid this is to pass `None` to the function
+to signal that the user didn't provide a value:
+
+```python
+def collect(new_value, accumulator=None):
+    if accumulator is None:
+        accumulator = set()
+    accumulator.add(new_value)
+    return accumulator
+```
+
+## How can I write functions to handle a variable number of arguments? {#style-varargs}
+
+We can often make programs simpler by writing functions that take a variable number of arguments,
+just like `print` and `max`.
+One way to to require user to stuff those arguments into a list,
+e.g.,
+to write `find_limits([a, b, c, d])`.
+However,
+Python can do this for us.
+If we declare a single argument whose name starts with a single `*`,
+Python will put all "extra" arguments into a [tuple](glossary.html#tuple)
+and pass that as the argument.
+By convention,
+this argument is called `args`:
+
+<!-- src="style/find_limits.py" -->
+```python
+def find_limits(*args):
+    print(args)
+
+find_limits(1, 3, 5, 2, 4)
+```
+```text
+(1, 3, 5, 2, 4)
+```
+
+This catch-all parameter can be used with regular parameters,
+but must come last in the parameter list to avoid ambiguity:
+
+<!-- src="style/select_outside.py" -->
+```python
+def select_outside(low, high, *values):
+    result = []
+    for v in values:
+        if (v < low) or (v > high):
+            result.add(v)
+    return result
+
+print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
+```
+```text
+[-0.2, -0.5, 1.7]
+```
+
+An equivalent special form exists for named arguments:
+the catch-all variable is conventionally called `kwargs`
+(for "keyword arguments")
+and its name is prefixed with `**` (i.e., two asterisks instead of one).
+When this is used,
+the function is given a [dictionary](glossary.html#dictionary) of names and values
+rather than a list:
+
+<!-- src="style/set_options.py" -->
+```python
+def set_options(tag, **kwargs):
+    result = '<{}'.format(tag)
+    for key in kwargs:
+        result += ' {}="{}"'.format(key, kwargs[key])
+    result += '/>'
+    return result
+
+print(set_options('h1', color='blue'))
+print(set_options('p', align='center', size='150%'))
+```
+```text
+<h1 color="blue"/>
+<p align="center" size="150%"/>
+```
+
+<!-- == noindent -->
+Notice that the names of parameters are not quoted:
+the call is `color='blue'` and not `'color'='blue'`.
+
+## How can I pass an unknown number of parameters? {#style-starargs}
+
+We can use the inverse of `*args` and `*kwargs` to match a list of values to arguments.
+In this case,
+we put the single `*` in front of the list when *calling* the function
+rather than in front of the parameter when *defining* it:
+
+<!-- src="style/trim_value.py" -->
+```python
+def trim_value(data, low, high):
+    print(data, "with", low, "and", high)
+
+parameters = ['some matrix', 'lower bound', 'upper bound']
+trim_value(*parameters)
+```
+```text
+some matrix with lower bound and upper bound
+```
+
+## How can I get values out of structured data more easily? {#style-destructure}
+
+Modern programming languages have lots of other tools to make life more convenient for programmers.
+One that's particularly useful is [destructuring](glossary.html#destructuring):
+
+<!-- src="style/destructuring.py" -->
+```python
+[first, [second, third]] = [1, [2, 3]]
+print(first)
+print(second)
+print(third)
+```
+```text
+1
+2
+3
+```
+
+As this example shows,
+if the variables on the left are arranged in the same way as the values on the right,
+Python will automatically unpack the values and assign them correctly.
+This is particularly useful when looping over lists of structured values:
+
+<!-- src="style/looping.py" -->
+```python
+people = [
+    [['Kay', 'McNulty'], 'mcnulty@eniac.org'],
+    [['Betty', 'Jennings'], 'jennings@eniac.org'],
+    [['Marlyn', 'Wescoff'], 'mwescoff@eniac.org']
+]
+for [[first, last], email] in people:
+    print('{} {} <{}>'.format(first, last, email))
+```
+```text
+Kay McNulty <mcnulty@eniac.org>
+Betty Jennings <jennings@eniac.org>
+Marlyn Wescoff <mwescoff@eniac.org>
+```
+
+## Summary {#style-summary}
+
+George Orwell laid out [six rules for good writing][orwells-rules],
+the last and most important of which is,
+"Break any of these rules sooner than say anything outright barbarous."
+There will always be cases where your code will be easier to understand
+if you *don't* do the things described in this lesson,
+but there are probably fewer of them than you think.
+
+FIXME: create concept map for review.
+
+## Exercises {#style-exercises}
+
+FIXME: create exercises for review.
+
+## Key Points {#style-keypoints}
+
+```{r, child="keypoints/style.md"}
+```
+
+```{r, child="etc/links.md"}
+```

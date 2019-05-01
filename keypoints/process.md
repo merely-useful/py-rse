@@ -1,0 +1,5 @@
+- "A software development process can be chaotic, agile, or sturdy.
+- "Agile development depends on feedback loops at several scales.
+- "Pair programming provides realtime feedback on code as it is written.
+- "The primary responsibility of a product manager is to translate users' needs into features and priorities.
+- "The primary responsibility of a project manager is to create and maintain a schedule.
