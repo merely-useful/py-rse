@@ -11,6 +11,8 @@
 This repository contains material for two semester-long courses on computing skills for researchers.
 Please see <https://merely-useful.github.io> for the rendered versions.
 
+## Building and Previewing
+
 To set up to preview locally:
 
 1.  Install R.
@@ -30,7 +32,23 @@ Or via RStudio:
 
 1. Or in the console `source("_build.R")` to build all the outputs.
 
-Information for authors:
+## Workflow
+
+If you are doing a major overhaul on material:
+
+1.  Pick a chapter.
+2.  Check that there isn't an outstanding branch with its name (i.e., that no one else is also doing a major overhaul).
+3.  Create a branch named after the chapter file, e.g. `automate` or `publish`.
+4.  Make some trivial change and create a PR with the subject line `revisions to automate` (or whatever the chapter name is).
+5.  Add the label "work in progress" to that PR.
+6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
+
+If you are making a smaller change, please create a branch with a meaningful name, submit changes, and ask for a reviewer.
+Please do not assign PRs to people without first checking with them.
+
+Finally, if you are doing a major reorganization that involves multiple chapters, please put in a proposal first.
+
+## Content Guidelines
 
 1.  `_bookdown.yml` contains an ordered list of R Markdown chapters and appendices.
     This list is repeated in `Makefile`.
