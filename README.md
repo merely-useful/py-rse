@@ -18,11 +18,17 @@ To set up to preview locally:
 
 1.  Run R and use `install.packages("bookdown")` to install bookdown.
 
-To build and preview:
+To build and preview, you can do it via `make`:
 
 1.  `make html` and then open `docs/index.html`.
 
 1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `docs` folder).
+
+Or via RStudio:
+
+1. When in the R project (opened via the `.Rproj` file), use the key bindings `Ctrl-Shift-B` to build the `html` output.
+
+1. Or in the console `source("_build.R")` to build all the outputs.
 
 Information for authors:
 
