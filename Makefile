@@ -85,3 +85,9 @@ ${PDF} : ${SRC}
 
 ${EPUB} : ${SRC}
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::epub_book'); warnings()"
+
+#-------------------------------------------------------------------------------
+
+## build_via_r  : build using directly the build.R file
+build_via_r:
+	@Rscript _build.R
