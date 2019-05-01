@@ -1,9 +1,16 @@
-# Logging {#s:logging}
+# Logging {#logging}
 
-## Objectives
+## Questions {#logging-questions}
+
+```{r, child="questions/logging.md"}
+```
+
+## Objectives {#logging-objectives}
 
 ```{r, child="objectives/logging.md"}
 ```
+
+## Introduction {#logging-intro}
 
 Programs should report things that go wrong.
 They should also sometimes report things that go right
@@ -26,7 +33,7 @@ We will start by looking at what kinds of errors you can handle
 and how you can detect them,
 then go on to look at how logging can make your work more consistent.
 
-## What kinds of errors should I try to handle and what should I do? {#s:logging-kinds}
+## What kinds of errors should I try to handle and what should I do? {#logging-kinds}
 
 To start,
 we need to distinguish between
@@ -45,7 +52,7 @@ on the other hand,
 are usually caused by interactions between the program and the outside world:
 for example,
 a user may mis-type a filename or the network might be down.
-Section \@ref(s:unit-random) described some ways to write unit tests
+Section \@ref(unit-random) described some ways to write unit tests
 to check that software is doing the right thing in these situations,
 but we still need to detect them---we'll look at how in the next section.
 
@@ -77,7 +84,7 @@ It's a little extra work to check things like this up front,
 but the larger your program or the longer it runs,
 the more useful those checks will be.
 
-## How can I detect errors? {#s:logging-exceptions}
+## How can I detect errors? {#logging-exceptions}
 
 Most modern programming languages use [exceptions](glossary.html#exception) for error handling.
 As the name suggests,
@@ -85,6 +92,7 @@ an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
 The code below shows a very simple example that reports attempts to divide by zero:
 
+<!-- src="logging/divide_by_zero.py" -->
 ```python
 for denom in [-5, 0, 5]:
     try:
@@ -93,7 +101,6 @@ for denom in [-5, 0, 5]:
     except:
         print('{} has no reciprocal'.format(denom))
 ```
-{: title="logging/divide_by_zero.py"}
 ```text
 1/-5 == -0.2
 0 has no reciprocal
@@ -116,6 +123,7 @@ so Python and other languages store information about the error
 in an object (also called an exception).
 We can [catch](glossary.html#catch) this object and inspect it as follows:
 
+<!-- src="logging/catch_exception.py" -->
 ```python
 for denom in [-5, 0, 5]:
     try:
@@ -124,7 +132,6 @@ for denom in [-5, 0, 5]:
     except Exception as error:
         print('{} has no reciprocal: {}'.format(denom, error))
 ```
-{: title="logging/catch_exception.py"}
 ```text
 1/-5 == -0.2
 0 has no reciprocal: division by zero
@@ -139,6 +146,7 @@ Python also allows us to specify what kind of exception we want to catch.
 For example,
 we can write code to handle out-of-range indexing and division by zero separately:
 
+<!-- src="logging/specific_exceptions.py" -->
 ```python
 numbers = [-5, 0, 5]
 for i in [0, 1, 2, 3]:
@@ -151,7 +159,6 @@ for i in [0, 1, 2, 3]:
     except ZeroDivisionError as error:
         print('{} has no reciprocal: {}'.format(denom, error))
 ```
-{: title="logging/specific_exceptions.py"}
 ```text
 1/-5 == -0.2
 0 has no reciprocal: division by zero
@@ -182,6 +189,7 @@ the ones that people handle most often are:
 So where do exceptions come from?
 The answer is that programmers can [raise](glossary.html#raise) them explicitly:
 
+<!-- src="logging/raise_exception.py" -->
 ```python
 for number in [1, 0, -1]:
     try:
@@ -191,7 +199,6 @@ for number in [1, 0, -1]:
     except ValueError as error:
         print('exception: {}'.format(error))
 ```
-{: title="logging/raise_exception.py"}
 ```text
 1
 0
@@ -211,6 +218,7 @@ until it finds a matching `except`;
 if there isn't one,
 it takes care of the exception itself.
 
+<!-- src="logging/exception_call_stack.py" -->
 ```python
 def sum_reciprocals(values):
     result = 0
@@ -224,7 +232,6 @@ try:
 except ArithmeticError as error:
     print('Error trying to sum reciprocals: {}'.format(error))
 ```
-{: title="logging/exception_call_stack.py"}
 ```text
 Error trying to sum reciprocals: division by zero
 ```
@@ -235,7 +242,7 @@ since there's nothing useful you can do in the middle of a small utility functio
 but put a few handlers in the main body of your program
 to catch and report all errors.
 
-## What exceptions should I raise and catch? {#s:logging-where}
+## What exceptions should I raise and catch? {#logging-where}
 
 Broadly speaking there are [two approaches to error handling][lbyl-vs-eafp]:
 "look before your leap"
@@ -244,6 +251,7 @@ and
 When using the first,
 programmers check if an operation will be allowed before trying it:
 
+<!-- src="logging/look_before_you_leap.py" -->
 ```python
 LOG_DIR = "/tmp/mylogdir"
 
@@ -255,12 +263,12 @@ def write_message(filename, message):
     else:
         print('No log directory {}'.format(LOG_DIR), file=sys.stderr)
 ```
-{: title="logging/look_before_you_leap.py"}
 
 with the second,
 they try the operation
 and catch the exception:
 
+<!-- src="logging/ask_permission_not_forgiveness.py" -->
 ```python
 LOG_DIR = "/tmp/mylogdir"
 
@@ -271,7 +279,7 @@ def write_message(filename, message):
             writer.write(message)
     except OSError as error:
         print('Unable to write log message to {}: {}'.format(path, error))
-```{: title="logging/ask_permission_not_forgiveness.py"}
+```
 
 The first approach doesn't actually need exception handlers,
 except it does:
@@ -313,7 +321,7 @@ else:
     # OK branch
 ```
 
-## How can my program report its activity consistently? {#s:logging-basic}
+## How can my program report its activity consistently? {#logging-basic}
 
 Suppose you wanted to turn print statements in your program on or off
 depending on how much detail you wanted to see.
@@ -355,18 +363,18 @@ Thus,
 if we run the small program shown below,
 only the warning message appears:
 
+<!-- src="logging/simple_logging.py" -->
 ```python
 import logging
 
 logging.warning('This is a warning.')
 logging.info('This is just for information.')
 ```
-{: title="logging/simple_logging.py"}
 ```text
 WARNING:root:This is a warning.
 ```
 
-## How can I control where log messages go and which log messages appear? {#s:logging-control}
+## How can I control where log messages go and which log messages appear? {#logging-control}
 
 We can configure logging to send messages to a file instead of to standard error
 using `logging.basicConfig`.
@@ -374,6 +382,7 @@ This has to be done before we make any logging calls: it's not retroactive.
 We can use the same function to set the logging level:
 everything at or above the specified level is displayed.
 
+<!-- src="logging/configure_logging.py" -->
 ```python
 import logging
 
@@ -385,7 +394,6 @@ logging.warning('This is a warning.')
 logging.error('Something went wrong.')
 logging.critical('Something went seriously wrong.')
 ```
-{: title="logging/configure_logging.py"}
 ```text
 DEBUG:root:This is for debugging.
 INFO:root:This is just for information.
@@ -431,7 +439,7 @@ but they are widely used.
 > Doing this gives you a record of the log output
 > while allowing you to monitor your program's progress interactively.
 
-## How can I change the format of my log messages? {#s:logging-format}
+## How can I change the format of my log messages? {#logging-format}
 
 By default,
 `logging` produces messages with the name of the level (such as `WARNING`),
@@ -454,11 +462,11 @@ it is unambiguous,
 easy for other programs to parse,
 easy to sort:
 
+<!-- src="logging/message_format.py" -->
 ```python
 logging.basicConfig(format='%(asctime)s,%(levelname)s,"%(message)s"', datefmt='%Y-%m-%d:%H:%M:%S')
 logging.warning('This is a warning')
 ```
-{: title="logging/message_format.py"}
 ```text
 2019-01-05:06:16:58,WARNING,"This is a warning"
 ```
@@ -470,9 +478,9 @@ CSV is the lowest common denominator of data formats,
 so logging in that format means that we don't have to write a bunch of regular expressions later
 to pull records out of our log.
 Remember
-if you need to write a parser, you've done something wrong (Chapter \@ref(s:rules)).
+if you need to write a parser, you've done something wrong (Chapter \@ref(rules)).
 
-## How can I handle multiple reporting sources in one program? {#s:logging-source}
+## How can I handle multiple reporting sources in one program? {#logging-source}
 
 Suppose we have a data analysis pipeline with two stages:
 one that gets words from files,
@@ -506,6 +514,7 @@ we have to:
 
 Time to write a function:
 
+<!-- src="logging/util.py" -->
 ```python
 import logging
 
@@ -530,7 +539,6 @@ def create_logger(name, level, filename):
 
     return logger
 ```
-{: title="logging/util.py"}
 
 To show how it works,
 here is a function that pretends to get words from a file,
@@ -538,6 +546,7 @@ sending the words it finds to standard output
 and writing log messages at `WARNING` level to `log.csv`
 (so the `DEBUG`-level message shouldn't appear):
 
+<!-- src="logging/get_words.py" -->
 ```python
 from util import create_logger
 
@@ -550,12 +559,12 @@ for word in ['first', 'second', 'third']:
     logger.warn(message)
     logger.critical(message)
 ```
-{: title="logging/get_words.py"}
 
 And here's another function that counts words it reads from standard input,
 writing log messages to the same file at `ERROR` level
 (so the `DEBUG` and `WARNING` messages shouldn't appear):
 
+<!-- src="logging/count_words.py" -->
 ```python
 import sys
 from util import create_logger
@@ -571,7 +580,6 @@ for line in sys.stdin:
     logger.error(message)
 print(count)
 ```
-{: title="logging/count_words.py"}
 
 When we put these to programs in a pipeline,
 all we see is the count:
@@ -613,12 +621,12 @@ but the data engineers and system administrators who eventually have to install 
 will be very grateful that you used `logging`,
 because then they can set it up the way they want with very little work.
 
-## How should I log my program's configuration? {#s:logging-config}
+## How should I log my program's configuration? {#logging-config}
 
 One of the most important things a program can record
 is its configuration---its *entire* configuration,
 so that its operation can be reproduced exactly later on
-(Chapter \@ref(s:configure)).
+(Chapter \@ref(configure)).
 Unfortunately,
 the configuration for even a moderately complex program consists of many values,
 and logging frameworks are designed to log one thing at a time.
@@ -654,11 +662,11 @@ On balance,
 we recommend the third option:
 convert the configuration to a JSON structure and write that as a single log entry.
 
-## Summary {#s:logging-summary}
+## Summary {#logging-summary}
 
 FIXME: create concept map for logging
 
-## Exercises {#s:logging-exercises}
+## Exercises {#logging-exercises}
 
 ### Set the logging level
 
@@ -676,7 +684,7 @@ FIXME: create concept map for logging
 
 -   FIXME: write configuration as JSON.
 
-## Key Points
+## Key Points {#logging-keypoints}
 
 ```{r, child="keypoints/logging.md"}
 ```

@@ -1,9 +1,16 @@
-# Configuring Software {#s:configure}
+# Configuring Software {#configure}
 
-## Objectives
+## Questions {#configure-questions}
+
+```{r, child="questions/configure.md"}
+```
+
+## Objectives {#configure-objectives}
 
 ```{r, child="objectives/configure.md"}
 ```
+
+## Introduction {#configure-intro}
 
 A program that does exactly the same thing every time we run it
 isn't as useful as one that can work on different files
@@ -25,7 +32,7 @@ the user's configuration file overrides the system settings,
 the job configuration overrides the user's defaults,
 and the command-line options overrides that.
 
-## How can I handle command-line flags consistently? {#s:configure-cmdline}
+## How can I handle command-line flags consistently? {#configure-cmdline}
 
 Modern Python programs use the `argparse` library for handling command-line arguments,
 but the older and simpler `getopt` library will illustrate the core ideas,
@@ -49,6 +56,7 @@ Given the spec and the list of actual arguments,
 the first is the (flag, argument) pairs it matched,
 and the second is everything else---typically a list of files to be processed.
 
+<!-- src="configure/getopt_simple.py" -->
 ```python
 from getopt import getopt
 
@@ -57,7 +65,6 @@ options, extras = getopt(args, 'b:q')
 print('options is', options)
 print('extras is', extras)
 ```
-{: title="configure/getopt_simple.py"}
 ```text
 options is [('-q', ''), ('-b', '/tmp/log.txt')]
 extras is ['file1.txt', 'file2.txt']
@@ -67,6 +74,7 @@ Once we have these two lists,
 we can define default values for our configuration
 and then loop over the (flag, argument) pairs to override those values:
 
+<!-- src="configure/getopt_simple.py" -->
 ```python
 # Defaults.
 logfile = None
@@ -82,7 +90,6 @@ for (opt, arg) in options:
         assert False, 'unrecognized option {}'.format(opt)
 print('Log file is {} and quiet is {}'.format(logfile, quiet))
 ```
-{: title="configure/getopt_simple.py"}
 ```text
 Log file is /tmp/log.txt and quiet is True
 ```
@@ -97,6 +104,7 @@ It's also common to check that some configuration values aren't accidentally bei
 After rearranging our code a little,
 we get this:
 
+<!-- src="configure/getopt_dict.py" -->
 ```python
 import sys
 from getopt import getopt
@@ -123,7 +131,6 @@ print('Log file {}'.format(settings['logfile']))
 print('Quiet {}'.format(settings['quiet']))
 print('Extras {}'.format(extras))
 ```
-{: title="configure/getopt_dict.py"}
 
 <!-- == noindent -->
 which we can run like this:
@@ -138,9 +145,9 @@ Extras ['first.txt']
 ```
 
 We really shouldn't use [`assert`](glossary.html#assertion) to handle errors here;
-Chapter \@ref(s:logging) will explore a better approach.
+Chapter \@ref(logging) will explore a better approach.
 
-## What do I do when I run out of memorable single-letter flags? {#s:configure-long}
+## What do I do when I run out of memorable single-letter flags? {#configure-long}
 
 Taschuk's Third Rule says, "Make common operations easy to control." @Tasc2017
 so that users can control everything from a shell script without having to create temporary configuration files.
@@ -156,6 +163,7 @@ To tell `getopt` what long names it should recognize,
 we give the function an extra list
 and use `=` as a suffix to indicate if the option takes an argument.
 
+<!-- src="configure/getopt_long.py" -->
 ```python
 from getopt import getopt
 
@@ -164,7 +172,6 @@ options, extras = getopt(args, 'b:q', ['logfile=', 'overwrite'])
 print('options is', options)
 print('extras is', extras)
 ```
-{: title="configure/getopt_long.py"}
 ```text
 options is [('-q', ''), ('--logfile', '/tmp/log.txt'), ('--overwrite', '')]
 extras is ['file1.txt', 'file2.txt']
@@ -175,7 +182,7 @@ and long names for things that are changed less frequently,
 and to provide long-name aliases for the single-letter flags
 (e.g., to have `--all-files` mean the same thing as `-a`).
 
-## How can I manage configuration files consistently? {#s:configure-files}
+## How can I manage configuration files consistently? {#configure-files}
 
 Controlling programs from the command line is useful,
 but complex programs can have many different configuration options,
@@ -219,7 +226,8 @@ we'll explore it in this section.
 
 Here's a sample configuration file:
 
-```text
+<!-- src="configure/config.yml" -->
+```
 # Example configuration file
 logfile: "/tmp/log.txt"
 quiet: false
@@ -228,11 +236,11 @@ fonts:
 - Verdana
 - Serif
 ```
-{: title="configure/config.yml"}
 
 <!-- == noindent -->
 And here's a short Python program that reads and prints that configuration:
 
+<!-- src="configure/read_config.py" -->
 ```python
 import yaml
 
@@ -240,7 +248,6 @@ with open('config.yml', 'r') as reader:
     config = yaml.load(reader)
 print(config)
 ```
-{: title="configure/read_config.py"}
 ```text
 {'logfile': '/tmp/log.txt', 'quiet': False, 'overwrite': False, 'fonts': ['Verdana', 'Serif']}
 ```
@@ -263,7 +270,7 @@ but if you need them,
 you're probably doing something wrong @Xu2015:
 most users never use most configuration options and find their presence confusing.
 
-## How can I implement overlay configuration? {#s:configure-overlay}
+## How can I implement overlay configuration? {#configure-overlay}
 
 We said at the start that programs often have
 system-wide, per-user, and per-job configuration files,
@@ -272,6 +279,7 @@ and command-line parameters overriding the rest.
 We can implement this using `dict.update`,
 which updates one dictionary with values from another:
 
+<!-- src="configure/util.py" -->
 ```python
 def get_full_configuration(filenames, command_line={}):
     '''
@@ -286,7 +294,6 @@ def get_full_configuration(filenames, command_line={}):
     result.update(command_line)
     return result
 ```
-{: title="configure/util.py"}
 
 This function creates an empty dictionary to hold settings.
 It then reads each specified configuration file in turn
@@ -298,6 +305,7 @@ we'll have to convert `getopt`'s output to a dictionary,
 but that's straightforward---the only trick is to match
 the command-line flag (like `-q`) to the configuration variable name (like `quiet`):
 
+<!-- src="configure/util.py" -->
 ```python
 def getopt_to_dict(pairs, names):
     '''
@@ -309,7 +317,6 @@ def getopt_to_dict(pairs, names):
         result[names[key]] = value
     return result
 ```
-{: title="configure/util.py"}
 
 We can test this with these three configuration files
 (we have lined up corresponding values to make them easier to see):
@@ -338,6 +345,7 @@ We can test this with these three configuration files
 <!-- == noindent -->
 using this test program:
 
+<!-- src="configure/test_config.py" -->
 ```python
 import sys
 from getopt import getopt
@@ -350,7 +358,6 @@ options = getopt_to_dict(options, {'-b': 'logfile', '-q': 'quiet'})
 config = get_full_configuration(config_files, options)
 print(config)
 ```
-{: title="configure/test_config.py"}
 
 <!-- == noindent -->
 and this command line:
@@ -362,7 +369,7 @@ $ python test-config.py -q
 {'quiet': False, 'logfile': './complaints.txt'}
 ```
 
-## How can I find configuration files? {#s:configure-find}
+## How can I find configuration files? {#configure-find}
 
 Our configuration files will usually not all be in the same directory.
 System-wide settings for an application called `app` are often stored in `/etc/app.yml`.
@@ -403,7 +410,7 @@ def find_config_files(name):
 
 Note that we use `os.path.isfile` to check that file exists before trying to read it.
 
-## How can I keep a record of the actual configuration that produced particular results? {#s:configure-dump}
+## How can I keep a record of the actual configuration that produced particular results? {#configure-dump}
 
 Careful record keeping is essential to reproducible science,
 and if *we* are careful,
@@ -423,7 +430,7 @@ We need this because how we interpret options will change over time,
 and if you don't know what the version of the program was,
 we'll have to guess what options mean.
 
-## Summary {#s:configure-summary}
+## Summary {#configure-summary}
 
 -   Many tool also allow longer command-line options to control everything to support scripting
     -   Out of scope of this lesson
@@ -439,7 +446,7 @@ if (knitr::is_latex_output()) {
 }
 ```
 
-## Exercises {#s:configure-exercises}
+## Exercises {#configure-exercises}
 
 ### Dump and check configuration
 
@@ -457,7 +464,7 @@ if (knitr::is_latex_output()) {
 
 -   FIXME: how to handle reading from stdin/stdout if no files specified.
 
-## Key Points
+## Key Points {#configure-keypoints}
 
 ```{r, child="keypoints/configure.md"}
 ```

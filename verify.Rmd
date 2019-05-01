@@ -1,14 +1,21 @@
-# Verification {#s:verify}
+# Verification {#verify}
 
-## Objectives
+## Questions {#verify-questions}
+
+```{r, child="questions/verify.md"}
+```
+
+## Objectives {#verify-objectives}
 
 ```{r, child="objectives/verify.md"}
 ```
 
+## Introduction {#verify-intro}
+
 The previous lesson explained how to test software in general;
 this one focuses on testing data analysis.
 
-## What is the difference between testing in software engineering and in data analysis? {#s:verify-diff}
+## What is the difference between testing in software engineering and in data analysis? {#verify-diff}
 
 Testing data analysis pipelines is often harder than testing mainstream software applications.
 The reason is that data analysts often don't know what the right answer is,
@@ -51,7 +58,7 @@ for example,
 someone could upgrade a library that one of our libraries depends on,
 which could lead to us getting slightly different answers than we expected.
 
-## Why should I be cautious when using floating-point numbers? {#s:verify-float}
+## Why should I be cautious when using floating-point numbers? {#verify-float}
 
 Every tutorial on testing numerical software has to include a discussion of the perils of floating point,
 so we might as well get ours out of the way.
@@ -151,6 +158,7 @@ almost all data scientists should trust the authors of core libraries to get thi
 To make this more concrete,
 consider the short Python program below:
 
+<!-- src="verify/fp_table.py" -->
 ```python
 vals = []
 for i in range(1, 10):
@@ -161,7 +169,6 @@ for i in range(1, 10):
     diff = total - expected
     print('{:2d} {:22.21f} {:22.21f}'.format(i, total, total-expected))
 ```
-{: title="verify/fp_table.py"}
 
 This program loop runs over the integers from 1 to 9 inclusive
 and puts the numbers 0.9, 0.09, 0.009, and so on in `vals`.
@@ -210,7 +217,7 @@ which can change evaluation order,
 or if you're changing platform,
 e.g., moving computation to a GPU.)
 
-## How can I express how close one number is to another? {#s:verify-error}
+## How can I express how close one number is to another? {#verify-error}
 
 The absolute spacing in the diagram above between the values we can represent is uneven.
 However,
@@ -232,7 +239,7 @@ Relative error is almost always more important than absolute error when we are t
 because it makes little sense to say that we're off by a hundredth
 when the value in question is a billionth.
 
-## How should I write tests that involved floating-point values? {#s:verify-numeric}
+## How should I write tests that involved floating-point values? {#verify-numeric}
 
 [Accuracy](glossary.html#accuracy) is how close your answer is to right,
 and [precision](glossary.html#precision) is how close repeated measurements are to each other.
@@ -273,6 +280,7 @@ and can be given either relative or absolute error bounds.
 To show how it works,
 here's an example with an unrealistically tight absolute bound:
 
+<!-- src="verify/approx.py" -->
 ```python
 from pytest import approx
 
@@ -286,7 +294,6 @@ for bound in (1e-15, 1e-16):
         if total != approx(expected, abs=bound):
             print('{:22.21f} {:2d} {:22.21f} {:22.21f}'.format(bound, i, total, expected))
 ```
-{: title="verify/approx.py"}
 ```text
 9.999999999999999790978e-17  6 0.999999000000000082267 0.999998999999999971244
 9.999999999999999790978e-17  8 0.999999990000000060775 0.999999989999999949752
@@ -299,7 +306,7 @@ both of which are unreasonably tight.
 an absolute error of $$10^{-15}$$ is one part in a trillion,
 which only a handful of high-precision experiments have ever achieved.)
 
-## How can I test plots and other graphical results? {#s:verify-plots}
+## How can I test plots and other graphical results? {#verify-plots}
 
 Testing visualizations is hard:
 any change to the dimension of the plot,
@@ -336,7 +343,7 @@ small changes to the library or to plotting parameters can make all of the tests
 by moving elements by a pixel or two.
 Vector-based tests therefore still need to have thresholds on floating-point values.
 
-## How can I test the steps in a data analysis pipeline during development? {#s:verify-simple}
+## How can I test the steps in a data analysis pipeline during development? {#verify-simple}
 
 We can't tell you how to test your math,
 since we don't know what math you're using,
@@ -378,6 +385,7 @@ which we pick by experimentation:
 1% excludes a valid correct value.
 The test function is called `is_zipf`:
 
+<!-- src="verify/test_zipf.py" -->
 ```python
 from pytest import approx
 
@@ -392,12 +400,12 @@ def is_zipf(hist):
     print('perfect', perfect)
     return scaled == approx(perfect, rel=RELATIVE_ERROR)
 ```
-{: title="verify/test_zipf.py"}
 
 <!-- == noindent -->
 Here are three tests that use this function
 with names that suggest their purpose:
 
+<!-- src="verify/test_zipf.py" -->
 ```python
 def test_fit_correct():
     actual = [round(100 / (1 + i)) for i in range(10)]
@@ -416,13 +424,12 @@ def test_fit_last_too_large():
     actual[-1] = actual[1]
     assert not is_zipf(actual)
 ```
-{: title="verify/test_zipf.py"}
 
-## How can I check the steps in a data analysis pipeline in production? {#s:verify-operational}
+## How can I check the steps in a data analysis pipeline in production? {#verify-operational}
 
 An [operational test](glossary.html#operational-test) is one that is kept in place during production
 to tell users if everything is still working as it should.
-A common pattern for such tests is to have every tool append information to a log (Chapter \@ref(s:logging))
+A common pattern for such tests is to have every tool append information to a log (Chapter \@ref(logging))
 and then have another tool check that log file after the run is over.
 Logging and then checking makes it easy to compare values between pipeline stages,
 and ensures that there's a record of why a problem was reported.
@@ -438,6 +445,7 @@ Some common operational tests include:
 To illustrate these ideas,
 here's a script that reads a document and prints one line per word:
 
+<!-- src="verify/text_to_words.py" -->
 ```python
 import sys
 
@@ -452,11 +460,11 @@ with open('logfile.csv', 'a') as logger:
     logger.write('text_to_words.py,num_lines,{}\n'.format(num_lines))
     logger.write('text_to_words.py,num_words,{}\n'.format(num_words))
 ```
-{: title="verify/text_to_words.py"}
 
 <!-- == noindent -->
 Here's a complementary script that counts how often words appear in its input:
 
+<!-- src="verify/word_count.py" -->
 ```python
 import sys
 
@@ -471,7 +479,6 @@ with open('logfile.csv', 'a') as logger:
     logger.write('word_count.py,num_words,{}\n'.format(num_words))
     logger.write('word_count.py,num_distinct,{}\n'.format(len(count)))
 ```
-{: title="verify/word_count.py"}
 
 Both of these scripts write records to `logfile.csv`.
 When we look at that file after a typical run,
@@ -493,7 +500,7 @@ check(data['text_to_words.py']['num_words'] == data['word_count.py']['num_words'
 check(data['word_count.py']['num_words'] >= data['word_count.py']['num_distinct'])
 ```
 
-## How can I infer and check properties of my data? {#s:verify-infer}
+## How can I infer and check properties of my data? {#verify-infer}
 
 Writing tests for the properties of data can be tedious,
 but some of the work can be automated.
@@ -600,15 +607,15 @@ Another way to use TDDA is to generate constraints for two datasets and then loo
 in order to see how similar the datasets are to each other.
 This is especially useful if the constraint file is put under version control.
 
-## Summary {#s:verify-summary}
+## Summary {#verify-summary}
 
 FIXME: create concept map for verification
 
-## Exercises {#s:verify-exercises}
+## Exercises {#verify-exercises}
 
 FIXME: create exercises for verification
 
-## Key Points
+## Key Points {#verify-keypoints}
 
 ```{r, child="keypoints/verify.md"}
 ```
