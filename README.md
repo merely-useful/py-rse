@@ -4,7 +4,7 @@
 [![Travis build status](https://travis-ci.org/merely-useful/merely-useful.github.io.svg?branch=master)](https://travis-ci.org/merely-useful/merely-useful.github.io)
 <!-- badges: end -->
 
-> I understand that students enjoy it, Greg, but... well, it's merely useful.
+> I understand that students enjoy it, but it's merely useful.
 >
 > -- A research professor speaking about an early version of this material.
 
@@ -47,6 +47,10 @@ and <https://merely-useful.github.io/conduct.html> for our Code of Conduct.
 
 ## Building and Previewing
 
+**Note:** we are using `book` as the master (published) branch because of the way GitHub handles organization repositories.
+Please always create your branches from `book` and merged completed work into `book` for publication:
+do *not* commit anything manually to `master`.
+
 To set up to preview locally:
 
 1.  Install R.
@@ -54,7 +58,7 @@ To set up to preview locally:
 
 1.  Run R and use `install.packages("bookdown")` to install bookdown.
 
-To build and preview, you can do it via `make`:
+To build and preview from the command line:
 
 1.  `make html` and then open `docs/index.html`.
 
@@ -72,10 +76,11 @@ If you are doing a major overhaul on material:
 
 1.  Pick a chapter.
 2.  Check that there isn't an outstanding branch with its name (i.e., that no one else is also doing a major overhaul).
-3.  Create a branch named after the chapter file, e.g. `automate` or `publish`.
+3.  Create a branch from `book` named after the chapter file, e.g. `automate` or `publish`.
 4.  Make some trivial change and create a PR with the subject line `revisions to automate` (or whatever the chapter name is).
 5.  Add the label "work in progress" to that PR.
 6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
+7.  When the material is ready for publication, merge it into the `book` branch.
 
 If you are making a smaller change, please create a branch with a meaningful name, submit changes, and ask for a reviewer.
 Please do not assign PRs to people without first checking with them.
