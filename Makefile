@@ -1,51 +1,11 @@
-.PHONY : all clean commands
+.PHONY : all clean commands settings
 
 STEM=merely-useful
-
-EPUB=_book/${STEM}.epub
-HTML=_book/index.html
-PDF=_book/${STEM}.pdf
-
-CHAPTERS_RSE= \
-shell.Rmd \
-automate.Rmd \
-syndicate.Rmd \
-configure.Rmd \
-logging.Rmd \
-unit.Rmd \
-verify.Rmd \
-branches.Rmd \
-backlog.Rmd \
-style.Rmd \
-process.Rmd \
-integrate.Rmd \
-remote.Rmd \
-tools.Rmd \
-docs.Rmd \
-refactor.Rmd \
-project.Rmd \
-inclusive.Rmd \
-package.Rmd \
-publish.Rmd \
-teamwork.Rmd \
-pacing.Rmd \
-finale.Rmd
-
-SRC= \
-index.Rmd \
-novice-r-intro.Rmd \
-novice-py-intro.Rmd \
-rse-intro.Rmd \
-${CHAPTERS_RSE} \
-references.Rmd \
-appendix.Rmd \
-LICENSE.md \
-CONDUCT.md \
-CONTRIBUTING.md \
-gloss.md \
-objectives.Rmd \
-keypoints.Rmd \
-rules.Rmd
+SRC=$(wildcard *.Rmd) $(wildcard *.md)
+OUT=_book
+EPUB=${OUT}/${STEM}.epub
+HTML=${OUT}/index.html
+PDF=${OUT}/${STEM}.pdf
 
 all : commands
 
@@ -69,14 +29,8 @@ epub : ${EPUB}
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf _book ${STEM}.Rmd
+	@rm -rf ${OUT} ${STEM}.Rmd
 	@find . -name '*~' -exec rm {} \;
-
-#-------------------------------------------------------------------------------
-
-## chapters     : list chapter files.
-chapters :
-	@echo ${CHAPTERS}
 
 #-------------------------------------------------------------------------------
 
@@ -91,6 +45,10 @@ ${EPUB} : ${SRC}
 
 #-------------------------------------------------------------------------------
 
-## build_via_r  : build using directly the build.R file
-build_via_r:
-	@Rscript _build.R
+## settings     : echo all variable values.
+settings :
+	@echo STEM ${STEM}
+	@echo SRC ${SRC}
+	@echo EPUB ${EPUB}
+	@echo HTML ${HTML}
+	@echo PDF ${PDF}
