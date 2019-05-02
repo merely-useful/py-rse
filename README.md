@@ -9,7 +9,43 @@
 > -- A research professor speaking about an early version of this material.
 
 This repository contains material for two semester-long courses on computing skills for researchers.
-Please see <https://merely-useful.github.io> for the rendered versions.
+Please see <https://merely-useful.github.io> for the rendered version,
+and <https://merely-useful.github.io/conduct.html> for our Code of Conduct.
+
+## Decision Making
+
+1.  Before each meeting, anyone who wishes may sponsor a proposal by filing an issue in the GitHub repository tagged "proposal".
+    Proposals must be filed at least 24 hours before a meeting in order to be considered at that meeting, and must include:
+    -   a one-line summary (the subject line of the issue)
+    -   the full text of the proposal
+    -   any required background information
+    -   pros and cons
+    -   possible alternatives
+
+2.  A quorum is established in a meeting if half or more of voting members are present.
+
+3.  Once a person has sponsored a proposal, they are responsible for it.
+    he group may not discuss or vote on the issue unless the sponsor or their delegate is present.
+    The sponsor is also responsible for presenting the item to the group.
+
+4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
+    -   Who likes the proposal?
+    -   Who can live with the proposal?
+    -   Who is uncomfortable with the proposal?
+
+5.  If all or most of the group likes or can live with the proposal, it is immediately moved to a formal vote with no further discussion.
+
+6.  If most of the group is uncomfortable with the proposal, it is postponed for further rework by the sponsor.
+
+7.  If some members are uncomfortable they can briefly state their objections.
+    A timer is then set for a brief discussion moderated by the facilitator.
+    After 10 minutes or when no one has anything further to add (whichever comes first),
+    the facilitator calls for a yes-or-no vote on the question:
+    "Should we implement this decision over the stated objections?"
+    If a majority votes "yes" the proposal is implemented.
+    Otherwise, the proposal is returned to the sponsor for further work.
+
+## Building and Previewing
 
 To set up to preview locally:
 
@@ -30,7 +66,23 @@ Or via RStudio:
 
 1. Or in the console `source("_build.R")` to build all the outputs.
 
-Information for authors:
+## Workflow
+
+If you are doing a major overhaul on material:
+
+1.  Pick a chapter.
+2.  Check that there isn't an outstanding branch with its name (i.e., that no one else is also doing a major overhaul).
+3.  Create a branch named after the chapter file, e.g. `automate` or `publish`.
+4.  Make some trivial change and create a PR with the subject line `revisions to automate` (or whatever the chapter name is).
+5.  Add the label "work in progress" to that PR.
+6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
+
+If you are making a smaller change, please create a branch with a meaningful name, submit changes, and ask for a reviewer.
+Please do not assign PRs to people without first checking with them.
+
+Finally, if you are doing a major reorganization that involves multiple chapters, please put in a proposal first.
+
+## Content Guidelines
 
 1.  `_bookdown.yml` contains an ordered list of R Markdown chapters and appendices.
     This list is repeated in `Makefile`.
