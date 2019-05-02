@@ -1,7 +1,8 @@
 .PHONY : all clean commands settings
 
 STEM=merely-useful
-SRC=$(wildcard *.Rmd) $(wildcard *.md)
+CONFIG=_bookdown.yml _output.yml
+SRC=${CONFIG} $(wildcard *.Rmd) $(wildcard *.md)
 OUT=_book
 EPUB=${OUT}/${STEM}.epub
 HTML=${OUT}/index.html
@@ -48,6 +49,7 @@ ${EPUB} : ${SRC}
 ## settings     : echo all variable values.
 settings :
 	@echo STEM ${STEM}
+	@echo CONFIG ${CONFIG}
 	@echo SRC ${SRC}
 	@echo EPUB ${EPUB}
 	@echo HTML ${HTML}
