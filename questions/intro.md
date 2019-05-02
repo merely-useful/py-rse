@@ -1,4 +1,0 @@
--   What is the difference between open, reproducible, and sustainable?
--   What is computational competence?
--   What is the scope of this training?
--   What are the prerequisites for this training?

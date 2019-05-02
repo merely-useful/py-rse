@@ -6,7 +6,7 @@ EPUB=_book/${STEM}.epub
 HTML=_book/index.html
 PDF=_book/${STEM}.pdf
 
-CHAPTERS= \
+CHAPTERS_RSE= \
 shell.Rmd \
 automate.Rmd \
 syndicate.Rmd \
@@ -33,7 +33,10 @@ finale.Rmd
 
 SRC= \
 index.Rmd \
-${CHAPTERS} \
+novice-r-intro.Rmd \
+novice-py-intro.Rmd \
+rse-intro.Rmd \
+${CHAPTERS_RSE} \
 references.Rmd \
 appendix.Rmd \
 LICENSE.md \

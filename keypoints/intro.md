@@ -1,5 +1,0 @@
--   Research is 'open' if everyone can read it.
--   Research is 'reproducible' if people who have access can regenerate it.
--   Research is 'sustainable' if it was built in reasonable time and without heroic effort.
--   Computational competence is the digital equivalent of knowing how to use lab equipment properly.
--   A project is 'done' when stakeholders can be reasonably sure the results are correct and the software can be understood, run, and extended by people other than the original authors without heroic effort.
