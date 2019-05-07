@@ -1,12 +1,10 @@
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
-[config-website]: https://merely-useful.github.io/
 
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
 [at]: https://en.wikipedia.org/wiki/At_(command)
 
-[becker-bruce]: https://www.brettbecker.com/
 [bibtex]: http://www.bibtex.org/
 [branch-per-feature]: https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
 [build-tools]: https://en.wikipedia.org/wiki/List_of_build_automation_software
@@ -40,7 +38,6 @@
 [gnu-make]: http://www.gnu.org/software/make/
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [go-fair]: https://www.go-fair.org/fair-principles/
-[gustavsen-julia]: http://www.juliagustavsen.com/
 [gutenberg]: https://www.gutenberg.org/
 
 [huff-testing]: https://github.com/katyhuff/python-testing
@@ -49,12 +46,8 @@
 [insight]: https://www.insightdatascience.com/
 [intellij-idea]: https://www.jetbrains.com/idea/
 
-[jekyll]: https://jekyllrb.com/
 [joss]: https://joss.theoj.org/
 [jupyter]: http://jupyter.org/
-
-[kernighan-brian]: https://en.wikipedia.org/wiki/Brian_Kernighan
-[kirk-matthew]: https://www.matthewkirk.com/
 
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -74,7 +67,6 @@
 
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
-[poisot-timothee]: http://poisotlab.io/
 [pypi]: https://pypi.org/
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
@@ -95,7 +87,6 @@
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [stack-printer]: http://www.stackprinter.com/
-[standage-daniel]: https://standage.github.io/
 [swc]: http://software-carpentry.org
 [swc-git]: https://swcarpentry.github.io/git-novice/
 [swc-make]: https://github.com/swcarpentry/make-novice
@@ -122,8 +113,6 @@
 
 [xcode]: https://developer.apple.com/xcode/ide/
 [xkcd-duty-calls]: https://xkcd.com/386/
-
-[yaml]: https://en.wikipedia.org/wiki/YAML
 
 [zenodo]: https://zenodo.org/
 [zipfs-law]: http://en.wikipedia.org/wiki/Zipf%27s_law

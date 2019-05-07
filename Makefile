@@ -1,4 +1,4 @@
-.PHONY : all clean commands settings
+.PHONY : all check clean commands settings
 
 STEM=merely-useful
 CONFIG=_bookdown.yml _output.yml
@@ -28,11 +28,6 @@ pdf : ${PDF}
 ## epub         : build epub version.
 epub : ${EPUB}
 
-## clean        : clean up generated files.
-clean :
-	@rm -rf ${OUT} ${STEM}.Rmd
-	@find . -name '*~' -exec rm {} \;
-
 #-------------------------------------------------------------------------------
 
 ${HTML} : ${SRC}
@@ -45,6 +40,16 @@ ${EPUB} : ${SRC}
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::epub_book'); warnings()"
 
 #-------------------------------------------------------------------------------
+
+## clean        : clean up generated files.
+clean :
+	@rm -rf ${OUT} ${STEM}.Rmd
+	@find . -name '*~' -exec rm {} \;
+
+## check        : internal checks.
+check :
+	@bin/checkgloss.py ./gloss.md ${SRC}
+	@bin/checklinks.py etc/links.md ${SRC}
 
 ## settings     : echo all variable values.
 settings :
