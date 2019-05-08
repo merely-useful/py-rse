@@ -116,8 +116,7 @@ Finally, if you are doing a major reorganization that involves multiple chapters
             though it doesn't prefix section labels with anything.)
         -   Don't show the R code used to load the image, just its output (i.e., the image).
         -   Give the figure the specified caption.
-    -   Use `knitr::include_graphics("figures/stem/filename.ext")` to include a PNG image.
-    -   Use `if (knitr::is_latex_output()) {...} else {...}` to include a PDF for the LaTeX version and an SVG for the web version.
+    -   Use `insert_graphic("figures/stem/filename.ext")` to include your image. If you are using a `.pdf` image, make sure that you have the same file but as a `.svg` as well. 
 
 1.  Use `@Name1234` to refer to bibliography entries.
 
