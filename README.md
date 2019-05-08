@@ -66,9 +66,7 @@ To build and preview from the command line:
 
 Or via RStudio:
 
-1. When in the R project (opened via the `.Rproj` file), use the key bindings `Ctrl-Shift-B` to build the `html` output.
-
-1. Or in the console `source("_build.R")` to build all the outputs.
+1. When in the R Project (opened via the `.Rproj` file), use the key bindings `Ctrl-Shift-B` to build the `html` output.
 
 ## Workflow
 
