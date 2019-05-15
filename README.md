@@ -25,7 +25,7 @@ and <https://merely-useful.github.io/conduct.html> for our Code of Conduct.
 2.  A quorum is established in a meeting if half or more of voting members are present.
 
 3.  Once a person has sponsored a proposal, they are responsible for it.
-    he group may not discuss or vote on the issue unless the sponsor or their delegate is present.
+    The group may not discuss or vote on the issue unless the sponsor or their delegate is present.
     The sponsor is also responsible for presenting the item to the group.
 
 4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
@@ -66,13 +66,19 @@ To build and preview from the command line:
 
 Or via RStudio:
 
-1. When in the R project (opened via the `.Rproj` file), use the key bindings `Ctrl-Shift-B` to build the `html` output.
-
-1. Or in the console `source("_build.R")` to build all the outputs.
+1. When in the R Project (opened via the `.Rproj` file), use the key bindings `Ctrl-Shift-B` to build the `html` output.
 
 ## Workflow
 
-If you are doing a major overhaul on material:
+We'll be working off of the `book` branch, **not the `master` branch**. The
+`book` branch is a "protected" branch, meaning it has a couple of conditions
+(which can always be updated if needed):
+
+1. Only @gvwilson and @lwjohnst86 can push directly to the main repo's `book` branch and only they can merge a PR (others will be added later).
+2. Everyone else must submit a PR either from their forked `book` branch or from another branch.
+3. Each PR must pass the Travis CI check and must get at least one (1) approval from someone else in order to be merged in.
+
+With that, the next things to consider are that if you are doing a major overhaul on material:
 
 1.  Pick a chapter.
 2.  Check that there isn't an outstanding branch with its name (i.e., that no one else is also doing a major overhaul).
@@ -80,7 +86,7 @@ If you are doing a major overhaul on material:
 4.  Make some trivial change and create a PR with the subject line `revisions to automate` (or whatever the chapter name is).
 5.  Add the label "work in progress" to that PR.
 6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
-7.  When the material is ready for publication, merge it into the `book` branch.
+7.  When the material is ready for publication, merge it into the `book` branch (under the conditions as stated above).
 
 If you are making a smaller change, please create a branch with a meaningful name, submit changes, and ask for a reviewer.
 Please do not assign PRs to people without first checking with them.
@@ -118,8 +124,7 @@ Finally, if you are doing a major reorganization that involves multiple chapters
             though it doesn't prefix section labels with anything.)
         -   Don't show the R code used to load the image, just its output (i.e., the image).
         -   Give the figure the specified caption.
-    -   Use `knitr::include_graphics("figures/stem/filename.ext")` to include a PNG image.
-    -   Use `if (knitr::is_latex_output()) {...} else {...}` to include a PDF for the LaTeX version and an SVG for the web version.
+    -   Use `insert_graphic("figures/stem/filename.ext")` to include your image. If you are using a `.pdf` image, make sure that you have the same file but as a `.svg` as well. 
 
 1.  Use `@Name1234` to refer to bibliography entries.
 
