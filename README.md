@@ -25,7 +25,7 @@ and <https://merely-useful.github.io/conduct.html> for our Code of Conduct.
 2.  A quorum is established in a meeting if half or more of voting members are present.
 
 3.  Once a person has sponsored a proposal, they are responsible for it.
-    he group may not discuss or vote on the issue unless the sponsor or their delegate is present.
+    The group may not discuss or vote on the issue unless the sponsor or their delegate is present.
     The sponsor is also responsible for presenting the item to the group.
 
 4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
