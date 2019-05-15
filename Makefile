@@ -48,8 +48,13 @@ clean :
 
 ## check        : internal checks.
 check :
-	@bin/checkgloss.py ./gloss.md ${SRC}
-	@bin/checklinks.py etc/links.md ${SRC}
+	@bin/chunks.py ${SRC}
+	@bin/gloss.py ./gloss.md ${SRC}
+	@bin/links.py etc/links.md ${SRC}
+
+## test         : tests on utilities.
+test :
+	@pytest
 
 ## settings     : echo all variable values.
 settings :
