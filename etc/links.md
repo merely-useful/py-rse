@@ -23,6 +23,7 @@
 [covenant]: https://www.contributor-covenant.org
 [creative-commons]: https://creativecommons.org/
 [cron]: https://en.wikipedia.org/wiki/Cron
+[curb-cuts]: https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
 
 [dc]: https://datacarpentry.org/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
