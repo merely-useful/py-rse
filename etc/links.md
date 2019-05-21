@@ -2,8 +2,10 @@
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
 [config-website]: https://merely-useful.github.io/
 
+[abela-rules]: http://extremepresentation.typepad.com/files/choosing-a-good-chart-09.pdf
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
+[anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
 [at]: https://en.wikipedia.org/wiki/At_(command)
 
 [becker-bruce]: https://www.brettbecker.com/
