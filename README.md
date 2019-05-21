@@ -146,3 +146,11 @@ Finally, if you are doing a major reorganization that involves multiple chapters
 1.  There are also some HTML comments containing the word `noindent` left over from formatting with an earlier template.
     These were used to prevent indentation of the first line of continuation paragraphs.
     We will find a more elegant way to handle this as we get closer to production.
+
+1.  When using additional software packages, you need to tell Travis to install
+    them. 
+    -   For R packages, it is very easy. When in the Merely Useful R Project (by
+        opening the `merely-useful.github.io.Rproj` file), type out
+        `usethis::use_package("packagename")` in the R Console. This will add 
+        the package dependency to the `DESCRIPTION` file under the imports section.
+    -  For Python packages ... TODO: Test and complete this section.
