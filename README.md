@@ -153,4 +153,6 @@ Finally, if you are doing a major reorganization that involves multiple chapters
         opening the `merely-useful.github.io.Rproj` file), type out
         `usethis::use_package("packagename")` in the R Console. This will add 
         the package dependency to the `DESCRIPTION` file under the imports section.
-    -  For Python packages ... TODO: Test and complete this section.
+    -   Do *not* use `View` in your R snippets,
+        as Travis will fail when it tries to launch a viewer from the command line.
+    -   For Python packages ... TODO: Test and complete this section.
