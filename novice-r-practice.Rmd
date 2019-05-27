@@ -6,7 +6,7 @@ and introduce a few more commonly-used functions.
 
 ## Working with a single tidy table
 
-1. Load the tidyverse collection of libraries and the `here` library for constructing paths:
+1. Load the tidyverse collection of package and the `here` package for constructing paths:
 
 ```{r fake-load-libraries}
 library(tidyverse)
@@ -16,7 +16,7 @@ library(here)
 2. Use `here::here` to construct a path to a file and `readr::read_csv` to read that file:
 
 ```{r read-survey-data}
-path = here::here("novice-r-practice", "person.csv")
+path <- here::here("novice-r-practice", "person.csv")
 person <- readr::read_csv(path)
 person
 ```
@@ -274,7 +274,9 @@ ggplot2::ggplot(hra) +
 ```{r change-visual}
 ggplot2::ggplot(hra) +
   ggplot2::geom_histogram(mapping = aes(x = log10.mass), bins = 100) +
-  ggplot2::ggtitle("Frequency of Species Masses") + ggplot2::xlab("Log10 of Mass") + ggplot2::ylab("Number of Species") +
+  ggplot2::ggtitle("Frequency of Species Masses") +
+  ggplot2::xlab("Log10 of Mass") +
+  ggplot2::ylab("Number of Species") +
   ggplot2::theme_minimal()
 ```
 
@@ -307,7 +309,7 @@ hra %>%
   dplyr::mutate(class_fct = as.factor(class)) %>%
   ggplot2::ggplot() +
   ggplot2::geom_point(mapping = aes(x = log10.mass, y = log10.hra, color = class_fct), alpha = 0.5) +
-  ggplot2::facet_wrap(~class_fct)
+  ggplot2::facet_wrap(vars(class_fct))
 ```
 
 *Create a plot faceted by order for just the reptiles.*
@@ -317,9 +319,9 @@ hra %>%
 ```{r fit-line}
 hra %>%
   dplyr::filter(class == "aves") %>%
-  ggplot2::ggplot() +
-  ggplot2::geom_point(mapping = aes(x = log10.mass, y = log10.hra), alpha = 0.5) +
-  ggplot2::geom_smooth(method = lm, mapping = aes(x = log10.mass, y = log10.hra), color = 'red', se = FALSE)
+  ggplot2::ggplot(mapping = aes(x = log10.mass, y = log10.hra)) +
+  ggplot2::geom_point(alpha = 0.5) +
+  ggplot2::geom_smooth(method = lm, color = 'red', se = FALSE)
 ```
 
 *Fit a line to the raw data for birds rather than the logarithmic data.*
