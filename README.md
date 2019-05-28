@@ -154,3 +154,11 @@ Finally, if you are doing a major reorganization that involves multiple chapters
         `usethis::use_package("packagename")` in the R Console. This will add 
         the package dependency to the `DESCRIPTION` file under the imports section.
     -  For Python packages ... TODO: Test and complete this section.
+    
+1.  Using Python inside the R Markdown documents is the same as using R, except 
+    you need to use a Python code chunk instead. All [options](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) 
+    related to R also apply to Python.
+    
+        ```{python}
+        python code ...
+        ```
