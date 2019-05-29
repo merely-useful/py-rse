@@ -156,10 +156,17 @@ Just as electrical engineers trust oscilloscope makers,
 almost all data scientists should trust the authors of core libraries to get this right.
 
 To make this more concrete,
-consider the short Python program below:
+consider the short Python program below.
+This program loop runs over the integers from 1 to 9 inclusive
+and puts the numbers 0.9, 0.09, 0.009, and so on in `vals`.
+The sums should be 0.9, 0.99, 0.999, and so on, but are they?
+To find out,
+we can calculate the same values by subtracting .1 from 1,
+then subtracting .01 from 1, and so on.
+This should create exactly the same sequence of numbers, but it doesn't.
 
 <!-- src="verify/fp_table.py" -->
-```python
+```{python}
 vals = []
 for i in range(1, 10):
     number = 9.0 * 10.0 ** -i
@@ -170,28 +177,7 @@ for i in range(1, 10):
     print('{:2d} {:22.21f} {:22.21f}'.format(i, total, total-expected))
 ```
 
-This program loop runs over the integers from 1 to 9 inclusive
-and puts the numbers 0.9, 0.09, 0.009, and so on in `vals`.
-The sums should be 0.9, 0.99, 0.999, and so on, but are they?
-To find out,
-we can calculate the same values by subtracting .1 from 1,
-then subtracting .01 from 1, and so on.
-This should create exactly the same sequence of numbers, but it doesn't:
-
-<table class="table table-striped">
-  <tr> <th>index</th> <th>total</th> <th>difference</th> </tr>
-  <tr> <th>1</th> <td>0.900000000000000022204</td> <td>0.000000000000000000000</td> </tr>
-  <tr> <th>2</th> <td>0.989999999999999991118</td> <td>0.000000000000000000000</td> </tr>
-  <tr> <th>3</th> <td>0.998999999999999999112</td> <td>0.000000000000000000000</td> </tr>
-  <tr> <th>4</th> <td>0.999900000000000011013</td> <td>0.000000000000000000000</td> </tr>
-  <tr> <th>5</th> <td>0.999990000000000045510</td> <td>0.000000000000000000000</td> </tr>
-  <tr> <th>6</th> <td>0.999999000000000082267</td> <td>0.000000000000000111022</td> </tr>
-  <tr> <th>7</th> <td>0.999999900000000052636</td> <td>0.000000000000000000000</td> </tr>
-  <tr> <th>8</th> <td>0.999999990000000060775</td> <td>0.000000000000000111022</td> </tr>
-  <tr> <th>9</th> <td>0.999999999000000028282</td> <td>0.000000000000000000000</td> </tr>
-</table>
-
-As this table shows,
+As the output shows,
 the very first value contributing to our sum is already slightly off.
 Even with 23 bits for a mantissa,
 we cannot exactly represent 0.9 in base 2,
