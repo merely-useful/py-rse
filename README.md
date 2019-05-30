@@ -97,9 +97,9 @@ We'll be working off of the `book` branch, **not the `master` branch**. The
 With that, the next things to consider are that if you are doing a major overhaul on material:
 
 1.  Pick a chapter.
-2.  Check that there isn't an outstanding branch with its name (i.e., that no one else is also doing a major overhaul).
-3.  Create a branch from `book` named after the chapter file, e.g. `automate` or `publish`.
-4.  Make some trivial change and create a PR with the subject line `revisions to automate` (or whatever the chapter name is).
+2.  Check that there isn't an outstanding PR with its name (i.e., that no one else is also doing a major overhaul).
+3.  Make sure your fork is current with `book` in the main repo and create a branch named after the chapter file, e.g. `automate` or `publish`.
+4.  Make some trivial change and create a PR to the main repo with the subject line `revisions to automate` (or whatever the chapter name is).
 5.  Add the label "work in progress" to that PR.
 6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
 7.  When the material is ready for publication, merge it into the `book` branch (under the conditions as stated above).
