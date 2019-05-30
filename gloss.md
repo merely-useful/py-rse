@@ -1,4 +1,4 @@
-# Glossary
+# Glossary {#glossary}
 
 **Absolute error**<a id="absolute-error"></a>
 :   FIXME

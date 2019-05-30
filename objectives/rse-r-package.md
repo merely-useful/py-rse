@@ -1,0 +1,1 @@
+-   Create and test a citable, shareable CRAN package.

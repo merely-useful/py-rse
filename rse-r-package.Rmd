@@ -1,0 +1,590 @@
+# R Packaging {#rse-r-package}
+
+## Questions {#rse-r-package-questions}
+
+```{r, child="questions/rse-r-package.md"}
+```
+
+## Objectives {#rse-r-package-objectives}
+
+```{r, child="objectives/rse-r-package.md"}
+```
+
+## What's in an R package? {#rse-r-package-intro}
+
+> Another response of the wizards,
+> when faced with a new and unique situation,
+> was to look through their libraries to see if it had ever happened before.
+> This was...a good survival trait.
+> It meant that in times of danger you spent the day sitting very quietly in a building with very thick walls.
+>
+> -- Terry Pratchett
+
+The more software you write,
+the more you realize that a programming language is really just
+a way to build and combine software libraries.
+Every widely-used language now has an online repository
+from which people can download and install such libraries,
+and sharing yours is a great way to contribute to the community
+that has helped you get where you are.
+This lesson shows you how to use R's tools to do this.
+
+> ### CRAN
+>
+> [CRAN][cran] is the Comprehensive R Archive Network.
+> Like the [Python Package Index][pypi],
+> it is the place to go to find the packages you need.
+> CRAN's rules are famously strict,
+> which ensures that packages run for everyone,
+> but which also makes package development a little more onerous than it might be.
+
+An R package must contain the following files:
+
+-   The text file `DESCRIPTION` (with no suffix) describes what the package does,
+    wrote it,
+    and what other packages it requires to run.
+    We will edit its contents as we go along.
+
+-   `NAMESPACE`,
+    (whose name also has no suffix)
+    contains the names of everything exported from the package
+    (i.e., everything that is visible to the outside world).
+    As we will see,
+    we should leave its management in the hands of RStudio.
+
+-   Just as `.gitignore` tells Git what files in a project to ignore,
+    `.Rbuildignore` tells RStudio which files *shouldn't* be included in the package.
+
+-   All of the R source for our package must go in a directory called `R`;
+    sub-directories below this are not allowed.
+
+-   As you would expect from its name,
+    the `data` directory contains all the data in our package.
+    In order for it to be loadable as part of the package,
+    the data must be saved in R's custom `.rda` format.
+    We will see how to do this below.
+
+-   Manual pages go in the `man` directory.
+    The bad news is that they have to be in a sort-of-LaTeX format
+    that is only a bit less obscure than the runes inscribed on the ancient dagger
+    your colleague brought back from her latest archeological dig.
+    The good news is,
+    we can embed comments in our source code and use a tool called [roxygen2][roxygen2]
+    to extract them and format them as required.
+
+-   The `tests` directory holds the package's unit tests.
+    It should contain files with names like <code>test_<em>some_feature</em>.R</code>,
+    which should in turn contain functions named <code>test_<em>something_specific</em></code>.
+    We'll have a closer look at these in Chapter \@ref(rse-r-testing).
+
+In order to understand the rest of what follows,
+it's important to understand that R packages are distributed as compiled [byte code](glossary.html#byte-code),
+*not* as [source code](glossary.html#source-code) (which is how Python does it)
+or as [binary code](glossary.html#binary-code) (which is how app stores distribute things).
+When a package is built,
+R loads and checks the code,
+then saves the corresponding low-level instructions.
+Our R files should therefore define functions,
+not run commands immediately:
+if they do the latter,
+those commands will be executed every time the script loads,
+which is probably not what users will want.
+
+As a side effect,
+this means that if a package uses `load(something)`,
+then that `load` command is executed *while the package is being compiled*,
+and *not* while the compiled package is being loaded by a user after distribution.
+Thus,
+this simple and rather pointless "package":
+
+```{r eval=FALSE}
+library(stringr)
+
+sr <- function(text, pattern, replacement) {
+  str_replace(text, pattern, replacement)
+}
+```
+
+may not work when it's loaded by a user,
+because `stringr` may not be in memory on the user's machine at the time `str_replace` is called.
+
+How then can our packages use libraries?
+The safest way is to use [fully-qualified names](glossary.html#fully-qualified-name)
+such as `stringr::str_replace`
+every time we call a function defined somewhere outside our package.
+We will explore other options below.
+
+### Exercise: What packages do you have?
+
+What R packages are currently installed on your computer?
+How did you figure this out?
+
+### Exercise: Pros and cons
+
+What are the pros and cons of distributing packages as source code, byte code, and binary code?
+
+## How do I create a package? {#rse-r-package-create}
+
+We will create an R package called `zipffreq` (with no dashes or other special characters in its name)
+to hold word frequencies in classic English novels
+and some functions to merge and plot that data.
+The first step is to run RStudio's project creation wizard,
+select "New Project",
+and then tell RStudio to make it a package (and a Git repository):
+
+FIXME: figure
+
+Before doing our first commit to version control,
+we remove `R/hello.R` and `man/hello.Rd`
+(which the project wizard "helpfully" provides as starting points),
+and add `README.md`, `LICENSE.md`, `CONDUCT.md`, and `CITATION.md`
+to describe the project as a whole,
+its license,
+the contributor code of conduct,
+and how we want the project cited.
+These files are nothing to do with R per se
+(and as we'll see below, R isn't entirely happy having them here with these names),
+but as the [previous book discussed](#FIXME),
+every project should have these files.
+
+We then create a placeholder version of the function we want to write:
+
+```{r, child="rse-r-package/etc/frequency-func.R"}
+```
+
+and then make the following changes to `DESCRIPTION`:
+
+1.  change the `Title`, `Author`, `Maintainer`, and `Description`;
+2.  change the `License` to [`MIT`][mit-license] (see FIXME for other options); and
+3.  go to the `Build` tab in RStudio and run `Check` to see if our package meets CRAN's standards.
+
+```{r, child="rse-r-package/etc/DESCRIPTION-original.md"}
+```
+
+When we run `Check`,
+we get multiple lines of output with one warning and three notes
+in the summary at the bottom:
+
+```
+── R CMD check results ───────────────────────────────────── zipffreq 0.1.0 ────
+Duration: 11.6s
+
+❯ checking for missing documentation entries ... WARNING
+  Undocumented code objects:
+    ‘count_words’
+  All user-level objects in a package should have documentation entries.
+  See chapter ‘Writing R documentation files’ in the ‘Writing R
+  Extensions’ manual.
+
+❯ checking DESCRIPTION meta-information ... NOTE
+  License components which are templates and need '+ file LICENSE':
+    MIT
+
+❯ checking top-level files ... NOTE
+  Non-standard files/directories found at top level:
+    ‘CITATION.md’ ‘CONDUCT.md’ ‘LICENSE.md’
+
+❯ checking package subdirectories ... NOTE
+  Found the following CITATION file in a non-standard place:
+    CITATION.md
+  Most likely ‘inst/CITATION’ should be used instead.
+
+0 errors ✔ | 1 warning ✖ | 3 notes ✖
+Error: R CMD check found WARNINGs
+Execution halted
+
+Exited with status 1.
+```
+
+The explanations for these are:
+
+1.  We haven't written any documentation for the `count_words` function.
+2.  We haven't described our license in the approved way.
+3.  Three of the files we added for GitHub's benefit have to be renamed or moved.
+
+After a bit of searching online,
+we move `LICENSE.md` to `LICENSE` with no extension (but still in the project's root directory)
+and change the entry in `DESCRIPTION` for the license to `License: MIT + file LICENSE` (spelled exactly that way).
+We also add lines to `.Rbuildignore` to tell RStudio to ignore `CITATION.md` and `CONDUCT.md`:
+
+```{r, child="rse-r-package/zipffreq/.Rbuildignore"}
+```
+
+We could change the name of `CITATION.md` to `inst/CITATION` instead,
+so that it will be copied into the root of the installation directory on users' machines,
+bit we decide to give priority to GitHub's convention that
+the citation description in the project's root directory.
+
+### Exercise: Packaging the CO2 functions
+
+1.  Create a brand-new package to hold the CO2 data and functions for analyzing it.
+2.  Put the license and citation files where R's packaging rules want them.
+3.  Build the package: what warnings do you get and what do they mean?
+
+### Exercise: Exploring a package
+
+1.  Clone a GitHub repository that contains an R package, such as <https://github.com/r-lib/usethis>.
+2.  Which files in this repository do you recognize, and what are they for?
+3.  Which files are there to satisfy something other than R's packaging system?
+
+## How do I document a R package? {#rse-r-package-document}
+
+Our next task is to document our function.
+To do this,
+we turn to Hadley Wickham's *[R Packages][wickham-packages]*
+and Karl Broman's "[R package primer][broman-packages]"
+for advice on writing roxygen2.
+We then return to our source file and put a specially-formatted comment in front of our code:
+
+```{r, child="rse-r-package/etc/frequency-doc.R"}
+```
+
+This comment is an example of [embedded documentation](glossary.html#embedded-documentation).
+Over the years,
+programmers have found that if they put code in one file and documentation in another,
+the documentation quickly falls out of date with the code:
+people will change a function's name or add a new parameter and forget to update the docs.
+If the documentation lives right beside the code,
+on the other hand,
+the next person to modify the code is far more likely to remember to update it.
+Tools like roxygen2 can read the code,
+extract the documentation,
+and format it as HTML or PDF.
+They can also do things like create an index,
+which would be even more painful to do by hand than writing the documentation itself.
+
+roxygen2 processes comment lines that start with `#'` (hash followed by single quote).
+Putting a comment block right before a function associates that documentation with that function,
+and `@something` indicates a roxygen2 command,
+so what this file is saying is:
+
+-   the function has two parameters called `input_file` and `output_file`;
+-   it returns the number of distinct words found; and
+-   we want to export it (i.e., we want it to be visible outside the package).
+
+Our function is now documented,
+but when we run `Check`,
+we still get a warning.
+After a bit more searching and experimentation,
+we discover that we need to load the `devtools` package in the console
+and run `devtools::document()` to regenerate documentation:
+it isn't done automatically.
+
+```{r eval=FALSE}
+library(devtools)
+devtools::document()
+```
+
+When we do this,
+we get good news and bad news:
+
+```
+Updating zipffreq documentation
+First time using roxygen2. Upgrading automatically...
+Updating roxygen version in /Users/gvwilson/merely/rse-r-package/zipffreq/DESCRIPTION
+Loading zipffreq
+Warning: The existing 'NAMESPACE' file was not generated by roxygen2, and will not be overwritten.
+Writing count_words.Rd
+```
+
+Ah---the tutorials did warn us about this.
+We need to delete `NAMESPACE` and re-run `devtools:document()` again:
+
+```
+Updating zipffreq documentation
+Writing NAMESPACE
+Loading zipffreq
+Writing NAMESPACE
+```
+
+Doing this creates this file:
+
+```{r, child="rse-r-package/zipffreq/NAMESPACE"}
+```
+
+The comment at the start tells roxygen2 it can overwrite the file,
+and reminds us that we shouldn't edit it by hand.
+The `export(count_words)` directive is what we really want:
+as you might guess from the name `export`,
+it tells the package builder to make this function visible outside the package.
+
+After doing this,
+we go into "Build...Configure build tools" and check "Generate documentation with Roxygen".
+Running `Check` again now gives us a clean bill of health.
+If we restart and install,
+we can now use `?count_words` in the console to view our help.
+
+### Exercise: Document a function
+
+FIXME: write this exercise once the CO2 manipulation functions exist.
+
+## What should I document? {#rse-r-package-docwhat}
+
+The answer to the question in this section's title depends on what stage of development you are in.
+If you are doing [exploratory programming](glossary.html#exploratory-programming),
+a short comment to remind yourself of each function's purpose is good enough.
+(In fact, it's probably better than what most people do.)
+That comment should begin with an active verb and describe
+how inputs are turned into outputs.
+If the function has any [side effects](glossary.html#side-effects),
+you should eliminate them.
+If you can't,
+you should describe them too.
+
+An active verb is something like "extract", "normalize", or "find".
+For example,
+these are all good one-line comments:
+
+-   "Create a list of current ages from a list of birth dates."
+-   "Clip signals to lie in [0...1]."
+-   "Reduce the red component of each pixel."
+
+You can tell your one-liners are useful
+if you can read them aloud in the order the functions are called
+in place of the function's name and parameters.
+
+Once you start writing code for other people---including yourself three months from now---your
+documentation should describe:
+
+1.  The name and purpose of every function and constant in your code.
+2.  The name, purpose, and default value (if any) of every parameter to every function.
+3.  Any side effects the function has.
+4.  The type of value returned by every function.
+5.  Why and how the function will deliberately fail.
+    If a function uses something like `stopifnot` or `assert` to check that a condition holds,
+    then that halt-and-catch-fire behavior is effectively part of its interface.
+
+### Exercise: Fixing documentation
+
+FIXME: provide poorly-documented function and ask learner to find and fix gaps.
+
+### Exercise: Cross-references
+
+1.  What should you add to the roxygen2 comments for one function to link to the documentation for another function?
+2.  Add a cross-reference from the documentation for the function FIXME in the CO2 package to the documentation for the function FIXME.
+
+### Exercise: Documenting error conditions
+
+The guidelines above said that authors should document why and how their functions will deliberately fail.
+Where and how should you do this using roxygen2 for R?
+
+## How do I manage package dependencies? {#rse-r-package-dependencies}
+
+Let's add another function in another file.
+(We don't really need the function,
+and it doesn't have to go in another file,
+but we'll create it for tutorial purposes.)
+
+```{r, child="rse-r-package/etc/counter-original.R"}
+```
+
+This function depends on functions from the tidyverse---more specifically,
+from the dplyr package.
+Since our compiled-and-distributable package will only contain the compiled code for its own functions,
+direct calls to functions from other libraries won't work after the package is installed.
+To fix this,
+we add this to the roxygen2 comment block for our function:
+
+```{r eval=FALSE}
+#' @import dplyr
+#' @importFrom magrittr %>%
+```
+
+to tell the package builder that we want all of dplyr available,
+plus the `%>%` operator from magrittr.
+We then various calls to use their package prefix:
+
+```{r eval=FALSE}
+tally_words <- function(all_words) {
+  dplyr::tibble(word = all_words) %>%
+    dplyr::group_by(word) %>%
+    dplyr::tally()
+}
+```
+
+Running a check gives us the following error:
+
+```
+❯ checking R code for possible problems ... NOTE
+  tally_words: no visible global function definition for ‘%>%’
+  tally_words: no visible global function definition for ‘tibble’
+  tally_words: no visible global function definition for ‘group_by’
+  tally_words: no visible binding for global variable ‘word’
+  tally_words: no visible global function definition for ‘tally’
+  Undefined global functions or variables:
+    %>% group_by tally tibble word
+```
+
+What we need to do is add these three lines to the bottom of `DESCRIPTION`:
+
+```text
+Imports:
+    dplyr (>= 0.7.0),
+    magrittr (>= 1.5.0)
+```
+
+The `Imports` field in `DESCRIPTION` actually has nothing to do with importing functions;
+it just ensures that those packages are installed when this package is.
+As for the version numbers in parentheses,
+we got those by running `packageVersion("readr")` and similar commands inside RStudio
+and then rounding off.
+(See Section \@ref(branches-tag) for a discussion of version numbering.)
+
+All right: are we done now?
+No, we are not:
+
+```text
+❯ checking R code for possible problems ... NOTE
+  tally_words: no visible binding for global variable ‘word’
+  Undefined global functions or variables:
+    word
+```
+
+This is annoying but understandable.
+When the package builder is checking our code,
+it has no idea what columns are going to be in our data frames,
+so it has no way to know if `group_by(word)` will cause a problem.
+However,
+this is just a `NOTE`, not an `ERROR`,
+so we can try running "Build...Install and Restart"
+to build our package,
+re-start our R session (so that memory is clean),
+and load our newly-created package.
+It works!
+
+But there's still that warning.
+To fix it,
+we add this to our roxygen2 comment block:
+
+```{r eval=FALSE}
+#' @importFrom rlang .data
+```
+
+and then modify the calls that use naked column names to be:
+
+```{r eval=FALSE}
+tally_words <- function(all_words) {
+  dplyr::tibble(word = all_words) %>%
+    dplyr::group_by(.data$word) %>%
+    dplyr::tally()
+}
+```
+
+`.data` is a pronoun that allows us to be explicit when we refer to an object inside the data.
+Adding this---i.e.,
+being explicity that `word` is a column of `.data` rather than an undefined variable---finally
+gives us a clean build.
+
+### Exercise: Document dependencies
+
+1.  Modify the functions in the CO2 package to use `package::function` name for everything.
+2.  Modify the `DESCRIPTION` file to document the package's dependencies.
+
+## How can I add data to a package? {#rse-r-package-data}
+
+But we still need to add our cleaned-up data to our package
+and document the package as a whole.
+Working at the console,
+let's create a very small data set:
+
+```{r eval=FALSE}
+words <- c("some", "words", "appear", "some", "times")
+small_data <- tally_words(words)
+small_data
+```
+```
+# A tibble: 4 x 2
+  word       n
+  <chr>  <int>
+1 appear     1
+2 some       2
+3 times      1
+4 words      1
+```
+
+Next,
+we load the `usethis` package with `library(usethis)`
+and called `usethis::use_data(small_data)`
+to store the tibble in `data/small_data.rda`.
+(We could just call `save` with the appropriate parameters,
+but `usethis` provides a cleaner interface.)
+Note that we *must* save the data as `.rda`, not as (for example) `.rds` or `.csv`;
+only `.rda` will be automatically loaded as part of the project.
+
+When we run `Check`,
+we get a complaint about an undocumented data set,
+so we create a file called `R/small_data.R` to hold documentation about the dataset
+and put this in it:
+
+```{r eval=FALSE}
+#' Sample word frequency data.
+#'
+#' This small dataset contains word frequencies for tutorial purposes.
+#'
+#' @docType data
+#'
+#' @format A data frame
+#' \describe{
+#'   \item{word}{The word being counted (chr)}
+#'   \item{n}{The number of occurrences (int)}
+#' }
+"small_data"
+```
+
+Everything except the last line is a roxygen2 comment block
+that describes the data in plain language,
+then uses some tags and directives to document its format and fields.
+The line `@docType` tells roxygen2 that this comment describes data rather than a function,
+and the last line is the string `"small_data"`,
+i.e.,
+the name of the dataset.
+We will create one placeholder R file like this for each of our datasets,
+and each will have that dataset's name as the thing being documented.
+
+We use a similar trick to document the package as a whole:
+we create a file `R/zipffred.R`
+(i.e., a file with exactly the same name as the package)
+and put this in it:
+
+```{r eval=FALSE}
+#' Example of an R package.
+#'
+#' @author Greg Wilson, \email{gvwilson@third-bit.com}
+#' @docType package
+#' @name zipffred
+NULL
+```
+
+That's right:
+to document the entire package,
+we document `NULL`.
+One last build,
+and our package is ready to deliver.
+
+> ### The Virtues of Laziness
+>
+> We should always put `LazyData: TRUE` in `DESCRIPTION`
+> so that datasets are only loaded on demand.
+
+### Exercise: Add sample data to the CO2 package
+
+1.  Create a small sample of the CO2 data in a tibble called `sample_CO2_data`.
+2.  Save it and document it.
+
+### Exercise: Reproducible data set creation
+
+1.  Write a small script to create and save the sample dataset from the previous exercise.
+2.  Where should this script go in your package? How should you document its existence and usage?
+3.  Swap packages with a colleague. Can you regenerate their sample data using only what is (documented) in their package?
+
+## Summary {#rse-r-package-summary}
+
+FIXME: create summary concept map for packaging in R.
+
+## Key Points {#rse-r-package-keypoints}
+
+```{r, child="keypoints/rse-r-package.md"}
+```
+
+```{r, child="etc/links.md"}
+```

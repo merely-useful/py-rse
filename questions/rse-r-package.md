@@ -1,0 +1,3 @@
+-   How can I manage the packages my project relies on?
+-   How can I create package for others to use?
+-   How should I announce that my package exists?
