@@ -1,0 +1,926 @@
+# Reproducibility {#novice-r-reproducibility}
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+```{r, echo=FALSE}
+library(RefManageR)
+library(NHANES)
+library(knitr)
+library(tidyverse)
+BibOptions(
+    check.entries = FALSE,
+    bib.style = "authoryear",
+    cite.style = "authoryear",
+    style = "markdown",
+    super = TRUE
+    # hyperlink = FALSE,
+)
+bib <- ReadBib("references.bib", check = FALSE)
+```
+
+## Questions
+
+- How do I organize my data analysis projects?
+- How can I make sure that my code is understandable to others?
+- How do I ensure my analyses are reproducible by others (and myself 9 months in the future)?
+
+TODO: Add more
+
+## Objectives 
+
+1. To become aware of and learn some "best practices" (or "good enough
+practices") for project organization.
+1. To use RStudio to create and manage projects with a consistent structure and
+a consistent way.
+1. To become aware of the importance of reproducibility of data analyses, for
+your own productivity and for greater rigor in science.
+1. To create reproducible documents interwoven with R code that can be easily
+updated by changing the code or data.
+1. To learn how functions are structured and some best practices for making and
+documenting them.
+1. To create your own functions to let the code repeat the work for you.
+
+TODO: Briefly introduce functions here?
+
+## Introduction
+
+General outline:
+
+-   How can I make programs easy to read?
+    -   coding style
+    -   linters
+    -   documentation
+-   How can I make programs easy to re-use?
+    -   Taschuk's Rules
+-   How can I combine explanations, code, and results?
+    -   notebooks
+-   How should I organize my projects?
+    -   Noble's Rules
+    -   RStudio projects
+-   How should I keep track of my data?
+    -   simple manifests
+-   What *isn't* included?
+    -   build tools (Make and its kin)
+    -   continuous integration
+    - documentation generators
+
+### Why try to be reproducible?
+
+Well, first of all, reproducibility and replicability are cornerstones of doing
+rigorous and sound science. As we've learned, reproducibility in science is
+lacking. Being reproducible isn't just doing better science, it can also:
+
+1. Make you much more efficient and productive, as less time is spent between
+coding and putting your results in the document.
+1. Make you more confident in your results, as what you report and show as
+figures or tables will be exactly what you get from your analysis. No copying
+and pasting required!
+1. It's actually a lot of fun! :wink:
+
+Hopefully by the end of this session you'll try to start using R Markdown files
+for writing your manuscripts and other technical documents. Believe us, it can
+save soooo much time in the end, after you've learned how to incorporate text
+with R code, and make your analysis and work more reproducible. Plus you can create
+some beautifully formatting reports, waaayyyy more easily than you can if you did
+it all in Word. As a bonus, switching between citation formats for different
+journals is a breeze.
+
+
+## Readability
+
+You can name an object in R almost anything you want, but it's best to stick to
+a [style guide]. For instance, use `snake_case` to name things.
+
+Some tips to use when working in R:
+
+- Think of writing code as if writing in a language
+    - Imagine other people will read your code
+- Keep it clear, simple, and *readable*
+- Stick to a *[style guide]*
+- Use full and descriptive words when typing and creating objects
+- Use white space to separate concepts (empty lines between, spaces, and/or tabs)
+- Use Sections (`"Code->Insert Section"` or `Ctrl-Shift-R`) to separate content in
+scripts.
+
+[style guide]: https://style.tidyverse.org/
+
+Even though R doesn't care about naming, spacing, and indenting, it really
+matters how your code looks. Coding is just like writing. Even though you may go
+through a brainstorming note-taking stage of writing, you eventually need to
+write correctly so others can understand, *and read*, what you are trying to
+say. In coding, brainstorming is fine, but eventually you need to code in a
+readable way. That's why using a [style guide] is really important.
+
+### Exercise: Make code more readable
+
+Time: 10 min
+
+Using the [style guide] in the link, try to make these code more readable. Copy
+and paste these text into the `R/project-session.R` file. The code below is in
+some way either *wrong* or incorrectly written. Edit the code so it follows the
+correct style and so it's easier to understand and read. You don't need to
+understand what the code does, just follow the guide.
+
+```{r, eval=FALSE}
+# Object names
+DayOne
+dayone
+T <- FALSE
+c <- 9
+mean <- function(x) sum(x)
+
+# Spacing
+x[,1]
+x[ ,1]
+x[ , 1]
+mean (x, na.rm = TRUE)
+mean( x, na.rm = TRUE )
+function (x) {}
+function(x){}
+height<-feet*12+inches
+mean(x, na.rm=10)
+sqrt(x ^ 2 + y ^ 2)
+df $ z
+x <- 1 : 10
+
+# Indenting
+if (y < 0 && debug)
+message("Y is negative")
+```
+
+<details><summary><strong>Click for a possible solution</strong></summary>
+<p>
+
+TODO: Move solutions into end of chapter?
+
+The old code is in comments and the better code is below it.
+
+```{r, eval=FALSE}
+# Object names
+
+# Should be camel case
+# DayOne
+day_one
+# dayone
+day_one
+
+# Should not over write existing function names
+# T = TRUE, so don't name anything T
+# T <- FALSE
+false <- FALSE
+# c is a function name already. Plus c is not descriptive
+# c <- 9
+number_value <- 9
+# mean is a function, plus does not describe the function which is sum
+# mean <- function(x) sum(x)
+sum_vector <- function(x) sum(x)
+
+# Spacing
+# Commas should be in correct place
+# x[,1]
+# x[ ,1]
+# x[ , 1]
+x[, 1]
+# Spaces should be in correct place
+# mean (x, na.rm = TRUE)
+# mean( x, na.rm = TRUE )
+mean(x, na.rm = TRUE)
+# function (x) {}
+# function(x){}
+function(x) {}
+# height<-feet*12+inches
+height <- feet * 12 + inches
+# mean(x, na.rm=10)
+mean(x, na.rm = 10)
+# sqrt(x ^ 2 + y ^ 2)
+sqrt(x^2 + y^2)
+# df $ z
+df$z
+# x <- 1 : 10
+x <- 1:10
+
+# Indenting should be done after if, for, else functions
+# if (y < 0 && debug)
+# message("Y is negative")
+if (y < 0 && debug)
+    message("Y is negative")
+```
+
+</p>
+</details>
+
+### Automatic styling with styler
+
+You may have organised the exercise by hand, however it is possible to do it
+automatically. The tidyverse [style guide] has been implemented into the
+[styler](http://styler.r-lib.org/) package to automate the process of following
+the guide by re-styling selected code. The styler snippets can be found in the
+Addins function on the top of your R document after you have installed it.
+
+<!-- ![From styler website.](/img/styler_0.1.gif) -->
+
+RStudio also has its own automatic styling ability, through the menu item `"Code ->
+Reformat Code"` (or `Ctrl-Shift-A`). Try both methods of styling on the exercise
+code above. There are slight differences in how each method works and they both
+aren't always perfect.
+
+TODO: Expand on this section and more about usage.
+
+## Reusability
+
+https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005412
+
+### DRY and describing your code
+
+DRY or "don't repeat yourself" is another way of saying, "make your own
+functions"! That way you don't need to copy and paste code you've used multiple
+times. Using functions also can make your code more readable and descriptive,
+since a function is a bundle of code that does a specific task... and usually
+the function name should describe what you are doing. We'll be covering functions
+more in the [Efficient Coding](/course/efficient-coding/) section of the course,
+but we'll talk about it briefly here. 
+
+What does a "function" mean? A function is, as mentioned, a bundled sequence of
+code that does a specific thing. Imagine it as a machine, like a microwave or
+oven. Each has a bunch of parts that work together to do something (e.g. cook
+food). Same with functions. And like machines, you can look at the contents of
+functions, like so:
+
+```{r}
+# Inside standard deviation function
+sd
+```
+
+It is very important for your future self, and for any person that will be
+reading/using your code to be able to understand what the code *does* and what
+it will *create* (or output). So it's crucial to describe what the code does
+through code comments, documentation, and descriptive naming of the function and
+other objects. For instance, if your function name is decriptive, then you don't
+need to spend much time describing what the code does and remember how to use
+it. Also, use code comment (anything after a `#`) to provide more detailed
+explanations of your code if the code is complicated or long (these of course are
+a bit subjective).
+
+Example:
+
+```{r}
+# The following function outputs the sum of two numeric objects (a and b). 
+# usage: summing(a = 2, b = 3)
+summing <- function(a, b) {
+    return(a + b)
+}
+
+summing(a = 2, b = 3)
+```
+
+The example above is summing up two different numeric objects. Note that the
+name for this function was chosen as **summing**, instead of **sum**. This is
+because R already has a built-in function called **sum** and so we don't want to
+overwrite it! We'll go over more of writing functions in the [Efficient
+Coding](/course/efficient-coding/) section.
+
+## Integrating text, code, and results
+
+### Markdown syntax
+
+First, let's create and save an R Markdown file. Go to `File -> New File -> R
+Markdown` and a dialog box will pop up. Type in `Reproducible documents` in the
+title section and your name in the author section. Choose the HTML output format.
+Save this file as `rmarkdown-session.Rmd` in the `doc/` folder.
+
+Markdown is a [markup syntax] and formatting tool that allows you write in plain
+text (like R code and scripts) a document that can convert to a vast range of
+other document types (e.g. HTML, PDF, Word documents, slides, posters, websites).
+In fact, this website is built from R and Markdown! (Plus many other things,
+like HTML.) The Markdown used in R Markdown is based on [pandoc] (pan means all
+and doc means document), a very powerful and well-maintained software tool for
+document conversion. Text formatting is done using special characters (like
+commands) to indicate what is bolded, a header, a list, and so on. Most features
+needed for writing a scientific document are available in Markdown, but not all.
+My suggestion is to try to fit your writing around Markdown, rather than force or
+fight Markdown to do something it wasn't designed to do. You can do a lot with
+what Markdown has.
+
+[markup syntax]: https://en.wikipedia.org/wiki/Markup_language
+[pandoc]: http://pandoc.org/index.html
+
+#### Headers 
+
+Creating headers (like chapters or sections) is indicated by one or more `#`: 
+
+```markdown
+# Header 1
+
+Paragraph.
+
+## Header 2
+
+Paragraph.
+
+### Header 3
+
+Paragraph.
+```
+
+#### Text formatting
+
+- `**bold**` gives **bold**. 
+- `*italics*` gives *italics*.
+- `super^script^` gives super^script^.
+- `sub~script~` gives sub~script~.
+
+#### Lists
+
+Unnumbered list:
+
+```markdown
+- item 1
+- item 2
+- item 3
+```
+
+gives...
+
+- item 1
+- item 2
+- item 3
+
+Numbered list:
+
+```markdown
+1. item 1
+2. item 2
+3. item 3
+```
+
+gives...
+
+1. item 1
+2. item 2
+3. item 3
+
+#### Block quotes
+
+One can also create quotes:
+
+```markdown
+> Block quote 
+```
+
+gives...
+
+> Block quote 
+
+
+#### Adding footnotes
+
+Footnotes can be done using the following command:
+
+```markdown
+Footnote[^1]
+
+[^1]: Footnote content
+```
+
+gives...
+
+Footnote[^1]
+
+[^1]: Footnote content
+
+#### Inserting pictures
+
+
+A png, jpeg, or pdf image can be attached by doing (here, use an image of your own):
+
+```markdown
+![image caption](/img/code-sharing-steps.png)
+```
+
+gives...
+
+![image caption](/img/code-sharing-steps.png)
+
+*Note*: Can also include links to images from the Internet, as a URL link.
+
+#### Adding links to websites
+
+And a link can be linked in the following format:
+
+```markdown
+[Link](https://google.com)
+```
+
+gives...
+
+[Link](https://google.com)
+
+#### Inserting (simple) tables
+
+You can insert tables using Markdown too. I wouldn't recommend doing it for 
+complicated tables though, as it can get tedious fast! (My recommended approach
+for more complex or bigger tables is to make a data frame in R and then use create
+the table as shown in the section below.)
+
+```
+|   | Fun | Serious |
+|:--|----:|--------:|
+| **Happy** | 1234 | 5678 |
+| **Sad** | 123 | 456 |
+```
+
+gives...
+
+|   | Fun | Serious |
+|:--|:---:|:-------:|
+| **Happy** | 1234 | 5678 |
+| **Sad** | 123 | 456 |
+
+The `|---:|` or `|:---|` tell the table to left-align or right-align the values
+in the column. Center-align is `|:----:|`.
+
+### R Markdown
+
+R Markdown is an extension of Markdown that combines R code and Markdown formatting
+markup. Output from R code gets inserted into the document for a seamless integration
+of document writing and analysis.
+
+#### YAML header/metadata
+
+Most Markdown documents (especially for R Markdown) include [YAML] metadata at
+the top of the document, surrounded by `---` on the top and bottom. The YAML
+contains metadata and options for the entire document. For instance, the title
+or author but also the output format you want to use, such as Word, HTML, or PDF
+(if you want to create a beautiful PDF, you need to install the R package
+[tinytex]). There are many more output formats, but these are the most common.
+
+[YAML]: https://bookdown.org/yihui/rmarkdown/html-document.html
+[tinytex]: https://yihui.name/tinytex/
+
+```yaml
+---
+title: "Document title"
+author: Your Name
+output: word_document
+---
+```
+
+There are additional options you can set in the output field, which we will show
+later below.
+
+#### Now the best part! Inserting R code
+
+One of the most powerful and useful features of R Markdown is its ability to
+combine text and R code in the same document! You can insert plots by including a
+code chunk, like the one below. The options added to the code chunk tell it to
+add a caption, to set the height and width of the figure, and to prevent the code
+chunk from showing up in the final document (`echo=FALSE`). The `bmi-plot` label is
+the name of the code chunk (which you can see in the "Document Outline", found
+using `Ctrl-Shift-O`, if you have the options set in the `Tools -> Global
+Options -> R Markdown`).
+
+**NOTE**: Code [chunk labels] should be named without `_`, spaces, or `.` and 
+instead should be one word or be separated by `-`. While an error may not 
+necessarily occur, there can be some unintended side effects that will cause you
+some annoyance without knowing the reason.
+
+[chunk labels]: https://yihui.name/knitr/options/#chunk-options
+
+````markdown
+`r ''````{r bmi-plot, fig.cap="Add your figure title here.", fig.height=8, fig.width=8, echo=FALSE}
+ggplot(NHANES, aes(x = Height, fill = Gender)) +
+    geom_density(alpha = 0.4) +
+    scale_fill_brewer(type = "qual", palette = "Dark2") +
+    theme_minimal() +
+    theme(legend.position = c(0.2, 0.85))
+`r ''````
+````
+
+(ref:insert-plot) Add your figure title here.
+
+```{r bmi-plot, fig.cap="(ref:insert-plot)", fig.height=8, fig.width=8, echo=FALSE}
+ggplot(NHANES, aes(x = Height, fill = Gender)) +
+    geom_density(alpha = 0.4) +
+    scale_fill_brewer(type = "qual", palette = "Dark2") +
+    theme_minimal() +
+    theme(legend.position = c(0.2, 0.85))
+```
+
+You can also create tables by using the `kable()` function from the knitr package:
+
+````markdown
+`r ''````{r mean-bmi-table, echo=FALSE}
+library(knitr)
+NHANES %>% 
+    select(SurveyYr, BMI, Diabetes) %>% 
+    group_by(SurveyYr, Diabetes) %>% 
+    summarise(MeanBMI = mean(BMI, na.rm = TRUE)) %>% 
+    spread(SurveyYr, MeanBMI) %>% 
+    kable(caption = "Table caption here")
+`r ''````
+````
+
+```{r mean-bmi-table, echo=FALSE}
+library(knitr)
+NHANES %>% 
+    select(SurveyYr, BMI, Diabetes) %>% 
+    mutate_at(vars(Diabetes), forcats::fct_explicit_na) %>% 
+    group_by(SurveyYr, Diabetes) %>% 
+    summarise(MeanBMI = round(mean(BMI, na.rm = TRUE), 2)) %>% 
+    spread(SurveyYr, MeanBMI) %>% 
+    kable(caption = "Table caption here")
+```
+
+Or just print out a number to the document:
+
+````markdown
+`r ''````{r, echo=FALSE}
+cor(NHANES$Height, NHANES$Weight)
+`r ''````
+````
+
+```{r, echo=FALSE}
+cor(iris$Sepal.Length, iris$Sepal.Width)
+```
+
+#### Inline R code
+
+You can also include R code within the text. You can use this to directly insert
+numbers into the text of the document. By using something like:
+
+> The mean of BMI is &#96;r round(mean(NHANES$BMI, na.rm = TRUE), 2)&#96;.
+
+Gives...
+
+The mean of BMI is `r round(mean(NHANES$BMI, na.rm = TRUE), 2)`.
+
+*Note*: Inline R code can *only* insert a single number or character value,
+nothing more.
+
+
+#### Citing literature with R Markdown
+
+If you want to insert a citation use `[@Hoejsgaard2006a]`, which will look like
+`r AutoCite(bib, "Hoejsgaard2006a")`, and the reference is then inserted onto
+the bottom of the document. You need to add a line to the YAML header like this:
+
+```yaml
+---
+title: "My report"
+author: "Me!"
+bibliography: my_references.bib
+---
+```
+
+Make sure to add this to the end of your file:
+
+```markdown
+# References
+```
+
+#### Making your report prettier
+
+This part mostly applies to HTML-based and PDF[^tinytex] outputs, since
+programmatically modifying or setting templates Word documents is rather
+difficult[^md-to-word]. Changing broad features of a document can be done by setting the
+"theme" of the document. Add an option in the YAML metadata like:
+
+```yaml
+---
+title: "My report"
+output:
+    html_document:
+        theme: sandstone
+---
+```
+
+Check out the R Markdown [documentation] for more types of themes you can use
+for HTML documents, and advanced topics such as parameterized R Markdown documents. 
+Most of the [Bootswatch] themes are available for use in R
+Markdown to HTML conversion.
+
+[documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
+[Bootswatch]: https://bootswatch.com/3/
+
+[^tinytex]: Knitting to PDF will require that you install LaTeX using the [tinytex](https://yihui.name/tinytex/r/) R package. After you install LaTeX you can create truly beautifully typeset PDF documents.
+
+[^md-to-word]: If you really want to do it, the best way is to create your template in the `.odt`, and then convert to `.docx`. [Here](https://github.com/andrewheiss/Global-Pandoc-files) is a good place to start. 
+
+#### Exercise: Starting creating a report
+
+Time: Until the end of the session.
+
+Open RStudio and create an `R Markdown` document:
+
+**File -> New File -> R Markdown**
+
+Save the file in `doc/` and name the file `report.Rmd`. In the R Markdown
+document, include the following "Header 1" `#` sections:
+
+- Abstract
+- Introduction
+- Material and Methods
+- Results
+- Discussion
+- Conclusion
+
+(You don't have to actually fill these out for the assignment.) Compile it by
+pressing the icon `Knit to HTML` or by typing `Ctrl-Shift-K`. Then:
+
+- Write some random words below the **Abstract section**, while using bold and
+italics.
+- Include an unnumbered list below **Introduction** listing two or three fake
+objectives.
+- Include a "Header 2" (`##`) called "Statistical analysis" below "Material and
+Methods".
+
+Compile ("knit") the document again and see what happens. Then, add these
+additional features to the document:
+
+1. Include a random picture with caption (of your research or of any png you
+find in your PC).
+2. Include a footnote.
+3. Include the link of your GitHub (if you created one) or of your academic profile.
+
+Then, add some R code chunks with code to wrangle your data and also to create a
+figure (you can copy and paste from previous sessions). Include these code chunks
+in the "Results" section. 
+
+### Resources for learning and help
+
+**For learning**:
+
+- [RStudio tutorial on using R Markdown](https://rmarkdown.rstudio.com/lesson-1.html)
+- [Markdown syntax guide](https://rmarkdown.rstudio.com/authoring_basics.html)
+- [Online book for R Markdown](https://bookdown.org/yihui/rmarkdown/)
+- [Pandoc Markdown Manual](https://pandoc.org/MANUAL.html#pandocs-markdown) (R
+Markdown uses [pandoc])
+- [R for Data Science](http://r4ds.had.co.nz/)
+    - [R Markdown chapter](https://r4ds.had.co.nz/r-markdown.html#r-markdown)
+
+**For help**:
+
+- [RStudio helpful cheatsheets](https://www.rstudio.com/resources/cheatsheets/)
+- [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) (downloads a pdf file)
+- [R Markdown reference cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
+## Project organization
+
+### Best practices overview
+
+The ability to read, understand, modify, and write simple pieces of code is an
+essential skill for modern data analysis tasks and projects. Here we introduce
+you to some of the best practices one should have while writing their code.
+Many of the best practices were taken from the "best practices" articles listed
+in the ["Resources"](#resources-for-learning-and-help) section below.
+
+- Organise all R scripts and files in the same directory (use a common and
+consistent folder and file structure).
+- Use [version control] (to track changes to files).
+- Make raw data "read-only" (don't edit it directly) and use code to show what
+was done.
+- Write and describe code for people to read (be descriptive and use a [style guide]).
+- Think of code as part of your manuscript/thesis/report: Write for an audience 
+or other reader.
+- Don't repeat yourself (use and create functions[^funcs]).
+- Whenever possible, use code to create output (figures, tables) rather than
+manualling creating or editing them.
+
+[^funcs]: Functions are units of action in R. Everything that does something is a function. You can also create your own. We'll cover that in [later sessions](/course/efficient-coding/).
+
+Managing your projects in a reproducible fashion doesn't just make your science
+reproducible, it also makes your life easier! RStudio is here to help us with
+that by using [R Projects]. RStudio projects make it straightforward to divide your
+work into multiple contexts, each with their own working directory, workspace,
+history, and source documents.
+
+[R Projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
+
+It is strongly recommended that you store *all* the necessary files that will be
+used in your code in the **same parent directory**[^dir]. You can then use
+relative file paths to access them (we'll talk about file paths below). This
+makes the directory and R Project a "product" or "bundle/package". Like a tiny
+machine, that needs to have all its parts in the same place.
+
+[^dir]: Directory also means folder.
+
+### Creating your first project
+
+There are many ways one could organise a project folder. We'll set up a project
+directory folder using [prodigenr](http://prodigenr.lukewjohnston.com/index.html):
+
+```{r, eval=FALSE}
+# prodigenr::setup_project("ProjectName")
+prodigenr::setup_project("learning-r")
+```
+
+When we use the `::` colon here, we are telling R "from the prodigenr package use
+the setup_project function". This function will then create the following
+folders and files:
+
+```
+learning-r
+├── R
+│   ├── README.md
+│   ├── fetch_data.R
+│   └── setup.R
+├── data
+│   └── README.md
+├── doc
+│   └── README.md
+├── .Rbuildignore
+├── .gitignore
+├── DESCRIPTION
+├── learning-r.Rproj
+└── README.md
+```
+
+This forces a specific, and consistent, folder structure to all your work. Think 
+of this like the "introduction", "methods", "results", and "discussion" sections 
+of your paper. Each project is then like a single manuscript or report, that
+contains everything relevant to that specific project. There is a lot of
+power in something as simple as a consistent structure. Projects are used to
+make life easier. Once a project is opened within RStudio the following actions
+are taken:
+
+- A new R session (process) is started.
+- The current working directory is set to the project directory.
+- RStudio project options are loaded.
+
+The README in each folder explains a bit about what should be placed there. But
+briefly:
+
+1. Documents like manuscripts, abstracts, and exploration type documents should 
+be put in the `doc/` directory (including [R Markdown] files which we will cover
+[later](/course/reproducible-documents/)).
+1. Data, raw data, and metadata should be in either the `data/` directory or
+in `data-raw/` for the raw data.
+1. All R files and code should be in the `R/` directory.
+1. Name all new files to reflect their content or function. Follow the tidyverse 
+[style guide for file naming](https://style.tidyverse.org/files.html).
+
+[R Markdown]: https://rmarkdown.rstudio.com/
+
+For the course, we'll delete all files except for the `R/`, `data/`, and `doc/`
+folders as well as the `learning-r.Rproj` and `.gitignore` file. For any
+project, it is **highly recommended** to use [version control]. We'll be
+covering version control in more detail [later](/courses/version-control/) in
+the course.
+
+### Exercise: Better file naming
+
+Time: 4 min
+
+Let's take some time to think about file naming. Look at the list of file names
+below. Which file names are good names and which shouldn't you use? We'll
+discuss after why some are good names and others are not.
+
+```
+fit models.R
+fit-models.R
+foo.r
+stuff.r
+get_data.R
+Manuscript version 10.docx
+manuscript.docx
+new version of analysis.R
+trying.something.here.R
+plotting-regression.R
+utility_functions.R
+code.R
+```
+
+### Next steps after creating the project
+
+Now that we've created a project and associated folders, let's add some more
+options to the project. One option to set is to ensure that every R session you 
+start is a "blank slate", by typing and running in the Console:
+
+```{r, eval=FALSE}
+usethis::use_blank_slate()
+```
+
+### Packages, data, and file paths
+
+A major strength of R is in its ability for others to easily create packages
+that simplify doing complex tasks (e.g. running mixed effects models with the
+lme4 package or creating figures with the ggplot2 package) and for anyone to 
+easily install and use that package. So make use of packages!
+
+You load a package by writing:
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+Working with multiple R scripts and files, it quickly gets tedious to always
+write out each library function at the top of each script. A better way of
+managing this is to create a new file, keep all package loading code in that
+file, and sourcing that file in each R script. So:
+
+```{r, eval=FALSE}
+usethis::use_r("package-loading")
+```
+
+In the `package-loading.R` file:
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+In any other `.R` file:
+
+```{r, eval=FALSE}
+source(here::here("R/package-loading.R"))
+```
+
+There's a new thing `here`! The [here] package uses a function called `here()` 
+that makes it easier to manage file paths. What is a file path and why is this 
+necessary? A file path is the list of folders a file is found in. For instance,
+your CV may be found in `/Users/Documents/personal_things/CV.docx`. The problem 
+with file paths in R is that when you run a script interactively (e.g. what we
+do in class and normally), the file path is located at the Project level (where 
+the `.Rproj` file is found). You can see the file path by looking at the top of
+the "Console". But! When you `source()` an R script, it may likely run *in the
+folder it is saved in*, e.g. in the `R/` folder. So your file path
+`R/packages-loading.R` won't work because there isn't a folder called R in the
+`R/` folder. Often people use the function `setwd()`, but this is *never* a good
+idea since using it makes your script *runnable only on your computer*... which
+makes it no longer reproducible. We use the `here()` function to tell R to go
+to the project root (where the `.Rproj` file is found) and then use that file
+path. This simple function can make your work more reproducible and easier for
+you to use later on.
+
+[here]: https://here.r-lib.org/
+
+We also use the `here()` function when we import a dataset. Let's save a dataset
+as a [csv] file. In the `project-session.R` file, add this to the top of the file:
+
+[csv]: https://en.wikipedia.org/wiki/Comma-separated_values
+
+```{r, eval=FALSE}
+source(here::here("R/package-loading.R"))
+```
+
+Then, let's add these lines to the end of the file:
+
+```{r, eval=FALSE}
+write_csv(iris, here::here("data/iris.csv"))
+imported_iris <- read_csv(here::here("data/iris.csv"))
+head(imported_iris)
+```
+
+### Resources for learning and help
+
+**For learning**:
+
+- [Good enough practicies in scientific computing](https://doi.org/10.1371/journal.pcbi.1005510) article
+- [Best practices in scientific computing](https://doi.org/10.1371/journal.pbio.1001745) article
+- [Organizing R Source Code](https://www.r-bloggers.com/r-best-practices-r-you-writing-the-r-way/)
+- [An example of a well organised folder project](https://github.com/hadley/data-baby-names)
+
+**For help**:
+
+- [RStudio support](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
+- [Tidyverse style guide](https://style.tidyverse.org/)
+
+
+## Tracking your data
+
+## To organize later
+
+Here are a few tips for being efficient. Also check out the resources at the 
+bottom for more places to learn about being efficient.
+
+- Aggressively keep your code as simple and concise as you can. The less code
+you have to write, debug, and maintain, the better. If you repeat code, stop and
+think how to not repeat it. You will save time in the end by taking time to think
+and plan.
+- Try to always think in terms of wrangling data as data.frames. There is a lot
+of power and utility from structure most things as data.frames. (e.g. "how can I
+get the dataframe to the form I need to make a figure?")
+- Keep learning. Keep reading books and help documentation. Keep taking courses
+and workshops. And start teaching R to others! *hint hint* :wink: Seriously, it's
+a great way for you to learn as it challenges you to know what you are talking 
+about and teaching!
+- When encountering a difficult problem, think about how to solve it, then try
+to find R packages or functions that do your problem for you. You may hear some
+poeple say "oh, don't bother with R packages, do everything in base R"... don't 
+listen to them. Do you build a computer from scratch everytime you want to do
+any type of work? Or a car when you want to drive somewhere? No, you don't. Make
+use of other people's hard work to make tools that simplify your life.
+- Use a [style guide] and create descriptive object names. Follow the [principles of tidy tools]
+when creating functions and code.
+- Split up your analyses steps into individual files (e.g. "model" file, "plot"
+file). Then `source` those files as needed or save the output in `data/` to use 
+it in other files.
+- Try not to have R scripts be too long (e.g. more than 500 lines of code). Keep
+script sizes as small as necessary and as specific as possible (have a single purpose).
+A script should have an end goal.
+
+## Acknowledgements
+
+Source material modified from https://rqawr-course.lwjohnst.com/ and many others
+https://rqawr-course.lwjohnst.com/license/
