@@ -1,1 +1,0 @@
--   How can I make it easy for users to configure software?

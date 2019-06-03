@@ -32,3 +32,5 @@ insert_graphic <- function(file) {
   }
 }
 
+# To use Python inside the bookdown R Markdown files.
+library(reticulate)

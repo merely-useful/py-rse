@@ -68,6 +68,22 @@ Or via RStudio:
 
 1. When in the R Project (opened via the `.Rproj` file), use the key bindings `Ctrl-Shift-B` to build the `html` output.
 
+Final building of the website is done via Travis CI. In order to get Travis set up
+to push the final generated book to the `master` branch, a GitHub Personal
+Access Token (PAT) must be added. This PAT can be generated and assigned to
+Travis with the following steps:
+
+1. Create a [PAT](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+for your account on GitHub (make sure to enable the "repo" scope so that using
+this token will enable writing to your GitHub repos) and copy the token to your
+clipboard.
+1. Go to https://travis-ci.org/USER/REPO/settings replacing `USER` with your
+GitHub ID and `REPO` with the name of the forked repository.
+1. Under the section "Environment Variables", type `GITHUB_TOKEN` in the "Name"
+text box and paste your personal access token into the "Value" text box.
+1. The `deploy` Travis commands found in [`.travis.yml`](.travis.yml) are then
+used to access this GitHub PAT.
+
 ## Workflow
 
 We'll be working off of the `book` branch, **not the `master` branch**. The
@@ -81,9 +97,9 @@ We'll be working off of the `book` branch, **not the `master` branch**. The
 With that, the next things to consider are that if you are doing a major overhaul on material:
 
 1.  Pick a chapter.
-2.  Check that there isn't an outstanding branch with its name (i.e., that no one else is also doing a major overhaul).
-3.  Create a branch from `book` named after the chapter file, e.g. `automate` or `publish`.
-4.  Make some trivial change and create a PR with the subject line `revisions to automate` (or whatever the chapter name is).
+2.  Check that there isn't an outstanding PR with its name (i.e., that no one else is also doing a major overhaul).
+3.  Make sure your fork is current with `book` in the main repo and create a branch named after the chapter file, e.g. `automate` or `publish`.
+4.  Make some trivial change and create a PR to the main repo with the subject line `revisions to automate` (or whatever the chapter name is).
 5.  Add the label "work in progress" to that PR.
 6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
 7.  When the material is ready for publication, merge it into the `book` branch (under the conditions as stated above).
@@ -146,3 +162,22 @@ Finally, if you are doing a major reorganization that involves multiple chapters
 1.  There are also some HTML comments containing the word `noindent` left over from formatting with an earlier template.
     These were used to prevent indentation of the first line of continuation paragraphs.
     We will find a more elegant way to handle this as we get closer to production.
+
+1.  When using additional software packages, you need to tell Travis to install
+    them. 
+    -   For R packages, it is very easy. When in the Merely Useful R Project (by
+        opening the `merely-useful.github.io.Rproj` file), type out
+        `usethis::use_package("packagename")` in the R Console. This will add 
+        the package dependency to the `DESCRIPTION` file under the imports section.
+    -   Do *not* use `View` in your R snippets,
+        as Travis will fail when it tries to launch a viewer from the command line.
+    -  For Python packages ... TODO: Test and complete this section.
+    
+1.  Using Python inside the R Markdown documents is the same as using R, except 
+    you need to use a Python code chunk instead. All [options](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) 
+    related to R also apply to Python.
+    
+        ```{python}
+        python code ...
+        ```
+    
