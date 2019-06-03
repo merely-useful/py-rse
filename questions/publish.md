@@ -1,2 +1,0 @@
--   How and where should I publish my reports?
--   What should I include in my publications?
