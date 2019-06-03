@@ -1,1 +1,0 @@
--   How can I tell what needs to be done and who is doing it?

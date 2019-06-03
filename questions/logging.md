@@ -1,2 +1,0 @@
--   How should I keep track of what I actually did?
--   How can I get my software to report errors?
