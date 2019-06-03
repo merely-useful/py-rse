@@ -1,4 +1,0 @@
--   How should I name my variables and functions?
--   How should I organize my code so that other people can understand it?
--   How can I make functions more reusable?
--   What should my code do when an error occurs?
