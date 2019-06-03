@@ -1,2 +1,0 @@
--   How should I write tests for my software?
--   How can I tell how much testing I've actually done?
