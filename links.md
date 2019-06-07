@@ -102,6 +102,7 @@
 [swc-shell]: https://swcarpentry.github.io/shell-novice/
 
 [tdda-site]: http://www.tdda.info/
+[testpypi]: https://test.pypi.org
 [tf-idf]: https://en.wikipedia.org/wiki/Tf%E2%80%93idf
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [travis-ci]: https://travis-ci.org/
