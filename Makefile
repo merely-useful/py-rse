@@ -28,11 +28,6 @@ pdf : ${PDF}
 ## epub         : build epub version.
 epub : ${EPUB}
 
-## clean        : clean up generated files.
-clean :
-	@rm -rf ${OUT} ${STEM}.Rmd
-	@find . -name '*~' -exec rm {} \;
-
 #-------------------------------------------------------------------------------
 
 ${HTML} : ${SRC}
@@ -45,6 +40,21 @@ ${EPUB} : ${SRC}
 	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::epub_book'); warnings()"
 
 #-------------------------------------------------------------------------------
+
+## clean        : clean up generated files.
+clean :
+	@rm -rf ${OUT} ${STEM}.Rmd
+	@find . -name '*~' -exec rm {} \;
+
+## check        : internal checks.
+check :
+	@bin/chunks.py ${SRC}
+	@bin/gloss.py ./gloss.md ${SRC}
+	@bin/links.py etc/links.md ${SRC}
+
+## test         : tests on utilities.
+test :
+	@pytest
 
 ## settings     : echo all variable values.
 settings :
