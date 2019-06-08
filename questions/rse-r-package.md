@@ -1,3 +1,5 @@
 -   How can I manage the packages my project relies on?
--   How can I create package for others to use?
+-   How can I share R I've written with other people as a package?
+-   Where and how can I share the code I have created?
 -   How should I announce that my package exists?
+-   What extra work do I have to do to meet CRAN's submission criteria?

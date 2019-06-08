@@ -22,26 +22,28 @@
 
 The more software you write,
 the more you realize that a programming language is really just
-a way to build and combine software libraries.
+a way to build and combine software packages.
 Every widely-used language now has an online repository
-from which people can download and install such libraries,
+from which people can download and install such packages,
 and sharing yours is a great way to contribute to the community
 that has helped you get where you are.
 This lesson shows you how to use R's tools to do this.
 
-> ### CRAN
+> ### CRAN and Alternatives
 >
-> [CRAN][cran] is the Comprehensive R Archive Network.
-> Like the [Python Package Index][pypi],
+> [CRAN][cran],
+> the Comprehensive R Archive Network,
 > it is the place to go to find the packages you need.
 > CRAN's rules are famously strict,
 > which ensures that packages run for everyone,
 > but which also makes package development a little more onerous than it might be.
+>
+> FIXME: explain how to share on GitHub
 
 An R package must contain the following files:
 
 -   The text file `DESCRIPTION` (with no suffix) describes what the package does,
-    wrote it,
+    who wrote it,
     and what other packages it requires to run.
     We will edit its contents as we go along.
 
@@ -50,16 +52,17 @@ An R package must contain the following files:
     contains the names of everything exported from the package
     (i.e., everything that is visible to the outside world).
     As we will see,
-    we should leave its management in the hands of RStudio.
+    we should leave its management in the hands of RStudio
+    and the `devtools` package we will meet below.
 
 -   Just as `.gitignore` tells Git what files in a project to ignore,
-    `.Rbuildignore` tells RStudio which files *shouldn't* be included in the package.
+    `.Rbuildignore` tells R which files to include or not include in the package.
 
 -   All of the R source for our package must go in a directory called `R`;
     sub-directories below this are not allowed.
 
 -   As you would expect from its name,
-    the `data` directory contains all the data in our package.
+    the optional `data` directory contains any data we have put in our package.
     In order for it to be loadable as part of the package,
     the data must be saved in R's custom `.rda` format.
     We will see how to do this below.
@@ -69,8 +72,9 @@ An R package must contain the following files:
     that is only a bit less obscure than the runes inscribed on the ancient dagger
     your colleague brought back from her latest archeological dig.
     The good news is,
-    we can embed comments in our source code and use a tool called [roxygen2][roxygen2]
-    to extract them and format them as required.
+    we can embed Markdown comments in our source code
+    and use a tool called [roxygen2][roxygen2]
+    to extract them and translate them into the format that R packages require.
 
 -   The `tests` directory holds the package's unit tests.
     It should contain files with names like <code>test_<em>some_feature</em>.R</code>,
@@ -95,7 +99,7 @@ this means that if a package uses `load(something)`,
 then that `load` command is executed *while the package is being compiled*,
 and *not* while the compiled package is being loaded by a user after distribution.
 Thus,
-this simple and rather pointless "package":
+the simple and rather pointless "package" below:
 
 ```{r eval=FALSE}
 library(stringr)
@@ -105,10 +109,10 @@ sr <- function(text, pattern, replacement) {
 }
 ```
 
-may not work when it's loaded by a user,
+may not work when it's loaded by a user
 because `stringr` may not be in memory on the user's machine at the time `str_replace` is called.
 
-How then can our packages use libraries?
+How then can our packages use other packages?
 The safest way is to use [fully-qualified names](glossary.html#fully-qualified-name)
 such as `stringr::str_replace`
 every time we call a function defined somewhere outside our package.
@@ -119,20 +123,25 @@ We will explore other options below.
 What R packages are currently installed on your computer?
 How did you figure this out?
 
-### Exercise: Pros and cons
+### Exercise: Can you build a package?
 
-What are the pros and cons of distributing packages as source code, byte code, and binary code?
+1.  Clone the GitHub repository for the `here` package at <https://github.com/r-lib/here>.
+2.  Open `here.Rproj` in RStudio.
+3.  Build the package.
+
+Does the package build successfully?
+What messages do you see?
+Do any of them worry you?
 
 ## How do I create a package? {#rse-r-package-create}
 
 We will create an R package called `zipffreq` (with no dashes or other special characters in its name)
 to hold word frequencies in classic English novels
 and some functions to merge and plot that data.
-The first step is to run RStudio's project creation wizard,
-select "New Project",
-and then tell RStudio to make it a package (and a Git repository):
+The first step is to use `usethis::create_package`
+with the path to the new package directory as an argument.
 
-FIXME: figure
+FIXME: go through this process and make sure the files are described correctly.
 
 Before doing our first commit to version control,
 we remove `R/hello.R` and `man/hello.Rd`
@@ -147,16 +156,30 @@ These files are nothing to do with R per se
 but as the [previous book discussed](#FIXME),
 every project should have these files.
 
-We then create a placeholder version of the function we want to write:
+We could remove these files by hand,
+but there's a better way.
+The `usethis` package provides tools for creating and managing packages
+so that we can do all of these operations from the R console by running:
+
+```{r usethis-example, eval=FALSE}
+usethis::use_readme_md()
+usethis::use_mit_license()
+usethis::use_code_of_conduct()
+usethis::use_citation()
+```
+
+We then create a placeholder version of the function we want to write
+in a file called `R/frequency.R`
+either by using `File...New` in RStudio
+or by running `usethis::use_r('R/frequency.R')`:
 
 ```{r, child="rse-r-package/etc/frequency-func.R"}
 ```
 
-and then make the following changes to `DESCRIPTION`:
+and then:
 
-1.  change the `Title`, `Author`, `Maintainer`, and `Description`;
-2.  change the `License` to [`MIT`][mit-license] (see FIXME for other options); and
-3.  go to the `Build` tab in RStudio and run `Check` to see if our package meets CRAN's standards.
+1.  change the `Title`, `Author`, `Maintainer`, and `Description` in the `DESCRIPTION` file and
+2.  go to the `Build` tab in RStudio and run `Check` to see if our package meets CRAN's standards.
 
 ```{r, child="rse-r-package/etc/DESCRIPTION-original.md"}
 ```
@@ -166,46 +189,13 @@ we get multiple lines of output with one warning and three notes
 in the summary at the bottom:
 
 ```
-── R CMD check results ───────────────────────────────────── zipffreq 0.1.0 ────
-Duration: 11.6s
-
-❯ checking for missing documentation entries ... WARNING
-  Undocumented code objects:
-    ‘count_words’
-  All user-level objects in a package should have documentation entries.
-  See chapter ‘Writing R documentation files’ in the ‘Writing R
-  Extensions’ manual.
-
-❯ checking DESCRIPTION meta-information ... NOTE
-  License components which are templates and need '+ file LICENSE':
-    MIT
-
-❯ checking top-level files ... NOTE
-  Non-standard files/directories found at top level:
-    ‘CITATION.md’ ‘CONDUCT.md’ ‘LICENSE.md’
-
-❯ checking package subdirectories ... NOTE
-  Found the following CITATION file in a non-standard place:
-    CITATION.md
-  Most likely ‘inst/CITATION’ should be used instead.
-
-0 errors ✔ | 1 warning ✖ | 3 notes ✖
-Error: R CMD check found WARNINGs
-Execution halted
-
-Exited with status 1.
+FIXME: fill in with correct output
 ```
 
-The explanations for these are:
-
-1.  We haven't written any documentation for the `count_words` function.
-2.  We haven't described our license in the approved way.
-3.  Three of the files we added for GitHub's benefit have to be renamed or moved.
-
-After a bit of searching online,
-we move `LICENSE.md` to `LICENSE` with no extension (but still in the project's root directory)
-and change the entry in `DESCRIPTION` for the license to `License: MIT + file LICENSE` (spelled exactly that way).
-We also add lines to `.Rbuildignore` to tell RStudio to ignore `CITATION.md` and `CONDUCT.md`:
+The warning tells us that we haven't written any documentation for the `count_words` function.
+We also add lines to `.Rbuildignore` to tell RStudio to ignore `CITATION.md` and `CONDUCT.md`
+using `usethis::use_build_ignore`,
+after which `.Rbuildignore` looks like this:
 
 ```{r, child="rse-r-package/zipffreq/.Rbuildignore"}
 ```
@@ -214,6 +204,11 @@ We could change the name of `CITATION.md` to `inst/CITATION` instead,
 so that it will be copied into the root of the installation directory on users' machines,
 bit we decide to give priority to GitHub's convention that
 the citation description in the project's root directory.
+
+### Exercise: Using `use_build_ignore`
+
+How should we call `usethis::use_build_ignore`
+in order to get it to ignore `CITATION.md` and `CONDUCT.md`?
 
 ### Exercise: Packaging the CO2 functions
 
@@ -253,6 +248,8 @@ and format it as HTML or PDF.
 They can also do things like create an index,
 which would be even more painful to do by hand than writing the documentation itself.
 
+FIXME: rewrite to describe Markdown documentation and `usethis::use_roxygen_md`.
+
 roxygen2 processes comment lines that start with `#'` (hash followed by single quote).
 Putting a comment block right before a function associates that documentation with that function,
 and `@something` indicates a roxygen2 command,
@@ -266,12 +263,10 @@ Our function is now documented,
 but when we run `Check`,
 we still get a warning.
 After a bit more searching and experimentation,
-we discover that we need to load the `devtools` package in the console
-and run `devtools::document()` to regenerate documentation:
-it isn't done automatically.
+we discover that we need to run `devtools::document()` to regenerate documentation
+because it isn't done automatically:
 
 ```{r eval=FALSE}
-library(devtools)
 devtools::document()
 ```
 
@@ -311,7 +306,7 @@ it tells the package builder to make this function visible outside the package.
 After doing this,
 we go into "Build...Configure build tools" and check "Generate documentation with Roxygen".
 Running `Check` again now gives us a clean bill of health.
-If we restart and install,
+If we use the `Install and Restart` button in RStudio's `Build` tab,
 we can now use `?count_words` in the console to view our help.
 
 ### Exercise: Document a function
@@ -336,7 +331,7 @@ For example,
 these are all good one-line comments:
 
 -   "Create a list of current ages from a list of birth dates."
--   "Clip signals to lie in [0...1]."
+-   "Ensure fractions lie in [0..1]."
 -   "Reduce the red component of each pixel."
 
 You can tell your one-liners are useful
@@ -381,7 +376,7 @@ but we'll create it for tutorial purposes.)
 This function depends on functions from the tidyverse---more specifically,
 from the dplyr package.
 Since our compiled-and-distributable package will only contain the compiled code for its own functions,
-direct calls to functions from other libraries won't work after the package is installed.
+direct calls to functions from other packages won't work after the package is installed.
 To fix this,
 we add this to the roxygen2 comment block for our function:
 
@@ -475,10 +470,25 @@ Adding this---i.e.,
 being explicity that `word` is a column of `.data` rather than an undefined variable---finally
 gives us a clean build.
 
+### Exercise: Letting `usethis` do the hard work
+
+1.  What does `usethis::use_pipe` do?
+2.  What does `usethis::use_package` do?
+
 ### Exercise: Document dependencies
 
 1.  Modify the functions in the CO2 package to use `package::function` name for everything.
 2.  Modify the `DESCRIPTION` file to document the package's dependencies.
+
+## How can I share my package via GitHub? {#rse-r-package-github}
+
+FIXME: explain how to share a package on GitHub.
+
+> What about adding something about other places to share packages?
+> E.g. A big advantage of CRAN is that users can install your package like they would any other package, with install.packages().
+> But you don't have to put your package on CRAN for people to be able to use it.
+> If you follow the conventions we set out in this chapter,
+> you can also host your package on GitHub and your users can install it with devtools::install_github() (or remotes::install_github()).
 
 ## How can I add data to a package? {#rse-r-package-data}
 
@@ -502,9 +512,12 @@ small_data
 4 words      1
 ```
 
+> FIXME:
+> I'd suggest getting them to save this code as an R script in data-raw via usethis::use_data_raw()
+> and then include usethis::use_data(small_data) at the end of the script.
+
 Next,
-we load the `usethis` package with `library(usethis)`
-and called `usethis::use_data(small_data)`
+we call `usethis::use_data(small_data)`
 to store the tibble in `data/small_data.rda`.
 (We could just call `save` with the appropriate parameters,
 but `usethis` provides a cleaner interface.)
@@ -542,7 +555,7 @@ We will create one placeholder R file like this for each of our datasets,
 and each will have that dataset's name as the thing being documented.
 
 We use a similar trick to document the package as a whole:
-we create a file `R/zipffred.R`
+we create a file `R/zipffreq.R`
 (i.e., a file with exactly the same name as the package)
 and put this in it:
 
@@ -566,6 +579,10 @@ and our package is ready to deliver.
 > We should always put `LazyData: TRUE` in `DESCRIPTION`
 > so that datasets are only loaded on demand.
 
+### Exercise: Letting `usethis` do even more work
+
+1.  What does `usethis::use_package_doc` do?
+
 ### Exercise: Add sample data to the CO2 package
 
 1.  Create a small sample of the CO2 data in a tibble called `sample_CO2_data`.
@@ -578,6 +595,18 @@ and our package is ready to deliver.
 3.  Swap packages with a colleague. Can you regenerate their sample data using only what is (documented) in their package?
 
 ## Summary {#rse-r-package-summary}
+
+> FIXME:
+> Some things I thought were missing so far:
+>
+> How do I use my package locally?
+> Talk about devtools::load_all() as an easy way to load all functions where you are working on your package.
+> Versus devtools::install() to make it available like any other installed package in your other projects.
+>
+> How will other people get my package?
+> Do you want to talk about how packages get on CRAN?
+> Or alternatives (I mentioned this in some of my line comments)?
+> I think starting with it on GitHub is appropriate for most people.
 
 FIXME: create summary concept map for packaging in R.
 
