@@ -10,7 +10,7 @@ language and a label.  If no source files are given, reads from standard input.
 
 import sys
 import re
-from util import LANGUAGES, read_files, report
+from util import LANGUAGES, read_all_files, report
 
 
 MARKER = '```'
@@ -20,7 +20,7 @@ RICH_MARKER = re.compile(r'^```\{(.+?)\s+([^=,]+)(,\s*.+=.+)*\s*}$')
 def main(source_files):
     '''Main driver.'''
 
-    chunks = read_files(source_files, get_chunks)
+    chunks = read_all_files(source_files, get_chunks)
     chunks = {c for c in chunks if bad_chunk(c)}
     report('Bad Chunks', chunks)
 

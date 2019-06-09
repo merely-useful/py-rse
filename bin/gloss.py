@@ -11,7 +11,7 @@ reads from standard input (but links file must still be named).
 
 import sys
 import re
-from util import read_files, report
+from util import read_all_files, report
 
 
 PAT_DEF = re.compile(r'^\*\*.+?\*\*<a\s+id="(.+?)"></a>', re.MULTILINE + re.DOTALL)
@@ -23,7 +23,7 @@ def main(links_file, source_files):
 
     with open(links_file, 'r') as reader:
         defined = set(PAT_DEF.findall(reader.read()))
-    used = read_files(source_files, find_uses)
+    used = read_all_files(source_files, find_uses)
     report('Terms: undefined', used - defined)
     report('Terms: unused', defined - used)
 
