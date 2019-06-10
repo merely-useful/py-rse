@@ -250,6 +250,9 @@
 **Index**<a id="index"></a>
 :   FIXME
 
+**Install**<a id="install"></a>
+:   FIXME
+
 **Instrumenting profiler**<a id="instrumenting-profiler"></a>
 :   FIXME
 
@@ -281,6 +284,9 @@
 :   FIXME
 
 **Label**<a id="issue-label"></a> (in issue tracker)
+:   FIXME
+
+**Library**<a id="library"></a>
 :   FIXME
 
 **Linter**<a id="linter"></a>
@@ -484,6 +490,9 @@
 :   FIXME
 
 **Standard output**<a id="stdout"></a>
+:   FIXME
+
+**Streaming data**<a id="streaming-data"></a>
 :   FIXME
 
 **Sturdy development**<a id="sturdy"></a>
