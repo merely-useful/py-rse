@@ -1,3 +1,0 @@
-# Word Frequencies
-
-Explain.
