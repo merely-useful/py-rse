@@ -151,7 +151,7 @@ Finally, if you are doing a major reorganization that involves multiple chapters
     -   If the figure's chunk ID is `stem-label`, use `fig:stem-label` to refer to it.
 
 1.  Glossary entries are in `gloss.md`, which is plain Markdown rather than R Markdown.
-    -   To refer to a glossary entry, use a direct link of the form `[text](glossary.html#term-label)`.
+    -   To refer to a glossary entry, use a direct link of the form `[text]``(glossary.html#term-label)`.
     -   Glossary definitions are set in bold and use an HTML anchor tag to provide the ID.
         We should find a more elegant way to do this.
 
