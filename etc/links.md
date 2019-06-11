@@ -1,3 +1,7 @@
+[ggplot2]: https://ggplot2.tidyverse.org/
+[lme4]: https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf
+[version-control]: https://peerj.com/preprints/3159/
+[rstudio-r-projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
 [styler-pkg]: http://styler.r-lib.org/
 [r-style-guide]: https://style.tidyverse.org/
 [config-email]: mailto:gvwilson@third-bit.com
