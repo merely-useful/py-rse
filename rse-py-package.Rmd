@@ -2,13 +2,13 @@
 
 ## Questions {#py-package-questions}
 
--   How can I manage the libraries my project relies on?
+-   How can I manage the packages my project relies on?
 -   How can I package up my work for others to use?
 -   How should I announce my work?
 
 ## Objectives {#py-package-objectives}
 
-```{r, child="objectives/py-package.md"}
+```{r, child="objectives/rse-py-package.md"}
 ```
 
 ## Introduction {#py-package-intro}
@@ -99,6 +99,16 @@ it just loads the bytes in the cached version and uses those.
 To avoid confusing it,
 we (almost) always put `__pycache__` in `.gitignore`.
 
+### Exercise: Hello, Zipf!
+
+If you put a statement 
+
+```python
+print("Hello, Zipf!")
+```
+at the end of `zipf.py`, what happens when you start python interactively and
+import the module with the command `import zipf`?
+
 ## How can I control what is executed during import and what isn't? {#py-package-import}
 
 Sometimes it's handy to be able to import code and also run it as a program.
@@ -150,6 +160,204 @@ We can test this by re-running `use.py` as before:
 the usage message doesn't appear,
 which means the main block wasn't executed,
 which is what we want.
+
+### Exercise: Turn `use.py` into a unit test
+
+1. Turn the `use.py` script into a `pytest` unit test.
+
+## How do I create a package? {#py-package-creating}
+
+Let's say we wanted to add some capabilities to what
+we've built: we want to be able to generate noisy
+Zipf distributions -- noise within the same default `RELATIVE_ERROR` --
+and we want to add a Zipf-checker that can handle
+unsorted inputs:
+
+<!-- src="package/03a/zipf.py" -->
+```python
+...as before...
+
+def make_zipf(length):
+    assert length > 0, 'Zipf distribution must have at least one element'
+    result = [1/(1 + i) for i in range(length)]
+    return result
+
+
+def make_noisy_zipf(length, rel=RELATIVE_ERROR):
+    data = make_zipf(length)
+    minnoise = 1.0 - rel/2
+    maxnoise = 1.0 + rel/2
+    for i in range(length):
+        data[i] = data[i]*random_uniform(minnoise, maxnoise)
+    return data
+
+
+def is_zipf(hist, rel=RELATIVE_ERROR):
+    assert len(hist) > 0, 'Cannot test Zipfiness without data'
+    scaled = [h/hist[0] for h in hist]
+    perfect = make_zipf(len(hist))
+    return scaled == approx(perfect, rel=rel)
+
+
+def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
+    sortedhist = sorted(hist)
+    return is_zipf(unsorted, rel)
+
+...as before...
+```
+
+As our package grows,
+we should split its source code into multiple files,
+and this is now starting to look like two broad types of 
+related functionality: generating a Zipf distribution, and
+checking against a Zipf distribution.  But they are related;
+and what's more, there are constants that would be common
+across the two pieces - the `RELATIVE_ERROR` constant.
+
+If we want multiple files, but they are related and
+and have some common items, that's a good indication that
+we are outgrowing a single-file module and we want a python
+package.
+
+A package in python is no more than a directory containing
+python code, and by convention a python file with a special
+name, `__init__.py` (this was a requirement before Python 3.3).
+Just as importing a module file executes the code in the module,
+importing a package executes the code in `__init__.py`.
+
+### Exercise: Create a package for our Zipf code.
+
+We're going to create a package for the code we've written
+for the Zipf distribution.  In the long and honourable(?)
+tradition of package names ending in "py", we'll call our
+package zipfpy.
+
+1. Create a `zipfpy` directory and move the file `zipf.py` into that directory.
+2. Create an empty file `zipfpy/__init__.py`.
+3. Modify the test suite so that it runs; functions will now be found in the namespace `zipfpy.zipf` rather than `zipf`.
+
+### Splitting into multiple files
+
+With that done, we're going to 
+
+<!-- src="package/03b/zipf/generate.py" -->
+```python
+from random import uniform
+
+RELATIVE_ERROR = 0.05
+
+def make_zipf(length):
+    assert length > 0, 'Zipf distribution must have at least one element'
+    result = [1/(1 + i) for i in range(length)]
+    return result
+
+
+def make_noisy_zipf(length, rel=RELATIVE_ERROR):
+    data = make_zipf(length)
+    minnoise = 1.0 - rel/2
+    maxnoise = 1.0 + rel/2
+    for i in range(length):
+        data[i] = data[i]*uniform(minnoise, maxnoise)
+    return data
+```
+
+<!-- src="package/03b/zipf/check.py" -->
+```python
+import sys
+from pytest import approx
+from . import generate
+
+
+USAGE = '''zipf num [num...]: are the given values Zipfy?'''
+RELATIVE_ERROR = 0.05
+
+
+def is_zipf(hist, rel=RELATIVE_ERROR):
+    assert len(hist) > 0, 'Cannot test Zipfiness without data'
+    scaled = [h/hist[0] for h in hist]
+    print(scaled)
+    perfect = make_zipf(len(hist))
+    return scaled == approx(perfect, rel=rel)
+
+
+def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
+    sortedhist = sorted(hist)
+    return is_zipf(sortedhist)
+
+
+if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        print(USAGE)
+    else:
+        values = [int(a) for a in sys.argv[1:]]
+        result = is_zipf(values)
+        print('{}: {}'.format(result, values))
+    sys.exit(0)
+```
+
+This looks pretty good; we'll just update our test file
+
+<!-- src="package/03b/test_zipf.py" -->
+```python
+import zipf
+
+def test_default_tolerance(length=5):
+    generated = zipf.generate.make_zipf(length)
+    assert zipf.check.is_zipf(generated)
+
+...
+```
+
+### Exercise: Factor out the package-wide constant `RELATIVE_ERROR`
+```
+
+<!-- src="package/04/zipf/generate.py" -->
+```python
+def make_zipf(length):
+    assert length > 0, 'Zipf distribution must have at least one element'
+    result = [1/(1 + i) for i in range(length)]
+    return result
+```
+
+<!-- == noindent -->
+and then import that file in `__init__.py`.
+
+<!-- src="package/04/zipf/__init__.py" -->
+```python
+import sys
+from pytest import approx
+from . import generate
+
+
+RELATIVE_ERROR = 0.05
+
+
+def is_zipf(hist, rel=RELATIVE_ERROR):
+    assert len(hist) > 0, 'Cannot test Zipfiness without data'
+    scaled = [h/hist[0] for h in hist]
+    perfect = generate.make_zipf(len(hist))
+    return scaled == approx(perfect, rel=rel)
+```
+
+We write that import as `from . import generate` to make sure that
+we will get the `generate.py` file in the same directory as `__init__.py`
+(the `.` means "current directory", just as it does in the Unix shell).
+
+When we arrange our code like this,
+the code that *uses* the library must refer to `zipf.generate.make_zipf`:
+
+<!-- src="package/04/use.py" -->
+```python
+import zipf
+
+generated = zipf.generate.make_zipf(5)
+print('generated distribution: {}'.format(generated))
+generated[-1] *= 2
+print('passes test with default tolerance: {}'.format(zipf.is_zipf(generated)))
+print('passes test with tolerance of 1.0: {}'.format(zipf.is_zipf(generated, rel=1.0)))
+```
+
+## What does it mean to install a python package? {#py-package-install}
 
 ## How can I install a Python package? {#py-package-install}
 
@@ -226,58 +434,7 @@ When we run `use.py`,
 it loads `zipf/__init__.py` when `import zipf` executes
 and creates a `__pycache__` directory inside `zipf`.
 
-## How can I manage the source code of large packages? {#py-package-large}
 
-As our package grows,
-we should split its source code into multiple files.
-To show how this works,
-we can put the Zipf generator in `zipf/generate.py`:
-
-<!-- src="package/04/zipf/generate.py" -->
-```python
-def make_zipf(length):
-    assert length > 0, 'Zipf distribution must have at least one element'
-    result = [1/(1 + i) for i in range(length)]
-    return result
-```
-
-<!-- == noindent -->
-and then import that file in `__init__.py`.
-
-<!-- src="package/04/zipf/__init__.py" -->
-```python
-import sys
-from pytest import approx
-from . import generate
-
-
-RELATIVE_ERROR = 0.05
-
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = generate.make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-```
-
-We write that import as `from . import generate` to make sure that
-we will get the `generate.py` file in the same directory as `__init__.py`
-(the `.` means "current directory", just as it does in the Unix shell).
-
-When we arrange our code like this,
-the code that *uses* the library must refer to `zipf.generate.make_zipf`:
-
-<!-- src="package/04/use.py" -->
-```python
-import zipf
-
-generated = zipf.generate.make_zipf(5)
-print('generated distribution: {}'.format(generated))
-generated[-1] *= 2
-print('passes test with default tolerance: {}'.format(zipf.is_zipf(generated)))
-print('passes test with tolerance of 1.0: {}'.format(zipf.is_zipf(generated, rel=1.0)))
-```
 
 ## How can I distribute software packages that I have created? {#py-package-distribute}
 
@@ -578,7 +735,7 @@ FIXME: <https://medium.com/indeed-engineering/marketing-for-data-science-a-7-ste
 ## Summary {#py-package-summary}
 
 ```{r p-package-concept, echo=FALSE, fig.cap="Python Packaging Concept Map"}
-insert_graphic("figures/py-package/concept.pdf")
+insert_graphic("figures/rse-py-package/concept.pdf")
 ```
 
 ## Exercises {#py-package-exercises}
@@ -589,7 +746,7 @@ insert_graphic("figures/py-package/concept.pdf")
 
 ## Key Points {#py-package-keypoints}
 
-```{r, child="keypoints/py-package.md"}
+```{r, child="keypoints/rse-py-package.md"}
 ```
 
 ```{r, child="etc/links.md"}
