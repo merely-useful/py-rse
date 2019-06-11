@@ -96,6 +96,213 @@ There are many aspects to reproducibility, such as:
 
 We'll cover the first three items in this course.
 
+## Project organization
+
+TODO: refs to rrtools, prodigenr, and the top rules article.
+
+### Best practices overview
+
+The ability to read, understand, modify, and write simple pieces of code is an
+essential skill for modern data analysis tasks and projects. Here we introduce
+you to some of the best practices one should have while writing their code.
+Many of the best practices were taken from the "best practices" articles listed
+in the ["Resources"](#resources-for-learning-and-help) section below.
+
+- Organise all R scripts and files in the same directory (use a common and
+consistent folder and file structure).
+- Use [version control] (to track changes to files).
+- Make raw data "read-only" (don't edit it directly) and use code to show what
+was done.
+- Write and describe code for people to read (be descriptive and use a [style guide]).
+- Think of code as part of your manuscript/thesis/report: Write for an audience 
+or other reader.
+- Don't repeat yourself (use and create functions[^funcs]).
+- Whenever possible, use code to create output (figures, tables) rather than
+manualling creating or editing them.
+
+[^funcs]: Functions are units of action in R. Everything that does something is a function. You can also create your own.
+
+Managing your projects in a reproducible fashion doesn't just make your science
+reproducible, it also makes your life easier! RStudio is here to help us with
+that by using [R Projects]. RStudio projects make it straightforward to divide your
+work into multiple contexts, each with their own working directory, workspace,
+history, and source documents.
+
+[R Projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
+
+It is strongly recommended that you store *all* the necessary files that will be
+used in your code in the **same parent directory**. You can then use
+relative file paths to access them (we'll talk about file paths below). This
+makes the directory and R Project a "product" or "bundle/package". Like a tiny
+machine, that needs to have all its parts in the same place.
+
+### Creating your first project
+
+There are many ways one could organise a project folder. We'll set up a project
+directory folder using [prodigenr](http://prodigenr.lukewjohnston.com/index.html):
+
+```{r, eval=FALSE}
+# prodigenr::setup_project("ProjectName")
+prodigenr::setup_project("learning-r")
+```
+
+When we use the `::` colon here, we are telling R "from the prodigenr package use
+the setup_project function". This function will then create the following
+folders and files:
+
+```
+learning-r
+├── R
+│   ├── README.md
+│   ├── fetch_data.R
+│   └── setup.R
+├── data
+│   └── README.md
+├── doc
+│   └── README.md
+├── .Rbuildignore
+├── .gitignore
+├── DESCRIPTION
+├── learning-r.Rproj
+└── README.md
+```
+
+This forces a specific, and consistent, folder structure to all your work. Think 
+of this like the "introduction", "methods", "results", and "discussion" sections 
+of your paper. Each project is then like a single manuscript or report, that
+contains everything relevant to that specific project. There is a lot of
+power in something as simple as a consistent structure. Projects are used to
+make life easier. Once a project is opened within RStudio the following actions
+are taken:
+
+- A new R session (process) is started.
+- The current working directory is set to the project directory.
+- RStudio project options are loaded.
+
+The README in each folder explains a bit about what should be placed there. But
+briefly:
+
+1. Documents like manuscripts, abstracts, and exploration type documents should 
+be put in the `doc/` directory (including [R Markdown] files which we will cover
+[later](/course/reproducible-documents/)).
+1. Data, raw data, and metadata should be in either the `data/` directory or
+in `data-raw/` for the raw data.
+1. All R files and code should be in the `R/` directory.
+1. Name all new files to reflect their content or function. Follow the tidyverse 
+[style guide for file naming](https://style.tidyverse.org/files.html).
+
+[R Markdown]: https://rmarkdown.rstudio.com/
+
+For the course, we'll delete all files except for the `R/`, `data/`, and `doc/`
+folders as well as the `learning-r.Rproj` and `.gitignore` file. For any
+project, it is **highly recommended** to use [version control]. We'll be
+covering version control in more detail [later](/courses/version-control/) in
+the course.
+
+### Exercise: Better file naming
+
+Time: 4 min
+
+Let's take some time to think about file naming. Look at the list of file names
+below. Which file names are good names and which shouldn't you use? We'll
+discuss after why some are good names and others are not.
+
+```
+fit models.R
+fit-models.R
+foo.r
+stuff.r
+get_data.R
+Manuscript version 10.docx
+manuscript.docx
+new version of analysis.R
+trying.something.here.R
+plotting-regression.R
+utility_functions.R
+code.R
+```
+
+### Next steps after creating the project
+
+Now that we've created a project and associated folders, let's add some more
+options to the project. One option to set is to ensure that every R session you 
+start is a "blank slate", by typing and running in the Console:
+
+```{r, eval=FALSE}
+usethis::use_blank_slate()
+```
+
+### Packages, data, and file paths
+
+A major strength of R is in its ability for others to easily create packages
+that simplify doing complex tasks (e.g. running mixed effects models with the
+lme4 package or creating figures with the ggplot2 package) and for anyone to 
+easily install and use that package. So make use of packages!
+
+You load a package by writing:
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+Working with multiple R scripts and files, it quickly gets tedious to always
+write out each library function at the top of each script. A better way of
+managing this is to create a new file, keep all package loading code in that
+file, and sourcing that file in each R script. So:
+
+```{r, eval=FALSE}
+usethis::use_r("package-loading")
+```
+
+In the `package-loading.R` file:
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+In any other `.R` file:
+
+```{r, eval=FALSE}
+source(here::here("R/package-loading.R"))
+```
+
+There's a new thing `here`! The [here] package uses a function called `here()` 
+that makes it easier to manage file paths. What is a file path and why is this 
+necessary? A file path is the list of folders a file is found in. For instance,
+your CV may be found in `/Users/Documents/personal_things/CV.docx`. The problem 
+with file paths in R is that when you run a script interactively (e.g. what we
+do in class and normally), the file path is located at the Project level (where 
+the `.Rproj` file is found). You can see the file path by looking at the top of
+the "Console". But! When you `source()` an R script, it may likely run *in the
+folder it is saved in*, e.g. in the `R/` folder. So your file path
+`R/packages-loading.R` won't work because there isn't a folder called R in the
+`R/` folder. Often people use the function `setwd()`, but this is *never* a good
+idea since using it makes your script *runnable only on your computer*... which
+makes it no longer reproducible. We use the `here()` function to tell R to go
+to the project root (where the `.Rproj` file is found) and then use that file
+path. This simple function can make your work more reproducible and easier for
+you to use later on.
+
+[here]: https://here.r-lib.org/
+
+We also use the `here()` function when we import a dataset. Let's save a dataset
+as a [csv] file. In the `project-session.R` file, add this to the top of the file:
+
+[csv]: https://en.wikipedia.org/wiki/Comma-separated_values
+
+```{r, eval=FALSE}
+source(here::here("R/package-loading.R"))
+```
+
+Then, let's add these lines to the end of the file:
+
+```{r, eval=FALSE}
+write_csv(iris, here::here("data/iris.csv"))
+imported_iris <- read_csv(here::here("data/iris.csv"))
+head(imported_iris)
+```
+
+
 ## Reusability
 
 here::here
@@ -525,212 +732,6 @@ find in your PC).
 Then, add some R code chunks with code to wrangle your data and also to create a
 figure (you can copy and paste from previous sessions). Include these code chunks
 in the "Results" section. 
-
-## Project organization
-
-TODO: refs to rrtools, prodigenr, and the top rules article.
-
-### Best practices overview
-
-The ability to read, understand, modify, and write simple pieces of code is an
-essential skill for modern data analysis tasks and projects. Here we introduce
-you to some of the best practices one should have while writing their code.
-Many of the best practices were taken from the "best practices" articles listed
-in the ["Resources"](#resources-for-learning-and-help) section below.
-
-- Organise all R scripts and files in the same directory (use a common and
-consistent folder and file structure).
-- Use [version control] (to track changes to files).
-- Make raw data "read-only" (don't edit it directly) and use code to show what
-was done.
-- Write and describe code for people to read (be descriptive and use a [style guide]).
-- Think of code as part of your manuscript/thesis/report: Write for an audience 
-or other reader.
-- Don't repeat yourself (use and create functions[^funcs]).
-- Whenever possible, use code to create output (figures, tables) rather than
-manualling creating or editing them.
-
-[^funcs]: Functions are units of action in R. Everything that does something is a function. You can also create your own.
-
-Managing your projects in a reproducible fashion doesn't just make your science
-reproducible, it also makes your life easier! RStudio is here to help us with
-that by using [R Projects]. RStudio projects make it straightforward to divide your
-work into multiple contexts, each with their own working directory, workspace,
-history, and source documents.
-
-[R Projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
-
-It is strongly recommended that you store *all* the necessary files that will be
-used in your code in the **same parent directory**. You can then use
-relative file paths to access them (we'll talk about file paths below). This
-makes the directory and R Project a "product" or "bundle/package". Like a tiny
-machine, that needs to have all its parts in the same place.
-
-### Creating your first project
-
-There are many ways one could organise a project folder. We'll set up a project
-directory folder using [prodigenr](http://prodigenr.lukewjohnston.com/index.html):
-
-```{r, eval=FALSE}
-# prodigenr::setup_project("ProjectName")
-prodigenr::setup_project("learning-r")
-```
-
-When we use the `::` colon here, we are telling R "from the prodigenr package use
-the setup_project function". This function will then create the following
-folders and files:
-
-```
-learning-r
-├── R
-│   ├── README.md
-│   ├── fetch_data.R
-│   └── setup.R
-├── data
-│   └── README.md
-├── doc
-│   └── README.md
-├── .Rbuildignore
-├── .gitignore
-├── DESCRIPTION
-├── learning-r.Rproj
-└── README.md
-```
-
-This forces a specific, and consistent, folder structure to all your work. Think 
-of this like the "introduction", "methods", "results", and "discussion" sections 
-of your paper. Each project is then like a single manuscript or report, that
-contains everything relevant to that specific project. There is a lot of
-power in something as simple as a consistent structure. Projects are used to
-make life easier. Once a project is opened within RStudio the following actions
-are taken:
-
-- A new R session (process) is started.
-- The current working directory is set to the project directory.
-- RStudio project options are loaded.
-
-The README in each folder explains a bit about what should be placed there. But
-briefly:
-
-1. Documents like manuscripts, abstracts, and exploration type documents should 
-be put in the `doc/` directory (including [R Markdown] files which we will cover
-[later](/course/reproducible-documents/)).
-1. Data, raw data, and metadata should be in either the `data/` directory or
-in `data-raw/` for the raw data.
-1. All R files and code should be in the `R/` directory.
-1. Name all new files to reflect their content or function. Follow the tidyverse 
-[style guide for file naming](https://style.tidyverse.org/files.html).
-
-[R Markdown]: https://rmarkdown.rstudio.com/
-
-For the course, we'll delete all files except for the `R/`, `data/`, and `doc/`
-folders as well as the `learning-r.Rproj` and `.gitignore` file. For any
-project, it is **highly recommended** to use [version control]. We'll be
-covering version control in more detail [later](/courses/version-control/) in
-the course.
-
-### Exercise: Better file naming
-
-Time: 4 min
-
-Let's take some time to think about file naming. Look at the list of file names
-below. Which file names are good names and which shouldn't you use? We'll
-discuss after why some are good names and others are not.
-
-```
-fit models.R
-fit-models.R
-foo.r
-stuff.r
-get_data.R
-Manuscript version 10.docx
-manuscript.docx
-new version of analysis.R
-trying.something.here.R
-plotting-regression.R
-utility_functions.R
-code.R
-```
-
-### Next steps after creating the project
-
-Now that we've created a project and associated folders, let's add some more
-options to the project. One option to set is to ensure that every R session you 
-start is a "blank slate", by typing and running in the Console:
-
-```{r, eval=FALSE}
-usethis::use_blank_slate()
-```
-
-### Packages, data, and file paths
-
-A major strength of R is in its ability for others to easily create packages
-that simplify doing complex tasks (e.g. running mixed effects models with the
-lme4 package or creating figures with the ggplot2 package) and for anyone to 
-easily install and use that package. So make use of packages!
-
-You load a package by writing:
-
-```{r, eval=FALSE}
-library(tidyverse)
-```
-
-Working with multiple R scripts and files, it quickly gets tedious to always
-write out each library function at the top of each script. A better way of
-managing this is to create a new file, keep all package loading code in that
-file, and sourcing that file in each R script. So:
-
-```{r, eval=FALSE}
-usethis::use_r("package-loading")
-```
-
-In the `package-loading.R` file:
-
-```{r, eval=FALSE}
-library(tidyverse)
-```
-
-In any other `.R` file:
-
-```{r, eval=FALSE}
-source(here::here("R/package-loading.R"))
-```
-
-There's a new thing `here`! The [here] package uses a function called `here()` 
-that makes it easier to manage file paths. What is a file path and why is this 
-necessary? A file path is the list of folders a file is found in. For instance,
-your CV may be found in `/Users/Documents/personal_things/CV.docx`. The problem 
-with file paths in R is that when you run a script interactively (e.g. what we
-do in class and normally), the file path is located at the Project level (where 
-the `.Rproj` file is found). You can see the file path by looking at the top of
-the "Console". But! When you `source()` an R script, it may likely run *in the
-folder it is saved in*, e.g. in the `R/` folder. So your file path
-`R/packages-loading.R` won't work because there isn't a folder called R in the
-`R/` folder. Often people use the function `setwd()`, but this is *never* a good
-idea since using it makes your script *runnable only on your computer*... which
-makes it no longer reproducible. We use the `here()` function to tell R to go
-to the project root (where the `.Rproj` file is found) and then use that file
-path. This simple function can make your work more reproducible and easier for
-you to use later on.
-
-[here]: https://here.r-lib.org/
-
-We also use the `here()` function when we import a dataset. Let's save a dataset
-as a [csv] file. In the `project-session.R` file, add this to the top of the file:
-
-[csv]: https://en.wikipedia.org/wiki/Comma-separated_values
-
-```{r, eval=FALSE}
-source(here::here("R/package-loading.R"))
-```
-
-Then, let's add these lines to the end of the file:
-
-```{r, eval=FALSE}
-write_csv(iris, here::here("data/iris.csv"))
-imported_iris <- read_csv(here::here("data/iris.csv"))
-head(imported_iris)
-```
 
 ## Readability
 
