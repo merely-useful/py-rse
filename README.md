@@ -109,6 +109,13 @@ Please do not assign PRs to people without first checking with them.
 
 Finally, if you are doing a major reorganization that involves multiple chapters, please put in a proposal first.
 
+If you are reviewing a PR, please use the ["Insert a suggestion"](https://help.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)
+if suggesting changes to the actual text. When responding as the "reviewee",
+please accept those changes as they insert the suggestion directly as a commit,
+thus giving attribution to the reviewer. This reduces work for the PR submitter
+and gives attribution to the reviewer. Note: This does not work for multi-line
+suggestions edits (though you can add more lines in the suggestion if desired).
+
 ## Content Guidelines
 
 1.  `_bookdown.yml` contains an ordered list of R Markdown chapters and appendices.
