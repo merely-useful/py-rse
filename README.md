@@ -99,10 +99,10 @@ With that, the next things to consider are that if you are doing a major overhau
 1.  Pick a chapter.
 2.  Check that there isn't an outstanding PR with its name (i.e., that no one else is also doing a major overhaul).
 3.  Make sure your fork is current with `book` in the main repo and create a branch named after the chapter file, e.g. `automate` or `publish`.
-4.  Make some trivial change and create a PR to the main repo with the subject line `revisions to automate` (or whatever the chapter name is).
+4.  Make some trivial change and create a **[Draft Pull Request](https://github.blog/2019-02-14-introducing-draft-pull-requests/)** to the main repo with the subject line `revisions to automate` (or whatever the chapter name is).
 5.  Add the label "work in progress" to that PR.
-6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
-7.  When the material is ready for publication, merge it into the `book` branch (under the conditions as stated above).
+6.  When it's ready for review, remove the label, and post a note in Slack asking for a reviewer.
+7.  When the material is ready for publication, change the PR status to "Ready for review" so the PR is no longer a draft PR. Someone will then merge it into the `book` branch (under the conditions as stated above).
 
 If you are making a smaller change, please create a branch with a meaningful name, submit changes, and ask for a reviewer.
 Please do not assign PRs to people without first checking with them.
