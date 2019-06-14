@@ -56,13 +56,16 @@ To set up to preview locally:
 1.  Install R.
     (We recommend that you also install and use the RStudio IDE.)
 
-1.  Run R and use `install.packages("bookdown")` to install bookdown.
+1.  Run R and install the following packages:
+  * `install.packages("bookdown")`
+  * `install.packages("reticulate")`
+  * `install.packages("here")`
 
 To build and preview from the command line:
 
-1.  `make html` and then open `docs/index.html`.
+1.  `make html` and then open `_book/index.html`.
 
-1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `docs` folder).
+1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `_book` folder).
 
 Or via RStudio:
 
