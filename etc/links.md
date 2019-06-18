@@ -1,4 +1,3 @@
-[markdown]: https://daringfireball.net/projects/markdown/
 [pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
 [r-markdown]: https://rmarkdown.rstudio.com/
 [ggplot2]: https://ggplot2.tidyverse.org/
