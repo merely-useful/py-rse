@@ -8,6 +8,8 @@
 [r-style-guide]: https://style.tidyverse.org/
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
+[yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
+[tinytex]: https://yihui.name/tinytex/
 
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
