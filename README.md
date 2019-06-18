@@ -56,13 +56,16 @@ To set up to preview locally:
 1.  Install R.
     (We recommend that you also install and use the RStudio IDE.)
 
-1.  Run R and use `install.packages("bookdown")` to install bookdown.
+1.  Run R and install the following packages:
+  * `install.packages("bookdown")`
+  * `install.packages("reticulate")`
+  * `install.packages("here")`
 
 To build and preview from the command line:
 
-1.  `make html` and then open `docs/index.html`.
+1.  `make html` and then open `_book/index.html`.
 
-1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `docs` folder).
+1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `_book` folder).
 
 Or via RStudio:
 
@@ -108,6 +111,13 @@ If you are making a smaller change, please create a branch with a meaningful nam
 Please do not assign PRs to people without first checking with them.
 
 Finally, if you are doing a major reorganization that involves multiple chapters, please put in a proposal first.
+
+If you are reviewing a PR, please use the ["Insert a suggestion"](https://help.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)
+if suggesting changes to the actual text. When responding as the "reviewee",
+please accept those changes as they insert the suggestion directly as a commit,
+thus giving attribution to the reviewer. This reduces work for the PR submitter
+and gives attribution to the reviewer. Note: This does not work for multi-line
+suggestions edits (though you can add more lines in the suggestion if desired).
 
 ## Content Guidelines
 
