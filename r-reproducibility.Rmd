@@ -345,9 +345,262 @@ because R already has a built-in function called **sum** and so we don't want to
 overwrite it! We'll go over more of writing functions in the [Efficient
 Coding](/course/efficient-coding/) section.
 
-## Integrating text, code, and results
+## Readability
 
-TODO: Move this below readability maybe?
+There are two reasons we write code: to instruct the computer to do something and
+to record the steps we took to get a particular result for us or others to
+understand. For computers, *how* or *what* you write doesn't matter, as long as
+the code is correct. But for humans, we need clear language in order to understand
+what is going on. Humans write code, humans read code, and humans must maintain them
+and fix any errors. So, what you write and how you write it is extremely important.
+
+Like natural human languages, R has a relaxed approached to how R code is written.
+This has some nice advantages, but also some major disadvantages, notably that
+writing styles can be quite different across the world or even within one's own
+code. So, it's important to stick to some guidelines, for instance, as laid out
+by the tidyverse [style guide][r-style-guide].
+
+Some tips to use when working in R:
+
+- Think of writing code as if you are writing in a natural language like English.
+- Imagine that other people will be reading your code.
+- Keep the code clear, simple, and *readable*.
+- Stick to a *[style guide][r-style-guide]*.
+- Use full and descriptive words when typing and creating objects.
+- Use white space to separate concepts (empty lines between them, use spaces, and/or tabs).
+- Use RStudio R Script Sections (`"Code->Insert Section"` or `Ctrl-Shift-R`) to
+separate content in scripts.
+
+Even though R doesn't care about naming, spacing, and indenting, it really
+matters how your code looks. Coding is just like writing. Even though you may go
+through a brainstorming note-taking stage of writing, you eventually need to
+write correctly so others can understand, *and read*, what you are trying to
+say. Brainstorming and exploratory work is fine, but eventually you need to
+write code that will be legible. That's why using a [style guide][r-style-guide]
+is really important.
+
+### Exercise: Make the code more readable
+
+Using the [style guide][r-style-guide] found in the link, try to make these code
+more readable. The code below is in some way either *wrong* or incorrectly
+written. Edit the code so it follows the correct style and so it is easier to
+understand and read. You don't need to understand what the code does, just
+follow the guide.
+
+```{r r-repro-exercise-readable-code, eval=FALSE}
+# Object names
+DayOne
+dayone
+T <- FALSE
+c <- 9
+mean <- function(x) sum(x)
+
+# Spacing
+x[,1]
+x[ ,1]
+x[ , 1]
+mean (x, na.rm = TRUE)
+mean( x, na.rm = TRUE )
+function (x) {}
+function(x){}
+height<-feet*12+inches
+mean(x, na.rm=10)
+sqrt(x ^ 2 + y ^ 2)
+df $ z
+x <- 1 : 10
+
+# Indenting
+if (y < 0 && debug)
+message("Y is negative")
+```
+
+FIXME: The below "details" will need to be dealt with since PDF doesn't allow this
+TODO: Maybe move to a solutions section at the end of chapter?
+
+<details><summary><strong>Click for a possible solution</strong></summary>
+<p>
+
+The old code is in comments and the better code is below it.
+
+```{r r-repro-exercise-readable-code-solution, eval=FALSE}
+# Object names
+
+# Should be camel case
+# DayOne
+day_one
+# dayone
+day_one
+
+# Should not over write existing function names
+# T = TRUE, so don't name anything T
+# T <- FALSE
+false <- FALSE
+# c is a function name already. Plus c is not descriptive
+# c <- 9
+number_value <- 9
+# mean is a function, plus does not describe the function which is sum
+# mean <- function(x) sum(x)
+sum_vector <- function(x) sum(x)
+
+# Spacing
+# Commas should be in correct place
+# x[,1]
+# x[ ,1]
+# x[ , 1]
+x[, 1]
+# Spaces should be in correct place
+# mean (x, na.rm = TRUE)
+# mean( x, na.rm = TRUE )
+mean(x, na.rm = TRUE)
+# function (x) {}
+# function(x){}
+function(x) {}
+# height<-feet*12+inches
+height <- feet * 12 + inches
+# mean(x, na.rm=10)
+mean(x, na.rm = 10)
+# sqrt(x ^ 2 + y ^ 2)
+sqrt(x^2 + y^2)
+# df $ z
+df$z
+# x <- 1 : 10
+x <- 1:10
+
+# Indenting should be done after if, for, else functions
+# if (y < 0 && debug)
+# message("Y is negative")
+if (y < 0 && debug)
+    message("Y is negative")
+```
+
+</p>
+</details>
+
+### Automatic styling with styler
+
+You may have organised the exercise by hand, but it's possible to do it
+automatically. The tidyverse [style guide][r-style-guide] has been implemented
+into the [styler][styler-pkg] package to automate the process of following the
+guide by directly re-styling selected code. The styler snippets can be found in
+the Addins function in the RStudio "Addins" menu after you have installed it.
+
+RStudio also has its own automatic styling ability, through the menu item `"Code ->
+Reformat Code"` (or `Ctrl-Shift-A`). Try both methods of styling on the exercise
+code above. There are slight differences in how each method works and they both
+aren't always perfect. For now, let's stick with using the styler package. The
+styler functions work on R code within both `.R` script files as well as R code
+within `.Rmd` documents, which we will cover later in this lesson.
+
+There are several styler RStudio addins, but we'll focus on the two:
+
+- `"Style selection"`: Highlight text and click this button to reformat the code.
+- `"Style active file"`: Code in the `.R` or `.Rmd` file you have open and
+visible in RStudio will be reformatted when you click this button.
+
+There are two other styler functions that are also useful:
+
+- `styler::style_file("path/to/filename")`: Styles the whole file as indicated by the
+file path in the first argument. Can be either an `.R` or `.Rmd` file.
+- `styler::style_dir("directoryname")`: Styles all files in the indicated directory
+in the first argument.
+
+Let's try the `styler::style_file()` function out. Inside a file called
+`non-styled-code.R`, it has:
+
+```{r r-repro-non-styled-code, eval=FALSE}
+# Spacing
+x[,1]
+mean (x, na.rm = TRUE)
+function (x) {}
+height<-feet*12+inches
+sqrt(x ^ 2 + y ^ 2)
+df $ z
+x <- 1 : 10
+
+# Indenting
+if (y < 0 && debug)
+message("Y is negative")
+```
+
+Then we run:
+
+```{r r-repro-use-styler-file, eval=FALSE}
+styler::style_file("testing-styler.R")
+```
+
+```
+Styling  1  files:
+ testing-styler.R ℹ 
+────────────────────────────────────────
+Status	Count	Legend 
+✔ 	0	File unchanged.
+ℹ 	1	File changed.
+✖ 	0	Styling threw an error.
+────────────────────────────────────────
+Please review the changes carefully!
+```
+
+Which changes the file to be styled!
+
+```{r r-repro-styled-code, eval=FALSE}
+# Spacing
+x[, 1]
+mean(x, na.rm = TRUE)
+function(x) {}
+height <- feet * 12 + inches
+sqrt(x^2 + y^2)
+df$ z
+x <- 1:10
+
+# Indenting
+if (y < 0 && debug) {
+  message("Y is negative")
+}
+```
+
+This is more or less everything that the styler package does.
+
+### Exercise: Use styler to fix code formatting
+
+Use the styler package function on the code from the previous exercise by either
+running `styler::style_file()` or with the `"Style selection"` addin when
+highlighting the code.
+
+
+## Tracking your data
+
+## To organize later
+
+Here are a few tips for being efficient. Also check out the resources at the 
+bottom for more places to learn about being efficient.
+
+- Aggressively keep your code as simple and concise as you can. The less code
+you have to write, debug, and maintain, the better. If you repeat code, stop and
+think how to not repeat it. You will save time in the end by taking time to think
+and plan.
+- Try to always think in terms of wrangling data as data.frames. There is a lot
+of power and utility from structure most things as data.frames. (e.g. "how can I
+get the dataframe to the form I need to make a figure?")
+- Keep learning. Keep reading books and help documentation. Keep taking courses
+and workshops. And start teaching R to others! *hint hint* :wink: Seriously, it's
+a great way for you to learn as it challenges you to know what you are talking 
+about and teaching!
+- When encountering a difficult problem, think about how to solve it, then try
+to find R packages or functions that do your problem for you. You may hear some
+poeple say "oh, don't bother with R packages, do everything in base R"... don't 
+listen to them. Do you build a computer from scratch everytime you want to do
+any type of work? Or a car when you want to drive somewhere? No, you don't. Make
+use of other people's hard work to make tools that simplify your life.
+- Use a [style guide] and create descriptive object names. Follow the [principles of tidy tools]
+when creating functions and code.
+- Split up your analyses steps into individual files (e.g. "model" file, "plot"
+file). Then `source` those files as needed or save the output in `data/` to use 
+it in other files.
+- Try not to have R scripts be too long (e.g. more than 500 lines of code). Keep
+script sizes as small as necessary and as specific as possible (have a single purpose).
+A script should have an end goal.
+
+## Integrating text, code, and results
 
 The most obvious demonstration of reproducibility is when the results obtained
 from executing the analysis code (by an independent entity) are indentical to
@@ -653,9 +906,10 @@ nothing more.
 
 #### Citing literature with R Markdown
 
-If you want to insert a citation use `[@Hoejsgaard2006a]`, which will look like
-` AutoCite(bib, "Hoejsgaard2006a")`, and the reference is then inserted onto
-the bottom of the document. You need to add a line to the YAML header like this:
+If you want to insert a citation use `[@Cone2016]`, which will look like
+[@Cone2016], with the resulting citation reference being inserted at the bottom
+of the document. To get the bibliography to work, you'll need to add a line to
+the YAML header like this:
 
 ```yaml
 ---
@@ -665,7 +919,8 @@ bibliography: my_references.bib
 ---
 ```
 
-Make sure to add this to the end of your file:
+Since all references are appended to the bottom of the document, make sure to
+add a final "Reference" section header to the end of your file:
 
 ```markdown
 # References
@@ -739,260 +994,6 @@ Then, add some R code chunks with code to wrangle your data and also to create a
 figure (you can copy and paste from previous sessions). Include these code chunks
 in the "Results" section. 
 
-## Readability
-
-There are two reasons we write code: to instruct the computer to do something and
-to record the steps we took to get a particular result for us or others to
-understand. For computers, *how* or *what* you write doesn't matter, as long as
-the code is correct. But for humans, we need clear language in order to understand
-what is going on. Humans write code, humans read code, and humans must maintain them
-and fix any errors. So, what you write and how you write it is extremely important.
-
-Like natural human languages, R has a relaxed approached to how R code is written.
-This has some nice advantages, but also some major disadvantages, notably that
-writing styles can be quite different across the world or even within one's own
-code. So, it's important to stick to some guidelines, for instance, as laid out
-by the tidyverse [style guide][r-style-guide].
-
-Some tips to use when working in R:
-
-- Think of writing code as if you are writing in a natural language like English.
-- Imagine that other people will be reading your code.
-- Keep the code clear, simple, and *readable*.
-- Stick to a *[style guide][r-style-guide]*.
-- Use full and descriptive words when typing and creating objects.
-- Use white space to separate concepts (empty lines between them, use spaces, and/or tabs).
-- Use RStudio R Script Sections (`"Code->Insert Section"` or `Ctrl-Shift-R`) to
-separate content in scripts.
-
-Even though R doesn't care about naming, spacing, and indenting, it really
-matters how your code looks. Coding is just like writing. Even though you may go
-through a brainstorming note-taking stage of writing, you eventually need to
-write correctly so others can understand, *and read*, what you are trying to
-say. Brainstorming and exploratory work is fine, but eventually you need to
-write code that will be legible. That's why using a [style guide][r-style-guide]
-is really important.
-
-### Exercise: Make the code more readable
-
-Using the [style guide][r-style-guide] found in the link, try to make these code
-more readable. The code below is in some way either *wrong* or incorrectly
-written. Edit the code so it follows the correct style and so it is easier to
-understand and read. You don't need to understand what the code does, just
-follow the guide.
-
-```{r r-repro-exercise-readable-code, eval=FALSE}
-# Object names
-DayOne
-dayone
-T <- FALSE
-c <- 9
-mean <- function(x) sum(x)
-
-# Spacing
-x[,1]
-x[ ,1]
-x[ , 1]
-mean (x, na.rm = TRUE)
-mean( x, na.rm = TRUE )
-function (x) {}
-function(x){}
-height<-feet*12+inches
-mean(x, na.rm=10)
-sqrt(x ^ 2 + y ^ 2)
-df $ z
-x <- 1 : 10
-
-# Indenting
-if (y < 0 && debug)
-message("Y is negative")
-```
-
-FIXME: The below "details" will need to be dealt with since PDF doesn't allow this
-TODO: Maybe move to a solutions section at the end of chapter?
-
-<details><summary><strong>Click for a possible solution</strong></summary>
-<p>
-
-The old code is in comments and the better code is below it.
-
-```{r r-repro-exercise-readable-code-solution, eval=FALSE}
-# Object names
-
-# Should be camel case
-# DayOne
-day_one
-# dayone
-day_one
-
-# Should not over write existing function names
-# T = TRUE, so don't name anything T
-# T <- FALSE
-false <- FALSE
-# c is a function name already. Plus c is not descriptive
-# c <- 9
-number_value <- 9
-# mean is a function, plus does not describe the function which is sum
-# mean <- function(x) sum(x)
-sum_vector <- function(x) sum(x)
-
-# Spacing
-# Commas should be in correct place
-# x[,1]
-# x[ ,1]
-# x[ , 1]
-x[, 1]
-# Spaces should be in correct place
-# mean (x, na.rm = TRUE)
-# mean( x, na.rm = TRUE )
-mean(x, na.rm = TRUE)
-# function (x) {}
-# function(x){}
-function(x) {}
-# height<-feet*12+inches
-height <- feet * 12 + inches
-# mean(x, na.rm=10)
-mean(x, na.rm = 10)
-# sqrt(x ^ 2 + y ^ 2)
-sqrt(x^2 + y^2)
-# df $ z
-df$z
-# x <- 1 : 10
-x <- 1:10
-
-# Indenting should be done after if, for, else functions
-# if (y < 0 && debug)
-# message("Y is negative")
-if (y < 0 && debug)
-    message("Y is negative")
-```
-
-</p>
-</details>
-
-### Automatic styling with styler
-
-You may have organised the exercise by hand, but it's possible to do it
-automatically. The tidyverse [style guide][r-style-guide] has been implemented
-into the [styler][styler-pkg] package to automate the process of following the
-guide by directly re-styling selected code. The styler snippets can be found in
-the Addins function in the RStudio "Addins" menu after you have installed it.
-
-RStudio also has its own automatic styling ability, through the menu item `"Code ->
-Reformat Code"` (or `Ctrl-Shift-A`). Try both methods of styling on the exercise
-code above. There are slight differences in how each method works and they both
-aren't always perfect. For now, let's stick with using the styler package. The
-styler functions work on R code within both `.R` script files as well as R code
-within `.Rmd` documents, which we will cover later in this lesson.
-
-There are several styler RStudio addins, but we'll focus on the two:
-
-- `"Style selection"`: Highlight text and click this button to reformat the code.
-- `"Style active file"`: Code in the `.R` or `.Rmd` file you have open and
-visible in RStudio will be reformatted when you click this button.
-
-There are two other styler functions that are also useful:
-
-- `styler::style_file("path/to/filename")`: Styles the whole file as indicated by the
-file path in the first argument. Can be either an `.R` or `.Rmd` file.
-- `styler::style_dir("directoryname")`: Styles all files in the indicated directory
-in the first argument.
-
-Let's try the `styler::style_file()` function out. Inside a file called
-`non-styled-code.R`, it has:
-
-```{r r-repro-non-styled-code, eval=FALSE}
-# Spacing
-x[,1]
-mean (x, na.rm = TRUE)
-function (x) {}
-height<-feet*12+inches
-sqrt(x ^ 2 + y ^ 2)
-df $ z
-x <- 1 : 10
-
-# Indenting
-if (y < 0 && debug)
-message("Y is negative")
-```
-
-Then we run:
-
-```{r r-repro-use-styler-file, eval=FALSE}
-styler::style_file("testing-styler.R")
-```
-
-```
-Styling  1  files:
- testing-styler.R ℹ 
-────────────────────────────────────────
-Status	Count	Legend 
-✔ 	0	File unchanged.
-ℹ 	1	File changed.
-✖ 	0	Styling threw an error.
-────────────────────────────────────────
-Please review the changes carefully!
-```
-
-Which changes the file to be styled!
-
-```{r r-repro-styled-code, eval=FALSE}
-# Spacing
-x[, 1]
-mean(x, na.rm = TRUE)
-function(x) {}
-height <- feet * 12 + inches
-sqrt(x^2 + y^2)
-df$ z
-x <- 1:10
-
-# Indenting
-if (y < 0 && debug) {
-  message("Y is negative")
-}
-```
-
-This is more or less everything that the styler package does.
-
-### Exercise: Use styler to fix code formatting
-
-Use the styler package function on the code from the previous exercise by either
-running `styler::style_file()` or with the `"Style selection"` addin when
-highlighting the code.
-
-
-## Tracking your data
-
-## To organize later
-
-Here are a few tips for being efficient. Also check out the resources at the 
-bottom for more places to learn about being efficient.
-
-- Aggressively keep your code as simple and concise as you can. The less code
-you have to write, debug, and maintain, the better. If you repeat code, stop and
-think how to not repeat it. You will save time in the end by taking time to think
-and plan.
-- Try to always think in terms of wrangling data as data.frames. There is a lot
-of power and utility from structure most things as data.frames. (e.g. "how can I
-get the dataframe to the form I need to make a figure?")
-- Keep learning. Keep reading books and help documentation. Keep taking courses
-and workshops. And start teaching R to others! *hint hint* :wink: Seriously, it's
-a great way for you to learn as it challenges you to know what you are talking 
-about and teaching!
-- When encountering a difficult problem, think about how to solve it, then try
-to find R packages or functions that do your problem for you. You may hear some
-poeple say "oh, don't bother with R packages, do everything in base R"... don't 
-listen to them. Do you build a computer from scratch everytime you want to do
-any type of work? Or a car when you want to drive somewhere? No, you don't. Make
-use of other people's hard work to make tools that simplify your life.
-- Use a [style guide] and create descriptive object names. Follow the [principles of tidy tools]
-when creating functions and code.
-- Split up your analyses steps into individual files (e.g. "model" file, "plot"
-file). Then `source` those files as needed or save the output in `data/` to use 
-it in other files.
-- Try not to have R scripts be too long (e.g. more than 500 lines of code). Keep
-script sizes as small as necessary and as specific as possible (have a single purpose).
-A script should have an end goal.
 
 ## Additional learning resources and material
 
