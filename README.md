@@ -53,10 +53,12 @@ do *not* commit anything manually to `master`.
 
 To set up to preview locally:
 
-1.  Install R.
-    (We recommend that you also install and use the RStudio IDE.)
+1.  Install R
+    (we recommend that you also install and use the RStudio IDE).
 
-1.  Open RStudio by clicking on the `merely-useful.github.io.Rproj` file and install the dependencies by typing in the console:
+1.  Open RStudio by clicking on the `merely-useful.github.io.Rproj` file 
+    (if not through RStudio, then open an R console in the location of the Merely Useful repo)
+    and install the dependencies by typing in the console:
 
     ```r
     install.packages("remotes")
