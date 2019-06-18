@@ -56,10 +56,12 @@ To set up to preview locally:
 1.  Install R.
     (We recommend that you also install and use the RStudio IDE.)
 
-1.  Run R and install the following packages:
-  * `install.packages("bookdown")`
-  * `install.packages("reticulate")`
-  * `install.packages("here")`
+1.  Open RStudio by clicking on the `merely-useful.github.io.Rproj` file and install the dependencies by typing in the console:
+
+    ```r
+    install.packages("remotes")
+    remotes::install_deps()
+    ```
 
 To build and preview from the command line:
 
