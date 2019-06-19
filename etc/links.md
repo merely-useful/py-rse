@@ -6,6 +6,7 @@
 [rstudio-r-projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
 [styler-pkg]: http://styler.r-lib.org/
 [r-style-guide]: https://style.tidyverse.org/
+[r-style-guide-files]: https://style.tidyverse.org/files.html
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
