@@ -886,120 +886,257 @@ document writing and analysis reporting.
 #### YAML header/metadata
 
 Most Markdown documents (especially for R Markdown) include [YAML][yaml] metadata at
-the top of the document, surrounded by `---` on the top and bottom. The YAML
-contains the metadata and various options for the entire document. For instance,
-the title or author but also the output format you want to use, such as Word,
-HTML, or PDF (if you want to create a beautiful PDF, you need to install the R
-package [tinytex][tinytex]). There are many more output formats, but these are
-the most common.
+the top of the document, surrounded by `---`. The YAML contains the metadata and
+various options for the entire document. For instance, the title and/or author 
+text is included here, as well as the options on what the converted output
+document should be, such as Word, HTML, or PDF (if you want to create a beautiful
+PDF, you need to install the R package [tinytex][tinytex]). While these three
+are the most commonly used output formats, there are many more output formats to
+choose from (e.g. slides, websites, books). The YAML header looks something like
+this:
 
 ```yaml
 ---
 title: "Document title"
 author: Your Name
-output: word_document
+output: html_document
 ---
 ```
 
-There are additional options you can set in the output field, which we will show
-later below.
+Usually when you create the R Markdown file, this YAML header gets added
+automatically. There are additional options you can set in the output field,
+which we will cover later on. In this particular case, the R Markdown file
+will convert to a HTML document via the `html_document` setting. There are also
+`word_document` and `pdf_document` settings. For now, we'll focus on the
+`html_document` output.
 
-#### Now the best part! Inserting R code
+#### Using R code chunks 
 
-One of the most powerful and useful features of R Markdown is its ability to
-combine text and R code in the same document! You can insert plots by including a
-code chunk, like the one below. The options added to the code chunk tell it to
-add a caption, to set the height and width of the figure, and to prevent the code
-chunk from showing up in the final document (`echo=FALSE`). The `bmi-plot` label is
-the name of the code chunk (which you can see in the "Document Outline", found
-using `Ctrl-Shift-O`, if you have the options set in the `Tools -> Global
-Options -> R Markdown`).
-
-**NOTE**: Code [chunk labels] should be named without `_`, spaces, or `.` and 
-instead should be one word or be separated by `-`. While an error may not 
-necessarily occur, there can be some unintended side effects that will cause you
-some annoyance without knowing the reason.
-
-[chunk labels]: https://yihui.name/knitr/options/#chunk-options
+R Markdown's primary function is to allow combining text and R code in the same
+document, which is incredibly powerful and useful! All R code chunks have the 
+appearance:
 
 ````markdown
-`r ''````{r bmi-plot, fig.cap="Add your figure title here.", fig.height=8, fig.width=8, echo=FALSE}
-ggplot(NHANES, aes(x = Height, fill = Gender)) +
-    geom_density(alpha = 0.4) +
-    scale_fill_brewer(type = "qual", palette = "Dark2") +
-    theme_minimal() +
-    theme(legend.position = c(0.2, 0.85))
+`r ''````{r chunk-label-name, chunk.option="...", chunk.option=...}
+...R code...
 `r ''````
 ````
 
-(ref:insert-plot) Add your figure title here.
+Notice that chunk options need to be on the same line (one single line). Any
+R code in the code chunk gets evaluated and any output gets inserted into the
+document. So if the code prints to the console, it will get inserted into the 
+document.
 
-```{r bmi-plot, fig.cap="(ref:insert-plot)", fig.height=8, fig.width=8, echo=FALSE, eval=FALSE}
-ggplot(NHANES, aes(x = Height, fill = Gender)) +
-    geom_density(alpha = 0.4) +
-    scale_fill_brewer(type = "qual", palette = "Dark2") +
-    theme_minimal() +
-    theme(legend.position = c(0.2, 0.85))
+The `r` tells R Markdown to run R on the code chunk, while the [chunk label][chunk-label]
+differentiates the chunk from other chunks. Using a chunk label also helps navigate
+a document when you use RStudio's "Document outline" (`Code -> Show Document Outline`).
+It also does a few other things.
+
+**Note**: Code [chunk labels][chunk-label] should be named without `_`, spaces,
+or `.` and instead should be one word or be separated by `-`. While an error may
+not necessarily occur, there can be some unintended side effects that will cause
+you some annoyance without knowing the reason.
+
+Let's load in some packages and data:
+
+````markdown
+`r ''````{r setup}
+library(tidyverse)
+# TODO: Complete this section
+dog_licenses <- read_csv(here::here("data/..."))
+`r ''````
+````
+
+```{r setup, echo=FALSE}
+library(tidyverse)
+# TODO: Complete this section
+dog_licenses <- read_csv(here::here("data/..."))
 ```
 
-You can also create tables by using the `kable()` function from the knitr package:
+We call the code chunk `setup` because it is getting everything ready for later 
+code.
+
+#### Inserting figures
+
+One of the most obvious benefits to using R Markdown is to automatically insert
+a plot. To do that we do:
 
 ````markdown
-`r ''````{r mean-bmi-table, echo=FALSE}
-library(knitr)
-NHANES %>% 
-    select(SurveyYr, BMI, Diabetes) %>% 
-    group_by(SurveyYr, Diabetes) %>% 
-    summarise(MeanBMI = mean(BMI, na.rm = TRUE)) %>% 
-    spread(SurveyYr, MeanBMI) %>% 
-    kable(caption = "Table caption here")
+`r ''````{r dog-license-plot}
+ggplot(dog_licenses, aes(x = ..., y = ...)) +
+    geom_point()
 `r ''````
 ````
 
-```{r mean-bmi-table, echo=FALSE, eval=FALSE}
-library(knitr)
-NHANES %>% 
-    select(SurveyYr, BMI, Diabetes) %>% 
-    mutate_at(vars(Diabetes), forcats::fct_explicit_na) %>% 
-    group_by(SurveyYr, Diabetes) %>% 
-    summarise(MeanBMI = round(mean(BMI, na.rm = TRUE), 2)) %>% 
-    spread(SurveyYr, MeanBMI) %>% 
-    kable(caption = "Table caption here")
+```{r dog-license-plot, echo=FALSE}
+ggplot(dog_licenses, aes(x = ..., y = ...)) +
+    geom_point()
 ```
 
-Or just print out a number to the document:
+What if we want to include the plot but not the code? Easy! Set the chunk option
+`echo` to `FALSE`:
 
 ````markdown
-`r ''````{r, echo=FALSE}
-cor(NHANES$Height, NHANES$Weight)
+`r ''````{r dog-license-plot, echo=FALSE}
+ggplot(dog_licenses, aes(x = ..., y = ...)) +
+    geom_point()
 `r ''````
 ````
 
-```{r, echo=FALSE}
-cor(iris$Sepal.Length, iris$Sepal.Width)
+Or what if you don't want R to run the code chunk, but still show the code? Set
+the chunk option `eval` (for evaluate) to `FALSE`:
+
+````markdown
+`r ''````{r dog-license-plot, eval=FALSE}
+ggplot(dog_licenses, aes(x = ..., y = ...)) +
+    geom_point()
+`r ''````
+````
+
+Since we have a figure, we can change some width, height, and alignment options,
+as well as add a caption with the `fig.width`, `fig.height`, `fig.align`, and `fig.cap`
+(respectively):
+
+````markdown
+`r ''````{r dog-license-plot, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+ggplot(dog_licenses, aes(x = ..., y = ...)) +
+    geom_point()
+`r ''````
+````
+
+```{r dog-license-plot-1, fig.cap="Add your figure title here.", fig.height=8, fig.width=8, echo=FALSE}
+ggplot(dog_licenses, aes(x = ..., y = ...)) +
+    geom_point()
+```
+
+What if we want to first run some code before running the plot, but don't want to 
+include the other code? Don't let it get evaluated so it outputs something. So,
+this will output the data frame and the plot:
+
+````markdown
+`r ''````{r dog-license-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+dog_licenses_after_2000 <- dog_licenses %>% 
+    fitler(... >= 2000)
+dog_licenses_after_2000
+ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+    geom_point()
+`r ''````
+````
+
+```{r dog-license-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8, echo=FALSE}
+dog_licenses_after_2000 <- dog_licenses %>% 
+    fitler(... >= 2000)
+dog_licenses_after_2000
+ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+    geom_point()
+```
+
+While this will only output the plot. See how we don't include code that would 
+send anything to the console to be "printed"? Only things that get output get
+included in the R Markdown output document. Also notice how we renamed the chunk
+label? In R Markdown you can't have duplicate code chunk labels.
+
+````markdown
+`r ''````{r dog-license-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+dog_licenses_after_2000 <- dog_licenses %>% 
+    fitler(... >= 2000)
+ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+    geom_point()
+`r ''````
+````
+
+(ref:dog-plot-2000) Add your figure title here.
+
+```{r dog-license-plot-after-2000, fig.cap="(ref:dog-plot-2000)", fig.height=8, fig.width=8, echo=FALSE}
+dog_licenses_after_2000 <- dog_licenses %>% 
+    fitler(... >= 2000)
+ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+    geom_point()
+```
+
+Neat!
+
+#### Exercise: Add some figures to a R Markdown document
+
+1. Create a new R Markdown file ("File -> New File -> R Markdown"), providing
+the title, author name (your name), and setting the output to HTML.
+2. Save the file as `using-rmarkdown.Rmd` in the `doc/` folder.
+3. Delete all text *except* the YAML header.
+4. Create an R code chunk and call the label "setup". Write code so the packages 
+and data are loaded.
+5. Create another code chunk and call it "plot-licenses-by-year". Write R code
+to create a point plot (`geom_point()`) of the year on the `x` axis and number
+of licenses on the `y` axis.
+6. Knit the document and see what the output looks like.
+7. Change the theme of the plot to another builtin theme (*hint*: themes start
+with `theme_`).
+
+#### Using R code chunks to insert tables
+
+You can also create tables by using the `kable()` function from the knitr package.
+Let's create a table of ...
+
+TODO: Finish this once data has been added.
+
+````markdown
+`r ''````{r mean-...-table}
+dog_licenses %>% 
+    select(...) %>% 
+    group_by(...) %>% 
+    summarise(Mean... = mean(..., na.rm = TRUE)) %>% 
+    spread(...) %>% 
+    knitr::kable(caption = "Table caption here.")
+`r ''````
+````
+
+```{r mean-...-table, echo=FALSE}
+dog_licenses %>% 
+    select(...) %>% 
+    group_by(...) %>% 
+    summarise(Mean... = mean(..., na.rm = TRUE)) %>% 
+    spread(...) %>% 
+    knitr::kable(caption = "Table caption here.")
+```
+
+If you want to simply print out a number or other text:
+
+````markdown
+`r ''````{r numbers-text}
+mean(dog_license$..., na.rm = TRUE)
+names(dog_license)
+`r ''````
+````
+
+```{r numbers-text, echo=FALSE}
+mean(dog_license$..., na.rm = TRUE)
+names(dog_license)
 ```
 
 #### Inline R code
 
-You can also include R code within the text. You can use this to directly insert
-numbers into the text of the document. By using something like:
+Often you might have results inside the text you are writing. Here you can
+include R code within the text so that the results are inserted directly 
+into the document. It looks like:
 
 > The mean of BMI is &#96;r round(mean(NHANES$BMI, na.rm = TRUE), 2)&#96;.
 
-Gives...
+Which gives...
 
-The mean of BMI is ` round(mean(NHANES$BMI, na.rm = TRUE), 2)`.
+> The mean of BMI is ` round(mean(NHANES$BMI, na.rm = TRUE), 2)`.
 
-*Note*: Inline R code can *only* insert a single number or character value,
-nothing more.
-
+Keep in mind that inline R code can *only* insert a single number or character
+value, nothing more.
 
 #### Citing literature with R Markdown
 
-If you want to insert a citation use `[@Cone2016]`, which will look like
-[@Cone2016], with the resulting citation reference being inserted at the bottom
-of the document. To get the bibliography to work, you'll need to add a line to
-the YAML header like this:
+No scientific writing is complete without being able to include references. If
+you want to insert a citation, use the Markdown key `[@Cone2016]`, which will
+look like [@Cone2016]. The text `Cone2016` is the key that the bibliography
+manager uses to identify a specific reference. Adding more references is done
+by separating by a `;`, so like `[@AuthorYear; @Author2Year; @Author3Year]`. The
+resulting citation reference will be inserted at the bottom of the document. To
+get the bibliography to work, you'll also need to add a line to the YAML header
+like this:
 
 ```yaml
 ---
@@ -1009,8 +1146,10 @@ bibliography: my_references.bib
 ---
 ```
 
-Since all references are appended to the bottom of the document, make sure to
-add a final "Reference" section header to the end of your file:
+The `my_references.bib` is a `.bib` file found in the same folder as the `.Rmd` 
+file. So in our case, the `.bib` file is in the `doc/` folder. Since all
+references are appended to the bottom of the document, it's good to add a final
+"Reference" section header to the end of your file, like so:
 
 ```markdown
 # References
@@ -1019,9 +1158,9 @@ add a final "Reference" section header to the end of your file:
 #### Making your report prettier
 
 This part mostly applies to HTML-based and PDF[^tinytex] outputs, since
-programmatically modifying or setting templates Word documents is rather
-difficult[^md-to-word]. Changing broad features of a document can be done by setting the
-"theme" of the document. Add an option in the YAML metadata like:
+programmatically modifying or setting templates in Word documents is rather
+difficult[^md-to-word]. Changing broad features of a document can be done by
+setting the "theme" of the document. Add an option in the YAML metadata like:
 
 ```yaml
 ---
@@ -1032,21 +1171,32 @@ output:
 ---
 ```
 
-Check out the R Markdown [documentation] for more types of themes you can use
-for HTML documents, and advanced topics such as parameterized R Markdown documents. 
-Most of the [Bootswatch] themes are available for use in R
-Markdown to HTML conversion.
+Check out the R Markdown [documentation][rmd-appearance] for more types of
+themes you can use for HTML documents, and advanced topics such as parameterized
+R Markdown documents. Most of the [Bootswatch][bootswatch] themes are available
+for use in R Markdown to HTML conversion.
 
-[documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
-[Bootswatch]: https://bootswatch.com/3/
+[^tinytex]: Knitting to PDF requires LaTeX, which you can install from [tinytex][tinytex]. 
+After you install LaTeX you can create truly beautifully typeset PDF documents.
 
-[^tinytex]: Knitting to PDF will require that you install LaTeX using the [tinytex](https://yihui.name/tinytex/r/) R package. After you install LaTeX you can create truly beautifully typeset PDF documents.
+[^md-to-word]: If you really want to do it, the best way is to create your
+template in the `.odt`, and then convert to `.docx`.
 
-[^md-to-word]: If you really want to do it, the best way is to create your template in the `.odt`, and then convert to `.docx`. [Here](https://github.com/andrewheiss/Global-Pandoc-files) is a good place to start. 
+Want to add a Table of Contents? Easy! Add `toc: true` to the YAML header:
+
+```yaml
+---
+title: "My report"
+output:
+    html_document:
+        theme: sandstone
+        toc: true
+---
+```
+
+This works for PDF, but *not* Word documents.
 
 #### Exercise: Starting creating a report
-
-Time: Until the end of the session.
 
 Open RStudio and create an `R Markdown` document:
 
