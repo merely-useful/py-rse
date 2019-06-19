@@ -14,6 +14,8 @@
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
 [rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
 [bootswatch]: https://bootswatch.com/3/
+[usethis]: https://usethis.r-lib.org/
+[r-here-pkg]: https://here.r-lib.org/
 
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
