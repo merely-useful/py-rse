@@ -11,6 +11,8 @@
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [tinytex]: https://yihui.name/tinytex/
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
+[rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
+[bootswatch]: https://bootswatch.com/3/
 
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
