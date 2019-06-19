@@ -199,21 +199,52 @@ utility_functions.R
 code.R
 ```
 
-### Next steps after creating the project
+### Should you keep your data under version control?
 
-Now that we've created a project and associated folders, let's add some more
-options to the project. One option to set is to ensure that every R session you 
-start is a "blank slate", by typing and running in the Console:
+We have a `data/` folder for a reason. But you might not want to keep the data
+under version control, for several reasons:
+
+1. It's a large dataset (tens or more of Mb file size)
+2. There are sensitive or personal information in the data
+
+As a rule of thumb, if you can send the data by an email attachment, you could
+probably put it into Git. Unless there is sensitive or personal data, then don't.
+If it isn't kept under version control, make sure you include a reference to how
+or where you got the data, either as an R script showing the code you used to 
+import/clean/download it or described in the `README.md` file.
+
+## Reusability
+
+Part of reproducibility is also making sure your scripts and file organization is
+"reusable" meaning that others (or yourself) can run it again. So, for instance,
+making sure to use "relative file paths" compared to "absolute file paths"
+(we'll cover these in a bit). Or indicating which other R packages your code
+depends on. So here we'll cover how to make sure your scripts and project files
+are reusable.
+
+### Keeping a "clean slate"
+
+When you finish writing your R code for the day and close the session, you probably
+will be asked about saving your session. What this does is everything kept in the
+"Environment" (e.g. all objects, functions, or datasets you created and used
+during the session) get saved to an `.RData` file. Then, the next time you open up
+your R session, R will see this `.RData` file and load everything in that file.
+Everything you did previously will be loaded into your "Environment". This seems like
+a good thing... but it's not. Imagine eating your dinner on a really dirty plate...
+that's not pleasant right? Loading a previous session is like that dirty plate.
+
+So, to make sure you always use a "clean plate", we'll run a handy function from 
+the [usethis][usethis] package to stop R from saving and loading this `.RData`
+file, ensuring you have a clean working environment:
 
 ```r
 usethis::use_blank_slate()
 ```
 
-TODO: Add more about this, e.g. `.RData`
+We'll use the usethis package more throughout this chapter and others, as it provides
+several very useful functions when working with projects.
 
 ### Packages, data, and file paths
-
-FIXME: This section may be more appropriate earlier.
 
 A major strength of R is in its ability for others to easily create packages
 that simplify doing complex tasks (e.g. running mixed effects models with the
@@ -222,7 +253,8 @@ and for anyone to easily install and use that package. You may encounter some
 who say you shouldn't rely on packages and only use base R functions. However, 
 this is seriously bad advice since the ecosystem of R packages can greatly 
 simplify your life doing data analysis. Plus, packages greatly expand and enhance
-the capability of R, so make use of packages!
+the capability of R, so make use of packages! If someone invents a wheel, why
+wouldn't you use it?
 
 You load a package by writing:
 
@@ -233,147 +265,83 @@ library(tidyverse)
 Working with multiple R scripts and files, it quickly gets tedious to always
 write out each library function at the top of each script. A better way of
 managing this is to create a new file, keep all package loading code in that
-file, and sourcing that file in each R script. So:
+file, and sourcing that file in each R script. So, to create a new R file
+in the `R/` folder, we'll use this `use_r()` function from the usethis package:
 
 ```r
 usethis::use_r("package-loading")
 ```
 
-In the `package-loading.R` file:
+This creates a file called `package-loading.R` in the `R/` folder. In the
+`package-loading.R` file, add this code to it.
 
 ```r
 library(tidyverse)
 ```
 
-In any other `.R` file:
+Then in other R scripts in the `R/`, include this code at the top the script:
 
 ```r
 source(here::here("R/package-loading.R"))
 ```
 
-There's a new thing `here`! The [here] package uses a function called `here()` 
-that makes it easier to manage file paths. What is a file path and why is this 
-necessary? A file path is the list of folders a file is found in. For instance,
-your CV may be found in `/Users/Documents/personal_things/CV.docx`. The problem 
-with file paths in R is that when you run a script interactively (e.g. what we
-do in class and normally), the file path is located at the Project level (where 
-the `.Rproj` file is found). You can see the file path by looking at the top of
-the "Console". But! When you `source()` an R script, it may likely run *in the
+There's a new thing `here`! The [here][r-here-pkg] package uses a function
+called `here()` that makes it easier to manage file paths. What is a file path
+and why is this necessary? A file path is the list of folders a file is found
+in. For instance, your resume may be found in
+`/Users/Documents/personal_things/resume.docx`. The problem with file paths in R
+is that when you run a script interactively (e.g. what we do in class and
+normally), the file path is located at the Project level (where the `.Rproj`
+file is found). You can see the file path by looking at the top of the
+"Console".
+
+But! When you `source()` an R script, it may likely run *in the
 folder it is saved in*, e.g. in the `R/` folder. So your file path
 `R/packages-loading.R` won't work because there isn't a folder called R in the
 `R/` folder. Often people use the function `setwd()`, but this is *never* a good
 idea since using it makes your script *runnable only on your computer*... which
 makes it no longer reproducible. We use the `here()` function to tell R to go
-to the project root (where the `.Rproj` file is found) and then use that file
-path. This simple function can make your work more reproducible and easier for
-you to use later on.
+to the project root (where the `.Rproj` file is found) and then use the file
+path from that point. This simple function can make your work more reproducible
+and easier for you to use later on.
 
-[here]: https://here.r-lib.org/
+We also use the `here()` function when we import a dataset or save a dataset.
+So, let's load in the NYC Dog License dataset. First, save the csv in the
+`data/` folder. Then create a new R file:
 
-We also use the `here()` function when we import a dataset. Let's save a dataset
-as a [csv] file. In the `project-session.R` file, add this to the top of the file:
+```r
+usethis::use_r("load-data")
+```
 
-[csv]: https://en.wikipedia.org/wiki/Comma-separated_values
+And write these lines in the file:
 
-```{r, eval=FALSE}
+```{r load-data-example, eval=FALSE}
 source(here::here("R/package-loading.R"))
+dog_license <- read_csv(here::here("data/nyc-dog.....csv"))
+# TODO complete this file path.
+head(dog_license)
 ```
 
-Then, let's add these lines to the end of the file:
+That is how we will load data in from now on.
 
-```{r, eval=FALSE}
-write_csv(iris, here::here("data/iris.csv"))
-imported_iris <- read_csv(here::here("data/iris.csv"))
-head(imported_iris)
-```
+Here are a few other tips for keeping your code reusable:
 
-## Reusability
-
-here::here
-
-https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005412
-
-### DRY and describing your code
-
-DRY or "don't repeat yourself" is another way of saying, "make your own
-functions"! That way you don't need to copy and paste code you've used multiple
-times. Using functions also can make your code more readable and descriptive,
-since a function is a bundle of code that does a specific task... and usually
-the function name should describe what you are doing. We'll be covering functions
-more in the [Efficient Coding](/course/efficient-coding/) section of the course,
-but we'll talk about it briefly here. 
-
-What does a "function" mean? A function is, as mentioned, a bundled sequence of
-code that does a specific thing. Imagine it as a machine, like a microwave or
-oven. Each has a bunch of parts that work together to do something (e.g. cook
-food). Same with functions. And like machines, you can look at the contents of
-functions, like so:
-
-```{r}
-# Inside standard deviation function
-sd
-```
-
-It is very important for your future self, and for any person that will be
-reading/using your code to be able to understand what the code *does* and what
-it will *create* (or output). So it's crucial to describe what the code does
-through code comments, documentation, and descriptive naming of the function and
-other objects. For instance, if your function name is decriptive, then you don't
-need to spend much time describing what the code does and remember how to use
-it. Also, use code comment (anything after a `#`) to provide more detailed
-explanations of your code if the code is complicated or long (these of course are
-a bit subjective).
-
-Example:
-
-```{r}
-# The following function outputs the sum of two numeric objects (a and b). 
-# usage: summing(a = 2, b = 3)
-summing <- function(a, b) {
-    return(a + b)
-}
-
-summing(a = 2, b = 3)
-```
-
-The example above is summing up two different numeric objects. Note that the
-name for this function was chosen as **summing**, instead of **sum**. This is
-because R already has a built-in function called **sum** and so we don't want to
-overwrite it! We'll go over more of writing functions in the [Efficient
-Coding](/course/efficient-coding/) section.
-
-
-## To organize later
-
-Here are a few tips for being efficient. Also check out the resources at the 
-bottom for more places to learn about being efficient.
-
-- Aggressively keep your code as simple and concise as you can. The less code
-you have to write, debug, and maintain, the better. If you repeat code, stop and
-think how to not repeat it. You will save time in the end by taking time to think
-and plan.
-- Try to always think in terms of wrangling data as data.frames. There is a lot
-of power and utility from structure most things as data.frames. (e.g. "how can I
-get the dataframe to the form I need to make a figure?")
-- Keep learning. Keep reading books and help documentation. Keep taking courses
-and workshops. And start teaching R to others! *hint hint* :wink: Seriously, it's
-a great way for you to learn as it challenges you to know what you are talking 
-about and teaching!
+- Aggressively try keep your code as simple and concise as you can. The less code
+you have to write, debug, and maintain, the better. If you repeat some code,
+stop and think how to not repeat it. You will save time in the end by taking
+time to think and plan.
 - When encountering a difficult problem, think about how to solve it, then try
 to find R packages or functions that do your problem for you. You may hear some
 poeple say "oh, don't bother with R packages, do everything in base R"... don't 
 listen to them. Do you build a computer from scratch everytime you want to do
 any type of work? Or a car when you want to drive somewhere? No, you don't. Make
 use of other people's hard work to make tools that simplify your life.
-- Use a [style guide] and create descriptive object names. Follow the [principles of tidy tools]
-when creating functions and code.
 - Split up your analyses steps into individual files (e.g. "model" file, "plot"
 file). Then `source` those files as needed or save the output in `data/` to use 
 it in other files.
 - Try not to have R scripts be too long (e.g. more than 500 lines of code). Keep
-script sizes as small as necessary and as specific as possible (have a single purpose).
-A script should have an end goal.
-
+script sizes as small as necessary and as specific as possible (have a single
+purpose). A script should have an end goal.
 
 ## Readability
 
