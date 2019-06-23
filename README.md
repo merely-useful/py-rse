@@ -53,16 +53,23 @@ do *not* commit anything manually to `master`.
 
 To set up to preview locally:
 
-1.  Install R.
-    (We recommend that you also install and use the RStudio IDE.)
+1.  Install R
+    (we recommend that you also install and use the RStudio IDE).
 
-1.  Run R and use `install.packages("bookdown")` to install bookdown.
+1.  Open RStudio by clicking on the `merely-useful.github.io.Rproj` file 
+    (if not through RStudio, then open an R console in the location of the Merely Useful repo)
+    and install the dependencies by typing in the console:
+
+    ```r
+    install.packages("remotes")
+    remotes::install_deps()
+    ```
 
 To build and preview from the command line:
 
-1.  `make html` and then open `docs/index.html`.
+1.  `make html` and then open `_book/index.html`.
 
-1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `docs` folder).
+1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `_book` folder).
 
 Or via RStudio:
 
@@ -99,15 +106,22 @@ With that, the next things to consider are that if you are doing a major overhau
 1.  Pick a chapter.
 2.  Check that there isn't an outstanding PR with its name (i.e., that no one else is also doing a major overhaul).
 3.  Make sure your fork is current with `book` in the main repo and create a branch named after the chapter file, e.g. `automate` or `publish`.
-4.  Make some trivial change and create a PR to the main repo with the subject line `revisions to automate` (or whatever the chapter name is).
+4.  Make some trivial change and create a **[Draft Pull Request](https://github.blog/2019-02-14-introducing-draft-pull-requests/)** to the main repo with the subject line `revisions to automate` (or whatever the chapter name is).
 5.  Add the label "work in progress" to that PR.
-6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
-7.  When the material is ready for publication, merge it into the `book` branch (under the conditions as stated above).
+6.  When it's ready for review, remove the label, and post a note in Slack asking for a reviewer.
+7.  When the material is ready for publication, change the PR status to "Ready for review" so the PR is no longer a draft PR. Someone will then merge it into the `book` branch (under the conditions as stated above).
 
 If you are making a smaller change, please create a branch with a meaningful name, submit changes, and ask for a reviewer.
 Please do not assign PRs to people without first checking with them.
 
 Finally, if you are doing a major reorganization that involves multiple chapters, please put in a proposal first.
+
+If you are reviewing a PR, please use the ["Insert a suggestion"](https://help.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)
+if suggesting changes to the actual text. When responding as the "reviewee",
+please accept those changes as they insert the suggestion directly as a commit,
+thus giving attribution to the reviewer. This reduces work for the PR submitter
+and gives attribution to the reviewer. Note: This does not work for multi-line
+suggestions edits (though you can add more lines in the suggestion if desired).
 
 ## Content Guidelines
 
