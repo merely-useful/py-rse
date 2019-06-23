@@ -16,7 +16,8 @@
 > when faced with a new and unique situation,
 > was to look through their libraries to see if it had ever happened before.
 > This was...a good survival trait.
-> It meant that in times of danger you spent the day sitting very quietly in a building with very thick walls.
+> It meant that in times of danger you spent the day sitting very quietly
+> in a building with very thick walls.
 >
 > -- Terry Pratchett
 
@@ -33,12 +34,11 @@ This lesson shows you how to use R's tools to do this.
 >
 > [CRAN][cran],
 > the Comprehensive R Archive Network,
-> it is the place to go to find the packages you need.
-> CRAN's rules are famously strict,
-> which ensures that packages run for everyone,
-> but which also makes package development a little more onerous than it might be.
+> is the best place to find the packages you need.
+> CRAN's famously strict rules ensure that packages run for everyone,
+> but also makes package development a little more onerous than it might be.
 > You can also share packages directly from GitHub,
-> which many people do while they are still developing the package.
+> which many people do while packages are still in development.
 > We will explore this in more detail below.
 
 ### Exercise: What packages do you have?
@@ -55,6 +55,27 @@ How did you figure this out?
 Does the package build successfully?
 What messages do you see?
 Do any of them worry you?
+
+## What *is* a package, exactly? {#rse-r-package-background}
+
+Suppose you have written a useful R script and want to share it with colleagues.
+You could email it to them (or point them at the GitHub repository it's in),
+but what should they do next?
+They could copy the file onto their computer,
+but then they would have to decide where to put it
+and remember their decision later on when you updated the script to fix a few bugs.
+And what about the documentation you so lovingly crafted---where should it go?
+Oh,
+and what if different people decide to organize their files differently---how
+hard will it be to make the things they have built play nicely together?
+
+[Packages](glossary.html#package) solve these problems.
+While the details vary from language to language,
+packages always require that information about the software
+be stored in a specific format and in a specific location,
+so that statements like `library(something)` know where to find what they need.
+They are rather like the USB ports of the software world:
+anything that conforms to a few simple rules can plug in to anything else.
 
 ## How do I create a package? {#rse-r-package-create}
 
@@ -206,14 +227,39 @@ so we will look at that next.
 ### Exercise: Packaging the CO2 functions
 
 1.  Create a brand-new package to hold the CO2 data and functions for analyzing it.
-2.  Put the license and citation files where R's packaging rules want them.
-3.  Build the package: what warnings do you get and what do they mean?
+2.  Put the license file where R's packaging rules wants it.
+3.  Read the documentation for `usethis::use_citation` and create a citation file.
+4.  Build the package: what warnings do you get and what do they mean?
 
 ### Exercise: Exploring a package
 
 1.  Clone a GitHub repository that contains an R package, such as <https://github.com/r-lib/usethis>.
 2.  Which files in this repository do you recognize, and what are they for?
 3.  Which files are there to satisfy something other than R's packaging system?
+
+### Exercise: Ignoring Files
+
+What does `usethis::use_build_ignore` do?
+When would you use it?
+
+## How do I use a package while I'm creating it? {#rse-r-package-use}
+
+The `devtools` package includes functions to help you create and test packages.
+After you install it,
+`devtools::load_all("path/to/package")`
+will do the same thing that `library(package)` does,
+but use the files you are developing.
+(If you run `load_all()` without a path,
+it will re-load the package in the current working directory,
+which is what you usually want to do during development.)
+
+`devtools::load_all` is different from `devtools::install`,
+which not only installs your package,
+but also tries to install its dependencies from CRAN.
+After you use `install`,
+the package will be available to other projects on your computer.
+This is therefore usually one of the last things you do
+as you come to the end of development.
 
 ## How do I document a R package? {#rse-r-package-document}
 
@@ -378,7 +424,7 @@ documentation should describe:
 
 ### Exercise: Fixing documentation
 
-FIXME: provide poorly-documented function and ask learner to find and fix gaps.
+FIXME: provide poorly-documented function in CO2 package and ask learner to find and fix gaps.
 
 ### Exercise: Cross-references
 
@@ -467,7 +513,6 @@ No, we are not:
 1.  Modify the functions in the CO2 package to use `package::function` name for everything.
 2.  Modify the `DESCRIPTION` file to document the package's dependencies.
 
-
 ### Importing
 
 1.  What does `@import` do in roxygen2 documentation?
@@ -475,18 +520,21 @@ No, we are not:
 
 ## How can I share my package via GitHub? {#rse-r-package-github}
 
-FIXME: explain how to share a package on GitHub.
+We said in Section \@ref(rse-r-package-intro) that R packages could be shared through GitHub
+as well as through CRAN.
+If someone has done this,
+installing the package on your computer is as simple as:
 
-> How will other people get my package?
-> Do you want to talk about how packages get on CRAN?
-> Or alternatives (I mentioned this in some of my line comments)?
-> I think starting with it on GitHub is appropriate for most people.
+```{r install-from-github, eval=FALSE}
+devtools::install_github("username/reponame")
+```
 
-> What about adding something about other places to share packages?
-> E.g. A big advantage of CRAN is that users can install your package like they would any other package, with install.packages().
-> But you don't have to put your package on CRAN for people to be able to use it.
-> If you follow the conventions we set out in this chapter,
-> you can also host your package on GitHub and your users can install it with devtools::install_github() (or remotes::install_github()).
+where `username` and `reponame` are the names of the user and the project respectively.
+If you want to share your work,
+all you have to do is create a repository whose contents are laid out
+as described earlier in this chapter:
+if it looks like an R project,
+`install_github` will treat it as one.
 
 ## How can I add data to a package? {#rse-r-package-data}
 
@@ -611,14 +659,13 @@ and our package is ready to deliver.
 
 ## Summary {#rse-r-package-summary}
 
-> FIXME:
-> Some things I thought were missing so far:
->
-> How do I use my package locally?
-> Talk about devtools::load_all() as an easy way to load all functions where you are working on your package.
-> Versus devtools::install() to make it available like any other installed package in your other projects.
-
-FIXME: create summary concept map for packaging in R.
+```{r rse-r-package-concept, echo=FALSE, fig.cap="R Packaging Concept Map"}
+if (knitr::is_latex_output()) {
+  knitr::include_graphics("figures/rse-r-package/rse-r-package.pdf")
+} else {
+  knitr::include_graphics("figures/rse-r-package/rse-r-package.svg")
+}
+```
 
 ## Key Points {#rse-r-package-keypoints}
 
