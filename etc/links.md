@@ -8,6 +8,7 @@
 
 [bibtex]: http://www.bibtex.org/
 [branch-per-feature]: https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
+[broman-packages]: https://kbroman.org/pkg_primer/
 [build-tools]: https://en.wikipedia.org/wiki/List_of_build_automation_software
 
 [capes-gerard]: https://github.com/gcapes
@@ -20,6 +21,7 @@
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [covenant]: https://www.contributor-covenant.org
+[cran]: https://cran.r-project.org/
 [creative-commons]: https://creativecommons.org/
 [cron]: https://en.wikipedia.org/wiki/Cron
 [curb-cuts]: https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
@@ -80,6 +82,7 @@
 [requests]: http://docs.python-requests.org
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
+[roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 
 [setuptools]: https://setuptools.readthedocs.io/
 [snakemake]: https://snakemake.readthedocs.io/
@@ -108,6 +111,7 @@
 [vanderplas-licensing]: http://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [vs-code]: https://code.visualstudio.com/
 
+[wickham-packages]: http://r-pkgs.had.co.nz/
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 [wing-ide]: https://wingware.com/
 [womens-pockets]: https://pudding.cool/2018/08/pockets/
