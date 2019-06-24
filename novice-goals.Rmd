@@ -117,7 +117,9 @@ but nothing more.
     -   When summing the data, missing values will be treated as zero
     -   If all values are missing, the sum will be equal to NaN
     -   cumsum() and cumprod() methods ignore missing values but preserve them in the resulting arrays
-    -   Missing values in GroupBy method are excluded (just like in R)
+    -   .groupby() method *see more in descriptive stats section* 
+        -   Missing values in .groupby() method are excluded (just like in R)
+        -   Another .groupby() fun fact: .groupby() with observed=True includes NaNs for categoricals.
     -   Many descriptive statistics methods have skipna option to control if missing data should be excluded . This value is set to True by default (unlike R) 
 
     Python Lecture Notes (useful commands)
@@ -127,8 +129,8 @@ but nothing more.
     -   dropna(axis=1,how='all') / drop coloumn if all values are missing
     -   dropna(thresh=5) / drop rows that contain less than 5 non-missing values
     -   fillna(0) / replace missing values with zeros
-    -   isnull() returns True if the value is missing
-    -   isnotnull() / Returns True for non-missing values
+    -   isna() returns True if the value is missing
+    -   notna() / Returns True for non-missing values
 
     T/F Exercises (#Review4Everybody)
     -   Imputation is really just making up data to artificially inflate results.  It’s better to just drop cases with missing data than to impute.
@@ -143,7 +145,93 @@ but nothing more.
     -   How could you handle missing data?
 
 -   How can I get a feel for my data?
-    -   summary statistics
+    -   summary/descrptive statistics
+
+    Python Learning Objectives 
+    -   Recognize the difference between statistics and descriptive statistics
+    -   Define four variable types: nomial, ordinal, interval and ratio
+    -   Describe the types of descriptive statistics: organize data and summarize data
+    -   Demonstrate and use commands that help you describe data 
+
+    Python Lecture Notes (general info)
+    -   Discuss basic probability & statistics overview
+        -   Identify materials available at https://seeing-theory.brown.edu/
+        -   Chapter 1 seems the most relevant at this point
+    -   Descriptive statistics quantitatively describes or summarizes features of a dataset. 
+    -   Descriptive statistics are used by researchers/analysts to report on populations and samples. 
+    -   Descriptive statistics speed up and simplify comprehension of a group’s characteristics
+    -   Variable types 
+        -   Nominal: Unordered categorical variables
+        -   Ordinal: There is an ordering but no implication of equal distance between the different points of the scale.
+        -   Interval: There are equal differences between successive points on the scale but the position of zero is arbitrary.
+        -   Ratio: The relative magnitudes of scores and the differences between them matter. The position of zero is fixed.
+    -   Types of descriptive statistics
+        -   Organize data: tables and graphs
+        -   Summarize data: central tendency and variation
+    -   Tables
+        -  frequency distributions, relative frequency distributions
+    -   Graphs
+        -  bar chart, histogram, boxplot
+    -   Central tendency   
+        - mean, median, mode
+    -   Variation
+        - range, interquartile range, variance, standard deviation
+
+    Python Lecture Notes (useful commands)
+    -   Import python libraries: 
+        -   import pandas as pd
+        -   import seaborn as sns
+    -   Read data into a dataframe (likely review from another section)
+        -   df = pd.read_csv("your-filename.csv") #read a csv file, it better be tidy first!
+        -   Note: you can read data from other file formats like excel, stata and sas
+    -   df.method() / description
+        -   head([n]), tail([n]) / first/last n rows 
+        -   describe() / generate descriptive statistics (for numeric columns only) 
+        -   shape / return a tuple representing the dimensionality of the dataframe
+        -   info() /  prints a dataframe's summary information, e.g., index dtype and column dtypes, non-null values and memory usage
+        -   max(), min() / return max/min values for all numeric columns
+        -   mean(), median() /  return mean/median values for all numeric columns
+        -   std() / standard deviation
+        -   sample([n]) / returns a random sample of the data frame
+    -   .groupby() method
+        -   Splits data into groups based on some criteria you define
+        -   Then you can calculate statistics (or apply a function) to each group 
+        -   A few performance notes:
+            -   It's customary to enact the grouping or splitting of data until it's needed. 
+            -   Creating the groupby object only verifies that you have passed a valid mapping
+            -   By default, the group keys are sorted during the groupby operation. You may want to pass sort=False for potential speedup
+    -   Graphs (Intro to seaborn)
+        -   Seaborn package is built on matplotlib but provides high level interface for drawing attractive statistical graphics 
+        -   It specifically targets statistical data visualization
+        -   Reference: https://seaborn.pydata.org/introduction.html
+        -   import seaborn as sns
+        -   sns.set(): applies the default default seaborn theme, scaling, and color palette
+        -   load dataset: e.g., tips = sns.load_dataset("tips") where tips is a tidy df
+        -   relplot() method: designed to visualize many different statistical relationships
+            -   Example: fmri = sns.load_dataset("fmri") where fmri is a tidy df
+            -   Example: sns.relplot(x="timepoint", y="signal", col="region", hue="event", style="event", kind="line", data=fmri)
+            -   explain each parameter in kind
+        -   catplot() method: helps visualize the relationship between one numeric variable and one (or more) categorical variables
+            -   Example: sns.catplot(x="day", y="total_bill", hue="smoker", kind="swarm", data=tips) 
+            -   kind parameter can be changed to: violin, bar, etc. 
+        -  pairplot() method: shows all pairwise relationships and the marginal distributions, optionally conditioned on a categorical variable
+            -   Example: sns.pairplot(data=iris, hue="species")
+            -   my personal fav when paired w/ .describe() for some initial EDA
+    
+    Live-coding Exercises
+    -   Try to read the first 10, 20, 50 records of your dataframe?
+    -   Can you guess how to view the last few records of your dataframe? 
+    -   Find how many records this data frame has
+    -   How many elements are there?     
+    -   What are the column names?
+    -   What types of columns we have in this data frame?
+    -   Give the summary for the numeric columns in the dataset
+    -   Calculate standard deviation for all numeric columns
+    -   What are the mean values of the first 50 records in the dataset? 
+    -   Calculate the basic statistics for column XXX (XXX refers to a TBD attribute selected lecture/presentation)
+    -   Find how many values in column XXX (hint: use the count method)
+    -   Calculate the average of column XXX
+
 -   How can I create a simple model of my data?
     -   formulas
     -   linear regression
