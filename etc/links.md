@@ -82,6 +82,7 @@
 [requests]: http://docs.python-requests.org
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
+[roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 
 [setuptools]: https://setuptools.readthedocs.io/
 [snakemake]: https://snakemake.readthedocs.io/

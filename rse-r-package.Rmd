@@ -211,7 +211,7 @@ we get a clean bill of health.
 We can now create a placeholder for one of the functions we want to write
 in a file called `R/frequency.R`
 either by using `File...New` in RStudio
-or by running `usethis::use_r('R/frequency.R')`:
+or by running `usethis::use_r('frequency.R')`:
 
 ```{r frequency-original}
 word_count <- function(word, text) {
@@ -285,7 +285,10 @@ word_count <- function(word, text) {
 }
 ```
 
-This comment is an example of [embedded documentation](glossary.html#embedded-documentation).
+This comment text, 
+is an example of [embedded documentation](glossary.html#embedded-documentation),
+can be easily inserted by placing the cursor somewhere in the function
+and clicking the button "Code -> Insert Roxygen Skeleton" in RStudio.
 Over the years,
 programmers have found that if they put code in one file and documentation in another,
 the documentation quickly falls out of date with the code:
@@ -308,7 +311,47 @@ so what this file is saying is:
 -   it returns the number of times the word is found in the text; and
 -   we want to export it (i.e., we want it to be visible outside the package).
 
-Our function is now documented,
+These roxygen2 text can also be written with [Markdown formatting][roxygen-md],
+so that for instance using `**word**` will bold the word. Other common formatting
+includes:
+
+- `[function_name()]` or `[object_name]` to link to other function or object,
+respectively, documentation in the same package.
+- `[pkgname::function_name()]` or `[pkgname::object_name]` to link to function
+or object, respectively, documentation in another package.
+- `[link name](website-link)` to link to a website.
+
+To enable Markdown with roxygen2 we'll need to install the package roxygen2md package
+and use:
+
+```r
+roxygen2md::roxygen2md("full")
+```
+
+which will output something like:
+
+```
+✔ Setting active project to '/Users/gvwilson/zipffreq'
+No files changed.
+✔ 0 source files changed
+ℹ Running `devtools::document()`
+Updating zipffreq documentation
+Writing NAMESPACE
+Loading zipffreq
+Writing NAMESPACE
+● Review the changes carefully
+● Commit the changes to version control
+✔ Setting active project to '<no active project>'
+```
+
+This converts all existing documentation to use Markdown version and will also
+add this line to the `DESCRIPTION` file:
+
+```
+Roxygen: list(markdown = TRUE)
+```
+
+Ok, our function is now documented,
 but when we run `Check`,
 we still get a warning.
 After a bit more searching and experimentation,
@@ -467,7 +510,7 @@ knitr::include_graphics("figures/FIXME.png")
 How then can our packages use other packages?
 The safest way is to use [fully-qualified names](glossary.html#fully-qualified-name)
 such as `stringr::str_replace`
-every time we call a function defined somewhere outside our package.
+every time we call a function from another package or that is defined somewhere outside our package.
 Let's modify our word counter to use `stringr::str_count`:
 
 ```{r word-count-stringr, eval=FALSE}
@@ -493,10 +536,14 @@ Imports:
 ```
 
 The `Imports` field in `DESCRIPTION` tells R what else it has to install when it installs our package.
-Just to be on the safe side,
-we run `packageVersion("stringr")` in the console,
-which tells us that we have version 1.4.0 of `stringr`,
-and the modify `DESCRIPTION` to be:
+To be explicit about the version of the package, we can run:
+
+```r
+usethis::use_tidy_versions()
+```
+
+Which will add the version of the package to the `DESCRIPTION` file, which will
+look like:
 
 ```
 Imports: 
@@ -539,9 +586,35 @@ if it looks like an R project,
 ## How can I add data to a package? {#rse-r-package-data}
 
 The last steps are to add some cleaned-up data to our package
-and document the package as a whole.
-Working at the console,
-let's create a very small data set:
+and document the package as a whole. If we want to create fake data or clean up 
+raw data, we should first run the command:
+
+```r
+# Let's name the data "small_data", but it can be anything.
+usethis::use_data_raw("small_data")
+```
+
+which outputs:
+
+```
+✔ Creating 'data-raw/'
+✔ Adding '^data-raw$' to '.Rbuildignore'
+✔ Writing 'data-raw/small_data.R'
+● Modify 'data-raw/small_data.R'
+● Finish the data preparation script in 'data-raw/small_data.R'
+● Use `usethis::use_data()` to add prepared data to package
+```
+
+that creates the `data-raw/` folder and the `small_data.R` file in that folder.
+Inside that new file is:
+
+```
+## code to prepare `small_data` dataset goes here
+
+usethis::use_data("small_data")
+```
+
+Let's replace the first comment with:
 
 ```{r create-sample-tibble, eval=FALSE}
 small_data <- tribble(
@@ -550,8 +623,10 @@ small_data <- tribble(
   "words",  1,
   "appear", 1,
   "times",  1)
-small_data
 ```
+
+which looks like:
+
 ```
 # A tibble: 4 x 2
   word   count
@@ -562,13 +637,30 @@ small_data
 4 times      1
 ```
 
-Next,
-we call `usethis::use_data(small_data)`
-to store the tibble in `data/small_data.rda`.
-(We could just call `save` with the appropriate parameters,
-but `usethis` provides a cleaner interface.)
-Note that we *must* save the data as `.rda`, not as (for example) `.rds` or `.csv`;
-only `.rda` will be automatically loaded as part of the project.
+Remove the quotes within the `use_data()`. The new file should contain the code:
+
+```r
+small_data <- tribble(
+  ~word,  ~ count,
+  "some",   2,
+  "words",  1,
+  "appear", 1,
+  "times",  1
+  )
+
+usethis::use_data(small_data)
+```
+
+Run the script by hitting "Source" (or `source("data-raw/small_data.R")`). This 
+will output:
+
+```
+✔ Creating 'data/'
+✔ Saving 'small_data' to 'data/small_data.rda'
+```
+
+Now the `small_data` data.frame object is saved to `data/` and is now accessible
+throughout the package!
 
 When we run `Check`,
 we get a complaint about an undocumented data set,
@@ -660,17 +752,10 @@ and our package is ready to deliver.
 ## Summary {#rse-r-package-summary}
 
 ```{r rse-r-package-concept, echo=FALSE, fig.cap="R Packaging Concept Map"}
-if (knitr::is_latex_output()) {
-  knitr::include_graphics("figures/rse-r-package/rse-r-package.pdf")
-} else {
-  knitr::include_graphics("figures/rse-r-package/rse-r-package.svg")
-}
+insert_graphic("figures/rse-r-package/rse-r-package.svg")
 ```
 
 ## Key Points {#rse-r-package-keypoints}
 
 ```{r, child="keypoints/rse-r-package.md"}
-```
-
-```{r, child="etc/links.md"}
 ```
