@@ -586,9 +586,35 @@ if it looks like an R project,
 ## How can I add data to a package? {#rse-r-package-data}
 
 The last steps are to add some cleaned-up data to our package
-and document the package as a whole.
-Working at the console,
-let's create a very small data set:
+and document the package as a whole. If we want to create fake data or clean up 
+raw data, we should first run the command:
+
+```r
+# Let's name the data "small_data", but it can be anything.
+usethis::use_data_raw("small_data")
+```
+
+which outputs:
+
+```
+✔ Creating 'data-raw/'
+✔ Adding '^data-raw$' to '.Rbuildignore'
+✔ Writing 'data-raw/small_data.R'
+● Modify 'data-raw/small_data.R'
+● Finish the data preparation script in 'data-raw/small_data.R'
+● Use `usethis::use_data()` to add prepared data to package
+```
+
+that creates the `data-raw/` folder and the `small_data.R` file in that folder.
+Inside that new file is:
+
+```
+## code to prepare `small_data` dataset goes here
+
+usethis::use_data("small_data")
+```
+
+Let's replace the first comment with:
 
 ```{r create-sample-tibble, eval=FALSE}
 small_data <- tribble(
@@ -597,8 +623,10 @@ small_data <- tribble(
   "words",  1,
   "appear", 1,
   "times",  1)
-small_data
 ```
+
+which looks like:
+
 ```
 # A tibble: 4 x 2
   word   count
@@ -609,13 +637,30 @@ small_data
 4 times      1
 ```
 
-Next,
-we call `usethis::use_data(small_data)`
-to store the tibble in `data/small_data.rda`.
-(We could just call `save` with the appropriate parameters,
-but `usethis` provides a cleaner interface.)
-Note that we *must* save the data as `.rda`, not as (for example) `.rds` or `.csv`;
-only `.rda` will be automatically loaded as part of the project.
+Remove the quotes within the `use_data()`. The new file should contain the code:
+
+```r
+small_data <- tribble(
+  ~word,  ~ count,
+  "some",   2,
+  "words",  1,
+  "appear", 1,
+  "times",  1
+  )
+
+usethis::use_data(small_data)
+```
+
+Run the script by hitting "Source" (or `source("data-raw/small_data.R")`). This 
+will output:
+
+```
+✔ Creating 'data/'
+✔ Saving 'small_data' to 'data/small_data.rda'
+```
+
+Now the `small_data` data.frame object is saved to `data/` and is now accessible
+throughout the package!
 
 When we run `Check`,
 we get a complaint about an undocumented data set,
