@@ -25,7 +25,7 @@ and <https://merely-useful.github.io/conduct.html> for our Code of Conduct.
 2.  A quorum is established in a meeting if half or more of voting members are present.
 
 3.  Once a person has sponsored a proposal, they are responsible for it.
-    he group may not discuss or vote on the issue unless the sponsor or their delegate is present.
+    The group may not discuss or vote on the issue unless the sponsor or their delegate is present.
     The sponsor is also responsible for presenting the item to the group.
 
 4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
@@ -53,37 +53,75 @@ do *not* commit anything manually to `master`.
 
 To set up to preview locally:
 
-1.  Install R.
-    (We recommend that you also install and use the RStudio IDE.)
+1.  Install R
+    (we recommend that you also install and use the RStudio IDE).
 
-1.  Run R and use `install.packages("bookdown")` to install bookdown.
+1.  Open RStudio by clicking on the `merely-useful.github.io.Rproj` file 
+    (if not through RStudio, then open an R console in the location of the Merely Useful repo)
+    and install the dependencies by typing in the console:
+
+    ```r
+    install.packages("remotes")
+    remotes::install_deps()
+    ```
 
 To build and preview from the command line:
 
-1.  `make html` and then open `docs/index.html`.
+1.  `make html` and then open `_book/index.html`.
 
-1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `docs` folder).
+1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `_book` folder).
 
 Or via RStudio:
 
 1. When in the R Project (opened via the `.Rproj` file), use the key bindings `Ctrl-Shift-B` to build the `html` output.
 
+Final building of the website is done via Travis CI. In order to get Travis set up
+to push the final generated book to the `master` branch, a GitHub Personal
+Access Token (PAT) must be added. This PAT can be generated and assigned to
+Travis with the following steps:
+
+1. Create a [PAT](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+for your account on GitHub (make sure to enable the "repo" scope so that using
+this token will enable writing to your GitHub repos) and copy the token to your
+clipboard.
+1. Go to https://travis-ci.org/USER/REPO/settings replacing `USER` with your
+GitHub ID and `REPO` with the name of the forked repository.
+1. Under the section "Environment Variables", type `GITHUB_TOKEN` in the "Name"
+text box and paste your personal access token into the "Value" text box.
+1. The `deploy` Travis commands found in [`.travis.yml`](.travis.yml) are then
+used to access this GitHub PAT.
+
 ## Workflow
 
-If you are doing a major overhaul on material:
+We'll be working off of the `book` branch, **not the `master` branch**. The
+`book` branch is a "protected" branch, meaning it has a couple of conditions
+(which can always be updated if needed):
+
+1. Only @gvwilson and @lwjohnst86 can push directly to the main repo's `book` branch and only they can merge a PR (others will be added later).
+2. Everyone else must submit a PR either from their forked `book` branch or from another branch.
+3. Each PR must pass the Travis CI check and must get at least one (1) approval from someone else in order to be merged in.
+
+With that, the next things to consider are that if you are doing a major overhaul on material:
 
 1.  Pick a chapter.
-2.  Check that there isn't an outstanding branch with its name (i.e., that no one else is also doing a major overhaul).
-3.  Create a branch from `book` named after the chapter file, e.g. `automate` or `publish`.
-4.  Make some trivial change and create a PR with the subject line `revisions to automate` (or whatever the chapter name is).
+2.  Check that there isn't an outstanding PR with its name (i.e., that no one else is also doing a major overhaul).
+3.  Make sure your fork is current with `book` in the main repo and create a branch named after the chapter file, e.g. `automate` or `publish`.
+4.  Make some trivial change and create a **[Draft Pull Request](https://github.blog/2019-02-14-introducing-draft-pull-requests/)** to the main repo with the subject line `revisions to automate` (or whatever the chapter name is).
 5.  Add the label "work in progress" to that PR.
-6.  When it's ready for review, remove the label and post a note in Slack asking for a reviewer.
-7.  When the material is ready for publication, merge it into the `book` branch.
+6.  When it's ready for review, remove the label, and post a note in Slack asking for a reviewer.
+7.  When the material is ready for publication, change the PR status to "Ready for review" so the PR is no longer a draft PR. Someone will then merge it into the `book` branch (under the conditions as stated above).
 
 If you are making a smaller change, please create a branch with a meaningful name, submit changes, and ask for a reviewer.
 Please do not assign PRs to people without first checking with them.
 
 Finally, if you are doing a major reorganization that involves multiple chapters, please put in a proposal first.
+
+If you are reviewing a PR, please use the ["Insert a suggestion"](https://help.github.com/en/articles/commenting-on-a-pull-request#adding-line-comments-to-a-pull-request)
+if suggesting changes to the actual text. When responding as the "reviewee",
+please accept those changes as they insert the suggestion directly as a commit,
+thus giving attribution to the reviewer. This reduces work for the PR submitter
+and gives attribution to the reviewer. Note: This does not work for multi-line
+suggestions edits (though you can add more lines in the suggestion if desired).
 
 ## Content Guidelines
 
@@ -116,8 +154,7 @@ Finally, if you are doing a major reorganization that involves multiple chapters
             though it doesn't prefix section labels with anything.)
         -   Don't show the R code used to load the image, just its output (i.e., the image).
         -   Give the figure the specified caption.
-    -   Use `knitr::include_graphics("figures/stem/filename.ext")` to include a PNG image.
-    -   Use `if (knitr::is_latex_output()) {...} else {...}` to include a PDF for the LaTeX version and an SVG for the web version.
+    -   Use `insert_graphic("figures/stem/filename.ext")` to include your image. If you are using a `.pdf` image, make sure that you have the same file but as a `.svg` as well. 
 
 1.  Use `@Name1234` to refer to bibliography entries.
 
@@ -128,7 +165,7 @@ Finally, if you are doing a major reorganization that involves multiple chapters
     -   If the figure's chunk ID is `stem-label`, use `fig:stem-label` to refer to it.
 
 1.  Glossary entries are in `gloss.md`, which is plain Markdown rather than R Markdown.
-    -   To refer to a glossary entry, use a direct link of the form `[text](glossary.html#term-label)`.
+    -   To refer to a glossary entry, use a direct link of the form `[text]``(glossary.html#term-label)`.
     -   Glossary definitions are set in bold and use an HTML anchor tag to provide the ID.
         We should find a more elegant way to do this.
 
@@ -139,3 +176,22 @@ Finally, if you are doing a major reorganization that involves multiple chapters
 1.  There are also some HTML comments containing the word `noindent` left over from formatting with an earlier template.
     These were used to prevent indentation of the first line of continuation paragraphs.
     We will find a more elegant way to handle this as we get closer to production.
+
+1.  When using additional software packages, you need to tell Travis to install
+    them. 
+    -   For R packages, it is very easy. When in the Merely Useful R Project (by
+        opening the `merely-useful.github.io.Rproj` file), type out
+        `usethis::use_package("packagename")` in the R Console. This will add 
+        the package dependency to the `DESCRIPTION` file under the imports section.
+    -   Do *not* use `View` in your R snippets,
+        as Travis will fail when it tries to launch a viewer from the command line.
+    -  For Python packages ... TODO: Test and complete this section.
+    
+1.  Using Python inside the R Markdown documents is the same as using R, except 
+    you need to use a Python code chunk instead. All [options](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) 
+    related to R also apply to Python.
+    
+        ```{python}
+        python code ...
+        ```
+    

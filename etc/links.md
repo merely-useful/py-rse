@@ -1,14 +1,14 @@
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
-[config-website]: https://merely-useful.github.io/
 
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
+[anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
 [at]: https://en.wikipedia.org/wiki/At_(command)
 
-[becker-bruce]: https://www.brettbecker.com/
 [bibtex]: http://www.bibtex.org/
 [branch-per-feature]: https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
+[broman-packages]: https://kbroman.org/pkg_primer/
 [build-tools]: https://en.wikipedia.org/wiki/List_of_build_automation_software
 
 [capes-gerard]: https://github.com/gcapes
@@ -21,8 +21,10 @@
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [covenant]: https://www.contributor-covenant.org
+[cran]: https://cran.r-project.org/
 [creative-commons]: https://creativecommons.org/
 [cron]: https://en.wikipedia.org/wiki/Cron
+[curb-cuts]: https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
 
 [dc]: https://datacarpentry.org/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
@@ -40,7 +42,6 @@
 [gnu-make]: http://www.gnu.org/software/make/
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [go-fair]: https://www.go-fair.org/fair-principles/
-[gustavsen-julia]: http://www.juliagustavsen.com/
 [gutenberg]: https://www.gutenberg.org/
 
 [huff-testing]: https://github.com/katyhuff/python-testing
@@ -49,12 +50,8 @@
 [insight]: https://www.insightdatascience.com/
 [intellij-idea]: https://www.jetbrains.com/idea/
 
-[jekyll]: https://jekyllrb.com/
 [joss]: https://joss.theoj.org/
 [jupyter]: http://jupyter.org/
-
-[kernighan-brian]: https://en.wikipedia.org/wiki/Brian_Kernighan
-[kirk-matthew]: https://www.matthewkirk.com/
 
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -74,7 +71,6 @@
 
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
-[poisot-timothee]: http://poisotlab.io/
 [pypi]: https://pypi.org/
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
@@ -86,6 +82,7 @@
 [requests]: http://docs.python-requests.org
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
+[roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 
 [setuptools]: https://setuptools.readthedocs.io/
 [snakemake]: https://snakemake.readthedocs.io/
@@ -95,7 +92,6 @@
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [stack-printer]: http://www.stackprinter.com/
-[standage-daniel]: https://standage.github.io/
 [swc]: http://software-carpentry.org
 [swc-git]: https://swcarpentry.github.io/git-novice/
 [swc-make]: https://github.com/swcarpentry/make-novice
@@ -115,6 +111,7 @@
 [vanderplas-licensing]: http://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [vs-code]: https://code.visualstudio.com/
 
+[wickham-packages]: http://r-pkgs.had.co.nz/
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 [wing-ide]: https://wingware.com/
 [womens-pockets]: https://pudding.cool/2018/08/pockets/
@@ -122,8 +119,6 @@
 
 [xcode]: https://developer.apple.com/xcode/ide/
 [xkcd-duty-calls]: https://xkcd.com/386/
-
-[yaml]: https://en.wikipedia.org/wiki/YAML
 
 [zenodo]: https://zenodo.org/
 [zipfs-law]: http://en.wikipedia.org/wiki/Zipf%27s_law
