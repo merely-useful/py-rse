@@ -1,4 +1,4 @@
-# Glossary
+# Glossary {#glossary}
 
 **Absolute error**<a id="absolute-error"></a>
 :   FIXME
@@ -52,6 +52,9 @@
 **Backlog**<a id="backlog"></a>
 :   FIXME
 
+**Binary code**<a id="binary-code"></a>
+:   FIXME
+
 **Bit rot**<a id="bit-rot"></a>
 :   FIXME
 
@@ -65,6 +68,9 @@
 :   FIXME
 
 **Build tool**<a id="build-tool"></a>
+:   FIXME
+
+**Byte code**<a id="byte-code"></a>
 :   FIXME
 
 **Call stack**<a id="call-stack"></a>
@@ -155,6 +161,9 @@
 **Docstring**<a id="docstring"></a>
 :   FIXME
 
+**Embedded documentation**<a id="embedded-documentation"></a>
+:   FIXME
+
 **Error**<a id="test-error"></a> (result from a unit test)
 :   FIXME
 
@@ -218,6 +227,9 @@
 :   FIXME
 
 **Frequently Asked Questions**<a id="faq"></a> (FAQ)
+:   FIXME
+
+**Fully-qualified name**<a id="fully-qualified-name"></a>
 :   FIXME
 
 **Function**<a id="make-function"></a> (in Make)
@@ -417,6 +429,9 @@
 **Remote login**<a id="remote-login"></a>
 :   FIXME
 
+**Repository**<a id="repository"></a>
+:   FIXME
+
 **Representation State Transfer**<a id="rest"></a> (REST)
 :   FIXME
 
@@ -459,6 +474,9 @@
 **Short circuit test**<a id="short-circuit-test"></a>
 :   FIXME
 
+**Side effects**<a id="side-effects"></a>
+:   FIXME
+
 **Sign**<a id="sign"></a>
 :   FIXME
 
@@ -472,6 +490,9 @@
 :   FIXME
 
 **Software development process**<a id="dev-process"></a>
+:   FIXME
+
+**Source code**<a id="source-code"></a>
 :   FIXME
 
 **SSH key**<a id="ssh-key"></a>
