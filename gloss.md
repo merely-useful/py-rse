@@ -336,6 +336,11 @@
 :   A simplified representation of the key elements and relationships of some
     problem domain that is good enough to support problem solving.
 
+**Method**<a id="method"></a>
+:   A function that is specific to an object type, based on qualities 
+    of that type, e.g. a string method like `upper()` which turns characters 
+    in a string to uppercase. 
+
 **MIT License**<a id="mit-license"></a>
 :   FIXME
 
@@ -345,6 +350,10 @@
 **Novice**<a id="novice"></a>
 :   Someone who has not yet built a usable mental model of a domain. See also
     [competent practitioner](#g:competent-practitioner) and [expert](#g:expert).
+
+**Object**<a id="object"></a>
+:   An object is a programming language's way of descrbing and storing values, 
+    usually labeled with a variable name. 
 
 **Object-oriented programming**<a id="oop"></a>
 :   FIXME
