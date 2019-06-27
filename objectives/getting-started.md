@@ -2,7 +2,3 @@
 - Answer a question about a function by looking it up in Spyder. 
 - Distinguish between a helpful and less helpful Stack Overflow answer. 
 - Identify which Spyder pane will show you a window of a loaded  table. 
-- Troubleshoot an error that arises because of a working directory / path issue
-- Given a directory structure and two file locations, describe how to 
-access the target location via an absolute or relative path. 
-
