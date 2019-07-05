@@ -55,8 +55,177 @@ However, if you want to work with CSV data in R, it isn't enough to look inside 
 
 ## How can I tell what's gone wrong in my programs?
 
--   reading error messages
--   the difference between syntax and runtime errors
+TODO: The errors shown in the markdown are way more informative than those in the Console.  Try to get the error displaying in the book like they do for someone in the console?
+
+Let me share an interaction my (CVW's) husband had at a Trader Joes (a small specialized supermarket) soon after we arrived in the USA from New Zealand.  
+
+Josh: "Do you sell *bat-trees*?"  
+
+Store-person: "What?"  
+
+Josh: "Do you sell *bat-trees*?"  
+
+Store person: "Huh? *Bat...trees*?"  
+
+Josh: "Do you sell *bat-er-ries*?  
+
+Store-person: "Oh...you mean batteries!  No.  We don't sell batteries."  
+
+This is a pretty accurate analogy for what it feels like when you are learning R.  You know what you want, but you have to ask for it in a way R understands.  When R doesn't understand you, or when R can't give you what you want, you'll get an error.  You'll know when you get one in R because the only output you see will start with `Error`.
+
+```{r, error = TRUE}
+buy_batteries(store = "Trader Joes")
+```
+
+It's also a good illustration of the two kinds of problems that occur:  syntax errors and runtime errors.  Syntax errors are like the "What? Huh?" moments.  R doesn't understand what you are asking it to do, because something about the way you are asking doesn't conform to what R expects.  Runtime errors are more like the "No, I can't help you" moments.  R understands what you are asking, but for some reason it can't give you what you are asking for.  
+
+You generally want to make sure you've ruled out syntax errors before assuming it's a runtime error. Unfortunately, R doesn't distinguish these two types of error in its output, so we'll discuss some of the most common examples in the following sections.
+
+This analogy is also a reminder that sometimes you'll have to repeat yourself.  With R, giving the exact same instruction should always result in the exact same error, but it's not uncommon, even for longtime R users, to run and edit a line of code multiple times before it runs without error.
+
+There is one flaw in this analogy -- R isn't a real person. So, if you need to vent *your* frustration by cursing it, insulting its parentage or storming off, it's fine, no one's feelings will be hurt.  Of course, it won't change R's response...
+
+### Common syntax errors
+
+Syntax errors occur when your code can't be parsed into its component pieces by R.  For example, R expects the arguments to a function to start after the opening parenthesis (`(`), be separated by a comma (`,`) and finish at the closing parenthesis (`)`). When R sees this code:
+```{r, error = TRUE}
+filter(dog_licenses BreedName == "Finnish Lapphund")
+```
+The missing comma means R can't figure out where the first argument to `filter()` ends: is it after `dog_licenses`, after `BreedName`, or after `==`?  
+
+Take a closer look at the error message.  Error messages always begin with `Error`, then optionally the name of the function that returned an error (not in this example), followed by a `:`, and some description of the error that occurred. The message `unexpected symbol` is one common kind of syntax error - in this case R encountered some code where it was expecting a comma or closing parenthesis.  We can fix it by putting in the missing comma:
+```{r, error = TRUE}
+filter(dog_licenses, BreedName == "Finnish Lapphund")
+```
+
+Syntax errors are usually the result of typos.  Some things to keep an eye out for:
+
+* If you are modelling your code on an example, pay very close attention to the punctuation: commas `,`, parenthesis `(`, `)`, brackets, `[`, `]`, and quotes `"`, `'`.  Every opening parenthesis, bracket, or quote needs a matching closing one, and they must be closed in the reverse order they were opened.  
+
+* New lines don't matter if they happen between arguments, or after pipe operators, but they can be problematic in other locations. 
+
+* R ignores other whitespace (spaces or tabs) unless it's inside a character string (i.e. inside quotes), so different spacing shouldn't be the cause of an error, but it is a good idea to follow good style for spacing.  TODO: link to style guide section.
+
+
+### Exercise: Syntax errors 
+
+Fix these **syntax** errors. 
+
+*  
+    ```{r, error = TRUE}
+    dog_licenses %>% 
+      arrange(desc(LicenseExpiredDate)))
+    ```
+    
+* 
+    ```{r, error = TRUE}
+    dog_licenses %>% 
+      mutate(
+        month_born = lubridate::month(AnimalBirthMonth)
+        year_born = lubridate::year(AnimalBirthMonth))
+    ```
+
+*
+    ```{r, error = TRUE}
+    dog_licenses %>% 
+      filter(AnimalName == "BRUNO)
+    ```
+    (If you run this code in the Console, you might not get an error, but you should see a `+` on a new line, a signal that R is waiting for more input and a clue that there is something missing in this code). 
+    
+*  
+    ```{r, error = TRUE}
+    dog_licenses 
+      %>% filter(AnimalGender == "M")
+    ```
+
+### Common runtime errors
+
+Runtime errors come in an infinite number of flavors because there are so many ways what you ask for might be impossible to do.  For example you might try to do arithmetic with character strings:
+```{r, error = TRUE}
+"apple" + "banana"
+```
+
+Or try to filter with something that isn't a logical:
+```{r, error = TRUE}
+dog_licenses %>% filter(AnimalName)
+```
+
+Perhaps the most common runtime error is of the form `Error: object not found`:
+```{r, error = TRUE}
+an_object_i_dont_have
+```
+This is R complaining that you've asked it to operate on an object that it doesn't know about.  Often this is actually a typo in disguise, for example you've misspelled the name of the object,
+```{r, error = TRUE}
+my_object <- 12
+my_objet
+```
+you've used the wrong case, 
+```{r, error = TRUE}
+My_object
+```
+or you've forgotten you used a separator
+```{r, error = TRUE}
+myobject
+```
+
+This error also often arises when you forgot quotes around strings.  For example, if we want all the dogs that are male, and try
+```{r, error = TRUE}
+dog_licenses %>% filter(AnimalGender == M)
+```
+you get an error because R is looking for an object called `M` to compare to the values in the column called `AnimalGender`.  What we really wanted to do was compare the values in `AnimalGender` to the string `"M"`:
+```{r}
+dog_licenses %>% filter(AnimalGender == "M")
+```
+
+### Exercise: `object not found`
+
+Fix these `object not found` errors. (Hint: the names of the objects or variables being created should give you a clue to the intent of the code)
+
+*
+    ```{r, error = TRUE}
+    dog_licenses %>% 
+      mutate(year_issued = lubridate::year(Liscenceissuedate))
+    ```
+
+* 
+    ```{r, error = TRUE}
+    dogs_named_bruno <- dog_licenses %>% 
+      filter(AnimalName == BRUNO)
+    ```
+
+### Warnings and messages 
+
+There are two other kinds of alerts R can give: warnings and messages.  These can both appear in the console with the same color as an error, but they are informational as opposed to fatal.  
+
+Messages are purely informational, for example when you read data in with `read_csv()` you get a message that describes the columns and their data types as parsed by the function:
+```{r}
+sites <- read_csv(here("data", "site.csv"))
+```
+
+Warnings generally alert you that something was slightly unexpected but that R recovered and gave you a result anyway.  Poorly formatted CSV files will often result in warnings from `read_csv()`:
+```{r}
+bad_csv <- "
+id, 
+1, 2
+2, 1
+3, 5
+"
+bad <- read_csv(bad_csv)
+```
+Here there was a missing column name.  `read_csv()` still returns an object but the warning alerts you that it made some assumption to get it, i.e. that it made up a column name:
+```{r}
+bad
+```
+
+Warnings don't **stop** you from proceeding, but they should alert you to question whether you **should be** proceeding.
+
+### What do I do when I get an `Error` I can't fix?
+
+* Check the error is reproducible.  Restart R with a clean slate and re-run your code up to and including the code that gives the error. This is the R version of the classic tech advice to "turn it off, then turn it on again".  TODO: link to reproducibility chapter.
+
+* Try googling it: for example, googling "R unexpected string constant" lead me to the question ["Error: unexpected symbol/input/string constant/numeric constant/SPECIAL in my code" on StackOverflow][error-unexpected] which gives some great examples of ways this error might arise.
+
+* Ask for help. You are most likely to get help when you can provide a reproducible example. TODO: provide link
 
 ## How can I operate on subsets of my data?
 

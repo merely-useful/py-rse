@@ -34,6 +34,8 @@
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 
+[error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co?noredirect=1&lq=1
+
 [f1000-research]: https://f1000research.com/
 [figshare]: https://figshare.com/
 
