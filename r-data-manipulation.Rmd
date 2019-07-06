@@ -71,6 +71,12 @@ TODO: Should we introduce the "common things that go wrong" / "the most common a
 
 ## Data Manipulation
 
+```{r, message = FALSE}
+dog_licenses <- read_csv(here("data", "nyc-dog-licenses.csv.gz"))
+```
+
+TODO: where is data introduced
+
 The RStudio Viewer has an interface much like other spreadsheet programs you might have used.  You can use this Viewer to look at the `dog_licenses` tibble with the `View()` function:
 ```{r, eval = FALSE}
 View(dog_licenses)
@@ -125,15 +131,152 @@ Using the RStudio Viewer answer the following questions:
 
 ## How can I select subsets of my data?
 
+Let's take a look at the data in the console:
+```{r}
+dog_licenses
+```
+
+Notice that in contrast to the Viewer you only see the first 10 rows of the dataset, and just the first few columns. The number of columns you see depends on the width of your console, so you may see more or fewer than dislayed here.  You should also note some of the contents of the columns have been abbreviated. The `…` at the end of some values in `BreedName` indicates these values have been truncated for display purposes.   
+
+### Re-arranging rows 
+
+You can reorder rows of data with the dplyr function `arrange()`. The arrange function takes a dataframe as its first argument and column names as the remaining arguments. The result will have the rows ordered in increasing value of the specified column.  For example, to find the licenses belonging to the oldest dogs we arrange `dog_licenses` using the `AnimalBirthMonth` column:
+```{r}
+arrange(dog_licenses, AnimalBirthMonth)
+```
+You'll see Jack the Pug that lives in Queens, just like you did in the Viewer.
+
+To arrange the rows by decreasing value, you need to wrap the column name in the `desc()`  (short for *desc*ending order).  For instance to find the youngest dogs:
+```{r}
+arrange(dog_licenses, desc(AnimalBirthMonth))
+```
+
+As another example, to find the earliest issue date we can order by increasing `LicenseIssuedDate`:
+```{r}
+arrange(dog_licenses, LicenseIssuedDate)
+```
+The first row is the record with the earliest issue date, but we can't actually see that date because the column `LicenseIssuedDate` isn't being displayed due to space.  One solution is to extract only the columns we are interested in, a manipulation known as selecting columns.
+
+### Exercise: Arranging character strings
+
+Use `arrange()` to order the dog licenses by `AnimalName` in increasing order.  What does this tell you about the way R treats punctation and numbers when dealing with alphabetical order?
+
+### Selecting columns
+
+The `select()` function in dplyr is used to extract some subset of columns (but keep all the rows) from a dataframe.  Just like `arrange()`, it takes a dataframe as its first argument and column names as the remaining arguments.  For example, to keep only the `AnimalName` column:
+```{r}
+select(dog_licenses, AnimalName)
+```
+
+You can provide additional column names as arguments to keep additional specified columns, for example to keep `AnimalName` and `BreedName`:
+```{r}
+select(dog_licenses, AnimalName, BreedName)
+```
+
+To return to finding the earliest issue date, you need to first arrange by increasing `LicenseIssuedDate` and then select the `LicenseIssuedDate` column.  One approach is to store the result of the arrange step,
+```{r}
+dog_by_date <- arrange(dog_licenses, LicenseIssuedDate)
+```
+Then apply the select step to this object:
+```{r}
+select(dog_by_date, LicenseIssuedDate)
+```
+
+There are lots of shortcuts you can use with `select()` to avoid having to type out all the variables you want to keep.  For example, you can ask for all the columns that start with a certain string:
+```{r}
+select(dog_licenses, starts_with("Animal"))
+```
+Take a look in the "Useful functions" section of the `select()` help page for a complete list:
+```{r, eval = FALSE}
+?dplyr::select
+```
+
+### Exercise: Find the latest license issue date
+
+Combine `arrange()` and `select()` to confirm the last issue date in this dataset is 31st December 2016.
+
+### Combining operations with the pipe `%>%`
+
+### Exercise: Reading aloud
+
+Read the following code aloud to your neighbour (or cat, dog or rubber duck).  Remember to pronounce `%>%` as "and then".  
+```{r, eval = FALSE}
+dog_licenses %>% 
+  filter(AnimalGender == "F") %>% 
+  arrange()
+```
+What do you think the code does? What question does it answer?
+
+### Filtering to keep a subset of rows
+
+```{r, message = FALSE}
+dog_licenses
+```
+
+
+
 -   select
 -   filter
 -   arrange
 -   Boolean conditions
 
+
+
+
+```{r, eval = FALSE}
+View(dog_licenses)
+```
+
+### Exercise: Enterprising dogs
+
+Are there any dogs called "Spock", "Picard", or "Janeway"? 
+
+These are Star Trek characters, can you find any dogs with a name from one of your favorite books, TV shows or movies?
+
+### Exercise: Expired Licenses
+
+This code creates two variables that contain dates for the start and end of the year 2016:
+```{r}
+start_of_2016 <- as.Date("2016-01-01")
+end_of_2016  <- as.Date("2016-12-31")
+```
+
+Use `filter()` with these variables to find:
+
+* The dog licenses that were issued before 2016
+* The dog licenses that expire during 2016
+
+### Exercise: 
+
+```{r}
+
+```
+
+
+
+
+
+Use arrows to sort, and search boxes to filter. Similar actions in other programs.
+
+WHich dog has 
+Remove dogs with expired licenses in 2016? Or keep dogs with licenses issued in 2016.
+
+
+
+### Pipes
+
+
+Run it to check your understanding.
+
+
 ## How can I calculate new values?
 
 -   mutate
 -   ifelse
+
+
+Which dog is the oldest?
+How long are dogs names? What is the longest name?  What is the shortest name?
 
 ## How can I tell what's gone wrong in my programs?
 
@@ -314,6 +457,9 @@ Warnings don't **stop** you from proceeding, but they should alert you to questi
 -   group
 -   summarize
 -   split-apply-combine
+
+What month has the most registrations?
+Which birth month has the most registered dogs?
 
 ## How can I work with two or more datasets?
 
