@@ -5,6 +5,10 @@
 ```{r, child="questions/r-data-manipulation.md"}
 ```
 
+## Motivation
+
+TODO: Preview some of the questions that we can answer with just data manipulation tools.
+
 ## How can I read tabular data into a program?
 
 ### What is tabular data?
@@ -32,7 +36,6 @@ In this case the first line has the column names, this is common (and recommende
 Why is CSV so popular? 
 
 * It's human readable.  CSV isn't a special file type, it is just a plain text file that follows some conventions.  This means you don't need any special software to look at the contents -- you can open in up in anything that can examine text and take a look inside. 
-
 * It's computer readable.  Because CSV files all have the same structure it's easy to write computer programs to read them.  This means in almost any program designed to work with data, and all the common programming languages, you'll find functions that will import CSV files.  This also means it's easy to create CSV files -- you can export them from Excel, write them from R, or even write one from scratch in a text editor.
 
 If you want to look inside a CSV file in RStudio you can navigate to its location in the "Files" pane and click on its name.  Selecting "View File", will open it in the Source pane. 
@@ -608,12 +611,147 @@ Warnings don't **stop** you from proceeding, but they should alert you to questi
 
 ## How can I operate on subsets of my data?
 
--   group
--   summarize
--   split-apply-combine
+The syntax for `summarise()` is the same as `mutate()` but it expects operations that reduce all rows down to one row.  Recall from `mutate()` this code that added the average license duration to every row of the data:
+```{r, results="hide"}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  mutate(avg_duration = mean(license_duration)) 
+```
+You actually saw this in one `mutate()` statement, but I've separated out the line that calculates the average so it's easier to see the difference with `summarise()`.  See what happens when you switch out the final `mutate()` with `summarise()`:
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  summarise(avg_duration = mean(license_duration)) 
+```
+Instead of the the one value repeated on every row, we get a new tibble with only one row, and a single column that corresponds to our requested summary.
 
-What month has the most registrations?
-Which birth month has the most registered dogs?
+Any function that takes many values and reduces them to one is a good candidate for `summarise()`, for example we could find the shortest licence duration by swapping in `min()` instead of `mean()`:
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  summarise(shortest_duration = min(license_duration)) 
+```
+
+Like `mutate()` you can also create multiple summary columns at once:
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration)
+  )
+```
+
+TODO: link to cheatsheet with list of other useful functions.
+
+Lot's of statistical operations produce one numbers summaries and are appropriate for use with `summarise()`: `sd()`, `min()`, `max()`, `mean()`, `median()`, `quantile()` (with a single argument).  Whenever you are summarizing many rows, it's a good idea to keep track of how many rows were summarized.  This is so common, dplyr provides a special function, `n()`, that simply counts the number of rows.  To add it to your summary:
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration),
+    n_licenses = n()
+  )
+```
+
+Now, imagine you want this summary just for licenses issued to dogs in the Bronx.  You might do something like:
+
+> Take the `dog_licenses` data, **and then**,   
+> mutate to add a column called `license_duration`, **and then**  
+> filter to keep rows where the `Borough` is `"Bronx"`, **and then**  
+> summarise to find the mean, min and max duration along with the number of rows.
+
+In code:
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  filter(Borough == "Bronx") %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration),
+    n_licenses = n()
+  )
+```
+
+But how does this compare to Brooklyn?  You could do the same operation again, but now for Brooklyn:
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  filter(Borough == "Brooklyn") %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration),
+    n_licenses = n()
+  )
+```
+
+What about Queens?  This kind of operation: summarising different subsets of the same data, is so common there is a much easier way to do it: combining `summarise()` with `group_by()`.  
+
+The only difference in the code, is that instead of filtering for a specific `Borough` we'll `group_by()` the column `Borough`.
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  group_by(Borough) %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration),
+    n_licenses = n()
+  )
+```
+The `group_by()` verb doesn't perform any changes to the data except to add a signal that this data is now grouped.  Subsequent operations will then happen within these groups.  In the case of `summarise()` we now get one row per group, and these are all stacked together in our result.
+
+You might have been a little surprised by the result above. I thought there were only five boroughs in New York (at least that's what the Beastie Boys told me)?  Notice some boroughs are represented more than once by variations in case or spelling: `Bronx`, `BRONX`.  As far as `group_by()` is concerned these are distinct values of this variable.  There also seem to be smaller designations than Borough in this data. You'll get a chance to try and resolve this in an exercise below.
+
+### Exercise: Dog birth months
+
+The following code creates a new column `month_born` that holds the name of the month the licensed dog was born:
+```{r, results = "hide"}
+dog_licenses %>% 
+  mutate(month_born = lubridate::month(AnimalBirthMonth, label = TRUE))
+```
+Use a `group_by()` step and a `summarise()` step to find the number of dogs born in each month?  Which month stands out? Can you guess why?
+
+### Exercise: Order matters?
+
+In the example above for dogs licensed in Brooklyn:
+```{r, results = "hide"}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  filter(Borough == "Brooklyn") %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration),
+    n_licenses = n()
+  )
+```
+the `filter()` step came after the `mutate()` step. Does this matter?  
+
+* Swap the order in the code and see if you get the same results.
+
+* Write out how you might describe the steps. Is it obvious you can swap the filter and mutate step and get the same results?
+
+* Which steps can't you swap the order of? Why?
+
+* *There are some performance differences...can you guess why?*
+
+### Exercise: the five boroughs
+
+The column `NTA` is a code for the "Neighborhood Tabulation Areas", and has been geo-coded from the licensee's address (as opposed to self reported).  The first two characters correspond to the Borough.
+
+This code creates a new variable called `borough_code` that contains just these two characters:
+```{r}
+dog_licenses %>% 
+  mutate(borough_code = stringr::str_sub(NTA, 1, 2)) 
+```
+
+Which borough has the longest average licence duration?
 
 ## How can I work with two or more datasets?
 
@@ -621,5 +759,77 @@ Which birth month has the most registered dogs?
 
 ## How can I save my results?
 
--   writing files
+Say, you've now got a summary of the license durations by borough:
+```{r}
+dog_licenses %>% 
+  mutate(
+    license_duration = LicenseExpiredDate - LicenseIssuedDate,
+    borough_code = stringr::str_sub(NTA, 1, 2)) %>% 
+  group_by(borough_code) %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration),
+    n_licenses = n()
+  ) 
+```
 
+How do you save this result for future use?
+
+If you just need this tibble later in your code you can assign it to a variable:
+```{r}
+duration_by_borough <- dog_licenses %>% 
+  mutate(
+    license_duration = LicenseExpiredDate - LicenseIssuedDate,
+    borough_code = stringr::str_sub(NTA, 1, 2)) %>% 
+  group_by(borough_code) %>% 
+  summarise(
+    avg_duration = mean(license_duration),
+    shortest_duration = min(license_duration),
+    longest_duration = max(license_duration),
+    n_licenses = n()
+  )
+```
+
+Then you can access it whenever you need it:
+```{r}
+duration_by_borough 
+```
+
+This keeps our result around in memory, but often you also want to preserve the data in a file on disk.  There are two common choices for format: CSV and RDS.
+
+You've already seen CSV files.  Saving your results in this format gives you all the benefits of that format: plain text files easily shared and opened.  You can save a tibble as a CSV file with the readr function `write_csv()`, where all you need to specify is the path:
+```{r}
+duration_by_borough %>% write_csv("duration-by-borough.csv")
+```
+
+You can then read this file in any project or R session with `read_csv()`:
+```{r}
+duration_by_borough <- read_csv("duration-by-borough.csv")
+```
+
+RDS files are a special R format.  They are binary files as opposed to plain text files, which means you can't just open them up and look inside.  If you are sharing them you'd also need your collaborators to have R.  These are downsides, but the advantage of this format is that it can be much quicker to load, it will preserve special R data types (for example factors, or nested structures), and can save any R object not just tabular data structures.
+
+To save the tibble as an RDS, use `write_rds()`:
+```{r}
+duration_by_borough %>% write_rds("duration-by-borough.rds")
+```
+
+To read it back in, use `read_rds()`:
+```{r}
+duration_by_borough <- read_rds("duration-by-borough.rds")
+```
+
+Often you'll save your data in both formats to make sure you get the best of both worlds. You'll talk more about where to save your data in TODO: add link.
+
+### Exercise
+
+Save the tibble with our extra columns:
+```{r, results = "hide"}
+dog_licenses %>% 
+  mutate(
+    license_duration = LicenseExpiredDate - LicenseIssuedDate,
+    borough_code = stringr::str_sub(NTA, 1, 2))
+```
+
+into a CSV file called `dog-licenses-extra.csv`.
