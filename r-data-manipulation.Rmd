@@ -72,10 +72,13 @@ TODO: Should we introduce the "common things that go wrong" / "the most common a
 ## Data Manipulation
 
 ```{r, message = FALSE}
-dog_licenses <- read_csv(here("data", "nyc-dog-licenses.csv.gz"))
+dog_licenses <- read_csv(here("data", "nyc-dog-licenses.csv.gz")) %>% 
+  drop_na(AnimalName)
 ```
 
-TODO: where is data introduced
+TODO: where is data introduced?
+
+TODO: clean version with no missing values and snake case column names, including month and year columns for some (all?) of the date columns.
 
 The RStudio Viewer has an interface much like other spreadsheet programs you might have used.  You can use this Viewer to look at the `dog_licenses` tibble with the `View()` function:
 ```{r, eval = FALSE}
@@ -197,35 +200,79 @@ Combine `arrange()` and `select()` to confirm the last issue date in this datase
 
 ### Combining operations with the pipe `%>%`
 
+You've seen you can combine data manipulation steps to do more complicated tasks, but so far you've done so by saving an intermediate object, in our previous example the object `dog_by_date`:
+```{r, results="hide"}
+dog_by_date <- arrange(dog_licenses, LicenseIssuedDate)
+select(dog_by_date, LicenseIssuedDate)
+```
+
+The pipe, `%>%`, is an operator that allows you to chain together operations without intermediate objects and maintain readability.  Let's just look at the first step in our manipulation:
+```{r, results='hide'}
+arrange(dog_licenses, LicenseIssuedDate)
+```
+
+With the pipe this can be rewritten as:
+```{r, results='hide'}
+dog_licenses %>% arrange(LicenseIssuedDate)
+```
+The pipe takes the object on the left hand side and passes it as the first argument to the function on the right hand side.  So, here the `dog_licenses` dataset is passed to the first argument of `arrange()`.  Inside `arrange()` we can then list any additional arguments as we normally would.  
+
+The pipe works very nicely with the data manipulation verbs because every verb expects a dataframe as its first argument and returns a data frame. This means the result of one operation is easily piped into the next operation, allowing you to chain together multiple steps.  For instance, piping the result of the arrange step above into the `select()` function:
+```{r, results = "hide"}
+dog_licenses %>% 
+  arrange(LicenseIssuedDate) %>% 
+  select(LicenseIssuedDate)
+```
+
+When you see the pipe, read it as "and then".  So, the above code would be read:
+
+> Take the dog_licenses data, **and then**   
+> arrange the rows by the `LicenseIssuedDate`, **and then**  
+> select the column `LicenseIssuedDate`.
+
+The result is code that matches very closely how we might describe the steps we performed in natural language.  It's so natural that for the remainder of the chapter we'll use the pipe when combining data manipulation steps.
+
 ### Exercise: Reading aloud
 
-Read the following code aloud to your neighbour (or cat, dog or rubber duck).  Remember to pronounce `%>%` as "and then".  
+Read the following code aloud to your neighbor (or cat, dog or rubber duck).  Remember to pronounce `%>%` as "and then".  
 ```{r, eval = FALSE}
 dog_licenses %>% 
-  filter(AnimalGender == "F") %>% 
-  arrange()
+  filter(Borough == "Queens") %>% 
+  summarise(max(AnimalBirthMonth))
 ```
-What do you think the code does? What question does it answer?
+You haven't learnt about the `filter()` or `summarise()` functions yet, but can you guess what the code does? What question might it answer? 
+
+### Exercise:  Using the pipe
+
+Re-write this snippet of code to use the pipe:
+```{r, results = "hide"}
+select(dog_licenses, AnimalName, BreedName)
+```
+
+Use the pipe to re-write this snippet of code to avoid the intermediate variable:
+```{r, results = "hide"}
+name_and_breed <- select(dog_licenses, AnimalName, BreedName)
+arrange(name_and_breed, BreedName)
+```
 
 ### Filtering to keep a subset of rows
 
-```{r, message = FALSE}
-dog_licenses
+The function to filter rows of a data frame is `filter()`.  Like `arrange()` and `select()`, its first argument is a dataframe or tibble.  The remaining arguments describe which rows to **keep**.  The rows to keep are specified with a logical expression - something that is either `TRUE` or `FALSE`. The rows where this expression is `TRUE` will be returned.
+
+One of the simplest kinds of logical expression is a test for equality with the `==` operator.  For example, to keep the rows where `AnimalName` is `BRUNO` you could do:
+```{r}
+dog_licenses %>% filter(AnimalName == "BRUNO")
 ```
+The logical expression, `AnimalName == "BRUNO"`, will be `TRUE` when the value of the `AnimalName` column is exactly equal to the character string `"BRUNO"` - any differences in case, or whitespace will result in `FALSE`.  
 
-
-
--   select
--   filter
--   arrange
--   Boolean conditions
-
-
-
-
-```{r, eval = FALSE}
-View(dog_licenses)
+Columns names can appear on either side of `==` or even on both sides.  When column names appear on both sides, the comparison happens row by row.  In programming terms this is know as an element-wise comparison.  For example, `LicenseIssuedDate == AnimalBirthMonth` will return `TRUE` for a row only if for that row the date the license was issued is the exact same date as the birth month for the dog. If you take a look:
+```{r}
+dog_licenses %>% 
+  filter(LicenseIssuedDate == AnimalBirthMonth)
 ```
+There are no rows that satisfy this criteria.
+
+You can think of `==` as being a specific kind of comparison.  Other comparisons include: `<` less than , `>` greater than, `<=` less than or equal to , `>=` greater than or equal to, and `!=` not equal to.
 
 ### Exercise: Enterprising dogs
 
@@ -235,39 +282,60 @@ These are Star Trek characters, can you find any dogs with a name from one of yo
 
 ### Exercise: Expired Licenses
 
-This code creates two variables that contain dates for the start and end of the year 2016:
+This code creates a variable that contains the date for the start of the year 2016:
 ```{r}
 start_of_2016 <- as.Date("2016-01-01")
-end_of_2016  <- as.Date("2016-12-31")
 ```
 
-Use `filter()` with these variables to find:
+Use `filter()` with this variables to find:
 
 * The dog licenses that were issued before 2016
-* The dog licenses that expire during 2016
+* The dog licenses that expire before 2016
 
-### Exercise: 
+### More complicated expressions
 
+If you pass more than one logical expression to `filter()` it will return only rows where **all** of the expressions are `TRUE`.  For example, licenses that are to dogs named Bruno in Brooklyn:
 ```{r}
-
+dog_licenses %>% 
+  filter(AnimalName == "BRUNO", Borough == "Brooklyn") 
 ```
 
+If you want to create an "or" type expression, like "licenses to dogs named BRUNO **or** dogs named BRUCE", you need to combine two comparisons with the OR operator, `|`.  
+```{r, results = "hide"}
+# Dogs just named BRUNO
+dog_licenses %>% 
+  filter(AnimalName == "BRUNO")
 
+# Dogs just named BRUCE
+dog_licenses %>% 
+  filter(AnimalName == "BRUCE")
 
+# Dogs named BRUNO or BRUCE
+dog_licenses %>% 
+  filter(AnimalName == "BRUNO" | AnimalName == "BRUCE")
+```
 
+If you find yourself combining lots of comparisons on the same column with `|`, like dogs named `BRUNO`, `BRUCE` or `BRADY`:
+```{r, results = "hide"}
+dog_licenses %>% 
+  filter(AnimalName == "BRUNO" | AnimalName == "BRUCE" | AnimalName == "BRADY")
+```
+You can save a lot of typing with `%in%`:
+```{r, results = "hide"}
+dog_licenses %>% 
+  filter(AnimalName %in% c("BRUNO", "BRUCE", "BRADY"))
+```
+`%in%` will return `TRUE` for an element of the left hand side if it is contained in the vector on the right hand side.
 
-Use arrows to sort, and search boxes to filter. Similar actions in other programs.
+### Exercise: Expired Licenses
 
-WHich dog has 
-Remove dogs with expired licenses in 2016? Or keep dogs with licenses issued in 2016.
+This code creates two variables that contains the dates for the start and end of the year 2016:
+```{r}
+start_of_2016 <- as.Date("2016-01-01")
+endt_of_2016 <- as.Date("2016-12-31")
+```
 
-
-
-### Pipes
-
-
-Run it to check your understanding.
-
+Use `filter()` with these variables to find the dog licenses that expire during  2016.
 
 ## How can I calculate new values?
 
