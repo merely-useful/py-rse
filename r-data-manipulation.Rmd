@@ -7,74 +7,9 @@
 
 ## Motivation
 
-TODO: Preview some of the questions that we can answer with just data manipulation tools.
-
-## How can I read tabular data into a program?
-
-### What is tabular data?
-
-Tabular data describes data that is in the form of a table: values arranged in rows each of the same length, or equivalently values arranged in columns each of the same length. Here's a small example of some tabular data:
-```{r, echo = FALSE, message=FALSE}
+```{r, message = FALSE, echo = FALSE}
 library(tidyverse)
 library(here)
-example_csv <- here("data", "site.csv")
-sites <- read_csv(example_csv )
-knitr::kable(sites)
-```
-
-Each row records information on a site at which water measurements are taken.  There are three columns: a site identification code, and the location of the site in latitude and longitude. 
-
-This is an incredibly common way of *displaying* data, but when *storing* tabular data in a file, we need a way to communicate when records and values begin and end.  A very popular format for doing this is CSV.  CSV, is short for **c**omma **s**eparated **v**alues, and like the name suggests, a comma, `,`, is used to separate the values for each column, while each record goes on a new line.  The file is plain text, but we use the extension `.csv` to indicate that is follows the CSV format conventions.
-
-Here's how the table above would look inside the CSV file `site.csv`:
-```{r, echo = FALSE, comment = NA}
-writeLines(readLines(example_csv))
-```
-
-In this case the first line has the column names, this is common (and recommended!), but not universal. 
-
-Why is CSV so popular? 
-
-* It's human readable.  CSV isn't a special file type, it is just a plain text file that follows some conventions.  This means you don't need any special software to look at the contents -- you can open in up in anything that can examine text and take a look inside. 
-* It's computer readable.  Because CSV files all have the same structure it's easy to write computer programs to read them.  This means in almost any program designed to work with data, and all the common programming languages, you'll find functions that will import CSV files.  This also means it's easy to create CSV files -- you can export them from Excel, write them from R, or even write one from scratch in a text editor.
-
-If you want to look inside a CSV file in RStudio you can navigate to its location in the "Files" pane and click on its name.  Selecting "View File", will open it in the Source pane. 
-
-However, if you want to work with CSV data in R, it isn't enough to look inside the file.  You need to read the contents of the file and store it in R's memory.  This process is known as data import.
-
-### Importing CSV data into R
-
-To work with data in R you need to have it in R's memory.  The `read_csv()` function in the readr package will import a CSV file, and represent it as a tibble, if you give it the location of the CSV file.  For example, to read the `site.csv` data and store it in an object called `sites`: 
-```{r}
-library(tidyverse)
-sites <- read_csv(here("data", "site.csv"))
-sites
-```
-
-TODO: talk about files paths, point reader to the place where file paths are talked about, or assume file is in their working directory.
-
-Notice that `read_csv()` gave us a message about what it did: it parsed our data file and found three columns `site_id`, `latitude` and `longitude`.  It also mentions what kind of data it assumed was in each column.  TODO: point to further discussion of data types.
-
-The object `sites` is now R's representation of the data from the `site.csv` file.    
-
-### Exercise: Import `visited.csv`
-
-Use `read_csv()` to read `visited.csv` into R. How does R indicate a cell with a missing value?
-
-```{r}
-visited <- read_csv(here("data", "visited.csv"))
-visited
-```
-
-### Exercise: Import IRS tax return data for New York City
-
-Use `read_csv()` to import the CSV file `nyc-tax-returns.csv`.  
-
-TODO: Should we introduce the "common things that go wrong" / "the most common additional arguments", e.g. `skip`, `na`, `col_names`, `col_types`?  My feeling is not now, but sometime later.
-
-## Data Manipulation
-
-```{r, message = FALSE}
 dog_licenses <- read_csv(here("data", "nyc-dog-licenses.csv.gz")) %>% 
   drop_na(AnimalName)
 ```
@@ -82,6 +17,8 @@ dog_licenses <- read_csv(here("data", "nyc-dog-licenses.csv.gz")) %>%
 TODO: where is data introduced?
 
 TODO: clean version with no missing values and snake case column names, including month and year columns for some (all?) of the date columns.
+
+TODO: I'm assuming that at some point this data will live in R package, so we can delay importing data to end of chapter.
 
 The RStudio Viewer has an interface much like other spreadsheet programs you might have used.  You can use this Viewer to look at the `dog_licenses` tibble with the `View()` function:
 ```{r, eval = FALSE}
@@ -119,13 +56,25 @@ You'll start this chapter by overcoming this first limitation.  You won't use th
 * selecting variables,
 * adding variables,
 * summarizing rows, and 
-* and performing these operations on subsets of the data
+* and performing these operations on subsets of the data.
+
+Combining this verbs you'll be able to answers questions like:
+
+* How long are licences issued for?
+
+* What are the most popular breeds?
+
+* What names are most popular for licensed dogs in New York?  Does this very geographically?
+
+* When are dogs born?
+
+TODO: update these question to reflect things that are actually done in this and later chapters.
 
 To master data manipulation you need to master two pieces:
 
-* How to describe the action you want with the data manipulation verbs individually.  This is a language specific skill - in this chapter, you'll use the functions in the dplyr package. 
+* How to describe the action you want with the data manipulation verbs individually.  This is a language specific skill - in this chapter, you'll use the functions in the dplyr package.  
 
-* Identifying which verbs, and in which order to apply them, to answer a question of interest.  This skill will translate across all technologies. 
+* Identifying which verbs, and in which order to apply them, to answer a question of interest.  This skill will translate across all technologies, but it takes a little longer to master.  
 
 ### Exercise: Point and click data manipulation
 
@@ -133,9 +82,7 @@ Using the RStudio Viewer answer the following questions:
 
 * How many dog licenses belong to dogs named "Queen" that live in "Queens"?
 
-* 
-
-## How can I select subsets of my data?
+## Exploring data in the console
 
 Let's take a look at the data in the console:
 ```{r}
@@ -143,6 +90,11 @@ dog_licenses
 ```
 
 Notice that in contrast to the Viewer you only see the first 10 rows of the dataset, and just the first few columns. The number of columns you see depends on the width of your console, so you may see more or fewer than displayed here.  You should also note some of the contents of the columns have been abbreviated. The `…` at the end of some values in `BreedName` indicates these values have been truncated for display purposes.   
+
+You'll be using dplyr package for data manipulation, its part of the tidyverse, so you'll need to load the tidyverse to begin:
+```{r}
+library(tidyverse)
+```
 
 ### Re-arranging rows 
 
@@ -166,6 +118,15 @@ The first row is the record with the earliest issue date, but we can't actually 
 ### Exercise: Arranging character strings
 
 Use `arrange()` to order the dog licenses by `AnimalName` in increasing order.  What does this tell you about the way R treats punctuation and numbers when dealing with alphabetical order?
+
+## How can I select subsets of my data?
+
+Two verbs are used to subset data:
+
+* `select()` to select columns
+* `filter()` to select rows
+
+You'll learn about these two functions in this section, along with learning about the pipe, `%>%`, a way to cahin together multiple operations on a dataset.
 
 ### Selecting columns
 
@@ -756,6 +717,67 @@ Which borough has the longest average licence duration?
 ## How can I work with two or more datasets?
 
 -   join
+
+## How can I read my own tabular data into R?
+
+### What is tabular data?
+
+Tabular data describes data that is in the form of a table: values arranged in rows each of the same length, or equivalently values arranged in columns each of the same length. Here's a small example of some tabular data:
+```{r, echo = FALSE, message=FALSE}
+example_csv <- here("data", "site.csv")
+sites <- read_csv(example_csv )
+knitr::kable(sites)
+```
+
+Each row records information on a site at which water measurements are taken.  There are three columns: a site identification code, and the location of the site in latitude and longitude. 
+
+This is an incredibly common way of *displaying* data, but when *storing* tabular data in a file, we need a way to communicate when records and values begin and end.  A very popular format for doing this is CSV.  CSV, is short for **c**omma **s**eparated **v**alues, and like the name suggests, a comma, `,`, is used to separate the values for each column, while each record goes on a new line.  The file is plain text, but we use the extension `.csv` to indicate that is follows the CSV format conventions.
+
+Here's how the table above would look inside the CSV file `site.csv`:
+```{r, echo = FALSE, comment = NA}
+writeLines(readLines(example_csv))
+```
+
+In this case the first line has the column names, this is common (and recommended!), but not universal. 
+
+Why is CSV so popular? 
+
+* It's human readable.  CSV isn't a special file type, it is just a plain text file that follows some conventions.  This means you don't need any special software to look at the contents -- you can open in up in anything that can examine text and take a look inside. 
+* It's computer readable.  Because CSV files all have the same structure it's easy to write computer programs to read them.  This means in almost any program designed to work with data, and all the common programming languages, you'll find functions that will import CSV files.  This also means it's easy to create CSV files -- you can export them from Excel, write them from R, or even write one from scratch in a text editor.
+
+If you want to look inside a CSV file in RStudio you can navigate to its location in the "Files" pane and click on its name.  Selecting "View File", will open it in the Source pane. 
+
+However, if you want to work with CSV data in R, it isn't enough to look inside the file.  You need to read the contents of the file and store it in R's memory.  This process is known as data import.
+
+### Importing CSV data into R
+
+To work with data in R you need to have it in R's memory.  The `read_csv()` function in the readr package will import a CSV file, and represent it as a tibble, if you give it the location of the CSV file.  For example, to read the `site.csv` data and store it in an object called `sites`: 
+```{r}
+library(tidyverse)
+sites <- read_csv(here("data", "site.csv"))
+sites
+```
+
+TODO: talk about files paths, point reader to the place where file paths are talked about, or assume file is in their working directory.
+
+Notice that `read_csv()` gave us a message about what it did: it parsed our data file and found three columns `site_id`, `latitude` and `longitude`.  It also mentions what kind of data it assumed was in each column.  TODO: point to further discussion of data types.
+
+The object `sites` is now R's representation of the data from the `site.csv` file.    
+
+### Exercise: Import `visited.csv`
+
+Use `read_csv()` to read `visited.csv` into R. How does R indicate a cell with a missing value?
+
+```{r}
+visited <- read_csv(here("data", "visited.csv"))
+visited
+```
+
+### Exercise: Import IRS tax return data for New York City
+
+Use `read_csv()` to import the CSV file `nyc-tax-returns.csv`.  
+
+TODO: Should we introduce the "common things that go wrong" / "the most common additional arguments", e.g. `skip`, `na`, `col_names`, `col_types`?  My feeling is not now, but sometime later.
 
 ## How can I save my results?
 
