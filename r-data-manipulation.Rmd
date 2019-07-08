@@ -339,12 +339,98 @@ Use `filter()` with these variables to find the dog licenses that expire during 
 
 ## How can I calculate new values?
 
--   mutate
--   ifelse
+So far, you've been manipulating the columns that ready exist in a dataset, but want if you want to add new ones? The function `mutate()` handles this kind of operation.  
 
+To see how this works let's start with a logical expression: `AnimalName == "CHASE"`.  If you used this with `filter()`, you would get all the rows back where the license was issued to a dog named `CHASE`. Let's say instead of subsetting the data, you want to add a column called `called_chase` that contained the `TRUE` and `FALSE` result.  With `mutate()` after passing in the data, you pass named arguments, where the name is the name you desire for the new column, and its value is the way to calculate it:
+```{r}
+dog_licenses %>% 
+  mutate(called_chase = AnimalName == "CHASE") %>% 
+  select(AnimalName, called_chase)
+```
 
-Which dog is the oldest?
-How long are dogs names? What is the longest name?  What is the shortest name?
+> Take `dog_licences`, **and then**,   
+> mutate to add a column called `called_chase` which is the result of testing whether `AnimalName` is exactly `"CHASE"`, **and then**,   
+> select the columns `AnimalName` and `called_chase`.
+
+The select statement isn't crucial to the calculation here, but it does help me draw your attention to the columns that were involved in this step.
+
+This can be a useful intermediate step in filtering, since it gives you a chance to examine the logical statement before using it to filter:
+```{r}
+dog_licenses %>% 
+  mutate(called_chase = AnimalName == "CHASE") %>% 
+  filter(called_chase)
+```
+
+Take a closer look at the argument to mutate:
+```
+called_chase = AnimalName == "CHASE"
+```
+On the left of the `=` is the argument name, `called_chase`.  This is a name you choose - it should be descriptive and follow good style.  On the right of the `=` is an expression that must either return as many values as there are rows, or a single value.  Here, the logical expression involves the column `AnimalName` so it returns as many values as there are rows.
+
+It you would prefer the values to be something other `TRUE` or `FALSE`, say `"called_chase"` and `"not_called_chase"`, `ifelse()` is a base R function that can do this:
+
+A call to `ifelse()` takes the form:
+```r
+ifelse(test, yes, no)
+```
+Where `test` is a logical expression, `yes` the value for the elements that return `TRUE`, and `no` the value for the elements that return `FALSE`. (Both `yes` and `no` could be other column names, in which case, the corresponding element of `yes` would be returned for `TRUE` elements).
+```{r}
+dog_licenses %>% 
+  mutate(
+    called_chase = ifelse(AnimalName == "CHASE", "called_chase", "not_called_chase")
+    ) %>% 
+  select(AnimalName, called_chase)
+```
+
+You can perform multiple mutate steps at once by passing more arguments to `mutate()`, so an alternative way of writing the above code (with more keystrokes, but with lines that are shorter) would be:
+```{r}
+dog_licenses %>% 
+  mutate(
+    is_chase = AnimalName == "CHASE",
+    called_chase = ifelse(is_chase, "called_chase", "not_called_chase")
+    ) %>% 
+  select(AnimalName, is_chase, called_chase)
+```
+
+Arithmetic is another common operation that returns as many elements as there are rows.  For instance we could see how long licenses are issued for:
+```{r}
+dog_licenses %>% 
+  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  select(license_duration)
+```
+Interesting that there is so much variation here. 
+
+TODO: provide link to RStudio data mini cheatsheet with other functions that are useful with mutate.
+
+You can use `mutate()` with operations that give one number based on all the rows:
+```{r}
+dog_licenses %>% 
+  mutate(
+    license_duration = LicenseExpiredDate - LicenseIssuedDate,
+    avg_duration = mean(license_duration)) %>% 
+  select(license_duration, avg_duration)
+```
+You'll get back the original number of rows, but the single value will be repeated in all of them - on average licenses are issued for 467.321 days.  You'll see a different manipulation, `summarise()` that collapses many rows into one later in this chapter.
+
+### Exercise: Ages of dogs
+
+Use `mutate()` to add a column `age_at_issue` that contains the dogs approximate age on the day the license was issued.
+
+### Exercise: Mutts
+
+Use `mutate()` along with `ifelse()` to create a column `breed` that takes values `"unknown"` if `BreedName` is `"Unknown"` and `"known"` otherwise.
+
+*Extra challenge* Can you figure out if the licenses issued to unknown breed dogs are of longer or shorter duration on average than known breed dogs?
+
+### Exercise: Name length
+
+The function `str_length()` in the stringr package finds the length of character strings.  Replace the `___` in following code to add a column called `name_length` that contains the length of the dog's name:
+```{r, eval = FALSE}
+dog_licenses %>% 
+  ___(___ = stringr::str_length(AnimalName))
+```
+
+Now add an `arrange()` step to find the licenses issued to dogs with the longest names?
 
 ## How can I tell what's gone wrong in my programs?
 
