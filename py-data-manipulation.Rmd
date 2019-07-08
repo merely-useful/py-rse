@@ -1,0 +1,173 @@
+# Python Packaging {#py-data-manipulation}
+
+## Introduction {#py-data-manipulation-intro}
+
+With just a few Python libraries and commands, you can rearrange, process, manipulate, and
+analyze tabular data easily and reproducibly.
+
+This material is based on a [workshop run by UofT Coders](https://github.com/UofTCoders/workshops-dc-python)
+and a [Data Carpentry Python workshop](https://datacarpentry.org/python-ecology-lesson/).
+
+## How can I read tabular data into a program? {#py-data-manipulation-reading}
+
+```python
+# reading in tabular data - example
+
+import pandas as pd # import the pandas package
+
+# where is the file located on your computer?
+# you can use a relative path (shown in the example), or the full path (i.e. /home/madeleine/data/file.csv)
+filename = "data/nyc-dog-licensing.csv"
+
+# the function pd.read_csv() takes a file path as its default input and tries to read in a table of data.
+# here we assign the function's output to a variable called "data"
+data = pd.read_csv(filename)
+```
+
+
+You can also use a url as the filename in read_csv:
+
+```python
+data_link = "https://raw.githubusercontent.com/merely-useful/merely-useful.github.io/book/data/measurements.csv"
+data = pd.read_csv(data_link)
+```
+
+## How can I tidy up my data?
+
+ - Cleaning column names
+ - other neat cleaning tricks as part of data manipulation session (see Damien's carbon data cleaning in PR)
+
+
+## How can I select subsets of my data?
+
+This data frame has rows and columns (it has 2 dimensions). To extract specific
+data from it (also referred to as "subsetting"), columns can be selected by their name.
+
+```python
+# to see what column names there are, we can use the method .columns
+data.columns
+
+# to get a single column, use square brackets and the column name in quotation marks. This is case sensitive!
+data["AnimalName"].head()
+
+# to get multiple columns, provide a list of column names inside the square brackets.
+data[["AnimalName", "AnimalGender"]].head()
+```
+
+Notice that if you provide a list, the returned object is a data frame, but if you provide a single item not in a list, it's a `Series` object.
+
+Selecting with single brackets (`[]`) is a shortcut to common operations, such as selecting columns by labels as above. The function `.loc[]` gives more flexible control over both rows and columns by label. The syntax is `loc[<rows>, <columns>]`.
+
+For example, you can select the first 10 rows and a slice of columns:
+
+```python
+data.loc[0:10, "AnimalName" : "BreedName"]
+```
+
+You can use logical operations to filter your data based on some criteria.
+
+```python
+# get rows where 'AnimalGender' is female
+data[data['AnimalGender'] == 'F'].head()
+
+# you can also get specific columns with .loc:
+data.loc[data['AnimalGender'] == 'F', ['AnimalName', 'AnimalGender']].head()
+```
+
+A single expression can also be used to filter for several criteria, either matching all criteria (`&`) or any criteria (`|`). These special operators are used instead of `and` and `or` to make sure that the comparison occurs for each row in the data frame. Parentheses are added to indicate the priority of the comparisons.
+
+
+```python
+# the symbol '&' can be used to combine multiple logical comparisons
+# '==' means 'is equal to'
+data.loc[(data['AnimalGender'] == 'F')
+         & (data['BreedName'] == 'Boxer')
+           & (data['AnimalName'] == 'MILEY'), 'AnimalName' : 'BreedName']
+
+# OR (|)
+# the order of comparisons can be structured with parentheses. Here we want the OR comparison
+ to happen before the AND comparison.
+
+data.loc[(data['AnimalName'] == 'MILEY') & ((data['BreedName'] == 'Boxer') |  
+          (data['BreedName'] == 'Labrador Retriever')),  'AnimalName' : 'BreedName']
+```
+
+
+## How can I calculate new values?
+
+A new column can be added to a data frame by calling the new column name and assigning values to it.
+The values should be either the same length as the original data frame, or all the same value.
+
+```python
+# create a new column and fill all rows with the value 'test'
+data['new_column'] = 'test'
+data.head()
+
+# drop the column we just made
+data = data.drop('new_column', axis = 1)
+```
+
+We can also create new columns by doing operations on existing columns.
+For example, let's create a column with the length of the dog's name.
+
+```python
+# the method .str allows string functions to be applied to the column contents (here we use 'len()')
+name_lengths = data['AnimalName'].str.len()
+
+# create a new column called 'NameLength'
+data['NameLength'] = name_lengths
+
+# we can see that the new column has been added to the end of the data frame
+data.columns
+```
+
+Let's create a column with the age of each animal at the time it was licensed.
+
+```python
+# use to_datetime to create a datetime object for each date we're using
+AnimalBirthDate = pd.to_datetime(data['AnimalBirthMonth'])
+LicenseIssuedDatetime = pd.to_datetime(data['LicenseIssuedDate'])
+
+# subtract the birth date from the license date
+AgeWhenLicensed = LicenseIssuedDatetime - AnimalBirthDate
+
+# assign AgeWhenLicensed to a new column
+data['AgeWhenLicensed'] = AgeWhenLicensed
+```
+
+## How can I tell what's gone wronge in my programs?
+
+```
+# this code generates a syntax error
+data['AnimalName'
+```
+
+The very bottom of the error message is the most helpul place to start looking: this says what kind of error it is (e.g. `SyntaxError`, `ValueError`, `TypeError`, etc) and sometimes includes a message that describes what went wrong.
+
+It also points to the place where the error happened: in this case, there's a missing square bracket, so the error we got was that Python reached the end of the file before it expected to because we didn't include proper punctuation.
+
+```python
+# this code generates a runtime error (there's nothing wrong with the syntax, but Python can't execute it because of
+# a different error)
+
+data['AnimalName'] < data['ZipCode']
+```
+
+The last line again tells us what went wrong, but this time we get a *traceback*: Python is showing us the series of steps that it followed internally before it hit an error. This is helpful because often the error will ultimately occur inside a function we're using but whose code we haven't ever seen, so Python shows us both what specifically went wrong inside the function, but also what line of our code caused the original cascade. Here, the offending line is pointed to at the very top of the traceback, and by reading the error message at the bottom we can see that the problem was that we can't use the 'less than' `<` comparison between two objects when one is a string (`data['AnimalName']`) and the other is a float (`data['ZipCode']`).
+
+## How can I operate on subsets of my data?
+
+
+## How can I work with two or more datasets?
+
+
+## How can I save my results?
+
+
+## Summary {#py-data-manipulation-summary}
+
+
+## Exercises {#py-data-manipulation-exercises}
+
+
+## Key Points {#py-data-manipulation-keypoints}
