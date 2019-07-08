@@ -161,6 +161,9 @@
 **Docstring**<a id="docstring"></a>
 :   FIXME
 
+**Environment**<a id="environment"></a>
+:   FIXME
+
 **Embedded documentation**<a id="embedded-documentation"></a>
 :   FIXME
 

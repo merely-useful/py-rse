@@ -2,25 +2,13 @@
 
 ## Questions
 
-- How do I organize my data analysis projects, my files, and my folders?
-- How can I make sure that my code is understandable to others?
-- How do I ensure my analyses are reproducible by others (and myself 9 months in
-the future)?
-
-TODO: Add more. Ideas?
+```{r, child="questions/r-reproducibility.md"}
+```
 
 ## Objectives 
 
-1. To become aware of and learn some "best practices" (or "good enough
-practices") for project organization.
-1. To use RStudio to create and manage projects in a consistent and structured
-way.
-1. To become aware of the importance of reproducibility in data analyses, for
-your own productivity and for greater rigor in science.
-1. To create reproducible documents interwoven with R code that can be easily
-updated by changing the code or data.
-
-TODO: Briefly introduce functions here?
+```{r, child="objectives/r-reproducibility.md"}
+```
 
 ## Introduction
 
@@ -39,15 +27,11 @@ having research be reproducible, likely due in many ways to a lack of training
 and awareness. Being reproducible isn't also just about doing better science, it
 can also:
 
-TODO: Add some reference here about definitions, lacking reproducibility, etc?
-
 1. Make you much more efficient and productive, as you spend less time between
 coding and putting your results in the document.
 1. Make you more confident in your results, since what you report and show as
 figures or tables will be exactly what you get from your analysis. No copying
 and pasting required!
-
-TODO: Add more items here.
 
 There are many aspects to reproducibility, such as:
 
@@ -71,15 +55,11 @@ is kept reproducible, all files will relate to that "output", and can be easily
 archived once the manuscript has been published. However, this definition could
 be different depending on your own situation and goals.
 
-TODO: refs to rrtools, prodigenr
-
 The ability to read, understand, modify, and write simple pieces of code is an
 essential skill for modern data analysis tasks and projects. Here we introduce
 you to some of the best practices one should have while writing their code.
 Many of these best practices were taken from published "best practices" articles
 [@Nobl2009;@Tasc2017;@Wils2017]
-
-TODO: Other references for best practices?
 
 - Organise all R scripts and files in a single parent directory using a common
 and consistent folder and file structure.
@@ -117,10 +97,9 @@ directory folder using the
 prodigenr::setup_project("learningr")
 ```
 
-TODO: Use prodigenr or something else?
+(You can also create a new project in RStudio by using "File -> New Project -> "Scientific Analysis Project using prodigenr".)
 
-When we use the `::` colon here, we are telling R "from the prodigenr package use
-the setup_project function". This function will then create the following
+When we use the `::` colon here, we are telling R "use setup_project function from the prodigenr package". This function will then create the following
 folders and files:
 
 ```
@@ -168,8 +147,6 @@ useful when working on R projects. For any project, it is **highly recommended**
 to use [version control]. We'll be covering version control in more detail
 [later](#version-control) in the course.
 
-TODO: Make sure the internal reference links are correct.
-
 ### Exercise: Better file naming
 
 Look at the list of file names below. Which file names are good names and which
@@ -195,8 +172,8 @@ code.R
 We have a `data/` folder for a reason. But you might not want to keep the data
 under version control, for several reasons:
 
-1. It's a large dataset (tens or more of Mb file size)
-2. There are sensitive or personal information in the data
+1. It's a large dataset (tens or more Mb in file size)
+2. There are sensitive and/or personally-identifying information in the data
 
 As a rule of thumb, if you can send the data by an email attachment, you could
 probably put it into Git. Unless there is sensitive or personal data, then don't.
@@ -213,18 +190,18 @@ making sure to use "relative file paths" compared to "absolute file paths"
 depends on. So here we'll cover how to make sure your scripts and project files
 are reusable.
 
-### Keeping a "clean slate"
+### Keeping a clean slate
 
 When you finish writing your R code for the day and close the session, you probably
 will be asked about saving your session. What this does is everything kept in the
-"Environment" (e.g. all objects, functions, or datasets you created and used
+[environment](glossary.html#environment) (e.g. all objects, functions, or datasets you created and used
 during the session) get saved to an `.RData` file. Then, the next time you open up
 your R session, R will see this `.RData` file and load everything in that file.
-Everything you did previously will be loaded into your "Environment". This seems like
+Everything you did previously will be loaded into your environment. This seems like
 a good thing... but it's not. Imagine eating your dinner on a really dirty plate...
 that's not pleasant right? Loading a previous session is like that dirty plate.
 
-So, to make sure you always use a "clean plate", we'll run a handy function from 
+So, to make sure you always use a clean slate, we'll run a handy function from 
 the [usethis][usethis] package to stop R from saving and loading this `.RData`
 file, ensuring you have a clean working environment:
 
@@ -238,8 +215,8 @@ several very useful functions when working with projects.
 ### Packages, data, and file paths
 
 A major strength of R is in its ability for others to easily create packages
-that simplify doing complex tasks (e.g. running mixed effects models with the
-[lme4][lme4] package or creating figures with the [ggplot2][ggplot2] package)
+that simplify doing complex tasks (e.g. creating figures with the
+[ggplot2][ggplot2] package)
 and for anyone to easily install and use that package. You may encounter some
 who say you shouldn't rely on packages and only use base R functions. However, 
 this is seriously bad advice since the ecosystem of R packages can greatly 
@@ -276,7 +253,7 @@ Then in other R scripts in the `R/`, include this code at the top the script:
 source(here::here("R/package-loading.R"))
 ```
 
-There's a new thing `here`! The [here][r-here-pkg] package uses a function
+The [here][r-here-pkg] package uses a function
 called `here()` that makes it easier to manage file paths. What is a file path
 and why is this necessary? A file path is the list of folders a file is found
 in. For instance, your resume may be found in
@@ -297,7 +274,7 @@ path from that point. This simple function can make your work more reproducible
 and easier for you to use later on.
 
 We also use the `here()` function when we import a dataset or save a dataset.
-So, let's load in the NYC Dog License dataset. First, save the csv in the
+So, let's load in the NYC Dog License dataset. First, save the CSV in the
 `data/` folder. Then create a new R file:
 
 ```r
@@ -317,22 +294,21 @@ That is how we will load data in from now on.
 
 Here are a few other tips for keeping your code reusable:
 
-- Aggressively try keep your code as simple and concise as you can. The less code
-you have to write, debug, and maintain, the better. If you repeat some code,
-stop and think how to not repeat it. You will save time in the end by taking
-time to think and plan.
-- When encountering a difficult problem, think about how to solve it, then try
-to find R packages or functions that do your problem for you. You may hear some
-poeple say "oh, don't bother with R packages, do everything in base R"... don't 
-listen to them. Do you build a computer from scratch everytime you want to do
-any type of work? Or a car when you want to drive somewhere? No, you don't. Make
-use of other people's hard work to make tools that simplify your life.
+- When encountering a difficult problem, try
+to find R packages or functions that do your problem for you[^only-use-base]. 
 - Split up your analyses steps into individual files (e.g. "model" file, "plot"
 file). Then `source` those files as needed or save the output in `data/` to use 
 it in other files.
 - Try not to have R scripts be too long (e.g. more than 500 lines of code). Keep
 script sizes as small as necessary and as specific as possible (have a single
 purpose). A script should have an end goal.
+
+
+[^only-use-base]: You may hear some people say "oh, don't bother with R
+packages, do everything in base R"... don't listen to them. Do you build a
+computer from scratch everytime you want to do any type of work? Or a car when
+you want to drive somewhere? No, you don't. Make use of other people's hard work
+to make tools that simplify your life.
 
 ## Readability
 
@@ -349,16 +325,14 @@ Like natural human languages, R has a relaxed approached to how R code is writte
 This has some nice advantages, but also some major disadvantages, notably that
 writing styles can be quite different across the world or even within one's own
 code. So, it's important to stick to some guidelines, for instance, as laid out
-by the tidyverse [style guide][r-style-guide].
+by the tidyverse [style guide][r-style-guide]. Some other tips include:
 
-Some tips to use when working in R:
-
-- Think of writing code as if you are writing in a natural language like English.
-- Imagine that other people will be reading your code.
-- Keep the code clear, simple, and *readable*.
-- Stick to a *[style guide][r-style-guide]*.
+- Write your code assuming other people will be reading it.
+- Stick to a *[style guide][r-style-guide]*. (We're repeating this because it's
+really important!)
 - Use full and descriptive words when typing and creating objects.
-- Use white space to separate concepts (empty lines between them, use spaces, and/or tabs).
+- Use white space to separate concepts (empty lines between them, use spaces,
+and/or tabs).
 - Use RStudio R Script Sections (`"Code->Insert Section"` or `Ctrl-Shift-R`) to
 separate content in scripts.
 
@@ -373,8 +347,7 @@ is really important.
 ### Exercise: Make the code more readable
 
 Using the [style guide][r-style-guide] found in the link, try to make these code
-more readable. The code below is in some way either *wrong* or incorrectly
-written. Edit the code so it follows the correct style and so it is easier to
+more readable. Edit the code so it follows the correct style and so it is easier to
 understand and read. You don't need to understand what the code does, just
 follow the guide.
 
@@ -572,8 +545,8 @@ save so much time and get your work that much closer to being reproducible.
 
 There are many other advantages to using R Markdown. From the single R Markdown
 format you can use it to create manuscripts, posters, slides, websites, books,
-and many more from simply using R Markdown! In fact, this book was written using
-R Markdown! As a bonus, switching between citation formats or Word templates for
+and many more from simply using R Markdown. In fact, this book was written using
+R Markdown. As a bonus, switching between citation formats or Word templates for
 different journals is easier than doing it with Word.
 
 ### Markdown
@@ -584,8 +557,8 @@ are many "flavours" of Markdown that have been developed over the years, R
 Markdown uses the [Pandoc][pandoc-markdown] version. Pandoc is a combination of
 pan which is Latin for "all" and doc which means document.
 
-Markdown is a "markup language" (like HTML, but simpler) meaning that special
-characters mean certain things, which we will cover below. 
+Markdown is a "markup language" meaning that special characters mean certain
+things, which we will cover below.
 
 To format text, such as to bold or make a list, you use the special characters.
 You write Markdown as plain text (like R code), so you don't need any special
@@ -594,7 +567,7 @@ scientific document are available in Markdown, but not all. *Tip*: Try to fit
 your writing and document creation around what Markdown can acheive, rather
 than force or fight Markdown to do something it wasn't designed to do.
 
-Alright, let's create and save an R Markdown file. In RStudio, go to `File ->
+All right, let's create and save an R Markdown file. In RStudio, go to `File ->
 New File -> R Markdown`. A dialog box will pop up. In the "Title" section,
 type in `Reproducible documents` and in the "Author" section type in your name.
 Choose the HTML output format. Save this file as `learning-rmarkdown.Rmd` in the
@@ -844,14 +817,14 @@ document writing and analysis reporting.
 #### YAML header/metadata
 
 Most Markdown documents (especially for R Markdown) include [YAML][yaml] metadata at
-the top of the document, surrounded by `---`. The YAML contains the metadata and
-various options for the entire document. For instance, the title and/or author 
-text is included here, as well as the options on what the converted output
-document should be, such as Word, HTML, or PDF (if you want to create a beautiful
-PDF, you need to install the R package [tinytex][tinytex]). While these three
-are the most commonly used output formats, there are many more output formats to
-choose from (e.g. slides, websites, books). The YAML header looks something like
-this:
+the top of the document, surrounded by `---`. YAML is a data format, like CSV,
+that contains the metadata and various options that R Markdown uses for the
+entire document. Data in YAML is stored in the form `variable: value`. For
+instance, `title` or `author` is paired with their respective "values" and then
+used by Markdown when creating the document. Other options are also included
+here, such as what the converted output document should be, such as Word. There
+are many more output formats to choose from (e.g. slides, websites, books). The
+YAML header looks something like this:
 
 ```yaml
 ---
@@ -861,12 +834,13 @@ output: html_document
 ---
 ```
 
+Here, there are three variable-value pairings: `title`, `author`, and `output`.
+In the `output` variable, the R Markdown function `html_document` is given so that
+the output document format is converted to HTML. There are also `word_document`
+and `pdf_document` settings. For now, we'll focus on the `html_document` output.
 Usually when you create the R Markdown file, this YAML header gets added
 automatically. There are additional options you can set in the output field,
-which we will cover later on. In this particular case, the R Markdown file
-will convert to a HTML document via the `html_document` setting. There are also
-`word_document` and `pdf_document` settings. For now, we'll focus on the
-`html_document` output.
+which we will cover later on. 
 
 #### Using R code chunks 
 
@@ -890,10 +864,9 @@ differentiates the chunk from other chunks. Using a chunk label also helps navig
 a document when you use RStudio's "Document outline" (`Code -> Show Document Outline`).
 It also does a few other things.
 
-**Note**: Code [chunk labels][chunk-label] should be named without `_`, spaces,
-or `.` and instead should be one word or be separated by `-`. While an error may
-not necessarily occur, there can be some unintended side effects that will cause
-you some annoyance without knowing the reason.
+**Note**: Standard practice is that code [chunk labels][chunk-label] should be
+named without `_`, spaces, or `.` and instead should be one word or be separated
+by `-`.
 
 Let's load in some packages and data:
 
@@ -911,8 +884,9 @@ library(tidyverse)
 dog_licenses <- read_csv(here::here("data/..."))
 ```
 
-We call the code chunk `setup` because it is getting everything ready for later 
-code.
+When running your code chunks interactively as you develop and write your document, 
+R Markdown will look for a code chunk labeled `setup` to run first (for
+instance, to load all packages used in a document). Hence we name this chunk "setup".
 
 #### Inserting figures
 
@@ -1011,8 +985,6 @@ dog_licenses_after_2000 <- dog_licenses %>%
 ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
     geom_point()
 ```
-
-Neat!
 
 #### Exercise: Add some figures to a R Markdown document
 
@@ -1209,3 +1181,5 @@ TODO: Where to put references to original material?
 
 Source material modified from https://rqawr-course.lwjohnst.com/ and many others
 https://rqawr-course.lwjohnst.com/license/
+
+TODO: Add keypoints
