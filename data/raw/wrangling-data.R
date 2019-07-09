@@ -24,6 +24,33 @@ dog_licenses <- dog_licenses %>%
 
 write_csv(dog_licenses, here("data/nyc-dog-licenses.csv.gz"))
 
+# NYC tax returns ---------------------------------------------------------
+
+if(!file.exists(here("data/raw/16zpallagi_ny.csv.gz"))){
+  # https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-statistics-2016-zip-code-data-soi
+  tax <- read_csv("https://www.irs.gov/pub/irs-soi/16zpallagi.csv")
+
+  # Big! Just save NY to `data/raw`
+  tax_ny <-
+    tax %>%
+    filter(STATE == "NY") %>%
+    write_csv(here("data/raw/16zpallagi_ny.csv.gz"))
+}
+
+tax_ny <- read_csv(here("data/raw/16zpallagi_ny.csv.gz"))
+
+tax_ny_clean <- tax_ny %>%
+  select(
+    zip_code = zipcode,
+    income_group = agi_stub,
+    n_returns = N1,
+    n_single = mars1,
+    n_joint = MARS2,
+    number_dependents = NUMDEP,
+    total_income = A00100) %>%
+  filter(zip_code %in% unique(dog_licenses$zip_code)) %>%
+  write_csv(here("data", "nyc-tax-returns.csv"))
+
 # CO2 datasets ------------------------------------------------------------
 
 import_co2_data <- function(.file) {
