@@ -53,16 +53,23 @@ do *not* commit anything manually to `master`.
 
 To set up to preview locally:
 
-1.  Install R.
-    (We recommend that you also install and use the RStudio IDE.)
+1.  Install R
+    (we recommend that you also install and use the RStudio IDE).
 
-1.  Run R and use `install.packages("bookdown")` to install bookdown.
+1.  Open RStudio by clicking on the `merely-useful.github.io.Rproj` file 
+    (if not through RStudio, then open an R console in the location of the Merely Useful repo)
+    and install the dependencies by typing in the console:
+
+    ```r
+    install.packages("remotes")
+    remotes::install_deps()
+    ```
 
 To build and preview from the command line:
 
-1.  `make html` and then open `docs/index.html`.
+1.  `make html` and then open `_book/index.html`.
 
-1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `docs` folder).
+1.  `make pdf` or `make epub` to build PDF and EPUB versions (also in the `_book` folder).
 
 Or via RStudio:
 

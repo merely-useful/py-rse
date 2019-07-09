@@ -50,7 +50,7 @@ clean :
 check :
 	@bin/chunks.py ${SRC}
 	@bin/gloss.py ./gloss.md ${SRC}
-	@bin/links.py etc/links.md ${SRC}
+	@bin/links.py ./links.md ${SRC}
 
 ## test         : tests on utilities.
 test :
