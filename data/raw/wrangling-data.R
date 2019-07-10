@@ -51,6 +51,22 @@ tax_ny_clean <- tax_ny %>%
   filter(zip_code %in% unique(dog_licenses$zip_code)) %>%
   write_csv(here("data", "nyc-tax-returns.csv"))
 
+
+# NYC NTA populations -----------------------------------------------------
+
+# From: https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Neighborhood-Tabulatio/swpk-hqdp
+nyc_pop_raw_path <- here("data/raw/nyc-nta-population.csv")
+if(!file.exists(nyc_pop_raw_path)){
+  nyc_pop <- read_csv("https://data.cityofnewyork.us/api/views/swpk-hqdp/rows.csv?accessType=DOWNLOAD") %>%
+    write_csv(nyc_pop_raw_path)
+}
+
+nyc_pop <- read_csv(nyc_pop_raw_path)
+
+nyc_pop_clean <- nyc_pop %>%
+  clean_names() %>%
+  write_csv(here("data/nyc-nta-population.csv"))
+
 # CO2 datasets ------------------------------------------------------------
 
 import_co2_data <- function(.file) {
