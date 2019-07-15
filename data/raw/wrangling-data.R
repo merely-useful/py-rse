@@ -67,6 +67,24 @@ nyc_pop_clean <- nyc_pop %>%
   clean_names() %>%
   write_csv(here("data/nyc-nta-population.csv"))
 
+# NYC Community District populations --------------------------------------
+
+# From: https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Community-Districts/xi7c-iiu2
+nyc_cd_pop_raw_path <- here("data/raw/nyc-cd-population.csv")
+if(!file.exists(nyc_cd_pop_raw_path)){
+  nyc_cd_pop <- read_csv("https://data.cityofnewyork.us/api/views/xi7c-iiu2/rows.csv?accessType=DOWNLOAD") %>%
+    write_csv(nyc_cd_pop_raw_path)
+}
+
+nyc_cd_pop <- read_csv(nyc_cd_pop_raw_path)
+
+nyc_cd_pop_clean <-
+  nyc_cd_pop %>%
+  gather(key = "year", value = "population", -Borough:-`CD Name`) %>%
+  separate(year, into = c("year", NA), remove = TRUE, convert = TRUE) %>%
+  clean_names() %>%
+  write_csv(here("data/nyc-cd-population.csv"))
+
 # CO2 datasets ------------------------------------------------------------
 
 import_co2_data <- function(.file) {
