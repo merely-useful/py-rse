@@ -2,6 +2,7 @@
 library(tidyverse)
 library(here)
 library(janitor)
+library(jsonlite)
 
 # NYC dog licensing dataset -----------------------------------------------
 
@@ -84,6 +85,17 @@ nyc_cd_pop_clean <-
   separate(year, into = c("year", NA), remove = TRUE, convert = TRUE) %>%
   clean_names() %>%
   write_csv(here("data/nyc-cd-population.csv"))
+
+
+# NYC Parks ---------------------------------------------------------------
+
+# https://data.cityofnewyork.us/Recreation/Directory-of-Parks/79me-a7rs
+
+parks <- read_json("https://www.nycgovparks.org/bigapps/DPR_Parks_001.json",
+    simplifyVector = TRUE) %>%
+  as_tibble() %>%
+  clean_names() %>%
+  write_csv(here("data/nyc-parks.csv"))
 
 # CO2 datasets ------------------------------------------------------------
 
