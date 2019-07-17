@@ -141,7 +141,7 @@ suggestions edits (though you can add more lines in the suggestion if desired).
     These lists are kept in Markdown files in the `questions`, `objectives`, and `keypoints` folders respectively
     so that they can be included in both the chapters and the `objectives.Rmd` and `keypoints.Rmd` appendices.
 
-1.  The last line in each chapter includes the file `etc/links.md`, which gives symbolic names to all the external links used in the book.
+1.  The last line in each chapter includes the file `links.md`, which gives symbolic names to all the external links used in the book.
     Please always use `[text][label]` to refer to links and put the URL itself in this file to ensure consistency between chapters.
 
 1.  Please use the free desktop version of [draw.io](https://www.draw.io/) to draw diagrams.
