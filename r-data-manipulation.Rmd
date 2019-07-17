@@ -11,7 +11,7 @@
 library(tidyverse)
 library(here)
 dog_licenses <- read_csv(here("data", "nyc-dog-licenses.csv.gz")) %>% 
-  drop_na(AnimalName)
+  drop_na(animal_name)
 ```
 
 TODO: where is data introduced?
@@ -35,11 +35,11 @@ This viewer has some basic data manipulation features:
 
 Arrange and filter are known as data manipulation **verbs**.  Individually, they describe a single simple manipulation of a dataset.  It's surprising how many questions you can answer using just these two basic verbs:  
 
-* How old is the oldest dog in this data?  To answer we can arrange the `AnimalBirthMonth` column in increasing order and see Jack, a Pug from Queens, was born in January 1999 (this license was issued in May 2015, making Jack at least 16 at the time).  You'll notice that there are other dogs with this same birthday. 
+* How old is the oldest dog in this data?  To answer we can arrange the `animal_birth_month` column in increasing order and see Jack, a Pug from Queens, was born in January 1999 (this license was issued in May 2015, making Jack at least 16 at the time).  You'll notice that there are other dogs with this same birthday. 
 
-* What range of license issue dates are in this data?  Arrange `LicenseIssueDate` once in increasing order and once in decreasing order, to find the issue dates range from 12th September 2015 to 31st December 2016.
+* What range of license issue dates are in this data?  Arrange `license_issued_date` once in increasing order and once in decreasing order, to find the issue dates range from 12th September 2015 to 31st December 2016.
 
-* How many dogs licenses belong to dogs named Fido? Filter the `AnimalName` column with `Fido`, and see "Showing ... of 12 entries" - so 12!  
+* How many dogs licenses belong to dogs named Fido? Filter the `animal_name` column with `Fido`, and see "Showing ... of 12 entries" - so 12!  
 
 * and many more...
 
@@ -89,7 +89,7 @@ Let's take a look at the data in the console:
 dog_licenses
 ```
 
-Notice that in contrast to the Viewer you only see the first 10 rows of the dataset, and just the first few columns. The number of columns you see depends on the width of your console, so you may see more or fewer than displayed here.  You should also note some of the contents of the columns have been abbreviated. The `…` at the end of some values in `BreedName` indicates these values have been truncated for display purposes.   
+Notice that in contrast to the Viewer you only see the first 10 rows of the dataset, and just the first few columns. The number of columns you see depends on the width of your console, so you may see more or fewer than displayed here.  You should also note some of the contents of the columns have been abbreviated. The `…` at the end of some values in `breed_name` indicates these values have been truncated for display purposes.   
 
 You'll be using dplyr package for data manipulation, its part of the tidyverse, so you'll need to load the tidyverse to begin:
 ```{r}
@@ -98,26 +98,26 @@ library(tidyverse)
 
 ### Re-arranging rows 
 
-You can reorder rows of data with the dplyr function `arrange()`. The arrange function takes a dataframe as its first argument and column names as the remaining arguments. The result will have the rows ordered in increasing value of the specified column.  For example, to find the licenses belonging to the oldest dogs we arrange `dog_licenses` using the `AnimalBirthMonth` column:
+You can reorder rows of data with the dplyr function `arrange()`. The arrange function takes a dataframe as its first argument and column names as the remaining arguments. The result will have the rows ordered in increasing value of the specified column.  For example, to find the licenses belonging to the oldest dogs we arrange `dog_licenses` using the `animal_birth_month` column:
 ```{r}
-arrange(dog_licenses, AnimalBirthMonth)
+arrange(dog_licenses, animal_birth_month)
 ```
 You'll see Jack the Pug that lives in Queens, just like you did in the Viewer.
 
 To arrange the rows by decreasing value, you need to wrap the column name in the `desc()`  (short for *desc*ending order).  For instance to find the youngest dogs:
 ```{r}
-arrange(dog_licenses, desc(AnimalBirthMonth))
+arrange(dog_licenses, desc(animal_birth_month))
 ```
 
-As another example, to find the earliest issue date we can order by increasing `LicenseIssuedDate`:
+As another example, to find the earliest issue date we can order by increasing `license_issued_date`:
 ```{r}
-arrange(dog_licenses, LicenseIssuedDate)
+arrange(dog_licenses, license_issued_date)
 ```
-The first row is the record with the earliest issue date, but we can't actually see that date because the column `LicenseIssuedDate` isn't being displayed due to space.  One solution is to extract only the columns we are interested in, a manipulation known as selecting columns.
+The first row is the record with the earliest issue date, but we can't actually see that date because the column `license_issued_date` isn't being displayed due to space.  One solution is to extract only the columns we are interested in, a manipulation known as selecting columns.
 
 ### Exercise: Arranging character strings
 
-Use `arrange()` to order the dog licenses by `AnimalName` in increasing order.  What does this tell you about the way R treats punctuation and numbers when dealing with alphabetical order?
+Use `arrange()` to order the dog licenses by `animal_name` in increasing order.  What does this tell you about the way R treats punctuation and numbers when dealing with alphabetical order?
 
 ## How can I select subsets of my data?
 
@@ -130,23 +130,23 @@ You'll learn about these two functions in this section, along with learning abou
 
 ### Selecting columns
 
-The `select()` function in dplyr is used to extract some subset of columns (but keep all the rows) from a dataframe.  Just like `arrange()`, it takes a dataframe as its first argument and column names as the remaining arguments.  For example, to keep only the `AnimalName` column:
+The `select()` function in dplyr is used to extract some subset of columns (but keep all the rows) from a dataframe.  Just like `arrange()`, it takes a dataframe as its first argument and column names as the remaining arguments.  For example, to keep only the `animal_name` column:
 ```{r}
-select(dog_licenses, AnimalName)
+select(dog_licenses, animal_name)
 ```
 
-You can provide additional column names as arguments to keep additional specified columns, for example to keep `AnimalName` and `BreedName`:
+You can provide additional column names as arguments to keep additional specified columns, for example to keep `animal_name` and `breed_name`:
 ```{r}
-select(dog_licenses, AnimalName, BreedName)
+select(dog_licenses, animal_name, breed_name)
 ```
 
-To return to finding the earliest issue date, you need to first arrange by increasing `LicenseIssuedDate` and then select the `LicenseIssuedDate` column.  One approach is to store the result of the arrange step,
+To return to finding the earliest issue date, you need to first arrange by increasing `license_issued_date` and then select the `license_issued_date` column.  One approach is to store the result of the arrange step,
 ```{r}
-dog_by_date <- arrange(dog_licenses, LicenseIssuedDate)
+dog_by_date <- arrange(dog_licenses, license_issued_date)
 ```
 Then apply the select step to this object:
 ```{r}
-select(dog_by_date, LicenseIssuedDate)
+select(dog_by_date, license_issued_date)
 ```
 
 There are lots of shortcuts you can use with `select()` to avoid having to type out all the variables you want to keep.  For example, you can ask for all the columns that start with a certain string:
@@ -166,33 +166,33 @@ Combine `arrange()` and `select()` to confirm the last issue date in this datase
 
 You've seen you can combine data manipulation steps to do more complicated tasks, but so far you've done so by saving an intermediate object, in our previous example the object `dog_by_date`:
 ```{r, results="hide"}
-dog_by_date <- arrange(dog_licenses, LicenseIssuedDate)
-select(dog_by_date, LicenseIssuedDate)
+dog_by_date <- arrange(dog_licenses, license_issued_date)
+select(dog_by_date, license_issued_date)
 ```
 
 The pipe, `%>%`, is an operator that allows you to chain together operations without intermediate objects and maintain readability.  Let's just look at the first step in our manipulation:
 ```{r, results='hide'}
-arrange(dog_licenses, LicenseIssuedDate)
+arrange(dog_licenses, license_issued_date)
 ```
 
 With the pipe this can be rewritten as:
 ```{r, results='hide'}
-dog_licenses %>% arrange(LicenseIssuedDate)
+dog_licenses %>% arrange(license_issued_date)
 ```
 The pipe takes the object on the left hand side and passes it as the first argument to the function on the right hand side.  So, here the `dog_licenses` dataset is passed to the first argument of `arrange()`.  Inside `arrange()` we can then list any additional arguments as we normally would.  
 
 The pipe works very nicely with the data manipulation verbs because every verb expects a dataframe as its first argument and returns a data frame. This means the result of one operation is easily piped into the next operation, allowing you to chain together multiple steps.  For instance, piping the result of the arrange step above into the `select()` function:
 ```{r, results = "hide"}
 dog_licenses %>% 
-  arrange(LicenseIssuedDate) %>% 
-  select(LicenseIssuedDate)
+  arrange(license_issued_date) %>% 
+  select(license_issued_date)
 ```
 
 When you see the pipe, read it as "and then".  So, the above code would be read:
 
 > Take the dog_licenses data, **and then**   
-> arrange the rows by the `LicenseIssuedDate`, **and then**  
-> select the column `LicenseIssuedDate`.
+> arrange the rows by the `license_issued_date`, **and then**  
+> select the column `license_issued_date`.
 
 The result is code that matches very closely how we might describe the steps we performed in natural language.  It's so natural that for the remainder of the chapter we'll use the pipe when combining data manipulation steps.
 
@@ -201,8 +201,8 @@ The result is code that matches very closely how we might describe the steps we 
 Read the following code aloud to your neighbor (or cat, dog or rubber duck).  Remember to pronounce `%>%` as "and then".  
 ```{r, eval = FALSE}
 dog_licenses %>% 
-  filter(Borough == "Queens") %>% 
-  summarise(max(AnimalBirthMonth))
+  filter(borough == "Queens") %>% 
+  summarise(max(animal_birth_month))
 ```
 You haven't learnt about the `filter()` or `summarise()` functions yet, but can you guess what the code does? What question might it answer? 
 
@@ -210,29 +210,29 @@ You haven't learnt about the `filter()` or `summarise()` functions yet, but can 
 
 Re-write this snippet of code to use the pipe:
 ```{r, results = "hide"}
-select(dog_licenses, AnimalName, BreedName)
+select(dog_licenses, animal_name, breed_name)
 ```
 
 Use the pipe to re-write this snippet of code to avoid the intermediate variable:
 ```{r, results = "hide"}
-name_and_breed <- select(dog_licenses, AnimalName, BreedName)
-arrange(name_and_breed, BreedName)
+name_and_breed <- select(dog_licenses, animal_name, breed_name)
+arrange(name_and_breed, breed_name)
 ```
 
 ### Filtering to keep a subset of rows
 
 The function to filter rows of a data frame is `filter()`.  Like `arrange()` and `select()`, its first argument is a dataframe or tibble.  The remaining arguments describe which rows to **keep**.  The rows to keep are specified with a logical expression - something that is either `TRUE` or `FALSE`. The rows where this expression is `TRUE` will be returned.
 
-One of the simplest kinds of logical expression is a test for equality with the `==` operator.  For example, to keep the rows where `AnimalName` is `BRUNO` you could do:
+One of the simplest kinds of logical expression is a test for equality with the `==` operator.  For example, to keep the rows where `animal_name` is `BRUNO` you could do:
 ```{r}
-dog_licenses %>% filter(AnimalName == "BRUNO")
+dog_licenses %>% filter(animal_name == "BRUNO")
 ```
-The logical expression, `AnimalName == "BRUNO"`, will be `TRUE` when the value of the `AnimalName` column is exactly equal to the character string `"BRUNO"` - any differences in case, or whitespace will result in `FALSE`.  
+The logical expression, `animal_name == "BRUNO"`, will be `TRUE` when the value of the `animal_name` column is exactly equal to the character string `"BRUNO"` - any differences in case, or whitespace will result in `FALSE`.  
 
-Columns names can appear on either side of `==` or even on both sides.  When column names appear on both sides, the comparison happens row by row.  In programming terms this is know as an element-wise comparison.  For example, `LicenseIssuedDate == AnimalBirthMonth` will return `TRUE` for a row only if for that row the date the license was issued is the exact same date as the birth month for the dog. If you take a look:
+Columns names can appear on either side of `==` or even on both sides.  When column names appear on both sides, the comparison happens row by row.  In programming terms this is know as an element-wise comparison.  For example, `license_issued_date == animal_birth_month` will return `TRUE` for a row only if for that row the date the license was issued is the exact same date as the birth month for the dog. If you take a look:
 ```{r}
 dog_licenses %>% 
-  filter(LicenseIssuedDate == AnimalBirthMonth)
+  filter(license_issued_date == animal_birth_month)
 ```
 There are no rows that satisfy this criteria.
 
@@ -261,33 +261,33 @@ Use `filter()` with this variables to find:
 If you pass more than one logical expression to `filter()` it will return only rows where **all** of the expressions are `TRUE`.  For example, licenses that are to dogs named Bruno in Brooklyn:
 ```{r}
 dog_licenses %>% 
-  filter(AnimalName == "BRUNO", Borough == "Brooklyn") 
+  filter(animal_name == "BRUNO", borough == "Brooklyn") 
 ```
 
 If you want to create an "or" type expression, like "licenses to dogs named BRUNO **or** dogs named BRUCE", you need to combine two comparisons with the OR operator, `|`.  
 ```{r, results = "hide"}
 # Dogs just named BRUNO
 dog_licenses %>% 
-  filter(AnimalName == "BRUNO")
+  filter(animal_name == "BRUNO")
 
 # Dogs just named BRUCE
 dog_licenses %>% 
-  filter(AnimalName == "BRUCE")
+  filter(animal_name == "BRUCE")
 
 # Dogs named BRUNO or BRUCE
 dog_licenses %>% 
-  filter(AnimalName == "BRUNO" | AnimalName == "BRUCE")
+  filter(animal_name == "BRUNO" | animal_name == "BRUCE")
 ```
 
 If you find yourself combining lots of comparisons on the same column with `|`, like dogs named `BRUNO`, `BRUCE` or `BRADY`:
 ```{r, results = "hide"}
 dog_licenses %>% 
-  filter(AnimalName == "BRUNO" | AnimalName == "BRUCE" | AnimalName == "BRADY")
+  filter(animal_name == "BRUNO" | animal_name == "BRUCE" | animal_name == "BRADY")
 ```
 You can save a lot of typing with `%in%`:
 ```{r, results = "hide"}
 dog_licenses %>% 
-  filter(AnimalName %in% c("BRUNO", "BRUCE", "BRADY"))
+  filter(animal_name %in% c("BRUNO", "BRUCE", "BRADY"))
 ```
 `%in%` will return `TRUE` for an element of the left hand side if it is contained in the vector on the right hand side.
 
@@ -305,31 +305,31 @@ Use `filter()` with these variables to find the dog licenses that expire during 
 
 So far, you've been manipulating the columns that ready exist in a dataset, but want if you want to add new ones? The function `mutate()` handles this kind of operation.  
 
-To see how this works let's start with a logical expression: `AnimalName == "CHASE"`.  If you used this with `filter()`, you would get all the rows back where the license was issued to a dog named `CHASE`. Let's say instead of subsetting the data, you want to add a column called `called_chase` that contained the `TRUE` and `FALSE` result.  With `mutate()` after passing in the data, you pass named arguments, where the name is the name you desire for the new column, and its value is the way to calculate it:
+To see how this works let's start with a logical expression: `animal_name == "CHASE"`.  If you used this with `filter()`, you would get all the rows back where the license was issued to a dog named `CHASE`. Let's say instead of subsetting the data, you want to add a column called `called_chase` that contained the `TRUE` and `FALSE` result.  With `mutate()` after passing in the data, you pass named arguments, where the name is the name you desire for the new column, and its value is the way to calculate it:
 ```{r}
 dog_licenses %>% 
-  mutate(called_chase = AnimalName == "CHASE") %>% 
-  select(AnimalName, called_chase)
+  mutate(called_chase = animal_name == "CHASE") %>% 
+  select(animal_name, called_chase)
 ```
 
 > Take `dog_licences`, **and then**,   
-> mutate to add a column called `called_chase` which is the result of testing whether `AnimalName` is exactly `"CHASE"`, **and then**,   
-> select the columns `AnimalName` and `called_chase`.
+> mutate to add a column called `called_chase` which is the result of testing whether `animal_name` is exactly `"CHASE"`, **and then**,   
+> select the columns `animal_name` and `called_chase`.
 
 The select statement isn't crucial to the calculation here, but it does help me draw your attention to the columns that were involved in this step.
 
 This can be a useful intermediate step in filtering, since it gives you a chance to examine the logical statement before using it to filter:
 ```{r}
 dog_licenses %>% 
-  mutate(called_chase = AnimalName == "CHASE") %>% 
+  mutate(called_chase = animal_name == "CHASE") %>% 
   filter(called_chase)
 ```
 
 Take a closer look at the argument to mutate:
 ```
-called_chase = AnimalName == "CHASE"
+called_chase = animal_name == "CHASE"
 ```
-On the left of the `=` is the argument name, `called_chase`.  This is a name you choose - it should be descriptive and follow good style.  On the right of the `=` is an expression that must either return as many values as there are rows, or a single value.  Here, the logical expression involves the column `AnimalName` so it returns as many values as there are rows.
+On the left of the `=` is the argument name, `called_chase`.  This is a name you choose - it should be descriptive and follow good style.  On the right of the `=` is an expression that must either return as many values as there are rows, or a single value.  Here, the logical expression involves the column `animal_name` so it returns as many values as there are rows.
 
 It you would prefer the values to be something other `TRUE` or `FALSE`, say `"called_chase"` and `"not_called_chase"`, `ifelse()` is a base R function that can do this:
 
@@ -341,25 +341,25 @@ Where `test` is a logical expression, `yes` the value for the elements that retu
 ```{r}
 dog_licenses %>% 
   mutate(
-    called_chase = ifelse(AnimalName == "CHASE", "called_chase", "not_called_chase")
+    called_chase = ifelse(animal_name == "CHASE", "called_chase", "not_called_chase")
     ) %>% 
-  select(AnimalName, called_chase)
+  select(animal_name, called_chase)
 ```
 
 You can perform multiple mutate steps at once by passing more arguments to `mutate()`, so an alternative way of writing the above code (with more keystrokes, but with lines that are shorter) would be:
 ```{r}
 dog_licenses %>% 
   mutate(
-    is_chase = AnimalName == "CHASE",
+    is_chase = animal_name == "CHASE",
     called_chase = ifelse(is_chase, "called_chase", "not_called_chase")
     ) %>% 
-  select(AnimalName, is_chase, called_chase)
+  select(animal_name, is_chase, called_chase)
 ```
 
 Arithmetic is another common operation that returns as many elements as there are rows.  For instance we could see how long licenses are issued for:
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
   select(license_duration)
 ```
 Interesting that there is so much variation here. 
@@ -370,7 +370,7 @@ You can use `mutate()` with operations that give one number based on all the row
 ```{r}
 dog_licenses %>% 
   mutate(
-    license_duration = LicenseExpiredDate - LicenseIssuedDate,
+    license_duration = license_expired_date - license_issued_date,
     avg_duration = mean(license_duration)) %>% 
   select(license_duration, avg_duration)
 ```
@@ -382,7 +382,7 @@ Use `mutate()` to add a column `age_at_issue` that contains the dogs approximate
 
 ### Exercise: Mutts
 
-Use `mutate()` along with `ifelse()` to create a column `breed` that takes values `"unknown"` if `BreedName` is `"Unknown"` and `"known"` otherwise.
+Use `mutate()` along with `ifelse()` to create a column `breed` that takes values `"unknown"` if `breed_name` is `"Unknown"` and `"known"` otherwise.
 
 *Extra challenge* Can you figure out if the licenses issued to unknown breed dogs are of longer or shorter duration on average than known breed dogs?
 
@@ -391,7 +391,7 @@ Use `mutate()` along with `ifelse()` to create a column `breed` that takes value
 The function `str_length()` in the stringr package finds the length of character strings.  Replace the `___` in following code to add a column called `name_length` that contains the length of the dog's name:
 ```{r, eval = FALSE}
 dog_licenses %>% 
-  ___(___ = stringr::str_length(AnimalName))
+  ___(___ = stringr::str_length(animal_name))
 ```
 
 Now add an `arrange()` step to find the licenses issued to dogs with the longest names?
@@ -432,13 +432,13 @@ There is one flaw in this analogy -- R isn't a real person. So, if you need to v
 
 Syntax errors occur when your code can't be parsed into its component pieces by R.  For example, R expects the arguments to a function to start after the opening parenthesis (`(`), be separated by a comma (`,`) and finish at the closing parenthesis (`)`). When R sees this code:
 ```{r, error = TRUE}
-filter(dog_licenses BreedName == "Finnish Lapphund")
+filter(dog_licenses breed_name == "Finnish Lapphund")
 ```
-The missing comma means R can't figure out where the first argument to `filter()` ends: is it after `dog_licenses`, after `BreedName`, or after `==`?  
+The missing comma means R can't figure out where the first argument to `filter()` ends: is it after `dog_licenses`, after `breed_name`, or after `==`?  
 
 Take a closer look at the error message.  Error messages always begin with `Error`, then optionally the name of the function that returned an error (not in this example), followed by a `:`, and some description of the error that occurred. The message `unexpected symbol` is one common kind of syntax error - in this case R encountered some code where it was expecting a comma or closing parenthesis.  We can fix it by putting in the missing comma:
 ```{r, error = TRUE}
-filter(dog_licenses, BreedName == "Finnish Lapphund")
+filter(dog_licenses, breed_name == "Finnish Lapphund")
 ```
 
 Syntax errors are usually the result of typos.  Some things to keep an eye out for:
@@ -457,28 +457,28 @@ Fix these **syntax** errors.
 *  
     ```{r, error = TRUE}
     dog_licenses %>% 
-      arrange(desc(LicenseExpiredDate)))
+      arrange(desc(license_expired_date)))
     ```
     
 * 
     ```{r, error = TRUE}
     dog_licenses %>% 
       mutate(
-        month_born = lubridate::month(AnimalBirthMonth)
-        year_born = lubridate::year(AnimalBirthMonth))
+        month_born = lubridate::month(animal_birth_month)
+        year_born = lubridate::year(animal_birth_month))
     ```
 
 *
     ```{r, error = TRUE}
     dog_licenses %>% 
-      filter(AnimalName == "BRUNO)
+      filter(animal_name == "BRUNO)
     ```
     (If you run this code in the Console, you might not get an error, but you should see a `+` on a new line, a signal that R is waiting for more input and a clue that there is something missing in this code). 
     
 *  
     ```{r, error = TRUE}
     dog_licenses 
-      %>% filter(AnimalGender == "M")
+      %>% filter(animal_gender == "M")
     ```
 
 ### Common runtime errors
@@ -490,7 +490,7 @@ Runtime errors come in an infinite number of flavors because there are so many w
 
 Or try to filter with something that isn't a logical:
 ```{r, error = TRUE}
-dog_licenses %>% filter(AnimalName)
+dog_licenses %>% filter(animal_name)
 ```
 
 Perhaps the most common runtime error is of the form `Error: object not found`:
@@ -513,11 +513,11 @@ myobject
 
 This error also often arises when you forgot quotes around strings.  For example, if we want all the dogs that are male, and try
 ```{r, error = TRUE}
-dog_licenses %>% filter(AnimalGender == M)
+dog_licenses %>% filter(animal_gender == M)
 ```
-you get an error because R is looking for an object called `M` to compare to the values in the column called `AnimalGender`.  What we really wanted to do was compare the values in `AnimalGender` to the string `"M"`:
+you get an error because R is looking for an object called `M` to compare to the values in the column called `animal_gender`.  What we really wanted to do was compare the values in `animal_gender` to the string `"M"`:
 ```{r}
-dog_licenses %>% filter(AnimalGender == "M")
+dog_licenses %>% filter(animal_gender == "M")
 ```
 
 ### Exercise: `object not found`
@@ -533,7 +533,7 @@ Fix these `object not found` errors. (Hint: the names of the objects or variable
 * 
     ```{r, error = TRUE}
     dogs_named_bruno <- dog_licenses %>% 
-      filter(AnimalName == BRUNO)
+      filter(animal_name == BRUNO)
     ```
 
 ### Warnings and messages 
@@ -575,13 +575,13 @@ Warnings don't **stop** you from proceeding, but they should alert you to questi
 The syntax for `summarise()` is the same as `mutate()` but it expects operations that reduce all rows down to one row.  Recall from `mutate()` this code that added the average license duration to every row of the data:
 ```{r, results="hide"}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
   mutate(avg_duration = mean(license_duration)) 
 ```
 You actually saw this in one `mutate()` statement, but I've separated out the line that calculates the average so it's easier to see the difference with `summarise()`.  See what happens when you switch out the final `mutate()` with `summarise()`:
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
   summarise(avg_duration = mean(license_duration)) 
 ```
 Instead of the the one value repeated on every row, we get a new tibble with only one row, and a single column that corresponds to our requested summary.
@@ -589,14 +589,14 @@ Instead of the the one value repeated on every row, we get a new tibble with onl
 Any function that takes many values and reduces them to one is a good candidate for `summarise()`, for example we could find the shortest licence duration by swapping in `min()` instead of `mean()`:
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
   summarise(shortest_duration = min(license_duration)) 
 ```
 
 Like `mutate()` you can also create multiple summary columns at once:
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
   summarise(
     avg_duration = mean(license_duration),
     shortest_duration = min(license_duration),
@@ -609,7 +609,7 @@ TODO: link to cheatsheet with list of other useful functions.
 Lot's of statistical operations produce one numbers summaries and are appropriate for use with `summarise()`: `sd()`, `min()`, `max()`, `mean()`, `median()`, `quantile()` (with a single argument).  Whenever you are summarizing many rows, it's a good idea to keep track of how many rows were summarized.  This is so common, dplyr provides a special function, `n()`, that simply counts the number of rows.  To add it to your summary:
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
   summarise(
     avg_duration = mean(license_duration),
     shortest_duration = min(license_duration),
@@ -622,14 +622,14 @@ Now, imagine you want this summary just for licenses issued to dogs in the Bronx
 
 > Take the `dog_licenses` data, **and then**,   
 > mutate to add a column called `license_duration`, **and then**  
-> filter to keep rows where the `Borough` is `"Bronx"`, **and then**  
+> filter to keep rows where the `borough` is `"Bronx"`, **and then**  
 > summarise to find the mean, min and max duration along with the number of rows.
 
 In code:
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
-  filter(Borough == "Bronx") %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
+  filter(borough == "Bronx") %>% 
   summarise(
     avg_duration = mean(license_duration),
     shortest_duration = min(license_duration),
@@ -641,8 +641,8 @@ dog_licenses %>%
 But how does this compare to Brooklyn?  You could do the same operation again, but now for Brooklyn:
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
-  filter(Borough == "Brooklyn") %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
+  filter(borough == "Brooklyn") %>% 
   summarise(
     avg_duration = mean(license_duration),
     shortest_duration = min(license_duration),
@@ -653,11 +653,11 @@ dog_licenses %>%
 
 What about Queens?  This kind of operation: summarising different subsets of the same data, is so common there is a much easier way to do it: combining `summarise()` with `group_by()`.  
 
-The only difference in the code, is that instead of filtering for a specific `Borough` we'll `group_by()` the column `Borough`.
+The only difference in the code, is that instead of filtering for a specific `borough` we'll `group_by()` the column `borough`.
 ```{r}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
-  group_by(Borough) %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
+  group_by(borough) %>% 
   summarise(
     avg_duration = mean(license_duration),
     shortest_duration = min(license_duration),
@@ -674,7 +674,7 @@ You might have been a little surprised by the result above. I thought there were
 The following code creates a new column `month_born` that holds the name of the month the licensed dog was born:
 ```{r, results = "hide"}
 dog_licenses %>% 
-  mutate(month_born = lubridate::month(AnimalBirthMonth, label = TRUE))
+  mutate(month_born = lubridate::month(animal_birth_month, label = TRUE))
 ```
 Use a `group_by()` step and a `summarise()` step to find the number of dogs born in each month?  Which month stands out? Can you guess why?
 
@@ -683,8 +683,8 @@ Use a `group_by()` step and a `summarise()` step to find the number of dogs born
 In the example above for dogs licensed in Brooklyn:
 ```{r, results = "hide"}
 dog_licenses %>% 
-  mutate(license_duration = LicenseExpiredDate - LicenseIssuedDate) %>% 
-  filter(Borough == "Brooklyn") %>% 
+  mutate(license_duration = license_expired_date - license_issued_date) %>% 
+  filter(borough == "Brooklyn") %>% 
   summarise(
     avg_duration = mean(license_duration),
     shortest_duration = min(license_duration),
@@ -704,12 +704,12 @@ the `filter()` step came after the `mutate()` step. Does this matter?
 
 ### Exercise: the five boroughs
 
-The column `NTA` is a code for the "Neighborhood Tabulation Areas", and has been geo-coded from the licensee's address (as opposed to self reported).  The first two characters correspond to the Borough.
+The column `neighborhood_tabulation_area` is a code for the "Neighborhood Tabulation Areas", and has been geo-coded from the licensee's address (as opposed to self reported).  The first two characters correspond to the Borough.
 
 This code creates a new variable called `borough_code` that contains just these two characters:
 ```{r}
 dog_licenses %>% 
-  mutate(borough_code = stringr::str_sub(NTA, 1, 2)) 
+  mutate(borough_code = stringr::str_sub(neighborhood_tabulation_area, 1, 2)) 
 ```
 
 Which borough has the longest average licence duration?
@@ -785,8 +785,8 @@ Say, you've now got a summary of the license durations by borough:
 ```{r}
 dog_licenses %>% 
   mutate(
-    license_duration = LicenseExpiredDate - LicenseIssuedDate,
-    borough_code = stringr::str_sub(NTA, 1, 2)) %>% 
+    license_duration = license_expired_date - license_issued_date,
+    borough_code = stringr::str_sub(neighborhood_tabulation_area, 1, 2)) %>% 
   group_by(borough_code) %>% 
   summarise(
     avg_duration = mean(license_duration),
@@ -802,8 +802,8 @@ If you just need this tibble later in your code you can assign it to a variable:
 ```{r}
 duration_by_borough <- dog_licenses %>% 
   mutate(
-    license_duration = LicenseExpiredDate - LicenseIssuedDate,
-    borough_code = stringr::str_sub(NTA, 1, 2)) %>% 
+    license_duration = license_expired_date - license_issued_date,
+    borough_code = stringr::str_sub(neighborhood_tabulation_area, 1, 2)) %>% 
   group_by(borough_code) %>% 
   summarise(
     avg_duration = mean(license_duration),
@@ -850,8 +850,8 @@ Save the tibble with our extra columns:
 ```{r, results = "hide"}
 dog_licenses %>% 
   mutate(
-    license_duration = LicenseExpiredDate - LicenseIssuedDate,
-    borough_code = stringr::str_sub(NTA, 1, 2))
+    license_duration = license_expired_date - license_issued_date,
+    borough_code = stringr::str_sub(neighborhood_tabulation_area, 1, 2))
 ```
 
 into a CSV file called `dog-licenses-extra.csv`.
