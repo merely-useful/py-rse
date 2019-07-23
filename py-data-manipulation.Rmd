@@ -10,6 +10,10 @@ and a [Data Carpentry Python workshop](https://datacarpentry.org/python-ecology-
 
 ## How can I read tabular data into a program? {#py-data-manipulation-reading}
 
+The package `pandas` is built for working with tabular data, and the `pandas`
+function `read_csv()` takes a tabular text file as input and returns a `pandas`
+data frame.
+
 ```python
 # reading in tabular data - example
 
@@ -24,18 +28,145 @@ filename = "data/nyc-dog-licensing.csv"
 data = pd.read_csv(filename)
 ```
 
-
-You can also use a url as the filename in read_csv:
+You can also pass a url as the `filename` argument in `read_csv()`:
 
 ```python
 data_link = "https://raw.githubusercontent.com/merely-useful/merely-useful.github.io/book/data/measurements.csv"
 data = pd.read_csv(data_link)
 ```
 
+The `read_csv()` function assumes by default that the column delimiter
+in the file is a comma and that the first line of the file contains column names.
+To specify a different delimiter (for example tab), pass the argument `sep = \t`.
+If the data has no column names, pass the argument `header = None`, or give a list
+of column names using the argument `names = [column names]`.
+
+
 ## How can I tidy up my data?
 
- - Cleaning column names
- - other neat cleaning tricks as part of data manipulation session (see Damien's carbon data cleaning in PR)
+Even carefully created and curated data can present difficulties at the analysis step.
+Here are a few tidying steps you might consider when exploring a new data set.
+
+### Modifying column names
+
+In this book we are using *snake case* for column names (`snake_case`), but another common format
+is called *camel case* (`CamelCase`). The following code uses the package `inflection`
+to convert a list of column names from camel to snake case.
+
+```python
+# import the underscore function which creates snake case
+from inflection import underscore
+
+# get a list of columns in snake case for the data frame 'df'
+snake_case_columns = [underscore(column) for column in df.columns]
+
+# reassign the columns of 'df'
+df.columns = snake_case_columns
+```
+
+If the column names have any whitespace in them, this one-liner will rename
+them without the whitespace.
+
+```python
+# Remove whitespace from column names
+df = df.rename(columns=lambda x: x.strip())
+```
+
+You might also decide that you don't want to keep some columns; you can drop them
+from the data frame using the function `drop()`. For example, the following code drops the columns
+`city_council_district` and `census_tract2010` from the dog license data frame.
+
+```python
+# drop two columns
+data = data.drop(columns = ["city_council_district", "census_tract2010"])
+```
+
+### Cleaning values
+
+Often, data entered by humans can have errors or inconsistent formats. The values
+in the `borough` column of the dog license data are a good example. To see all the
+unique values in this column, we can use the pandas function `unique()` or `value_counts()`.
+
+```python
+# list and count all the values of 'borough'
+data['borough'].value_counts()
+```
+
+Adding the function `count()` will show the total number of unique boroughs (79).
+
+```python
+data['borough'].value_counts().count()
+```
+
+There are at least three different variations of `New York` with various capitalizations.
+`New York`, `NEW YORK`, and `new york` should probably all be considered the same
+borough, but unless we do something to these names, `pandas` will consider them unique.
+There are also two `Manhattan` counts that are spelled and capitalized the same but are showing
+up as different values. This could be due to some extra whitespace in the field.
+
+A good first pass to clean this up is to apply some string methods to this column.
+The method `str` allows us to use any Python function that works on strings and
+apply it to a data frame.
+
+We can remove whitespace from the left and right sides of each entry using
+the string methods `lstrip()` and `rstrip()`.
+Before we reassign the values to the 'borough' column, we can check if these operations
+will decrease the number of unique values.
+
+```python
+print(data['borough'].str.rstrip().value_counts().count())
+print(data['borough'].str.lstrip().value_counts().count())
+```
+
+Since only `rstrip()` actually combines any values, we'll just do that.
+
+```python
+# strip whitespace from the end of each borough name
+data['borough'] = data['borough'].str.rstrip()
+```
+
+After this operation, the total number of unique values has gone down to 73.
+
+Next, we'll convert all the boroughs to lower case.
+
+```python
+data['borough'] = data['borough'].str.lower()
+```
+
+This reduces the unique boroughs down again to 58. Not bad, but another look
+at `data['borough'].value_counts()` shows us that we still have some issues:
+'staten island' and 'staten is' are two different values that probably refer to the
+same borough. At this point automatic processing might give way to some human
+oversight: for instance, we could look up the true names of New York's boroughs
+and see that there are only five. We could then cross-reference the 'borough' column
+with other location information like the zip code or city council district to assign
+correct boroughs to some of the mis-named ones. We could also do a few things
+manually, such as renaming 'staten is'
+to 'staten island', which would take care of 267 mis-labeled entries.
+
+```python
+# replace values in the 'borough' column
+data['borough'] = data[['borough']].replace('staten is', 'staten island')
+```
+
+We could also decide that it's not worth it to meticulously fix the stragglers and
+drop any rows whose borough appears less than, say, five times in the dataset. This
+operation involves a few concepts that will be covered more in following sections,
+but we'll show it here for completeness.
+
+```python
+# get a list of the unique borough names
+borough_names = data['borough'].value_counts().index
+
+# get a list of all the borough names that have 5 or more members
+large_borough_names = borough_names[data['borough'].value_counts().values >= 5]
+
+# the function `isin(list)` returns True or False for each row if the value is in `list`
+data_large_boroughs = data[data['borough'].isin(large_borough_names)]
+
+# print the unique boroughs after this operation
+print(data_large_boroughs['borough'].value_counts()
+```
 
 
 ## How can I select subsets of my data?
