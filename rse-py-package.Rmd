@@ -1268,55 +1268,58 @@ you would be able to add that badge and link by adding the following line to you
 FIXME: talk about the webhooks, bringing in the discussion from the CI section.
 
 ## How can I distribute software packages that I have created? {#rse-py-package-distribute}
-
-FIXME: flesh this out with testpypi and pypi
-
 <!-- == noindent -->
 
-Once you have created this file,
-you can run `python setup.py sdist` to create your package.
-The verb `sdist` stands for "source distribution",
-meaning that the source of the Python files is included in the package:
+With our package working, testable, installable, and documented, 
+we should distribute it so anyone can just `pip install pterry_zipfpy`
+and start running!
+
+`pip` installs packages either from a source distribution (an `sdist` in
+python packaging jargon) or a binary distribution called a wheel (`bdist_wheel`).
+We can use setuptools to generate both of these:
 
 ```shell
-$ python setup.py sdist
+$ python setup.py sdist bdist_wheels
 ```
 ```text
 running sdist
 running egg_info
-creating zipf.egg-info
-writing zipf.egg-info/PKG-INFO
-writing dependency_links to zipf.egg-info/dependency_links.txt
-writing top-level names to zipf.egg-info/top_level.txt
-writing manifest file 'zipf.egg-info/SOURCES.txt'
-reading manifest file 'zipf.egg-info/SOURCES.txt'
-writing manifest file 'zipf.egg-info/SOURCES.txt'
-warning: sdist: standard file not found: should have one of README, README.rst, README.txt, README.md
-
-running check
+creating zipfpy.egg-info
+writing zipfpy.egg-info/PKG-INFO
+writing dependency_links to zipfpy.egg-info/dependency_links.txt
+...
 warning: check: missing required meta-data: url
-
 warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
 
-creating zipf-0.1
-creating zipf-0.1/zipf
-creating zipf-0.1/zipf.egg-info
-copying files to zipf-0.1...
-copying setup.py -> zipf-0.1
-copying zipf/__init__.py -> zipf-0.1/zipf
-copying zipf/generate.py -> zipf-0.1/zipf
-copying zipf.egg-info/PKG-INFO -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/SOURCES.txt -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/dependency_links.txt -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/top_level.txt -> zipf-0.1/zipf.egg-info
-Writing zipf-0.1/setup.cfg
+creating zipfpy-0.1
+creating zipfpy-0.1/bin
+creating zipfpy-0.1/zipfpy
+...
 creating dist
 Creating tar archive
-removing 'zipf-0.1' (and everything under it)
+removing 'zipfpy-0.1' (and everything under it)
+
+running bdist_wheel
+running build
+running build_py
+creating build
+creating build/lib
+creating build/lib/zipfpy
+...
+adding 'zipfpy/__init__.py'
+adding 'zipfpy/check.py'
+adding 'zipfpy/generate.py'
+adding 'zipfpy-0.1.data/scripts/check_zipf.py'
+adding 'zipfpy-0.1.dist-info/top_level.txt'
+adding 'zipfpy-0.1.dist-info/WHEEL'
+adding 'zipfpy-0.1.dist-info/METADATA'
+adding 'zipfpy-0.1.dist-info/RECORD'
+removing build/bdist.macosx-10.7-x86_64/wheel
 ```
 
 <!-- == noindent -->
-We will look at how to clean up the warnings about `README.md`, `url`, and `author_email` in the exercises.
+We will look at how to clean up the warnings about `url`, and `author_email` in the exercises, as
+well as considering other package metadata we should add for our package.
 
 `python setup.py sdist` creates a compressed file `dist/zipf-0.1.tar.gz` that contains the following:
 
@@ -1324,29 +1327,120 @@ We will look at how to clean up the warnings about `README.md`, `url`, and `auth
 $ tar ztvf dist/zipf-0.1.tar.gz
 ```
 ```text
-drwxr-xr-x  0 pterry staff       0 20 Aug 15:36 zipf-0.1/
--rw-r--r--  0 pterry staff     180 20 Aug 15:36 zipf-0.1/PKG-INFO
--rw-r--r--  0 pterry staff      38 20 Aug 15:36 zipf-0.1/setup.cfg
--rw-r--r--  0 pterry staff     145 20 Aug 13:40 zipf-0.1/setup.py
-drwxr-xr-x  0 pterry staff       0 20 Aug 15:36 zipf-0.1/zipf/
--rw-r--r--  0 pterry staff     317 20 Aug 13:34 zipf-0.1/zipf/__init__.py
--rw-r--r--  0 pterry staff     163 20 Aug 13:34 zipf-0.1/zipf/generate.py
-drwxr-xr-x  0 pterry staff       0 20 Aug 15:36 zipf-0.1/zipf.egg-info/
--rw-r--r--  0 pterry staff       1 20 Aug 15:36 zipf-0.1/zipf.egg-info/dependency_links.txt
--rw-r--r--  0 pterry staff     180 20 Aug 15:36 zipf-0.1/zipf.egg-info/PKG-INFO
--rw-r--r--  0 pterry staff     154 20 Aug 15:36 zipf-0.1/zipf.egg-info/SOURCES.txt
--rw-r--r--  0 pterry staff       5 20 Aug 15:36 zipf-0.1/zipf.egg-info/top_level.txt
+drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/
+-rw-r--r--  0 pterry staff     182 Jul 23 16:30 zipfpy-0.1/PKG-INFO
+drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/bin/
+-rwxr-xr-x  0 pterry staff     467 Jul 23 16:24 zipfpy-0.1/bin/check_zipf.py
+-rw-r--r--  0 pterry staff     792 Jul 23 16:24 zipfpy-0.1/README.md
+drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/
+-rw-r--r--  0 pterry staff     182 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/PKG-INFO
+-rw-r--r--  0 pterry staff     210 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/SOURCES.txt
+-rw-r--r--  0 pterry staff       7 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/top_level.txt
+-rw-r--r--  0 pterry staff       1 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/dependency_links.txt
+-rw-r--r--  0 pterry staff     162 Jul 23 16:24 zipfpy-0.1/setup.py
+drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/zipfpy/
+-rw-r--r--  0 pterry staff    1978 Jul 23 16:24 zipfpy-0.1/zipfpy/check.py
+-rw-r--r--  0 pterry staff    2022 Jul 23 16:24 zipfpy-0.1/zipfpy/generate.py
+-rw-r--r--  0 pterry staff     318 Jul 23 16:24 zipfpy-0.1/zipfpy/__init__.py
+-rw-r--r--  0 pterry staff      38 Jul 23 16:30 zipfpy-0.1/setup.cfg
 ```
 
 <!-- == noindent -->
 The source files `__init__.py` and `generate.py` are in there,
 along with the odds and ends that `pip` will need to install this package properly when the time comes.
 
+Also present in `dist` is a file `zipfpy-0.1-py3-none-any.whl`, the "wheel" file;
+running `file dist/zipfpy-0.1-py3-none-any.whl` will show it to be a zip file.  We
+can list its contents and see the same source files and some metadata:
+
+```shell
+$ unzip -l dist/zipfpy-0.1-py3-none-any.whl
+```
+```text
+Archive:  dist/zipfpy-0.1-py3-none-any.whl
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+      318  07-23-2019 20:24   zipfpy/__init__.py
+     1978  07-23-2019 20:24   zipfpy/check.py
+     2022  07-23-2019 20:24   zipfpy/generate.py
+      454  07-23-2019 20:30   zipfpy-0.1.data/scripts/check_zipf.py
+        7  07-23-2019 20:30   zipfpy-0.1.dist-info/top_level.txt
+       92  07-23-2019 20:30   zipfpy-0.1.dist-info/WHEEL
+      172  07-23-2019 20:30   zipfpy-0.1.dist-info/METADATA
+      606  07-23-2019 20:30   zipfpy-0.1.dist-info/RECORD
+---------                     -------
+     5649                     8 files
+```
+
+These distribution files can now be distributed via `pypi`, the standard python
+repository for python packages.
+
+There is a `testpypi` repository that lets us test putting packages
+on pypi without having them appear on the standard repository; let's
+start with that.  Go to [`https://test.pypi.org`](https://test.pypi.org),
+create an account, and confirm your email.
+
+The preferred tool for uploading packages to the PyPI family of repositories
+is called [`twine`](https://twine.readthedocs.io/en/latest/); we will
+install that package:
+
+```shell
+$ pip install twine
+```
+and now we can upload our distributions:
+
+```shell
+$ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+Enter your username: pterry
+Enter your passowrd: *********
+Uploading zipfpy-0.1-py3-none-any.whl
+...
+Uploading zipfpy-0.1.tar.gz
+...
+```
+
+The `--repository-url` allows us to specify the test PyPI repository, and we
+have now uploadd both types of distribution, allowing users with different
+environments to use the wheel distribution if their systems allow it, or
+the source distribution otherwise.
+
+We can now test this with a virtual environment and installing with pip:
+
+```shell
+$ virtualenv ~/envs/testpypi
+Using base prefix '/usr/local/Cellar/python/3.7.2_2/Frameworks/Python.framework/Versions/3.7'
+New python executable in /Users/pterry/envs/testpypi/bin/python3.7
+Also creating executable in /Users/pterry/envs/testpypi/bin/python
+sourInstalling setuptools, pip, wheel...
+$ source ~/envs/testpypi/bin/activate
+(testpypi) $ pip install --index-url https://test.pypi.org/simple/ zipfpy
+Looking in indexes: https://test.pypi.org/simple/
+Collecting zipfpy
+  Using cached https://test-files.pythonhosted.org/packages/f8/ac/d152eed95bff7567954becef22b8fe0f2aae15008fbeb346c69f75b9d2a0/zipfpy-0.1-py3-none-any.whl
+Installing collected packages: zipfpy
+Successfully installed zipfpy-0.1
+(testpypi) $
+```
+
+Success!  Once we are happy with how our package appears in testpypi
+(including its [project page](https://test.pypi.org/project/zipfpy/)),
+we can go through the same process to put it on the main pypi repository.
+But first we have a few improvements to make to our setup.py so that
+our package webpage is useful and to make it easier for potential users
+to find, understand, and install our package.
 
 
-FIXME: testpypi for testing package distribution
+### Exercise: Clean up warning messages
 
-FIXME: Documenting section - Sphinx
+-   FIXME: clean up warning messages from `python setup.py sdist`
+
+### Exercise License, longinfo, and classification metadata
+
+-   FIXME: add additional metadata to setup.py
+
+### Exercise: Requirements in setup.py
+
+-   FIXME: add requirements metadata to setup.py
 
 ## Announcing Work {#rse-py-package-announce}
 
@@ -1359,11 +1453,6 @@ FIXME: <https://medium.com/indeed-engineering/marketing-for-data-science-a-7-ste
 insert_graphic("figures/rse-py-package/concept.pdf")
 ```
 
-## Exercises {#rse-py-package-exercises}
-
-### Clean up warning messages
-
--   FIXME: clean up warning messages from `python setup.py sdist`
 
 ## Key Points {#rse-py-package-keypoints}
 
