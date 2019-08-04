@@ -15,5 +15,7 @@ If you wish to report errata or suggest improvements to wording, please include
 the chapter name in the first line of the body of your report (e.g., `Testing
 Data Analysis`).
 
+Code style conventions can be found in [./style-guide-for-authors.Rmd].
+
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
