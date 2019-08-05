@@ -17,6 +17,8 @@
 - `git diff` displays differences between commits.
 - `git checkout` recovers old versions of files.
 
+- `git branch` creates a new branch where new features can be developed while leaving the master branch untouched.
+
 - The `.gitignore` file tells Git what files to ignore.
 
 - A local Git repository can be connected to one or more remote repositories.
@@ -29,3 +31,5 @@
 - Conflicts occur when two or more people change the same lines of the same file.
 - The version control system does not allow people to overwrite each other’s changes blindly,
   but highlights conflicts so that they can be resolved.
+  
+- Pull requests suggest changes to repos where you don’t have write privileges.

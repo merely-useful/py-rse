@@ -14,6 +14,9 @@
 - Compare various versions of tracked files.
 - Restore old versions of files.
 
+- Explain why branches can be useful.
+- Merge branches back into the master branch.
+
 - Configure Git to ignore specific files.
 - Explain why ignoring files can be useful.
 
@@ -26,4 +29,8 @@
 
 - Explain what conflicts are and when they can occur.
 - Resolve conflicts resulting from a merge.
+
+- Define the terms fork, clone, origin, remote, upstream.
+- Understand how to make a pull request and explain what they are useful for.
+
 
