@@ -15,13 +15,13 @@ meeting. Follow the "Proposal Issue Template".
 4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
     -   Who likes the proposal?
     -   Who can live with the proposal?
-    -   Who is uncomfortable with the proposal?
+    -   Who disagrees with the proposal?
 
 5.  If all or most of the group likes or can live with the proposal, it is immediately moved to a formal vote with no further discussion.
 
-6.  If most of the group is uncomfortable with the proposal, it is postponed for further rework by the sponsor.
+6.  If most of the group disagrees with the proposal, it is postponed for further rework by the sponsor.
 
-7.  If some members are uncomfortable they can briefly state their objections.
+7.  If some members disagree they can briefly state their objections.
     A timer is then set for a brief discussion moderated by the facilitator.
     After 10 minutes or when no one has anything further to add (whichever comes first),
     the facilitator calls for a yes-or-no vote on the question:
@@ -32,7 +32,8 @@ meeting. Follow the "Proposal Issue Template".
 ## Building and Previewing
 
 **Note:** we are using `book` as the master (published) branch because of the
-way GitHub handles organization repositories.
+way GitHub handles organization repositories, domain names, and the generation
+of the website.
 
 **Setup to locally preview the book**:
 
@@ -43,7 +44,8 @@ through RStudio, then open an R console in the location of the Merely Useful
 repo) and install the dependencies by typing in the console:
 
     ```r
-    install.packages("remotes")
+    # Make sure you have remotes installed
+    # install.packages("remotes")
     remotes::install_deps()
     ```
 
@@ -85,8 +87,9 @@ used to access this GitHub PAT.
     1. Submit a PR of a branch from their fork of the repo
     1. Each PR must pass the Travis CI check and must get at least one (1)
     approval from someone else.
-    1. Only @gvwilson and @lwjohnst86 (so far) can merge into the main repo's
-    `book` branch.
+    1. Generally @gvwilson or @lwjohnst86 merge into the main repo's
+    `book` branch to make sure the content will generate correctly to the website.
+    However, others should be able to merge as well.
     
 **For larger changes (e.g. making a chapter)**:
 
@@ -120,7 +123,6 @@ material with exercises. Don't worry too much about grammar appearance, structur
 etc. This will be done at the end stage.
 
 ## Specific Content Guidelines
-
 
 1.  bookdown's behavior is controlled by the metadata in `_bookdown.yml` and in the YAML header of `index.Rmd`.
     Please do not add YAML headers to other `.Rmd` files, since it is ignored when building the entire book.
@@ -178,7 +180,7 @@ etc. This will be done at the end stage.
         as Travis will fail when it tries to launch a viewer from the command line.
     
 
-## Using Python code chunks
+## Using Python Code Chunks
 
 R users should be already familiar with using R Markdown. The process for using
 Python in R Markdown is familiar straight forward. When you want to include some
@@ -217,12 +219,4 @@ addons:
 
 ## Guide for code and text styling
 
-- Code:
-
-- Text:
-
-Style guide in contributing
-
-    Also how style is set throughout book for learners to know about, like a legend of sorts
-    Maddy: That's a great idea Brandeis It might be good as more of a sidebar than a section - the distinction between all the types is not obvious to beginners, but it would be good to have it written down to refer to. Like a glossary more than an introduction.
-    Damien: We can probably add to the style guide as we go? Maybe a style_guide.md file?
+See the code and text style guide [here](./style-guide-for-authors.Rmd).
