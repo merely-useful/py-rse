@@ -12,4 +12,4 @@ This repository contains material for two semester-long courses on computing ski
 Please see <https://merely-useful.github.io> for the rendered version,
 and <https://merely-useful.github.io/conduct.html> for our Code of Conduct.
 
-For contributors, please follow our [contributing guidelines](/CONTRIBUTING.md).
+For contributors, please follow our [contributing guidelines](.github/CONTRIBUTING.md).
