@@ -182,7 +182,7 @@ etc. This will be done at the end stage.
 
 ## Using Python Code Chunks
 
-R users should be already familiar with using R Markdown. The process for using
+The process for inserting Python code chunks in R Markdown is the same as for inserting R code chunks. Simply replace `{r}` with `{python}` on the first line of the fenced code chunk: 
     
     ```{python}
     python code ...
