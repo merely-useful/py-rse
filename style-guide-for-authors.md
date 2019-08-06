@@ -22,6 +22,11 @@ Some specific conventions that were briefly discussed previously:
             long_arg2))
     ```
 
+For markdown, we use ATX-headers (`#` prefix) rather than Setext headers (`=/-`
+underlines), links with `[linkname][tag]` rather than `[linkname](url)]`, and
+fenced code blocks rather than indented blocks. More details on the writing
+process can be found in [CONTRIBUTING.md](CONTRIBUTING.md).
+
 These are not set in stone, just collecting what was suggested in the issue.
 There are more details for what we recommend for learners in [./style.Rmd]
 (Python only so far). Discuss further in [issue
