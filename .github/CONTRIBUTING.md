@@ -135,7 +135,8 @@ etc. This will be done at the end stage.
         -   Give the figure the specified caption.
     -   Use `insert_graphic("figures/stem/filename.ext")` to include your image. If you are using a `.pdf` image, make sure that you have the same file but as a `.svg` as well. 
 
-1.  Use `@Name1234` to refer to bibliography entries.
+1.  Use `@Name1234` or `[@Name1234]` to refer to bibliography entries. These entries must exist in the `book.bib` file.
+    For multiple entries, separate the entries with `;`, i.e. `[@Name1234;@Name5678]`.
 
 1.  Use `\@ref(label)` to refer to labels for sections and figures.
     Note that:
