@@ -15,8 +15,8 @@
 ### What is reproducibility and why try to do it?
 
 There are several key cornerstones for doing rigorous and sound scientific
-research, two of which are reproducibility and replicability. Replicability is
-when a study is repeated by other independent research groups. Reproducibility
+research, two of which are reproducibility and replicability [@Patil2016]. Replicability is
+when a study is repeated by other independent research groups. [Reproducibility][sci-reproducibility]
 is when, given the same data and the same analytical/computational steps, a
 scientific result can be verified. Both of these concepts are surprisingly
 difficult to achieve.
@@ -203,7 +203,8 @@ that's not pleasant right? Loading a previous session is like that dirty plate.
 
 So, to make sure you always use a clean slate, we'll run a handy function from 
 the [usethis][usethis] package to stop R from saving and loading this `.RData`
-file, ensuring you have a clean working environment:
+file, ensuring you have a clean working environment. You only need to run this function
+once, as it will set the appropriate RStudio settings for you.
 
 ```r
 usethis::use_blank_slate()
@@ -285,8 +286,7 @@ And write these lines in the file:
 
 ```{r load-data-example, eval=FALSE}
 source(here::here("R/package-loading.R"))
-dog_license <- read_csv(here::here("data/nyc-dog.....csv"))
-# TODO complete this file path.
+dog_license <- read_csv(here::here("data/nyc-dog-licenses.csv.gz"))
 head(dog_license)
 ```
 
@@ -798,14 +798,15 @@ See how it looks by "Knitting" the document ("Knit" button or `Ctrl-Shift-K`).
 
 #### Exercise: Try to re-create a document using Markdown
 
-1. Go to (link to html page). This is a HTML file that has been created by using
+1. Open [this link](https://htmlpreview.github.io/?https://github.com/merely-useful/merely-useful.github.io/blob/book/includes/r-reproducibility/exercise.html).
+This is a HTML file that has been created by using
 Markdown formatting. 
 2. Create a new R Markdown file, with output type "HTML", and save it as
 `mimic-html-file.Rmd`.
 3. Delete all the automatically added text except the top part Inside the R Markdown file
 4. Write text using Markdown formatting so that you
-can create a `html_document` that looks exactly like that (linked) file.
-4. Knit the 
+can create a `html_document` that looks exactly like the linked file.
+4. Knit the R Markdown document. Confirm that your version looks the same as the above version.
 
 ### R Markdown
 
@@ -873,15 +874,15 @@ Let's load in some packages and data:
 ````markdown
 `r ''````{r setup}
 library(tidyverse)
-# TODO: Complete this section
-dog_licenses <- read_csv(here::here("data/..."))
+co2_data <- read_csv(here::here("data/co2.csv")) %>% 
+  filter(co2_standard > 0)
 `r ''````
 ````
 
-```{r setup, echo=FALSE}
+```{r setup, include=FALSE}
 library(tidyverse)
-# TODO: Complete this section
-dog_licenses <- read_csv(here::here("data/..."))
+co2_data <- read_csv(here::here("data/co2.csv")) %>% 
+  filter(co2_standard > 0)
 ```
 
 When running your code chunks interactively as you develop and write your document, 
@@ -894,14 +895,14 @@ One of the most obvious benefits to using R Markdown is to automatically insert
 a plot. To do that we do:
 
 ````markdown
-`r ''````{r dog-license-plot}
-ggplot(dog_licenses, aes(x = ..., y = ...)) +
+`r ''````{r co2-time-plot}
+ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
 
-```{r dog-license-plot, echo=FALSE}
-ggplot(dog_licenses, aes(x = ..., y = ...)) +
+```{r co2-time-plot, echo=FALSE}
+ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 ```
 
@@ -909,8 +910,8 @@ What if we want to include the plot but not the code? Easy! Set the chunk option
 `echo` to `FALSE`:
 
 ````markdown
-`r ''````{r dog-license-plot, echo=FALSE}
-ggplot(dog_licenses, aes(x = ..., y = ...)) +
+`r ''````{r co2-time-plot, echo=FALSE}
+ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
@@ -919,8 +920,8 @@ Or what if you don't want R to run the code chunk, but still show the code? Set
 the chunk option `eval` (for evaluate) to `FALSE`:
 
 ````markdown
-`r ''````{r dog-license-plot, eval=FALSE}
-ggplot(dog_licenses, aes(x = ..., y = ...)) +
+`r ''````{r co2-time-plot, eval=FALSE}
+ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
@@ -930,14 +931,14 @@ as well as add a caption with the `fig.width`, `fig.height`, `fig.align`, and `f
 (respectively):
 
 ````markdown
-`r ''````{r dog-license-plot, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
-ggplot(dog_licenses, aes(x = ..., y = ...)) +
+`r ''````{r co2-time-plot, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
 
-```{r dog-license-plot-1, fig.cap="Add your figure title here.", fig.height=8, fig.width=8, echo=FALSE}
-ggplot(dog_licenses, aes(x = ..., y = ...)) +
+```{r co2-time-plot-1, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 ```
 
@@ -946,11 +947,11 @@ include the other code? Don't let it get evaluated so it outputs something. So,
 this will output the data frame and the plot:
 
 ````markdown
-`r ''````{r dog-license-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+`r ''````{r co2-time-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
 dog_licenses_after_2000 <- dog_licenses %>% 
     fitler(... >= 2000)
 dog_licenses_after_2000
-ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
@@ -1077,9 +1078,13 @@ bibliography: my_references.bib
 ```
 
 The `my_references.bib` is a `.bib` file found in the same folder as the `.Rmd` 
-file. So in our case, the `.bib` file is in the `doc/` folder. Since all
-references are appended to the bottom of the document, it's good to add a final
-"Reference" section header to the end of your file, like so:
+file. So in our case, the `.bib` file is in the `doc/` folder. You can also use
+other bibliography manager files, such as EndNote. 
+See [this documentation](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html#specifying_a_bibliography)
+for which bibliography managers can be used.
+
+Since all references are appended to the bottom of the document, it's good to
+add a final "Reference" section header to the end of your file, like so:
 
 ```markdown
 # References
