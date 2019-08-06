@@ -931,59 +931,71 @@ as well as add a caption with the `fig.width`, `fig.height`, `fig.align`, and `f
 (respectively):
 
 ````markdown
-`r ''````{r co2-time-plot, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+`r ''````{r co2-time-plot, fig.cap="Add your figure title here.", fig.height=4, fig.width=7}
 ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
 
-```{r co2-time-plot-1, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
+```{r co2-time-plot-1, fig.cap="Add your figure title here.", fig.height=4, fig.width=7}
 ggplot(co2_data, aes(x = year, y = co2_standard)) +
     geom_point()
 ```
 
 What if we want to first run some code before running the plot, but don't want to 
-include the other code? Don't let it get evaluated so it outputs something. So,
-this will output the data frame and the plot:
+include the output of the other code? Make sure that the output doesn't "print". 
+So letting R evaluate both dataframe and plot, the code chunk will output and 
+insert both into the knitted document.
 
 ````markdown
-`r ''````{r co2-time-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
-dog_licenses_after_2000 <- dog_licenses %>% 
-    fitler(... >= 2000)
-dog_licenses_after_2000
-ggplot(co2_data, aes(x = year, y = co2_standard)) +
+`r ''````{r co2-time-plot-after-2000-1, fig.cap="Add your figure title here.", fig.height=4, fig.width=7}
+co2_after_2000 <- co2_data %>% 
+    filter(year >= 2000)
+
+# Print dataframe
+co2_after_2000
+
+# Print plot
+ggplot(co2_after_2000, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
 
-```{r dog-license-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8, echo=FALSE}
-dog_licenses_after_2000 <- dog_licenses %>% 
-    fitler(... >= 2000)
-dog_licenses_after_2000
-ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+```{r co2-time-plot-after-2000-1, fig.cap="Add your figure title here.", fig.height=4, fig.width=7, echo=FALSE}
+co2_after_2000 <- co2_data %>% 
+    filter(year >= 2000)
+
+# Print dataframe
+co2_after_2000
+
+# Print plot
+ggplot(co2_after_2000, aes(x = year, y = co2_standard)) +
     geom_point()
 ```
 
-While this will only output the plot. See how we don't include code that would 
-send anything to the console to be "printed"? Only things that get output get
-included in the R Markdown output document. Also notice how we renamed the chunk
-label? In R Markdown you can't have duplicate code chunk labels.
+Compare to this next code chunk, which will only output ("print") the plot. See
+how we don't include code that would send anything to the console to be
+"printed"? Only things that get "printed" will be included in the R Markdown output
+document. Also notice how we renamed the chunk label? In R Markdown you can't
+have duplicate code chunk labels.
 
 ````markdown
-`r ''````{r dog-license-plot-after-2000, fig.cap="Add your figure title here.", fig.height=8, fig.width=8}
-dog_licenses_after_2000 <- dog_licenses %>% 
-    fitler(... >= 2000)
-ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+`r ''````{r co2-time-plot-after-2000-2, fig.cap="Add your figure title here.", fig.height=4, fig.width=7}
+co2_after_2000 <- co2_data %>% 
+    filter(year >= 2000)
+
+# Print plot
+ggplot(co2_after_2000, aes(x = year, y = co2_standard)) +
     geom_point()
 `r ''````
 ````
 
-(ref:dog-plot-2000) Add your figure title here.
+```{r co2-time-plot-after-2000-2, fig.cap="Add your figure title here.", fig.height=4, fig.width=7, echo=FALSE}
+co2_after_2000 <- co2_data %>% 
+    filter(year >= 2000)
 
-```{r dog-license-plot-after-2000, fig.cap="(ref:dog-plot-2000)", fig.height=8, fig.width=8, echo=FALSE}
-dog_licenses_after_2000 <- dog_licenses %>% 
-    fitler(... >= 2000)
-ggplot(dog_licenses_after_2000, aes(x = ..., y = ...)) +
+# Print plot
+ggplot(co2_after_2000, aes(x = year, y = co2_standard)) +
     geom_point()
 ```
 
