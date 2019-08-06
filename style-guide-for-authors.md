@@ -28,6 +28,6 @@ fenced code blocks rather than indented blocks. More details on the writing
 process can be found in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 These are not set in stone, just collecting what was suggested in the issue.
-There are more details for what we recommend for learners in [./style.Rmd]
-(Python only so far). Discuss further in [issue
+There are more details for what we recommend for learners in
+[style.Rmd](style.Rmd) (Python only so far). Discuss further in [issue
 #116](https://github.com/merely-useful/merely-useful.github.io/issues/116).
