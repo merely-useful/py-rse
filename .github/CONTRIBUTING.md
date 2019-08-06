@@ -157,8 +157,8 @@ etc. This will be done at the end stage.
     These were used to prevent indentation of the first line of continuation paragraphs.
     We will find a more elegant way to handle this as we get closer to production.
     
-    -   Do *not* use `View` in your R snippets,
-        as Travis will fail when it tries to launch a viewer from the command line.
+1.  Do *not* use `View()` in your R snippets,
+    as Travis will fail when it tries to launch a viewer from the command line.
     
 ## Guide for code and text styling
 
