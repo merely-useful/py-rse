@@ -14,7 +14,7 @@ meeting. Follow the "Proposal Issue Template".
 
 4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
     -   Who likes the proposal? (+1)
-    -   Who can live with the proposal?
+    -   Who can live with the proposal? (0)
     -   Who disagrees with the proposal?
 
 5.  If all or most of the group likes or can live with the proposal, it is immediately moved to a formal vote with no further discussion.
