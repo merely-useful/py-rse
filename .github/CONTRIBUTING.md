@@ -114,6 +114,7 @@ etc. This will be done at the end stage.
 
 1.  The ID for each chapter and section heading is set by putting `{#some-label}` on the heading line.
     Please use the stem of the file's name in labels, i.e., start all labels for chapter `stuff.Rmd` with the word `stuff`.
+    Also include the course type to the beginning (e.g. "r-", "py-", and "rse-").
 
 1.  Each chapter starts with a list of questions and a list of learning objectives and ends with a list of key points.
     These lists are kept in Markdown files in the `questions`, `objectives`, and `keypoints` folders respectively
