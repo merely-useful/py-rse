@@ -149,10 +149,6 @@ etc. This will be done at the end stage.
     -   Glossary definitions are set in bold and use an HTML anchor tag to provide the ID.
         We should find a more elegant way to do this.
 
-1.  Many code fragments are accompanied by an HTML comment that contains `src="stem/filename.ext"`.
-    This identifies the path to that file within the `./src` folder.
-    We should find a more elegant way to handle these references.
-
 1.  There are also some HTML comments containing the word `noindent` left over from formatting with an earlier template.
     These were used to prevent indentation of the first line of continuation paragraphs.
     We will find a more elegant way to handle this as we get closer to production.
