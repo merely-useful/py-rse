@@ -13,7 +13,7 @@ meeting. Follow the "Proposal Issue Template".
     The sponsor is also responsible for presenting the item to the group.
 
 4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
-    -   Who likes the proposal?
+    -   Who likes the proposal? (+1)
     -   Who can live with the proposal?
     -   Who disagrees with the proposal?
 
