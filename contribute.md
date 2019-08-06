@@ -4,7 +4,8 @@ Contributions of all kinds are welcome, from errata and minor improvements to
 entirely new sections and chapters: please [email us][config-email] or submit an
 issue or pull request to [our GitHub repository][config-repo].  Everyone whose
 work is incorporated will be acknowledged; please note that all contributors are
-required to abide by our Code of Conduct.
+required to abide by our [Code of Conduct](./CONDUCT.md). See the 
+[contributing guidelines](./.github/CONTRIBUTING.md) for more detail.
 
 Please note that we use Simplified English rather than Traditional English,
 i.e., American rather than British spelling and grammar.  We encourage
