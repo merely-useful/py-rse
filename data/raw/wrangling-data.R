@@ -2,6 +2,7 @@
 library(tidyverse)
 library(here)
 library(janitor)
+library(jsonlite)
 
 # NYC dog licensing dataset -----------------------------------------------
 
@@ -23,6 +24,78 @@ dog_licenses <- dog_licenses %>%
          census_tract_2010 = census_tract2010)
 
 write_csv(dog_licenses, here("data/nyc-dog-licenses.csv.gz"))
+
+# NYC tax returns ---------------------------------------------------------
+
+if(!file.exists(here("data/raw/16zpallagi_ny.csv.gz"))){
+  # https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-statistics-2016-zip-code-data-soi
+  tax <- read_csv("https://www.irs.gov/pub/irs-soi/16zpallagi.csv")
+
+  # Big! Just save NY to `data/raw`
+  tax_ny <-
+    tax %>%
+    filter(STATE == "NY") %>%
+    write_csv(here("data/raw/16zpallagi_ny.csv.gz"))
+}
+
+tax_ny <- read_csv(here("data/raw/16zpallagi_ny.csv.gz"))
+
+tax_ny_clean <- tax_ny %>%
+  select(
+    zip_code = zipcode,
+    income_group = agi_stub,
+    n_returns = N1,
+    n_single = mars1,
+    n_joint = MARS2,
+    number_dependents = NUMDEP,
+    total_income = A00100) %>%
+  filter(zip_code %in% unique(dog_licenses$zip_code)) %>%
+  write_csv(here("data", "nyc-tax-returns.csv"))
+
+
+# NYC NTA populations -----------------------------------------------------
+
+# From: https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Neighborhood-Tabulatio/swpk-hqdp
+nyc_pop_raw_path <- here("data/raw/nyc-nta-population.csv")
+if(!file.exists(nyc_pop_raw_path)){
+  nyc_pop <- read_csv("https://data.cityofnewyork.us/api/views/swpk-hqdp/rows.csv?accessType=DOWNLOAD") %>%
+    write_csv(nyc_pop_raw_path)
+}
+
+nyc_pop <- read_csv(nyc_pop_raw_path)
+
+nyc_pop_clean <- nyc_pop %>%
+  clean_names() %>%
+  write_csv(here("data/nyc-nta-population.csv"))
+
+# NYC Community District populations --------------------------------------
+
+# From: https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Community-Districts/xi7c-iiu2
+nyc_cd_pop_raw_path <- here("data/raw/nyc-cd-population.csv")
+if(!file.exists(nyc_cd_pop_raw_path)){
+  nyc_cd_pop <- read_csv("https://data.cityofnewyork.us/api/views/xi7c-iiu2/rows.csv?accessType=DOWNLOAD") %>%
+    write_csv(nyc_cd_pop_raw_path)
+}
+
+nyc_cd_pop <- read_csv(nyc_cd_pop_raw_path)
+
+nyc_cd_pop_clean <-
+  nyc_cd_pop %>%
+  gather(key = "year", value = "population", -Borough:-`CD Name`) %>%
+  separate(year, into = c("year", NA), remove = TRUE, convert = TRUE) %>%
+  clean_names() %>%
+  write_csv(here("data/nyc-cd-population.csv"))
+
+
+# NYC Parks ---------------------------------------------------------------
+
+# https://data.cityofnewyork.us/Recreation/Directory-of-Parks/79me-a7rs
+
+parks <- read_json("https://www.nycgovparks.org/bigapps/DPR_Parks_001.json",
+    simplifyVector = TRUE) %>%
+  as_tibble() %>%
+  clean_names() %>%
+  write_csv(here("data/nyc-parks.csv"))
 
 # CO2 datasets ------------------------------------------------------------
 
