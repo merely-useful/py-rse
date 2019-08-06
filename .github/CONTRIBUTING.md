@@ -84,7 +84,7 @@ used to access this GitHub PAT.
 
 - Use the `book` branch as the main "development" branch (**not `master`**).
 - Since `book` is "protected", to add to the repo you must:
-    1. Submit a PR of a branch from their fork of the repo
+    1. Submit a PR of a branch from your fork of the repo
     1. Each PR must pass the Travis CI check and must get at least one (1)
     approval from someone else.
     1. Generally @gvwilson or @lwjohnst86 merge into the main repo's
