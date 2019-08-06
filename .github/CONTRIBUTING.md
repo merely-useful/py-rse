@@ -13,9 +13,9 @@ meeting. Follow the "Proposal Issue Template".
     The sponsor is also responsible for presenting the item to the group.
 
 4.  After the sponsor presents the proposal, a "sense" vote is cast for the proposal prior to any discussion:
-    -   Who likes the proposal?
-    -   Who can live with the proposal?
-    -   Who disagrees with the proposal?
+    -   Who likes the proposal? (+1)
+    -   Who can live with the proposal? (0)
+    -   Who disagrees with the proposal? (-1)
 
 5.  If all or most of the group likes or can live with the proposal, it is immediately moved to a formal vote with no further discussion.
 
@@ -63,7 +63,7 @@ Or via RStudio:
 
 - Use the `book` branch as the main "development" branch (**not `master`**).
 - Since `book` is "protected", to add to the repo you must:
-    1. Submit a PR of a branch from their fork of the repo
+    1. Submit a PR of a branch from your fork of the repo
     1. Each PR must pass the Travis CI check and must get at least one (1)
     approval from someone else.
     1. Generally @gvwilson or @lwjohnst86 merge into the main repo's
@@ -117,7 +117,7 @@ etc. This will be done at the end stage.
     Also include the course type to the beginning (e.g. "r-", "py-", and "rse-").
 
 1.  Each chapter starts with a list of questions and a list of learning objectives and ends with a list of key points.
-    These lists are kept in Markdown files in the `questions`, `objectives`, and `keypoints` folders respectively
+    These lists are kept in plain Markdown files in the `questions`, `objectives`, and `keypoints` folders respectively
     so that they can be included in both the chapters and the `objectives.Rmd` and `keypoints.Rmd` appendices.
 
 1.  The last line in each chapter includes the file `links.md`, which gives symbolic names to all the external links used in the book.
@@ -166,12 +166,12 @@ See the code and text style guide [here](./style-guide-for-authors.Rmd).
 
 ## Using Python Code Chunks
 
-R users should be already familiar with using R Markdown. The process for using
-Python in R Markdown is familiar straight forward. When you want to include some
-code and its output, use code chunks like:
+The process for inserting Python code chunks in R Markdown is the same as for inserting R code chunks. Simply replace `{r}` with `{python}` on the first line of the fenced code chunk: 
     
     ```{python}
-    python code ...
+    # Python chunks will also be syntax highlighted
+    for num in range(5):
+        print(num)
     ```
 
 Code chunks have
