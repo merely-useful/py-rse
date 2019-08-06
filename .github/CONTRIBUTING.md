@@ -184,7 +184,6 @@ etc. This will be done at the end stage.
 
 R users should be already familiar with using R Markdown. The process for using
 Python in R Markdown is familiar straight forward. When you want to include some
-code and its output, use code chunks like:
     
     ```{python}
     python code ...
