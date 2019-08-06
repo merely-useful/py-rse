@@ -1017,42 +1017,27 @@ with `theme_`).
 #### Using R code chunks to insert tables
 
 You can also create tables by using the `kable()` function from the knitr package.
-Let's create a table of ...
-
-TODO: Finish this once data has been added.
+Let's create a table of the mean CO~2~ concentration over the years at each
+monthly period for each station.
 
 ````markdown
-`r ''````{r mean-...-table}
-dog_licenses %>% 
-    select(...) %>% 
-    group_by(...) %>% 
-    summarise(Mean... = mean(..., na.rm = TRUE)) %>% 
-    spread(...) %>% 
+`r ''````{r mean-co2-table}
+co2_data %>% 
+    select(station, month, co2_standard) %>% 
+    group_by(station, month) %>% 
+    summarise(MeanCO2 = round(mean(co2_standard, na.rm = TRUE), 2)) %>% 
+    spread(station, MeanCO2) %>% 
     knitr::kable(caption = "Table caption here.")
 `r ''````
 ````
 
-```{r mean-...-table, echo=FALSE}
-dog_licenses %>% 
-    select(...) %>% 
-    group_by(...) %>% 
-    summarise(Mean... = mean(..., na.rm = TRUE)) %>% 
-    spread(...) %>% 
+```{r mean-co2-table, echo=FALSE}
+co2_data %>% 
+    select(station, month, co2_standard) %>% 
+    group_by(station, month) %>% 
+    summarise(MeanCO2 = round(mean(co2_standard, na.rm = TRUE), 2)) %>% 
+    spread(station, MeanCO2) %>% 
     knitr::kable(caption = "Table caption here.")
-```
-
-If you want to simply print out a number or other text:
-
-````markdown
-`r ''````{r numbers-text}
-mean(dog_license$..., na.rm = TRUE)
-names(dog_license)
-`r ''````
-````
-
-```{r numbers-text, echo=FALSE}
-mean(dog_license$..., na.rm = TRUE)
-names(dog_license)
 ```
 
 #### Inline R code
@@ -1061,11 +1046,11 @@ Often you might have results inside the text you are writing. Here you can
 include R code within the text so that the results are inserted directly 
 into the document. It looks like:
 
-> The mean of BMI is &#96;r round(mean(NHANES$BMI, na.rm = TRUE), 2)&#96;.
+> The mean of CO~2~ is &#96;r round(mean(co2_data$co2_standard, na.rm = TRUE), 2)&#96;.
 
 Which gives...
 
-> The mean of BMI is ` round(mean(NHANES$BMI, na.rm = TRUE), 2)`.
+> The mean of CO~2~ is ` round(mean(co2_data$co2_standard, na.rm = TRUE), 2)`.
 
 Keep in mind that inline R code can *only* insert a single number or character
 value, nothing more.
