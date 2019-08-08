@@ -121,6 +121,7 @@
 
 [wickham-packages]: http://r-pkgs.had.co.nz/
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+[wiki-rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 [wing-ide]: https://wingware.com/
 [womens-pockets]: https://pudding.cool/2018/08/pockets/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
