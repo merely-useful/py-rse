@@ -5,10 +5,10 @@ only when it is considered that it will improve clarity.
 
 Some specific conventions that were briefly discussed previously:
 
-- `function_name` (snake_case)
+- `function_name()` and `method_name()` (snake_case, include parentheses)
 - `variable_name` (snake_case)
 - `folder-name/` (hyphens instead of underscores, trailing slash for clarity)
-- `file-name`
+- `file-name` (hyphens instead of underscores)
 - `'string'` and `"string"` (single or double quotes, It seems people prefer
   different options here)
 - Method chaining in pandas:
