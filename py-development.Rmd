@@ -227,3 +227,75 @@ help(sum_two_numbers)
 
 Now we can apply what we have learnt about functions on the code we have
 written previously.
+
+## How to make programs indicate that something has gone wrong?
+
+When performing programmatic data analysis, we need to both ensure that our
+code runs correctly and that it carries out the intended tasks. The Python
+interpreter will help us with the first part; if a part of the code is not
+valid, an error will be raised with a message that helps us trace back what
+part of the code is not correct.
+
+### Ducktyping - relying on Python to detect unexpected behavior
+
+In our function `sum_two_numbers()`, we could explicitly check that the input
+arguments are numerical. However, explicitly checking the type of each input
+parameter quickly becomes tedious and can make functions less readable,
+especially as they grow more complex. An alternative approach is to try to
+perform the intended operations on the input parameters and rely on that Python
+will raise an error if they are of the wrong type.
+
+```{python error=TRUE}
+sum_two_numbers(5, 'six')
+```
+
+The raised error contains a helpful message that alerts us to what went wrong;
+`string` objects cannot be added to `int` objects in Python. If the input
+variables behave correctly then they probably are of the correct types and no
+explicit checking is needed. This approach is often referred to as "ducktyping"
+because makes assumption on the type of variable based on its behavior, just
+like the saying
+
+> If it looks like a duck, swims like a duck, and quacks like a duck, then it
+> probably is a duck.
+
+### Assertions - explicitly checking for unexpected behavior
+
+Ducktyping is useful to catch anything that raises an error in Python, but
+sometimes we might want to stop the code execution for other reason than a
+technical Python error. Examples of this includes when you have performed a
+specific operation that you know should give output of a certain shape and to
+check if a variable is within an allowed range. The `assert` statement allows
+us to check if a condition is `True` and stop code execution if it is not.
+
+```{python error=TRUE}
+assert 1 == 0
+print('This is only printed if the assertion above is "True"')
+```
+
+Since the condition above is `False`, an `AssertionError` is raised and code
+execution halts. If the assertion is `True`, there is no output and the next
+line of code is executed (if there is one).
+
+```{python}
+assert 0 == 0
+print('This is only printed if the assertion above is "True"')
+```
+
+As mentioned above, this is useful if we know that a variable should look a
+certain way, since we can assert if this is the case and guard ourselves from
+errors that origin early in the pipeline but could give rise to more cryptic
+errors that are difficult to troubleshoot later in the pipeline.
+
+It is often helpful to add a clarifying message to the assertion statement,
+especially as assertions become more complex.
+
+```{python error=TRUE}
+x = 1
+assert x == 0, 'x is not 0'
+```
+
+> Note: Similar functionality can be achieved by explicitly raising an error
+> within a `try` and `except` block, or within a conditional statement using
+> `if`, `elif`, and `else`, but `assert` is a simple and readable way of
+> allowing for manual error checking.
