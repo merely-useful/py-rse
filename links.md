@@ -27,6 +27,7 @@
 [creative-commons]: https://creativecommons.org/
 [cron]: https://en.wikipedia.org/wiki/Cron
 [curb-cuts]: https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
+[cv]: https://stats.stackexchange.com/
 
 [dc]: https://datacarpentry.org/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
@@ -88,6 +89,11 @@
 
 [setuptools]: https://setuptools.readthedocs.io/
 [snakemake]: https://snakemake.readthedocs.io/
+[so]: https://stackoverflow.com/
+[so-keyword-builtins]: https://stackoverflow.com/a/22864250/2166823
+[so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
+[so-mre-p]: https://stackoverflow.com/questions/20109391/how-to-make-good-reproducible-pandas-examples
+[so-mre-r]: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
 [sphinx]: http://www.sphinx-doc.org/en/master/
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-exchange-data-explorer]: https://data.stackexchange.com/
