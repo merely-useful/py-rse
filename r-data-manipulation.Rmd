@@ -227,7 +227,12 @@ One of the simplest kinds of logical expression is a test for equality with the 
 ```{r}
 dog_licenses %>% filter(animal_name == "BRUNO")
 ```
-The logical expression, `animal_name == "BRUNO"`, will be `TRUE` when the value of the `animal_name` column is exactly equal to the character string `"BRUNO"` - any differences in case, or whitespace will result in `FALSE`.  
+You could read this code aloud as:
+
+> Take the dog_licenses data, **and then**   
+> filter for only rows when `animal_name` is equal to "BRUNO"
+
+The logical expression, `animal_name == "BRUNO"`, will be `TRUE` when the value of the `animal_name` column is exactly equal to the character string `"BRUNO"` - any differences in case, or whitespace will result in `FALSE`.
 
 Columns names can appear on either side of `==` or even on both sides.  When column names appear on both sides, the comparison happens row by row.  In programming terms this is know as an element-wise comparison.  For example, `license_issued_date == animal_birth_month` will return `TRUE` for a row only if for that row the date the license was issued is the exact same date as the birth month for the dog. If you take a look:
 ```{r}
@@ -549,7 +554,10 @@ Fix these `object not found` errors. (Hint: the names of the objects or variable
 There are two other kinds of alerts R can give: warnings and messages.  These can both appear in the console with the same color as an error, but they are informational as opposed to fatal.  
 
 Messages are purely informational, for example when you read data in with `read_csv()` you get a message that describes the columns and their data types as parsed by the function:
-```{r}
+```{r, eval = FALSE}
+sites <- read_csv("site.csv")
+```
+```{r, echo = FALSE}
 sites <- read_csv(here("data", "site.csv"))
 ```
 
@@ -708,7 +716,7 @@ the `filter()` step came after the `mutate()` step. Does this matter?
 
 * Which steps can't you swap the order of? Why?
 
-* *There are some performance differences...can you guess why?*
+* *Despite giving the same results, some orderings of the data manipulation steps will take longer to compute. Can you guess why?*
 
 ### Exercise: the five boroughs
 
@@ -738,7 +746,10 @@ dogs_by_nta
 ```
 
 Looks like MN12 has the most licenses, but what neighborhood is this?  And are there many licenses because a high proportion of people own dogs, or just that there are lots of people in this neighborhood?  To answer both of these questions you would need to combine this data with additional data, say that contained in `nyc-nta-pop`
-```{r}
+```{r, eval = FALSE}
+nta_pop <- read_csv("nyc-nta-population.csv")
+```
+```{r, echo = FALSE}
 nta_pop <- read_csv(here("data", "nyc-nta-population.csv"))
 ```
 
@@ -789,10 +800,11 @@ dogs %>% left_join(neighborhoods)
 ```
 It's called a `left_join()` because we will get (at least) one row back for every row in the dataset on the left, in this case, `dogs`.  I like to think about `left_join()` working just as we described above: for each row in the dataset on the left, look up the value in the dataset on the right. 
 
-Notice that `left_join()` gave us the message `Joining, by = "nta"`.  The join functions in dplyr will use any columns with the same name in both datasets to do the join.  If the datasets have columns for the same quantity but with different names, for instance, if `neighborhoods` had a column called `nta_code` instead of `nta`:
-```{r}
+Notice that `left_join()` gave us the message `Joining, by = "nta"`.  The join functions in dplyr will use any columns with the same name in both datasets to do the join.  If the datasets have columns for the same quantity but with different names, for instance, if instead of `neighborhoods`, you had the dataset `neighborhoods_2` with a column called `nta_code` instead of `nta`:
+```{r, include = FALSE}
 neighborhoods_2 <- neighborhoods %>% 
   rename(nta_code = nta)
+```{r}
 neighborhoods_2 
 ```
 
@@ -805,6 +817,15 @@ You can use the `by` argument to the join function to specify which columns are 
 dogs %>% 
   left_join(neighborhoods_2, by = c("nta" = "nta_code"))
 ```
+The value passed to `by` is a named character vector and is created using the form
+```
+c("<< Name of column in LHS dataset >>" = "<< Name of column in RHS dataset >>")
+```
+The `by` argument in the example above, 
+```{r, results = "hide"}
+c("nta" = "nta_code")
+```
+specifies the join column is `"nta"` in `dogs`, and `"nta_code"` in `neighborhoods_2`.
 
 ### Exercise: Predicting the output of a join
 
