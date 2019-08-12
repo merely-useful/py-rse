@@ -356,6 +356,11 @@
 **MIT License**<a id="mit-license"></a>
 :   FIXME
 
+**Namespace**<a id="namespace"></a>
+:   A way of organizing names of related objects, functions,
+    or variables, to avoid confusion with (for instance) common names that
+    might well occur in multiple packages.
+
 **Not Invented Here**<a id="not-invented-here"></a> (NIH)
 :   FIXME
 
@@ -456,6 +461,11 @@
 
 **Relative error**<a id="relative-error"></a>
 :   FIXME
+
+**Relative import**<a id="relative-import"></a>
+:   In Python, the importing of a module relative to the current path
+    and thus likely from within the current package (*e.g.*, `from . import generate`)
+    rather than an import from a globally-defined package (*e.g.*, `from zipfpy import generate`).
 
 **Remote login**<a id="remote-login"></a>
 :   FIXME
