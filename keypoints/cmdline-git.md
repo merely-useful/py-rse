@@ -1,5 +1,3 @@
-- TODO: Point about when/why to use Git at the command line.
-
 - Use git config with the `--global` option to configure a user name,
   email address, editor, and other preferences once per machine.
 
