@@ -976,46 +976,59 @@ we largely take for granted.
 
 We should certainly have a README for the package, describing how to
 install the package and how to use it in a couple of key use cases,
-so let's add that:
+so let's add that.
 
-<!-- src="rse-py-package/09/README.md" -->
+In the Python community, much documentation is written in 
+[reStructuredText](glossary.html#restructured-text), which is
+a markup format for plain text documents which can be rendered
+into documents with quite complex indexes and cross-linking
+by many documentation tools; GitHub will recognize reST files
+ending in `.rst` and display them nicely.   We'll use that here;
+titles are underlined and overlined, section headings are underlined,
+and code blocks are set off with two colons (`::`) and indented.
+So let's create a `README.rst`:
+
+<!-- src="rse-py-package/09/README.rst" -->
 ```text
-# Zipfpy
+======
+Zipfpy
+======
 
-This Python package provides routines for generating lists of counts
+This python package provides routines for generating lists of counts
 that follow (exactly or approximately) a Zipf distribution, and for
 testing whether a counts distribution does or doesn't follow such
-a distribution
+a distribution.
 
-## Installation
------------
+Installation
+------------
 
 To install, clone this repository, change into the repository directory
-and run the commands
+and run the commands::
 
-pip install -r requirements.txt
-pip install .
+    pip install -r requirements.txt
+    pip install .
 
-## Use
------------
+Use
+---
 
 You can use the package after installation with `import zipfpy`, with functions
 in the modules `check` and `generate`.
 
-You can also use the command line tool `check_zipf.py` which tests to see if
-a provided list of countsfollows a Zipf distribution:
+You can also use the command line tool `check_zipf.py` which tests to see if 
+a provided list of countsfollows a Zipf distribution::
 
-$ check_zipf.py 100 50 33 25
-True: [100, 50, 33, 25]
+    $ check_zipf.py 100 50 33 25
+    True: [100, 50, 33, 25]
 
-## Authors
-------------
+Authors
+-------
 
 Terry Pratchett
 ```
 
-And we should also make sure that there are [docstrings](#docs-docstrings) written
-for the package as a whole (in the `__init__.py`):
+In addition to the README, we should also make sure that there are
+[docstrings](#docs-docstrings) written for the package as a whole
+(in the `__init__.py`):
 
 <!-- src="rse-py-package/09/zipfpy/__init__.py" -->
 ```python
@@ -1090,8 +1103,6 @@ code, but it helpfully shows up when a user types, for instance,
 
 ## How do I generate web pages of documentation for my package? {#rse-py-package-sphinx}
 
-FIXME: Right now torn between using Sphinx since it's defacto standard for Python packages and allows autodocs, but don't wanting to teach rst.  The result is extra complexity that I'm not sure I want...
-
 When you've viewed documentation for large Python packages, they 
 have very likely been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
 a package for writing software documentation and generating web packages
@@ -1100,15 +1111,15 @@ When combined with [Read The Docs](https://readthedocs.org), a free service for
 hosting that online documentation that includes tools to automatically update
 documentation when your package and its documentation changes, and that understands
 documents written to support Sphinx, it is an extremely useful way to
-build both documentation and an online home for your package.
+build both documentation and an online home for your package.  Both tools
+recongnize reStructuredText files.
 
 We'll start by putting together a minimal set of documentation that includes
-your `README.md` and the docstrings for your package.  Sphinx makes it
+your `README.rst` and the docstrings for your package.  Sphinx makes it
 relatively straightforwrd to get started, using the `quickstart` tool.  We'll
 create doucmentation in a `docs/` directory at the top of our repository:
 
 ```bash
-$ pip install sphinx m2r
 $ mkdir docs
 $ cd docs
 $ sphinx-quickstart
@@ -1130,9 +1141,8 @@ The project name will occur in several places in the built documentation.
 ```
 
 Once that is complete, there will be a file called `conf.py` in the docs
-directory that configures Sphinx.  There are two changes we'll want to
-make to that; one so that autodoc can find our module (and it's docstrings)
-and one so that we can read in our markdown README.
+directory that configures Sphinx.  We'll make one change to that, so that
+autodoc can find our module (and its docstrings).
 
 First, we'll set the "Path setup" section, which starts very near the head
 of the file:
@@ -1156,18 +1166,6 @@ sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../'))
 ```
 
-Finally, we'll list an extension to sphinx (the `m2r` package we installed)
-which lets us incorporate markdown documents into our documentation by adding the
-`m2r` extention to the `extensions` section about a third of the way down:
-
-<!-- src="rse-py-package/10/docs/conf.py" -->
-```python
-extensions = [
-    'sphinx.ext.autodoc',
-    'm2r',
-]
-```
-
 With that done, we can generate run a sphinx autodoc script which will read
 the docstrings from our package and include them into .rst files in the
 `docs/source` directory:
@@ -1176,45 +1174,56 @@ the docstrings from our package and include them into .rst files in the
 sphinx-apidoc -o source/ ../zipfpy
 ```
 
-Now we're ready!  In the `/docs` directory there's a Makefile; if we run `make html`
+Now we're ready.  In the `/docs` directory there's a Makefile,
+generated by `sphinx-quickstart`;
+if we run `make html`
 and in a web browser open the file `docs/_build/index.html` we'll have a very minimal
 documentation in a familiar looking form; if you look under `modules` you will
 see the documentation for the individual modules.  But that first page is
 still a little sparse.
 
-FIXME: add something about rst format
-
-If we add the line `.. mdinclude:: ../README.md` to the `docs/index.rst` file
-so that the markdown file `README.md` is included, like so:
+If we add the line `.. include:: ../README.rst` to the `docs/index.rst` file
+at the beginning, so that page starts with our README, and then include a direct
+link to the zipfpy package documentation:
 
 <!-- src="rse-py-package/10/docs/index.rst" -->
 ```text
 Welcome to Zipfpy's documentation!
 ==================================
 
+.. include:: ../README.rst
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-.. mdinclude:: ../README.md
+   zipfpy
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 ```
 
 and rerun `make html`, we now get an updated set of web pages which
 re-uses your README to be the introduction to the documentation.
 
 Note that we needed additional packages to build the documentation
-here that is not reflected in our `requirements.txt`; the `Sphinx` and `m2r`
-packages.  It isn't needed for running, developing, or even testing
+here that is not reflected in our `requirements.txt`; the `Sphinx`
+package and its dependencies.
+
+They aren't needed for running, developing, or even testing
 the package, but it is needed for building the documentation.
 To note this requirement, but without requiring everyone installing
-the package to have `Sphinx` (which is a large package) and `m2r` 
+the package to have `Sphinx`
 installed, let's create a `requirements_docs.txt` file that contains
 only those things (where versions come from `pip freeze`):
 
 <!-- src="rse-py-package/10/requirements_docs.txt" -->
 ```text
 Sphinx>=1.7.4
-m2r==0.2.1
 ```
 
 Then anyone wanting to build the documentation (including you, on another computer)
@@ -1246,25 +1255,20 @@ from your github repository; Read The Docs will then build the documentation
 the source files (in our case, `docs/source/modules.rst`, `docs/source/zipfpy.rst`,
 `docs/Makefile`, `docs.conf.py`) need to be checked into your repository.
 
-Once this is done, you can import your repository; in this case since there
-are additional requirements (the `m2r` package), you will have to make sure
-Read The Docs installs this when building the documentation; when importing,
-under "Advanced Settings", set the "Requirements file" to be `requirements_docs.txt`.
 Then you should be able to build; after a few minutes, your documents should 
 be visible!  If you named your project, _e.g._, `pterry_zipfpy`, your 
 documents will be available at 
 [`https://pterry_zipfpy.readthedocs.io/en/latest/`](https://pterry_zipfpy.readthedocs.io/en/latest/).
 
-FIXME: Should we just use the configuration file approach here rather than going
-into advanced settings?
-
 As with continuous integration testing, there are badges for your README linking
 both to the documentation and reporting on the status of the documentation build;
 you would be able to add that badge and link by adding the following line to your
-`README.md`:
+`README.rst`:
 
 ```text
-[![Documentation Status](https://readthedocs.org/projects/pterry_zipfpy/badge/?version=latest)](https://pterry_zipfpy.readthedocs.io/en/latest/?badge=latest)
+.. image:: https://pterry_zipfpy.readthedocs.io/en/latest/?badge=latest
+    :target: https://readthedocs.org/projects/pterry_zipfpy/badge/?version=latest
+    :alt: Documentation Status
 ```
 
 FIXME: talk about the webhooks, bringing in the discussion from the CI section.

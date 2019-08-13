@@ -1,36 +1,34 @@
-# Zipfpy
+======
+Zipfpy
+======
 
 This python package provides routines for generating lists of counts
 that follow (exactly or approximately) a Zipf distribution, and for
 testing whether a counts distribution does or doesn't follow such
-a distribution
+a distribution.
 
-## Installation
------------
+Installation
+------------
 
 To install, clone this repository, change into the repository directory
-and run the commands
+and run the commands::
 
-``` bash
-pip install -r requirements.txt
-pip install .
-```
+    pip install -r requirements.txt
+    pip install .
 
-## Use
------------
+Use
+---
 
 You can use the package after installation with `import zipfpy`, with functions
 in the modules `check` and `generate`.
 
 You can also use the command line tool `check_zipf.py` which tests to see if 
-a provided list of countsfollows a Zipf distribution:
+a provided list of countsfollows a Zipf distribution::
 
-```bash
-$ check_zipf.py 100 50 33 25
-True: [100, 50, 33, 25]
-```
+    $ check_zipf.py 100 50 33 25
+    True: [100, 50, 33, 25]
 
-## Authors
-------------
+Authors
+-------
 
 Terry Pratchett

@@ -470,6 +470,10 @@
     and thus likely from within the current package (*e.g.*, `from . import generate`)
     rather than an import from a globally-defined package (*e.g.*, `from zipfpy import generate`).
 
+**Restructured Text (reST)**<a id="restructured-text"></a>
+:   A plain text markup language used by much Python documentation and
+    documentation tooling.
+
 **Remote login**<a id="remote-login"></a>
 :   FIXME
 

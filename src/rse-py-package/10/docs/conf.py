@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Zipfpy'
+project = 'zipfpy'
 copyright = '2019, Terry Pratchett'
 author = 'Terry Pratchett'
 
@@ -41,7 +41,6 @@ release = '1.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'm2r',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -104,7 +103,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Zipfpydoc'
+htmlhelp_basename = 'zipfpydoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -131,7 +130,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Zipfpy.tex', 'Zipfpy Documentation',
+    (master_doc, 'zipfpy.tex', 'zipfpy Documentation',
      'Terry Pratchett', 'manual'),
 ]
 
@@ -141,7 +140,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'zipfpy', 'Zipfpy Documentation',
+    (master_doc, 'zipfpy', 'zipfpy Documentation',
      [author], 1)
 ]
 
@@ -152,8 +151,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Zipfpy', 'Zipfpy Documentation',
-     author, 'Zipfpy', 'One line description of project.',
+    (master_doc, 'zipfpy', 'zipfpy Documentation',
+     author, 'zipfpy', 'One line description of project.',
      'Miscellaneous'),
 ]
 
