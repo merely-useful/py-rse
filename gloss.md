@@ -174,6 +174,14 @@
 **Docstring**<a id="docstring"></a>
 :   FIXME
 
+**DRY (Don't Repeat Yourself)**<a id="dry"></a>
+:   The general principle when programming that it's typically better to define
+    something (a function, a constant...) once and refer to it consistently 
+    as a "single source of truth" throughout a piece of software than to 
+    define copies in multiple places, if only because then you only have to
+    make any changes in one place.  This is useful and helpful principle but should
+    not be thought of as an involate rule.
+
 **Environment**<a id="environment"></a>
 :   FIXME
 
@@ -662,7 +670,11 @@
 :   FIXME
 
 **Virtual environment**<a id="virtual-environment"></a>
-:   FIXME
+:   In Python, the `virtualenv` package allows you to create virtual, disposable,
+    python software environments containing only the packages and versions of packages
+    you want to use for a particular project or task, and to install new packages
+    into the environment without affecting other virtual environments or the system-wide
+    default environment.
 
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG)
 :   FIXME
