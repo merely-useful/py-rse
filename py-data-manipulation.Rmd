@@ -41,7 +41,6 @@ To specify a different delimiter (for example tab), pass the argument `sep = \t`
 If the data has no column names, pass the argument `header = None`, or give a list
 of column names using the argument `names = [column names]`.
 
-
 ## How can I tidy up my data?
 
 Even carefully created and curated data can present difficulties at the analysis step.
@@ -168,7 +167,6 @@ data_large_boroughs = data[data['borough'].isin(large_borough_names)]
 print(data_large_boroughs['borough'].value_counts())
 ```
 
-
 ## How can I select subsets of my data?
 
 This data frame has rows and columns (it has 2 dimensions). To extract specific
@@ -179,55 +177,62 @@ data from it (also referred to as "subsetting"), columns can be selected by thei
 data.columns
 
 # to get a single column, use square brackets and the column name in quotation marks. This is case sensitive!
-data["AnimalName"].head()
+data["animal_name"].head()
 
 # to get multiple columns, provide a list of column names inside the square brackets.
-data[["AnimalName", "AnimalGender"]].head()
+data[["animal_name", "animal_gender"]].head()
 ```
 
-Notice that if you provide a list, the returned object is a data frame, but if you provide a single item not in a list, it's a `Series` object.
+Notice that if you provide a list, the returned object is a data frame, but if
+you provide a single item not in a list, it's a `Series` object.
 
-Selecting with single brackets (`[]`) is a shortcut to common operations, such as selecting columns by labels as above. The function `.loc[]` gives more flexible control over both rows and columns by label. The syntax is `loc[<rows>, <columns>]`.
+Selecting with single brackets (`[]`) is a shortcut to common operations such
+as selecting columns by labels as above. The function `.loc[]` gives more
+flexible control over both rows and columns by label. The syntax is `loc[<rows>, <columns>]`.
 
 For example, you can select the first 10 rows and a slice of columns:
 
 ```python
-data.loc[0:10, "AnimalName" : "BreedName"]
+data.loc[0:10, "animal_name" : "breed_name"]
 ```
 
 You can use logical operations to filter your data based on some criteria.
 
 ```python
-# get rows where 'AnimalGender' is female
-data[data['AnimalGender'] == 'F'].head()
+# get rows where 'animal_gender' is female
+data[data['animal_gender'] == 'F'].head()
 
 # you can also get specific columns with .loc:
-data.loc[data['AnimalGender'] == 'F', ['AnimalName', 'AnimalGender']].head()
+data.loc[data['animal_gender'] == 'F', ['animal_name', 'animal_gender']].head()
 ```
 
-A single expression can also be used to filter for several criteria, either matching all criteria (`&`) or any criteria (`|`). These special operators are used instead of `and` and `or` to make sure that the comparison occurs for each row in the data frame. Parentheses are added to indicate the priority of the comparisons.
+A single expression can also be used to filter for several criteria, either
+matching all criteria (`&`) or any criteria (`|`). These special operators are
+used instead of `and` and `or` to make sure that the comparison occurs for each
+row in the data frame. Parentheses are added to indicate the priority of the
+comparisons.
 
 
 ```python
 # the symbol '&' can be used to combine multiple logical comparisons
 # '==' means 'is equal to'
-data.loc[(data['AnimalGender'] == 'F')
-         & (data['BreedName'] == 'Boxer')
-           & (data['AnimalName'] == 'MILEY'), 'AnimalName' : 'BreedName']
+data.loc[(data['animal_gender'] == 'F')
+         & (data['breed_name'] == 'Boxer')
+           & (data['animal_name'] == 'MILEY'), 'animal_name' : 'breed_name']
 
 # OR (|)
 # the order of comparisons can be structured with parentheses. Here we want the OR comparison
- to happen before the AND comparison.
+# to happen before the AND comparison.
 
-data.loc[(data['AnimalName'] == 'MILEY') & ((data['BreedName'] == 'Boxer') |  
-          (data['BreedName'] == 'Labrador Retriever')),  'AnimalName' : 'BreedName']
+data.loc[(data['animal_name'] == 'MILEY') & ((data['breed_name'] == 'Boxer') |  
+          (data['breed_name'] == 'Labrador Retriever')),  'animal_name' : 'breed_name']
 ```
-
 
 ## How can I calculate new values?
 
-A new column can be added to a data frame by calling the new column name and assigning values to it.
-The values should be either the same length as the original data frame, or all the same value.
+A new column can be added to a data frame by calling the new column name and
+assigning values to it. The values should be either the same length as the
+original data frame, or all the same value.
 
 ```python
 # create a new column and fill all rows with the value 'test'
@@ -243,10 +248,10 @@ For example, let's create a column with the length of the dog's name.
 
 ```python
 # the method .str allows string functions to be applied to the column contents (here we use 'len()')
-name_lengths = data['AnimalName'].str.len()
+name_lengths = data['animal_name'].str.len()
 
-# create a new column called 'NameLength'
-data['NameLength'] = name_lengths
+# create a new column called 'name_length'
+data['name_length'] = name_lengths
 
 # we can see that the new column has been added to the end of the data frame
 data.columns
@@ -257,35 +262,53 @@ Note: this step takes a few seconds to run.
 
 ```python
 # use to_datetime to create a datetime object for each date we're using
-AnimalBirthDate = pd.to_datetime(data['AnimalBirthMonth'])
-LicenseIssuedDatetime = pd.to_datetime(data['LicenseIssuedDate'])
+animal_birth_date = pd.to_datetime(data['animal_birth_month'])
+license_issued_datetime = pd.to_datetime(data['license_issued_date'])
 
 # subtract the birth date from the license date
-AgeWhenLicensed = LicenseIssuedDatetime - AnimalBirthDate
+age_when_licensed = license_issued_datetime - animal_birth_date
 
-# assign AgeWhenLicensed to a new column
-data['AgeWhenLicensed'] = AgeWhenLicensed
+# assign age_when_licensed to a new column
+data['age_when_licensed'] = age_when_licensed
 ```
 
 ## How can I tell what's gone wronge in my programs?
 
+Typos and errors are inevitable - they happen to everyone. Python provides
+error messages if it can't run your code that will help you figure out where
+the problem is.
+
 ```
 # this code generates a syntax error
-data['AnimalName'
+data['animal_name'
 ```
 
-The very bottom of the error message is the most helpul place to start looking: this says what kind of error it is (e.g. `SyntaxError`, `ValueError`, `TypeError`, etc) and sometimes includes a message that describes what went wrong.
+The very bottom of the error message is the most helpul place to start looking:
+this says what kind of error it is (e.g. `SyntaxError`, `ValueError`,
+`TypeError`, etc) and sometimes includes a message that describes what went
+wrong.
 
-It also points to the place where the error happened: in this case, there's a missing square bracket, so the error we got was that Python reached the end of the file before it expected to because we didn't include proper punctuation.
+It also points to the place where the error happened: in this case, there's a
+missing square bracket, so the error we got was that Python reached the end of
+the file before it expected to because we didn't include proper punctuation.
 
 ```python
-# this code generates a runtime error (there's nothing wrong with the syntax, but Python can't execute it because of
-# a different error)
+# this code generates a runtime error (there's nothing wrong with the syntax,
+# but Python can't execute it because of a different error)
 
-data['AnimalName'] < data['ZipCode']
+data['animal_name'] < data['zip_code']
 ```
 
-The last line again tells us what went wrong, but this time we get a *traceback*: Python is showing us the series of steps that it followed internally before it hit an error. This is helpful because often the error will ultimately occur inside a function we're using but whose code we haven't ever seen, so Python shows us both what specifically went wrong inside the function, but also what line of our code caused the original cascade. Here, the offending line is pointed to at the very top of the traceback, and by reading the error message at the bottom we can see that the problem was that we can't use the 'less than' `<` comparison between two objects when one is a string (`data['AnimalName']`) and the other is a float (`data['ZipCode']`).
+The last line again tells us what went wrong, but this time we get a
+*traceback*: Python is showing us the series of steps that it followed
+internally before it hit an error. This is helpful because often the error will
+ultimately occur inside a function we're using but whose code we haven't ever
+seen, so Python shows us both what specifically went wrong inside the function,
+but also what line of our code caused the original cascade. Here, the offending
+line is pointed to at the very top of the traceback, and by reading the error
+message at the bottom we can see that the problem was that we can't use the
+'less than' `<` comparison between two objects when one is a string
+(`data['animal_name']`) and the other is a float (`data['zip_code']`).
 
 ## How can I operate on subsets of my data?
 
@@ -305,34 +328,52 @@ The last line again tells us what went wrong, but this time we get a *traceback*
 
 Based on the output of `data.info()`, can you answer the following questions?
 
- - What is the class of the object `data` (where `data = pd.read_csv("data/nyc-dog-licensing.csv")`)?
+ - What is the class of the object `data` (where
+   `data = pd.read_csv("data/nyc-dog-licensing.csv")`)?
  - How many rows and how many columns are in this object?
  - Why is there not the same number of rows (observations) for each column?
 
 2. **Finding messy values**
 
-Get a list of the unique values in the `breed_name` column of the dog license data using
-`value_counts()` or `unique()`. Sort this list alphabetically. (Hint: use the `sort_values()`
-function.) Look at the first 50 values. Do you see any breed names that should be combined?
+Get a list of the unique values in the `breed_name` column of the dog license
+data using `value_counts()` or `unique()`. Sort this list alphabetically. (Hint:  
+use the `sort_values()` function.) Look at the first 50 values. Do you see any
+breed names that should be combined?
 
 2. **Subsetting data by row**
 
-- Extract the 200th and 201st row of the dog license dataset and assign the resulting data frame to a new variable name (i.e. `data_200_201`). Remember that Python indexing starts at 0!
+- Extract the 200th and 201st row of the dog license dataset and assign the
+resulting data frame to a new variable name (i.e. `data_200_201`). Remember
+that Python indexing starts at 0!
 
 - With the data frame `data = pd.read_csv("data/nyc-dog-licensing.csv")`:
-    - How can you get the same result as from `data.head()` by using row slices instead of the `head()` method?
+    - How can you get the same result as from `data.head()` by using row slices
+    instead of the `head()` method?
 
-- There are at least three distinct ways to extract the last row of a data frame. How many can you come up with?
+- There are at least three distinct ways to extract the last row of a data
+frame. How many can you come up with?
 
 3. **Selecting and filtering data**
 
-Subset the dog license data frame `data` to include only female dogs and retain only the columns 'AnimalName', 'AnimalGender' and 'BreedName'. There are multiple ways this could be done.
+Subset the dog license data frame `data` to include only female dogs and retain
+only the columns 'animal_name', 'animal_gender' and 'breed_name'. There are
+multiple ways this could be done.
+
+3. **Error messages**
+
+Run the following code. What type of error does it generate?
+
+```python
+data.loc[0:10, 'animal_name', 'breed_name']
+```
+
+Edit the code to prevent it from causing an error.
 
 4. **Creating new columns**
 
-Create a new data frame from the dog license data frame `data` that contains only the `AnimalBirthMonth`, `AnimalName`, and `BreedName` columns.
-Add two new columns to this new data frame: one called `birth_year` which contains just the year from the `AnimalBirthMonth` column, and one
-called `birth_month` which contains just the month from the `AnimalBirthMonth` column.
+Create a new data frame from the dog license data frame `data` that contains only the `animal_birth_month`, `animal_name`, and `breed_name` columns.
+Add two new columns to this new data frame: one called `birth_year` which contains just the year from the `animal_birth_month` column, and one
+called `birth_month` which contains just the month from the `animal_birth_month` column.
 
 5. **groupby()**
 
