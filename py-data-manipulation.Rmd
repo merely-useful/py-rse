@@ -117,10 +117,10 @@ print(data['borough'].str.rstrip().value_counts().count())
 print(data['borough'].str.lstrip().value_counts().count())
 ```
 
-Since only `rstrip()` actually combines any values, we'll just do that.
+Since only `rstrip()` actually reduces the number of unique values, we'll just do that.
 
 ```python
-# strip whitespace from the end of each borough name
+# strip whitespace from the end of each borough name and reassign to column
 data['borough'] = data['borough'].str.rstrip()
 ```
 
@@ -312,12 +312,130 @@ message at the bottom we can see that the problem was that we can't use the
 
 ## How can I operate on subsets of my data?
 
+Many data analysis tasks can be approached using the *split-apply-combine
+paradigm*: split the data into groups, apply some analysis to each group, and
+then combine the results.
+
+`pandas` facilitates this workflow through the use of `groupby()` to split
+data and summary/aggregation functions such as `mean()` which collapses each
+group into a single-row summary of that group. The arguments to `groupby()` are
+the column names that contain the categorical variables by which summary
+statistics should be calculated.
+
+Let's start with a smaller data frame of the top 10 most common dog breeds and
+with only boroughs that are listed 5 or more times
+
+```python
+# get a list of the 10 most common breed names
+common_breeds = data_large_boroughs['breed_name'].value_counts()[:10].index
+
+# create a new data frame with only the common breeds
+data_common_breeds = data_large_boroughs[data_large_boroughs['breed_name'].isin(common_breeds)]
+```
+
+`groupby()` enables us to break the data down into groups and perform operations
+on each group. To look at how many animals of each sex there are in each of the
+most common breeds, we can use `groupby()`:
+
+```python
+data_common_breeds.groupby('breed_name')['animal_gender'].value_counts()
+```
+
+For some breeds, male dogs are much more common, but for other dogs the ratio
+is about equal.
+
+Other summary statistics, such as the mean, minimum, and maximum can be calculated:
+
+```python
+data_common_breeds.groupby(['borough'])['name_length'].mean()
+```
+
+Groups can also be created from multiple columns. For example, we can group by
+both breed and borough and look for the maximum name length:
+
+```python
+data_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max()
+
+# add a sort to show the longest name first
+data_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max().sort_values(ascending = False)
+```
+
+A Yorkshire Terrier from Manhattan holds the longest name in the dataset.
+
+Instead of choosing a single summary statistic to calculate each time, the more
+general `agg()` method can be called to aggregate or summarize by *any*
+existing aggregation functions. This approach is more flexible and powerful
+since multiple aggregation functions can be applied in the same line of code by
+passing them as a list to `agg()`.
+
+```python
+data_common_breeds.groupby(['breed_name'])['name_length'].agg(['count','min', 'max', 'mean'])
+```
+
+Yorkshire Terriers also have the largest mean name length of the top 10 breeds.
 
 ## How can I work with two or more datasets?
+
+Often related data exists in multiple files. We often need to combine these
+files into a single data frame to analyze the data. You can stack multiple data
+frames together using the `concat()` function, and you can also *join* multiple
+data frames using a common field.
+
+### Concatenating data frames
+
+Let’s grab two subsets of our data to see how `concat()` works.
+
+```python
+# get the first 10 rows
+data_subset = data.head(10)
+
+# get the last 10 rows
+data_subset_last10 = data.tail(10)
+
+# Reset the index values to the second data frame appends properly
+data_subset_last10=data_subset_last10.reset_index(drop=True)
+# drop=True option avoids adding new index column with old index values
+```
+
+When we concatenate data frames, we need to specify the axis. `axis=0` tells
+pandas to stack the second data frame under the first one. It will automatically
+detect whether the column names are the same and will stack accordingly. `axis=1`
+will stack the columns in the second data frame to the RIGHT of the first
+data frame. To stack the data vertically, we need to make sure we have the same
+columns and associated column format in both datasets. When we stack
+horizonally, we want to make sure what we are doing makes sense (ie the data
+are related in some way).
+
+```python
+# Stack the data frames on top of each other
+vertical_stack = pd.concat([data_subset, data_subset_last10], axis=0)
+
+# Place the data frames side by side
+horizontal_stack = pd.concat([data_subset, data_subset_last10], axis=1)
+```
+
+### Joining data frames
+
+When we concatenated our data frames we simply added them to each other -
+stacking them either vertically or side by side. Another way to combine data
+frames is to use columns in each dataset that contain common values (a common
+unique id). Combining data frames using a common field is called “joining”. The
+columns containing the common values are called “join key(s)”.
+
 
 
 ## How can I save my results?
 
+We can use the `to_csv()` command to do export a data frame in CSV format. Note
+that the code below will by default save the data into the current working
+directory. We can save it to a different folder by adding the foldername and a
+slash to the filename. We use the ‘index=False’ so that pandas doesn’t include
+the index number for each line.
+
+```python
+# Write data frame to CSV
+vertical_stack.to_csv('data_output/out.csv', index=False)
+```
 
 ## Summary {#py-data-manipulation-summary}
 
@@ -377,9 +495,14 @@ called `birth_month` which contains just the month from the `animal_birth_month`
 
 5. **groupby()**
 
-Use `groupby()` and `agg()` with the dog license data frame `data` after adding the `AgeWhenLicensed` column to find the mean, min, and max age when a dog was licensed in days grouped by `Borough`. Hint: the pandas `timedelta` format of the `AgeWhenLicensed` column will make calculating numeric quantities difficult; try creating a new column for the licensed age in days using `data['AgeWhenLicensed'].dt.days`.
+  1. Use `groupby()` and `agg()` with the dog license data frame `data` after adding the `age_when_licensed` column to find the mean, min, and max age when a dog was licensed in days grouped by `borough`. Hint: the pandas `timedelta` format of the `age_when_licensed` column will make calculating numeric quantities difficult; try creating a new column for the licensed age in days using `data['age_when_licensed'].dt.days`.
 
-Which borough has the largest mean time until licensing? Return the columns `BreedName`, `Borough`, and `AgeWhenLicensed`. Hint: Look into the `idxmax()` method.
+  Which borough has the largest mean time until licensing? Return the columns `breed_name`, `borough`, and `age_when_licensed`. Hint: Look into the `idxmax()` method.
+
+  2. How many dogs are female and how many are male?
+
+6. **Joining data**
+
 
 
 ## Key Points {#py-data-manipulation-keypoints}
