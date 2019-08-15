@@ -235,12 +235,23 @@ You could read this code aloud as:
 
 The logical expression, `animal_name == "BRUNO"`, will be `TRUE` when the value of the `animal_name` column is exactly equal to the character string `"BRUNO"` - any differences in characters, case, or whitespace will result in `FALSE`.
 
-Columns names can appear on either side of `==` or even on both sides.  When column names appear on both sides, the comparison happens row by row.  In programming terms this is know as an element-wise comparison.  For example, `license_issued_date == animal_birth_month` will return `TRUE` for a row only if for that row the date the license was issued is the exact same date as the birth month for the dog. If you take a look:
+Above, each value within a column was compared against the same fixed string (`"BRUNO"`). You can also compare the values from two columns against each other by including a column name on each side of the `==` sign. In programming terms this is known as element-wise comparison.  For example, `license_issued_date == animal_birth_month` will return `TRUE` for a row only if for that row the date the license was issued is the exact same date as the birth month for the dog. If you take a look:
 ```{r}
 dog_licenses %>% 
   filter(license_issued_date == animal_birth_month)
 ```
 There is no output (apart from the column names), which means that no rows satisfy this criteria.
+
+Remember that a string is surrounded by quotes while a column name is not.  When you are reading  code, look for the quotes to figure out if the comparison is to a string, or (by the absence of quotes) to the strings within a column. Use the same strategy to figure out where the quotes should be in your own code, but beware: misplacing quotes often won't result in an error, but instead a result that you weren't expecting.  For example, I might be interested in the licenses issued to male dogs and try:
+```{r}
+dog_licenses %>% 
+  filter("animal_gender" == "M")
+```
+The result has zero rows, which would suggest there are no such licenses, but in fact this is the answer to a different question.  Can you see what is wrong with the code?  By surrounding `animal_gender` in quotes, R has interpreted the comparison as: is the string `"animal_gender"` equal to the string `"M"`?.  The answer is `FALSE`, and no rows are returned.  I actually wanted to compare the `animal_gender` column to the string `"M"`, so `animal_gender` should have no quotes around it:
+```{r}
+dog_licenses %>% 
+  filter(animal_gender == "M")
+```
 
 The operator, `==` (you can read as "is equal to", or simply "equals"), is a specific kind of comparison.  Other comparisons include: 
 
@@ -587,7 +598,7 @@ Warnings don't **stop** you from proceeding, but they should alert you to questi
 
 * Check that the error is reproducible.  Restart R with a clean slate and re-run your code up to and including the code that gives the error. This is the R version of the classic tech advice to "turn it off, then turn it on again".  TODO: link to reproducibility chapter.
 
-* Try googling it: for example, googling "R unexpected string constant" lead me to the question ["Error: unexpected symbol/input/string constant/numeric constant/SPECIAL in my code" on StackOverflow][error-unexpected] which gives some great examples of ways this error might arise.
+* Try searching for it online: for example, searching for "R unexpected string constant" lead me to the question ["Error: unexpected symbol/input/string constant/numeric constant/SPECIAL in my code" on StackOverflow][error-unexpected] which gives some great examples of ways this error might arise.
 
 * Ask for help. You are most likely to get help when you can provide a reproducible example. TODO: provide link
 
