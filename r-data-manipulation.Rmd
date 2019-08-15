@@ -126,7 +126,7 @@ Two verbs are used to subset data:
 * `select()` to select columns
 * `filter()` to select rows
 
-You'll learn about these two functions in this section, along with learning about `%>%`, a way to chain together multiple operations on a dataset.
+You'll learn about these two functions in this section, along with learning about a way to chain together multiple operations on a dataset.
 
 ### Selecting columns
 
@@ -198,7 +198,7 @@ The result is code that matches very closely how we might describe the steps we 
 
 ### Exercise: Reading aloud
 
-Read the following code aloud to your neighbor (or cat, dog, or rubber duck).  Remember to pronounce `%>%` as "and then".  
+Read the following code aloud to your neighbor (or cat, dog, or [rubber duck][rubber-duck-debugging]).  Remember to pronounce `%>%` as "and then".  
 ```{r, eval = FALSE}
 dog_licenses %>% 
   arrange(license_issued_date) %>% 
@@ -283,27 +283,28 @@ Use `filter()` with this variable to find:
 
 ### More complicated expressions
 
-If you pass more than one logical expression to `filter()` then `filter()` will return only rows where **all** of the expressions are `TRUE`.  For example, licenses that are to dogs named Bruno in Brooklyn:
+Logical expressions can be combined with logical operators to construct more complicated expressions.  For example, the AND operator, `&`, returns `TRUE` only if the expressions on both sides of it are `TRUE`.  For example, you've seen, you can find the licenses to dogs called `"BRUNO"`:
 ```{r}
 dog_licenses %>% 
-  filter(animal_name == "BRUNO", borough == "Brooklyn") 
+  filter(animal_name == "BRUNO")
 ```
+And you could find the dog licenses issued to dogs that live in Brooklyn:
+```{r}
+dog_licenses %>% 
+  filter(borough == "Brooklyn")
+```
+If you want to find the licenses that are to dogs named Bruno in Brooklyn, you could combine the two logical statements with `&`:
+```{r}
+dog_licenses %>% 
+  filter((animal_name == "BRUNO") & (borough == "Brooklyn")) 
+```
+The parentheses around each logical expression are optional, but can help visually to group the components to `&`, especially if those logical expressions get more complicated.
 
 If you want to create an "or" type expression, like "licenses to dogs named BRUNO **or** dogs named BRUCE", you need to combine two comparisons with the OR operator, `|`.  
 ```{r, results = "hide"}
-# Dogs just named BRUNO
-dog_licenses %>% 
-  filter(animal_name == "BRUNO")
-
-# Dogs just named BRUCE
-dog_licenses %>% 
-  filter(animal_name == "BRUCE")
-
-# Dogs named BRUNO or BRUCE
 dog_licenses %>% 
   filter((animal_name == "BRUNO") | (animal_name == "BRUCE"))
 ```
-The parentheses around each logical expression are optional, but can help visually to group the components to `|`, especially if those logical expressions get more complicated.
 
 If you find yourself combining lots of comparisons on the same column with `|`, like dogs named `BRUNO`, `BRUCE` or `BRADY`:
 ```{r, results = "hide"}
@@ -315,7 +316,7 @@ You can save a lot of typing with `%in%`:
 dog_licenses %>% 
   filter(animal_name %in% c("BRUNO", "BRUCE", "BRADY"))
 ```
-On the right hand side of `%in%` the function `c()`, **c**combines many single values into a vector. `%in%` will return `TRUE` for an element of the left hand side if it is contained in the vector on the right hand side.
+On the right hand side of `%in%` the function `c()`, **c**ombines many single values into a vector. `%in%` will return `TRUE` for an element of the left hand side if it is contained in the vector on the right hand side.
 
 ### Exercise: Expired Licenses
 
@@ -600,7 +601,18 @@ Warnings don't **stop** you from proceeding, but they should alert you to questi
 
 * Try searching for it online: for example, searching for "R unexpected string constant" lead me to the question ["Error: unexpected symbol/input/string constant/numeric constant/SPECIAL in my code" on StackOverflow][error-unexpected] which gives some great examples of ways this error might arise.
 
-* Ask for help. You are most likely to get help when you can provide a reproducible example. TODO: provide link
+* Ask for help.  You are most likely to get help when you can provide a reproducible example. Stack Overflow
+has detailed instruction on how to create a [minimal reproducible
+example][so-mre] when asking a question to increase the chances that the
+question receives a specific and helpful answer. The key principles listed on
+the website recommends that an answer follows these guidelines: 
+    
+    > - Minimal – Use as little code as possible that still produces the same
+     problem
+    > - Complete – Provide all parts someone else needs to reproduce your problem
+    > in the question itself
+    > - Reproducible – Test the code you're about to provide to make sure it
+    > reproduces the problem
 
 ## How can I operate on subsets of my data?
 

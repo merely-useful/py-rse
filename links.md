@@ -87,10 +87,13 @@
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
+[rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 
 [setuptools]: https://setuptools.readthedocs.io/
 [select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [snakemake]: https://snakemake.readthedocs.io/
+[so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
+[so-mre-r]: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
 [sphinx]: http://www.sphinx-doc.org/en/master/
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-exchange-data-explorer]: https://data.stackexchange.com/
