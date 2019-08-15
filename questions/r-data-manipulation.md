@@ -3,5 +3,4 @@
 - How can I calculate new values?
 - How can I tell what's gone wrong in my programs?
 - How can I operate on subsets of my data?
-- How can I work with two or more datasets?
 - How can I save my results?
