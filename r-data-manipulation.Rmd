@@ -98,13 +98,13 @@ library(tidyverse)
 
 ### Re-arranging rows 
 
-You can reorder rows of data with the dplyr function `arrange()`. The arrange function takes a dataframe as its first argument and column names as the remaining arguments. The result will have the rows ordered in increasing value of the specified column.  For example, to find the licenses belonging to the oldest dogs we arrange `dog_licenses` using the `animal_birth_month` column:
+You can reorder rows of data with the dplyr function `arrange()`. The arrange function takes a tibble as its first argument and column names as the remaining arguments. The result will have the rows ordered in increasing value of the specified column.  For example, to find the licenses belonging to the oldest dogs we arrange `dog_licenses` using the `animal_birth_month` column:
 ```{r}
 arrange(dog_licenses, animal_birth_month)
 ```
 You'll see Jack the Pug that lives in Queens, just like you did in the Viewer.
 
-To arrange the rows by decreasing value, you need to wrap the column name in the `desc()`  (short for *desc*ending order).  For instance to find the youngest dogs:
+To arrange the rows by decreasing value, you need to wrap the column name in `desc()`  (short for *desc*ending order).  For instance to find the youngest dogs:
 ```{r}
 arrange(dog_licenses, desc(animal_birth_month))
 ```
@@ -126,11 +126,11 @@ Two verbs are used to subset data:
 * `select()` to select columns
 * `filter()` to select rows
 
-You'll learn about these two functions in this section, along with learning about the pipe, `%>%`, a way to chain together multiple operations on a dataset.
+You'll learn about these two functions in this section, along with learning about `%>%`, a way to chain together multiple operations on a dataset.
 
 ### Selecting columns
 
-The `select()` function in dplyr is used to extract some subset of columns (but keep all the rows) from a dataframe.  Just like `arrange()`, it takes a dataframe as its first argument and column names as the remaining arguments.  For example, to keep only the `animal_name` column:
+The `select()` function in dplyr is used to extract some subset of columns (but keep all the rows) from a tibble.  Just like `arrange()`, it takes a tibble as its first argument and column names as the remaining arguments.  For example, to keep only the `animal_name` column:
 ```{r}
 select(dog_licenses, animal_name)
 ```
@@ -153,7 +153,7 @@ There are lots of shortcuts you can use with `select()` to avoid having to type 
 ```{r}
 select(dog_licenses, starts_with("Animal"))
 ```
-Take a look in the "Useful functions" section of the `select()` help page for a complete list:
+Take a look in the ["Useful functions"][select-docs] section of the `select()` help page for a complete list:
 ```{r, eval = FALSE}
 ?dplyr::select
 ```
@@ -170,7 +170,7 @@ dog_by_date <- arrange(dog_licenses, license_issued_date)
 select(dog_by_date, license_issued_date)
 ```
 
-The pipe, `%>%`, is an operator that allows you to chain together operations without intermediate objects and maintain readability.  Let's just look at the first step in our manipulation:
+The pipe, `%>%`, is an operator that allows you to chain together operations without intermediate objects and maintain readability.  The name, "pipe", comes from the plumbing kind of pipe, not the smoking kind, and references the idea of objects flowing out of one function and into another. Let's just look at the first step in our manipulation:
 ```{r, results='hide'}
 arrange(dog_licenses, license_issued_date)
 ```
@@ -181,7 +181,7 @@ dog_licenses %>% arrange(license_issued_date)
 ```
 The pipe takes the object on the left hand side and passes it as the first argument to the function on the right hand side.  So, here the `dog_licenses` dataset is passed to the first argument of `arrange()`.  Inside `arrange()` we can then list any additional arguments as we normally would.  
 
-The pipe works very nicely with the data manipulation verbs because every verb expects a dataframe as its first argument and returns a data frame. This means the result of one operation is easily piped into the next operation, allowing you to chain together multiple steps.  For instance, piping the result of the arrange step above into the `select()` function:
+The pipe works very nicely with the data manipulation verbs because every verb expects a tibble as its first argument and returns a tibble. This means the result of one operation is easily piped into the next operation, allowing you to chain together multiple steps.  For instance, piping the result of the arrange step above into the `select()` function:
 ```{r, results = "hide"}
 dog_licenses %>% 
   arrange(license_issued_date) %>% 
@@ -198,13 +198,14 @@ The result is code that matches very closely how we might describe the steps we 
 
 ### Exercise: Reading aloud
 
-Read the following code aloud to your neighbor (or cat, dog or rubber duck).  Remember to pronounce `%>%` as "and then".  
+Read the following code aloud to your neighbor (or cat, dog, or rubber duck).  Remember to pronounce `%>%` as "and then".  
 ```{r, eval = FALSE}
 dog_licenses %>% 
-  filter(borough == "Queens") %>% 
-  summarise(max(animal_birth_month))
+  arrange(license_issued_date) %>% 
+  select(license_expired_date)
 ```
-You haven't learnt about the `filter()` or `summarise()` functions yet, but can you guess what the code does? What question might it answer? 
+
+What question might it answer? 
 
 ### Exercise:  Using the pipe
 
@@ -221,7 +222,7 @@ arrange(name_and_breed, breed_name)
 
 ### Filtering to keep a subset of rows
 
-The function to filter rows of a data frame is `filter()`.  Like `arrange()` and `select()`, its first argument is a dataframe or tibble.  The remaining arguments describe which rows to **keep**.  The rows to keep are specified with a logical expression - something that is either `TRUE` or `FALSE`. The rows where this expression is `TRUE` will be returned.
+The function to filter rows of a tibble is `filter()`.  Like `arrange()` and `select()`, its first argument is a tibble.  The remaining arguments describe which rows to **keep**.  The rows to keep are specified with a logical expression - something that is either `TRUE` or `FALSE`. The rows where this expression is `TRUE` will be returned.
 
 One of the simplest kinds of logical expression is a test for equality with the `==` operator.  For example, to keep the rows where `animal_name` is `BRUNO` you could do:
 ```{r}
@@ -239,9 +240,9 @@ Columns names can appear on either side of `==` or even on both sides.  When col
 dog_licenses %>% 
   filter(license_issued_date == animal_birth_month)
 ```
-There are no rows that satisfy this criteria.
+There is no output (apart from the column names), which means that no rows satisfy this criteria.
 
-You can think of `==` as being a specific kind of comparison.  Other comparisons include: 
+The operator, `==` (you can read as "is equal to", or simply "equals"), is a specific kind of comparison.  Other comparisons include: 
 
 | Operator | Meaning |
 |:--|:--|
@@ -271,7 +272,7 @@ Use `filter()` with this variable to find:
 
 ### More complicated expressions
 
-If you pass more than one logical expression to `filter()` it will return only rows where **all** of the expressions are `TRUE`.  For example, licenses that are to dogs named Bruno in Brooklyn:
+If you pass more than one logical expression to `filter()` then `filter()` will return only rows where **all** of the expressions are `TRUE`.  For example, licenses that are to dogs named Bruno in Brooklyn:
 ```{r}
 dog_licenses %>% 
   filter(animal_name == "BRUNO", borough == "Brooklyn") 
@@ -289,20 +290,21 @@ dog_licenses %>%
 
 # Dogs named BRUNO or BRUCE
 dog_licenses %>% 
-  filter(animal_name == "BRUNO" | animal_name == "BRUCE")
+  filter((animal_name == "BRUNO") | (animal_name == "BRUCE"))
 ```
+The parentheses around each logical expression are optional, but can help visually to group the components to `|`, especially if those logical expressions get more complicated.
 
 If you find yourself combining lots of comparisons on the same column with `|`, like dogs named `BRUNO`, `BRUCE` or `BRADY`:
 ```{r, results = "hide"}
 dog_licenses %>% 
-  filter(animal_name == "BRUNO" | animal_name == "BRUCE" | animal_name == "BRADY")
+  filter((animal_name == "BRUNO") | (animal_name == "BRUCE") | (animal_name == "BRADY"))
 ```
 You can save a lot of typing with `%in%`:
 ```{r, results = "hide"}
 dog_licenses %>% 
   filter(animal_name %in% c("BRUNO", "BRUCE", "BRADY"))
 ```
-`%in%` will return `TRUE` for an element of the left hand side if it is contained in the vector on the right hand side.
+On the right hand side of `%in%` the function `c()`, **c**combines many single values into a vector. `%in%` will return `TRUE` for an element of the left hand side if it is contained in the vector on the right hand side.
 
 ### Exercise: Expired Licenses
 
@@ -318,7 +320,7 @@ Use `filter()` with these variables to find the dog licenses that expire during 
 
 So far, you've been manipulating the columns that already exist in a dataset, but what if you want to add new ones? The function `mutate()` handles this kind of operation.  
 
-To see how this works let's start with a logical expression: `animal_name == "CHASE"`.  If you used this with `filter()`, you would get all the rows back where the license was issued to a dog named `CHASE`. Let's say instead of subsetting the data, you want to add a column called `called_chase` that contained the `TRUE` and `FALSE` result.  With `mutate()` after passing in the data, you pass named arguments, where the name is the name you desire for the new column, and its value is the way to calculate it:
+To see how this works let's start with a logical expression: `animal_name == "CHASE"`.  If you used this with `filter()`, you would get all the rows back where the license was issued to a dog named `CHASE`. Let's say instead of subsetting the data, you want to add a column called `called_chase` that contained the `TRUE` and `FALSE` result. You might do this for example, if you are interested in comparing the two groups of dogs, rather than just keeping one of them. With `mutate()` after passing in the data, you pass named arguments, where the name is the name you desire for the new column, and its value is the way to calculate it:
 ```{r}
 dog_licenses %>% 
   mutate(called_chase = animal_name == "CHASE") %>% 
@@ -359,6 +361,8 @@ dog_licenses %>%
   select(animal_name, called_chase)
 ```
 
+FIXME: add diagram showing how ifelse works
+
 You can perform multiple mutate steps at once by passing more arguments to `mutate()`, so an alternative way of writing the above code (with more keystrokes, but with lines that are shorter) would be:
 ```{r}
 dog_licenses %>% 
@@ -368,6 +372,7 @@ dog_licenses %>%
     ) %>% 
   select(animal_name, is_chase, called_chase)
 ```
+Notice that the computation for the `called_chase` column refers to the `is_chase` column.  The arguments to mutate are computed in order, so columns created later in the same `mutate()` can refer to columns created earlier.
 
 Arithmetic is another common operation that returns as many elements as there are rows.  For instance we could see how long licenses are issued for:
 ```{r}
@@ -375,7 +380,7 @@ dog_licenses %>%
   mutate(license_duration = license_expired_date - license_issued_date) %>% 
   select(license_duration)
 ```
-Interesting that there is so much variation here. 
+The output shows us licenses aren't issued for a standard time period.  In these first rows, there are some licenses issued for a whole number of years: 2 (731 days), 3 (1097 days) and 5 (1826 days).  However, others seem to be for fractions of years like 421 days.
 
 TODO: provide link to RStudio data mini cheatsheet with other functions that are useful with mutate.
 
@@ -387,7 +392,7 @@ dog_licenses %>%
     avg_duration = mean(license_duration)) %>% 
   select(license_duration, avg_duration)
 ```
-You'll get back the original number of rows, but the single value will be repeated in all of them - on average licenses are issued for 467.321 days.  You'll see a different manipulation, `summarise()` that collapses many rows into one later in this chapter.
+You'll get back the original number of rows, but the single value will be repeated in all of them - on average licenses are issued for 467.321 days.  You'll see a different verb, `summarise()` that collapses many rows into one later in this chapter.
 
 ### Exercise: Ages of dogs
 
@@ -443,7 +448,7 @@ There is one flaw in this analogy -- R isn't a real person. So, if you need to v
 
 ### Common syntax errors
 
-Syntax errors occur when your code can't be parsed into its component pieces by R.  For example, R expects the arguments to a function to start after the opening parenthesis (`(`), be separated by a comma (`,`) and finish at the closing parenthesis (`)`). When R sees this code:
+Syntax errors occur when your code can't be broken into its component pieces by R.  For example, R expects the arguments to a function to start after the opening parenthesis (`(`), be separated by a comma (`,`) and finish at the closing parenthesis (`)`). When R sees this code:
 ```{r, error = TRUE}
 filter(dog_licenses breed_name == "Finnish Lapphund")
 ```
@@ -667,7 +672,7 @@ dog_licenses %>%
   )
 ```
 
-What about Queens?  This kind of operation: summarising different subsets of the same data, is so common there is a much easier way to do it: combining `summarise()` with `group_by()`.  
+What about Queens?  This kind of operation --- summarising different subsets of the same data --- is so common there is a much easier way to do it: combining `summarise()` with `group_by()`.  
 
 The only difference in the code, is that instead of filtering for a specific `borough` we'll `group_by()` the column `borough`.
 ```{r}

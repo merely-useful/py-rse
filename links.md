@@ -89,6 +89,7 @@
 [roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 
 [setuptools]: https://setuptools.readthedocs.io/
+[select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [snakemake]: https://snakemake.readthedocs.io/
 [sphinx]: http://www.sphinx-doc.org/en/master/
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
