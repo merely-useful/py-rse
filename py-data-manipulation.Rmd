@@ -25,14 +25,14 @@ filename = "data/nyc-dog-licensing.csv"
 
 # the function pd.read_csv() takes a file path as its default input and tries to read in a table of data.
 # here we assign the function's output to a variable called "data"
-data = pd.read_csv(filename)
+dog_licenses = pd.read_csv(filename)
 ```
 
 You can also pass a url as the `filename` argument in `read_csv()`:
 
 ```python
 data_link = "https://raw.githubusercontent.com/merely-useful/merely-useful.github.io/book/data/measurements.csv"
-data = pd.read_csv(data_link)
+dog_licenses = pd.read_csv(data_link)
 ```
 
 The `read_csv()` function assumes by default that the column delimiter
@@ -63,8 +63,8 @@ snake_case_columns = [underscore(column) for column in df.columns]
 df.columns = snake_case_columns
 ```
 
-If the column names have any whitespace in them, this one-liner will rename
-them without the whitespace.
+If the column names have any whitespace in them, the following one-liner will
+rename them without the whitespace.
 
 ```python
 # Remove whitespace from column names
@@ -73,28 +73,28 @@ df = df.rename(columns=lambda x: x.strip())
 
 You might also decide that you don't want to keep some columns; you can drop them
 from the data frame using the function `drop()`. For example, the following code drops the columns
-`city_council_district` and `census_tract2010` from the dog license data frame.
+`city_council_district` and `census_tract2010` from the `dog_licenses` data frame.
 
 ```python
 # drop two columns
-data = data.drop(columns = ["city_council_district", "census_tract2010"])
+dog_licenses = dog_licenses.drop(columns = ["city_council_district", "census_tract2010"])
 ```
 
 ### Cleaning values
 
 Often, data entered by humans can have errors or inconsistent formats. The values
 in the `borough` column of the dog license data are a good example. To see all the
-unique values in this column, we can use the pandas function `unique()` or `value_counts()`.
+unique values in this column, we can use the pandas functions `unique()` or `value_counts()`.
 
 ```python
 # list and count all the values of 'borough'
-data['borough'].value_counts()
+dog_licenses['borough'].value_counts()
 ```
 
 Adding the function `count()` will show the total number of unique boroughs (79).
 
 ```python
-data['borough'].value_counts().count()
+dog_licenses['borough'].value_counts().count()
 ```
 
 There are at least three different variations of `New York` with various capitalizations.
@@ -113,15 +113,15 @@ Before we reassign the values to the 'borough' column, we can check if these ope
 will decrease the number of unique values.
 
 ```python
-print(data['borough'].str.rstrip().value_counts().count())
-print(data['borough'].str.lstrip().value_counts().count())
+print(dog_licenses['borough'].str.rstrip().value_counts().count())
+print(dog_licenses['borough'].str.lstrip().value_counts().count())
 ```
 
 Since only `rstrip()` actually reduces the number of unique values, we'll just do that.
 
 ```python
 # strip whitespace from the end of each borough name and reassign to column
-data['borough'] = data['borough'].str.rstrip()
+dog_licenses['borough'] = dog_licenses['borough'].str.rstrip()
 ```
 
 After this operation, the total number of unique values has gone down to 73.
@@ -129,11 +129,11 @@ After this operation, the total number of unique values has gone down to 73.
 Next, we'll convert all the boroughs to lower case.
 
 ```python
-data['borough'] = data['borough'].str.lower()
+dog_licenses['borough'] = dog_licenses['borough'].str.lower()
 ```
 
 This reduces the unique boroughs down again to 58. Not bad, but another look
-at `data['borough'].value_counts()` shows us that we still have some issues:
+at `dog_licenses['borough'].value_counts()` shows us that we still have some issues:
 'staten island' and 'staten is' are two different values that probably refer to the
 same borough. At this point automatic processing might give way to some human
 oversight: for instance, we could look up the true names of New York's boroughs
@@ -145,7 +145,7 @@ to 'staten island', which would take care of 267 mis-labeled entries.
 
 ```python
 # replace values in the 'borough' column
-data['borough'] = data[['borough']].replace('staten is', 'staten island')
+dog_licenses['borough'] = dog_licenses[['borough']].replace('staten is', 'staten island')
 ```
 
 We could also decide that it's not worth it to meticulously fix the stragglers and
@@ -155,16 +155,16 @@ but we'll show it here for completeness.
 
 ```python
 # get a list of the unique borough names
-borough_names = data['borough'].value_counts().index
+borough_names = dog_licenses['borough'].value_counts().index
 
 # get a list of all the borough names that have 5 or more members
-large_borough_names = borough_names[data['borough'].value_counts().values >= 5]
+large_borough_names = borough_names[dog_licenses['borough'].value_counts().values >= 5]
 
 # the function `isin(list)` returns True or False for each row if the value is in `list`
-data_large_boroughs = data[data['borough'].isin(large_borough_names)]
+dog_licenses_large_boroughs = dog_licenses[dog_licenses['borough'].isin(large_borough_names)]
 
 # print the unique boroughs after this operation
-print(data_large_boroughs['borough'].value_counts())
+print(dog_licenses_large_boroughs['borough'].value_counts())
 ```
 
 ## How can I select subsets of my data?
@@ -174,13 +174,13 @@ data from it (also referred to as "subsetting"), columns can be selected by thei
 
 ```python
 # to see what column names there are, we can use the method .columns
-data.columns
+dog_licenses.columns
 
 # to get a single column, use square brackets and the column name in quotation marks. This is case sensitive!
-data["animal_name"].head()
+dog_licenses["animal_name"].head()
 
 # to get multiple columns, provide a list of column names inside the square brackets.
-data[["animal_name", "animal_gender"]].head()
+dog_licenses[["animal_name", "animal_gender"]].head()
 ```
 
 Notice that if you provide a list, the returned object is a data frame, but if
@@ -193,17 +193,17 @@ flexible control over both rows and columns by label. The syntax is `loc[<rows>,
 For example, you can select the first 10 rows and a slice of columns:
 
 ```python
-data.loc[0:10, "animal_name" : "breed_name"]
+dog_licenses.loc[0:10, "animal_name" : "breed_name"]
 ```
 
 You can use logical operations to filter your data based on some criteria.
 
 ```python
 # get rows where 'animal_gender' is female
-data[data['animal_gender'] == 'F'].head()
+dog_licenses[dog_licenses['animal_gender'] == 'F'].head()
 
 # you can also get specific columns with .loc:
-data.loc[data['animal_gender'] == 'F', ['animal_name', 'animal_gender']].head()
+dog_licenses.loc[dog_licenses['animal_gender'] == 'F', ['animal_name', 'animal_gender']].head()
 ```
 
 A single expression can also be used to filter for several criteria, either
@@ -216,16 +216,16 @@ comparisons.
 ```python
 # the symbol '&' can be used to combine multiple logical comparisons
 # '==' means 'is equal to'
-data.loc[(data['animal_gender'] == 'F')
-         & (data['breed_name'] == 'Boxer')
-           & (data['animal_name'] == 'MILEY'), 'animal_name' : 'breed_name']
+dog_licenses.loc[(dog_licenses['animal_gender'] == 'F')
+         & (dog_licenses['breed_name'] == 'Boxer')
+           & (dog_licenses['animal_name'] == 'MILEY'), 'animal_name' : 'breed_name']
 
 # OR (|)
 # the order of comparisons can be structured with parentheses. Here we want the OR comparison
 # to happen before the AND comparison.
 
-data.loc[(data['animal_name'] == 'MILEY') & ((data['breed_name'] == 'Boxer') |  
-          (data['breed_name'] == 'Labrador Retriever')),  'animal_name' : 'breed_name']
+dog_licenses.loc[(dog_licenses['animal_name'] == 'MILEY') & ((dog_licenses['breed_name'] == 'Boxer') |  
+          (dog_licenses['breed_name'] == 'Labrador Retriever')),  'animal_name' : 'breed_name']
 ```
 
 ## How can I calculate new values?
@@ -236,11 +236,11 @@ original data frame, or all the same value.
 
 ```python
 # create a new column and fill all rows with the value 'test'
-data['new_column'] = 'test'
-data.head()
+dog_licenses['new_column'] = 'test'
+dog_licenses.head()
 
 # drop the column we just made
-data = data.drop('new_column', axis = 1)
+dog_licenses = dog_licenses.drop('new_column', axis = 1)
 ```
 
 We can also create new columns by doing operations on existing columns.
@@ -248,13 +248,13 @@ For example, let's create a column with the length of the dog's name.
 
 ```python
 # the method .str allows string functions to be applied to the column contents (here we use 'len()')
-name_lengths = data['animal_name'].str.len()
+name_lengths = dog_licenses['animal_name'].str.len()
 
 # create a new column called 'name_length'
-data['name_length'] = name_lengths
+dog_licenses['name_length'] = name_lengths
 
 # we can see that the new column has been added to the end of the data frame
-data.columns
+dog_licenses.columns
 ```
 
 Let's create a column with the age of each animal at the time it was licensed.
@@ -262,14 +262,14 @@ Note: this step takes a few seconds to run.
 
 ```python
 # use to_datetime to create a datetime object for each date we're using
-animal_birth_date = pd.to_datetime(data['animal_birth_month'])
-license_issued_datetime = pd.to_datetime(data['license_issued_date'])
+animal_birth_date = pd.to_datetime(dog_licenses['animal_birth_month'])
+license_issued_datetime = pd.to_datetime(dog_licenses['license_issued_date'])
 
 # subtract the birth date from the license date
 age_when_licensed = license_issued_datetime - animal_birth_date
 
 # assign age_when_licensed to a new column
-data['age_when_licensed'] = age_when_licensed
+dog_licenses['age_when_licensed'] = age_when_licensed
 ```
 
 ## How can I tell what's gone wronge in my programs?
@@ -280,7 +280,7 @@ the problem is.
 
 ```
 # this code generates a syntax error
-data['animal_name'
+dog_licenses['animal_name'
 ```
 
 The very bottom of the error message is the most helpul place to start looking:
@@ -296,7 +296,7 @@ the file before it expected to because we didn't include proper punctuation.
 # this code generates a runtime error (there's nothing wrong with the syntax,
 # but Python can't execute it because of a different error)
 
-data['animal_name'] < data['zip_code']
+dog_licenses['animal_name'] < dog_licenses['zip_code']
 ```
 
 The last line again tells us what went wrong, but this time we get a
@@ -308,7 +308,7 @@ but also what line of our code caused the original cascade. Here, the offending
 line is pointed to at the very top of the traceback, and by reading the error
 message at the bottom we can see that the problem was that we can't use the
 'less than' `<` comparison between two objects when one is a string
-(`data['animal_name']`) and the other is a float (`data['zip_code']`).
+(`dog_licenses['animal_name']`) and the other is a float (`dog_licenses['zip_code']`).
 
 ## How can I operate on subsets of my data?
 
@@ -327,10 +327,10 @@ with only boroughs that are listed 5 or more times
 
 ```python
 # get a list of the 10 most common breed names
-common_breeds = data_large_boroughs['breed_name'].value_counts()[:10].index
+common_breeds = dog_licenses_large_boroughs['breed_name'].value_counts()[:10].index
 
 # create a new data frame with only the common breeds
-data_common_breeds = data_large_boroughs[data_large_boroughs['breed_name'].isin(common_breeds)]
+dog_licenses_common_breeds = dog_licenses_large_boroughs[dog_licenses_large_boroughs['breed_name'].isin(common_breeds)]
 ```
 
 `groupby()` enables us to break the data down into groups and perform operations
@@ -338,7 +338,7 @@ on each group. To look at how many animals of each sex there are in each of the
 most common breeds, we can use `groupby()`:
 
 ```python
-data_common_breeds.groupby('breed_name')['animal_gender'].value_counts()
+dog_licenses_common_breeds.groupby('breed_name')['animal_gender'].value_counts()
 ```
 
 For some breeds, male dogs are much more common, but for other dogs the ratio
@@ -347,17 +347,17 @@ is about equal.
 Other summary statistics, such as the mean, minimum, and maximum can be calculated:
 
 ```python
-data_common_breeds.groupby(['borough'])['name_length'].mean()
+dog_licenses_common_breeds.groupby(['borough'])['name_length'].mean()
 ```
 
 Groups can also be created from multiple columns. For example, we can group by
 both breed and borough and look for the maximum name length:
 
 ```python
-data_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max()
+dog_licenses_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max()
 
 # add a sort to show the longest name first
-data_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max().sort_values(ascending = False)
+dog_licenses_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max().sort_values(ascending = False)
 ```
 
 A Yorkshire Terrier from Manhattan holds the longest name in the dataset.
@@ -369,7 +369,7 @@ since multiple aggregation functions can be applied in the same line of code by
 passing them as a list to `agg()`.
 
 ```python
-data_common_breeds.groupby(['breed_name'])['name_length'].agg(['count','min', 'max', 'mean'])
+dog_licenses_common_breeds.groupby(['breed_name'])['name_length'].agg(['count','min', 'max', 'mean'])
 ```
 
 Yorkshire Terriers also have the largest mean name length of the top 10 breeds.
@@ -387,13 +387,13 @@ Let’s grab two subsets of our data to see how `concat()` works.
 
 ```python
 # get the first 10 rows
-data_subset = data.head(10)
+data_subset = dog_licenses.head(10)
 
 # get the last 10 rows
-data_subset_last10 = data.tail(10)
+data_subset_last10 = dog_licenses.tail(10)
 
 # Reset the index values to the second data frame appends properly
-data_subset_last10=data_subset_last10.reset_index(drop=True)
+data_subset_last10=dog_licenses_subset_last10.reset_index(drop=True)
 # drop=True option avoids adding new index column with old index values
 ```
 
@@ -434,7 +434,7 @@ the index number for each line.
 
 ```python
 # Write data frame to CSV
-vertical_stack.to_csv('data_output/out.csv', index=False)
+dog_licenses_common_breeds.to_csv('dog_licenses_common.csv', index=False)
 ```
 
 ## Summary {#py-data-manipulation-summary}
@@ -444,10 +444,10 @@ vertical_stack.to_csv('data_output/out.csv', index=False)
 
 1. **Understanding data frame structure**
 
-Based on the output of `data.info()`, can you answer the following questions?
+Based on the output of `dog_licenses.info()`, can you answer the following questions?
 
- - What is the class of the object `data` (where
-   `data = pd.read_csv("data/nyc-dog-licensing.csv")`)?
+ - What is the class of the object `dog_licenses` (where
+   `dog_licenses = pd.read_csv("data/nyc-dog-licensing.csv")`)?
  - How many rows and how many columns are in this object?
  - Why is there not the same number of rows (observations) for each column?
 
@@ -464,8 +464,8 @@ breed names that should be combined?
 resulting data frame to a new variable name (i.e. `data_200_201`). Remember
 that Python indexing starts at 0!
 
-- With the data frame `data = pd.read_csv("data/nyc-dog-licensing.csv")`:
-    - How can you get the same result as from `data.head()` by using row slices
+- With the data frame `dog_licenses = pd.read_csv("data/nyc-dog-licensing.csv")`:
+    - How can you get the same result as from `dog_licenses.head()` by using row slices
     instead of the `head()` method?
 
 - There are at least three distinct ways to extract the last row of a data
@@ -482,20 +482,20 @@ multiple ways this could be done.
 Run the following code. What type of error does it generate?
 
 ```python
-data.loc[0:10, 'animal_name', 'breed_name']
+dog_licenses.loc[0:10, 'animal_name', 'breed_name']
 ```
 
 Edit the code to prevent it from causing an error.
 
 4. **Creating new columns**
 
-Create a new data frame from the dog license data frame `data` that contains only the `animal_birth_month`, `animal_name`, and `breed_name` columns.
+Create a new data frame from the dog license data frame `dog_licenses` that contains only the `animal_birth_month`, `animal_name`, and `breed_name` columns.
 Add two new columns to this new data frame: one called `birth_year` which contains just the year from the `animal_birth_month` column, and one
 called `birth_month` which contains just the month from the `animal_birth_month` column.
 
 5. **groupby()**
 
-  1. Use `groupby()` and `agg()` with the dog license data frame `data` after adding the `age_when_licensed` column to find the mean, min, and max age when a dog was licensed in days grouped by `borough`. Hint: the pandas `timedelta` format of the `age_when_licensed` column will make calculating numeric quantities difficult; try creating a new column for the licensed age in days using `data['age_when_licensed'].dt.days`.
+  1. Use `groupby()` and `agg()` with the dog license data frame `dog_licenses` after adding the `age_when_licensed` column to find the mean, min, and max age when a dog was licensed in days grouped by `borough`. Hint: the pandas `timedelta` format of the `age_when_licensed` column will make calculating numeric quantities difficult; try creating a new column for the licensed age in days using `dog_licenses['age_when_licensed'].dt.days`.
 
   Which borough has the largest mean time until licensing? Return the columns `breed_name`, `borough`, and `age_when_licensed`. Hint: Look into the `idxmax()` method.
 
