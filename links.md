@@ -1,8 +1,5 @@
 # {-}
 
-[config-email]: mailto:gvwilson@third-bit.com
-[config-repo]: https://github.com/merely-useful/merely-useful.github.io/
-
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
@@ -12,7 +9,11 @@
 [branch-per-feature]: https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
 [broman-packages]: https://kbroman.org/pkg_primer/
 [build-tools]: https://en.wikipedia.org/wiki/List_of_build_automation_software
+[bootswatch]: https://bootswatch.com/3/
 
+[config-email]: mailto:gvwilson@third-bit.com
+[config-repo]: https://github.com/merely-useful/merely-useful.github.io/
+[chunk-label]: https://yihui.name/knitr/options/#chunk-options
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
@@ -34,6 +35,8 @@
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 
+[error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co?noredirect=1&lq=1
+
 [f1000-research]: https://f1000research.com/
 [figshare]: https://figshare.com/
 
@@ -45,6 +48,7 @@
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [go-fair]: https://www.go-fair.org/fair-principles/
 [gutenberg]: https://www.gutenberg.org/
+[ggplot2]: https://ggplot2.tidyverse.org/
 
 [huff-testing]: https://github.com/katyhuff/python-testing
 
@@ -57,6 +61,7 @@
 
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
+[lme4]: https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf
 
 [make]: https://www.gnu.org/software/make/
 [markdown]: https://en.wikipedia.org/wiki/Markdown
@@ -78,16 +83,26 @@
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [pytest]: http://pytest.org/
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
+[pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
 
+[r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
+[r-style-guide-files]: https://style.tidyverse.org/files.html
+[r-style-guide]: https://style.tidyverse.org/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [requests]: http://docs.python-requests.org
+[rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
+[roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
-[roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
+[rstudio-r-projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
+[rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 
 [setuptools]: https://setuptools.readthedocs.io/
+[select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [snakemake]: https://snakemake.readthedocs.io/
+[so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
+[so-mre-r]: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
 [sphinx]: http://www.sphinx-doc.org/en/master/
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-exchange-data-explorer]: https://data.stackexchange.com/
@@ -100,6 +115,8 @@
 [swc-python]: https://swcarpentry.github.io/python-novice-inflammation/
 [swc-r]: https://swcarpentry.github.io/r-novice-gapminder/
 [swc-shell]: https://swcarpentry.github.io/shell-novice/
+[sci-reproducibility]: https://en.wikipedia.org/wiki/Reproducibility
+[styler-pkg]: http://styler.r-lib.org/
 
 [tdda-site]: http://www.tdda.info/
 [tf-idf]: https://en.wikipedia.org/wiki/Tf%E2%80%93idf
@@ -107,11 +124,14 @@
 [travis-ci]: https://travis-ci.org/
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [tyranny-structurelessness]: http://www.jofreeman.com/joreen/tyranny.htm
+[tinytex]: https://yihui.name/tinytex/
 
 [unpaywall]: http://unpaywall.org/
+[usethis]: https://usethis.r-lib.org/
 
 [vanderplas-licensing]: http://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [vs-code]: https://code.visualstudio.com/
+[version-control]: https://peerj.com/preprints/3159/
 
 [wickham-packages]: http://r-pkgs.had.co.nz/
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
@@ -121,6 +141,8 @@
 
 [xcode]: https://developer.apple.com/xcode/ide/
 [xkcd-duty-calls]: https://xkcd.com/386/
+
+[yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 
 [zenodo]: https://zenodo.org/
 [zipfs-law]: http://en.wikipedia.org/wiki/Zipf%27s_law
