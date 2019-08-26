@@ -35,6 +35,8 @@
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 
+[error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co?noredirect=1&lq=1
+
 [f1000-research]: https://f1000research.com/
 [figshare]: https://figshare.com/
 
@@ -83,20 +85,24 @@
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
 [pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
 
+[r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
+[r-style-guide-files]: https://style.tidyverse.org/files.html
+[r-style-guide]: https://style.tidyverse.org/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [requests]: http://docs.python-requests.org
+[rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
+[roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
-[roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 [rstudio-r-projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
-[r-style-guide]: https://style.tidyverse.org/
-[r-style-guide-files]: https://style.tidyverse.org/files.html
-[rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
-[r-here-pkg]: https://here.r-lib.org/
+[rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 
 [setuptools]: https://setuptools.readthedocs.io/
+[select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [snakemake]: https://snakemake.readthedocs.io/
+[so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
+[so-mre-r]: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
 [sphinx]: http://www.sphinx-doc.org/en/master/
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-exchange-data-explorer]: https://data.stackexchange.com/
