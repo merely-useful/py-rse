@@ -74,34 +74,65 @@ And that is the basic steps involved! Let's go through it in more detail. The ve
 first thing to do is create a Travis account by linking your GitHub account.
 Go to [Travis][travis-ci] and create your profile.
 
+### Travis is watching (your repo)
+
+> Note: This process is for general Travis usage. When working with R projects
+or packages, this process is simplified by using the `usethis::use_travis()`
+command, which we wil discuss at the end of this session.
+
+TODO: Add internal link to R section
+
+After the "step-zero" of setting up your Travis account, the first step to using
+Travis is to tell it about your repository. Go to [Travis-CI][travis-ci] and
+on the left, besides the "My Repositories", click "+" to add a repository that
+is already on GitHub. 
+
+```{r image-add-repo}
+insert_graphic("figure/rse-ci/add-repo.png")
 ```
 
-Which creates a typical `.travis.yml` configuration file for R projects.
+Then, find your repository in the list...
 
-### Setting up Travis in Python
+You may have to re-sync the list of repositories with GitHub.
 
+```{r image-list-repos}
+insert_graphic("figure/rse-ci/list-repos.png")
+```
 
+When you've found your repository, flick the switch. You've now told Travis
+to watch the repository for any updated commits and run any commands as needed.
 
-A simple `.travis.yml` configuration file looks like this:
+### Setting up Travis for Python projects
+
+Next,
+create a file called `.travis.yml` in the root directory of the repository.
+Note the leading `.` in the name:
+like many systems,
+Travis puts its configuration file in the project's root directory (Chapter \@ref(configure)),
+but uses a leading dot so that the file won't clutter the listing from `ls`.
+
+A simple template `.travis.yml` configuration file may look like this:
 
 ```yaml
-language: "python"
+language: ... # Which programming language to use, e.g. Python
 python:
--   "3.6"
+- ... # Python specific. Sets the Python version
 install:
--   "pip install -r requirements.txt"
+- ... # Commands to use to install, such as extra software packages
 script:
--   "python src/continuous/hello.py"
+- ... # Commands to run in order to build or test your software
 ```
 
-The `language` key tells Travis what language we're using.
-We then use `python` to specify the version (or versions) of Python to use
-(we can ask Travis to test our project with several different versions).
-`install` tells Travis how to install the software needed for testing;
-by convention,
-we put a list of packages in `requirements.txt` for `pip` to use (Chapter \@ref(py-package)).
-Finally,
-`script` tells Travis how to actually run the tests.
+Let's break it down what each key does:
+
+- `language` tells Travis which programming language you're using.
+- `python` is specific to when `language` is set to `python` and sets the version
+you want to use, e.g. `"3.6"`. You can ask Travis to test our project with
+several different versions by adding more `-` items.
+- `install` tells Travis how to install the software you need for your package.
+For Python packages, the convention is to put a list of packages in
+`requirements.txt` for `pip` to use (Chapter \@ref(py-package)).
+- `script` tells Travis how to actually run the tests.
 We can put almost anything here,
 provided it does not need to interact with a human being
 (e.g., provided it doesn't prompt with yes/no questions during package installation).
@@ -109,6 +140,19 @@ provided it does not need to interact with a human being
 The third and final step is to create that test script.
 Ours is called `hello.py`,
 and is in the `./src/continuous` directory of the project containing this lesson:
+
+An example file might be something like:
+
+```yaml
+language: python
+python:
+- "3.6"
+install:
+- pip install -r requirements.txt
+script:
+- python src/build.py # example build.py file
+```
+
 
 ```python
 #!/usr/bin/env python
