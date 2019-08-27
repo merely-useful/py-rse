@@ -1,16 +1,16 @@
-# Git at the command line {#cmdline-git}
+# Git at the command line {#rse-cmdline-git}
 
-## Questions {#cmdline-git-questions}
+## Questions {#rse-cmdline-git-questions}
 
-```{r, child="questions/cmdline-git.md"}
+```{r, child="questions/rse-cmdline-git.md"}
 ```
 
-## Objectives {#cmdline-git-objectives}
+## Objectives {#rse-cmdline-git-objectives}
 
-```{r, child="objectives/cmdline-git.md"}
+```{r, child="objectives/rse-cmdline-git.md"}
 ```
 
-## Introduction {#cmdline-git-intro}
+## Introduction {#rse-cmdline-git-intro}
 
 A version control system stores a master copy of your code in a repository,
 which you can’t edit directly.
@@ -27,25 +27,16 @@ It’s also useful from a collaboration viewpoint,
 because the system keeps a record of who made what changes when
 and prevents people from overwriting other people's work.
 
-In a previous lesson (TODO: provide link),
-we learned the basics of a version control system called Git
-via a popular graphical user interface called GitKraken.
-Such interfaces are a relatively new development - originally
-Git could only be used at the command line.
-GitKraken and other similar products simplify
-the command line experience by allowing users to point and click
-(which is great for teaching and learning),
-but the tradeoff is that users aren't able to access the full functionality of Git.
-Graphical interfaces also often cost money to use,
-and aren't always installed on remote computing facilities (e.g. supercomputing or cloud facilities).
-Long story short,
-while products like GitKraken are a good version control solution for many people,
-due to issues of functionality, cost, accessibility and/or personal preference,
-others may need or want to use Git via the command line.
+In a previous lesson,
+we learned the basics of a version control system called Git,
+via a graphical interface.
+Like many computer programs,
+using Git at the command line instead is a more powerful option,
+in that it allows you to access all the features of Git.
 This chapter describes how to do just that.
 
 
-## Setting up Git {#cmdline-git-setup}
+## Setting up Git {#rse-cmdline-git-setup}
 
 When we use Git on a new computer for the first time,
 we need to configure a few things. Below are a few examples
@@ -147,7 +138,7 @@ same commands to choose another editor or update your email address.
 > ```
 
 
-## Creating a repository {#cmdline-git-repos}
+## Creating a repository {#rse-cmdline-git-repos}
 
 Once Git is configured,
 we can start using it.
@@ -220,7 +211,7 @@ If you are using a different version of `git`, the exact
 wording of the output might be slightly different.
 
 
-## Tracking changes {#cmdline-git-changes}
+## Tracking changes {#rse-cmdline-git-changes}
 
 First let's make sure we're still in the right directory.
 You should be in the `planets` directory.
@@ -763,7 +754,7 @@ repository (`git commit`):
 *TODO: Figure - The Git Commit Workflow [../fig/git-committing.svg](https://github.com/swcarpentry/git-novice/blob/gh-pages/fig/git-committing.svg)*
 
 
-## Exploring history {#cmdline-git-history}
+## Exploring history {#rse-cmdline-git-history}
 
 As we saw in the previous section, we can refer to commits by their identifiers.
 You can refer to the most recent commit of the working directory by using the identifier `HEAD`.
@@ -1068,7 +1059,7 @@ on the other hand,
 moving backward and forward in time becomes much easier.
 
 
-## Branches {#cmdline-git-branches}
+## Branches {#rse-cmdline-git-branches}
 
 *FIXME: This lesson is from [UW-Madison](https://uw-madison-datascience.github.io/git-novice-custom/07-branches/)
 and therefore doesn't quite match the storyline of the other lessons.*
@@ -1377,7 +1368,254 @@ Deleted branch bashdev (was 2n779ds).
 ```
 
 
-## Ignoring things {#cmdline-git-ignore}
+## A branching workflow {#rse-cmdline-git-branching-workflow}
+
+Now that we're comfortable with creating and merging branches,
+we need to consider when and how we might use branches in our code development workflows.
+
+Experienced developers tend to use a "branch-per-feature" workflow,
+even when they are working on their own.
+Whenever they want to create a new feature,
+they create a new branch from `master` and do the work there.
+When it's done,
+they merge that branch back into `master.
+
+In the context of what we've learned about branches so far,
+our branch-per-feature workflow looks like this:
+
+1.  `git checkout master` to make sure you're working in the `master` branch.
+
+2.  `git pull origin master` (or `git pull upstream master`) to make sure that
+    your starting point is up to date
+    (i.e., that the changes you committed while working on the cluster yesterday are now in your local copy,
+    or that the fix your colleague did last week has been incorporated).
+
+3.  <code>git checkout -b <em>name-of-feature</em></code> to create a new branch.
+    The branch's name should be as descriptive as the name of a function
+    or of a file containing source code:
+    `"stuff"` or `"fixes"` saves you a couple of seconds of typing when you create the branch,
+    and will cost you much more time than that later on
+    when you're juggling half a dozen branches
+    and trying to figure out what's in each.
+
+4.  Do the work you want to do.
+    If some other task occurs to you while you're doing it---for example,
+    if you're writing a new function and realize that the documentation for some other function should be updated---*don't*
+    do that work in this branch just because you happen to be there.
+    Instead,
+    commit your changes,
+    switch back to `master`,
+    create a new branch for the other work,
+    and carry on.
+
+5.  Periodically,
+    you may <code>git push origin <em>name-of-feature</em></code> to save your work to GitHub.
+
+6.  When the work is done,
+    you `git pull origin master` to get any changes that anyone else has put in the master copy
+    into your branch
+    and merge any conflicts.
+    This is an important step:
+    you want to do the merge *and test that everything still works* in *your* branch,
+    not in `master`.
+
+7.  Finally,
+    use `git checkout master` to switch back to the `master` branch on your machine
+    and <code>git merge <em>name-of-feature</em> master</code> to merge your changes into `master`.
+    Test it one more time,
+    and then `git push origin master` to send your changes to the remote repository
+    for everyone else to admire and use.
+
+It takes longer to describe this workflow than to use it.
+Right now,
+for example,
+the repository for this material currently has six active branches:
+`master` (which is the published version),
+`explain-branch-per-feature` (where this is being written),
+and four others created from `master` as reminders to fix a glossary entry,
+rewrite the description in `README.md` of how to generate a PDF of these notes,
+and so on.
+This approach essentially uses branches as a to-do list,
+which takes no more time than typing a brief note about the feature into a text file
+or writing it in a lab notebook,
+and is much easier to track.
+Chapter \@ref(backlog) will look at better ways to manage this.
+
+
+### How can I switch between branches when work is only partly done?
+
+So what happens if we are in the middle of making changes on branch X
+and realize that we need to do some reorganizing that has nothing to do with
+the feature we're currently working on?
+The easy answer is to commit our half-finished work,
+switch branches,
+do the other task,
+and then switch back.
+However,
+that workflow leaves a lot of commits in our history corresponding to half-done work,
+and ideally we want every commit to move the system from one useful state to another.
+And if we make a dozen commits while working on a feature and then merge that branch into `master`,
+the overall history of the project can become very difficult to read.
+
+There is a command called `git stash` that will temporarily save work on a branch.
+We don't recommend using it,
+since it creates yet another place where valuable information might be stored (or forgotten).
+Instead,
+commit changes in the branch as you work,
+then squash those commits into one single comprehensible commit
+using the command `git rebase` (discussed in [the next section](#branches-rebase)).
+After squashing,
+you can merge that single large (meaningful) commit into `master`.
+
+Like many things involving Git,
+this is easier to understand with a diagram.
+Suppose we have created a branch to work on a feature:
+
+FIXME: figure
+
+<!-- == noindent -->
+We make several small changes,
+then realize we need to fix something else,
+so we commit those changes:
+
+FIXME: figure
+
+<!-- == noindent -->
+switch to `master`, and create a new branch to do the other work.
+This happens several times,
+eventually leaving the repository in this state:
+
+FIXME: figure
+
+<!-- == noindent -->
+If we were to merge now,
+four commits would wind up in the history of the `master` branch.
+Instead,
+we squash those four commits into one:
+
+FIXME: figure
+
+<!-- == noindent -->
+and then merge that:
+
+FIXME: figure
+
+## How can I keep my project's history clean when working on many branches? {#branches-rebase}
+
+The workflow described above depends on [rebasing](glossary.html#rebase),
+which means moving or combining some commits from one branch to another.
+`git rebase` is a powerful command:
+it can replay changes made in one branch on top of changes made to another:
+
+FIXME: figure
+
+<!-- == noindent -->
+or collapse several consecutive commits into a single commit,
+as we saw in the [previous section](#branches-switching).
+We will only use it for the latter ability.
+
+The command we want is `git rebase -i BASE`,
+where `BASE` is the most recent commit *before* the sequence to be compressed
+(i.e., the one that everything else will be based on).
+Many people find this confusing,
+and frequently ask `git rebase` to start with the first commit they want changed
+rather than the last one that they don't.
+
+When we run `git rebase -i`,
+it brings up a display of recent commits
+in the same editor we would use for writing commit messages:
+
+FIXME: figure
+
+The help text in this display tells us what we can do;
+in most cases,
+people choose to `pick` the first commit and `squash` the rest.
+When we save this file,
+Git immediately launches the editor again to show us
+the combination of recent changes and messages:
+
+FIXME: figure
+
+<!-- == noindent -->
+We can now edit this text to create a commit message for the unified commit.
+After we have done this,
+`git log` will only show us this single commit,
+because it's the only one left in our history:
+
+FIXME: figure
+
+`git rebase` is a complex command,
+and if we have merged changes from other branches into the branch we're rebasing,
+Git can become confused
+(or rather, it can confuse us).
+A good rule to follow is,
+"Don't rebase branches that are shared with other people."
+Instead,
+do all the work required for a feature,
+rebase,
+and then merge in recent changes from `master` and merge back to `master`:
+
+FIXME: figure
+
+What if you have pushed a branch to GitHub (or elsewhere)
+and then combine the commits to change its history
+as shown below:
+
+FIXME: figure
+
+<!-- == noindent -->
+In this case,
+Git realizes that your merge would lose information and prevents the operation from going through.
+You can use `git push --force` to overwrite the remote history,
+but this is usually a sign that you should have done something differently a while back.
+Remember,
+`git push --force` will also overwrite any work that other people have pushed to the repository,
+so it's a good way to end friendships.
+
+
+### What *is* a feature?
+
+But what is a "feature", exactly?
+What's large enough to merit creation of a new branch?
+These rules make sense for small projects with or without collaborators:
+
+1.  Anything cosmetic that is only one or two lines long can be done in `master` and committed right away.
+    "Cosmetic" means changes to comments or documentation:
+    nothing that affects how code runs---not even a simple variable renaming---is done this way,
+    because experience has taught that things that aren't supposed to often do.
+
+2.  A pure addition that doesn't change anything else is a feature and goes into a branch.
+    For example,
+    if you run a new analysis and save the results,
+    that should be done on its own branch
+    because it might take several tries to get the analysis to run,
+    and you might interrupt yourself several times to fix things that you've discovered aren't working.
+
+3.  Every change to code that someone might want to undo later in one step gets done as a feature.
+    For example,
+    if a parameter is added to a function,
+    every call to the function has to be updated;
+    since neither alteration makes sense without the other,
+    it's considered a single feature and should be done in one branch.
+
+The hardest thing about using a branch-per-feature workflow is actually doing it for small changes.
+As the first point in the list above suggests,
+most people are pragmatic about this on small projects;
+on large ones,
+where dozens of people might be committing,
+even the smallest and most innocuous change needs to be in its own branch
+so that it can be reviewed (which we discuss below).
+
+The other thing that's hard to do with a branch-per-feature workflow is a major code reorganization.
+If many files are being moved, renamed, and altered in order to restructure the project,
+merging branches where those changes *haven't* been made can be tedious and error-prone.
+The solution is to not get into this situation:
+as Chapter \@ref(refactor) says,
+code should be reorganized in many small steps,
+not one big one.
+
+
+## Ignoring things {#rse-cmdline-git-ignore}
 
 What if we have files that we do not want Git to track for us,
 like backup files created by our editor
@@ -1499,7 +1737,7 @@ nothing to commit, working directory clean
 ```
 
 
-## Remotes in GitHub {#cmdline-git-remotes}
+## Remotes in GitHub {#rse-cmdline-git-remotes}
 
 Version control really comes into its own when we begin to collaborate with
 other people.  We already have most of the machinery we need to do this; the
@@ -1699,7 +1937,7 @@ GitHub, though, this command would download them to our local repository.
 
 
 
-## Collaborating {#cmdline-git-collaborating}
+## Collaborating {#rse-cmdline-git-collaborating}
 
 For the next step, get into pairs.  One person will be the "Owner" and the other
 will be the "Collaborator". The goal is that the Collaborator add changes into
@@ -1856,7 +2094,7 @@ GitHub) are back in sync.
 
 
 
-## Conflicts {#cmdline-git-conflicts}
+## Conflicts {#rse-cmdline-git-conflicts}
 
 As soon as people can work in parallel, they'll likely step on each other's toes.
 This will even happen with a single person:
@@ -2143,17 +2381,47 @@ Conflicts can also be minimized with project management strategies:
   `htmltidy`, `perltidy`, `rubocop`, etc.) to enforce, if necessary
 
 
-## Pull requests  {#cmdline-git-pull-requests}
+## Pull requests  {#rse-cmdline-git-pull-requests}
 
 *FIXME: This lesson is from [UW-Madison](https://uw-madison-datascience.github.io/git-novice-custom/10-pull-requests/)
 and therefore doesn't quite match the storyline of the other lessons.*
 
 Pull requests are a great way to collaborate with others using github.
-Instead of making changes directly to a repository you can suggest changes to a repo.
+Instead of making changes directly to a repository, you can suggest changes via a pull request.
 This can be useful if you don't have permission to modify a repository directly or
 you want someone else to review your changes.
 
-For this lesson we will be working on the `countries` repository together.
+To be more specific, a pull request is essentially a marker saying,
+"Someone would like to merge branch A into branch X".
+The pull request does *not* contain the changes:
+instead,
+it points at two branches,
+so that if either branch is changed,
+the differences displayed are always up to date.
+
+FIXME: figure
+
+Pull requests can be created between two branches in a single repository,
+or between branches of different repositories.
+The latter is common in projects with many contributors:
+each contributor works in a branch in their own [fork](glossary.html#fork) of the repository,
+and when they're done,
+they create a pull request offering to merge their changes into the `master` branch
+of the original repository.
+In order to update their own repository,
+they pull changes from the original:
+
+FIXME: figure
+
+A pull request can store more than the location of the source and destination branch.
+In particular,
+it can store comments that people have made about the proposed merge.
+GitHub and other [forges](glossary.html#forge) allow users to add comments on the pull request as a whole,
+or on particular lines,
+and can mark old comments as out of date if the lines of code the comment is attached to are updated.
+
+To see this all in action,
+let's go ahead and work on the `countries` repository together.
 Open the github link for the `countries` repo provided by the instructor 
 in your browser window.
 
@@ -2603,7 +2871,7 @@ Now the owner/administrator/manager of the authoritative repo can review our pul
 
 
 
-## Exercises {#cmdline-git-exercises}
+## Exercises {#rse-cmdline-git-exercises}
 
 ### Creating a repository
 
@@ -3527,9 +3795,9 @@ A few steps are populated to get you started.
 > ```
 
 
-## Key Points {#cmdline-git-keypoints}
+## Key Points {#rse-cmdline-git-keypoints}
 
-```{r, child="keypoints/cmdline-git.md"}
+```{r, child="keypoints/rse-cmdline-git.md"}
 ```
 
 ```{r, child="./links.md"}
