@@ -85,7 +85,7 @@ Travis is to tell it about your repository. Go to [Travis-CI][travis-ci] and
 on the left, besides the "My Repositories", click the "+" to add a repository
 that is already on GitHub.
 
-```{r image-add-repo}
+```{r image-add-repo, echo=FALSE}
 insert_graphic("figure/rse-ci/add-repo.png")
 ```
 
@@ -93,30 +93,36 @@ Then, find your repository in the list and flick the switch button on (so it is
 green). You may have to re-sync the list of repositories with GitHub if you
 can't find the repository (green "Sync account" button on the left sidebar).
 
-```{r image-list-repos}
+```{r image-list-repos, echo=FALSE}
 insert_graphic("figure/rse-ci/list-repos.png")
 ```
 
 You've now told Travis to watch the repository for any updated commits and run
 any commands as needed.
 
-### Setting up Travis for Python projects
+### Configure your project for Travis
 
 Next we need to create a file called `.travis.yml` in the root directory of the
-repository. Note the leading `.` in the name: like many systems, Travis puts its
-configuration file in the project's root directory (Chapter \@ref(configure)),
-but uses a leading dot so that the file won't clutter the listing from `ls`.
-
-A simple template `.travis.yml` configuration file may look like this:
+repository. The leading `.` in the name is used by Unix-like systems (Mac OS or
+Linux) to hide the file, but on Windows systems it won't be hidden. This file
+contains [YAML](glossary.html#yaml) key-value settings that Travis will use and
+interpret. A simple template `.travis.yml` configuration file may look like:
 
 ```yaml
-language: ... # Which programming language to use, e.g. Python
+# Which programming language to use, e.g. Python
+language: ... 
+
+# Python specific. Sets the Python version
 python:
-- ... # Python specific. Sets the Python version
+- ... 
+
+# Commands to use to install, such as extra software packages
 install:
-- ... # Commands to use to install, such as extra software packages
+- ... 
+
+# Commands to run in order to build or test your software
 script:
-- ... # Commands to run in order to build or test your software
+- ... 
 ```
 
 Let's break it down what each key does:
@@ -126,68 +132,52 @@ Let's break it down what each key does:
 you want to use, e.g. `"3.6"`. You can ask Travis to test our project with
 several different versions by adding more `-` items.
 - `install` tells Travis how to install the software you need for your package.
-For Python packages, the convention is to put a list of packages in
-`requirements.txt` for `pip` to use (Chapter \@ref(py-package)).
-- `script` tells Travis how to actually run the tests.
-We can put almost anything here,
-provided it does not need to interact with a human being
-(e.g., provided it doesn't prompt with yes/no questions during package installation).
+For Python packages, the convention is to put a list of packages in a file
+called `requirements.txt` for `pip` to use (Chapter \@ref(py-package)).
+- `script` tells Travis how to actually run the tests. We can put almost
+anything here, provided the code doesn't need human interaction (no question prompts
+for answers).
 
-The third and final step is to create that test script.
-Ours is called `hello.py`,
-and is in the `./src/continuous` directory of the project containing this lesson:
-
-An example file might be something like:
+An example file that has the keys filled out might be something like:
 
 ```yaml
 language: python
+
 python:
 - "3.6"
+
 install:
 - pip install -r requirements.txt
+
 script:
-- python src/build.py # example build.py file
+# if an example build.py file was in the src folder
+- python src/build.py 
 ```
 
+After we've added and committed this file to Git, pushed up to GitHub, and (if 
+Travis is watching the GitHub repository) Travis will start. Every time commits
+are pushed to the GitHub repository, Travis will:
 
-```python
-#!/usr/bin/env python
+1. Create a new Linux image.
+2. Install the desired version of Python.
+3. Install the software described in `requirements.txt`.
+4. Run the commands in the `script` key, in this case to run `python src/build.py`.
+5. Report the results at `https://travis-ci.org/USER/REPO` (USER is your username,
+and REPO is the name of the repository).
 
-print('Hello, continuous')
+Travis' summary report tells us whether the build passed or failed. It fails when
+it encounters warnings or errors. In the image below, the main thing to look for
+is whether the colour is green and says "passed" (as shown), or if the colours 
+are red and the message is "failed" or "error".
+
+```{r image-build-overview, echo=FALSE, fig.cap="Travis build overview."}
+insert_graphic("figures/rse-ci/build-overview.png")
 ```
 
-The first line is a [shebang](glossary.html#shebang)
-that tells the operating system to run our script with Python rather than with the Bash shell.
-`#!/Users/pterry/anaconda3/bin/python` would run a particular version of Python,
-but `/usr/bin/env some_program_name` finds the program you want,
-so if Python is installed somewhere else,
-this still works.
-
-Once we commit these changes,
-Travis is set up.
-Every time a commit is made to this branch, it will:
-
-1.  Create a new Linux image.
-2.  Install the desired version of Python (or clone an existing image that has it, which is faster).
-3.  Install the software described by `requirements.txt`.
-4.  Run the `hello.py` script.
-5.  Report the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>.
-
-Travis's summary report tells us what happened
-(Figure \@ref(fig:integrate-summary)).
-The detailed log has *lots* of information:
-there are 397 lines hidden under "Build system information"
-and another 23 under "pip install" heading
-(Figure \@ref(fig:integrate-log)).
-
-```{r integrate-summary, echo=FALSE, fig.cap="Travis Summary Report"}
-knitr::include_graphics("figures/integrate/summary.png")
-```
-
-```{r integrate-log, echo=FALSE, fig.cap="Travis Log"}
-knitr::include_graphics("figures/integrate/log.png")
-```
-
+The log below this overview contains a ton of information, most of which are
+only relevant when you start needing to debug why and how your software doesn't
+build in a clean, non-local environment (aka. not your own computer). We'll get
+into more detail about interpreting the logs and overviews later in the chapter.
 
 ### Setting up Travis in R {#rse-ci-setting-up-with-r}
 
@@ -210,6 +200,10 @@ TODO: Add ref to section.
 
 See the [usethis](https://usethis.r-lib.org/reference/ci.html) webpage for more
 details and help on this function.
+
+You've now set up CI for your R or Python software repository! You can now start
+using it to find errors or problems and to making your software usable to
+others.
 
 ## How can I tell Travis that something went wrong? {#rse-ci-error}
 
