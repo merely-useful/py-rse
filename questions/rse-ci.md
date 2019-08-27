@@ -1,4 +1,3 @@
-
 - What is continuous integration?
 - Why should I use it?
 - How do I set it up on my software?
