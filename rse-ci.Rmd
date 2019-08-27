@@ -227,17 +227,6 @@ usable to others.
 
 ## Using Travis to test your Python project {#rse-ci-testing}
 
-The most important thing is the test program's [exit status](glossary.html#exit-status).
-An exit status of 0 means "nothing went wrong",
-and it is the default if we don't specify anything else.
-We can force this exit status by ending our script with `sys.exit(0)`.
-
-The operating system interprets any non-zero exit status as a shell error code.
-`sys.exit(1)` means "something went wrong",
-and you will rarely have to worry about other codes
-like 127 for "command not found" and 130 for "terminated with Control-C".
-
-We can test this by telling Travis to run a second script:
 The primary reason to use CI is to run the package's tests (as we covered in
 the [Unit Test] section) and check how those tests perform in a clean environment.
 Getting Travis to run the unit tests in your package is as easy as modifying
@@ -248,10 +237,14 @@ TODO: Reference to unit test chapter.
 ```yaml
 language: python
 python:
--   "3.6"
+- "3.6"
 install:
--   pip install -r requirements.txt
+- pip install -r requirements.txt
 script:
+- pytest
+```
+
+```yaml
 -   python src/continuous/failure.py
 ```
 
@@ -266,6 +259,17 @@ import sys
 print('And this command fails')
 sys.exit(1)
 ```
+
+The most important thing is the test program's [exit status](glossary.html#exit-status).
+An exit status of 0 means "nothing went wrong",
+and it is the default if we don't specify anything else.
+We can force this exit status by ending our script with `sys.exit(0)`.
+
+The operating system interprets any non-zero exit status as a shell error code.
+`sys.exit(1)` means "something went wrong",
+and you will rarely have to worry about other codes
+like 127 for "command not found" and 130 for "terminated with Control-C".
+
 
 When we commit these changes and view the repository's status page,
 we are initially told that our build is queued
