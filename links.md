@@ -43,6 +43,7 @@
 [gdb]: https://www.gnu.org/software/gdb
 [geek-feminism]: http://geekfeminism.wikia.com/
 [github]: http://github.com
+[github-pages]: https://pages.github.com/
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [gnu-make]: http://www.gnu.org/software/make/
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
