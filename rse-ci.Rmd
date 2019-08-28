@@ -243,67 +243,50 @@ script:
 - pytest
 ```
 
+After committing and pushing to your GitHub repository, Travis will now always
+run your tests in it's clean environment. If the tests fail, Travis will update
+the status to "failed" or "error". Then you can go through the Travis log and 
+start debugging what went wrong, which can sometimes be a very difficult task
+and is always different depending on the project, tests, and programming language.
+All details about the build are contained in the Travis "Job log", right below
+the build overview. Searching for the problem can sometimes be quite tedious.
+In the final exercise we'll get you to intentionally fail the Travis build to 
+see how it looks.
+
+TODO: Do we want to add more explanation about this? I feel running unit tests are basically the biggest reason to use CI.
+
+## How can I use CI for non-testing purposes? {#rse-ci-deploying}
+
+This section is meant only as a brief resource and introduction to using CI for
+more than just testing software. For instance, in R if you want to create a
+website for your R package, running:
+
+```r
+usethis::use_pkgdown()
+usethis::use_pkgdown_travis()
+```
+
+...will set up the necessary infrastructure to create a website from your package
+documentation and to get Travis to automatically build, create, and deploys your
+package website to be put online. So for R projects, the `.travis.yml` file
+looks something like this after using the above functions:
+
 ```yaml
--   python src/continuous/failure.py
+language: R
+sudo: false
+cache: packages
+
+before_cache: Rscript -e 'remotes::install_cran(\"pkgdown\")
+deploy:
+  provider: script
+  script: Rscript -e 'pkgdown::deploy_site_github()'
+  skip_cleanup: true
 ```
 
-<!-- == noindent -->
-and by making that script report failure on purpose:
+The `deploy` key is the important one here, as it is the one that tells Travis 
+to send the generated website files to be put online (via [GitHub Pages][github-pages]).
 
-```python
-#!/usr/bin/env python
-
-import sys
-
-print('And this command fails')
-sys.exit(1)
-```
-
-The most important thing is the test program's [exit status](glossary.html#exit-status).
-An exit status of 0 means "nothing went wrong",
-and it is the default if we don't specify anything else.
-We can force this exit status by ending our script with `sys.exit(0)`.
-
-The operating system interprets any non-zero exit status as a shell error code.
-`sys.exit(1)` means "something went wrong",
-and you will rarely have to worry about other codes
-like 127 for "command not found" and 130 for "terminated with Control-C".
-
-
-When we commit these changes and view the repository's status page,
-we are initially told that our build is queued
-(Figure \@ref(fig:integrate-queued)).
-We don't need to refresh the page:
-when the build starts,
-the page updates automatically.
-When when the build finishes,
-the summary turns red and the log displays an error message
-(Figure \@ref(fig:integrate-failure)).
-
-```{r integrate-queued, echo=FALSE, fig.cap="Travis Queued"}
-knitr::include_graphics("figures/integrate/queued.png")
-```
-
-```{r integrate-failure, echo=FALSE, fig.cap="Travis Failure"}
-knitr::include_graphics("figures/integrate/failure.png")
-```
-
-While we are waiting for Travis to finish building our site,
-we can take a look at the "Branches" tab of our repository.
-Clicking on a check mark or an X will bring up details of that build on that branch
-(Figure \@ref(fig:integrate-overall)).
-Sure enough,
-the page displays a red X once the build on `master` completes.
-
-```{r integrate-overall, echo=FALSE, fig.cap="Travis Overall"}
-knitr::include_graphics("figures/integrate/overall.png")
-```
-
-## How can I automatically run tests for my project when things change?  {#rse-ci-tests}
-
-FIXME: describe how to run actual tests with Travis-CI - will this require a project or projects in a separate repository?
-
-## How can I use
+TODO: Add information for Python projects
 
 ## Summary {#rse-ci-summary}
 
