@@ -172,10 +172,7 @@ It is assumed that students have completed the novice course.
 ## Project management
 
 **Lead author:** unassigned  
-**Status:** unassigned
-[#148](https://github.com/merely-useful/merely-useful.github.io/issues/148)
-[#161](https://github.com/merely-useful/merely-useful.github.io/issues/161)
-[#162](https://github.com/merely-useful/merely-useful.github.io/issues/162)
+**Status:** unassigned ([#148](https://github.com/merely-useful/merely-useful.github.io/issues/148), [#161](https://github.com/merely-useful/merely-useful.github.io/issues/161), [#162](https://github.com/merely-useful/merely-useful.github.io/issues/162))  
 **Source materials:**
 [inclusive.Rmd](https://merely-useful.github.io/still-magic/en/teamwork.html), 
 [backlog.Rmd](https://merely-useful.github.io/still-magic/en/backlog.html),
@@ -230,7 +227,7 @@ It is assumed that students have completed the novice course.
 (But could possibly be as bonus/elective lessons?)
 
 - [Working remotely](https://merely-useful.github.io/still-magic/en/remote.html), [#157](https://github.com/merely-useful/merely-useful.github.io/issues/157)
-- [Data Syndication](https://merely-useful.github.io/still-magic/en/syndicate.html)
+- [Data Syndication](https://merely-useful.github.io/still-magic/en/syndicate.html), [#145](https://github.com/merely-useful/merely-useful.github.io/issues/145)
 - [Logging](https://merely-useful.github.io/still-magic/en/logging.html)
 - [Other tools](https://merely-useful.github.io/still-magic/en/tools.html)
 - [Pacing](https://merely-useful.github.io/still-magic/en/pacing.html), [#163](https://github.com/merely-useful/merely-useful.github.io/issues/163)
