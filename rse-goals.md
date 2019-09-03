@@ -2,6 +2,7 @@
 
 The intermediate course starts with a few (simple)
 pre-prepared scripts/programs for processing/analysing data.
+(Perhaps the scripts written in the novice course?)
 It works through the process of combining those scripts into a workflow for personal use,
 before testing, organising, packaging and publishing the workflow
 (or key programs within it) for wider use.
@@ -218,8 +219,8 @@ It is assumed that students have completed the novice course.
 ## Topics that might actually belong in the novice course
 
 - [Documentation](https://merely-useful.github.io/still-magic/en/docs.html), [#158](https://github.com/merely-useful/merely-useful.github.io/issues/158)
-- [Code style](https://merely-useful.github.io/still-magic/en/style.html)
-- [Refactoring](https://merely-useful.github.io/still-magic/en/refactor.html)
+- [Code style](https://merely-useful.github.io/still-magic/en/style.html), [#149](https://github.com/merely-useful/merely-useful.github.io/issues/149)
+- [Refactoring](https://merely-useful.github.io/still-magic/en/refactor.html), [#159](https://github.com/merely-useful/merely-useful.github.io/issues/159)
 
 
 ## Topics that aren't included
