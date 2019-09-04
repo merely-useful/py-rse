@@ -1,6 +1,6 @@
 - Functions allow partitioning of code into segments that perform specific
   tasks. They make code easier to write, read, troubleshoot, and reuse.
-- Functions can be provided default values for certain input parameters, which
+- Functions can have default values for certain input parameters, which
   allows these parameters not to be explicitly set every time a function is
   called.
 - Ducktyping relies on the Python interpreter to raise meaningful errors when
