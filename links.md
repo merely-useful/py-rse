@@ -66,12 +66,14 @@
 
 [noller-a-lot-happens]: http://jessenoller.com/blog/2015/9/27/a-lot-happens
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
+[numpy-docstring]: https://numpydoc.readthedocs.io/en/latest/format.html
 
 [orcid]: https://orcid.org/
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osi-license-list]: http://opensource.org/licenses
 [osf]: https://osf.io/
 
+[pandas-docstring]: https://pandas.pydata.org/pandas-docs/stable/development/contributing_docstring.html
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [pypi]: https://pypi.org/
