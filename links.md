@@ -43,6 +43,7 @@
 [gdb]: https://www.gnu.org/software/gdb
 [geek-feminism]: http://geekfeminism.wikia.com/
 [gh-pages]: https://pages.github.com/
+[gh-myoctocat]: https://myoctocat.com
 [github]: http://github.com
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [gnu-make]: http://www.gnu.org/software/make/
