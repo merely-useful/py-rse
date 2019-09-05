@@ -1,5 +1,5 @@
 - Describe why functions are used and are major components of programming.
-- Create a function that takes both arguments and keyword arguments.
+- Create a function that takes both positional arguments and keyword arguments.
 - Use assert to check that a function input parameter is within a certain range
   of values.
 - Formulate a question with a minimal reproducible example.
