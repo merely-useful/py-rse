@@ -44,7 +44,10 @@
 [gdb]: https://www.gnu.org/software/gdb
 [geek-feminism]: http://geekfeminism.wikia.com/
 [ggplot2]: https://ggplot2.tidyverse.org/
+[gh-myoctocat]: https://myoctocat.com
+[gh-pages]: https://pages.github.com/
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
+[github]: http://github.com
 [github]: http://github.com
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [gnu-make]: http://www.gnu.org/software/make/
