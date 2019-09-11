@@ -1,66 +1,131 @@
-.PHONY : all clean commands settings
+.PHONY : all clean commands html settings
 
-STEM=merely-useful
-CONFIG=_bookdown.yml _output.yml
-SRC=${CONFIG} $(wildcard *.Rmd) $(wildcard *.md)
-OUT=_book
-EPUB=${OUT}/${STEM}.epub
-HTML=${OUT}/index.html
-PDF=${OUT}/${STEM}.pdf
+INDEX_HTML=_book/index.html
+ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
+ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/rse/rse.pdf
 
-all : commands
+R_FILES=\
+  _r.yml \
+  r-index.Rmd \
+  novice-goals.Rmd \
+  r-intro.Rmd \
+  r-practice.Rmd \
+  r-reproducibility.Rmd \
+  r-data-manipulation.Rmd \
+  r-publishing.Rmd \
+  r-objectives.Rmd \
+  r-keypoints.Rmd
+
+PY_FILES=\
+  _py.yml \
+  py-index.Rmd \
+  novice-goals.Rmd \
+  py-intro.Rmd \
+  py-development.Rmd \
+  py-objectives.Rmd \
+  py-keypoints.Rmd
+
+RSE_FILES=\
+  _rse.yml \
+  rse-index.Rmd \
+  rse-intro.Rmd \
+  rse-bash.Rmd \
+  automate.Rmd \
+  configure.Rmd \
+  verify.Rmd \
+  branches.Rmd \
+  backlog.Rmd \
+  style.Rmd \
+  process.Rmd \
+  integrate.Rmd \
+  remote.Rmd \
+  tools.Rmd \
+  docs.Rmd \
+  refactor.Rmd \
+  project.Rmd \
+  inclusive.Rmd \
+  rse-r-package.Rmd \
+  rse-r-testing.Rmd \
+  py-package.Rmd \
+  rse-publish.Rmd \
+  teamwork.Rmd \
+  pacing.Rmd \
+  finale.Rmd \
+  rse-objectives.Rmd \
+  rse-keypoints.Rmd
+
+COMMON_FILES=\
+  _common.R \
+  appendix.Rmd \
+  LICENSE.md \
+  CONDUCT.md \
+  CONTRIBUTING.md \
+  gloss.md \
+  rules.Rmd \
+  references.Rmd \
+  links.md
 
 #-------------------------------------------------------------------------------
+
+all : commands
 
 ## commands     : show all commands.
 commands :
 	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g'
 
-## everything   : rebuild all versions.
-everything : ${HTML} ${PDF} ${EPUB}
+## everything   : rebuild all HTML and PDF.
+everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 
-## html         : build HTML version.
-html : ${HTML}
-
-## pdf          : build PDF version.
-pdf : ${PDF}
-
-## epub         : build epub version.
-epub : ${EPUB}
+${INDEX_HTML} : ./_index.html
+	cp ./_index.html ${INDEX_HTML}
+	cp -r ./static _book/static
 
 #-------------------------------------------------------------------------------
 
-${HTML} : ${SRC}
-	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook'); warnings()"
+## html         : build HTML version.
+html : ${ALL_HTML} ${INDEX_HTML}
 
-${PDF} : ${SRC}
-	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book'); warnings()"
+_book/r/index.html : ${R_FILES} ${COMMON_FILES}
+	cp r-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_r.yml'); warnings()"
 
-${EPUB} : ${SRC}
-	Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::epub_book'); warnings()"
+_book/py/index.html : ${PY_FILES} ${COMMON_FILES}
+	cp py-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
+
+_book/rse/index.html : ${RSE_FILES} ${COMMON_FILES}
+	cp rse-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_rse.yml'); warnings()"
+
+#-------------------------------------------------------------------------------
+
+## pdf          : build PDF version.
+pdf : ${ALL_PDF} ${INDEX_HTML}
+
+_book/r/r.pdf : ${R_FILES} ${COMMON_FILES}
+	cp r-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_r.yml'); warnings()"
+
+_book/py/py.pdf : ${PY_FILES} ${COMMON_FILES}
+	cp py-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py.yml'); warnings()"
+
+_book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
+	cp rse-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_rse.yml'); warnings()"
 
 #-------------------------------------------------------------------------------
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf ${OUT} ${STEM}.Rmd
+	@rm -rf _book _bookdown_files _main.Rmd *.log
 	@find . -name '*~' -exec rm {} \;
-
-## check        : internal checks.
-check :
-	@bin/chunks.py ${SRC}
-	@bin/gloss.py ./gloss.md ${SRC}
-	@bin/links.py ./links.md ${SRC}
-
-## test         : tests on utilities.
-test :
-	@pytest
 
 ## settings     : echo all variable values.
 settings :
-	@echo STEM ${STEM}
-	@echo CONFIG ${CONFIG}
-	@echo SRC ${SRC}
-	@echo EPUB ${EPUB}
-	@echo HTML ${HTML}
-	@echo PDF ${PDF}
+	@echo ALL_HTML: ${ALL_HTML}
+	@echo ALL_PDF: ${ALL_PDF}
+	@echo R_FILES: ${R_FILES}
+	@echo PY_FILES: ${PY_FILES}
+	@echo RSE_FILES: ${RSE_FILES}
+	@echo COMMON_FILES: ${COMMON_FILES}
