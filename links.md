@@ -43,6 +43,7 @@
 
 [gdb]: https://www.gnu.org/software/gdb
 [geek-feminism]: http://geekfeminism.wikia.com/
+[github-pages]: https://pages.github.com/
 [ggplot2]: https://ggplot2.tidyverse.org/
 [gh-myoctocat]: https://myoctocat.com
 [gh-pages]: https://pages.github.com/
