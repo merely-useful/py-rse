@@ -37,7 +37,7 @@ RSE_FILES=\
   backlog.Rmd \
   style.Rmd \
   process.Rmd \
-  integrate.Rmd \
+  rse-ci.Rmd \
   remote.Rmd \
   tools.Rmd \
   docs.Rmd \
