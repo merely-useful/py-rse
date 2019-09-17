@@ -30,10 +30,10 @@ RSE_FILES=\
   rse-index.Rmd \
   rse-intro.Rmd \
   rse-bash.Rmd \
+  rse-cmdline-git.Rmd \
   automate.Rmd \
   configure.Rmd \
   verify.Rmd \
-  branches.Rmd \
   backlog.Rmd \
   style.Rmd \
   process.Rmd \
