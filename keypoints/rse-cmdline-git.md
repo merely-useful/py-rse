@@ -1,5 +1,5 @@
 - Use git config with the `--global` option to configure a user name,
-  email address, editor, and other preferences once per machine.
+  email address and other preferences once per machine.
 
 - `git init` initializes a repository.
 - Git stores all of its repository data in the `.git` directory.
