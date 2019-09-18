@@ -14,13 +14,13 @@ The package `pandas` is built for working with tabular data, and the `pandas`
 function `read_csv()` takes a tabular text file as input and returns a `pandas`
 data frame.
 
-```python
+```{python}
 # reading in tabular data - example
 
 import pandas as pd # import the pandas package
 
 # where is the file located on your computer?
-# you can use a relative path (shown in the example), or the full path (i.e. /home/madeleine/data/file.csv)
+# you can use a path relative to the current directory (shown in the example), or the full path (i.e. /home/madeleine/data/file.csv)
 filename = "data/nyc-dog-licensing.csv"
 
 # the function pd.read_csv() takes a file path as its default input and tries to read in a table of data.
@@ -30,141 +30,32 @@ dog_licenses = pd.read_csv(filename)
 
 You can also pass a url as the `filename` argument in `read_csv()`:
 
-```python
-data_link = "https://raw.githubusercontent.com/merely-useful/merely-useful.github.io/book/data/measurements.csv"
+```{python}
+data_link = 'https://github.com/merely-useful/merely-useful.github.io/raw/book/data/nyc-dog-licenses.csv.gz'
 dog_licenses = pd.read_csv(data_link)
 ```
 
 The `read_csv()` function assumes by default that the column delimiter
 in the file is a comma and that the first line of the file contains column names.
-To specify a different delimiter (for example tab), pass the argument `sep = \t`.
-If the data has no column names, pass the argument `header = None`, or give a list
-of column names using the argument `names = [column names]`.
+To specify a different delimiter (for example tab), pass the argument `sep=\t`.
+If the data has no column names, pass the argument `header=None`, or give a list
+of column names using the argument `names=['column1', 'column2']`.
 
-## How can I tidy up my data?
+Data can come in many formats, and `read_csv()` has many options to reflect this.
+The `read_csv()` [help page](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html)
+describes all the possible arguments that can be used to tell `read_csv()` about
+how your data is organized.
 
-Even carefully created and curated data can present difficulties at the analysis step.
-Here are a few tidying steps you might consider when exploring a new data set.
+Here's what the first few rows and columns of the dog license data look like if
+you open the file in a spreadsheet program:
 
-### Modifying column names
+![dog license data in a spreadsheet program](figures/dog_licenses_spreadsheet_screenshot.png)
 
-In this book we are using *snake case* for column names (`snake_case`), but another common format
-is called *camel case* (`CamelCase`). The following code uses the package `inflection`
-to convert a list of column names from camel to snake case.
+The structure of the data is exactly the same after reading it with `read_csv()`.
+You can get a quick view of the data using the method `.head()`:
 
-```python
-# import the underscore function which creates snake case
-from inflection import underscore
-
-# get a list of columns in snake case for the data frame 'df'
-snake_case_columns = [underscore(column) for column in df.columns]
-
-# reassign the columns of 'df'
-df.columns = snake_case_columns
-```
-
-If the column names have any whitespace in them, the following one-liner will
-rename them without the whitespace.
-
-```python
-# Remove whitespace from column names
-df = df.rename(columns=lambda x: x.strip())
-```
-
-You might also decide that you don't want to keep some columns; you can drop them
-from the data frame using the function `drop()`. For example, the following code drops the columns
-`city_council_district` and `census_tract2010` from the `dog_licenses` data frame.
-
-```python
-# drop two columns
-dog_licenses = dog_licenses.drop(columns = ["city_council_district", "census_tract2010"])
-```
-
-### Cleaning values
-
-Often, data entered by humans can have errors or inconsistent formats. The values
-in the `borough` column of the dog license data are a good example. To see all the
-unique values in this column, we can use the pandas functions `unique()` or `value_counts()`.
-
-```python
-# list and count all the values of 'borough'
-dog_licenses['borough'].value_counts()
-```
-
-Adding the function `count()` will show the total number of unique boroughs (79).
-
-```python
-dog_licenses['borough'].value_counts().count()
-```
-
-There are at least three different variations of `New York` with various capitalizations.
-`New York`, `NEW YORK`, and `new york` should probably all be considered the same
-borough, but unless we do something to these names, `pandas` will consider them unique.
-There are also two `Manhattan` counts that are spelled and capitalized the same but are showing
-up as different values. This could be due to some extra whitespace in the field.
-
-A good first pass to clean this up is to apply some string methods to this column.
-The method `str` allows us to use any Python function that works on strings and
-apply it to a data frame.
-
-We can remove whitespace from the left and right sides of each entry using
-the string methods `lstrip()` and `rstrip()`.
-Before we reassign the values to the 'borough' column, we can check if these operations
-will decrease the number of unique values.
-
-```python
-print(dog_licenses['borough'].str.rstrip().value_counts().count())
-print(dog_licenses['borough'].str.lstrip().value_counts().count())
-```
-
-Since only `rstrip()` actually reduces the number of unique values, we'll just do that.
-
-```python
-# strip whitespace from the end of each borough name and reassign to column
-dog_licenses['borough'] = dog_licenses['borough'].str.rstrip()
-```
-
-After this operation, the total number of unique values has gone down to 73.
-
-Next, we'll convert all the boroughs to lower case.
-
-```python
-dog_licenses['borough'] = dog_licenses['borough'].str.lower()
-```
-
-This reduces the unique boroughs down again to 58. Not bad, but another look
-at `dog_licenses['borough'].value_counts()` shows us that we still have some issues:
-'staten island' and 'staten is' are two different values that probably refer to the
-same borough. At this point automatic processing might give way to some human
-oversight: for instance, we could look up the true names of New York's boroughs
-and see that there are only five. We could then cross-reference the 'borough' column
-with other location information like the zip code or city council district to assign
-correct boroughs to some of the mis-named ones. We could also do a few things
-manually, such as renaming 'staten is'
-to 'staten island', which would take care of 267 mis-labeled entries.
-
-```python
-# replace values in the 'borough' column
-dog_licenses['borough'] = dog_licenses[['borough']].replace('staten is', 'staten island')
-```
-
-We could also decide that it's not worth it to meticulously fix the stragglers and
-drop any rows whose borough appears less than, say, five times in the dataset. This
-operation involves a few concepts that will be covered more in following sections,
-but we'll show it here for completeness.
-
-```python
-# get a list of the unique borough names
-borough_names = dog_licenses['borough'].value_counts().index
-
-# get a list of all the borough names that have 5 or more members
-large_borough_names = borough_names[dog_licenses['borough'].value_counts().values >= 5]
-
-# the function `isin(list)` returns True or False for each row if the value is in `list`
-dog_licenses_large_boroughs = dog_licenses[dog_licenses['borough'].isin(large_borough_names)]
-
-# print the unique boroughs after this operation
-print(dog_licenses_large_boroughs['borough'].value_counts())
+```{python}
+dog_licenses.head()
 ```
 
 ## How can I select subsets of my data?
@@ -172,7 +63,7 @@ print(dog_licenses_large_boroughs['borough'].value_counts())
 This data frame has rows and columns (it has 2 dimensions). To extract specific
 data from it (also referred to as "subsetting"), columns can be selected by their name.
 
-```python
+```{python}
 # to see what column names there are, we can use the method .columns
 dog_licenses.columns
 
@@ -183,7 +74,7 @@ dog_licenses["animal_name"].head()
 dog_licenses[["animal_name", "animal_gender"]].head()
 ```
 
-Notice that if you provide a list, the returned object is a data frame, but if
+Notice that if you provide a list, the returned object is a data frame of one or more columns, but if
 you provide a single item not in a list, it's a `Series` object.
 
 Selecting with single brackets (`[]`) is a shortcut to common operations such
@@ -192,13 +83,13 @@ flexible control over both rows and columns by label. The syntax is `loc[<rows>,
 
 For example, you can select the first 10 rows and a slice of columns:
 
-```python
+```{python}
 dog_licenses.loc[0:10, "animal_name" : "breed_name"]
 ```
 
 You can use logical operations to filter your data based on some criteria.
 
-```python
+```{python}
 # get rows where 'animal_gender' is female
 dog_licenses[dog_licenses['animal_gender'] == 'F'].head()
 
@@ -213,7 +104,7 @@ row in the data frame. Parentheses are added to indicate the priority of the
 comparisons.
 
 
-```python
+```{python}
 # the symbol '&' can be used to combine multiple logical comparisons
 # '==' means 'is equal to'
 dog_licenses.loc[(dog_licenses['animal_gender'] == 'F')
@@ -234,7 +125,7 @@ A new column can be added to a data frame by calling the new column name and
 assigning values to it. The values should be either the same length as the
 original data frame, or all the same value.
 
-```python
+```{python}
 # create a new column and fill all rows with the value 'test'
 dog_licenses['new_column'] = 'test'
 dog_licenses.head()
@@ -246,7 +137,7 @@ dog_licenses = dog_licenses.drop('new_column', axis = 1)
 We can also create new columns by doing operations on existing columns.
 For example, let's create a column with the length of the dog's name.
 
-```python
+```{python}
 # the method .str allows string functions to be applied to the column contents (here we use 'len()')
 name_lengths = dog_licenses['animal_name'].str.len()
 
@@ -260,7 +151,7 @@ dog_licenses.columns
 Let's create a column with the age of each animal at the time it was licensed.
 Note: this step takes a few seconds to run.
 
-```python
+```{python}
 # use to_datetime to create a datetime object for each date we're using
 animal_birth_date = pd.to_datetime(dog_licenses['animal_birth_month'])
 license_issued_datetime = pd.to_datetime(dog_licenses['license_issued_date'])
@@ -278,7 +169,7 @@ Typos and errors are inevitable - they happen to everyone. Python provides
 error messages if it can't run your code that will help you figure out where
 the problem is.
 
-```
+```{python error = TRUE}
 # this code generates a syntax error
 dog_licenses['animal_name'
 ```
@@ -292,7 +183,7 @@ It also points to the place where the error happened: in this case, there's a
 missing square bracket, so the error we got was that Python reached the end of
 the file before it expected to because we didn't include proper punctuation.
 
-```python
+```{python error = TRUE}
 # this code generates a runtime error (there's nothing wrong with the syntax,
 # but Python can't execute it because of a different error)
 
@@ -310,7 +201,7 @@ message at the bottom we can see that the problem was that we can't use the
 'less than' `<` comparison between two objects when one is a string
 (`dog_licenses['animal_name']`) and the other is a float (`dog_licenses['zip_code']`).
 
-## How can I operate on subsets of my data?
+## How can I summarize and group my data?
 
 Many data analysis tasks can be approached using the *split-apply-combine
 paradigm*: split the data into groups, apply some analysis to each group, and
@@ -325,7 +216,7 @@ statistics should be calculated.
 Let's start with a smaller data frame of the top 10 most common dog breeds and
 with only boroughs that are listed 5 or more times
 
-```python
+```{python}
 # get a list of the 10 most common breed names
 common_breeds = dog_licenses_large_boroughs['breed_name'].value_counts()[:10].index
 
@@ -337,7 +228,7 @@ dog_licenses_common_breeds = dog_licenses_large_boroughs[dog_licenses_large_boro
 on each group. To look at how many animals of each sex there are in each of the
 most common breeds, we can use `groupby()`:
 
-```python
+```{python}
 dog_licenses_common_breeds.groupby('breed_name')['animal_gender'].value_counts()
 ```
 
@@ -346,14 +237,14 @@ is about equal.
 
 Other summary statistics, such as the mean, minimum, and maximum can be calculated:
 
-```python
+```{python}
 dog_licenses_common_breeds.groupby(['borough'])['name_length'].mean()
 ```
 
 Groups can also be created from multiple columns. For example, we can group by
 both breed and borough and look for the maximum name length:
 
-```python
+```{python}
 dog_licenses_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max()
 
 # add a sort to show the longest name first
@@ -368,7 +259,7 @@ existing aggregation functions. This approach is more flexible and powerful
 since multiple aggregation functions can be applied in the same line of code by
 passing them as a list to `agg()`.
 
-```python
+```{python}
 dog_licenses_common_breeds.groupby(['breed_name'])['name_length'].agg(['count','min', 'max', 'mean'])
 ```
 
@@ -382,9 +273,133 @@ directory. We can save it to a different folder by adding the foldername and a
 slash to the filename. We use the ‘index=False’ so that pandas doesn’t include
 the index number for each line.
 
-```python
+```{python}
 # Write data frame to CSV
 dog_licenses_common_breeds.to_csv('dog_licenses_common.csv', index=False)
+```
+
+## How can I tidy up my data?
+
+Even carefully created and curated data can present difficulties at the analysis step.
+Here are a few tidying steps you might consider when exploring a new data set.
+
+### Modifying column names
+
+In this book we are using *snake case* for column names (`snake_case`,
+see the [style guide](https://github.com/merely-useful/merely-useful.github.io/blob/c1bef59634070573922f30dd933acc20cb3ff300/style.Rmd)
+for more information about coding format and style), but another common format
+is called *camel case* (`CamelCase`). The following code uses the package `inflection`
+to convert a list of column names from camel to snake case.
+
+```{python}
+# import the underscore function which creates snake case
+from inflection import underscore
+
+# here's what the columns look like in camel case
+dog_licenses.columns
+```
+
+```{python}
+# get a list of columns in snake case for the data frame 'df'
+snake_case_columns = [underscore(column) for column in dog_licenses.columns]
+
+# reassign the columns of 'df'
+dog_licenses.columns = snake_case_columns
+
+# here's what the columns now look like in snake case
+dog_licenses.columns
+```
+
+If the column names have any whitespace in them, the following one-liner will
+rename them without the whitespace.
+
+```{python}
+# Remove whitespace from column names
+dog_licenses = dog_licenses.rename(columns=lambda x: x.strip())
+```
+
+You might also decide that you don't want to keep some columns; you can drop them
+from the data frame using the method `drop()`. For example, the following code drops the columns
+`city_council_district` and `census_tract2010` from the `dog_licenses` data frame.
+
+```{python}
+# drop two columns
+dog_licenses = dog_licenses.drop(columns=["city_council_district", "census_tract2010"])
+```
+
+### Cleaning values
+
+Often, data entered by humans can have errors or inconsistent formats. The values
+in the `borough` column of the dog license data are a good example. To see all the
+unique values in this column, we can use the pandas method `unique()`.
+
+```{python}
+# list all boroughs
+dog_licenses['borough'].unique()
+```
+
+Instead of the names of the unique boroughs, the number of boroughs can be
+returned with the nunique() method.
+
+```{python}
+# list all boroughs
+dog_licenses['borough'].nunique()
+```
+
+The number of dog registrations for each borough can be computed with the
+`value_counts()` method.
+
+```{python}
+# list and count all the values of 'borough'
+dog_licenses['borough'].value_counts()
+```
+
+There are at least three different variations of `New York` with various capitalizations.
+`New York`, `NEW YORK`, and `new york` should probably all be considered the same
+borough, but unless we do something to these names, `pandas` will consider them unique.
+
+A good first pass to clean this up is to apply some string methods to this column.
+The method `str` allows us to use any Python function that works on strings and
+apply it to a data frame.
+
+We can convert all the boroughs to lower case to combine all the names with
+the same spelling but different capitalizations.
+
+```{python}
+dog_licenses['borough'] = dog_licenses['borough'].str.lower()
+```
+
+This reduces the number of unique boroughs. Not bad, but another look
+at `dog_licenses['borough'].value_counts()` shows us that we still have some issues:
+'staten island' and 'staten is' are two different values that probably refer to the
+same borough. At this point automatic processing might give way to some human
+oversight: for instance, we could look up the true names of New York's boroughs
+and see that there are only five. We could then cross-reference the 'borough' column
+with other location information like the zip code or city council district to assign
+correct boroughs to some of the mis-named ones. We could also do a few things
+manually, such as renaming 'staten is'
+to 'staten island', which would take care of 267 mis-labeled entries.
+
+```{python}
+# replace values in the 'borough' column
+dog_licenses['borough'] = dog_licenses['borough'].replace('staten is', 'staten island')
+```
+
+We could also decide that it's not worth it to meticulously fix the stragglers and
+drop any rows whose borough appears less than, say, five times in the dataset.
+
+```{python}
+# get a list of the unique borough names
+borough_names = dog_licenses['borough'].unique()
+
+# get a list of all the borough names that have 5 or more members
+large_borough_names = borough_names[dog_licenses['borough'].value_counts() >= 5]
+
+# the method `isin(list)` returns True or False for each row if the value is in `list`
+dog_licenses_large_boroughs = dog_licenses[dog_licenses['borough'].isin(large_borough_names)]
+
+# look at the unique boroughs after this operation
+dog_licenses_large_boroughs['borough'].value_counts()
 ```
 
 ## Summary {#py-data-manipulation-summary}
@@ -433,7 +448,7 @@ multiple ways this could be done.
 
 Run the following code. What type of error does it generate?
 
-```python
+```{python}
 dog_licenses.loc[0:10, 'animal_name', 'breed_name']
 ```
 
@@ -455,3 +470,5 @@ called `birth_month` which contains just the month from the `animal_birth_month`
 
 
 ## Key Points {#py-data-manipulation-keypoints}
+
+```{r, child="keypoints/py-data-manipulation.md"}```
