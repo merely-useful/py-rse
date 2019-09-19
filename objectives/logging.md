@@ -1,5 +1,0 @@
--   Explain the advantages of using a logging library rather than `print` statements in data science pipelines.
--   Describe the intent of the five standard logging levels.
--   Create and configure a simple logger.
--   Define a custom format for log messages.
--   Define a source name to use in consolidated logs.
