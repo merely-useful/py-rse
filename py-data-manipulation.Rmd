@@ -62,6 +62,7 @@ dog_licenses.head()
 
 This data frame has rows and columns (it has 2 dimensions). To extract specific
 data from it (also referred to as "subsetting"), columns and/or rows can be selected either by their name or location.
+
 ### Selecting columns
 
 To select a column, pass the column name as a string to the data frame, using square brackets to indicate that we want to select from the data frame (similar to subsetting lists).
@@ -79,10 +80,16 @@ dog_licenses[["animal_name", "animal_gender"]].head()
 
 Notice that if you provide a list, the returned object is a data frame of one or more columns, but if
 you provide a single item not in a list, it's a `Series` object with a one column. There are situations where it is beneficial to work with one over the other, but for now it is enough to know the differences when selecting columns.
+
 ### Selecting rows
 
 Selecting with single brackets (`[]`) is a shortcut to common operations such
 as selecting columns by labels as above. If you instead pass a range of numbers (e.g. `[0:10]`), the corresponding *row numbers* will be selected.
+
+```{python}
+dog_licenses[0:10]
+```
+
 ### Selecting rows and columns
 
 The function `.loc[]` gives more flexible control over both rows and columns by label. The syntax is `loc[<rows>, <columns>]`.
@@ -144,11 +151,9 @@ We can also create new columns by doing operations on existing columns.
 For example, let's create a column with the length of the dog's name.
 
 ```{python}
-# the accessor `.str` gives access to string methods that can be applied to the column values, e.g. `len()`
-name_lengths = dog_licenses['animal_name'].str.len()
-
 # create a new column called 'name_length'
-dog_licenses['name_length'] = name_lengths
+# the accessor `.str` gives access to string methods that can be applied to the column values, e.g. `len()`
+dog_licenses['name_length'] = dog_licenses['animal_name'].str.len()
 
 # we can see that the new column has been added to the end of the data frame
 dog_licenses.columns
@@ -156,6 +161,12 @@ dog_licenses.columns
 
 Let's create a column with the age of each animal at the time it was licensed.
 Note: this step takes a few seconds to run.
+
+To calculate the age of each animal at licensing, we'll use the animal birth date
+and the date it was licensed. `pandas` has a data type called `datetime` that
+allows it to deal with dates: subtracting two dates, for instance, is different
+than subtracting two numbers. The function `to_datetime()` converts a string
+into a `datetime` object.
 
 ```{python}
 # use to_datetime to create a datetime object for each date we're using
@@ -220,10 +231,11 @@ the column names that contain the categorical variables by which summary
 statistics should be calculated.
 
 Let's start with a smaller data frame of the top 10 most common dog breeds and
-with only boroughs that are listed 5 or more times
+with only boroughs that are listed 5 or more times.
 
 ```{python}
 # get a list of the 10 most common breed names
+# the attribute 'index' gives us just the row descriptions and not the values
 common_breeds = dog_licenses_large_boroughs['breed_name'].value_counts()[:10].index
 
 # create a new data frame with only the common breeds
@@ -462,9 +474,14 @@ Edit the code to prevent it from causing an error.
 
 4. **Creating new columns**
 
-Create a new data frame from the dog license data frame `dog_licenses` that contains only the `animal_birth_month`, `animal_name`, and `breed_name` columns.
-Add two new columns to this new data frame: one called `birth_year` which contains just the year from the `animal_birth_month` column, and one
-called `birth_month` which contains just the month from the `animal_birth_month` column.
+  1. Add two new columns to the `dog_licenses` data frame: one that contains the length of the
+  breed name from the `breed_name` column, and one that contains just the first
+  letter of the `animal_name` column.
+
+  2. Create a new data frame from the dog license data frame `dog_licenses` that contains only the `animal_birth_month`, `animal_name`, and `breed_name` columns.
+  Add two new columns to this new data frame: one called `birth_year` which contains just the year from the `animal_birth_month` column, and one
+  called `birth_month` which contains just the month from the `animal_birth_month` column.
+
 
 5. **groupby()**
 
