@@ -82,13 +82,15 @@ you provide a single item not in a list, it's a `Series` object with a one colum
 ### Selecting rows
 
 Selecting with single brackets (`[]`) is a shortcut to common operations such
-as selecting columns by labels as above. The function `.loc[]` gives more
-flexible control over both rows and columns by label. The syntax is `loc[<rows>, <columns>]`.
+as selecting columns by labels as above. If you instead pass a range of numbers (e.g. `[0:10]`), the corresponding *row numbers* will be selected.
+### Selecting rows and columns
+
+The function `.loc[]` gives more flexible control over both rows and columns by label. The syntax is `loc[<rows>, <columns>]`.
 
 For example, you can select the first 10 rows and a slice of columns:
 
 ```{python}
-dog_licenses.loc[0:10, "animal_name" : "breed_name"]
+dog_licenses.loc[0:10, "animal_name":"breed_name"]
 ```
 
 You can use logical operations to filter your data based on some criteria.
@@ -112,22 +114,22 @@ comparisons.
 # the symbol '&' can be used to combine multiple logical comparisons
 # '==' means 'is equal to'
 dog_licenses.loc[(dog_licenses['animal_gender'] == 'F')
-         & (dog_licenses['breed_name'] == 'Boxer')
+           & (dog_licenses['breed_name'] == 'Boxer')
            & (dog_licenses['animal_name'] == 'MILEY'), 'animal_name' : 'breed_name']
 
 # OR (|)
 # the order of comparisons can be structured with parentheses. Here we want the OR comparison
 # to happen before the AND comparison.
 
-dog_licenses.loc[(dog_licenses['animal_name'] == 'MILEY') & ((dog_licenses['breed_name'] == 'Boxer') |  
-          (dog_licenses['breed_name'] == 'Labrador Retriever')),  'animal_name' : 'breed_name']
+dog_licenses.loc[(dog_licenses['animal_name'] == 'MILEY') & ((dog_licenses['breed_name'] == 'Boxer')
+         | (dog_licenses['breed_name'] == 'Labrador Retriever')),  'animal_name' : 'breed_name']
 ```
 
 ## How can I calculate new values?
 
-A new column can be added to a data frame by calling the new column name and
-assigning values to it. The values should be either the same length as the
-original data frame, or all the same value.
+A new column can be added to a data frame by
+assigning values to a new column label. The assigned values should be either the same length as the
+original data frame, or a single value.
 
 ```{python}
 # create a new column and fill all rows with the value 'test'
@@ -135,14 +137,14 @@ dog_licenses['new_column'] = 'test'
 dog_licenses.head()
 
 # drop the column we just made
-dog_licenses = dog_licenses.drop('new_column', axis = 1)
+dog_licenses = dog_licenses.drop(columns='new_column')
 ```
 
 We can also create new columns by doing operations on existing columns.
 For example, let's create a column with the length of the dog's name.
 
 ```{python}
-# the method .str allows string functions to be applied to the column contents (here we use 'len()')
+# the accessor `.str` gives access to string methods that can be applied to the column values, e.g. `len()`
 name_lengths = dog_licenses['animal_name'].str.len()
 
 # create a new column called 'name_length'
@@ -167,11 +169,11 @@ age_when_licensed = license_issued_datetime - animal_birth_date
 dog_licenses['age_when_licensed'] = age_when_licensed
 ```
 
-## How can I tell what's gone wronge in my programs?
+## How can I tell what's gone wrong in my programs?
 
 Typos and errors are inevitable - they happen to everyone. Python provides
 error messages if it can't run your code that will help you figure out where
-the problem is.
+the problem is. Generally, there are two types of errors: syntax errors - where Python can't execute the code, e.g. due to a missing parenthesis; and runtime erros - where Python executed the code but ran into an illegal operation, e.g. an undefined variable name was used in an operation.
 
 ```{python error = TRUE}
 # this code generates a syntax error
@@ -252,7 +254,7 @@ both breed and borough and look for the maximum name length:
 dog_licenses_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max()
 
 # add a sort to show the longest name first
-dog_licenses_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max().sort_values(ascending = False)
+dog_licenses_common_breeds.groupby(['borough', 'breed_name'])['name_length'].max().sort_values(ascending=False)
 ```
 
 A Yorkshire Terrier from Manhattan holds the longest name in the dataset.
@@ -422,7 +424,7 @@ Based on the output of `dog_licenses.info()`, can you answer the following quest
 
 2. **Finding messy values**
 
-Get a list of the unique values in the `breed_name` column of the dog license
+- Get a list of the unique values in the `breed_name` column of the dog license
 data using `value_counts()` or `unique()`. Sort this list alphabetically. (Hint:  
 use the `sort_values()` function.) Look at the first 50 values. Do you see any
 breed names that should be combined?
