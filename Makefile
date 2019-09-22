@@ -79,6 +79,9 @@ everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 ${INDEX_HTML} : ./_index.html
 	cp ./_index.html ${INDEX_HTML}
 	cp -r ./static _book/static
+	mkdir _book/data
+	find dir1 -maxdepth 1 -type f -exec cp -t dir2 {} +
+	cp ./data _book/data
 
 #-------------------------------------------------------------------------------
 
