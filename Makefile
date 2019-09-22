@@ -37,16 +37,16 @@ RSE_FILES=\
   backlog.Rmd \
   style.Rmd \
   process.Rmd \
-  rse-ci.Rmd \
   remote.Rmd \
   tools.Rmd \
   docs.Rmd \
   refactor.Rmd \
   project.Rmd \
   inclusive.Rmd \
+  rse-ci.Rmd \
   rse-r-package.Rmd \
   rse-r-testing.Rmd \
-  py-package.Rmd \
+  rse-py-package.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
   pacing.Rmd \
