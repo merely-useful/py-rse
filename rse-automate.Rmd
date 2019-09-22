@@ -106,7 +106,6 @@ Make is based on three key ideas:
 
 Let's start by creating a file called `Makefile` that contains the following three lines:
 
-<!-- src="automate/single_rule.mk" -->
 ```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
@@ -229,7 +228,6 @@ FIXME: figure
 Our Makefile isn't particularly exciting so far.
 Let's add another rule to the end and save the result as `double_rule.mk`:
 
-<!-- src="automate/double_rule.mk" -->
 ```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
@@ -246,7 +244,6 @@ When we ask Make to run this file:
 $ make -f double_rule.mk
 ```
 
-<!-- == noindent -->
 we get this rather disappointing message:
 
 ```text
@@ -284,7 +281,6 @@ let's add another target to our Makefile to delete all of the files we have gene
 By convention this target is called `clean`,
 and ours looks like this:
 
-<!-- src="automate/clean.mk" -->
 ```
 # Remove all generated files.
 clean :
@@ -299,7 +295,6 @@ Let's run Make:
 $ make -f pipeline.mk clean
 ```
 
-<!-- == noindent -->
 and then use `ls` to list the contents of `results`.
 Sure enough, it's empty.
 
@@ -352,7 +347,6 @@ we ought to regenerate our results and then check to see if they've changed.
 Here's a modified version of the Makefile
 in which each result depends on both the data file and the script:
 
-<!-- src="automate/depend_on_script.mk" -->
 ```
 .PHONY: clean
 
@@ -385,7 +379,6 @@ We can fix that by defining a [variable](glossary.html#make-variable) at the top
 to refer to the script,
 then using that variable in our rules:
 
-<!-- src="automate/define_variable.mk" -->
 ```
 .PHONY: clean
 
@@ -437,7 +430,6 @@ this target is called `all`,
 and while we don't have to list all our phony targets in alphabetical order,
 it makes them a lot easier to find:
 
-<!-- src="automate/multi_prereq.mk" -->
 ```
 .PHONY: all clean
 
@@ -479,24 +471,20 @@ The first step is to use the very cryptic expression `$@` in the rule's action
 to mean "the target of the rule".
 We start with this:
 
-<!-- src="automate/single_rule.mk" -->
 ```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 ```
 
-<!-- == noindent -->
 and turn it into this:
 
-<!-- src="automate/automatic_variables_wrong.mk" -->
 ```
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > $@
 ```
 
-<!-- == noindent -->
 `$@` is an automatic variable:
 Make defines its value for us separately in each rule.
 And yes,
@@ -507,7 +495,6 @@ but we're stuck with it.
 Step 2 is to replace the list of prerequisites in the action with `$^`,
 which is another automatic variable meaning "all the prerequisites of the current rule":
 
-<!-- src="automate/automatic_variables_wrong.mk" -->
 ```
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt
@@ -520,14 +507,12 @@ They also depend on `bin/countwords.py`.
 What happens if we include that in the rule while using automatic variables?
 (We'll do this for a third book to keep the three rules separate in the example Makefile.)
 
-<!-- src="automate/automatic_variables_wrong.mk" -->
 ```
 # Regenerate results for "The Time Machine" - WRONG
 results/time_machine.csv : data/time_machine.txt ${COUNT}
         python bin/countwords.py $^ > $@
 ```
 
-<!-- == noindent -->
 This doesn't do the right thing because `$^` includes *all* of the prerequisites,
 so the action tries to process the script as if it were a data file:
 
@@ -539,7 +524,6 @@ This situation comes up so often that
 Make helpfully provides another automatic variable `$<` meaning "the first prerequisite",
 which lets us rewrite our rules like this:
 
-<!-- src="automate/automatic_variables.mk" -->
 ```
 # Regenerate results for "Janey Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt ${COUNT}
@@ -564,20 +548,17 @@ Whatever part of a filename `%` matches in the target,
 it must also match in the prerequisites,
 so the single rule:
 
-<!-- src="automate/pattern_rule.mk" -->
 ```
 results/%.csv : data/%.txt ${COUNT}
         python bin/countwords.py $< > $@
 ```
 
-<!-- == noindent -->
 will handle *Jane Eyre*, *Moby Dick*, and *The Time Machine*.
 (Unfortunately, `%` cannot be used in rules' actions,
 which is why `$<` and `$@` are needed.)
 With this rule in place,
 our entire Makefile is reduced to:
 
-<!-- src="automate/pattern_rule.mk" -->
 ```
 .PHONY: all clean
 
@@ -637,15 +618,12 @@ and we just want to update them.
 We can define a variable called `RESULTS` to be a list of all the results files
 using the same notation we'd use in the shell to match all the CSV files in the `results/` directory:
 
-<!-- src="automate/filename_wildcard.mk" -->
 ```
 RESULTS=results/*.csv
 ```
 
-<!-- == noindent -->
 and then make `all` depend on that:
 
-<!-- src="automate/filename_wildcard.mk" -->
 ```
 # Regenerate all results.
 all : ${RESULTS}
@@ -665,12 +643,10 @@ because functions were added to Make long after it was first written,
 but at least they have readable names.
 Let's create a variable `DATA` that holds the names of all of our data files:
 
-<!-- src="automate/function_wildcard.mk" -->
 ```
 DATA = $(wildcard data/*.txt)
 ```
 
-<!-- == noindent -->
 This calls the function `wildcard` with the argument `data/*.txt`.
 The result is a list of all the text files in the `raw` directory,
 just as we'd get with `data/*.txt` in the shell.
@@ -682,7 +658,6 @@ To check,
 we can add another phony target to the end of the file called `settings`
 that uses the shell command `echo` to print the name and value of a variable:
 
-<!-- src="automate/function_wildcard.mk" -->
 ```
 .PHONY: all clean settings
 
@@ -710,7 +685,6 @@ The output appears twice because Make shows us the command it's going to run bef
 If we put `@` before the command,
 Make doesn't show it before running it:
 
-<!-- src="automate/function_wildcard_silent.mk" -->
 ```
 settings :
 	@echo COUNT: ${COUNT}
@@ -730,7 +704,6 @@ but what we want is the names of the corresponding output files.
 Make has another function called `patsubst` (short for "**pat**tern **subst**itution")
 that uses the same kind of patterns used in rules to do exactly this:
 
-<!-- src="automate/patsubst.mk" -->
 ```
 RESULTS=$(patsubst data/%.txt,results/%.csv,${DATA})
 ```
@@ -751,7 +724,6 @@ which is our list of books' names.
 
 Let's check that this has worked by adding to the `settings` target
 
-<!-- src="automate/patsubst.mk" -->
 ```
 settings :
         @echo COUNT: ${COUNT}
@@ -808,7 +780,6 @@ But how can we document the workflow that our Makefile now embodies?
 One common choice is to provide a special target like `settings`
 that prints a description of available targets:
 
-<!-- src="automate/makefile_help.mk" -->
 ```
 .PHONY: all clean help settings
 
@@ -839,7 +810,6 @@ since we may be using the `-f` flag to specify which Makefile we're using.
 With all that in place,
 our finished Makefile is:
 
-<!-- src="automate/makefile_grep.mk" -->
 ```
 .PHONY: all clean help settings
 
