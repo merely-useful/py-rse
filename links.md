@@ -129,6 +129,7 @@
 [swc]: http://software-carpentry.org
 
 [tdda-site]: http://www.tdda.info/
+[testpypi]: https://test.pypi.org
 [tf-idf]: https://en.wikipedia.org/wiki/Tf%E2%80%93idf
 [tinytex]: https://yihui.name/tinytex/
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
