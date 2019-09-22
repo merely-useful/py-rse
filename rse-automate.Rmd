@@ -83,7 +83,7 @@ This introduction based on
 the [Software Carpentry lesson on Make][swc-make] maintained by [Gerard Capes][capes-gerard]
 and on [Jonathan Dursi][dursi-jonathan]'s [introduction to pattern rules][dursi-pattern-rules].
 
-## How can I update a file when its prerequisites change? {#rse-automate-first}
+## First steps to using Make {#rse-automate-first}
 
 Make is based on three key ideas:
 
@@ -145,37 +145,31 @@ run this command in the shell:
 $ make
 ```
 
-Make automatically looks for a file called `Makefile` and checks the rules it contains.
-In this case,
-one of three things will happen:
+Make will automatically look for a file called `Makefile` and check the rules
+it contains. In this case, one of three things will happen:
 
-1.  Make won't be able to find the file `data/moby_dick.csv`,
-    so it will run the script to create it.
-2.  Make will see that `data/moby_dick.txt` is newer than `results/moby_dick.csv`,
-    in which case it will run the script to update the results file.
-3.  Make will see that `results/moby_dick.csv` is newer than its prerequisite,
-    so it won't do anything.
+1. Make won't be able to find the file `data/moby_dick.csv`, so it will run the
+script to create it.
+2. Make will see that `data/moby_dick.txt` is newer than
+`results/moby_dick.csv`, in which case it will run the script to update the
+results file.
+3. Make will see that `results/moby_dick.csv` is newer than its prerequisite,
+so it won't do anything.
 
-In the first two cases,
-Make will show the command it runs,
-along with anything the command prints to the screen
-via [standard output](glossary.html#stdout) or [standard error](glossary.html#stderr).
-In this case,
-there is no screen output,
+In the first two cases, Make will show the command it runs, along with anything
+the command prints to the screen via [standard output](glossary.html#stdout) or
+[standard error](glossary.html#stderr). In this case, there is no screen output,
 so we only see the command.
 
 > **Indentation Errors**
 >
-> If `Makefile` contains spaces instead of tabs to indent the rule's action,
-> we will see an error message like this:
+> If `Makefile` contains spaces instead of tabs to indent the rule's action, we
+> will see an error message like this:
 > 
 > ```text
 > Makefile:3: *** missing separator.  Stop.
 > ```
 >
-> The requirement to use tabs is a legacy of Make's origins as a student intern project,
-> and no,
-> I'm not kidding.
 
 If we run `make` again right away it doesn't re-run our script
 because we're in situation #3 from the list above:
@@ -205,7 +199,7 @@ To test that Make is actually doing the right thing, we can:
 2.  Run the command `touch data/moby_dick.txt` to update the timestamp on the source file,
     then run `make` (situation #2).
 
-## How can I update multiple files when their prerequisites change? {#rse-automate-extend}
+## Updating multiple files when prerequisites change {#rse-automate-extend}
 
 Our Makefile isn't particularly exciting so far.
 Let's add another rule to the end and save the result as `double_rule.mk`:
@@ -223,7 +217,7 @@ results/jane_eyre.csv : data/jane_eyre.txt
 When we ask Make to run this file:
 
 ```shell
-$ make -f double_rule.mk
+$ make 
 ```
 
 we get this rather disappointing message:
@@ -239,7 +233,7 @@ To update something else,
 we need to tell Make we want it:
 
 ```shell
-$ make -f double_rule.mk results/jane_eyre.csv
+$ make results/jane_eyre.csv
 ```
 
 This time Make runs:
@@ -248,7 +242,7 @@ This time Make runs:
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I get rid of temporary files that I don't need? {#rse-automate-phony}
+## Cleaning up temporary files {#rse-automate-phony}
 
 A [phony target](glossary.html#phony-target) in a Makefile
 is one that doesn't correspond to any files
@@ -315,7 +309,7 @@ though some put the `.PHONY` declarations right before the rules they refer to.
 As with most other rules about programming style (Chapter \@ref(style)),
 consistency matters more than exactly what you do.
 
-## How can I make a target depend on several prerequisites? {#rse-automate-multi}
+## Targets with several prerequisite dependencies {#rse-automate-multi}
 
 Right now,
 our Makefile says that each result file depends only on the corresponding data file.
@@ -393,7 +387,7 @@ Using variables doesn't just cut down on typing.
 They also make rules easier to understand,
 since they signal to readers that several things are always and exactly the same.
 
-## How can I make one update depend on another? {#rse-automate-chain}
+## Track multiple targets based on one rule {#rse-automate-chain}
 
 We can re-create all the results files with a single command
 by listing multiple targets when we run Make:
@@ -439,7 +433,7 @@ This is called [declarative programming](glossary.html#declarative-programming):
 we declare what outcome we want,
 and the program figures out how to achieve it.
 
-## How can I abbreviate my update rules? {#rse-automate-automatic}
+## Simplifying Make rules {#rse-automate-automatic}
 
 We could add a third book to our Makefile,
 then a fourth,
@@ -521,7 +515,7 @@ Using an editor that does syntax highlighting helps (Chapter \@ref(tools)),
 and if you are ever designing software for other people to use,
 remember this case and don't do it.
 
-## How can I write one general rule to update many files in the same way? {#rse-automate-pattern}
+## Generalizing rules to update many files {#rse-automate-pattern}
 
 We can now replace all the rules for generating results files
 with one [pattern rule](glossary.html#pattern-rule)
@@ -586,7 +580,7 @@ $ make -f pattern_rule.mk results/jane_eyre.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I define sets of files automatically? {#rse-automate-functions}
+## Automatically define sets of files {#rse-automate-functions}
 
 Our "automated" analysis is still not fully automated:
 If we add another book to `raw`,
@@ -752,7 +746,7 @@ but this is still a big improvement over running things manually,
 particularly as we start to add more steps
 (such as merging data files and generating plots).
 
-## How can I document my workflow? {#rse-automate-doc}
+## Documenting Makefiles {#rse-automate-doc}
 
 Every well-behaved program can tell people how to use it.
 If we run `make --help`, for example,
