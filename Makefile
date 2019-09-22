@@ -37,16 +37,16 @@ RSE_FILES=\
   backlog.Rmd \
   style.Rmd \
   process.Rmd \
-  rse-ci.Rmd \
   remote.Rmd \
   tools.Rmd \
   docs.Rmd \
   refactor.Rmd \
   project.Rmd \
   inclusive.Rmd \
+  rse-ci.Rmd \
   rse-r-package.Rmd \
   rse-r-testing.Rmd \
-  py-package.Rmd \
+  rse-py-package.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
   pacing.Rmd \
@@ -79,6 +79,9 @@ everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 ${INDEX_HTML} : ./_index.html
 	cp ./_index.html ${INDEX_HTML}
 	cp -r ./static _book/static
+	mkdir _book/data
+	find dir1 -maxdepth 1 -type f -exec cp -t dir2 {} +
+	cp ./data _book/data
 
 #-------------------------------------------------------------------------------
 

@@ -1,4 +1,10 @@
--   Programmers should use tolerances when comparing floating-point numbers (not just in tests).
--   Test the data structures used in plotting rather than the plots themselves.
+-   Tests can usefully exercise particular pieces of functionality (unit tests) or larger pieces of the code base demonstrating interactions between units (integration tests)
+-   It is useful to test for both expected behaviour - making sure that code is performing to its specification (verification) - and that it gets the right answers (validation)
+-   Examples of behaviour tests - error handling, correctly converging to *a* solution; and
+-   Examples of solution tests include converging to *the* solution, and recovery of statistical parameters
+-   In data science, one is normally looking for approximate correctness of solutions
+-   Sources of approximation error come from stochastic statistical variation and deterministic floating point approximations
 -   Check that parametric or non-parametric statistics of data do not differ from saved values by more than a specified tolerance.
+-   Perform "incorrectness" testing as well as correctness testing --- make sure that predictable errors are caught and test their handling
 -   Infer constraints on data and then check that subsequent data sets obey these constraints.
+-   Test the data structures used in plotting rather than the plots themselves.
