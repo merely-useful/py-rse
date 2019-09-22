@@ -1,2 +1,0 @@
--   Create and use virtual environments to manage library versions without conflict.
--   Create and test a citable, shareable Pip package.

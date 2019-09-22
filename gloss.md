@@ -158,7 +158,31 @@
 **Digital Object Identifier**<a id="doi"></a> (DOI)
 :   FIXME
 
+**Directory**<a id="directory"></a>
+:   A folder in a filesystem. 
+
+**Directory Tree**<a id="directory-tree"></a>
+:   If the nesting relationships between directories in a filesystem 
+    are drawn as arrows from the containing directory to the nested ones, a 
+    tree structure develops. 
+
+**Disk**<a id="disk"></a>
+:   Disk refers to disk storage, a physical component of a computer that stores 
+    information on a disk. The most common kind of disk storage is a hard disk 
+    drive, which is a storage drive with a non-removable disk. 
+
 **Docstring**<a id="docstring"></a>
+:   FIXME
+
+**DRY (Don't Repeat Yourself)**<a id="dry"></a>
+:   The general principle when programming that it's typically better to define
+    something (a function, a constant...) once and refer to it consistently 
+    as a "single source of truth" throughout a piece of software than to 
+    define copies in multiple places, if only because then you only have to
+    make any changes in one place.  This is useful and helpful principle but should
+    not be thought of as an involate rule.
+
+**Environment**<a id="environment"></a>
 :   FIXME
 
 **Embedded documentation**<a id="embedded-documentation"></a>
@@ -210,6 +234,11 @@
 
 **Filename stem**<a id="filename-stem"></a>
 :   FIXME
+
+**Filesystem**<a id="filesystem"></a>
+:   Controls how files are stored and retrieved on disk by an operating system.
+    Also used to refer to the disk that is used to store the files or the type 
+    of the filesystem. 
 
 **Fixture**<a id="fixture"></a>
 :   FIXME
@@ -322,12 +351,26 @@
 **Mantissa**<a id="mantissa"></a>
 :   FIXME
 
+**Memory**<a id="memory"></a>
+:   A physical device on your computer that temporarily stores information
+    for immediate use. 
+
 **Mental model**<a id="mental-model"></a>
 :   A simplified representation of the key elements and relationships of some
     problem domain that is good enough to support problem solving.
 
+**Method**<a id="method"></a>
+:   A function that is specific to an object type, based on qualities 
+    of that type, e.g. a string method like `upper()` which turns characters 
+    in a string to uppercase. 
+
 **MIT License**<a id="mit-license"></a>
 :   FIXME
+
+**Namespace**<a id="namespace"></a>
+:   A way of organizing names of related objects, functions,
+    or variables, to avoid confusion with (for instance) common names that
+    might well occur in multiple packages.
 
 **Not Invented Here**<a id="not-invented-here"></a> (NIH)
 :   FIXME
@@ -335,6 +378,10 @@
 **Novice**<a id="novice"></a>
 :   Someone who has not yet built a usable mental model of a domain. See also
     [competent practitioner](#g:competent-practitioner) and [expert](#g:expert).
+
+**Object**<a id="object"></a>
+:   An object is a programming language's way of descrbing and storing values, 
+    usually labeled with a variable name. 
 
 **Object-oriented programming**<a id="oop"></a>
 :   FIXME
@@ -425,6 +472,15 @@
 
 **Relative error**<a id="relative-error"></a>
 :   FIXME
+
+**Relative import**<a id="relative-import"></a>
+:   In Python, the importing of a module relative to the current path
+    and thus likely from within the current package (*e.g.*, `from . import generate`)
+    rather than an import from a globally-defined package (*e.g.*, `from zipfpy import generate`).
+
+**Restructured Text (reST)**<a id="restructured-text"></a>
+:   A plain text markup language used by much Python documentation and
+    documentation tooling.
 
 **Remote login**<a id="remote-login"></a>
 :   FIXME
@@ -604,6 +660,9 @@
 **Variable**<a id="make-variable"></a> (in Make)
 :   FIXME
 
+**Variable**<a id="python-variable"></a> (in Python)
+:   A symbolic name that reserves memory to store a value. 
+
 **Vector image**<a id="vector-image"></a>
 :   FIXME
 
@@ -611,7 +670,11 @@
 :   FIXME
 
 **Virtual environment**<a id="virtual-environment"></a>
-:   FIXME
+:   In Python, the `virtualenv` package allows you to create virtual, disposable,
+    python software environments containing only the packages and versions of packages
+    you want to use for a particular project or task, and to install new packages
+    into the environment without affecting other virtual environments or the system-wide
+    default environment.
 
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG)
 :   FIXME
