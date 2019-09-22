@@ -30,7 +30,7 @@ RSE_FILES=\
   rse-index.Rmd \
   rse-intro.Rmd \
   rse-bash.Rmd \
-  automate.Rmd \
+  rse-automate.Rmd \
   configure.Rmd \
   verify.Rmd \
   branches.Rmd \
