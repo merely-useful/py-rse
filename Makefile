@@ -46,7 +46,7 @@ RSE_FILES=\
   inclusive.Rmd \
   rse-r-package.Rmd \
   rse-r-testing.Rmd \
-  py-package.Rmd \
+  rse-py-package.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
   pacing.Rmd \
