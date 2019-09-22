@@ -46,7 +46,6 @@ name of the item.
 As an example,
 we can put a constant and two functions used in our Zipf's Law study in a file called `zipf.py`:
 
-<!-- src="rse-py-package/01/zipf.py" -->
 ```python
 from pytest import approx
 
@@ -65,12 +64,10 @@ def is_zipf(hist, rel=RELATIVE_ERROR):
     return scaled == approx(perfect, rel=rel)
 ```
 
-<!-- == noindent -->
 and then use `import zipf`,
 `from zipf import is_zipf`,
 and so on:
 
-<!-- src="rse-py-package/01/use.py" -->
 ```python
 from zipf import make_zipf, is_zipf
 
@@ -89,7 +86,6 @@ passes test with default tolerance: False
 passes test with tolerance of 1.0: True
 ```
 
-<!-- == noindent -->
 It also creates a sub-directory called `__pycache__`
 that holds the compiled versions of the imported files.
 The next time Python imports `zipf`,
@@ -132,7 +128,6 @@ that variable is assigned the string `'__main__'`.
 Otherwise, it is assigned the module's name.
 Using this leads to modules like this:
 
-<!-- src="rse-py-package/02/zipf.py" -->
 ```python
 import sys
 from pytest import approx
@@ -185,7 +180,6 @@ Zipf distributions -- noise within the same default `RELATIVE_ERROR` --
 and we want to add a Zipf-checker that can handle
 unsorted inputs:
 
-<!-- src="rse-py-package/03a/zipf.py" -->
 ```python
 ...as before...
 
@@ -271,7 +265,6 @@ which will each be part of the package.  We'll split our routines up into functi
 generate Zipf-distributed data and those that test for Zipf-y-ness.  So we'll
 have a `zipf/generate.py`
 
-<!-- src="rse-py-package/03b/zipf/generate.py" -->
 ```python
 from random import uniform
 
@@ -314,7 +307,6 @@ x = make_zipf(...)
 
 either would work.  Let's use the second to write `zipf/check.py`:
 
-<!-- src="rse-py-package/03b/zipf/check.py" -->
 ```python
 import sys
 from pytest import approx
@@ -349,7 +341,6 @@ Now we just need to update our tests; outside of the package,
 we refer to `zipfpy.generate` and `zipfpy.check` as we did
 before with `zipfpy.zipf`:
 
-<!-- src="rse-py-package/03c/test_zipf.py" -->
 ```python
 import zipfpy.generate
 import zipfpy.check
@@ -438,7 +429,6 @@ the shell searches for programs it can execute, in Python a variable `sys.path`
 search.  Create a Python file `showpath.py` containing the following, and
 then run it with `python showpath.py`:
 
-<!-- src="rse-py-package/05/showpath.py" -->
 ```python
 import sys
 
@@ -521,7 +511,6 @@ Installing setuptools, pip, wheel...
 done.
 ```
 
-<!-- == noindent -->
 `virtualenv` creates a new directory called `test`,
 which contains sub-directories called `bin`, `lib`, and so on---everything
 needed for a minimal Python installation.
@@ -534,7 +523,6 @@ We can switch to the `test` environment by running:
 $ source test/bin/activate
 ```
 
-<!-- == noindent -->
 `source` is a Unix shell command meaning "run all the commands from a file in this currently-active shell".
 We use it because typing `test/bin/activate` on its own would run those commands in a sub-shell,
 which would have no effect on the shell we're in.
@@ -678,11 +666,9 @@ we must create a file called `setup.py` in the directory *above* the root direct
     +- generate.py
 ```
 
-<!-- == noindent -->
 The file `setup.py` must have exactly that name,
 and must contain these lines:
 
-<!-- src="rse-py-package/06/setup.py" -->
 ```python
 from setuptools import setup
 
@@ -849,7 +835,6 @@ script that is now currently sits in `zipfpy/check.py`; we used to be able to
 run that script as `python zipf.py 100 50 33` to test if a set of counts approximately
 matched a zipf distribution:
 
-<!-- src="rse-py-package/07/zipfpy/check.py" -->
 ```python
 import sys
 ...
@@ -872,7 +857,6 @@ package itself, but also associated scripts that it places with
 other executable files.  So let's split that command line utility
 out into its own tool, `bin/check_zipf.py`:
 
-<!-- src="rse-py-package/08/bin/check_zipf.py" -->
 ```python
 #!/usr/bin/env python
 import sys
@@ -893,7 +877,6 @@ if __name__ == '__main__':
 That means that the `zipfpy/check.py` file now contains only
 the routines `is_zipf()` and `is_unsorted_zipf()`:
 
-<!-- src="rse-py-package/08/zipfpy/check.py" -->
 ```python
 from pytest import approx
 from .generate import make_zipf
@@ -915,7 +898,6 @@ def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
 Now we make sure that setuptools knows about this script and
 will install it:
 
-<!-- src="rse-py-package/08/setup.py" -->
 ```python
 from setuptools import setup
 
@@ -992,7 +974,6 @@ titles are underlined and overlined, section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented.
 So let's create a `README.rst`:
 
-<!-- src="rse-py-package/09/README.rst" -->
 ```text
 ======
 Zipfpy
@@ -1034,7 +1015,6 @@ In addition to the README, we should also make sure that there are
 [docstrings](#docs-docstrings) written for the package as a whole
 (in the `__init__.py`):
 
-<!-- src="rse-py-package/09/zipfpy/__init__.py" -->
 ```python
 """
 The zipfpy package contains tests of distributions of counts to see if
@@ -1047,7 +1027,6 @@ RELATIVE_ERROR = 0.05
 
 and for key routines like `is_zipf` and `make_zipf`:
 
-<!-- src="rse-py-package/09/zipfpy/check.py" -->
 ```python
 def is_zipf(hist, rel=RELATIVE_ERROR):
     """Tests if a histogram of counts follows a Zipf distribution.
@@ -1075,7 +1054,6 @@ def is_zipf(hist, rel=RELATIVE_ERROR):
     return scaled == approx(perfect, rel=rel)
 ```
 
-<!-- src="rse-py-package/09/zipfpy/generate.py" -->
 ```python
 def make_zipf(length):
     """Returns a list of counts that follows a Zipf distribution.
@@ -1162,7 +1140,6 @@ of the file:
 Here we those extensions are in another directory, so we'll uncomment those
 lines below and add another pointing up one level from `docs/` so that we have:
 
-<!-- src="rse-py-package/10/docs/conf.py" -->
 ```python
 import os
 import sys
@@ -1190,7 +1167,6 @@ If we add the line `.. include:: ../README.rst` to the `docs/index.rst` file
 at the beginning, so that page starts with our README, and then include a direct
 link to the zipfpy package documentation:
 
-<!-- src="rse-py-package/10/docs/index.rst" -->
 ```text
 Welcome to Zipfpy's documentation!
 ==================================
@@ -1225,7 +1201,6 @@ the package to have `Sphinx`
 installed, let's create a `requirements_docs.txt` file that contains
 only those things (where versions come from `pip freeze`):
 
-<!-- src="rse-py-package/10/requirements_docs.txt" -->
 ```text
 Sphinx>=1.7.4
 ```
@@ -1285,7 +1260,6 @@ to the image, and additional, optional fields on indented lines, such as `:targe
 a link to follow when the image is clicked, and `:alt:` for alternate text for the image.
 
 ## How can I distribute software packages that I have created? {#rse-py-package-distribute}
-<!-- == noindent -->
 
 With our package working, testable, installable, and documented, 
 we should distribute it so anyone can just `pip install pterry_zipfpy`
@@ -1334,7 +1308,6 @@ adding 'zipfpy-0.1.dist-info/RECORD'
 removing build/bdist.macosx-10.7-x86_64/wheel
 ```
 
-<!-- == noindent -->
 We will look at how to clean up the warnings about `url`, and `author_email` in the exercises, as
 well as considering other package metadata we should add for our package.
 
@@ -1362,7 +1335,6 @@ drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/zipfpy/
 -rw-r--r--  0 pterry staff      38 Jul 23 16:30 zipfpy-0.1/setup.cfg
 ```
 
-<!-- == noindent -->
 The source files `__init__.py` and `generate.py` are in there,
 along with the odds and ends that `pip` will need to install this package properly when the time comes.
 
