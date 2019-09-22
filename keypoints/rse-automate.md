@@ -1,4 +1,4 @@
-- A build tool re-runs commands to bring files up to date with respect to the things they depend on.
+- A build tool re-runs commands so all files and their dependencies are up-to-date with each other.
 - Make is a widely-used build tool that uses files' timestamps to find out-of-date prerequisites.
 - A Make rule has targets, prerequisites, and actions.
 - A target can correspond to a file or be a phony target (used simply to trigger actions).
