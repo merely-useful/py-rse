@@ -79,7 +79,7 @@ everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 ${INDEX_HTML} : ./_index.html
 	cp ./_index.html ${INDEX_HTML}
 	cp -r ./static _book/static
-	mkdir _book/data
+	mkdir -p _book/data
 	find ./data -maxdepth 1 -type f -exec cp -t _book/data {} +
 
 #-------------------------------------------------------------------------------
