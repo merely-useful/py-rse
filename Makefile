@@ -31,6 +31,7 @@ RSE_FILES=\
   rse-intro.Rmd \
   rse-bash.Rmd \
   rse-cmdline-git.Rmd \
+  rse-advanced-git.Rmd \
   automate.Rmd \
   configure.Rmd \
   verify.Rmd \

@@ -9,9 +9,3 @@
 - How can I identify old versions of files?
 - How do I review my changes?
 - How can I recover old versions of files?
-
-- What are branches?
-- How can I work in parallel using branches?
-
-- What are pull requests used for?
-- How can I make a pull request?
