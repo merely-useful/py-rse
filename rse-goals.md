@@ -103,7 +103,7 @@ It is assumed that students have completed the novice course.
 
 ## Automating analyses
 
-**Lead author:** Luke Johnston 
+**Lead author:** Luke Johnston  
 **Status:** First draft in progress ([#48](https://github.com/merely-useful/merely-useful.github.io/issues/48))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/make-novice/),
@@ -165,7 +165,7 @@ It is assumed that students have completed the novice course.
 
 ## Project structure
 
-**Lead author:** Charlotte Wickham 
+**Lead author:** Charlotte Wickham  
 **Status:** First draft in progress ([#160](https://github.com/merely-useful/merely-useful.github.io/issues/160))  
 **Source materials:** [project.Rmd](https://merely-useful.github.io/still-magic/en/project.html)
 
