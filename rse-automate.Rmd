@@ -53,25 +53,21 @@ users is [drake][drake].
 
 Make is based on three key ideas:
 
-1.  The operating system automatically records a [timestamp](glossary.html#timestamp)
-    every time a file is changed.
-    By checking this,
-    Make can tell whether files are newer or older than other files.
-2.  A programmer writes a [Makefile](glossary.html#makefile)
-    to tell Make how files depend on each other.
-    For example,
-    the Makefile could say that `results/moby_dick.csv` depends on `data/moby_dick.txt`,
-    or that `plots/aggregate.svg` depends on all of the CSV files in the `results/` directory.
-3.  The Makefile includes shell commands to create or update files that are out of date.
-    For example,
-    it could include a command to (re-)run `bin/countwords.py`
-    to create `results/moby_dick.csv` from `data/moby_dick.txt`.
-    (Make's use on shell commands is one reason for its longevity,
-    since it allows programmers to write tools for updating files
-    in whatever language they want.)
+TODO: How well does Make work with Git given 1. below.
 
-The "recipe" and rules around what to update or build are contained in a file
-called `Makefile`. Let's create one in the root of our project with these lines:
+1. Given that the operating system automatically records a
+[timestamp](glossary.html#timestamp) whenever a file is changed, Make can use
+this information to tell when files have changed (i.e. update the timestamp).
+2. File dependencies are recorded explicitly (inside file called
+[`Makefile`](glossary.html#makefile)). For instance, if `results/moby_dick.csv`
+depends on `data/moby_dick.txt`, this can be recorded in the Makefile.
+3. The commands used to update the files (the output) are recorded along with
+the file dependencies inside the Makefile. For example, it could include a
+to (re-)create the `results/moby_dick.csv` file is done by running the
+command `bin/countwords.py` with `data/moby_dick.txt` as input. 
+
+These "recipes" and rules for the pipeline are contained in a file called
+`Makefile`. Let's create one in the root of our project with these lines:
 
 ```
 # Regenerate results for "Moby Dick"
@@ -79,33 +75,26 @@ results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 ```
 
-The `#` character starts a comment,
-which runs to the end of a line (just as it does in Python or R).
-`results/moby_dick.csv` is the [target](glossary.html#make-target) of a [rule](glossary.html#make-rule),
-i.e., something that may need to be created or updated.
-Every rule in a Makefile has one or more targets,
-and must be written flush against the left margin.
+As in the shell and many other programming languages, `#` indicates the line is
+a comment. The `results/moby_dick.csv` is the
+[target](glossary.html#make-target) of a [rule](glossary.html#make-rule),
+which is everything required to create the target. Every rule in a Makefile has
+one or more targets. Like in Python, indentation and placement is important.
 
-`data/moby_dick.txt` is a [prerequisite](glossary.html#make-prerequisite) in that rule,
-i.e.,
-something that the target of the rule depends on.
-A single colon separates the target from its prerequisites,
-and a rule can have any number of prerequisites---we'll see examples soon.
+The `data/moby_dick.txt` after the target and single `:` colon is a
+[prerequisite](glossary.html#make-prerequisite) for the target and the rule,
+which are the file dependencies. Like the target, you can have many prerequisites
+(dependencies).
 
-The indented line that uses Python to run `bin/countwords.py`
-is the rule's [action](glossary.html#make-action).
-It creates or updates the target when it is out of date.
-A rule can have any number of actions,
-but they *must* be indented by a single tab character.
-Notice that the output of `bin/countwords.py` is [redirected](glossary.html#redirection) using `>`
-to create the output file:
-we will look at modifying the script in Chapter \@ref(configure)
-so that it can take the name of an output file as an argument.
+The indented line below the target and prerequisite (with the Python code) is
+the rule's [action](glossary.html#make-action). In this case, the action is to
+run `bin/countwords.py` on the prerequisite and output the target. Whenever
+the prerequisite or target get out of date with the others, for instance when
+the prerequisite is newer (has been modified) than the target.
+A rule can have one or many actions, all of which need to be indented by a tab.
 
-Together,
-the three parts of this rule tell Make when and how to re-create `results/moby_dick.csv`.
-To test that it works,
-run this command in the shell:
+Together, the three parts of this rule tell Make when and how to re-create
+`results/moby_dick.csv`. To test that it works, run this command in the shell:
 
 ```shell
 $ make
@@ -114,15 +103,14 @@ $ make
 Make will automatically look for a file called `Makefile` and check the rules
 it contains. In this case, one of three things will happen:
 
-1. Make won't be able to find the file `data/moby_dick.csv`, so it will run the
-script to create it.
-2. Make will see that `data/moby_dick.txt` is newer than
-`results/moby_dick.csv`, in which case it will run the script to update the
-results file.
-3. Make will see that `results/moby_dick.csv` is newer than its prerequisite,
-so it won't do anything.
+1. If the `results/moby_dick.csv` doesn't exist, Make will run the action to
+create it.
+2. If `data/moby_dick.txt` is newer than `results/moby_dick.csv`, Make will run
+the action to update the target results file.
+3. If `results/moby_dick.csv` is newer than (or the same as) its prerequisite
+data file, Make will do nothing.
 
-In the first two cases, Make will show the command it runs, along with anything
+For the first two cases, Make will show the commands it runs, along with anything
 the command prints to the screen via [standard output](glossary.html#stdout) or
 [standard error](glossary.html#stderr). In this case, there is no screen output,
 so we only see the command.
@@ -137,12 +125,10 @@ so we only see the command.
 > ```
 >
 
-If we run `make` again right away it doesn't re-run our script
-because we're in situation #3 from the list above:
-the target is newer than its prerequisites,
-so no action is required.
-We can check this by listing the files with their timestamps,
-ordered by how recently they have been updated:
+If we run `make` again right away it doesn't re-run our script because we're now
+at situation #3: the target is newer than its prerequisites, so no action is
+required. We can check this by listing the files with their timestamps, ordered
+by how recently they have been updated:
 
 ```shell
 $ ls -l -t data/moby_dick.txt results/moby_dick.csv
