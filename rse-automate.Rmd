@@ -7,81 +7,47 @@
 
 ## Introduction {#rse-automate-intro}
 
-As Section \@ref(rse-intro-example) said,
-Zipf's Law states that the second most common word in a body of text
-appears half as often as the most common,
-the third most common appears a third as often,
-and so on.
-The analyses we want to do include:
+Up until now, we've been running commands one by one and re-running everything
+when we've modified or added to the code. As the programming task becomes more
+complex and more interdependencies occur between code, input, and output, we
+quickly start needing a ["build tool"](glossary.html#build-tool) or "pipeline"
+system in place so that everything gets executed in order and as needed. This
+chapter will go into explaining and demonstrating how to automate the workflow
+using a system called [Make][make] (more precisely called [GNU Make][gnu-make]).
 
--   Analyze one input file to see how well it conforms to Zipf's Law.
--   Analyze multiple input files to how well then conform in aggregate.
--   Plot individual and aggregate word frequency distributions and expected values.
+We currently have analyses based on Zipf's Law where we want to:
 
-The project we have inherited as a starting point contains the following:
+- Analyze one input file to see how well it conforms to Zipf's Law.
+- Analyze multiple input files to see how well they conform in aggregate.
+- Plot individual and aggregate word frequency distributions and their expected values.
 
-1.  The books we are analyzing are in <code>data/<em>title</em>.txt</code>.
-2.  A program called `bin/countwords.py` can read a text file
-    and produce a CSV file with two columns:
-    the words in the text
-    and the number of times that word occurs.
-3.  `bin/countwords.py` can analyze several files at once if we provide many filenames on the command line
-    or concatenate the files and send them to standard input in a pipeline
-    using something like `cat data/*.txt | bin/countwords.py`.
-4.  Another program, `bin/plotcounts.py`, will create a visualization for us
-    that shows word rank on the X axis and word counts on the Y axis.
-    (It doesn't show the actual words.)
-5.  A third program, `bin/collate.py`,
-    takes one or more CSV files as input and merges them
-    by combining the counts for words they have in common.
-6.  Finally,
-    `bin/testfit.py` will compare actual distributions against expectations
-    and give a fitting score.
+Our starting point has:
 
-It's easy enough to run these programs by hand if we only want to analyze a handful of files,
-but doing this becomes tedious and error-prone as the number of files grows.
-Instead,
-we can write a shell script or another Python program to do multi-file analyses.
-Doing this documents the pipeline so that our colleagues (and future selves) can understand it,
-and enables us to re-do the entire analysis with a single command if we get new data
-or change our methods, parameters, or libraries.
-It also prevents us from making lots of little errors:
-there's no guarantee we'll get the script right the first time,
-but once we've fixed it, it will stay fixed.
+TODO: Update this based on previous content.
 
-However,
-re-running the entire analysis every time we get a new file is inefficient:
-we don't need to re-count the words in our first thousand books
-when we add the thousand and first.
-This isn't a problem when calculations can be done quickly,
-but many can't,
-and anyway,
-the point of this chapter is to introduce a tool for handling cases in which
-we really want to avoid doing unnecessary work.
+1. Input book files as `.txt` files in the `data/` folder.
+2. `bin/countwords.py` that will read a text file and create a CSV file with two
+columns: the words in the text and how many times the word occurs. It can also
+analyze several files at once by running on each file or by concatenating all files
+together first and running on the aggregate (e.g. `cat data/*.txt | bin/countwords.py`).
+3. `bin/plotcounts.py` will create a visualization for us that shows the word ranking
+on the X axis and word count on the Y axis, though it doesn't show the actual words.
+4. `bin/collate.py` will takes one or more CSV files as input and merges them by
+combining the counts for words they have in common.
+5. `bin/testfit.py` will compare actual distributions against expectations and
+give a fitting score.
 
-What we want is a way to describe which files depend on which other files
-and how to generate or update a file when necessary.
-This is the job of a [build tool](glossary.html#build-tool).
-As the name suggests,
-a build tool's job is to build new files out of old ones.
-The most widely used build tool,
-[Make][make],
-was written in 1976 to recompile programs
-(which at the time was a slow process).
-[GNU Make][gnu-make] is a free, fast, and well-documented version of Make;
-we will use it throughout this book.
+To be reproducible in our analysis and to document the pipeline and input-output
+dependencies, we'll now implement the automate build system, Make. With this
+system in place, we can easily re-do our analyses with a single command, which
+will save us a lot of time if any of the input data or code gets modified.
 
-> **Alternatives**
+> **Alternatives to Make**
 >
-> [Many better build tools][build-tools] have been developed since Make---so many,
-> in fact,
-> that none has been able to capture more than a small fraction of potential users.
-> [Snakemake][snakemake] has a lot of fans,
-> and a future version of this tutorial might well use it.
-
-This introduction based on
-the [Software Carpentry lesson on Make][swc-make] maintained by [Gerard Capes][capes-gerard]
-and on [Jonathan Dursi][dursi-jonathan]'s [introduction to pattern rules][dursi-pattern-rules].
+> [Many powerful build tools][build-tools] have developed since Make was
+released---so many, in fact, that most have only a small number of users each.
+However, a strong contender for Python users is [Snakemake][snakemake] and for R
+users is [drake][drake].
 
 ## First steps to using Make {#rse-automate-first}
 
@@ -870,3 +836,9 @@ insert_graphic("figures/automate/concept.pdf")
 
 ```{r, child="keypoints/rse-automate.md"}
 ```
+
+## Attributions
+
+The introduction was based on the [Software Carpentry lesson on Make][swc-make]
+maintained by [Gerard Capes][capes-gerard] and on [Jonathan Dursi][dursi-jonathan]'s 
+[introduction to pattern rules][dursi-pattern-rules].
