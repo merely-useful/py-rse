@@ -332,17 +332,13 @@ we declare what outcome we want and the program figures out how to achieve it.
 
 ## Simplifying Make rules {#rse-automate-automatic}
 
-We could add a third book to our Makefile,
-then a fourth,
-but any time we find ourselves duplicating code,
-there's almost certainly a way to write a general rule.
-In order to create these,
-though,
-we first need to learn about [automatic variables](glossary.html#automatic-variable).
+We could add a third rule to analyze a book, or more. But that would start to
+duplicate code and there's usually a way to write more generic rules.
+In order to create these generic rules, we first need to learn about 
+[automatic variables](glossary.html#automatic-variable).
 
 The first step is to use the very cryptic expression `$@` in the rule's action
-to mean "the target of the rule".
-We start with this:
+to mean "the target of the rule". We start with this:
 
 ```
 # Regenerate results for "Moby Dick"
@@ -358,15 +354,12 @@ results/moby_dick.csv : data/moby_dick.txt
         python bin/countwords.py data/moby_dick.txt > $@
 ```
 
-`$@` is an automatic variable:
-Make defines its value for us separately in each rule.
-And yes,
-`$@` is an unfortunate name:
-something like `$TARGET` would be easier to understand,
-but we're stuck with it.
+`$@` is an automatic variable: Make defines its value for us separately in each
+rule. (Yes, `$@` is an unfortunate name. Something like `$TARGET` would have
+been easier to understand, but we're stuck with it.)
 
-Step 2 is to replace the list of prerequisites in the action with `$^`,
-which is another automatic variable meaning "all the prerequisites of the current rule":
+Step 2 is to replace the list of prerequisites in the action with `$^`, which is
+another automatic variable meaning "all the prerequisites of the current rule":
 
 ```
 # Regenerate results for "Jane Eyre"
@@ -374,11 +367,10 @@ results/jane_eyre.csv : data/jane_eyre.txt
         python bin/countwords.py $^ > $@
 ```
 
-But wait:
-our results files don't just have books as dependencies.
-They also depend on `bin/countwords.py`.
-What happens if we include that in the rule while using automatic variables?
-(We'll do this for a third book to keep the three rules separate in the example Makefile.)
+But, our results files don't just have books as dependencies, they also depend on
+scripts like `bin/countwords.py`. What happens if we include that in the rule
+while using automatic variables? We're showing a third book now, so that we keep
+the three rules separate in the example Makefile.)
 
 ```
 # Regenerate results for "The Time Machine" - WRONG
@@ -386,16 +378,10 @@ results/time_machine.csv : data/time_machine.txt ${COUNT}
         python bin/countwords.py $^ > $@
 ```
 
-This doesn't do the right thing because `$^` includes *all* of the prerequisites,
-so the action tries to process the script as if it were a data file:
-
-```shell
-python bin/countwords.py data/time_machine.txt bin/countwords.py results/time_machine.csv
-```
-
-This situation comes up so often that
-Make helpfully provides another automatic variable `$<` meaning "the first prerequisite",
-which lets us rewrite our rules like this:
+This doesn't do the right thing because `$^` includes *all* of the
+prerequisites, so the action tries to process the script as if it were a data
+file. Make provides another automatic variable `$<` meaning "the first
+prerequisite", which lets us rewrite our rules like this:
 
 ```
 # Regenerate results for "Janey Eyre"
@@ -403,13 +389,10 @@ results/jane_eyre.csv : data/jane_eyre.txt ${COUNT}
         python bin/countwords.py $< > $@
 ```
 
-And yes,
-`$< > $@` is hard to read,
-even with practice,
-and `< $<` (reading the first prerequisite from [standard input](glossary.html#stdin))
-is even harder.
-Using an editor that does syntax highlighting helps (Chapter \@ref(tools)),
-and if you are ever designing software for other people to use,
+Unfortunately, `$< > $@` is hard to read, even with practice, and `< $<`
+(reading the first prerequisite from [standard input](glossary.html#stdin)) is
+even harder. Using an editor that does syntax highlighting helps (Chapter
+\@ref(tools)), and if you are ever designing software for other people to use,
 remember this case and don't do it.
 
 ## Generalizing rules to update many files {#rse-automate-pattern}
