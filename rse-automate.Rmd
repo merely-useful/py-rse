@@ -298,49 +298,37 @@ exactly the same.
 
 ## Track multiple targets based on one rule {#rse-automate-chain}
 
-We can re-create all the results files with a single command
-by listing multiple targets when we run Make:
+We can re-create all the results files with a single command by listing multiple
+targets when we run Make:
 
 ```shell
 $ make results/moby_dick.csv results/jane_eyre.csv
 ```
 
-However,
-users have to know what files they might want to create in order to do this,
-and have to type their names exactly right.
-A better approach is to create a phony target that depends on all of the output files
-and make it the first rule in the file so that it is the default.
-By convention,
-this target is called `all`,
-and while we don't have to list all our phony targets in alphabetical order,
-it makes them a lot easier to find:
+However, users have to remember each file they want to (re-)create and to type 
+out each file. Instead, a better approach is to create a phony target that
+depends on all of the output files, then make it the first rule in the file so
+that it is the default. By convention, this target is called `all`. 
 
 ```
 .PHONY: all clean
 
-COUNT=bin/countwords.py
-
 # Regenerate all results.
 all : results/moby_dick.csv results/jane_eyre.csv
-
-# ...rules for moby_dick, jane_eyre, and clean...
 ```
 
-If we run Make now,
-it sees that `all` is only "up to date" if the two CSV files are up to date,
-so it looks for a rule for each and runs each of those rules.
+If we run Make now, it sees that `all` is only "up to date" if the two CSV files
+are up to date, so it looks for a rule for each and runs each of those rules.
 
-We can draw the prerequisites defined in the Makefile as a [dependency graph](glossary.html#dependency-graph),
+We could draw the prerequisites defined in the Makefile as a [dependency graph](glossary.html#dependency-graph),
 with arrows showing what each target depends on.
 
 FIXME: figure
 
-Note that the Makefile doesn't define the order
-in which `results/moby_dick.csv` and `results/jane_eyre.csv` are updated,
-so Make can rebuild them in whatever order it wants.
-This is called [declarative programming](glossary.html#declarative-programming):
-we declare what outcome we want,
-and the program figures out how to achieve it.
+Note that the Makefile doesn't define the order in which `results/moby_dick.csv`
+and `results/jane_eyre.csv` are updated, so Make will rebuild them in
+potentially random order. This is called [declarative programming](glossary.html#declarative-programming): 
+we declare what outcome we want and the program figures out how to achieve it.
 
 ## Simplifying Make rules {#rse-automate-automatic}
 
