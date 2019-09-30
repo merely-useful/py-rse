@@ -241,21 +241,13 @@ most common approach to using phony targets.
 
 ## Targets with several prerequisite dependencies {#rse-automate-multi}
 
-Right now,
-our Makefile says that each result file depends only on the corresponding data file.
-That's not accurate:
-in reality,
-each result also depends on the script used to generate it.
-If we change our script,
-we ought to regenerate our results and then check to see if they've changed.
-(We can rely on version control to tell us that.)
-
-Here's a modified version of the Makefile
-in which each result depends on both the data file and the script:
+Right now, our Makefile says that each result file depends only on the
+corresponding data file. But that's not completely true. In reality,
+each result also depends on the script used to generate it. If we change our
+script, we probably need to regenerate our results. To do that, we would add the
+script to the prerequisites:
 
 ```
-.PHONY: clean
-
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
 	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
@@ -263,16 +255,12 @@ results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
 	python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
-
-# ...clean target as before...
 ```
-
-We can test this by touching the script and then making one or the other result:
 
 ```shell
-$ touch bin/countwords.py
-$ make -f depend_on_script.mk results/jane_eyre.csv
+$ make results/jane_eyre.csv
 ```
+
 ```text
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
