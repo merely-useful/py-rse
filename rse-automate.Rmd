@@ -265,17 +265,14 @@ $ make results/jane_eyre.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I reduce the amount of typing I have to do? {#rse-automate-variables}
+## Using variables for more efficient typing {#rse-automate-variables}
 
-The name of our script now appears four times in our Makefile,
-which will make for a lot of typing if and when we decide to move it or rename it.
-We can fix that by defining a [variable](glossary.html#make-variable) at the top of our file
-to refer to the script,
-then using that variable in our rules:
+The name of our script now appears four times in our Makefile, which could lead
+to problems if the script name ever changes or moves. Like R or Python, we can
+defining a [variable](glossary.html#make-variable) at the top of our file to
+refer to the script and use that variable in our rules instead.
 
 ```
-.PHONY: clean
-
 COUNT=bin/countwords.py
 
 # Regenerate results for "Moby Dick"
@@ -285,25 +282,19 @@ results/moby_dick.csv : data/moby_dick.txt ${COUNT}
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt ${COUNT}
 	python ${COUNT} data/jane_eyre.txt > results/jane_eyre.csv
-
-# ...clean target as before...
 ```
 
-The definition takes the form `NAME=value`.
-By convention,
-variables are written in UPPER CASE
-so that they'll stand out from filenames (which are usually in lower case),
-but that's not required.
-What *is* required is using `${NAME}` to refer to the variable:
-if we write `$NAME`,
-Make interprets that as "the variable called `N` followed by the three literal characters 'AME'."
-If no variable called `N` exists,
-`$NAME` becomes `AME`,
-which is almost certainly not useful.
+The definition takes the form `NAME=value`. By convention, variables are written
+in UPPER CASE so that they'll stand out from filenames (which are usually in
+lower case), but it's not required.
+What *is* required is using `${NAME}` to refer to the variable, not `$NAME`. 
+Make interprets `$NAME` to be a "variable called `N`", and the following three
+characters 'AME' are interpreted literally. If no variable called `N` exists,
+`$NAME` becomes `AME`, which is almost certainly useless.
 
-Using variables doesn't just cut down on typing.
-They also make rules easier to understand,
-since they signal to readers that several things are always and exactly the same.
+Using variables doesn't just cut down on typing. They also make rules easier to
+understand, since they signal to readers that several things are always and
+exactly the same.
 
 ## Track multiple targets based on one rule {#rse-automate-chain}
 
