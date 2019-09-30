@@ -154,8 +154,8 @@ source file, then run `make` (situation #2).
 
 ## Updating multiple files when prerequisites change {#rse-automate-extend}
 
-Our Makefile isn't particularly exciting so far.
-Let's add another rule to the end and save the result as `double_rule.mk`:
+Our Makefile isn't particularly exciting so far. Let's add another rule to the
+end.
 
 ```
 # Regenerate results for "Moby Dick"
@@ -167,23 +167,20 @@ results/jane_eyre.csv : data/jane_eyre.txt
         python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-When we ask Make to run this file:
+When we ask Make to run this file, we get a rather disappointing message:
 
 ```shell
 $ make 
 ```
 
-we get this rather disappointing message:
-
 ```text
 make: `results/moby_dick.csv' is up to date.
 ```
 
-Nothing happens because by default Make only attempts to update
-the first target it finds in the Makefile,
-which is called the [default target](glossary.html#default-target).
-To update something else,
-we need to tell Make we want it:
+Nothing happens because by default Make only attempts to update the first target
+it finds in the Makefile, which is called the [default target](glossary.html#default-target). 
+In this case, the first target is `results/moby_dick.csv`. To update something
+else, we need to tell Make specifically what we want:
 
 ```shell
 $ make results/jane_eyre.csv
@@ -197,18 +194,11 @@ python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 
 ## Cleaning up temporary files {#rse-automate-phony}
 
-A [phony target](glossary.html#phony-target) in a Makefile
-is one that doesn't correspond to any files
-and doesn't have any prerequisites.
-Phony targets are just a way to save useful commands in a Makefile,
-but saying "just" is a bit misleading:
-what we're actually doing is recording all of the steps in our workflow,
-even if those steps don't create or update files.
-
-For example,
-let's add another target to our Makefile to delete all of the files we have generated.
-By convention this target is called `clean`,
-and ours looks like this:
+A [phony target](glossary.html#phony-target) in a Makefile is one that doesn't
+correspond to any files and doesn't have any prerequisites. Phony targets are
+a way to save useful commands in a Makefile. For example, let's add another
+target to our Makefile to delete all of the files we have generated. By
+convention this target is called `clean`, and ours looks like this:
 
 ```
 # Remove all generated files.
@@ -216,51 +206,38 @@ clean :
         rm -f results/*.csv
 ```
 
-(The `-f` flag to `rm` means "force removal".
-When we use it, `rm` won't complain if the files it's trying to remove are already gone.)
-Let's run Make:
+The `-f` flag to `rm` means "force removal". When we use it, `rm` won't complain
+if the files it's trying to remove are already gone. Let's run Make:
 
 ```shell
-$ make -f pipeline.mk clean
+$ make clean
 ```
 
-and then use `ls` to list the contents of `results`.
-Sure enough, it's empty.
+Phony targets are useful as a way of documenting actions in a project, but
+there's a catch:
 
-Phony targets are useful as a way of documenting actions in a project,
-but there's a catch.
-Use `mkdir` to create a directory called `clean`,
-then run `make -f clean.mk clean`.
-Make will print:
+```shell
+mkdir clean
+make clean
+```
 
 ```text
 make: `clean' is up to date.
 ```
 
-The problem is that Make finds something called `clean` and assumes that's what the rule is referring to.
-Since the rule has no prerequisites,
-it can't be out of date,
-so no actions are executed.
+Because there is a folder called `clean`, Make thinks that you are meaning the
+folder `clean` rather than the `clean` rule. Since the rule has no
+prerequisites, it can't be out of date, so no actions are executed.
 
-There are two ways to solve this problem.
-The first is to make sure we don't have phony targets with the same names as files or directories.
-That works as long as our project is small and we're paying attention,
-but as the project grows,
-or we're rushing to meet a deadline
-or have inherited the project from someone else and don't realize that this might be a problem,
-it's bound to fail at exactly the worst time.
-
-A much better solution is to tell Make that the target is phony
-by putting this in the Makefile:
+While there are a few ways to solve this problem, the best solution is to tell
+Make that the target is "phony" by putting this at the top of the Makefile:
 
 ```make
 .PHONY : clean
 ```
 
-Most people declare all of their phony targets together near the top of the file,
-though some put the `.PHONY` declarations right before the rules they refer to.
-As with most other rules about programming style (Chapter \@ref(style)),
-consistency matters more than exactly what you do.
+Declaring all your phony targets together at the top of the file is probably the
+most common approach to using phony targets.
 
 ## Targets with several prerequisite dependencies {#rse-automate-multi}
 
