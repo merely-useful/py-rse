@@ -7,22 +7,58 @@
 
 ## Introduction {#automate-intro}
 
-As Section \@ref(rse-intro-example) said,
 Zipf's Law states that the second most common word in a body of text
 appears half as often as the most common,
 the third most common appears a third as often,
 and so on.
-The analyses we want to do include:
+To test it,
+we will use some novels from [Project Gutenberg][gutenberg]:
 
--   Analyze one input file to see how well it conforms to Zipf's Law.
--   Analyze multiple input files to how well then conform in aggregate.
--   Plot individual and aggregate word frequency distributions and expected values.
+| Book                            | Length (words) |
+| ------------------------------- | -------------: |
+| anne_of_green_gables.txt        |         105642 |
+| common_sense.txt                |          24999 |
+| count_of_monte_cristo.txt       |         464226 |
+| dracula.txt                     |         164424 |
+| emma.txt                        |         160458 |
+| ethan_frome.txt                 |          37732 |
+| frankenstein.txt                |          78098 |
+| jane_eyre.txt                   |         188455 |
+| life_of_frederick_douglass.txt  |          43789 |
+| moby_dick.txt                   |         215830 |
+| mysterious_affair_at_styles.txt |          59604 |
+| pride_and_prejudice.txt         |         124974 |
+| sense_and_sensibility.txt       |         121590 |
+| sherlock_holmes.txt             |         107533 |
+| time_machine.txt                |          35524 |
+| treasure_island.txt             |          71616 |
+
+The most common words in this [corpus][corpus] appear this many times:
+
+| Word | Count |
+| ---- | ----: |
+| the  | 97278 |
+| and  | 59385 |
+| to   | 56028 |
+| of   | 55190 |
+| I    | 45680 |
+| a    | 40483 |
+| in   | 30030 |
+| was  | 24512 |
+| that | 24386 |
+| you  | 22123 |
+| it   | 21420 |
+
+The frequencies don't match Zipf's predictions exactly—for example,
+we would expect about 48,600 occurrences of "and"—but
+there certainly seems to be a decay curve of some kind.
+We'll look more closely at this data as we go along.
 
 The project we have inherited as a starting point contains the following:
 
 1.  The books we are analyzing are in <code>data/<em>title</em>.txt</code>.
-2.  A program called `bin/countwords.py` can read a text file
-    and produce a CSV file with two columns:
+2.  A program called `bin/countwords.py` reads a text file
+    and produces a [CSV][csv] file with two columns:
     the words in the text
     and the number of times that word occurs.
 3.  `bin/countwords.py` can analyze several files at once if we provide many filenames on the command line
@@ -35,13 +71,13 @@ The project we have inherited as a starting point contains the following:
     takes one or more CSV files as input and merges them
     by combining the counts for words they have in common.
 6.  Finally,
-    `bin/testfit.py` will compare actual distributions against expectations
+    `bin/testfit.py` compares actual distributions against expectations
     and give a fitting score.
 
 It's easy enough to run these programs by hand if we only want to analyze a handful of files,
 but doing this becomes tedious and error-prone as the number of files grows.
 Instead,
-we can write a shell script or another Python program to do multi-file analyses.
+we can write a program to do multi-file analyses.
 Doing this documents the pipeline so that our colleagues (and future selves) can understand it,
 and enables us to re-do the entire analysis with a single command if we get new data
 or change our methods, parameters, or libraries.
@@ -61,7 +97,7 @@ we really want to avoid doing unnecessary work.
 
 What we want is a way to describe which files depend on which other files
 and how to generate or update a file when necessary.
-This is the job of a [build tool](glossary.html#build-tool).
+This is the job of a [build tool][build-tool].
 As the name suggests,
 a build tool's job is to build new files out of old ones.
 The most widely used build tool,
@@ -73,7 +109,7 @@ we will use it throughout this book.
 
 > **Alternatives**
 >
-> [Many better build tools][build-tools] have been developed since Make---so many,
+> [Many better build tools][build-tool] have been developed since Make---so many,
 > in fact,
 > that none has been able to capture more than a small fraction of potential users.
 > [Snakemake][snakemake] has a lot of fans,
