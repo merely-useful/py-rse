@@ -35,9 +35,6 @@ RSE_FILES=\
   branches.Rmd \
   backlog.Rmd \
   style.Rmd \
-  process.Rmd \
-  remote.Rmd \
-  tools.Rmd \
   docs.Rmd \
   refactor.Rmd \
   project.Rmd \
@@ -48,7 +45,6 @@ RSE_FILES=\
   rse-py-package.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
-  pacing.Rmd \
   finale.Rmd \
   rse-objectives.Rmd \
   rse-keypoints.Rmd
