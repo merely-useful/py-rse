@@ -37,6 +37,7 @@
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [doi]: FIXME
 [dryad]: https://datadryad.org/
+[drake]: https://ropenscilabs.github.io/drake-manual/
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 

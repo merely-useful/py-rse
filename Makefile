@@ -29,7 +29,7 @@ RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
   rse-bash.Rmd \
-  automate.Rmd \
+  rse-automate.Rmd \
   configure.Rmd \
   verify.Rmd \
   branches.Rmd \
