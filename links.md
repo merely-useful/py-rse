@@ -1,15 +1,16 @@
-# {-}
-
+[abandonware]: FIXME
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
 [at]: https://en.wikipedia.org/wiki/At_(command)
 
+[bash]: FIXME
 [bibtex]: http://www.bibtex.org/
 [bootswatch]: https://bootswatch.com/3/
+[branch]: FIXME
 [branch-per-feature]: https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
 [broman-packages]: https://kbroman.org/pkg_primer/
-[build-tools]: https://en.wikipedia.org/wiki/List_of_build_automation_software
+[build-tool]: https://en.wikipedia.org/wiki/List_of_build_automation_software
 
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
@@ -23,15 +24,18 @@
 [conda]: https://conda.io/
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
+[corpus]: FIXME
 [covenant]: https://www.contributor-covenant.org
 [cran]: https://cran.r-project.org/
 [creative-commons]: https://creativecommons.org/
 [cron]: https://en.wikipedia.org/wiki/Cron
+[csv]: FIXME
 [curb-cuts]: https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
 [cv]: https://stats.stackexchange.com/
 
 [dc]: https://datacarpentry.org/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
+[doi]: FIXME
 [dryad]: https://datadryad.org/
 [drake]: https://ropenscilabs.github.io/drake-manual/
 [dursi-jonathan]: https://www.dursi.ca/
@@ -44,6 +48,7 @@
 
 [gdb]: https://www.gnu.org/software/gdb
 [geek-feminism]: http://geekfeminism.wikia.com/
+[git]: FIXME
 [github-pages]: https://pages.github.com/
 [ggplot2]: https://ggplot2.tidyverse.org/
 [gh-myoctocat]: https://myoctocat.com
@@ -58,12 +63,14 @@
 
 [huff-testing]: https://github.com/katyhuff/python-testing
 
+[impostor-syndrone]: FIXME
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
 [intellij-idea]: https://www.jetbrains.com/idea/
 
 [joss]: https://joss.theoj.org/
 [jupyter]: http://jupyter.org/
+[jupytext]: FIXME
 
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -78,6 +85,8 @@
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
 [numpy-docstring]: https://numpydoc.readthedocs.io/en/latest/format.html
 
+[open-license]: FIXME
+[open-science]: FIXME
 [orcid]: https://orcid.org/
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
@@ -90,17 +99,23 @@
 [pypi]: https://pypi.org/
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
 [pytest]: http://pytest.org/
+[python]: FIXME
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 
+[r]: FIXME
 [r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
 [r-style-guide-files]: https://style.tidyverse.org/files.html
 [r-style-guide]: https://style.tidyverse.org/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
+[reproducible-research]: FIXME
 [requests]: http://docs.python-requests.org
+[rmd-appearance]: FIXME
 [rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
 [roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
+[rse]: FIXME
+[rstudio]: FIXME
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [rstudio-r-projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
@@ -110,7 +125,7 @@
 [select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [setuptools]: https://setuptools.readthedocs.io/
 [snakemake]: https://snakemake.readthedocs.io/
-[so-keyword-builtins]: https://stackoverflow.com/a/22864250/2166823
+[so-keywords-builtins]: https://stackoverflow.com/a/22864250/2166823
 [so-mre-p]: https://stackoverflow.com/questions/20109391/how-to-make-good-reproducible-pandas-examples
 [so-mre-r]: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
 [so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
@@ -122,6 +137,7 @@
 [stack-overflow]: https://stackoverflow.com/
 [stack-printer]: http://www.stackprinter.com/
 [styler-pkg]: http://styler.r-lib.org/
+[sustainable-software]: FIXME
 [swc-git]: https://swcarpentry.github.io/git-novice/
 [swc-make]: https://github.com/swcarpentry/make-novice
 [swc-python]: https://swcarpentry.github.io/python-novice-inflammation/

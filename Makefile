@@ -28,7 +28,6 @@ PY_FILES=\
 RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
-  rse-intro.Rmd \
   rse-bash.Rmd \
   rse-automate.Rmd \
   configure.Rmd \
@@ -78,9 +77,10 @@ everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 
 ${INDEX_HTML} : ./_index.html
 	cp ./_index.html ${INDEX_HTML}
-	cp -r ./static _book/static
-	mkdir _book/data
-	find ./data -maxdepth 1 -type f -exec cp -t _book/data {} +
+	mkdir -p _book/static
+	cp ./static/* _book/static
+	mkdir -p _book/data
+	cp ./data/*.* _book/data
 
 #-------------------------------------------------------------------------------
 
@@ -122,6 +122,10 @@ _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
 clean :
 	@rm -rf _book _bookdown_files _main.Rmd *.log
 	@find . -name '*~' -exec rm {} \;
+
+## links        : check that all links are defined and used.
+links :
+	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
 
 ## settings     : echo all variable values.
 settings :
