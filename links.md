@@ -17,6 +17,7 @@
 [carpentries]: https://carpentries.org/
 [caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: http://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
+[chocolatey]: https://chocolatey.org/
 [choose-license]: http://choosealicense.com/
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
 [climate-api]: http://data.worldbank.org/developers/climate-data-api
