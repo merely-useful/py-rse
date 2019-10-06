@@ -1,6 +1,6 @@
 library(tidyverse)
 
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 data <- read_csv(args[1]) %>%
   select(-`Product code`) %>%
   rename(Station=`Bureau of Meteorology station number`) %>%
