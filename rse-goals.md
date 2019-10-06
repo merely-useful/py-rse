@@ -67,7 +67,7 @@ It is assumed that students have completed the novice course.
 ## Version control
 
 **Lead author:** Damien Irving  
-**Status:** First draft ready for review ([#164](https://github.com/merely-useful/merely-useful.github.io/issues/164))  
+**Status:** First draft under review ([#164](https://github.com/merely-useful/merely-useful.github.io/issues/164))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/git-novice/),
 [branches.Rmd](https://merely-useful.github.io/still-magic/en/branches.html)
@@ -88,8 +88,8 @@ It is assumed that students have completed the novice course.
 
 ## Configuring software
 
-**Lead author:** unassigned  
-**Status:** unassigned ([#156](https://github.com/merely-useful/merely-useful.github.io/issues/156))  
+**Lead author:** Damien Irving  
+**Status:** First draft in progress ([#156](https://github.com/merely-useful/merely-useful.github.io/issues/156))  
 **Source materials:** [configure.Rmd](https://merely-useful.github.io/still-magic/en/configure.html)
 
 > Topic outline:
@@ -103,8 +103,8 @@ It is assumed that students have completed the novice course.
 
 ## Automating analyses
 
-**Lead author:** unassigned  
-**Status:** unassigned ([#48](https://github.com/merely-useful/merely-useful.github.io/issues/48))  
+**Lead author:** Luke Johnston  
+**Status:** First draft in progress ([#48](https://github.com/merely-useful/merely-useful.github.io/issues/48))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/make-novice/),
 [automate.Rmd](https://merely-useful.github.io/still-magic/en/automate.html)
@@ -127,7 +127,7 @@ It is assumed that students have completed the novice course.
 ## Testing
 
 **Lead author:** Jonathan Dursi  
-**Status:** First draft in progress ([#106](https://github.com/merely-useful/merely-useful.github.io/issues/106))  
+**Status:** First draft complete ([#106](https://github.com/merely-useful/merely-useful.github.io/issues/106))  
 **Source materials:**
 [Katy Huff](http://katyhuff.github.io/python-testing/),
 [unit.Rmd](https://merely-useful.github.io/still-magic/en/unit.html),
@@ -154,7 +154,7 @@ It is assumed that students have completed the novice course.
 ## Continuous integration
 
 **Lead author:** Luke Johnston  
-**Status:** First draft in progress ([#99](https://github.com/merely-useful/merely-useful.github.io/issues/99))  
+**Status:** First draft complete ([#99](https://github.com/merely-useful/merely-useful.github.io/issues/99))  
 **Source materials:** [rse-ci.Rmd](https://merely-useful.github.io/still-magic/en/integrate.html)
 
 > Topic outline:
@@ -165,15 +165,15 @@ It is assumed that students have completed the novice course.
 
 ## Project structure
 
-**Lead author:** unassigned  
-**Status:** unassigned ([#160](https://github.com/merely-useful/merely-useful.github.io/issues/160))  
+**Lead author:** Charlotte Wickham  
+**Status:** First draft in progress ([#160](https://github.com/merely-useful/merely-useful.github.io/issues/160))  
 **Source materials:** [project.Rmd](https://merely-useful.github.io/still-magic/en/project.html)
 
 
 ## Project management
 
-**Lead author:** unassigned  
-**Status:** unassigned ([#148](https://github.com/merely-useful/merely-useful.github.io/issues/148), [#161](https://github.com/merely-useful/merely-useful.github.io/issues/161), [#162](https://github.com/merely-useful/merely-useful.github.io/issues/162))  
+**Lead author:** Kate Hertweck  
+**Status:** First draft in progress ([#148](https://github.com/merely-useful/merely-useful.github.io/issues/148), [#161](https://github.com/merely-useful/merely-useful.github.io/issues/161), [#162](https://github.com/merely-useful/merely-useful.github.io/issues/162))  
 **Source materials:**
 [inclusive.Rmd](https://merely-useful.github.io/still-magic/en/teamwork.html), 
 [backlog.Rmd](https://merely-useful.github.io/still-magic/en/backlog.html),
@@ -195,7 +195,7 @@ It is assumed that students have completed the novice course.
 ## Packaging
 
 **Lead author:** Greg Wilson (R), Jonathan Dursi (Python)  
-**Status:** First draft of R packaging complete ([#87](https://github.com/merely-useful/merely-useful.github.io/issues/87)), first draft Python packaging ready for review ([#117](https://github.com/merely-useful/merely-useful.github.io/issues/117))  
+**Status:** First draft of R packaging complete ([#87](https://github.com/merely-useful/merely-useful.github.io/issues/87)), first draft Python packaging complete ([#117](https://github.com/merely-useful/merely-useful.github.io/issues/117))  
 **Source materials:** [package.Rmd](https://merely-useful.github.io/still-magic/en/package.html)
 
 > Topic outline:

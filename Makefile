@@ -28,29 +28,24 @@ PY_FILES=\
 RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
-  rse-intro.Rmd \
   rse-bash.Rmd \
   rse-cmdline-git.Rmd \
   rse-advanced-git.Rmd \
-  automate.Rmd \
+  rse-automate.Rmd \
   configure.Rmd \
   verify.Rmd \
   backlog.Rmd \
   style.Rmd \
-  process.Rmd \
-  rse-ci.Rmd \
-  remote.Rmd \
-  tools.Rmd \
   docs.Rmd \
   refactor.Rmd \
   project.Rmd \
   inclusive.Rmd \
+  rse-ci.Rmd \
   rse-r-package.Rmd \
   rse-r-testing.Rmd \
-  py-package.Rmd \
+  rse-py-package.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
-  pacing.Rmd \
   finale.Rmd \
   rse-objectives.Rmd \
   rse-keypoints.Rmd
@@ -79,7 +74,10 @@ everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 
 ${INDEX_HTML} : ./_index.html
 	cp ./_index.html ${INDEX_HTML}
-	cp -r ./static _book/static
+	mkdir -p _book/static
+	cp ./static/* _book/static
+	mkdir -p _book/data
+	cp ./data/*.* _book/data
 
 #-------------------------------------------------------------------------------
 
@@ -122,6 +120,10 @@ clean :
 	@rm -rf _book _bookdown_files _main.Rmd *.log
 	@find . -name '*~' -exec rm {} \;
 
+## links        : check that all links are defined and used.
+links :
+	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+
 ## settings     : echo all variable values.
 settings :
 	@echo ALL_HTML: ${ALL_HTML}
@@ -129,4 +131,4 @@ settings :
 	@echo R_FILES: ${R_FILES}
 	@echo PY_FILES: ${PY_FILES}
 	@echo RSE_FILES: ${RSE_FILES}
-	@echo COMMON_FILES: ${COMMON_FILES}
+@echo COMMON_FILES: ${COMMON_FILES}
