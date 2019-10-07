@@ -8,9 +8,9 @@
 [bibtex]: http://www.bibtex.org/
 [bootswatch]: https://bootswatch.com/3/
 [branch]: FIXME
-[branch-per-feature]: https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
+[branch-per-feature]: glossary.html#branch-per-feature-workflow
 [broman-packages]: https://kbroman.org/pkg_primer/
-[build-tool]: https://en.wikipedia.org/wiki/List_of_build_automation_software
+[build-tool]: glossary.html#build-tool
 
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
