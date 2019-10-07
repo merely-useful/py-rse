@@ -188,7 +188,7 @@ in this case,
 `-F` tells `ls` to add markers to its output to tell us what things are.
 A trailing `/` indicates a directory,
 while a trailing `*` tell us that something is a runnable program.
-Depending on your default options,
+Depending on our setup,
 the shell might also use colors to indicate whether each entry is a file or directory.
 
 ```shell
@@ -379,8 +379,7 @@ $ ls -F -a
 
 (Remember,
 we are now in `/Users/amira`.)
-As you can see,
-there is another special directory called `.` (a single period),
+The output also shows another special directory called `.` (a single period),
 which refers to the current working directory.
 It may seem redundant to have a name for it,
 but we'll see some uses for it soon.
@@ -458,46 +457,32 @@ this only works with `cd`:
 `ls -` tries to print a listing of a directory called `-`
 rather than showing us the contents of our previous directory.
 
----HERE---
-
-## Working With Files and Directories {#rse-bash-working}
-
-### Creating directories 
+## How can I create new files and directories? {#rse-bash-filedir}
  
 We now know how to explore files and directories,
-but how do we create them in the first place?
-
-Step one: see where we are and what we already have.
-Let's go back to our `data-shell` directory on the Desktop
-and use `ls -F` to see what it contains:
+but how do we create them?
+To find out,
+let's go back to our `climate-data` directory:
 
 ```shell
-$ pwd
-```
-
-```text
-/Users/amira/Desktop/data-shell
-```
-
-```shell
+$ cd ~/climate-data
 $ ls -F
 ```
 
 ```text
-creatures/  data/  molecules/  north-pacific-gyre/  notes.txt  pizza.cfg  solar.pdf  writing/
+NOTES           bin/            docs/           thesis.md       tofu.config
+README.md       cooked/         raw/            thesis.pdf
 ```
 
-Let's create a new directory called `thesis` using the command `mkdir thesis`
-(which has no output):
+To create a new directory,
+we use the command `mkdir` (short for <strong>m</strong>a<strong>k</strong>e <strong>dir</strong>irectory):
 
 ```shell
-$ mkdir thesis
+$ mkdir analysis
 ```
 
-As you might guess from its name,
-`mkdir` means "make directory".
-Since `thesis` is a relative path
-(i.e., does not have a leading slash, like `/what/ever/thesis`),
+Since `analysis` is a relative path
+(i.e., does not have a leading slash)
 the new directory is created in the current working directory:
 
 ```shell
@@ -505,124 +490,109 @@ $ ls -F
 ```
 
 ```text
-creatures/  data/  molecules/  north-pacific-gyre/  notes.txt  pizza.cfg  solar.pdf  thesis/  writing/
+NOTES           analysis/       cooked/         raw/            thesis.pdf
+README.md       bin/            docs/           thesis.md       tofu.config
 ```
 
-> **Two ways of doing the same thing**
->
-> Using the shell to create a directory is no different than using a file explorer.
-> If you open the current directory using your operating system's graphical file explorer,
-> the `thesis` directory will appear there too.
-> While the shell and the file explorer are two different ways of interacting with the files,
-> the files and directories themselves are the same.
+Using the shell to create a directory is no different than using a graphical tool.
+If we look at the current directory with our computer's file browser
+we will see the `analysis` directory there too.
+The shell and the file explorer are two different ways of interacting with the files;
+the files and directories themselves are the same.
 
+> **Naming Files and Directories**
+>
+> Complicated names of files and directories can make our life painful.
+> Following a few simple rules can save a lot of headaches:
+>
+> 1. **Don't use spaces.**
+>    Spaces can make a name easier to read,
+>    but since they are used to separate arguments on the command line,
+>    most shell commands interpret a name like `My Thesis` as two names `My` and `Thesis`.
+>    Use `-` or `_` instead,
+>    e.g, `climate-data` or `climate_data`.
+>
+> 2. **Don't begin the name with `-` (dash)**
+>    to avoid confusion with command options like `-F`.
+>
+> 3. **Stick with letters, digits, `.` (period or 'full stop'), `-` (dash) and `_` (underscore).**
+>    Many other characters mean special things in the shell.
+>    We will learn about some of these during this lesson,
+>    but these are always safe.
+>
+> If we need to refer to files or directories that have spaces or other special characters in their names,
+> we can surround the name in quotes (`""`).
+> For example, `ls "My Thesis"` will work where `ls My Thesis` does not.
 
-> **Good names for files and directories**
->
-> Complicated names of files and directories can make your life painful
-> when working on the command line. Here we provide a few useful
-> tips for the names of your files.
->
-> 1. Don't use spaces.
->
->    Spaces can make a name more meaningful,
->    but since spaces are used to separate arguments on the command line
->    it is better to avoid them in names of files and directories.
->    You can use `-` or `_` instead (e.g. `north-pacific-gyre/` rather than `north pacific gyre/`).
->
-> 2. Don't begin the name with `-` (dash).
->
->    Commands treat names starting with `-` as options.
->
-> 3. Stick with letters, numbers, `.` (period or 'full stop'), `-` (dash) and `_` (underscore).
->
->    Many other characters have special meanings on the command line.
->    We will learn about some of these during this lesson.
->    There are special characters that can cause your command to not work as
->    expected and can even result in data loss.
->
-> If you need to refer to names of files or directories that have spaces
-> or other special characters, you should surround the name in quotes (`""`).
-
-
-Since we've just created the `thesis` directory, there's nothing in it yet:
+Since we just created the `thesis` directory,
+it doesn't contain anything:
 
 ```shell
-$ ls -F thesis
+$ ls -F analysis
 ```
 
-### Create a text file
-
-Let's change our working directory to `thesis` using `cd`,
-then run a text editor called Nano to create a file called `draft.txt`:
+Let's change our working directory to `analysis` using `cd`,
+then use a very simple text editor called [Nano][nano] to create a file called `draft.txt`:
 
 ```shell
-$ cd thesis
+$ cd analysis
 $ nano draft.txt
 ```
 
-We could have created this file without using `cd` to first change our current
-directory, and instead directly have typed `nano thesis/draft.txt`.
+We could just as easily have run `nano analysis/draft.txt` to edit the file.
+What's more important is that when we say "Nano is a text editor" we really do mean "text":
+it can only work with plain character data,
+not spreadsheets, images, Microsoft Word files, or anything else invented after 1970.
+We use it in this lesson because it runs everywhere
+and because it is as simple as something can be and still be called an editor.
+However,
+that last trait means that we *shouldn't* use it for larger tasks,
+such as writing a program or a paper.
+Chapter \@ref(tools) discusses some alternatives.
 
-> **Which Editor?**
+> **Recycling Pixels**
 >
-> When we say, "`nano` is a text editor," we really do mean "text": it can
-> only work with plain character data, not spreadsheets, images, Word documents
-> (these are saved as XML-files, a markup language similar to HTML which makes
-> them difficult to edit outside a Word editor), or
-> any other format. We use it in examples because it is one of the
-> least complex and readily available text editors. However, because of this trait, it may 
-> not be powerful enough or flexible enough for the work you need to do
-> after this workshop. On Unix systems (such as Linux and Mac OS X),
-> many programmers use [Emacs](http://www.gnu.org/software/emacs/) or
-> [Vim](http://www.vim.org/) (both of which require more time to learn),
-> or a graphical editor such as
-> [Sublime Text](https://www.sublimetext.com/). On Windows, a popular editor is
-> [Notepad++](http://notepad-plus-plus.org/). Windows also has a built-in
-> editor called `notepad` and macOS has `TextEdit` which both can be run from
-> the command line (`start notepad <file_name>` and `open -e <file_name>`,
-> respectively).
->
-> No matter what editor you use, you will need to know where it searches
-> for and saves files. If you start it from the shell, it will (probably)
-> use your current working directory as its default location. If you use
-> your computer's start menu, it may want to save files in your desktop or
-> documents directory instead. You can change this by navigating to
-> another directory the first time you "Save As..."
+> Unlike most modern editors,
+> Nano runs *inside* the shell window instead of opening a new window of its own.
+> This is a holdover from an era when graphical terminals were a rarity
+> and different applications had to share a single character-only screen.
 
-
-Let's type in a few lines of text.
-Once we're happy with our text,
-we can press <kbd>Ctrl</kbd>+<kbd>O</kbd>
-(press the Ctrl or Control key and, while holding it down, press the O key)
-to write our data to disk
-(we'll be asked what file we want to save this to:
-press <kbd>Return</kbd> to accept the suggested default of `draft.txt`).
+Once Nano is open we can type in a few lines of text,
+then press <kbd>Ctrl</kbd>+<kbd>O</kbd>
+(the Control key and the letter 'O' at the same time)
+to save our work.
+Nano will ask us what file we want to save it to;
+press <kbd>Return</kbd> to accept the suggested default of `draft.txt`.
+Once our file is saved,
+we can use <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit the editor and return to the shell.
 
 *TODO: Figure - Nano in Action [../fig/nano-screenshot.png](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/nano-screenshot.png)*
 
-Once our file is saved, we can use `Ctrl-X` to quit the editor and
-return to the shell.
-
 > **Control, Ctrl, or ^ Key**
 >
-> The Control key is also called the "Ctrl" key. There are various ways
-> in which using the Control key may be described. For example, you may
-> see an instruction to press the Control key and, while holding it down,
-> press the X key, described as any of:
+> The Control key,
+> also called the "Ctrl" key,
+> can be described in a bewildering variety of ways.
+> For example,
+> holding down <kbd>Control</kbd> and <kbd>X</kbd> at the same time
+> may be written as any of:
 >
-> * `Control-X`
-> * `Control+X`
-> * `Ctrl-X`
-> * `Ctrl+X`
-> * `^X`
-> * `C-x`
+> -   `Control-X`
+> -   `Control+X`
+> -   `Ctrl-X`
+> -   `Ctrl+X`
+> -   `C-x`
+> -   `^X`
 >
-> In nano, along the bottom of the screen you'll see `^G Get Help ^O WriteOut`.
-> This means that you can use `Control-G` to get help and `Control-O` to save your
-> file.
+> When Nano runs
+> it displays some help in the bottom two lines of the screen
+> using the last of these notations:
+> for example,
+> `^G Get Help` means "use <kbd>Control</kbd>+<kbd>G</kbd> to get help"
+> and `^O WriteOut` means "use <kbd>Control</kbd>+<kbd>O</kbd> to write out the current file".
 
-`nano` doesn't leave any output on the screen after it exits,
+Nano doesn't leave any output on the screen after it exits,
+but we can use `ls` to show that we have indeed created a new file `draft.txt`:
 but `ls` now shows that we have created a file called `draft.txt`:
 
 ```shell
@@ -635,107 +605,103 @@ draft.txt
 
 > **What's In A Name?**
 >
-> You may have noticed that all of Amira's files are named "something dot
-> something", and in this part of the lesson, we always used the extension
-> `.txt`.  This is just a convention: we can call a file `mythesis` or
-> almost anything else we want. However, most people use two-part names
-> most of the time to help them (and their programs) tell different kinds
-> of files apart. The second part of such a name is called the
-> **filename extension**, and indicates
-> what type of data the file holds: `.txt` signals a plain text file, `.pdf`
-> indicates a PDF document, `.cfg` is a configuration file full of parameters
-> for some program or other, `.png` is a PNG image, and so on.
->
-> This convention is important as it can give us hints of what is expected to
-> be in a files. Files contain
-> bytes: it's up to us and our programs to interpret those bytes
-> according to the rules for plain text files, PDF documents, configuration
-> files, images, and so on.
->
-> Naming a PNG image of a whale as `whale.mp3` doesn't somehow
-> magically turn it into a recording of whalesong, though it *might*
-> cause the operating system to try to open it with a music player
+> All of Amira's files are named "something dot something".
+> This is just a convention:
+> we can call a file `mythesis` or almost anything else.
+> However,
+> most people use two-part names to help them (and their programs)
+> tell different kinds of files apart.
+> The second part of such a name is called the [filename extension][filename-extension]
+> and indicates what type of data the file holds:
+> `.txt` for plain text,
+> `.pdf` for a PDF document,
+> `.png` for a PNG image, and so on.
+> This is just a convention:
+> saving a PNG image of a whale as `whale.mp3`
+> doesn't somehow magically turn it into a recording of whalesong,
+> though it *might* cause the operating system to try to open it with a music player
 > when someone double-clicks it.
 
-### Moving files and directories
+## How can move files and directories around? {#rse-bash-move}
 
-Returning to the `data-shell` directory,
+Let's go back to our `climate-data` directory:
 
 ```shell
-cd ~/Desktop/data-shell/
+cd ~/climate-data
 ```
 
-In our `thesis` directory we have a file `draft.txt`
-which isn't a particularly informative name,
-so let's change the file's name using `mv`,
-which is short for "move":
+The `analysis` directory contains a file called `draft.txt`.
+That isn't a particularly informative name,
+so let's change it using `mv` (short for <strong>m</strong>o<strong>v</strong>e):
 
 ```shell
-$ mv thesis/draft.txt thesis/quotes.txt
+$ mv analysis/draft.txt analysis/prior-work.txt
 ```
 
-The first argument tells `mv` what we're "moving",
-while the second is where it's to go.
-In this case,
-we're moving `thesis/draft.txt` to `thesis/quotes.txt`,
-which has the same effect as renaming the file.
-A filename is just a pointer to a location on the storage drive where the bytes of that file are kept,
-so all that `mv` does is to change the name of the pointer.
-The physical location of the file's bytes on the drive remains the same as long as the
-new pointer name is on the same drive as where the bytes are stored.
-Only if the new pointer name is on a removable storage media such as flash drive,
-the bytes need to be copied from the internal computer drive and their original
-space on the computer drive is marked as a writable place to put the bytes of new files).
-Sure enough,
-`ls` shows us that `thesis` now contains one file called `quotes.txt`:
+The first argument tells `mv` what we are "moving",
+while the second is where it's to go:
+here,
+moving `analysis/draft.txt` to `analysis/prior-work.txt`
+has the same effect as renaming the file:
 
 ```shell
-$ ls thesis
+$ ls analysis
 ```
 
 ```text
-quotes.txt
+prior-work.txt
 ```
 
-One has to be careful when specifying the target file name, since `mv` will
-silently overwrite any existing file with the same name, which could
-lead to data loss. An additional option, `mv -i` (or `mv --interactive`),
-can be used to make `mv` ask you for confirmation before overwriting.
-`mv` also works on directories.
+We must be careful when specifying the destination
+because `mv` will silently overwrite any existing file with the same name.
+An option `-i` (for "interactive") makes `mv` ask us for confirmation before overwriting.
+`mv` also works on directories,
+so `mv analysis first-paper` would rename the directory without changing its contents.
 
-Let's move `quotes.txt` into the current working directory.
-We use `mv` once again,
-but this time we'll just use the name of a directory as the second argument
-to tell `mv` that we want to keep the filename,
-but put the file somewhere new.
-(This is why the command is called "move".)
+Now suppose we want to move `prior-work.txt` into the current working directory.
+If we don't want to change the file's name,
+just its location,
+we can provide `mv` with a directory as a destination
+and it will move the file there.
 In this case,
-the directory name we use is the special directory name `.` that we mentioned earlier.
+the directory we want is the special name `.` that we mentioned earlier:
 
 ```shell
-$ mv thesis/quotes.txt .
+$ mv analysis/prior-work.txt .
 ```
 
-The effect is to move the file from the directory it was in to the current working directory.
-`ls` now shows us that `thesis` is empty:
+`ls` now shows us that `analysis` is empty:
 
 ```shell
-$ ls thesis
+$ ls analysis
 ```
 
-Further,
-`ls` with a filename or directory name as an argument only lists that file or directory.
-We can use this to see that `quotes.txt` is still in our current directory:
+and that our current directory now contains our file:
 
 ```shell
-$ ls quotes.txt
+$ ls
 ```
 
 ```text
-quotes.txt
+NOTES           analysis/       cooked/         prior-work.txt  thesis.md       tofu.config
+README.md       bin/            docs/           raw/            thesis.pdf
 ```
 
-### Copying files and directories
+If we only want to check that the file exists,
+we can give its name to `ls`
+just like we can give the command the name of a directory:
+
+```shell
+$ ls prior-work.txt
+```
+
+```text
+prior-work.txt
+```
+
+---HERE---
+
+## How can I copy files and directories? {#rse-bash-copy}
 
 The `cp` command works very much like `mv`,
 except it copies a file instead of moving it.
@@ -744,12 +710,12 @@ with two paths as arguments --- like most Unix commands,
 `ls` can be given multiple paths at once:
 
 ```shell
-$ cp quotes.txt thesis/quotations.txt
-$ ls quotes.txt thesis/quotations.txt
+$ cp quotes.txt analysis/quotations.txt
+$ ls quotes.txt analysis/quotations.txt
 ```
 
 ```text
-quotes.txt   thesis/quotations.txt
+quotes.txt   analysis/quotations.txt
 ```
 
 We can also copy a directory and all its contents by using the
