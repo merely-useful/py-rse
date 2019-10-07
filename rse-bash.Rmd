@@ -182,8 +182,8 @@ our results may be different depending on our operating system
 and what files or directories we have.)
 
 We can make the output of `ls` more comprehensible by using the `-F` [option][command-option]
-(also sometimes called a [switch][command-switch], a [flag][command-flag], or an [argument][command-argument]).
-Options are exactly like parameters to a function in R or Python;
+(also sometimes called a [switch][command-switch] or a [flag][command-flag]).
+Options are exactly like arguments to a function in R or Python;
 in this case,
 `-F` tells `ls` to add markers to its output to tell us what things are.
 A trailing `/` indicates a directory,
@@ -227,7 +227,9 @@ $ ls /Users
 Amira   Jun     Sami
 ```
 
-We can combine the two types of options:
+We often call the file and directory names that we give to commands [arguments][command-argument]
+to distinguish them from the built-in options.
+We can combine options and arguments:
 
 ```shell
 $ ls -F /Users
@@ -237,9 +239,9 @@ $ ls -F /Users
 Amira/  Jun/    Sami/
 ```
 
-but we must put the command's built-in options (like `-F`)
+but we must put the command's options (like `-F`)
 before the names of any files or directories we want to work on
-because once the command encounters a filename,
+because once the command encounters one of the latter
 it assumes that we are done giving it built-in options:
 
 ```shell
@@ -401,7 +403,7 @@ because there are fewer interactions and exceptions to keep track of.
 > These usually contain settings or other data for particular programs;
 > the prefix `.` is used to prevent `ls` from cluttering up the output
 > when we run `ls`.
-> We can always use the `-a` flag to display them.
+> We can always use the `-a` option to display them.
 
 `cd` is a simple command,
 but it allows us to explore several new ideas.
@@ -432,8 +434,8 @@ $ pwd
 ```
 
 This works no matter where we are:
-`cd` without any options always returns us to our home directory.
-We can achieve the same thing using `~`,
+`cd` on its own always returns us to our home directory.
+We can achieve the same thing using the special directory name `~`,
 which is a shortcut for our home directory:
 
 ```shell
@@ -445,15 +447,15 @@ Applications    Documents       Library         Music           Public          
 Desktop         Downloads       Movies          Pictures        climate-data 
 ```
 
-(`ls` doesn't show any trailing slashes because we haven't used `-F`.)
+(`ls` doesn't show any trailing slashes here because we haven't used `-F`.)
 We can use `~` in paths,
 so that (for example) `~/Downloads` always refers to our download directory.
 
 Finally,
-we can use the shortcut `-` (a single dash) to mean the last directory we were in.
-This is faster and more reliable than trying to remember and type the path.
-Unlike `~`,
-this only works with `cd`:
+`cd` interprets the shortcut `-` (a single dash) to mean the last directory we were in.
+Using this is usually faster and more reliable than trying to remember and type the path,
+but unlike `~`,
+it only works with `cd`:
 `ls -` tries to print a listing of a directory called `-`
 rather than showing us the contents of our previous directory.
 
@@ -699,108 +701,130 @@ $ ls prior-work.txt
 prior-work.txt
 ```
 
----HERE---
-
 ## How can I copy files and directories? {#rse-bash-copy}
 
-The `cp` command works very much like `mv`,
-except it copies a file instead of moving it.
-We can check that it did the right thing using `ls`
-with two paths as arguments --- like most Unix commands,
-`ls` can be given multiple paths at once:
+The `cp` command
+(for <strong>c</strong>o<strong>p</strong>y,
+and no, we don't know why the creators of Unix seemed to be allergic to vowels)
+works like `mv` except it copies a file instead of moving it.
+We can check that it did the right thing using `ls` with two arguments:
 
 ```shell
-$ cp quotes.txt analysis/quotations.txt
-$ ls quotes.txt analysis/quotations.txt
+$ cp prior-work.txt analysis/section-1.txt
+$ ls prior-work.txt analysis/section-1.txt
 ```
 
 ```text
-quotes.txt   analysis/quotations.txt
+analysis/section-1.txt  prior-work.txt
 ```
 
-We can also copy a directory and all its contents by using the
-[recursive](https://en.wikipedia.org/wiki/Recursion) option `-r`,
-e.g. to back up a directory:
+Notice that `ls` shows the output in alphabetical order.
+If we leave off the second filename and ask it to show us a file and a directory
+(or multiple directories)
+it lists them one by one:
 
 ```shell
-$ cp -r thesis thesis_backup
-```
-
-We can check the result by listing the contents of both the `thesis` and `thesis_backup` directory:
-
-```shell
-$ ls thesis thesis_backup
+$ ls prior-work.txt analysis
 ```
 
 ```text
-thesis:
-quotations.txt
+prior-work.txt
 
-thesis_backup:
-quotations.txt
+analysis:
+section-1.txt
 ```
 
-
-### Removing files and directories
-
-Returning to the `data-shell` directory,
-let's tidy up this directory by removing the `quotes.txt` file we created.
-The Unix command we'll use for this is `rm` (short for 'remove'):
+Copying a directory and its content is a little more complicated.
+If we use `cp` on its own,
+we get an error message:
 
 ```shell
-$ rm quotes.txt
+$ cp analysis backup
+```
+
+```text
+cp: analysis is a directory (not copied).
+```
+
+If we really want to copy everything,
+we must give `cp` the `-r` option (meaning [<strong>r</strong>ecursive][recursion]:
+
+```shell
+$ cp -r analysis backup
+```
+
+Once again we can check the result with `ls`:
+
+```shell
+$ ls analysis backup
+```
+
+```text
+analysis/:
+section-1.txt
+
+backup/:
+section-1.txt
+```
+
+---HERE---
+
+## How can I delete files and directories? {#rse-bash-rm}
+
+Let's tidy up by removing the `prior-work.txt` file we created in our `climate-data` directory.
+The command to do this is `rm` (for <strong>r</strong>e<strong>m</strong>ove):
+
+```shell
+$ rm prior-work.txt
 ```
 
 We can confirm the file has gone using `ls`:
 
 ```shell
-$ ls quotes.txt
+$ ls prior-work.txt
 ```
 
 ```text
-ls: cannot access 'quotes.txt': No such file or directory
+ls: prior-work.txt: No such file or directory
 ```
 
-> **Deleting Is Forever**
->
-> The Unix shell doesn't have a trash bin that we can recover deleted
-> files from (though most graphical interfaces to Unix do).  Instead,
-> when we delete files, they are unlinked from the filesystem so that
-> their storage space on disk can be recycled. Tools for finding and
-> recovering deleted files do exist, but there's no guarantee they'll
-> work in any particular situation, since the computer may recycle the
-> file's disk space right away.
+Deleting is forever:
+the Unix shell doesn't have a trash bin that we can recover deleted files from
+(though most graphical interfaces for Unix do),
+so when we delete a file,
+it really is gone—or at least gone-ish.
+Tools for finding and recovering deleted files do exist,
+but there is no guarantee they will work,
+since the computer may recycle the file's disk space at any time.
 
-If we try to remove the `thesis` directory using `rm thesis`,
-we get an error message:
+In a half-hearted attempt to stop us from erasing things accidentally,
+`rm` refuses to delete directories:
 
 ```shell
-$ rm thesis
+$ rm analysis
 ```
 
 ```text
-rm: cannot remove `thesis': Is a directory
+rm: analysis: is a directory
 ```
 
-This happens because `rm` by default only works on files, not directories.
-
-`rm` can remove a directory *and all its contents* if we use the 
-recursive option `-r`, and it will do so *without any confirmation prompts*:
+`rm` can remove a directory and everything it contains
+if we use the recursive option `-r`:
 
 ```shell
-$ rm -r thesis
+$ rm -r analysis
 ```
 
-Given that there is no way to retrieve files deleted using the shell,
-`rm -r` *should be used with great caution* (you might consider adding the interactive option `rm -r -i`).
+`rm -r` should be used with great caution:
+in most cases,
+it's safest to add the `-i` option (for <strong>i</strong>nteractive)
+to get `rm` to ask us to confirm each deletion.
+As a halfway measure,
+we can use `-v` (for <strong>v</strong>erbose)
+to get `rm` to print a message for each file it deletes.
+This options works the same way with `mv` and `cp`.
 
-> **Verbose output**
->
-> To see what happens when we run an `rm` command,
-> we can append the verbose `-v`.
-> This will print each deleted filename,
-> which can be immensely helpful when something goes awry.
-> The `-v` flag works the same with `mv` and `cp`.
+---HERE---
 
 ### Operations with multiple files and directories
 
