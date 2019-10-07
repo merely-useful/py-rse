@@ -11,20 +11,18 @@ In a previous lesson (TODO: provide link),
 we learned the basics of Git using a graphical interface (GitKraken or R Studio).
 Like many computer programs,
 using Git at the command line is a potentially more powerful option,
-as it allows you to access all the features.
-This chapter describes how the basic "add, commit, push, pull" cycle works at the command line,
-before introducing new concepts including branching and pull requests.
+as it allows you to access all Git's features.
+This chapter describes how the basic "add, commit, push, pull" cycle works at the command line.
 
 
 ## Setting up Git {#rse-cmdline-git-setup}
 
-When we use Git at the command line for the first time,
-we need to configure a few things. 
-
 On a command line, Git commands are written as `git verb options`,
 where `verb` is what we actually want to do
 and `options` is additional optional information which may or may not be required for the `verb`.
-Here is how Dracula sets up his new laptop:
+
+Following this syntax,
+the first thing we need to do is configure Git:
 
 ```shell
 $ git config --global user.name "Vlad Dracula"
@@ -37,7 +35,7 @@ For these lessons we will be interacting with [GitHub](https://github.com/),
 so the email address should be the same as the one used when setting up your GitHub account.
 
 The commands we just ran above only need to be run once: the flag `--global` tells Git
-to use the settings for every project, in your user account, on this computer.
+to use the settings for every project in your user account on this computer.
 You can re-run them at any time if you want to change your details.
 
 You can also check your settings at any time:
@@ -59,8 +57,8 @@ $ git config --list
 
 ## Creating a repository {#rse-cmdline-git-repos}
 
-Once Git is configured,
-we can start using it.
+Once Git is configured, we can start using it.
+This section will cover how to create a Git repository associated with a project folder.
 
 We will continue with the story of Wolfman and Dracula who are investigating if it
 is possible to send a planetary lander to Mars. 
@@ -80,13 +78,6 @@ Then we tell Git to make `planets` a repository — a place where Git can store 
 ```shell
 $ git init
 ```
-
-It is important to note that `git init` will create a repository that
-includes subdirectories and their files---there is no need to create
-separate repositories nested within the `planets` repository,
-whether subdirectories are present from the beginning or added later.
-Also, note that the creation of the `planets` directory and its initialization as a
-repository are completely separate processes.
 
 If we use `ls` to show the directory's contents,
 it appears that nothing has changed:
@@ -126,15 +117,11 @@ $ git status
 nothing to commit (create/copy files and use "git add" to track)
 ```
 
-If you are using a different version of `git`, the exact
-wording of the output might be slightly different.
-
 
 ## Tracking changes {#rse-cmdline-git-changes}
 
 Now that we have a folder and repository for our work,
 we'll want to add files to it and track those changes using Git.
-
 Most of the commands we'll use (e.g. `git add`, `git commit`) will sound familiar,
 as the same terminology is used in graphical interfaces like GitKraken and R Studio.
 
@@ -226,7 +213,7 @@ We use the `-m` flag (for "message")
 to record a short, descriptive, and specific comment that will help us remember later on what we did and why.
 If we just run `git commit` without the `-m` option,
 Git will launch `nano`
-(or whatever other default editor was configured using `git config --global core.editor`)
+(or whatever other default editor is configured using `git config --global core.editor`)
 so that we can write a longer message.
 
 If we run `git status` now:
@@ -264,14 +251,6 @@ the short identifier printed by the `git commit` command earlier),
 the commit's author,
 when it was created,
 and the log message Git was given when the commit was created.
-
-> **Where Are My Changes?**
->
-> If we run `ls` at this point, we will still see just one file called `mars.txt`.
-> That's because Git saves information about files' history
-> in the special `.git` directory mentioned earlier
-> so that our filesystem doesn't become cluttered
-> (and so that we can't accidentally edit or delete an old version).
 
 Now suppose Dracula adds more information to the file:
 
@@ -422,8 +401,8 @@ this command:
 $ git remote add origin https://github.com/vlad/planets.git
 ```
 
-Make sure to use the URL for your repository rather than Vlad's: the only
-difference should be your username instead of `vlad`.
+(Make sure to use the URL for your repository rather than Vlad's: the only
+difference should be your username instead of `vlad`.)
 
 `origin` is a local name used to refer to the remote repository. It could be called
 anything, but `origin` is a convention that is often used by default in Git
@@ -459,54 +438,6 @@ To https://github.com/vlad/planets.git
  * [new branch]      master -> master
 ```
 
-> **Proxy**
->
-> If the network you are connected to uses a proxy, there is a chance that your
-> last command failed with "Could not resolve hostname" as the error message. To
-> solve this issue, you need to tell Git about the proxy:
->
-> ```shell
-> $ git config --global http.proxy http://user:password@proxy.url
-> $ git config --global https.proxy http://user:password@proxy.url
-> ```
->
-> When you connect to another network that doesn't use a proxy, you will need to
-> tell Git to disable the proxy using:
->
-> ```shell
-> $ git config --global --unset http.proxy
-> $ git config --global --unset https.proxy
-> ```
-
-> **Password Managers**
->
-> If your operating system has a password manager configured, `git push` will
-> try to use it when it needs your username and password.  For example, this
-> is the default behavior for Git Bash on Windows. If you want to type your
-> username and password at the terminal instead of using a password manager,
-> type:
->
-> ```shell
-> $ unset SSH_ASKPASS
-> ```
->
-> in the terminal, before you run `git push`.  Despite the name, [Git uses
-> `SSH_ASKPASS` for all credential
-> entry](https://git-scm.com/docs/gitcredentials#_requesting_credentials), so
-> you may want to unset `SSH_ASKPASS` whether you are using Git via SSH or
-> https.
->
-> You may also want to add `unset SSH_ASKPASS` at the end of your `~/.bashrc`
-> to make Git default to using the terminal for usernames and passwords.
-
-> **The '-u' Flag**
->
-> You may see a `-u` option used with `git push` in some documentation.  This
-> option is synonymous with the `--set-upstream-to` option for the `git branch`
-> command, and is used to associate the current branch with a remote branch so
-> that the `git pull` command can be used without any arguments. To do this,
-> simply use `git push -u origin master` once the remote has been set up.
-
 We can pull changes from the remote repository to the local one as well:
 
 ```shell
@@ -534,10 +465,7 @@ To do this, we need to use an identifier to indicate which version of the file w
 As we saw in a previous section, we can refer to commits by their identifiers.
 You can refer to the most recent commit of the working directory by using the identifier `HEAD`.
 
-We've been adding one line at a time to `mars.txt`,
-so it's easy to track our progress by looking, so let's do that using our `HEAD`s.
-Before we start,
-let's make a change to `mars.txt`, adding yet another line.
+For example, let's make a change to `mars.txt` adding yet another line.
 
 ```text
 Cold and dry, but everything is my favorite color
@@ -545,7 +473,7 @@ The two moons may be a problem for Wolfman
 An ill-considered change
 ```
 
-Now, let's see what we get.
+We can now use `HEAD` to see the change we made:
 
 ```shell
 $ git diff HEAD mars.txt
@@ -563,7 +491,7 @@ index b36abfd..0848c8d 100644
 ```
 
 which is the same as what you would get if you leave out `HEAD` (try it).
-The real goodness in all this is when you can refer to previous commits.
+The real goodness in all this is when referring to previous commits.
 We do that by adding `~1` 
 (where "~" is "tilde", pronounced [**til**-d*uh*]) 
 to refer to the commit one before `HEAD`.
@@ -613,14 +541,6 @@ index 0000000..df0654a
 @@ -0,0 +1 @@
 +Cold and dry, but everything is my favorite color
 ```
-
-In this way,
-we can build up a chain of commits.
-The most recent end of the chain is referred to as `HEAD`;
-we can refer to previous commits using the `~` notation,
-so `HEAD~1`
-means "the previous commit",
-while `HEAD~123` goes back 123 commits from where we are now.
 
 We can also refer to commits using
 those long strings of digits and letters
@@ -745,71 +665,7 @@ by using `git checkout`:
 $ git checkout HEAD mars.txt
 ```
 
-> **Don't Lose Your HEAD**
->
-> Above we used
->
-> ```shell
-> $ git checkout f22b25e mars.txt
-> ```
->
-> to revert `mars.txt` to its state after the commit `f22b25e`. But be careful! 
-> The command `checkout` has other important functionalities and Git will misunderstand
-> your intentions if you are not accurate with the typing. For example, 
-> if you forget `mars.txt` in the previous command.
->
-> ```shell
-> $ git checkout f22b25e
-> ```
->
-> ```text
-> Note: checking out 'f22b25e'.
->
-> You are in 'detached HEAD' state. You can look around, make experimental
-> changes and commit them, and you can discard any commits you make in this
-> state without impacting any branches by performing another checkout.
->
-> If you want to create a new branch to retain commits you create, you may
-> do so (now or later) by using -b with the checkout command again. Example:
->
->  git checkout -b <new-branch-name>
->
-> HEAD is now at f22b25e Start notes on Mars as a base
-> ```
->
-> The "detached HEAD" is like "look, but don't touch" here,
-> so you shouldn't make any changes in this state.
-> After investigating your repo's past state, reattach your `HEAD` with `git checkout master`.
-
-
-
 *TODO: Figure - Git Checkout [../fig/git-checkout.svg](https://github.com/swcarpentry/git-novice/blob/gh-pages/fig/git-checkout.svg)*
-
-
-> **Simplifying the Common Case**
->
-> If you read the output of `git status` carefully,
-> you'll see that it includes this hint:
->
-> ```shell
-> (use "git checkout -- <file>..." to discard changes in working directory)
-> ```
->
-> As it says,
-> `git checkout` without a version identifier restores files to the state saved in `HEAD`.
-> The double dash `--` is needed to separate the names of the files being recovered
-> from the command itself:
-> without it,
-> Git would try to use the name of the file as the commit identifier.
-
-The fact that files can be reverted one by one
-tends to change the way people organize their work.
-If everything is in one large document,
-it's hard (but not impossible) to undo changes to the introduction
-without also undoing changes made later to the conclusion.
-If the introduction and conclusion are stored in separate files,
-on the other hand,
-moving backward and forward in time becomes much easier.
 
 
 ## Exercises {#rse-cmdline-git-exercises}
