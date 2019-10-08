@@ -76,8 +76,8 @@ we can customize the prompt to give us more information.
 > **Don't Type the Dollar Sign**
 >
 > We show the `$` prompt so that it's clear what you are supposed to type,
-> but you should *not* type it yourself,
-> only the commands that follow it.
+> particularly when several commands appear in a row,
+> but you should *not* type it yourself.
 
 Let's run a command to find out who the shell thinks we are:
 
@@ -328,6 +328,33 @@ $ ls -F
 NOTES           bin/            docs/           thesis.md       tofu.config
 README.md       cooked/         raw/            thesis.pdf
 ```
+
+> **Missing Directories and Unknown Options**
+>
+> If we give a command an option that it doesn't understand,
+> it will usually print an error message and (if we're lucky)
+> tersely remind us of what we should have done:
+>
+> ```shell
+> $ cd -j
+> ```
+>
+> ```text
+> -bash: cd: -j: invalid option
+> cd: usage: cd [-L|-P] [dir]
+> ```
+>
+> If, on the other hand,
+> we get the syntax right but make a mistake in the name of a file or directory,
+> it will tell us that:
+>
+> ```shell
+> $ cd whoops
+> ```
+>
+> ```text
+> -bash: cd: whoops: No such file or directory
+> ```
 
 We now know how to go down the directory tree,
 but how do we go up?
@@ -767,8 +794,6 @@ backup/:
 section-1.txt
 ```
 
----HERE---
-
 ## How can I delete files and directories? {#rse-bash-rm}
 
 Let's tidy up by removing the `prior-work.txt` file we created in our `climate-data` directory.
@@ -824,237 +849,282 @@ we can use `-v` (for <strong>v</strong>erbose)
 to get `rm` to print a message for each file it deletes.
 This options works the same way with `mv` and `cp`.
 
----HERE---
+## How can I run commands on lots of files at once? {#rse-bashwildcard}
 
-### Operations with multiple files and directories
-
-Oftentimes one needs to copy or move several files at once.
-This can be done by providing a list of individual filenames,
-or specifying a naming pattern using wildcards.
-
-**Wildcards**
->
-> `*` is a **wildcard**, which matches zero or more characters.
-> Let's consider the `data-shell/molecules` directory:
-> `*.pdb` matches `ethane.pdb`, `propane.pdb`, and every
-> file that ends with '.pdb'. On the other hand, `p*.pdb` only matches
-> `pentane.pdb` and `propane.pdb`, because the 'p' at the front only
-> matches filenames that begin with the letter 'p'.
->
-> `?` is also a wildcard, but it matches exactly one character.
-> So `?ethane.pdb` would match `methane.pdb` whereas
-> `*ethane.pdb` matches both `ethane.pdb`, and `methane.pdb`.
->
-> Wildcards can be used in combination with each other
-> e.g. `???ane.pdb` matches three characters followed by `ane.pdb`,
-> giving `cubane.pdb  ethane.pdb  octane.pdb`.
->
-> When the shell sees a wildcard, it expands the wildcard to create a
-> list of matching filenames *before* running the command that was
-> asked for. As an exception, if a wildcard expression does not match
-> any file, Bash will pass the expression as an argument to the command
-> as it is. For example typing `ls *.pdf` in the `molecules` directory
-> (which contains only files with names ending with `.pdb`) results in
-> an error message that there is no file called `*.pdf`.
-> However, generally commands like `ls` see the lists of
-> file names matching these expressions, but not the wildcards
-> themselves. It is the shell, not the other programs, that deals with
-> expanding wildcards, and this is another example of orthogonal design.
-
-### Getting help
-
-`ls` has lots of other **options**. There are two common ways to find out how
-to use a command and what options it accepts:
-
-1. We can pass a `--help` option to the command, such as: `$ ls --help`
-
-2. We can read its manual with `man`, such as: `$ man ls`
-
-Depending on your environment you might find that only one of these works
-(either `man` or `--help`).
-We'll describe both ways below.
-
-#### The `--help` option
-
-Many Bash built-in commands, and programs that people have written that can be
-run from within bash, support a `--help` option to display more
-information on how to use the command or program.
+The `cooked` directory in our climate data project contains
+precipitation and temperature records from four weather stations in Australia:
 
 ```shell
-$ ls --help
+$ ls cooked
 ```
 
 ```text
-Usage: ls [OPTION]... [FILE]...
-List information about the FILEs (the current directory by default).
-Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
-
-Mandatory arguments to long options are mandatory for short options too.
-  -a, --all                  do not ignore entries starting with .
-  -A, --almost-all           do not list implied . and ..
-      --author               with -l, print the author of each file
-  -b, --escape               print C-style escapes for nongraphic characters
-      --block-size=SIZE      scale sizes by SIZE before printing them; e.g.,
-                               '--block-size=M' prints sizes in units of
-                               1,048,576 bytes; see SIZE format below
-  -B, --ignore-backups       do not list implied entries ending with ~
-  -c                         with -lt: sort by, and show, ctime (time of last
-                               modification of file status information);
-                               with -l: show ctime and sort by name;
-                               otherwise: sort by ctime, newest first
-  -C                         list entries by columns
-      --color[=WHEN]         colorize the output; WHEN can be 'always' (default
-                               if omitted), 'auto', or 'never'; more info below
-  -d, --directory            list directories themselves, not their contents
-  -D, --dired                generate output designed for Emacs' dired mode
-  -f                         do not sort, enable -aU, disable -ls --color
-  -F, --classify             append indicator (one of */=>@|) to entries
-      --file-type            likewise, except do not append '*'
-      --format=WORD          across -x, commas -m, horizontal -x, long -l,
-                               single-column -1, verbose -l, vertical -C
-      --full-time            like -l --time-style=full-iso
-  -g                         like -l, but do not list owner
-      --group-directories-first
-                             group directories before files;
-                               can be augmented with a --sort option, but any
-                               use of --sort=none (-U) disables grouping
-  -G, --no-group             in a long listing, don't print group names
-  -h, --human-readable       with -l and/or -s, print human readable sizes
-                               (e.g., 1K 234M 2G)
-      --si                   likewise, but use powers of 1000 not 1024
-  -H, --dereference-command-line
-                             follow symbolic links listed on the command line
-      --dereference-command-line-symlink-to-dir
-                             follow each command line symbolic link
-                               that points to a directory
-      --hide=PATTERN         do not list implied entries matching shell PATTERN
-                               (overridden by -a or -A)
-      --indicator-style=WORD  append indicator with style WORD to entry names:
-                               none (default), slash (-p),
-                               file-type (--file-type), classify (-F)
-  -i, --inode                print the index number of each file
-  -I, --ignore=PATTERN       do not list implied entries matching shell PATTERN
-  -k, --kibibytes            default to 1024-byte blocks for disk usage
-  -l                         use a long listing format
-  -L, --dereference          when showing file information for a symbolic
-                               link, show information for the file the link
-                               references rather than for the link itself
-  -m                         fill width with a comma separated list of entries
-  -n, --numeric-uid-gid      like -l, but list numeric user and group IDs
-  -N, --literal              print raw entry names (don't treat e.g. control
-                               characters specially)
-  -o                         like -l, but do not list group information
-  -p, --indicator-style=slash
-                             append / indicator to directories
-  -q, --hide-control-chars   print ? instead of nongraphic characters
-      --show-control-chars   show nongraphic characters as-is (the default,
-                               unless program is 'ls' and output is a terminal)
-  -Q, --quote-name           enclose entry names in double quotes
-      --quoting-style=WORD   use quoting style WORD for entry names:
-                               literal, locale, shell, shell-always,
-                               shell-escape, shell-escape-always, c, escape
-  -r, --reverse              reverse order while sorting
-  -R, --recursive            list subdirectories recursively
-  -s, --size                 print the allocated size of each file, in blocks
-  -S                         sort by file size, largest first
-      --sort=WORD            sort by WORD instead of name: none (-U), size (-S),
-                               time (-t), version (-v), extension (-X)
-      --time=WORD            with -l, show time as WORD instead of default
-                               modification time: atime or access or use (-u);
-                               ctime or status (-c); also use specified time
-                               as sort key if --sort=time (newest first)
-      --time-style=STYLE     with -l, show times using style STYLE:
-                               full-iso, long-iso, iso, locale, or +FORMAT;
-                               FORMAT is interpreted like in 'date'; if FORMAT
-                               is FORMAT1<newline>FORMAT2, then FORMAT1 applies
-                               to non-recent files and FORMAT2 to recent files;
-                               if STYLE is prefixed with 'posix-', STYLE
-                               takes effect only outside the POSIX locale
-  -t                         sort by modification time, newest first
-  -T, --tabsize=COLS         assume tab stops at each COLS instead of 8
-  -u                         with -lt: sort by, and show, access time;
-                               with -l: show access time and sort by name;
-                               otherwise: sort by access time, newest first
-  -U                         do not sort; list entries in directory order
-  -v                         natural sort of (version) numbers within text
-  -w, --width=COLS           set output width to COLS.  0 means no limit
-  -x                         list entries by lines instead of by columns
-  -X                         sort alphabetically by entry extension
-  -Z, --context              print any security context of each file
-  -1                         list one file per line.  Avoid '\n' with -q or -b
-      --help     display this help and exit
-      --version  output version information and exit
-
-The SIZE argument is an integer and optional unit (example: 10K is 10*1024).
-Units are K,M,G,T,P,E,Z,Y (powers of 1024) or KB,MB,... (powers of 1000).
-
-Using color to distinguish file types is disabled both by default and
-with --color=never.  With --color=auto, ls emits color codes only when
-standard output is connected to a terminal.  The LS_COLORS environment
-variable can change the settings.  Use the dircolors command to set it.
-
-Exit status:
- 0  if OK,
- 1  if minor problems (e.g., cannot access subdirectory),
- 2  if serious trouble (e.g., cannot access command-line argument).
-
-GNU coreutils online help: <http://www.gnu.org/software/coreutils/>
-Full documentation at: <http://www.gnu.org/software/coreutils/ls>
-or available locally via: info '(coreutils) ls invocation'
+andamooka_prec.csv      badingarra_prec.csv     bellambi_prec.csv       tuggeranong_prec.csv
+andamooka_temp.csv      badingarra_temp.csv     bellambi_temp.csv       tuggeranong_temp.csv
 ```
 
-> **Unsupported command-line options**
->
-> If you try to use an option that is not supported, `ls` and other commands
-> will usually print an error message similar to:
->
-> ```shell
-> $ ls -j
-> ```
->
-> ```text
-> ls: invalid option -- 'j'
-> Try 'ls --help' for more information.
-> ```
+The `wc` command (short for <strong>w</strong>ord <strong>c</strong>ount)
+can tell us how many lines, words, and letters there are in one of these files:
 
-#### The `man` command
-
-The other way to learn about `ls` is to type
 ```shell
-$ man ls
+$ wc cooked/andamooka_prec.csv
 ```
 
-This will display a description
-of the `ls` command and its options and some examples of how to use it.
-Likewise, `man man` will show the manual for the `man` command.
+```text
+20003   20004  401858 cooked/andamooka_prec.csv
+```
 
-To navigate through the `man` pages,
-you may use <kbd>↑</kbd> and <kbd>↓</kbd> to move line-by-line,
-or try <kbd>Ctrl</kbd>+<kbd>Spacebar</kbd> and <kbd>Spacebar</kbd> to skip up
-and down by a full page (<kbd>B</kbd> and <kbd>F</kbd> also works).
-To search for a character or word in the `man` pages,
-use <kbd>/</kbd> followed by the character or word you are searching for.
-Sometimes a search will result in multiple hits.
-If so, you can move between hits using <kbd>N</kbd>
-(for moving forward) and <kbd>Shift</kbd>+<kbd>N</kbd> (for moving backward).
-
-To quit the `man` pages, press <kbd>Q</kbd>.
-
-> **Assistance on the web**
+> **What's in a Word?**
 >
-> Of course there is a third way to access help for commands:
-> searching the internet via your web browser.
-> In many cases the first results from your search will be
-> [Stack Overflow](https://stackoverflow.com/questions/tagged/bash)
-> pages where someone has already asked (and hopefully had answered)
-> a question similar to yours.
+> The number of lines and number of words in this file are almost the same
+> because `wc` only considers spaces to be word breaks, not commas,
+> and the only space in this file occurs in the name of one of the columns.
+
+We could run `wc` seven more times to count find out how many lines there are in the other files,
+but that would be a lot of typing
+and we would probably make at least one mistake.
+We can't just give `wc` the name of the directory as we do with `ls`:
+
+```shell
+$ wc cooked
+```
+
+```text
+wc: cooked: read: Is a directory
+```
+
+Instead,
+we can use [wildcards][wildcard] to select a set of filenames at once.
+The most commonly-used wildcard is `*`;
+it matches zero or more characters,
+so `cooked/*.csv` matches all of the files in the `cooked` directory:
+
+```text
+$ ls cooked/*.csv
+```
+
+```text
+cooked/andamooka_prec.csv       cooked/badingarra_prec.csv      cooked/bellambi_prec.csv        cooked/tuggeranong_prec.csv
+cooked/andamooka_temp.csv       cooked/badingarra_temp.csv      cooked/bellambi_temp.csv        cooked/tuggeranong_temp.csv
+```
+
+while `cooked/b*.csv` only matches the four whose names begin with a 'b':
+
+```shell
+$ ls cooked/b*.csv
+```
+
+```text
+cooked/badingarra_prec.csv      cooked/badingarra_temp.csv      cooked/bellambi_prec.csv        cooked/bellambi_temp.csv
+```
+
+Wildcards are expanded to match filenames *before* commands are run,
+so they work exactly the same way for every command.
+This means that we can use them with `wc` to (for example)
+count the number of records in the precipitation files:
+
+```shell
+$ wc cooked/*_prec.csv
+```
+
+```text
+   20003   20004  401858 cooked/andamooka_prec.csv
+   21099   21100  406584 cooked/badingarra_prec.csv
+    8315    8316  169740 cooked/bellambi_prec.csv
+    8681    8682  175998 cooked/tuggeranong_prec.csv
+   58098   58102 1154180 total
+```
+
+or the number of records in the files from Tuggeranong:
+
+```shell
+$ wc cooked/tug*.csv
+```
+
+```text
+    8681    8682  175998 cooked/tuggeranong_prec.csv
+    8680    8681  196212 cooked/tuggeranong_temp.csv
+   17361   17363  372210 total
+```
+
+The exercises will introduce and explore other wildcards
+(such as `?`, which matches exactly one character).
+For now,
+the only other thing we need to know is that
+it's possible for a wildcard expression to *not* match anything.
+In this case,
+the command will usually print an error message:
+
+```shell
+$ wc cooked/*.txt
+```
+
+```text
+wc: cooked/*.txt: open: No such file or directory
+```
+
+## How can I find out what commands there are and how to use them? {#rse-bash-help}
+
+By default,
+`wc` displays lines, words, and characters,
+but we can ask it to display only a count of lines:
+
+```shell
+$ wc -l cooked/*_prec.csv
+```
+
+```text
+   20003 cooked/andamooka_prec.csv
+   21099 cooked/badingarra_prec.csv
+    8315 cooked/bellambi_prec.csv
+    8681 cooked/tuggeranong_prec.csv
+   58098 total
+```
+
+`wc` has other options as well.
+We can use the `man` command (short for <strong>man</strong>ual)
+to find out what they are:
+
+```shell
+$ man wc
+```
+
+```text
+WC(1)                     BSD General Commands Manual                    WC(1)
+
+NAME
+     wc -- word, line, character, and byte count
+
+SYNOPSIS
+     wc [-clmw] [file ...]
+
+DESCRIPTION
+     The wc utility displays the number of lines, words, and bytes contained
+     in each input file, or standard input (if no file is specified) to the
+     standard output.  A line is defined as a string of characters delimited
+     by a <newline> character.  Characters beyond the final <newline> charac-
+     ter will not be included in the line count.
+
+     A word is defined as a string of characters delimited by white space
+     characters.  White space characters are the set of characters for which
+     the iswspace(3) function returns true.  If more than one input file is
+     specified, a line of cumulative counts for all the files is displayed on
+     a separate line after the output for the last file.
+
+     The following options are available:
+
+     -c      The number of bytes in each input file is written to the standard
+             output.  This will cancel out any prior usage of the -m option.
+
+     -l      The number of lines in each input file is written to the standard
+             output.
+
+     -m      The number of characters in each input file is written to the
+             standard output.  If the current locale does not support multi-
+             byte characters, this is equivalent to the -c option.  This will
+             cancel out any prior usage of the -c option.
+
+     -w      The number of words in each input file is written to the standard
+             output.
+
+     When an option is specified, wc only reports the information requested by
+     that option.  The order of output always takes the form of line, word,
+     byte, and file name.  The default action is equivalent to specifying the
+     -c, -l and -w options.
+
+     If no files are specified, the standard input is used and no file name is
+     displayed.  The prompt will accept input until receiving EOF, or [^D] in
+     most environments.
+
+ENVIRONMENT
+     The LANG, LC_ALL and LC_CTYPE environment variables affect the execution
+     of wc as described in environ(7).
+
+EXIT STATUS
+     The wc utility exits 0 on success, and >0 if an error occurs.
+
+EXAMPLES
+     Count the number of characters, words and lines in each of the files
+     report1 and report2 as well as the totals for both:
+
+           wc -mlw report1 report2
+
+COMPATIBILITY
+     Historically, the wc utility was documented to define a word as a "maxi-
+     mal string of characters delimited by <space>, <tab> or <newline> charac-
+     ters".  The implementation, however, did not handle non-printing charac-
+     ters correctly so that "  ^D^E  " counted as 6 spaces, while
+     "foo^D^Ebar" counted as 8 characters.  4BSD systems after 4.3BSD modi-
+     fied the implementation to be consistent with the documentation.  This
+     implementation defines a "word" in terms of the iswspace(3) function,
+     as required by IEEE Std 1003.2 ("POSIX.2").
+
+SEE ALSO
+     iswspace(3)
+
+STANDARDS
+     The wc utility conforms to IEEE Std 1003.1-2001 ("POSIX.1").
+
+HISTORY
+     A wc command appeared in Version 1 AT&T UNIX.
+
+BSD                            February 23, 2005                           BSD
+```
+
+> **Navigating the Manual**
 >
-> GNU provides links to its
-> [manuals](http://www.gnu.org/manual/manual.html) including the
-> [core GNU utilities](http://www.gnu.org/software/coreutils/manual/coreutils.html),
-> which covers many commands introduced within this lesson.
-> There's also a community effort known as the [TLDR pages](https://tldr.sh/)
-> that aims to simplify the default man pages with practical examples.
+> If our screen is too small to display an entire manual page at once,
+> the shell will use a [pager][pager] called `less` to show it piece by piece.
+> We can use <kbd>↑</kbd> and <kbd>↓</kbd> to move line-by-line
+> or <kbd>Ctrl</kbd>+<kbd>Spacebar</kbd> and <kbd>Spacebar</kbd>
+> to skip up and down one page at a time.
+> (<kbd>B</kbd> and <kbd>F</kbd> also work.)
+> 
+> To search for a character or word,
+> use <kbd>/</kbd> followed by the character or word to search for.
+> If the search produces multiple hits,
+> we can move between them using <kbd>N</kbd> (for "next").
+> To quit, press <kbd>Q</kbd>.
+
+This is a lot of information,
+most of which isn't really useful.
+Some commands have a `--help` option to provide a succinct summary of possibilites,
+but the best place to go for help these days is probably the [TLDR][tldr] website.
+The acronym stands for "too long, didn't read",
+and its help for `wc` displays this:
+
+```
+wc
+Count words, bytes, or lines.
+
+Count lines in file:
+wc -l {{file}}
+
+Count words in file:
+wc -w {{file}}
+
+Count characters (bytes) in file:
+wc -c {{file}}
+
+Count characters in file (taking multi-byte character sets into account):
+wc -m {{file}}
+
+edit this page on github
+```
+
+As the last line suggests,
+all of its examples are in a public GitHub repository
+so that users like you can add the ones you wish it had.
+For more information,
+we can search on [Stack Overflow][so-bash]
+or browse the [GNU manuals][gnu-man]
+(particularly those for the [core GNU utilities][gnu-man-coreutils],
+which include many of the commands introduced in this lesson).
+In all cases,
+though,
+we need to have some idea of what we're looking for in the first place:
+someone who wants to know how many lines there are in a data file
+is unlikely to think to look for `wc`.
 
 ## Pipes and Filters {#rse-bash-pipes}
 
@@ -3856,6 +3926,10 @@ Exercise
 Note that in most command line tools, multiple options can be combined
 with a single `-` and no spaces between the options: `ls -F -a` is
 equivalent to `ls -Fa`.
+
+Exercise
+
+Introduce ? and other wildcards.
 
 ## Key Points {#rse-bash-keypoints}
 

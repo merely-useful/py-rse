@@ -72,6 +72,8 @@
 [github]: http://github.com
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [gnu-make]: http://www.gnu.org/software/make/
+[gnu-man]: http://www.gnu.org/manual/manual.html
+[gnu-man-coreutils]: http://www.gnu.org/software/coreutils/manual/coreutils.html
 [go-fair]: https://www.go-fair.org/fair-principles/
 [gui]: glossary.html#gui
 [gutenberg]: https://www.gutenberg.org/
@@ -162,6 +164,7 @@
 [select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [setuptools]: https://setuptools.readthedocs.io/
 [snakemake]: https://snakemake.readthedocs.io/
+[so-bash]: https://stackoverflow.com/questions/tagged/bash
 [so-keywords-builtins]: https://stackoverflow.com/a/22864250/2166823
 [so-mre-p]: https://stackoverflow.com/questions/20109391/how-to-make-good-reproducible-pandas-examples
 [so-mre-r]: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
