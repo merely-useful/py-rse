@@ -227,6 +227,8 @@ $ cat util.py
 ```
 
 ```python
+import yaml
+
 def get_full_configuration(filenames, command_line={}):
     '''
     Overlay configuration files and command-line parameters,
@@ -251,52 +253,69 @@ we'll have to convert `argparse`'s output to a dictionary,
 but that's straightforward using the built in function `vars()` 
 
 We can test this with these three configuration files
-(we have lined up corresponding values to make them easier to see):
-
-<table>
-  <tr>
-    <th><code>system.yml</code></th>
-    <th><code>user.yml</code></th>
-    <th><code>job.yml</code></th>
-  </tr>
-  <tr>
-    <tr><code>quiet: true</code></tr>
-    <tr><code>quiet: false</code></tr>
-    <tr><code></code></tr>
-  </tr>
-  <tr>
-    <tr><code></code></tr>
-    <tr><code>logfile: "/tmp/log.txt"</code></tr>
-    <tr><code>logfile: "./complaints.txt"</code></tr>
-  </tr>
-</table>
-<!-- used="configure/system.yml" -->
-<!-- used="configure/user.yml" -->
-<!-- used="configure/job.yml" -->
-
-using this test program:
+(`system.yml`, `user.yml`, `job.yml`),
 
 ```shell
-$ cat test_config.py
+$ cat system.yml
+```
+
+```text
+# System configuration file
+quiet: true
+```
+
+```shell
+$ cat user.yml
+```
+
+```text
+# User configuration file
+quiet: false
+logfile: "/tmp/log.txt"
+```
+
+```shell
+$ cat job.yml
+```
+
+```text
+# Job specific configuration file
+logfile: "./complaints.txt"
+```
+
+by updating `script.py` from earlier:
+
+```shell
+$ cat script.py
 ```
 
 ```python
-import sys
-from getopt import getopt
+import argparse
 from util import get_full_configuration
 
 config_files = ['system.yml', 'user.yml', 'job.yml']
 
-options, extras = getopt('b:q', sys.argv[1:])
-options = getopt_to_dict(options, {'-b': 'logfile', '-q': 'quiet'})
-config = get_full_configuration(config_files, options)
-print(config)
+def main(inargs):
+    """Run the program."""
+
+    config = get_full_configuration(config_files, command_line=vars(inargs))
+    print(config)
+
+if __name__ == '__main__':
+
+    description='Example script.'
+    parser = argparse.ArgumentParser(description=description,
+                                     argument_default=argparse.SUPPRESS)
+    
+    parser.add_argument("--logfile", type=str, help="log file")
+    parser.add_argument("--quiet", action="store_true", help="quiet mode")
+
+    args = parser.parse_args()            
+    main(args)
 ```
 
-and this command line:
-
 ```shell
-$ python test-config.py -q
+$ python script.py --quiet
 ```
 
 ```text
@@ -366,21 +385,6 @@ and if you don't know what the version of the program was,
 we'll have to guess what options mean.
 
 
-## Summary {#rse-configure-summary}
-
--   Many tool also allow longer command-line options to control everything to support scripting
-    -   Out of scope of this lesson
--   Every tool acts as if it was the only extra thing your project needed
-    -   So you wind up with lots of configuration files littering your root directory
-    -   Tempting to move them all to `./etc/`, but tools don't know to look there
-
-```{r configure-concept, echo=FALSE, fig.cap="Configuration Concept Map"}
-if (knitr::is_latex_output()) {
-  knitr::include_graphics("figures/configure/concept.pdf")
-} else {
-  knitr::include_graphics("figures/configure/concept.svg")
-}
-```
 
 ## Exercises {#rse-configure-exercises}
 
