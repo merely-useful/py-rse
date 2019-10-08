@@ -129,6 +129,7 @@
 [parent-directory]: glossary.html#parent-directory
 [path]: glossary.html#path
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
+[pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [prompt]: glossary.html#prompt
 [pypi]: https://pypi.org/

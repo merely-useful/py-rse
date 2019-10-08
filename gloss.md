@@ -548,6 +548,9 @@
 **Situational action**<a id="situational-action"></a>
 :   FIXME
 
+**Snake case**<a id="snake-case"></a>
+:   FIXME
+
 **Software development process**<a id="dev-process"></a>
 :   FIXME
 

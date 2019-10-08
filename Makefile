@@ -29,10 +29,11 @@ RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
   rse-bash.Rmd \
+  rse-cmdline-git.Rmd \
+  rse-advanced-git.Rmd \
   rse-automate.Rmd \
   configure.Rmd \
   verify.Rmd \
-  branches.Rmd \
   backlog.Rmd \
   style.Rmd \
   docs.Rmd \
@@ -130,4 +131,4 @@ settings :
 	@echo R_FILES: ${R_FILES}
 	@echo PY_FILES: ${PY_FILES}
 	@echo RSE_FILES: ${RSE_FILES}
-	@echo COMMON_FILES: ${COMMON_FILES}
+@echo COMMON_FILES: ${COMMON_FILES}
