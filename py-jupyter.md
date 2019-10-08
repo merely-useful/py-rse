@@ -1,4 +1,4 @@
-## The Jupyter notebook
+## The Jupyter notebook {#py-the-jupyter-notebook}
 
 Although the Python interpreter is very powerful,
 it is commonly bundled with other useful tools and interfaces
@@ -132,7 +132,7 @@ the command palette also shows a command's keyboard shortcut.
 The last tab (the wrench icon) is for advanced cell settings,
 which is outside the scope of this material.
 
-### How to get help
+### How to get help {#py-how-to-get-help}
 
  <!--TODO Depending on where this section will be in the book, some of these concepts might not have been introduced (packages, lists). -->
 
@@ -170,7 +170,7 @@ However,
 sometimes you forget
 and it is useful to get hints via the help systems described above.
 
-### Version control
+### Version control with notebooks {#py-version-control-with-notebooks}
 
 Jupyter notebooks are stored as JSON-files with an .ipynb extension.
 These are specially formatted text files,
