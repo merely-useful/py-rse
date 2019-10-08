@@ -1458,117 +1458,279 @@ but doing so is almost always a bad idea.
 
 ## Loops {#rse-bash-loops}
 
-**Loops** are a programming construct which allow us to repeat a command or set of commands
-for each item in a list.
-As such they are key to productivity improvements through automation.
-Similar to wildcards and tab completion, using loops also reduces the
-amount of typing required (and hence reduces the number of typing mistakes).
+A [loop][unix-loop] is a way to repeat a set of commands for each item in a list.
+We can use them to build complex workflows out of simple pieces,
+and,
+like wildcards,
+they reduce the typing we have to do and the number of mistakes we might make.
 
-For this example,
-we'll use the `creatures` directory which contains genome data files of mythological creatures.
-The directory only has two example files,
-but the principles can be applied to many more files at once.
-We would like to print out the classification for each species, which is given on the second line of the file.
-For each file, we would need to execute the command `head -n 2` and pipe this to `tail -n 1`.
-We'll use a loop to solve this problem, but first let's look at the general form of a loop:
+Let's suppose that we want to take a slice out of each temperature data file in the `cleaned` directory—
+more specifically,
+that we want to get the first three rows of each file
+*without* the header row.
+If we only cared about one file,
+we could use a simple pipeline to take the first four lines
+and then take the last three of those:
 
 ```shell
-for thing in list_of_things
-do
-    operation_using $thing    # Indentation within the loop is not required, but aids legibility
-done
+$ head -n 4 andamooka_temp.csv | tail -n 3
 ```
 
-and we can apply this to our example like this:
+```text
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+```
+
+If we try to use a wildcard to select files,
+we only get three lines of output,
+not the 12 we expect:
 
 ```shell
-$ for filename in basilisk.dat unicorn.dat
+$ head -n 4 *.csv | tail -n 3
+```
+
+```text
+70339,1996,1,1,,
+70339,1996,1,2,,
+70339,1996,1,3,,
+```
+
+The problem is that `head` is producing a single stream of output
+containing four lines for each file
+(along with a header telling us the file's name):
+
+```shell
+$ head -n 4 *.csv
+```
+
+```text
+==> andamooka_temp.csv <==
+Station,Year,Month,Day,Max Temp (C),Quality
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+
+==> badingarra_temp.csv <==
+Station,Year,Month,Day,Max Temp (C),Quality
+9037,1965,1,1,40.6,Y
+9037,1965,1,2,40,Y
+9037,1965,1,3,41.1,Y
+
+==> bellambi_temp.csv <==
+Station,Year,Month,Day,Max Temp (C),Quality
+68228,1997,1,1,,
+68228,1997,1,2,,
+68228,1997,1,3,,
+
+==> tuggeranong_temp.csv <==
+Station,Year,Month,Day,MaxTemp (C),Quality
+70339,1996,1,1,,
+70339,1996,1,2,,
+70339,1996,1,3,,
+```
+
+Let's try this instead:
+
+```shell
+$ for filename in andamooka_temp.csv badingarra_temp.csv
 > do
->    head -n 2 $filename | tail -n 1
+>   head -n 4 $filename
 > done
 ```
 
 ```text
-CLASSIFICATION: basiliscus vulgaris
-CLASSIFICATION: equus monoceros
+Station,Year,Month,Day,Max Temp (C),Quality
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+Station,Year,Month,Day,Max Temp (C),Quality
+9037,1965,1,1,40.6,Y
+9037,1965,1,2,40,Y
+9037,1965,1,3,41.1,Y
 ```
 
-> **Follow the Prompt**
->
-> The shell prompt changes from `$` to `>` and back again as we were
-> typing in our loop. The second prompt, `>`, is different to remind
-> us that we haven't finished typing a complete command yet. A semicolon, `;`,
-> can be used to separate two commands written on a single line.
+There is a lot going on here,
+so we will break it down into pieces:
 
-When the shell sees the keyword `for`,
-it knows to repeat a command (or group of commands) once for each item in a list.
-Each time the loop runs (called an iteration), an item in the list is assigned in sequence to
-the **variable**, and the commands inside the loop are executed, before moving on to
-the next item in the list.
-Inside the loop,
-we call for the variable's value by putting `$` in front of it.
-The `$` tells the shell interpreter to treat
-the variable as a variable name and substitute its value in its place,
-rather than treat it as text or an external command.
+1.  The keywords `for`…`in`…`do`…`done` create the loop,
+    and must always appear in that order.
 
-In this example, the list is two filenames: `basilisk.dat` and `unicorn.dat`.
-Each time the loop iterates, it will assign a file name to the variable `filename`
-and run the `head` command.
-The first time through the loop,
-`$filename` is `basilisk.dat`.
-The interpreter runs the command `head` on `basilisk.dat`,
-and then prints the
-first three lines of `basilisk.dat`.
-For the second iteration, `$filename` becomes
-`unicorn.dat`. This time, the shell runs `head` on `unicorn.dat`
-and prints the first three lines of `unicorn.dat`.
-Since the list was only two items, the shell exits the `for` loop.
+2.  `filename` is a [variable][variable].
+    At any moment it contains a value,
+    which can change over time.
+
+3.  The loop runs once for each item in the list.
+    Each time it runs,
+    it assigns the next item to the variable,
+    so in this case,
+    `filename` will be `andamooka_temp.csv` the first time around
+    and `badingarra_temp.csv` the second time.
+
+4.  The commands that the loop executes (which are called the [body][loop-body] of the loop)
+    appear between `do` and `done`.
+    Those commands use the current value of the variable `filename`,
+    but to get it,
+    we must put a dollar sign `$` in front of the variable's name.
+    If we forget and use `filename` instead of `$filename`,
+    the shell will think that we are actually referring to something called `filename`.
+
+5.  The shell prompt changes from `$` to `>` and back again as we type in our loop.
+    The second prompt is called a [continuation prompt][continuation-prompt];
+    it is different to remind us that we haven't finished typing a complete command yet.
+
+So what does the loop actually do?
+As the output shows,
+it runs our little pipeline separately for each file.
+Let's use a wildcard expression to select all four temperature files
+and add another stage to the pipeline:
+
+```shell
+$ for filename in *_temp.csv
+> do
+>   head -n 4 $filename | tail -n 3
+> done
+```
+
+```text
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+9037,1965,1,1,40.6,Y
+9037,1965,1,2,40,Y
+9037,1965,1,3,41.1,Y
+68228,1997,1,1,,
+68228,1997,1,2,,
+68228,1997,1,3,,
+70339,1996,1,1,,
+70339,1996,1,2,,
+70339,1996,1,3,,
+```
+
+The weather station IDs in the first column show that
+we are in fact getting exactly three rows from each of four files.
 
 > **Same Symbols, Different Meanings**
 >
-> Here we see `>` being used as a shell prompt, whereas `>` is also
-> used to redirect output.
-> Similarly, `$` is used as a shell prompt, but, as we saw earlier,
-> it is also used to ask the shell to get the value of a variable.
->
-> If the *shell* prints `>` or `$` then it expects you to type something,
-> and the symbol is a prompt.
->
-> If *you* type `>` or `$` yourself, it is an instruction from you that
-> the shell should redirect output or get the value of a variable.
+> The computer displays `>` as a shell continuation prompt when we are typing,
+> but when we type `>` ourselves,
+> it means "redirect output".
+> Similarly,
+> `$` is a regular prompt when the computer prints it
+> but means "get the value of a variable" when we type.
+> This [overloading][overloading] is sometimes confusing,
+> but there are only so many symbols on a standard keyboard.
 
-When using variables it is also
-possible to put the names into curly braces to clearly delimit the variable
-name: `$filename` is equivalent to `${filename}`, but is different from
-`${file}name` (the latter appends "name" to the `$file` variable).
-You may find this notation in other people's programs.
+## What do variable names mean? {#rse-bash-meaningless}
 
+The short answer to this section's title is "nothing".
 We have called the variable in this loop `filename`
-in order to make its purpose clearer to human readers.
-The shell itself doesn't care what the variable is called;
-if we wrote this loop as:
+to make its purpose clear to human readers,
+but the shell doesn't care what the variable is called.
+We could equally well write our loop as:
 
 ```shell
-$ for x in basilisk.dat unicorn.dat
+$ for f in *_temp.csv
 > do
->    head -n 2 $x | tail -n 1
+>   head -n 4 $f | tail -n 3
 > done
 ```
 
 or:
 
 ```shell
-$ for temperature in basilisk.dat unicorn.dat
+$ for username in *_temp.csv
 > do
->    head -n 2 $temperature | tail -n 1
+>   head -n 4 $username | tail -n 3
 > done
 ```
 
-it would work exactly the same way.
 *Don't do this.*
 Programs are only useful if people can understand them,
-so meaningless names (like `x`) or misleading names (like `temperature`)
-increase the odds that the program won't do what its readers think it does.
+so meaningless names like `f` and misleading names like `username`
+increase the odds of misunderstanding.
+
+## How can I re-do things I have done recently? {#rse-bash-history}
+
+Loops are useful if we know in advance what we want to repeat,
+but if we have already run commands,
+we can still repeat.
+One way is to use <kbd>↑</kbd> and <kbd>↓</kbd> to go up and down in our command history as described earlier.
+Another is to use the `history` command to get a list of the last few hundred commands that have been executed:
+
+```shell
+$ history
+```
+
+```text
+  ...
+  571  wc -l *.csv | sort -n | head n 3
+  572  wc -l *.csv | sort -n | head -n 3
+  573  wc -l *.csv | sort -n | head -n 3 | tail -n 1
+  ...
+```
+
+and then use an exclamation mark `!` followed by a number to repeat one of those commands:
+
+```shell
+$ !572
+```
+
+```shell
+wc -l *.csv | sort -n | head -n 3
+    8314 bellambi_temp.csv
+    8315 bellambi_prec.csv
+    8680 tuggeranong_temp.csv
+```
+
+The shell prints the command it is going to run to standard error rather than to standard output,
+so that (for example) `!572 > results.txt` puts the command's output into a file
+*without* also writing the command.
+
+Having an accurate record of what we have done
+and a simple way to repeat it
+are yet another reason why people use the Unix shell.
+In fact,
+being able to repeat history is such a powerful idea
+that the shell gives us several ways to do it.
+
+-   `!head` re-runs the most recent command starting with `head`,
+    while `!wc` re-runs the most recent starting with `wc`.
+-   If we type <kbd>Ctrl</kbd>+<kbd>R</kbd>
+    the shell does an interactive reverse search for whatever we type next.
+    If we don't like the first thing it finds,
+    we can type <kbd>Ctrl</kbd>+<kbd>R</kbd> again to go further back.
+
+If we use `history`, <kbd>↑</kbd>, or <kbd>Ctrl</kbd>+<kbd>R</kbd>,
+we will quickly notice that loops don't have to be broken across lines.
+Instead,
+their parts can be separated with semi-colons:
+
+```shell
+$ for filename in *_temp.csv; do head -n 4 $filename | tail -n 3; done
+```
+
+This is fairly readable,
+although even experienced users have a tendency to put the semi-colon after `do` instead of before it.
+If our loop contains multiple commands,
+though,
+the multi-line format is much easier to read—compare this:
+
+```shell
+$ for filename in *_temp.csv
+> do
+>   echo $filename
+>   head -n 4 $filename | tail -n 3
+> done
+```
+
+with this:
+
+```shell
+$ for filename in *_temp.csv; do echo $filename; head -n 4 $filename | tail -n 3; done
+```
+
+## HERE
 
 Let's continue with our example in the `data-shell/creatures` directory.
 Here's a slightly more complicated loop:
@@ -1724,49 +1886,6 @@ shows what happens when the modified loop is executed, and demonstrates how the
 judicious use of `echo` is a good debugging technique.
 
 *TODO: Figure - For Loop in Action [../fig/shell_script_for_loop_flow_chart.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/shell_script_for_loop_flow_chart.svg)*
-
-
-> **Those Who Know History Can Choose to Repeat It**
->
-> Another way to repeat previous work is to use the `history` command to
-> get a list of the last few hundred commands that have been executed, and
-> then to use `!123` (where "123" is replaced by the desired command number) to
-> repeat one of those commands. For example, if Amira types this:
->
-> ```shell
-> $ history | tail -n 5
-> ```
->
-> ```shell
->   456  ls -l NENE0*.txt
->   457  rm stats-NENE01729B.txt.txt
->   458  bash goostats NENE01729B.txt stats-NENE01729B.txt
->   459  ls -l NENE0*.txt
->   460  history
-> ```
->
-> then she can re-run `goostats` on `NENE01729B.txt` simply by typing
-> `!458`.
-
-> **Other History Commands**
->
-> There are a number of other shortcut commands for getting at the history.
->
-> - `Ctrl-R` enters a history search mode "reverse-i-search" and finds the
-> most recent command in your history that matches the text you enter next.
-> Press `Ctrl-R` one or more additional times to search for earlier matches.
-> - `!!` retrieves the immediately preceding command
-> (you may or may not find this more convenient than using the up-arrow
-> one common usecase is to preface a previous command, e.g. `sudo !!`)
-> - `!!` is shorthand for `!-1`, so `!-2` would go back two steps in history instead of one.
-> - `!$` retrieves the last word of the last command.
-> That's useful more often than you might expect: after
-> `bash goostats NENE01729B.txt stats-NENE01729B.txt`, you can type
-> `less !$` to look at the file `stats-NENE01729B.txt`, which is
-> quicker than doing up-arrow and editing the command-line.
-> `less !!:3` would do the same thing but it more flexible, since the number
-> can be changed to grab any argument from the previous command.
-
 
 ## Shell Scripts {#rse-bash-scripts}
 `
