@@ -97,6 +97,7 @@
 [pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
+[pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pypi]: https://pypi.org/
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
 [pytest]: http://pytest.org/
