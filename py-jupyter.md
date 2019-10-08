@@ -170,3 +170,80 @@ However,
 sometimes you forget
 and it is useful to get hints via the help systems described above.
 
+### Version control
+
+Jupyter notebooks are stored as JSON-files with an .ipynb extension.
+These are specially formatted text files,
+which are read and rendered by JupyterLab.
+JSON files are efficiently read by machine and it is a common data exchange format.
+However,
+they are not always that easy to read for humans,
+which can create problems when working with Jupyter notebooks under version control.
+The Markdown format is easier for us to read
+and facilitates reading version control diffs and making more granular commits.
+You also don't have to worry about accidentally misplacing braces within the JSON file,
+which would cause the notebook to fail to render.
+
+Jupytext is a JupyterLab extension that enables saving of notebook in plain text formats,
+such as Markdown.
+The plain text notebook is two-way synced with the `.ipynb` file,
+so that when either of the files change,
+the other is updated to reflect this change.
+Jupytext supports the R Markdown format,
+which extends the Markdown syntax with some useful features for notebooks,
+and which is used to generate reproducible reports from R Notebooks
+via the R Studio IDE.
+Using the R Markdown format for our notebooks,
+we take advantage of a well established format for reproducible analysis.
+If needed, we also have access to the publishing options
+available via the R Studio IDE
+(R Markdown builds upon Pandoc,
+which is the most extensive Mardown specification,
+with support for more advanced scholarly features
+such as inline citations and cross-references).
+
+To install Jupytext, open a terminal and type the following
+(if you installed JupyterLab in another conda environment than the base,
+make sure to first switch to that environment).
+
+```bash
+conda install -c conda-forge jupytext
+```
+
+Restart JupyterLab and click OK when asked to rebuild the application,
+this makes the Jupytext extension part of JupyterLab.
+The Jupytext commands are all available from the command palette.
+Create a new notebook and click on the command palette icon in the sidebar.
+Type "pair" and you will see all the Jupytext commands.
+Click on "Pair Notebook with R Markdown",
+ <!--TODO Screenshot from doc? -->
+this is the only Jupytext command we need to use.
+That's it!
+Your `.ipynb` notebook is now linked to an `.Rmd` file with the same name.
+Open up the File Browser from the sidebar
+and you can see that the new file has been created in the same directory.
+The pairing needs to be done once for each notebook,
+or can be setup to occur for [all notebooks automatically][jupytext-global-config].
+
+[jupytext-global-config]: https://jupytext.readthedocs.io/en/latest/using-server.html#global-configuration
+
+Since Jupytext can open `.Rmd` files as notebooks,
+you only need to commit the `.Rmd` file to version control.
+`.Rmd` files open as text when double clicked in the JupyterLab file browser.
+To open them as notebooks,
+right click the filename and select "Open with".
+A `.ipynb` file will be created if it doesn't already exist.
+Since `.Rmd` files do not store the notebooks' output cells,
+the code will need to be run again to recreate the output.
+Running the entire notebook is good practice since it ensures reproducibility,
+and it is important to do this before sharing it with a collaborator.
+Otherwise,
+you might have run some of the cells out of order,
+or are working with a variable from a cell that you have since deleted,
+so that once your collaborator tries to run the file in sequential order,
+the would (in the best case scenario) get an error 
+and (in the worst case scenario) they might get a different output without noticing.
+Collaborating with `.Rmd` files makes it easier for collaborators to review pull request,
+but it is also important to remember that in order to run the notebook locally,
+all collaborators need to have Jupytext installed.
+
