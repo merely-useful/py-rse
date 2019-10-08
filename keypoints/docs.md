@@ -1,3 +1,0 @@
--   Documentation strings (docstrings) can be placed at the start of a file or at the start of a function.
--   Docstrings can be formatted using a superset of Markdown.
--   Tools like `pydoc` and Sphinx can extract and format docstrings to create documentation for software.
