@@ -32,6 +32,7 @@ RSE_FILES=\
   rse-cmdline-git.Rmd \
   rse-advanced-git.Rmd \
   rse-automate.Rmd \
+  rse-unit-testing.Rmd \
   configure.Rmd \
   verify.Rmd \
   backlog.Rmd \
