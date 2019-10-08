@@ -1268,11 +1268,10 @@ $ wc -l *.csv | sort -n
 The vertical bar `|` between the `wc` and `sort` commands
 tells the shell that we want to use the output of the command on the left
 as the input to the command on the right.
-The computer might put the data in a temporary file,
-leave it in memory,
-or something else entirely:
-all that matters to use is that everything the first command prints
-becomes input to the second command.
+Putting it another way,
+the downstream command doesn't read from a file;
+instead,
+it reads the output of the upstream command.
 
 We can use `|` to build pipes of any length.
 For example,
@@ -1313,57 +1312,66 @@ The shell makes this easy by letting us move up and down in our [command history
 using the <kbd>↑</kbd> and <kbd>↓</kbd> keys
 and editing old commands to create new ones.
 
-## How do pipes work? {#rse-bash-stdio}
+## How do pipes work (and why do I need to know)? {#rse-bash-stdio}
 
---HERE--
+In order to use pipes and redirection effectively,
+we need to know just a little about how they work.
+When a computer runs a program—any program—it creates a [process][process] in memory
+to hold the program's instructions and data.
+Every process in Unix has an input channel called [standard input][standard-input]
+and an output channel called [standard output][standard-output].
+(By this point you may be surprised that their names are so memorable, but don't worry:
+most Unix programmers call them [stdin][stdin] and [stdout][stdout]).
 
-Here's what actually happens behind the scenes when we create a pipe.
-When a computer runs a program --- any program --- it creates a **process**
-in memory to hold the program's software and its current state.
-Every process has an input channel called **standard input**.
-(By this point, you may be surprised that the name is so memorable, but don't worry:
-most Unix programmers call it "stdin").
-Every process also has a default output channel called **standard output**
-(or "stdout"). A second output channel called **standard error** (stderr) also
-exists. This channel is typically used for error or diagnostic messages, and it
-allows a user to pipe the output of one program into another while still receiving
-error messages in the terminal.
-
-The shell is actually just another program.
-Under normal circumstances,
-whatever we type on the keyboard is sent to the shell on its standard input,
-and whatever it produces on standard output is displayed on our screen.
-When we tell the shell to run a program,
+The shell is a program like any other,
+and like any other,
+it runs inside a process.
+Under normal circumstances its standard input is connected to our keyboard
+and its standard output to our screen,
+so it reads what we type and displays its output for us to see (FIXME: diagram).
+When we tell the shell to run a program
 it creates a new process
-and temporarily sends whatever we type on our keyboard to that process's standard input,
-and whatever the process sends to standard output to the screen.
+and temporarily reconnects the keyboard and stream
+to that process's standard input and output (FIXME: diagram).
 
-When we run `wc -l *.pdb > lengths.txt`,
-the shell tells the computer to create a new process to run the `wc` program.
-Since we've provided some filenames as arguments,
-`wc` reads from them instead of from standard input.
-And since we've used `>` to redirect output to a file,
-the shell connects the process's standard output to that file.
+Redirection with `>` tells the shell to connect the program's standard output to a file
+instead of to the screen (FIXME: diagram).
+If we provide one or more files for the command to read,
+as with `sort lengths.txt`,
+the program reads data from those files.
+If we don't provide any filenames,
+though,
+the Unix convention is for the program to read from standard input.
+We can test this by running `sort` on its own,
+typing in a few lines of text,
+and then pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> to signal the end of input.
+`sort` will then sort and print whatever we typed:
 
-If we run `wc -l *.pdb | sort -n` instead,
-the shell creates two processes
-(one for each process in the pipe)
-so that `wc` and `sort` run simultaneously.
-The standard output of `wc` is fed directly to the standard input of `sort`;
-since there's no redirection with `>`,
-`sort`'s output goes to the screen.
-And if we run `wc -l *.pdb | sort -n | head -n 1`,
-we get three processes with data flowing from the files,
-through `wc` to `sort`,
-and from `sort` through `head` to the screen.
+```shell
+$ sort
+one
+two
+three
+four
+^D
+```
 
-*TODO: Figure - Redirects and Pipes [../fig/redirects-and-pipes.png](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/redirects-and-pipes.svg)*
+```text
+four
+one
+three
+two
+```
 
-The key is that any program that reads lines of text from standard input
-and writes lines of text to standard output
-can be combined with every other program that behaves this way as well.
-You can *and should* write your programs this way
-so that you can put those programs into pipes to multiply their power.
+When we create a pipe like `wc *.csv | sort`,
+the shell creates one process for each command so that `wc` and `sort` will run simultaneously,
+and then connects the standard output of `wc` directly to the standard input of `sort` (FIXME: diagram).
+`wc` doesn't know whether its output is going to the screen,
+another program,
+or to a file via `>`.
+Equally,
+`sort` doesn't know if its input is coming from the keyboard or another process;
+it just knows that it has to read, sort, and print.
 
 > **Why Isn't It Doing Anything?**
 >
@@ -1382,10 +1390,71 @@ so that you can put those programs into pipes to multiply their power.
 > It doesn't tell us this:
 > it just sits and waits.
 >
+> This mistake can be hard to spot,
+> particularly if we put the filename at the end of the pipeline:
+>
+> ```shell
+> $ wc -l | sort bellambi_temp.csv
+> ```
+>
+> In this case,
+> `sort` ignores standard input and reads the data in the file,
+> but `wc` still just sits there waiting for input.
+>
 > If we make this mistake,
 > we can end the program by typing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 > We can also use this to interrupt programs that are taking a long time to run
 > or are trying to connect to a website that isn't responding.
+
+Just as we can redirect standard output with `>`,
+we can connect standard input to a file using `<`.
+In the case of a single file,
+this has the same effect as providing the file's name to the command:
+
+```shell
+$ wc < bellambi_temp.csv
+```
+
+```text
+    8314    8316  184203
+```
+
+If we try to use redirection with a wildcard,
+though,
+the shell *doesn't* concatenate all of the matching files:
+
+```shell
+$ wc < *.csv
+```
+
+```text
+-bash: *.csv: ambiguous redirect
+```
+
+It also doesn't print the error message to standard output,
+which we can prove by redirecting:
+
+```shell
+$ wc < *.csv > all.txt
+```
+
+```text
+-bash: *.csv: ambiguous redirect
+```
+
+```shell
+$ cat all.txt
+```
+
+```text
+cat: all.txt: No such file or directory
+```
+
+Every process has a second output channel called [standard error][standard-error] (or [stderr][stderr]).
+Programs use it for error messages
+so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
+There are ways to redirect standard error,
+but doing so is almost always a bad idea.
 
 ## Loops {#rse-bash-loops}
 
