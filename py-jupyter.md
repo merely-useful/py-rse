@@ -132,3 +132,41 @@ the command palette also shows a command's keyboard shortcut.
 The last tab (the wrench icon) is for advanced cell settings,
 which is outside the scope of this material.
 
+### How to get help
+
+ <!--TODO Depending on where this section will be in the book, some of these concepts might not have been introduced (packages, lists). -->
+
+Once you start out using Python,
+you don't know what functions are available within each package.
+If you're working with the `numpy` package in a Jupyter notebook,
+you can type `numpy.`<kbd>Tab</kbd> (that is numpy + period + tab-key)
+and a small menu will pop up showing all the available functions in the `numpy` module.
+There are plenty of available functions,
+so it can be helpful to filter the menu
+by typing the initial letters of the function name.
+
+ <!--TODO Add screenshots? -->
+To get more info on the function you want to use,
+you can type out the full name and then press <kbd>Shift + Tab</kbd>
+to bring up a help dialogue.
+For the `numpy.mean` function
+you can see that the first argument `a` should be "array-like".
+An array is essentially just a sequence of numbers,
+such as a list `[]` or tuple `()`.
+Instead of manually activating the pop up menu every time,
+JupyterLab offers a tool called "Contextual Help",
+which displays help information automatically as you type.
+This very useful and it is a good habit to always have it open next to the Notebook.
+More help is available via the "Help" menu,
+which links to useful online resources
+(for example `Help --> JupyterLab Reference`).
+The unformatted docstring can be seen by prepending or appending a `?` to the function name, e.g. `numpy.mean?`.
+Two `?` (`numpy.mean??`) will show the full source code for the function.
+
+When you start getting familiar with typing function names,
+you will notice that this is often faster than looking for functions in menus,
+such as in spreadsheet program.
+However,
+sometimes you forget
+and it is useful to get hints via the help systems described above.
+
