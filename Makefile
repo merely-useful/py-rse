@@ -35,8 +35,6 @@ RSE_FILES=\
   branches.Rmd \
   backlog.Rmd \
   style.Rmd \
-  docs.Rmd \
-  refactor.Rmd \
   project.Rmd \
   inclusive.Rmd \
   rse-ci.Rmd \
