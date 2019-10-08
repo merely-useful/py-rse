@@ -1730,162 +1730,68 @@ with this:
 $ for filename in *_temp.csv; do echo $filename; head -n 4 $filename | tail -n 3; done
 ```
 
-## HERE
+## How can I create new filenames automatically? {#rse-bash-autoname}
 
-Let's continue with our example in the `data-shell/creatures` directory.
-Here's a slightly more complicated loop:
-
-```shell
-$ for filename in *.dat
-> do
->     echo $filename
->     head -n 100 $filename | tail -n 20
-> done
-```
-
-The shell starts by expanding `*.dat` to create the list of files it will process.
-The **loop body**
-then executes two commands for each of those files.
-The first, `echo`, just prints its command-line arguments to standard output.
-For example:
+Suppose we want to create a backup copy of each precipitation data file.
+If we don't want to change the files' names,
+we can do this with `cp`:
 
 ```shell
-$ echo hello there
+$ cd ~/climate-data
+$ mkdir backup
+$ cp cleaned/*_prec.csv backup
 ```
 
-prints:
+But what if we want the backup files to have the [extension][filename-extension] `.bak` instead of `.csv`?
+`cp` can do this for a single file:
+
+```shell
+$ cp cleaned/andamooka_prec.csv backup/andamooka_prec.bak
+```
+
+but can't do all the files at once:
+
+```shell
+$ cp cleaned/*_prec.csv backup/*_prec.bak
+```
 
 ```text
-hello there
+usage: cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file target_file
+       cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file ... target_directory
 ```
 
-In this case,
-since the shell expands `$filename` to be the name of a file,
-`echo $filename` just prints the name of the file.
-Note that we can't write this as:
+`backup/*_prec.bak` doesn't match anything—those files don't yet exist—so
+what we are actually asking `cp` to do is:
 
 ```shell
-$ for filename in *.dat
+$ cp cleaned/andamooka_prec.csv cleaned/badingarra_prec.csv cleaned/bellambi_prec.csv cleaned/tuggeranong_prec.csv
+```
+
+This doesn't work because `cp` only understands how to do two things:
+copy a single file to create another file,
+or copy a bunch of files into a directory.
+If we give it more than two names as arguments,
+it expects the last one to be a directory;
+since it isn't,
+it reports an error.
+
+Instead,
+let's copy all the files and then rename them:
+
+```shell
+$ cp cleaned/*_prec.csv backup
+$ for filename in backup/*.csv
 > do
->     $filename
->     head -n 100 $filename | tail -n 20
+>   mv $filename $filename.bak
 > done
+$ ls backup
 ```
-
-because then the first time through the loop,
-when `$filename` expanded to `basilisk.dat`, the shell would try to run `basilisk.dat` as a program.
-Finally,
-the `head` and `tail` combination selects lines 81-100
-from whatever file is being processed
-(assuming the file has at least 100 lines).
-
-> **Spaces in Names**
->
-> Spaces are used to separate the elements of the list
-> that we are going to loop over. If one of those elements
-> contains a space character, we need to surround it with
-> quotes, and do the same thing to our loop variable.
-> Suppose our data files are named:
->
-> ```text
-> red dragon.dat
-> purple unicorn.dat
-> ```
->
-> To loop over these files, we would need to add double quotes like so:
->
-> ```shell
-> $ for filename in "red dragon.dat" "purple unicorn.dat"
-> do
->     head -n 100 "$filename" | tail -n 20
-> done
-> ```
->
-> It is simpler just to avoid using spaces (or other special characters) in filenames.
->
-> The files above don't exist, so if we run the above code, the `head` command will be unable
-> to find them, however the error message returned will show the name of the files it is
-> expecting:
-> ```text
-> head: cannot open ‘red dragon.dat’ for reading: No such file or directory
-> head: cannot open ‘purple unicorn.dat’ for reading: No such file or directory
-> ```
->
-> Try removing the quotes around `$filename` in the loop above
-> to see the effect of the quote marks on spaces.
-> Note that we get a result from the loop command for unicorn.dat
-> when we run this code in the `creatures` directory:
->
-> ```text
-> head: cannot open ‘red’ for reading: No such file or directory
-> head: cannot open ‘dragon.dat’ for reading: No such file or directory
-> head: cannot open ‘purple’ for reading: No such file or directory
-> CGGTACCGAA
-> AAGGGTCGCG
-> CAAGTGTTCC
-> ```
-
-We would like to modify each of the files in `data-shell/creatures`, but also save a version
-of the original files, naming the copies `original-basilisk.dat` and `original-unicorn.dat`.
-We can't use:
-
-```shell
-$ cp *.dat original-*.dat
-```
-
-because that would expand to:
-
-```shell
-$ cp basilisk.dat unicorn.dat original-*.dat
-```
-
-This wouldn't back up our files, instead we get an error:
 
 ```text
-cp: target `original-*.dat' is not a directory
+andamooka_prec.csv.bak badingarra_prec.csv.bak bellambi_prec.csv.bak tuggeranong_prec.csv.bak
 ```
 
-This problem arises when `cp` receives more than two inputs. When this happens, it
-expects the last input to be a directory where it can copy all the files it was passed.
-Since there is no directory named `original-*.dat` in the `creatures` directory we get an
-error.
-
-Instead, we can use a loop:
-
-```shell
-$ for filename in *.dat
-> do
->     cp $filename original-$filename
-> done
-```
-
-This loop runs the `cp` command once for each filename.
-The first time,
-when `$filename` expands to `basilisk.dat`,
-the shell executes:
-
-```shell
-cp basilisk.dat original-basilisk.dat
-```
-
-The second time, the command is:
-
-```shell
-cp unicorn.dat original-unicorn.dat
-```
-
-Before running a loop,
-it can be a good idea to check that the loop is doing the correct thing.
-We learned earlier how to print strings using `echo`,
-and we can modify the loop
-to use `echo` to print our commands without actually executing them.
-As such we can check what commands *would be* run in the unmodified loop.
-
-The following diagram
-shows what happens when the modified loop is executed, and demonstrates how the
-judicious use of `echo` is a good debugging technique.
-
-*TODO: Figure - For Loop in Action [../fig/shell_script_for_loop_flow_chart.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/shell_script_for_loop_flow_chart.svg)*
+--HERE--
 
 ## Shell Scripts {#rse-bash-scripts}
 `
