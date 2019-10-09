@@ -1980,97 +1980,76 @@ Station
 68228
 ```
 
---HERE--
+But we have made a common mistake:
+we have changed the script without changing the comment.
+A description that sends readers in the wrong direction is worse than none at all,
+so we should go back and update it.
+We should probably also change the script's name from `years.sh` to `column.sh`,
+since a program's name is the first piece of "documentation" anyone sees.
 
-The only caveat is that each time you modify the script,
-you should check that the comment is still accurate:
-an explanation that sends the reader in the wrong direction is worse than none at all.
-
-
-What if we want to process many files in a single pipeline?
-For example, if we want to sort our `.pdb` files by length, we would type:
-
-```shell
-$ wc -l *.pdb | sort -n
-```
-
-because `wc -l` lists the number of lines in the files
-(recall that `wc` stands for 'word count', adding the `-l` option means 'count lines')
-and `sort -n` sorts things numerically.
-We could put this in a file,
-but then it would only ever sort a list of `.pdb` files in the current directory.
-If we want to be able to get a sorted list of other kinds of files,
-we need a way to get all those names into the script.
-We can't use `$1`, `$2`, and so on
-because we don't know how many files there are.
-Instead, we use the special variable `$@`,
-which means,
-"All of the command-line arguments to the shell script."
-We also should put `$@` inside double-quotes
-to handle the case of arguments containing spaces
-(`"$@"` is equivalent to `"$1"` `"$2"` ...)
-Here's an example:
+We should probably also add one more command to our pipeline.
+If we run the script as-is for column 3,
+which holds months,
+we get this:
 
 ```shell
-$ nano sorted.sh
+$ bash years.sh cleaned/bellambi_prec.csv 3
 ```
+Month
+1
+2
+...
+11
+12
+1
+2
+...
+8
+9
+10
+```
+
+Duplicate months aren't removed because `uniq` only removes *adjacent* duplicates.
+If we want to get rid of them all,
+we must sort the data so that redundant lines are next to one another.
+Here's our final script:
 
 ```text
-# Sort filenames by their length.
-# Usage: bash sorted.sh one_or_more_filenames
-wc -l "$@" | sort -n
+# Select distinct values from a column of a climate data file.
+# Usage: bash years.sh /path/to/file.csv column_number
+cut -d , -f $2 $1 | uniq
 ```
 
-```shell
-$ bash sorted.sh *.pdb ../creatures/*.dat
-```
+## How can I turn interactive work into a script? {#rse-bash-capture}
 
-```text
-9 methane.pdb
-12 ethane.pdb
-15 propane.pdb
-20 cubane.pdb
-21 pentane.pdb
-30 octane.pdb
-163 ../creatures/basilisk.dat
-163 ../creatures/unicorn.dat
-433 total
-```
-
-
-Suppose we have just run a series of commands that did something useful --- for example,
-that created a graph we'd like to use in a paper.
-We'd like to be able to re-create the graph later if we need to,
-so we want to save the commands in a file.
-Instead of typing them in again
+Suppose we have just run a series of commands that did something useful,
+such as creating a plot for a paper.
+Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
-we can do this:
+we can run this:
 
 ```shell
-$ history 5 > redo-figure-3.sh
+$ history 6 > make-figure-3.sh
 ```
 
-The file `redo-figure-3.sh` now contains:
+to put the most recent five commands in `make-figure-3.sh`.
 
 ```text
-297 bash goostats NENE01729B.txt stats-NENE01729B.txt
-298 bash goodiff stats-NENE01729B.txt /data/validated/01729.txt > 01729-differences.txt
-299 cut -d ',' -f 2-3 01729-differences.txt > 01729-time-series.txt
-300 ygraph --format scatter --color bw --borders none 01729-time-series.txt figure-3.png
-301 history | tail -n 5 > redo-figure-3.sh
+297 bash stats.sh cleaned/*_temp.csv > temperature_stats.csv
+298 bash trim-outliers.sh temperature_stats.csv > plot_data.txt
+299 date
+300 ygraph --format scatter --color bw --borders none plot_data.txt figure-3.png
+301 rm temperature_stats.csv plot_data.txt
+302 history 6 > make-figure-3.sh
 ```
 
-After a moment's work in an editor to remove the serial numbers on the commands,
-and to remove the final line where we called the `history` command,
-we have a completely accurate record of how we created that figure.
-
-In practice, most people develop shell scripts by running commands at the shell prompt a few times
-to make sure they're doing the right thing,
-then saving them in a file for re-use.
-This style of work allows people to recycle
-what they discover about their data and their workflow with one call to `history`
-and a bit of editing to clean up the output
-and save it as a shell script.
+It only takes a few moments in an editor to remove the serial numbers
+and delete the use of `date`
+(which prints the current time and date)
+to create a script that accurately captures what we actually did.
+This is how we usually develop shell scripts:
+run commands interactively a few times to make sure they are doing the right thing,
+then save our recent history to a file and turn that into a reusable script.
 
 ## Finding Things {#rse-bash-finding}
 
