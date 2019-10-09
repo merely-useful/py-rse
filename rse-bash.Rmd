@@ -1791,75 +1791,136 @@ $ ls backup
 andamooka_prec.csv.bak badingarra_prec.csv.bak bellambi_prec.csv.bak tuggeranong_prec.csv.bak
 ```
 
---HERE--
+## How can I create new commands of my own? {#rse-bash-script}
 
-## Shell Scripts {#rse-bash-scripts}
-`
-We are going to take the commands we repeat frequently and save them in files
-so that we can re-run all those operations again later by typing a single command.
+Loops and history let us do tasks repeatedly,
+but we can go even further and save commands in files
+so that we can re-run complex sequences of operations with a few keystrokes.
 For historical reasons,
-a bunch of commands saved in a file is usually called a shell **script**,
-but make no mistake:
-these are actually small programs.
+a file full of shell commands is usually called a [shell script][shell-script],
+but it is really just another kind of program.
 
-Let's start by going back to `molecules/` and creating a new file, `middle.sh` which will
-become our shell script:
+Let's start by going into `climate-data` and creating a new file called `years.sh`
+to hold our shell script:
 
 ```shell
-$ cd molecules
-$ nano middle.sh
+$ cd ~/climate-data
+$ nano years.sh
 ```
 
-The command `nano middle.sh` opens the file `middle.sh` within the text editor "nano"
-(which runs within the shell).
-If the file does not exist, it will be created.
-We can use the text editor to directly edit the file -- we'll simply insert the following line:
+Insert this line:
 
 ```text
-head -n 15 octane.pdb | tail -n 5
+cut -d , -f 2 cleaned/bellambi_temp.csv
 ```
 
-This is a variation on the pipe we constructed earlier:
-it selects lines 11-15 of the file `octane.pdb`.
-Remember, we are *not* running it as a command just yet:
-we are putting the commands in a file.
+This uses the `cut` command to split the CSV file on commas
+and select the second field from each line.
+(The option `-d` stands for [delimiter][delimiter]:
+we can provide any character we want to split lines on colons, spaces, and so on.)
+Note that we do *not* put a dollar sign `$` at the front of the line:
+we have been showing that for interactive commands,
+but in this case we are putting the command in a file rather than running it immediately.
 
-Then we save the file (`Ctrl-O` in nano),
-and exit the text editor (`Ctrl-X` in nano).
-Check that the directory `molecules` now contains a file called `middle.sh`.
-
-Once we have saved the file,
-we can ask the shell to execute the commands it contains.
-Our shell is called `bash`, so we run the following command:
+Once we have added this line to the file,
+we can write it out with <kbd>Ctrl</kbd>+<kbd>O</kbd>
+and exit with <kbd>Ctrl</kbd>+<kbd>O</kbd>.
+`ls` shows that our file now exists:
 
 ```shell
-$ bash middle.sh
+$ ls
 ```
 
 ```text
-ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
-ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
-ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
-ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
-ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+NOTES           backup/         cleaned/        raw/            thesis.pdf      years.sh
+README.md       bin/            docs/           thesis.md       tofu.config
+```
+
+and we can check its contents using `cat years.sh`.
+More importantly,
+we can now ask the shell to run this file:
+
+```shell
+$ bash years.sh
+```
+
+```text
+Year
+1997
+1997
+...many more lines...
+2019
+2019
+2019
 ```
 
 Sure enough,
-our script's output is exactly what we would get if we ran that pipeline directly.
-
-What if we want to select lines from an arbitrary file?
-We could edit `middle.sh` each time to change the filename,
-but that would probably take longer than just retyping the command.
-Instead, let's edit `middle.sh` and make it more versatile:
+our script's output is exactly what we would get if we ran the command directly.
+For example,
+we can count how many lines of output there are by putting our script in a pipeline:
 
 ```shell
-$ nano middle.sh
+$ bash years.sh | wc -l
 ```
 
-Now, within "nano", replace the text `octane.pdb` with the special variable called `$1`:
+```text
+    8314
+```
+
+What if we want to remove duplicates from the output?
+The command `uniq` will do what we want,
+so let's edit our script,
+add it,
+look at our changes,
+and then run the modified script:
 
 ```shell
-head -n 15 "$1" | tail -n 5
+$ nano years.sh
+$ cat years.sh
+```
+
+```text
+cut -d , -f 2 cleaned/bellambi_temp.csv | uniq
+```
+
+```shell
+$ bash years.sh
+```
+
+```text
+Year
+1997
+1998
+1999
+...one line per year...
+2017
+2018
+2019
+```
+
+Once again,
+we can pipe the output of our script into other commands
+just as we would pipe the output from any other program:
+
+```shell
+$ bash years.sh | wc -l
+```
+
+```text
+      24
+```
+
+## How can I make my scripts more versatile? {#rse-bash-params}
+
+Creating a list of distinct years in a single specific data file isn't all that useful.
+What we really want is a way to get the years from any of our files.
+Let's edit `years.sh` again and replace `cleaned/bellambi_temp.csv`
+with a special variable `$1`.
+Once our change is made,
+`years.sh` should contain:
+
+```text
+cut -d , -f 2 $1 | uniq
 ```
 
 Inside a shell script,
@@ -1867,102 +1928,64 @@ Inside a shell script,
 We can now run our script like this:
 
 ```shell
-$ bash middle.sh octane.pdb
+$ bash years.sh cleaned/bellambi_temp.csv
 ```
+
+and get exactly the same output as before,
+or give it a different filename:
+
+```shell
+$ bash years.sh cleaned/andamooka_prec.csv 
+```
+
+and get the years from that file instead.
+
+Our little script is now doing something useful,
+but it may take the next person who reads it a moment to figure out exactly what that is.
+We can improve our script by adding [comments][comment] at the top:
 
 ```text
-ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
-ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
-ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
-ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
-ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+# Select distinct years from column 2 of climate data file.
+# Usage: bash years.sh /path/to/file.csv
+cut -d , -f 2 $1 | uniq
 ```
 
-
-or on a different file like this:
-
-```shell
-$ bash middle.sh pentane.pdb
-```
-
-```text
-ATOM      9  H           1       1.324   0.350  -1.332  1.00  0.00
-ATOM     10  H           1       1.271   1.378   0.122  1.00  0.00
-ATOM     11  H           1      -0.074  -0.384   1.288  1.00  0.00
-ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
-ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
-```
-
-> **Double-Quotes Around Arguments**
->
-> For the same reason that we put the loop variable inside double-quotes,
-> in case the filename happens to contain any spaces,
-> we surround `$1` with double-quotes.
-
-
-We still need to edit `middle.sh` each time we want to adjust the range of lines,
-though.
-Let's fix that by using the special variables `$2` and `$3` for the
-number of lines to be passed to `head` and `tail` respectively:
-
-```shell
-$ nano middle.sh
-```
-
-```shell
-head -n $2 "$1" | tail -n $3
-```
-
-We can now run:
-
-```shell
-$ bash middle.sh pentane.pdb 15 5
-```
-
-```text
-ATOM      9  H           1       1.324   0.350  -1.332  1.00  0.00
-ATOM     10  H           1       1.271   1.378   0.122  1.00  0.00
-ATOM     11  H           1      -0.074  -0.384   1.288  1.00  0.00
-ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
-ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
-```
-
-By changing the arguments to our command we can change our script's
-behaviour:
-
-```shell
-$ bash middle.sh pentane.pdb 20 5
-```
-
-
-```text
-ATOM     14  H           1      -1.259   1.420   0.112  1.00  0.00
-ATOM     15  H           1      -2.608  -0.407   1.130  1.00  0.00
-ATOM     16  H           1      -2.540  -1.303  -0.404  1.00  0.00
-ATOM     17  H           1      -3.393   0.254  -0.321  1.00  0.00
-TER      18              1
-```
-
-This works,
-but it may take the next person who reads `middle.sh` a moment to figure out what it does.
-We can improve our script by adding some **comments** at the top:
-
-```shell
-$ nano middle.sh
-```
-
-```text
-# Select lines from the middle of a file.
-# Usage: bash middle.sh filename end_line num_lines
-head -n $2 "$1" | tail -n $3
-```
-
-A comment starts with a `#` character and runs to the end of the line.
+As in R and Python,
+a comment starts with a `#` character and runs to the end of the line.
 The computer ignores comments,
-but they're invaluable for helping people (including your future self) understand and use scripts.
+but they help people (including your future self) understand and use scripts.
+
+Let's make one more change to our script.
+Instead of always selecting the second column,
+let's have it select whatever column the user specified:
+
+```text
+# Select distinct years from column 2 of climate data file.
+# Usage: bash years.sh /path/to/file.csv
+cut -d , -f $2 $1 | uniq
+```
+
+The change is very small:
+we have replaced the fixed column number `2` with a reference to the special variable `$2`,
+which is assigned the value of the second command-line argument we give the script when we run it.
+Let's check that it works by asking for column 1,
+which is the weather station ID:
+
+```shell
+$ bash years.sh cleaned/bellambi_prec.csv 1
+```
+
+```text
+Station
+68228
+```
+
+--HERE--
+
 The only caveat is that each time you modify the script,
 you should check that the comment is still accurate:
 an explanation that sends the reader in the wrong direction is worse than none at all.
+
 
 What if we want to process many files in a single pipeline?
 For example, if we want to sort our `.pdb` files by length, we would type:
