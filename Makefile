@@ -36,8 +36,6 @@ RSE_FILES=\
   verify.Rmd \
   backlog.Rmd \
   style.Rmd \
-  docs.Rmd \
-  refactor.Rmd \
   project.Rmd \
   inclusive.Rmd \
   rse-ci.Rmd \

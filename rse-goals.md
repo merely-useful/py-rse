@@ -64,10 +64,25 @@ It is assumed that students have completed the novice course.
 > -   Bonus material: non-standard commands you might find useful (tree, htop, autojump, fd, etc)
 
 
+## Configuring software
+
+**Lead author:** Damien Irving  
+**Status:** First draft in progress ([#156](https://github.com/merely-useful/merely-useful.github.io/issues/156))  
+**Source materials:** [configure.Rmd](https://merely-useful.github.io/still-magic/en/configure.html)
+
+> Topic outline:
+> -   How do I parse the command line from within a Python script?
+>     -   basic structure of python scripts
+>     -   argparse
+> -   How would I implement a configuration file?
+>     -   as a data structure (JSON)
+>     -   as key/value pairs (YAML)
+
+
 ## Version control
 
 **Lead author:** Damien Irving  
-**Status:** First draft under review ([#164](https://github.com/merely-useful/merely-useful.github.io/issues/164))  
+**Status:** First draft complete ([#164](https://github.com/merely-useful/merely-useful.github.io/issues/164))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/git-novice/),
 [branches.Rmd](https://merely-useful.github.io/still-magic/en/branches.html)
@@ -86,25 +101,10 @@ It is assumed that students have completed the novice course.
 >     -   reviewing pull requests
 
 
-## Configuring software
-
-**Lead author:** Damien Irving  
-**Status:** First draft in progress ([#156](https://github.com/merely-useful/merely-useful.github.io/issues/156))  
-**Source materials:** [configure.Rmd](https://merely-useful.github.io/still-magic/en/configure.html)
-
-> Topic outline:
-> -   How do I parse the command line from within a Python script?
->     -   basic structure of python scripts
->     -   argparse
-> -   How would I implement a configuration file?
->     -   as a data structure (JSON)
->     -   as key/value pairs (YAML)
-
-
 ## Automating analyses
 
 **Lead author:** Luke Johnston  
-**Status:** First draft in progress ([#48](https://github.com/merely-useful/merely-useful.github.io/issues/48))  
+**Status:** First draft complete ([#48](https://github.com/merely-useful/merely-useful.github.io/issues/48))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/make-novice/),
 [automate.Rmd](https://merely-useful.github.io/still-magic/en/automate.html)
