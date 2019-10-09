@@ -152,6 +152,8 @@
 [rmd-appearance]: FIXME
 [rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
 [root-directory]: glossary.html#root-directory
+[rothenberg-backup]: http://wiki.c2.com/?ComputerErrorHaiku
+[rothenberg-quote]: https://www.clir.org/wp-content/uploads/sites/6/ensuring.pdf
 [roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 [rse]: FIXME
 [rstudio-cloud]: https://rstudio.cloud/

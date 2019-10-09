@@ -48,7 +48,8 @@ RSE_FILES=\
   teamwork.Rmd \
   finale.Rmd \
   rse-objectives.Rmd \
-  rse-keypoints.Rmd
+  rse-keypoints.Rmd \
+  rse-solutions.Rmd
 
 COMMON_FILES=\
   _common.R \
