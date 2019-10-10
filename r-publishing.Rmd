@@ -19,7 +19,7 @@ By the end of this chapter, you'll be able to take an R Markdown document that l
 
 To understand what it takes to get a webpage online, it helps to understand roughly what happens when you point your browser at a web address.  When you point your browser at an address, for example https://merely-useful.github.io/r-publishing.html, the following things happen:
 
-1. The name `https://merely-useful.github.io` is converted to an address of a computer that has the relevant files for this website.  This computer is also known as the website host or server. 
+1. The URL `https://merely-useful.github.io` points to a location on another computer where the relevant files for this website reside. This computer is known as the website host or server, since it *hosts* the webpage files on its local storage drives and *serves* them to us via the internet.
 2. The browser requests the file `r-publishing.html` from the host.
 3. The browser reads the contents of `r-publishing.html` and displays it for you in the browser window.  
 
@@ -68,14 +68,17 @@ If you Knit `report.Rmd` you'll get `report.html`, an HTML document, because in 
 
 ![](figures/r-publishing/open-html.png)
 
-HTML is the language of webpages. If you "Open in Editor" you will see the contents of the file --- it's plain text, but follows the conventions of the HTML language.  If you "View in Web Browser" your browser will read, interpret and display the HTML for you.   When you "View in Web Browser" you may notice the address bar in your browser looks something like:
+HTML is the language of webpages. If you "Open in Editor" you will see the contents of the file --- it's plain text with markup tags
+to indicate how web browsers should display the text.  If you "View in Web Browser" your browser will read, interpret and display the HTML for you.   When you "View in Web Browser" you may notice the address bar in your browser looks something like:
 ```
 file:///Users/wickhamc/Documents/Projects/sharing-work/docs/report.html
 ```
 
-The `file://` is a signal that this particular address is to a file living on your computer locally.  You couldn't give this address to someone else and expect it to work, because they don't have this file, let alone the same directory structure.  
+Just as `https://` is a signal that a file resides on a remote server computer, `file://` is a signal that a file lives on your computer locally. In spite of having "web" in their name, web browsers perfectly display local files as long as they are in a suitable format,
+such as HTML. However, you couldn't give this local address to someone else and expect it to work, because they don't have this file on their computer.
 
-The HTML produced by R Markdown is completely self-contained, the browser needs no additional files to display the page as you see it now.  So, you could email the file `report.html`, and your recipients could open it their browser and see the same result.  However, rather than sending the file, our goal will be to put this HTML file on the web so you can share a link.  You'll start by having this file accessible at the link `https://{{your_username}}.github.io/sharing-work/report.html`, then learn how to have it displayed with the shorter link  `https://{{your_username}}.github.io/sharing-work`
+The HTML produced by R Markdown is completely self-contained, the browser needs no additional files to display the page as you see it now.  So, you could email the file `report.html`, and your recipients could open it their browser and see the same result.  However, our goal will be to put this HTML file on the web so you can share a link to the file instead of the file itself.  You'll start by having this file accessible at the link `https://{{your_username}}.github.io/sharing-work/report.html`, then learn how to have it displayed with the shorter link  `https://{{your_username}}.github.io/sharing-work`
+
 
 ### Setting up your repo to have a web page
 
@@ -116,7 +119,7 @@ Try visiting: `https://{{your_username}}.github.io/sharing-work/report.html`.  Y
 
 You could send people the link, `https://{{your_username}}.github.io/sharing-work/report.html`, but it is often nicer to send them the shorter version without the file name: `https://{{your_username}}.github.io/sharing-work`.  You can try this now, but it won't work --- you'll see a message in your browser like: "404- File not found".  This shorter URL points to a directory as opposed to a file.  By default, when a server receives a request for a directory, it looks for a file to display with a default name --- usually `index.html`.  In your case there is no file called `index.html` so there is nothing to display.
 
-If you would like the contents of `report.html` to be displayed as the homepage of your project, then rename `report.Rmd` to `index.Rmd`.  You'll then need to regenerate the HTML file, remove `index.html`, commit, and push your changes.   For work that is communicated easily in one page, this would be a good option. 
+If you would like the contents of `report.html` to be displayed as the homepage of your project, then rename `report.Rmd` to `index.Rmd`.  You'll then need to regenerate the HTML file, commit it, and push your changes.   For work that is communicated easily in one page, this would be a good option. 
 
 Alternatively, you might have a different page as the default page --- one that summarizes the project and then links to other more detailed pages.  You'll see how to do this over the next few sections.  To get started create a new R Markdown document.  Delete **all** the contents of the file, and then copy and paste in the following:
 ```
@@ -147,6 +150,8 @@ Now when you visit `https://{{your_username}}.github.io/sharing-work` you should
 
 ![](figures/r-publishing/index.png)
 
+Note that it might take some time for the webpage to refresh automatically and detect the new index file. You can trigger this manually by going to GitHub Pages settings and changes the source branch to something else than `docs/` and then back again.
+
 ### What does it take to get your work on a webpage?
 
 To sum up the process above, in its most minimal form, to have a webpage at `https://{{your_username}}.github.io/{{repo_name}}`, your repo at `https://github.com/{{your_username}}/{{repo_name}}` needs to:
@@ -156,7 +161,7 @@ To sum up the process above, in its most minimal form, to have a webpage at `htt
 
 Be aware that everything inside the `docs` folder is now public, even if your repository is private.  
 
-You might have noticed this book lives at a GitHub Pages URL without a repo name --- there is nothing after the `.io` in `https://merely-useful.github.io`.  This is known as a user or organization site (`merely-useful` is an organization rather than a user, so this is an organization site).  There are a few differences between what you've learnt so far and the process of setting up a user site at `https://{{your_username}}.github.io`.  First, you need to name your repository in a specific way --- it must be called `{{your_username}}.github.io`.  Second, user sites don't use the `docs/` folder --- you put your HTML files at the top level in the repo.  And third, you don't have to change any settings with user sites --- GitHub will recognize the repo name and automatically serve it at `https://{{your_username}}.github.io`. 
+You might have noticed this book lives at a GitHub Pages URL without a repo name --- there is nothing after the `.io` in `https://merely-useful.github.io`.  Both GitHub organizations and individuals can make use of this shorter address format (`merely-useful` is an organization rather than a user, so this is an organization site).  There are a few differences between what you've learnt so far and the process of setting up a user site without a repo name (at `https://{{your_username}}.github.io`).  First, you need to name your repository in a specific way --- it must be called `{{your_username}}.github.io`.  Second, user sites don't use the `docs/` folder --- you put your HTML files at the top level in the repo.  And third, you don't have to change any settings with user sites --- GitHub will recognize the repo name and automatically serve it at `https://{{your_username}}.github.io`. 
 
 ### Exercise: Customize `index.Rmd`
 
@@ -230,12 +235,12 @@ Add to `index.Rmd`:
 
 ### Linking to sections within a page
 
-URLs can also refer to places inside the current page, most usually to another section.  In R Markdown you've seen you create headings using `#`.  For example, an Appendix subsection might be:
+URLs can also refer to places inside the current page, most usually to another section.  In R Markdown you've seen how to create headings using `#`.  For example, an Appendix subsection might be:
 ```markdown
 ## Appendix
 ```
 
-If we want to link to this section from elsewhere, you prefix the section name with `#` in the URL.  For example, if this section is in `report.Rmd` and you want to link to it elsewhere in `report.Rmd`, you could use:
+If we want to link to this section from elsewhere, you prefix the section name with a single `#` in the URL.  For example, if this section is in `report.Rmd` and you want to link to it elsewhere in `report.Rmd`, you could use:
 ```markdown
 See more details in the [appendix](#appendix)
 ```
@@ -261,7 +266,7 @@ Add a new section to `report.Rmd` and include a link to it in `index.Rmd`.  You'
 
 ### Including images
 
-Most of your images will likely be generated by R chunks in your R Markdown files and be included automatically.  If you want to include display other images, you use the same syntax you saw in the [Markdown section of the Reproducibility chapter](#r-reproducibility-markdown) chapter.  That is, in your R Markdown file you'll include the image with something like:
+Most of your images will likely be plots generated by R chunks in your R Markdown files and thus automatically included in the knitted HTML.  If you want to display other images, you use the same syntax you saw in the [Markdown section of the Reproducibility chapter](#r-reproducibility-markdown) chapter.  That is, in your R Markdown file you'll include the image with something like:
 
 ```markdown
 ![Image caption here.](path/to/image/file.png)
@@ -304,14 +309,14 @@ Or as a percentage:
 
 Include an image in your `index.Rmd`.  *(If you need an image to include you could always [build your own version of an Octocat][gh-myoctocat], GitHub's mascot).*
 
-Don't forget, you'll need to commit your re-Knit `index.html` and your image.
+Don't forget, you'll need to commit both your re-Knit `index.html` and your image.
 
 ## Exercise: Add a website to an existing project
 
 Add a website to one of your existing project repositories.  You'll need to complete the following steps:
 
 * Create a `docs/` directory in your project.
-* Add an `index.Rmd` R Markdown document to the `docs/` folder, knit it to HTML to produce `index.html`.
+* Add an `index.Rmd` R Markdown document to the `docs/` folder and knit it to HTML to produce `index.html`.
 * Commit these changes to git, and push to GitHub.
 * Activate GitHub Pages in the repository settings with source set to "master branch /docs folder".
 * Visit the site to check it is working.
