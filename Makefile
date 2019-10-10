@@ -29,6 +29,7 @@ RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
   rse-bash.Rmd \
+  rse-py-scripting.Rmd \
   rse-cmdline-git.Rmd \
   rse-advanced-git.Rmd \
   rse-automate.Rmd \
