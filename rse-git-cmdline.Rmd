@@ -518,140 +518,153 @@ because the two repositories are already synchronized.
 
 ## How can I explore a project's history? {#rse-git-cmdline-history}
 
---HERE--
+We have now made three changes to our project.
+Git lets us look at the previous versions of the project files
+and restore specific files to earlier states if we want to.
+To do this,
+we need to use an identifier that indicates the versions we want.
 
-Now that we've synced our local repository with GitHub, we can resume work on the eniac project.
-
-At this stage, we're starting to build up a history of changes to the project.
-Using Git, we have the ability to look at previous versions of the project files, and,
-if desired, restore a specific file to a previous state.
-To do this, we need to use an identifier to indicate which version of the file we want to examine/use.
-As we saw in a previous section, we can refer to commits by their identifiers.
-You can refer to the most recent commit of the working directory by using the identifier `HEAD`.
-
-For example, let's make a change to `names.txt` adding yet another line.
+There are two ways to do this,
+which are similar in spirit to [absolute][absolute-path] and [relative][relative-path] paths.
+The "absolute" version is the unique identifier that Git gives to each commit.
+These identifiers are 40 characters long,
+but in most situations Git will let us use just the first half dozen characters or so.
+For example,
+if we run `git log` right now,
+it shows us something like this:
 
 ```text
-Cold and dry, but everything is my favorite color
-The two moons may be a problem for Wolfman
-An ill-considered change
+commit f86520952f1f4ed3751ff407673203a57dab633c
+Author: Frances Bilas <frances@eniac.org>
+Date:   Thu Oct 10 09:41:24 2019 -0400
+
+    Adding missing name
+
+commit 61d3964f81a081d80dc49d9610d5bcbe454b2ad6
+Author: Frances Bilas <frances@eniac.org>
+Date:   Thu Oct 10 09:38:12 2019 -0400
+
+    Correcting typos in names
+
+commit 8e966b5f0703d347e4f84817f12b48f456a58ae1
+Author: Frances Bilas <frances@eniac.org>
+Date:   Thu Oct 10 09:30:03 2019 -0400
+
+    Starting notes on ENIAC personnel
 ```
 
-We can now use `HEAD` to see the change we made:
+If we add a title to the top of `names.txt` so that it contains:
 
-```shell
-$ git diff HEAD names.txt
+```text
+Personnel:
+Frances Bilas
+Jean Jennings
+Ruth Lichterman
+Kay McNulty
+Betty Snyder
+Marlyn Wescoff
 ```
+
+then `git diff` on its own will show the difference between the file as it is
+and the most recent version:
 
 ```text
 diff --git a/names.txt b/names.txt
-index b36abfd..0848c8d 100644
+index 53b863e..fddc85e 100644
 --- a/names.txt
 +++ b/names.txt
 @@ -1,3 +1,4 @@
- Cold and dry, but everything is my favorite color
- The two moons may be a problem for Wolfman
-+An ill-considered change.
++Personnel:
+ Frances Bilas
+ Jean Jennings
+ Ruth Lichterman
 ```
 
-which is the same as what you would get if you leave out `HEAD` (try it).
-The real goodness in all this is when referring to previous commits.
-We do that by adding `~1` 
-(where "~" is "tilde", pronounced [**til**-d*uh*]) 
-to refer to the commit one before `HEAD`.
+but `git diff -r 61d3964` shows the difference between the current state
+and the file as it was after that commit:
 
-```shell
-$ git diff HEAD~1 names.txt
+```text
+diff --git a/names.txt b/names.txt
+index 46a1948..fddc85e 100644
+--- a/names.txt
++++ b/names.txt
+@@ -1,5 +1,7 @@
++Personnel:
+ Frances Bilas
+ Jean Jennings
+ Ruth Lichterman
+ Kay McNulty
+ Betty Snyder
++Marlyn Wescoff
 ```
 
-If we want to see the differences between older commits we can use `git diff`
-again, but with the notation `HEAD~1`, `HEAD~2`, and so on, to refer to them:
+(Note that you may need to use a different identifier than `61d3964`.)
+
+The "relative" version of history relies on a special identifier called `HEAD`,
+which always refers to the most recent version in the repository.
+`git diff -r HEAD` (where the option `-r` is short for <strong>r</strong>evision)
+shows the same thing as `git diff`.
+Instead of typing in a version identifier to back up one commit,
+though,
+we can simply use `HEAD~1` (where `~` is the tilde symbol).
+This shorthand is read "HEAD minus one",
+and gives us the difference to the *previous* saved version.
+`git diff -r HEAD~2` goes back two revisions and so on.
+
+We can also look at the differences between two saved versions
+by separating their identifiers with two dots `..` like this:
 
 ```shell
-$ git diff HEAD~2 names.txt
+$ git diff -r HEAD~1..HEAD~2
 ```
 
 ```text
 diff --git a/names.txt b/names.txt
-index df0654a..b36abfd 100644
+index 46a1948..deca855 100644
 --- a/names.txt
 +++ b/names.txt
-@@ -1 +1,4 @@
- Cold and dry, but everything is my favorite color
-+The two moons may be a problem for Wolfman
-+An ill-considered change
+@@ -1,5 +1,5 @@
+ Frances Bilas
+ Jean Jennings
+ Ruth Lichterman
+-Kay McNulty
+-Betty Snyder
++Kay Mcnulty
++Betty Synder
 ```
 
-We could also use `git show` which shows us what changes we made at an older commit as 
-well as the commit message, rather than the _differences_ between a commit and our 
-working directory that we see by using `git diff`.
+If we want to see the changes made in a particular commit,
+we can use `git show`;
+we do not need the `-r` option in this case:
 
 ```shell
 $ git show HEAD~2 names.txt
 ```
 
 ```text
-commit f22b25e3233b4645dabd0d81e651fe074bd8e73b
+commit 8e966b5f0703d347e4f84817f12b48f456a58ae1
 Author: Frances Bilas <frances@eniac.org>
-Date:   Thu Aug 22 09:51:46 2013 -0400
+Date:   Thu Oct 10 09:30:03 2019 -0400
 
     Starting notes on ENIAC personnel
 
 diff --git a/names.txt b/names.txt
 new file mode 100644
-index 0000000..df0654a
+index 0000000..deca855
 --- /dev/null
 +++ b/names.txt
-@@ -0,0 +1 @@
-+Cold and dry, but everything is my favorite color
+@@ -0,0 +1,5 @@
++Frances Bilas
++Jean Jennings
++Ruth Lichterman
++Kay Mcnulty
++Betty Synder
 ```
 
-We can also refer to commits using
-those long strings of digits and letters
-that `git log` displays.
-These are unique IDs for the changes,
-and "unique" really does mean unique:
-every change to any set of files on any computer
-has a unique 40-character identifier.
-Our first commit was given the ID
-`f22b25e3233b4645dabd0d81e651fe074bd8e73b`,
-so let's try this:
+## How can I restore old versions of files? {#rse-git-cmdline-restore}
 
-```shell
-$ git diff f22b25e3233b4645dabd0d81e651fe074bd8e73b names.txt
-```
+--HERE--
 
-```text
-diff --git a/names.txt b/names.txt
-index df0654a..93a3e13 100644
---- a/names.txt
-+++ b/names.txt
-@@ -1 +1,4 @@
- Cold and dry, but everything is my favorite color
-+The two moons may be a problem for Wolfman
-+An ill-considered change
-```
-
-That's the right answer,
-but typing out random 40-character strings is annoying,
-so Git lets us use just the first few characters:
-
-```shell
-$ git diff f22b25e names.txt
-```
-
-```text
-diff --git a/names.txt b/names.txt
-index df0654a..93a3e13 100644
---- a/names.txt
-+++ b/names.txt
-@@ -1 +1,4 @@
- Cold and dry, but everything is my favorite color
-+The two moons may be a problem for Wolfman
-+An ill-considered change
-```
-
-All right!
 So we can save changes to files and see what we've changed—now how
 can we restore older versions of things?
 Let's suppose we change our mind about the last update to
