@@ -66,6 +66,9 @@
 [gh-myoctocat]: https://myoctocat.com
 [gh-pages]: https://pages.github.com/
 [git]: FIXME
+[git-ssh-bitbucket]: https://confluence.atlassian.com/bitbucket/set-up-ssh-for-git-728138079.html
+[git-ssh-github]: https://help.github.com/articles/generating-ssh-keys
+[git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
 [github-pages]: https://pages.github.com/
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [github]: http://github.com

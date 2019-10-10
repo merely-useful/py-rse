@@ -30,8 +30,8 @@ RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
   rse-bash.Rmd \
-  rse-cmdline-git.Rmd \
-  rse-advanced-git.Rmd \
+  rse-git-cmdline.Rmd \
+  rse-git-advanced.Rmd \
   rse-automate.Rmd \
   configure.Rmd \
   verify.Rmd \
@@ -115,7 +115,7 @@ _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf _book _bookdown_files _main.Rmd *.log
+	@rm -rf _book _bookdown_files _main.Rmd *.log rse.Rmd
 	@find . -name '*~' -exec rm {} \;
 
 ## links        : check that all links are defined and used.

@@ -247,7 +247,7 @@ $ git log
 
 ```text
 commit 8e966b5f0703d347e4f84817f12b48f456a58ae1
-Author: Greg Wilson <gvwilson@third-bit.com>
+Author: Frances Bilas <frances@eniac.org>
 Date:   Thu Oct 10 09:24:04 2019 -0400
 
     Starting notes on ENIAC personnel
@@ -404,96 +404,104 @@ $ git commit -a -m "Adding missing name"
  1 file changed, 1 insertion(+)
 ```
 
-## How can I tell Git to ignore some files? {#rse-git-cmdline-ignore}
+## How can I synchronize with other repositories? {#rse-git-cmdline-remotes}
 
---HERE--
+Sooner or later our computer will experience a hardware failure,
+be stolen,
+or be thrown in the lake by someone who thinks we shouldn't spend the *entire* vacation working on our thesis.
+Even before that happens
+we will probably want to collaborate with others,
+which we can do by linking our local repository to one stored on a hosting service such as [GitHub][github].
 
-We're only working with one file so far (`names.txt`),
-but what if we had lots of files in this directory?
-We might want to have git track our text (`.txt`) files, for instance,
-but not our data files (`.dat`).
-
-So that those data files don't show up as "untracked files" every time we call `git status`,
-we can create a file in the root directory of our project called `.gitignore`.
-In this file we can list all the files we want git to ignore.
-For example, we could add the line `*.dat` to `.gitignore` to ignore all the data files.
-
-Don't forget to add and commit the `.gitignore` file to your repository so that git
-knows to use it!
-
-## Remotes in GitHub {#rse-git-cmdline-remotes}
-
-One of the first things we did when learning Git via GitKraken or RStudio
-was to link our local repository with an external hosting service (GitHub).
-We will do that again here,
-so login to GitHub and create a new repository called `eniac`.
+The first step in doing that is to create an account on GitHub if we don't already have one,
+and then to create a new repository to synchronize with.
+The remote repository doesn't have to have the same name as the local one,
+but we will probably get confused if they are different,
+so the repository we create on GitHub will also be called `eniac`.
 
 The next step is to connect the two repositories.
-We do this by making the GitHub repository a remote for the local repository.
-The home page of the repository on GitHub includes the string we need to
-identify it:
+We do this by making the GitHub repository a [remote][remote-repository] for the local repository.
+The home page of the repository on GitHub includes the string we need to identify it:
 
-*TODO: Figure - Where to Find Repository URL on GitHub [../fig/github-find-repo-string.png](https://github.com/swcarpentry/git-novice/blob/gh-pages/fig/github-find-repo-string.png)*
+FIXME: figure (where to find repo link on GitHub)
 
-Click on the 'HTTPS' link to change the protocol from SSH to HTTPS.
+We can click on "HTTPS" to change the URL from SSH to HTTPS
+and then copy that URL.
 
 > **HTTPS vs. SSH**
 >
-> We use HTTPS here because it does not require additional configuration.  After
-> the workshop you may want to set up SSH access, which is a bit more secure, by
-> following one of the great tutorials from
-> [GitHub](https://help.github.com/articles/generating-ssh-keys),
-> [Atlassian/Bitbucket](https://confluence.atlassian.com/bitbucket/set-up-ssh-for-git-728138079.html)
-> and [GitLab](https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/)
-> (this one has a screencast).
+> We use HTTPS here because it does not require additional configuration.
+> You may want to set up SSH access,
+> which is a bit more secure,
+> by following one of the tutorials from [GitHub][git-ssh-github],
+> [Bitbucket][git-ssh-bitbucket],
+> or [GitLab][git-ssh-gitlab]
+> (the last of which includes a screencast).
 
-*TODO: Figure - Changing the Repository URL on GitHub [../fig/github-change-repo-string.png](https://github.com/swcarpentry/git-novice/blob/gh-pages/fig/github-change-repo-string.png)*
-
-Copy that URL from the browser, go into the local `eniac` repository, and run
-this command:
+Next,
+let's go into the local `eniac` repository and run this command:
 
 ```shell
 $ git remote add origin https://github.com/frances/eniac.git
 ```
 
-(Make sure to use the URL for your repository rather than Frances's: the only
-difference should be your username instead of `frances`.)
+Make sure to use the URL for your repository instead of the one shown:
+the only difference should be that it includes your username instead of `frances`.
 
-`origin` is a local name used to refer to the remote repository. It could be called
-anything, but `origin` is a convention that is often used by default in Git
-and GitHub, so it's helpful to stick with this unless there's a reason not to.
-
-We can check that the command has worked by running `git remote -v`:
+A Git remote is like a bookmark:
+it gives a short name to a URL.
+In this case,
+the remote's name is `origin`;
+we could use anything we want,
+but `origin` is Git's default,
+so we will stick with it.
+We can check that the command has worked by running `git remote -v`
+(where the `-v` option is short for <strong>v</strong>erbose):
 
 ```shell
 $ git remote -v
 ```
 
 ```text
-origin   https://github.com/frances/eniac.git (push)
-origin   https://github.com/frances/eniac.git (fetch)
+origin	https://github.com/frances/eniac.git (fetch)
+origin	https://github.com/frances/eniac.git (push)
 ```
 
-Once the remote is set up, this command will push the changes from
-our local repository to the repository on GitHub:
+Git displays two lines because it's actually possible to set up a remote
+to download from one URL but upload to another.
+Sensible people don't do this,
+so we won't explore this possibility any further.
+
+Once we have set up the remote,
+we can [push][git-push] the work we have done so far to the repository on GitHub:
 
 ```shell
 $ git push origin master
 ```
 
+This may prompt us to enter our username and password;
+once we do that,
+we see a few lines of administrative information:
+
+
 ```text
-Enumerating objects: 16, done.
-Counting objects: 100% (16/16), done.
-Delta compression using up to 8 threads.
-Compressing objects: 100% (11/11), done.
-Writing objects: 100% (16/16), 1.45 KiB | 372.00 KiB/s, done.
-Total 16 (delta 2), reused 0 (delta 0)
-remote: Resolving deltas: 100% (2/2), done.
-To https://github.com/frances/eniac.git
+Counting objects: 9, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (9/9), 833 bytes | 277.00 KiB/s, done.
+Total 9 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), done.
+To github.com:frances/eniac.git
  * [new branch]      master -> master
 ```
 
-We can pull changes from the remote repository to the local one as well:
+If we view our GitHub repository in the browser,
+we will now see that it includes `names.txt`
+along with all of the commits we made to create it.
+
+FIXME: screenshot
+
+We can now [pull][git-pull] changes from the remote repository to the local one as well:
 
 ```shell
 $ git pull origin master
@@ -505,11 +513,12 @@ From https://github.com/frances/eniac
 Already up-to-date.
 ```
 
-Pulling has no effect in this case because the two repositories are already
-synchronized.
+Pulling has no effect in this case
+because the two repositories are already synchronized.
 
+## How can I explore a project's history? {#rse-git-cmdline-history}
 
-## Exploring history {#rse-git-cmdline-history}
+--HERE--
 
 Now that we've synced our local repository with GitHub, we can resume work on the eniac project.
 
@@ -722,6 +731,21 @@ $ git checkout HEAD names.txt
 
 *TODO: Figure - Git Checkout [../fig/git-checkout.svg](https://github.com/swcarpentry/git-novice/blob/gh-pages/fig/git-checkout.svg)*
 
+
+## How can I tell Git to ignore some files? {#rse-git-cmdline-ignore}
+
+We're only working with one file so far (`names.txt`),
+but what if we had lots of files in this directory?
+We might want to have git track our text (`.txt`) files, for instance,
+but not our data files (`.dat`).
+
+So that those data files don't show up as "untracked files" every time we call `git status`,
+we can create a file in the root directory of our project called `.gitignore`.
+In this file we can list all the files we want git to ignore.
+For example, we could add the line `*.dat` to `.gitignore` to ignore all the data files.
+
+Don't forget to add and commit the `.gitignore` file to your repository so that git
+knows to use it!
 
 ## Exercises {#rse-git-cmdline-exercises}
 
@@ -1284,6 +1308,3 @@ $ git log --patch HEAD~9 *.txt
 
 ```{r, child="./links.md"}
 ```
-
-
-GREG WILSON
