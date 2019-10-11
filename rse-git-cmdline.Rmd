@@ -598,7 +598,9 @@ index 46a1948..fddc85e 100644
 +Marlyn Wescoff
 ```
 
-(Note that you may need to use a different identifier than `61d3964`.)
+Note that you may need to use a different identifier than `61d3964`.
+Note also that we have *not* committed this change:
+we will look at ways of undoing it in the next section.
 
 The "relative" version of history relies on a special identifier called `HEAD`,
 which always refers to the most recent version in the repository.
@@ -663,15 +665,12 @@ index 0000000..deca855
 
 ## How can I restore old versions of files? {#rse-git-cmdline-restore}
 
---HERE--
-
-So we can save changes to files and see what we've changed—now how
-can we restore older versions of things?
-Let's suppose we change our mind about the last update to
-`names.txt` (the "ill-considered change").
-
-`git status` now tells us that the file has been changed,
-but those changes haven't been staged:
+We can see what we changed,
+but how can we restore it?
+Let's suppose we change our mind about the last update to `names.txt`
+before we add it or commit it.
+`git status` tells us that the file has been changed,
+but those changes haven't been [staged][git-stage]:
 
 ```shell
 $ git status
@@ -688,38 +687,56 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-We can put things back the way they were
-by using `git checkout`:
+We can put things back the way they were in the last saved revision using `git checkout`:
 
 ```shell
 $ git checkout HEAD names.txt
+$ git status
+```
+
+```text
+On branch master
+nothing to commit, working tree clean
+```
+
+```shell
 $ cat names.txt
 ```
 
 ```text
-Cold and dry, but everything is my favorite color
-The two moons may be a problem for Wolfman
+Frances Bilas
+Jean Jennings
+Ruth Lichterman
+Kay McNulty
+Betty Snyder
+Marlyn Wescoff
 ```
 
-As you might guess from its name,
+As its name suggests,
 `git checkout` checks out (i.e., restores) an old version of a file.
 In this case,
-we're telling Git that we want to recover the version of the file recorded in `HEAD`,
-which is the last saved commit.
-If we want to go back even further,
-we can use a commit identifier instead:
+we told Git to recover the version of the file saved in `HEAD`,
+i.e.,
+in the most recent commit.
+We can use a commit identifier to go back as far as we want:
 
 ```shell
-$ git checkout f22b25e names.txt
-```
-
-```shell
+$ git checkout 8e966b5 names.txt
 $ cat names.txt
 ```
 
 ```text
-Cold and dry, but everything is my favorite color
+Frances Bilas
+Jean Jennings
+Ruth Lichterman
+Kay Mcnulty
+Betty Synder
 ```
+
+Doing this does *not* change the history:
+`git log` still shows our three commits.
+Instead,
+it replaces the content of the file with the old content:
 
 ```shell
 $ git status
@@ -730,124 +747,84 @@ On branch master
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
-    modified:   names.txt
-
+	modified:   names.txt
 ```
 
-Notice that the changes are on the staged area.
-Again, we can put things back the way they were
-by using `git checkout`:
+Notice that the changes have already been added to the staging area for new commits.
+We can bring the file back in sync with the most recent commit using `git checkout`:
 
 ```shell
 $ git checkout HEAD names.txt
+$ git status
 ```
 
-*TODO: Figure - Git Checkout [../fig/git-checkout.svg](https://github.com/swcarpentry/git-novice/blob/gh-pages/fig/git-checkout.svg)*
+```text
+On branch master
+nothing to commit, working tree clean
+```
 
+```shell
+$ cat names.txt
+```
+
+```text
+Frances Bilas
+Jean Jennings
+Ruth Lichterman
+Kay McNulty
+Betty Snyder
+Marlyn Wescoff
+```
+
+Since we didn't commit the change in which we added the line `Personnel`,
+that work is now lost:
+Git can only go back and forth between committed versions of files.
 
 ## How can I tell Git to ignore some files? {#rse-git-cmdline-ignore}
 
-We're only working with one file so far (`names.txt`),
-but what if we had lots of files in this directory?
-We might want to have git track our text (`.txt`) files, for instance,
-but not our data files (`.dat`).
+We have only modified one file in this tutorial,
+but everything we have done works just as well with multiple files.
+Sometimes,
+though,
+we don't want Git to track files' history.
+For example,
+we might want to track text files with names ending in `.txt`
+but not data files with names ending in `.dat`.
 
-So that those data files don't show up as "untracked files" every time we call `git status`,
+To stop Git from telling us about these files every time we call `git status`,
 we can create a file in the root directory of our project called `.gitignore`.
-In this file we can list all the files we want git to ignore.
-For example, we could add the line `*.dat` to `.gitignore` to ignore all the data files.
+This file can contain filenames like `thesis.pdf`
+or [wildcard][wildcard] patterns like `*.dat`.
+Each must be on a line of its own,
+and Git will ignore anything that matches any of these lines.
 
-Don't forget to add and commit the `.gitignore` file to your repository so that git
-knows to use it!
+> **Remember to Ignore**
+>
+> Don't forget to commit `.gitignore` to your repository
+> so that Git knows to use it.
 
 ## Exercises {#rse-git-cmdline-exercises}
 
-### Creating a repository
+### Places to create Git repositories {#rse-git-cmdline-ex-places}
 
-**Places to Create Git Repositories**
-
-Along with tracking information about eniac (the project we have already created), 
-Bilas would also like to track information about moons.
-Despite Wolfman's concerns, Bilas creates a `moons` project inside his `eniac` 
-project with the following sequence of commands:
+Along with information about the ENIAC project,
+Frances would also like to keep some notes on the UNIVAC.
+Despite her colleagues' concerns,
+Frances creates a `univac` project inside her `eniac` project as follows:
 
 ```shell
-$ cd ~   # return to Desktop directory
-$ cd eniac     # go into eniac directory, which is already a Git repository
-$ ls -a          # ensure the .git sub-directory is still present in the eniac directory
-$ mkdir moons    # make a sub-directory eniac/moons
-$ cd moons       # go into moons sub-directory
-$ git init       # make the moons sub-directory a Git repository
-$ ls -a          # ensure the .git sub-directory is present indicating we have created a new Git repository
+$ cd ~/eniac     # go into eniac directory, which is already a Git repository
+$ mkdir univac   # make a sub-directory eniac/univac
+$ cd univac      # go into univac sub-directory
+$ git init       # make univac a Git repository
 ```
 
-Is the `git init` command, run inside the `moons` sub-directory, required for 
-tracking files stored in the `moons` sub-directory?
+Is the `git init` command that she runs inside the `univac` sub-directory
+required for tracking files stored there?
  
-> *Solution*
->
-> No. Bilas does not need to make the `moons` sub-directory a Git repository 
-> because the `eniac` repository will track all files, sub-directories, and 
-> sub-directory files under the `eniac` directory.  Thus, in order to track 
-> all information about moons, Bilas only needed to add the `moons` sub-directory
-> to the `eniac` directory.
-> 
-> Additionally, Git repositories can interfere with each other if they are "nested":
-> the outer repository will try to version-control
-> the inner repository. Therefore, it's best to create each new Git
-> repository in a separate directory. To be sure that there is no conflicting
-> repository in the directory, check the output of `git status`. If it looks
-> like the following, you are good to go to create a new repository as shown
-> above:
->
-> ```shell
-> $ git status
-> ```
->
-> ```text
-> fatal: Not a git repository (or any of the parent directories): .git
-> ```
+### Committing changes {#rse-git-cmdline-ex-commit}
 
-
-**Correcting `git init` Mistakes**
-
-Wolfman explains to Bilas how a nested repository is redundant and may cause confusion
-down the road. Bilas would like to remove the nested repository. How can Bilas undo 
-his last `git init` in the `moons` sub-directory?
-
-> *Background*
-> 
-> Removing files from a git repository needs to be done with caution. To remove files from the working tree and not from your working directory, use
-> 
-> ```shell
-> $ rm filename
-> ```
-> 
-> The file being removed has to be in sync with the branch head with no updates.
-> If there are updates, the file can be removed by force by using the `-f` option.
-> Similarly a directory can be removed from git using `rm -r dirname` or `rm -rf dirname`.
->
-> *Solution - USE WITH CAUTION*
->
-> Git keeps all of its files in the `.git` directory.
-> To recover from this little mistake, Bilas can just remove the `.git`
-> folder in the moons subdirectory by running the following command from inside the `eniac` directory:
->
-> ```shell
-> $ rm -rf moons/.git
-> ```
->
-> But be careful! Running this command in the wrong directory, will remove
-> the entire Git history of a project you might want to keep.
-> Therefore, always check your current directory using the command `pwd`.
-
-
-### Tracking changes
-
-**Committing Changes to Git**
-
-Which command(s) below would save the changes of `myfile.txt`
-to my local Git repository?
+Which command(s) below would save changes to `myfile.txt` to a local Git repository?
 
 1. ```shell
    $ git commit -m "my recent changes"
@@ -867,452 +844,136 @@ to my local Git repository?
    $ git commit -m myfile.txt "my recent changes"
    ```
 
-> *Solution*
->
-> 1. Would only create a commit if files have already been staged.  
-> 2. Would try to create a new repository.  
-> 3. Is correct: first add the file to the staging area, then commit.  
-> 4. Would try to commit a file "my recent changes" with the message myfile.txt.  
-
-
-**Committing Multiple Files**
+### Committing multiple files {#rse-git-cmdline-ex-multiple}
 
 The staging area can hold changes from any number of files
 that you want to commit as a single snapshot.
 
-1. Add some text to `names.txt` noting your decision
-to consider Venus as a base
+1.  Add some commas to `names.txt` to separate first and last names.
 
-2. Create a new file `venus.txt` with your initial thoughts
-about Venus as a base for you and your friends
+2.  Create a new file `old-computers.txt`
+    and write a few lines about the first computer you remember seeing or using.
 
-3. Add changes from both files to the staging area,
-and commit those changes.
+3.  Add changes from both files to the staging area
+    and commit those changes.
 
-> *Solution*
->
-> First we make our changes to the `names.txt` and `venus.txt` files:  
-> ```shell
-> $ nano names.txt
-> $ cat names.txt
-> ```
->
-> ```text
-> Maybe I should start with a base on Venus.
-> ```
->
-> ```shell
-> $ nano venus.txt
-> $ cat venus.txt
-> ```
->
-> ```text
-> Venus is a nice planet and I definitely should consider it as a base.
-> ```
->
-> Now you can add both files to the staging area. We can do that in one line:
->
-> ```shell
-> $ git add names.txt venus.txt
-> ```
-> 
-> Or with multiple commands:  
->
-> ```shell
-> $ git add names.txt
-> $ git add venus.txt
-> ```
->
-> Now the files are ready to commit. You can check that using `git status`. If you are ready to commit use:
->
-> ```shell
-> $ git commit -m "Write plans to start a base on Venus"
-> ```
-> ```text
-> [master cc127c2]
-> Write plans to start a base on Venus
-> 2 files changed, 2 insertions(+)
-> create mode 100644 venus.txt
-> ```
+### Write a biography {#rse-git-cmdline-ex-bio}
 
-**`bio` Repository**
+-   Create a new Git repository on your computer called `bio`.  
+-   Write a three-line biography for yourself in a file called `me.txt` and commit your changes. 
+-   Modify one line and add a fourth line. 
+-   Display the differences between the file's original state and its updated state.
 
-* Create a new Git repository on your computer called `bio`.  
-* Write a three-line biography for yourself in a file called `me.txt`, commit your changes. 
-* Modify one line, add a fourth line. 
-* Display the differences between its updated state and its original state.  
+### Ignoring nested files {#rse-git-cmdline-ex-ignore-nested}
 
-> *Solution*
->
-> If needed, move out of the `eniac` folder:
->
-> ```shell
-> $ cd ..
-> ```
->
-> Create a new folder called `bio` and 'move' into it:
->
-> ```shell
-> $ mkdir bio
-> $ cd bio
-> ```
->
-> Initialise git:
->
-> ```shell
-> $ git init
-> ```
->
-> Create your biography file `me.txt` using `nano` or another text editor.
-> Once in place, add and commit it to the repository:
->
-> ```shell
-> $ git add me.txt
-> $ git commit -m'Adding biography file'
-> ```
->
-> Modify the file as described (modify one line, add a fourth line).
-> To display the differences
-> between its updated state and its original state, use `git diff`:
->
-> ```shell
-> $ git diff me.txt
-> ```
+Suppose our project has a directory `results` with two sub-directories called `data` and `plots`.
+How would we ignore all of the files in `results/plots`
+but not ignore files in `results/data`?
 
-### Ignoring things
-
-**Ignoring Nested Files**
-
-Given a directory structure that looks like:
-
-```shell
-results/data
-results/plots
-```
-
-How would you ignore only `results/plots` and not `results/data`?
-
-> *Solution*
->
-> If you only want to ignore the contents of
-> `results/plots`, you can change your `.gitignore` to ignore
-> only the `/plots/` subfolder by adding the following line to
-> your .gitignore:
-> 
-> ```text
-> results/plots/
-> ```
->
-> This line will ensure only the contents of `results/plots` is ignored, and
-> not the contents of `results/data`.
-> 
-> As with most programming issues, there
-> are a few alternative ways that one may ensure this ignore rule is followed.
-> The "Ignoring Nested Files: Variation" exercise has a slightly
-> different directory structure
-> that presents an alternative solution.
-> Further, the discussion page has more detail on ignore rules.
-
-
-**Including Specific Files**
+### Including specific files {#rse-git-cmdline-ex-include}
 
 How would you ignore all `.dat` files in your root directory except for `final.dat`?
+(Hint: find out what the exclamation mark `!` means in a `.gitignore` file.)
 
-Hint: Find out what `!` (the exclamation point operator) does.
-
-> *Solution*
-> 
-> You would add the following two lines to your .gitignore:
-> 
-> ```text
-> *.dat           # ignore all data files
-> !final.dat      # except final.data
-> ```
->
-> The exclamation point operator will include a previously excluded entry.
-> 
-> Note also that because you've previously committed `.dat` files in this
-> lesson they will not be ignored with this new rule. Only future additions
-> of `.dat` files added to the root directory will be ignored.
-
-
-### Remotes in GitHub
-
-**GitHub GUI**
+### Exploring the GitHub interface {#rse-git-cmdline-ex-github-interface}
 
 Browse to your `eniac` repository on GitHub.
-Under the Code tab, find and click on the text that says "XX commits" (where "XX" is some number).
-Hover over, and click on, the three buttons to the right of each commit.
+Under the `Code` tab,
+find and click on the text that says "NN commits" (where "NN" is some number).
+Hover over and click on the three buttons to the right of each commit.
 What information can you gather/explore from these buttons?
 How would you get that same information in the shell?
 
-> *Solution*
->
-> The left-most button (with the picture of a clipboard) copies the full identifier of the commit 
-> to the clipboard. In the shell, ```git log``` will show you the full commit identifier for each 
-> commit.
-> 
-> When you click on the middle button, you'll see all of the changes that were made in that 
-> particular commit. Green shaded lines indicate additions and red ones removals. In the shell we 
-> can do the same thing with ```git diff```. In particular, ```git diff ID1..ID2``` where ID1 and 
-> ID2 are commit identifiers (e.g. ```git diff a3bf1e5..041e637```) will show the differences 
-> between those two commits.
-> 
-> The right-most button lets you view all of the files in the repository at the time of that 
-> commit. To do this in the shell, we'd need to checkout the repository at that particular time. 
-> We can do this with ```git checkout ID``` where ID is the identifier of the commit we want to 
-> look at. If we do this, we need to remember to put the repository back to the right state 
-> afterwards!
+### GitHub timestamps {#rse-git-cmdline-ex-timestamp}
 
+-   Create a remote repository on GitHub.
+-   Push the contents of your local repository to the remote.
+-   Make changes to your local repository and push these changes as well.
+-   Go to the repo you just created on GitHub and check the timestamps of the files.
 
-**GitHub Timestamp**
+How does GitHub record times, and why?
 
-Create a remote repository on GitHub. Push the contents of your local
-repository to the remote. Make changes to your local repository and push these
-changes. Go to the repo you just created on GitHub and check the
-timestamps of the files. How does GitHub record times, and why?
+### Push versus commit {#rse-git-cmdline-ex-push-commit}
 
-> *Solution*
->
-> GitHub displays timestamps in a human readable relative format (i.e. "22 hours ago" or "three 
-> weeks ago"). However, if you hover over the timestamp, you can see the exact time at which the 
-> last change to the file occurred.
+How is `git push` different from `git commit`?
 
+### License and README files {#rse-git-cmdline-ex-boilerplate}
 
-**Push vs. Commit**
+When we initialized our GitHub repo,
+we didn't add a `README.md` or license file.
+If we had,
+what would have happened when we tried to link our local and remote repositories?
 
-In this lesson, we introduced the "git push" command.
-How is "git push" different from "git commit"?
+### Recovering older versions of a file {#rse-git-cmdline-ex-recover}
 
-> *Solution*
->
-> When we push changes, we're interacting with a remote repository to update it with the changes 
-> we've made locally (often this corresponds to sharing the changes we've made with others). 
-> Commit only updates your local repository.
+Jennifer made changes this morning to a shell script called `data_cruncher.sh`
+that she has been working on for weeks.
+Her changes broke the script,
+and she has now spent an hour trying to get it back in working order.
+Luckily,
+she has been keeping track of her project's versions using Git.
+Which of the commands below can she use
+torecover the last committed version of her script?
 
+1.  `$ git checkout HEAD`
+2.  `$ git checkout HEAD data_cruncher.sh`
+3.  `$ git checkout HEAD~1 data_cruncher.sh`
+4.  `$ git checkout <unique ID of last commit> data_cruncher.sh`
+5.  Both 2 and 4
 
-**GitHub License and README files**
+### Workflow and history {#rse-git-cmdline-ex-history}
 
-In this section we learned about creating a remote repository on GitHub, but when you initialized 
-your GitHub repo, you didn't add a README.md or a license file. If you had, what do you think 
-would have happened when you tried to link your local and remote repositories?
-
-> *Solution*
->
-> In this case, we'd see a merge conflict due to unrelated histories. When GitHub creates a 
-> README.md file, it performs a commit in the remote repository. When you try to pull the remote 
-> repository to your local repository, Git detects that they have histories that do not share a 
-> common origin and refuses to merge.
->
-> ```shell
-> $ git pull origin master
-> ```
->
-> ```text
-> warning: no common commits
-> remote: Enumerating objects: 3, done.
-> remote: Counting objects: 100% (3/3), done.
-> remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
-> Unpacking objects: 100% (3/3), done.
-> From https://github.com/frances/eniac
->  * branch            master     -> FETCH_HEAD
->  * [new branch]      master     -> origin/master
-> fatal: refusing to merge unrelated histories
-> ```
->
-> You can force git to merge the two repositories with the option `--allow-unrelated-histories`. 
-> Be careful when you use this option and carefully examine the contents of local and remote 
-> repositories before merging.
->
-> ```shell
-> $ git pull --allow-unrelated-histories origin master
-> ```
-> 
-> ```text
-> From https://github.com/frances/eniac
->  * branch            master     -> FETCH_HEAD
-> Merge made by the 'recursive' strategy.
-> README.md | 1 +
-> 1 file changed, 1 insertion(+)
-> create mode 100644 README.md
-> ```
-
-
-### Exploring history
-
-
-**Recovering Older Versions of a File**
-
-Jennifer has made changes to the Python script that she has been working on for weeks, and the
-modifications she made this morning "broke" the script and it no longer runs. She has spent
-~ 1hr trying to fix it, with no luck...
-
-Luckily, she has been keeping track of her project's versions using Git! Which commands below will
-let her recover the last committed version of her Python script called
-`data_cruncher.py`?
-
-1. `$ git checkout HEAD`
-
-2. `$ git checkout HEAD data_cruncher.py`
-
-3. `$ git checkout HEAD~1 data_cruncher.py`
-
-4. `$ git checkout <unique ID of last commit> data_cruncher.py`
-
-5. Both 2 and 4
-
-> *Solution*
->
-> The answer is (5)-Both 2 and 4. 
-> 
-> The `checkout` command restores files from the repository, overwriting the files in your working 
-> directory. Answers 2 and 4 both restore the *latest* version *in the repository* of the file 
-> `data_cruncher.py`. Answer 2 uses `HEAD` to indicate the *latest*, whereas answer 4 uses the 
-> unique ID of the last commit, which is what `HEAD` means. 
-> 
-> Answer 3 gets the version of `data_cruncher.py` from the commit *before* `HEAD`, which is NOT 
-> what we wanted.
-> 
-> Answer 1 can be dangerous! Without a filename, `git checkout` will restore **all files** 
-> in the current directory (and all directories below it) to their state at the commit specified. 
-> This command will restore `data_cruncher.py` to the latest commit version, but it will also 
-> restore *any other files that are changed* to that version, erasing any changes you may 
-> have made to those files!
-> As discussed above, you are left in a *detached* `HEAD` state, and you don't want to be there.
-
-
-**Reverting a Commit**
-
-Jennifer is collaborating on her Python script with her colleagues and
-realizes her last commit to the project's repository contained an error and
-she wants to undo it.  `git revert [erroneous commit ID]` will create a new 
-commit that reverses Jennifer's erroneous commit. Therefore `git revert` is
-different to `git checkout [commit ID]` because `git checkout` returns the
-files within the local repository to a previous state, whereas `git revert`
-reverses changes committed to the local and project repositories.  
-Below are the right steps and explanations for Jennifer to use `git revert`,
-what is the missing command?
-
-1. `________ # Look at the git history of the project to find the commit ID`
-
-2. Copy the ID (the first few characters of the ID, e.g. 0b1d055).
-
-3. `git revert [commit ID]`
-
-4. Type in the new commit message.
-
-5. Save and close
-
-
-**Understanding Workflow and History**
-
-What is the output of the last command in
+What is the output of the last command in the sequence below?
 
 ```
 $ cd eniac
-$ echo "Venus is beautiful and full of love" > venus.txt
-$ git add venus.txt
-$ echo "Venus is too hot to be suitable as a base" >> venus.txt
-$ git commit -m "Comment on Venus as an unsuitable base"
-$ git checkout HEAD venus.txt
-$ cat venus.txt #this will print the contents of venus.txt to the screen
+$ echo "ENIAC was the world's first computer." > history.txt
+$ git add history.txt
+$ echo "ENIAC was the world's first general-purpose electronic computer." > history.txt
+$ git commit -m "Origins of ENIAC"
+$ git checkout HEAD history.txt
+$ cat history.txt
 ```
 
 1. ```text
-   Venus is too hot to be suitable as a base
+   ENIAC was the world's first computer.
    ```
 
 2. ```
-   Venus is beautiful and full of love
+   ENIAC was the world's first general-purpose electronic computer.
    ```
 
 3. ```
-   Venus is beautiful and full of love
-   Venus is too hot to be suitable as a base
+   ENIAC was the world's first computer.
+   ENIAC was the world's first general-purpose electronic computer.
    ```
 
-4. ```
-   Error because you have changed venus.txt without committing the changes
-   ```
+4. An error message because we have changed `history.txt` without committing first.
 
-> *Solution*
->
-> The answer is 2. 
->  
-> The command `git add venus.txt` places the current version of `venus.txt` into the staging area. 
-> The changes to the file from the second `echo` command are only applied to the working copy, 
-> not the version in the staging area.
->  
-> So, when `git commit -m "Comment on Venus as an unsuitable base"` is executed, 
-> the version of `venus.txt` committed to the repository is the one from the staging area and
-> has only one line.
->   
-> At this time, the working copy still has the second line (and 
-> `git status` will show that the file is modified). However, `git checkout HEAD venus.txt` 
-> replaces the working copy with the most recently committed version of `venus.txt`.
->   
->  So, `cat venus.txt` will output 
->  
->  ```text
->  Venus is beautiful and full of love.
->  ```
+### Understanding `git diff` {#rse-git-cmdline-ex-diff}
 
+-   What will the command `git diff HEAD~9 names.txt` do if we run it?
+-   What does it actually do?
+-   What does `git diff HEAD names.txt` do?
 
-**Checking Understanding of `git diff`**
+### Getting rid of staged changes {#rse-git-cmdline-ex-unstage}
 
-Consider this command: `git diff HEAD~9 names.txt`. What do you predict this command
-will do if you execute it? What happens when you do execute it? Why?
+`git checkout` can be used to restore a previous commit when unstaged changes have been made,
+but will it also work for changes that have been staged but not committed?
+To find out:
 
-Try another command, `git diff [ID] names.txt`, where [ID] is replaced with
-the unique identifier for your most recent commit. What do you think will happen,
-and what does happen?
+-   Change `names.txt`.
+-   `git add` that change.
+-   Use `git checkout` to see if you can remove your change.
 
+Does it work?
 
-**Getting Rid of Staged Changes**
+### Figuring out who did what {#rse-git-cmdline-ex-blame}
 
-`git checkout` can be used to restore a previous commit when unstaged changes have
-been made, but will it also work for changes that have been staged but not committed?
-Make a change to `names.txt`, add that change, and use `git checkout` to see if
-you can remove your change.
+Run the command `git blame names.txt`.
 
-
-**Explore and Summarize Histories**
-
-Exploring history is an important part of Git, often it is a challenge to find
-the right commit ID, especially if the commit is from several months ago.
-
-Imagine the `eniac` project has more than 50 files.
-You would like to find a commit with specific text in `names.txt` is modified.
-When you type `git log`, a very long list appeared,
-How can you narrow down the search?
-
-Recall that the `git diff` command allow us to explore one specific file,
-e.g. `git diff names.txt`. We can apply a similar idea here.
-
-```shell
-$ git log names.txt
-```
-
-Unfortunately some of these commit messages are very ambiguous e.g. `update files`.
-How can you search through these files?
-
-Both `git diff` and `git log` are very useful and they summarize a different part of the history 
-for you.
-Is it possible to combine both? Let's try the following:
-
-```shell
-$ git log --patch names.txt
-```
-
-You should get a long list of output, and you should be able to see both commit messages and 
-the difference between each commit.
-
-Question: What does the following command do?
-
-```shell
-$ git log --patch HEAD~9 *.txt
-```
-
+-   What does each line of the output show?
+-   Why do some lines start with a circumflex `^`?
 
 ## Key Points {#rse-git-cmdline-keypoints}
 
