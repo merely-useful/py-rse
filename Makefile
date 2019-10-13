@@ -41,7 +41,6 @@ RSE_FILES=\
   inclusive.Rmd \
   rse-ci.Rmd \
   rse-r-package.Rmd \
-  rse-r-testing.Rmd \
   rse-py-package.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
