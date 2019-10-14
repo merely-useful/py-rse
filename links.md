@@ -110,6 +110,9 @@
 [r-markdown]: https://rmarkdown.rstudio.com/
 [r-style-guide-files]: https://style.tidyverse.org/files.html
 [r-style-guide]: https://style.tidyverse.org/
+[r-pkg-book]: http://r-pkgs.had.co.nz/
+[r-pkg-book-testing]: http://r-pkgs.had.co.nz/tests.html
+[r-testthat]: https://testthat.r-lib.org/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [reproducible-research]: FIXME
 [requests]: http://docs.python-requests.org
