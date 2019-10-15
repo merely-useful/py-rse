@@ -1,4 +1,0 @@
--   `ssh` is a secure way to log in to a remote computer.
--   `scp` is a secure way to copy files to and from a remote computer.
--   SSH is a secure alternative to username/password authorization.
--   SSH keys are generated in pairs: the public key can be shared with others, but the private keys stays on your machine only.

@@ -1,4 +1,0 @@
--   Explain what SSH is and when it should be used.
--   Use `ssh` to connect to a remote computer.
--   Use `scp` to copy files to and from remote computers.
--   Generate and install an SSH key pair.

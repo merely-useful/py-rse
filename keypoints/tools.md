@@ -1,8 +1,0 @@
--   Choose an editor that is kind to your wrists, portable, syntax-aware, programmable, and can handle Unicode characters.
--   A symbolic debugger is a program that allows you to control and inspect the execution of another program.
--   Symbolic debuggers are a much more efficient way to find most bugs than `print` statements.
--   A profiler records and reports the execution time of the statements in a program.
--   Instrumenting profilers modify the source code to check the clock and record start and end times for statements.
--   Sampling profilers interrupt a program's execution to build a histogram of execution times.
--   An integrated development environment (IDE) combines editing, execution, profiling, code checking, and many other tools in one.
--   Use `cron` or `at` to execute tasks periodically or at some future time respectively.

@@ -174,6 +174,14 @@
 **Docstring**<a id="docstring"></a>
 :   FIXME
 
+**DRY (Don't Repeat Yourself)**<a id="dry"></a>
+:   The general principle when programming that it's typically better to define
+    something (a function, a constant...) once and refer to it consistently 
+    as a "single source of truth" throughout a piece of software than to 
+    define copies in multiple places, if only because then you only have to
+    make any changes in one place.  This is useful and helpful principle but should
+    not be thought of as an involate rule.
+
 **Environment**<a id="environment"></a>
 :   FIXME
 
@@ -359,6 +367,11 @@
 **MIT License**<a id="mit-license"></a>
 :   FIXME
 
+**Namespace**<a id="namespace"></a>
+:   A way of organizing names of related objects, functions,
+    or variables, to avoid confusion with (for instance) common names that
+    might well occur in multiple packages.
+
 **Not Invented Here**<a id="not-invented-here"></a> (NIH)
 :   FIXME
 
@@ -460,6 +473,15 @@
 **Relative error**<a id="relative-error"></a>
 :   FIXME
 
+**Relative import**<a id="relative-import"></a>
+:   In Python, the importing of a module relative to the current path
+    and thus likely from within the current package (*e.g.*, `from . import generate`)
+    rather than an import from a globally-defined package (*e.g.*, `from zipfpy import generate`).
+
+**Restructured Text (reST)**<a id="restructured-text"></a>
+:   A plain text markup language used by much Python documentation and
+    documentation tooling.
+
 **Remote login**<a id="remote-login"></a>
 :   FIXME
 
@@ -521,6 +543,9 @@
 :   FIXME
 
 **Situational action**<a id="situational-action"></a>
+:   FIXME
+
+**Snake case**<a id="snake-case"></a>
 :   FIXME
 
 **Software development process**<a id="dev-process"></a>
@@ -648,7 +673,11 @@
 :   FIXME
 
 **Virtual environment**<a id="virtual-environment"></a>
-:   FIXME
+:   In Python, the `virtualenv` package allows you to create virtual, disposable,
+    python software environments containing only the packages and versions of packages
+    you want to use for a particular project or task, and to install new packages
+    into the environment without affecting other virtual environments or the system-wide
+    default environment.
 
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG)
 :   FIXME
