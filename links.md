@@ -71,7 +71,7 @@
 
 [joss]: https://joss.theoj.org/
 [jupyter]: http://jupyter.org/
-[jupytext]: FIXME
+[jupytext]: https://jupytext.readthedocs.io/en/latest/introduction.html
 
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -105,7 +105,7 @@
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 
-[r]: FIXME
+[r]: https://cran.r-project.org/
 [r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
 [r-style-guide-files]: https://style.tidyverse.org/files.html
@@ -120,7 +120,8 @@
 [rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
 [roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 [rse]: FIXME
-[rstudio]: FIXME
+[rstudio]: https://rstudio.com/
+[rstudio-addin]: https://rstudio.github.io/rstudioaddins/
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [rstudio-r-projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
