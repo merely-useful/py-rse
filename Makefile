@@ -32,7 +32,6 @@ RSE_FILES=\
   rse-cmdline-git.Rmd \
   rse-advanced-git.Rmd \
   rse-automate.Rmd \
-  configure.Rmd \
   verify.Rmd \
   backlog.Rmd \
   style.Rmd \
