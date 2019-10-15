@@ -158,7 +158,23 @@
 **Digital Object Identifier**<a id="doi"></a> (DOI)
 :   FIXME
 
+**Directory**<a id="directory"></a>
+:   A folder in a filesystem. 
+
+**Directory Tree**<a id="directory-tree"></a>
+:   If the nesting relationships between directories in a filesystem 
+    are drawn as arrows from the containing directory to the nested ones, a 
+    tree structure develops. 
+
+**Disk**<a id="disk"></a>
+:   Disk refers to disk storage, a physical component of a computer that stores 
+    information on a disk. The most common kind of disk storage is a hard disk 
+    drive, which is a storage drive with a non-removable disk. 
+
 **Docstring**<a id="docstring"></a>
+:   FIXME
+
+**Environment**<a id="environment"></a>
 :   FIXME
 
 **Embedded documentation**<a id="embedded-documentation"></a>
@@ -210,6 +226,11 @@
 
 **Filename stem**<a id="filename-stem"></a>
 :   FIXME
+
+**Filesystem**<a id="filesystem"></a>
+:   Controls how files are stored and retrieved on disk by an operating system.
+    Also used to refer to the disk that is used to store the files or the type 
+    of the filesystem. 
 
 **Fixture**<a id="fixture"></a>
 :   FIXME
@@ -322,9 +343,18 @@
 **Mantissa**<a id="mantissa"></a>
 :   FIXME
 
+**Memory**<a id="memory"></a>
+:   A physical device on your computer that temporarily stores information
+    for immediate use. 
+
 **Mental model**<a id="mental-model"></a>
 :   A simplified representation of the key elements and relationships of some
     problem domain that is good enough to support problem solving.
+
+**Method**<a id="method"></a>
+:   A function that is specific to an object type, based on qualities 
+    of that type, e.g. a string method like `upper()` which turns characters 
+    in a string to uppercase. 
 
 **MIT License**<a id="mit-license"></a>
 :   FIXME
@@ -335,6 +365,10 @@
 **Novice**<a id="novice"></a>
 :   Someone who has not yet built a usable mental model of a domain. See also
     [competent practitioner](#g:competent-practitioner) and [expert](#g:expert).
+
+**Object**<a id="object"></a>
+:   An object is a programming language's way of descrbing and storing values, 
+    usually labeled with a variable name. 
 
 **Object-oriented programming**<a id="oop"></a>
 :   FIXME
@@ -603,6 +637,9 @@
 
 **Variable**<a id="make-variable"></a> (in Make)
 :   FIXME
+
+**Variable**<a id="python-variable"></a> (in Python)
+:   A symbolic name that reserves memory to store a value. 
 
 **Vector image**<a id="vector-image"></a>
 :   FIXME
