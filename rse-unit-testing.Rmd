@@ -26,7 +26,7 @@ you might test code interactively by running it yourself on different problems.
 
 For instance, let's say you wrote a function like this:
 
-```{r}
+```{r manual-test-r}
 # in R
 numSign <- function(x) {
   if (x > 0) {
@@ -39,7 +39,7 @@ numSign <- function(x) {
 numSign(1)
 ```
 
-```{python}
+```{python manual-test-py}
 # In Python
 def numSign(x):
     if x > 0:
@@ -53,7 +53,7 @@ numSign(1)
 
 A simple way to test the code is to run commands like:
 
-```{r}
+```{r manual-test-r-2}
 numSign(2) == 1
 numSign(0) == -1
 numSign(-4) == -1
@@ -61,7 +61,7 @@ numSign(-4) == -1
 
 You could go a step further and write a script with some simple tests:
 
-```{r}
+```{r stop-not-r}
 # In R
 stopifnot(numSign(1) == 1)
 stopifnot(numSign(-Inf) == -1)
@@ -70,19 +70,20 @@ stopifnot(numSign(-Inf) == -1)
 `stopifnot()` runs the code and if it resolves to `true` than it continues.
 What if you want to test something that you know should fail?
 
-```{r, error=TRUE}
+```{r show-stop-not-error, error=TRUE}
 stopifnot(numSign(NULL) == -1)
 ```
 
 Which gives an error as expected.
 
-TODO: Need Python version of this
+TODO: Need Python version of this.
 
 TODO: Finish this off...
 
 ### Exercise
 
-- e0: Write in the console to check if it has an error or gives you what you expect.
+- Write manually in the console/terminal a test to check if the function has an error or gives you what you expect.
+TODO: Need to complete this.
 
 ### Why this quickly becomes a problem
 
@@ -227,7 +228,8 @@ the [R Packages][r-pkg-book] book.
 **In R**:
 
 - Making sure you are inside your R package in RStudio, 
-type out `usethis::use_testthat()` to set up testing if you haven't done already.
+type out `usethis::use_testthat()` to set up testing, 
+if you haven't done so already.
 Next run the command:
 
     ```r
@@ -258,7 +260,7 @@ Unit tests all have a similar and basic structure:
 - Loading the packages and setting up any necessary inputs/fixtures.
 - Setting up the test function ("expectation") with the code and its expected out.
 
-So template of how it looks like would be (for Python):
+So template of how it looks like would be (for **Python**):
 
 ```python
 from package import function
@@ -272,14 +274,14 @@ def test_name():
 Load the function from the package, write the test name, set the function name
 with an input/fixture, and test against the expectation.
 
-In R, it would be:
+In **R**, it would be:
 
 ```r
 context("Short description of what is being tested")
 library(package)
 
 test_that("short description of what is expected", {
-  expect_equal(function_name(input), expectation)
+  expect_identical(function_name(input), expectation)
 })
 ```
 
@@ -300,20 +302,63 @@ Then re-run the tests (`pytest` or `devtools::test()`) and confirm that the test
 
 ### Exercise
 
-**In Python**:
+- **In Python**: Create a new test file called `test_simple_arithmetic.py`. 
+Write out (or copy and paste) the code below into the newly created test file.
+Then fill in the blanks.
 
-**In R**:
+    ```python
+    
+    ```
 
-- Create a new test by running `usethis::use_test("")`. Write out (or copy and
-paste) the code below into the newly created test file. Fill in the blank
+TODO: Finish this.
 
-TODO: Complete
+
+- **In R**: Create a new test by running `usethis::use_test("simple-arithmetic")`. 
+Write out (or copy and paste) the code below into the newly created test file. 
+Fill in the blanks.
+
+    ```r
+    context("Check simple calculations")
+    
+    test_that("plus and minus give correct outputs", {
+      expect_identical(1 + 2, 3)
+      ___(1 - 2, -1)
+      expect_identical(1 + NA, __)
+      expect_identical(___ - ___, NA)
+    })
+    ```
 
 ## Describing and developing unit tests {#rse-unit-testing-develop-tests}
 
-TODO: Better title?
+TODO: What is the Python equivalent of context() and the message in test_that()?
 
+Like writing code, your tests should generally be written to be self-explanatory,
+and to provide enough documentation to understand what is going on.
+Each test file should also try to encompass a general topic
+or focus on a specific and similar set of functionality from your package.
 
+In **R**, testthat test's generally are created for one R script in the `R/` folder.
+testthat also has several other mechanisms to help clarify what is being tested:
+
+- Multiple forms of `expect_*` functions for different purposes.
+For instance, `expect_identical()` compares that actual and expected results are *identical* 
+while `expect_equal()` compares that the outputs are approximately equal. 
+This last one is used when numerical precision may change depending on operating system 
+or other characteristics of the computer influence precision. 
+These two are the most commonly used expectation functions. 
+Others include `expect_length()`, 
+which is used to check how many elements the output should have.
+
+- Documentation of the tests are also incorporated into the results output through
+`context("description")` and `test_that("message", ...)`. 
+`context()` describes the entire test file, 
+while `test_that("message", ...)` is specific to the individual unit test.
+
+TODO: Add python equivalent.
+
+```python
+
+```
 
 ### Exercise
 
@@ -329,29 +374,40 @@ There are no right answers, only more descriptive or less descriptive messages.
     context("___")
     
     test_that("___", {
+      expect_identical(sum(c(1, 2)), 3)
+      expect_identical(sum(c(NA, 2)), NA)
+    })
     
+    test_that("___", {
+      expect_identical(mean(c(1, 2)), 1.5)
+      expect_identical(mean(c(NA, 2)), NA)
     })
     ```
 
-
 ### Exercise
 
-- Create a new test file. Then, write a unit test to check if
-(in R, use a single `test_that()`):
-    - 
+- Create a new test file. 
+Then, write a unit test for `count_words()` to check the following tests.
+In R, use a single `test_that()`. 
+(**Hint**: For R, use TAB auto-completion to search for useful `expect_*` functions.) 
+Test that `count_words()`:
+    - Outputs zero when given an empty string.
+    - Outputs NA when given NA.
+    - Outputs 2 when given two words, separated by a space.
+    - Outputs 2 when given two words, but not separated by a space.
     
 TODO: Have coherence with functions they previously created? Or stand-alone?
 
 ## Testing both code success *and* failure {#rse-unit-testing-test-failure}
 
-It might not seems important, but testing how your code *fails* is just as important as when it *succeeds*.
+It might not seem immediately necessary, 
+but testing how your code *fails* is just as important as when it *succeeds*.
 Knowing how and when you code fails (outputs an error) is good practice,
 as it forces you to think about how a user might interact with your software
 and if your code actually fails when you write that it should.
 So our tests should actually include checks on expected errors too.
 
 In **Python**, we can test for an error by using:
-
 
 ```python
 import pytest
@@ -376,19 +432,22 @@ test_that("count words throws an error", {
 
 ### Exercise
 
-- Using the same process as we've covered 
-(i.e. making a new test file, setting up the basic template of the test),
-create a new test to check when code should throw an error. 
-Create the test for a function from your R or Python package you haven't tested yet.
+- Using the same unit as the previous exercise, 
+create a new test to check when the code should throw an error. 
+Create the test for the `count_words()` function.
 
 ## Checking what code is tested {#rse-unit-testing-coverage}
 
-Take a moment to study the code shown below,
-and see if you can tell which lines will be executed or not.
+Great, we've now gone over how to create unit tests. 
+But as you write more and more code, 
+you may start missing some code and forgetting to write unit tests for them.
+Or, you may have complex code with some conditionals (`if ... else ...`) 
+that don't always get executed. 
+For instance, take a moment to examine the code below.
 
 In **Python**:
 
-```python
+```{python}
 def first(left, right):
     if left < right:
         left, right = right, left
@@ -440,17 +499,16 @@ second <- function(check, balance) {
 c(3, 5, first(3, 5))
 ```
 
-
 You probably have a hard time figuring out which lines of code were executed and which weren't.
-As you start using more conditionals in your code, 
-its good practice to test cases when those conditionals get activated.
+There's actually an easy way to find that out automatically.
 There is a tool called code [coverage](glossary.html#coverage) 
 to help see how much of your code gets executed by your tests,
 which is especially useful with tracking conditional activation.
 Code coverage measures which parts of your program are and are not executed.
 Essentially, a code coverage tool tracks the progress of execution through the code
-and identifies which lines of all the lines gets executed.
-After the program finishes, code coverage tells you what lines were not executed,
+and identifies which exact lines gets executed.
+After the program finishes, 
+code coverage tells you what lines were not executed,
 and what percentage was.
 
 Use this tool to make sure a large portion of your code gets tested.
@@ -460,27 +518,24 @@ since anything that *isn't* tested may likely be wrong,
 while balancing writing tests and writing code.
 It usually isn't necessary to get 100% code coverage.
 
-use `coverage run filename.py` instead of `python filename.py` to run your program.
-This creates a file in the current directory called `.coverage`;
-once your program completes,
-you can run `coverage report` to get a summary of the most recent report:
+For **Python**, if the above code were in a file, called `demo_coverage.py`,
+we can run the coverage with the package `coverage`:
 
 ```shell
-$ coverage run demo_coverage.py
+coverage run demo_coverage.py
+coverage report
 ```
+
 ```text
 Name               Stmts   Miss  Cover
 --------------------------------------
 demo_coverage.py      16      1    94%
 ```
 
-If you want the details,
-you can use `coverage html` to generate an HTML listing.
-
-**R** has similar functionality. 
-The covr package has several functions for checking coverage.
-Given that you've developed a package throughout this course, 
-the more appropriate function to use is:
+While **R** has similar functionality, it works best at a package level,
+rather than a file level.
+The covr package has several functions for checking coverage, 
+but for testing packages there is:
 
 ```r
 covr::package_coverage()
