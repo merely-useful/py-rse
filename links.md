@@ -210,6 +210,7 @@
 [unix-shell]: glossary.html#unix-shell
 [unpaywall]: http://unpaywall.org/
 [usethis]: https://usethis.r-lib.org/
+[uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
 
 [vanderplas-licensing]: http://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [version-control]: https://peerj.com/preprints/3159/

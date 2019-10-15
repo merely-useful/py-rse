@@ -1,53 +1,32 @@
 # Advanced Git {#rse-git-advanced}
 
-Now that we're comfortable using Git at the command line,
-we can look at two important concepts for keeping our code development organised
-and for working with others: branching and pull requests. 
+Now that we are comfortable using Git at the command line,
+we can look at two tools for organizing our development and working with others:
+branching and pull requests.
+[Branches][git-branch] let us work on multiple things simultaneously in a single repository;
+[pull requests][pull-request] let us submit our work for review,
+get feedback,
+and make updates.
+Used together,
+they allow us to go through the write-review-revise cycle
+familiar to anyone who has ever written a journal paper
+in hours rather than weeks.
 
+> This lesson is derived in part from one created at
+> [the University of Wisconsin-Madison][uwm-git-lesson].
+> We are grateful to its authors for using an open license
+> so that we could repurpose their work.
 
-## Branches {#rse-git-advanced-branches}
+## What is a branch and how do I create one? {#rse-git-advanced-create-branch}
 
-*FIXME: This lesson is from [UW-Madison](https://uw-madison-datascience.github.io/git-novice-custom/07-branches/)
-and therefore doesn't quite match the storyline of the other lessons.*
+The Git lessons so far have all used a sequential timeline:
+each change builds on the one before,
+and *only* on the one before.
+However,
+there are times when we want to keep our main work safe from experimental changes.
+To do this, we can use [branches][git-branch] to work on separate tasks in parallel.
 
-In the Git lessons so far, we've been working in a straight timeline.
-However, there are times when we might want to keep
-our main work safe from experimental changes.
-To do this, we can use branches to work on separate tasks in parallel.
-
-We didn't dwell on it earlier,
-but the default branch created when initializing a repository is called `master`.
-It is often considered to be the "clean" or "working" version of a
-repository's code.
-
-We can see what branches exist in a repository by typing
-
-```shell
-$ git branch
-```
-
-```text
-* master
-```
-
-The '*' indicates which branch we are currently on.
-
-In this lesson, Dracula is trying to run an analysis
-and doesn't know if it will be faster in bash or python.
-To keep his master branch safe he will use separate branches
-for both the bash and python analysis.
-Then he will merge the branch with the faster script
-into his master branch.
-
-First, let's make the python branch.
-We use the same `git branch` command but now add the 
-name we want to give our new branch
-
-```shell
-$ git branch pythondev
-```
-
-We can now check our work with the `git branch` command.
+We can see what branches a repository using this command:
 
 ```shell
 $ git branch
@@ -55,13 +34,47 @@ $ git branch
 
 ```text
 * master
-  pythondev
 ```
 
-We can see that we created the `pythondev` branch but we
-are still in the master branch.
+When we initialize a repository,
+Git automatically creates a branch called [`master`][git-branch-master].
+It is often considered the "official" version of the repository.
+The asterisk '*' indicates that it is currently active,
+i.e.,
+that all changes we make will take place in this branch by default.
+(The active branch is like the [current working directory][current-working-directory] in the shell.)
 
-We can also see this in the output of the `git status` command.
+Suppose that we are working on an analysis
+and don't know whether a [violin plot][violin-plot] or [beeswarm plot][beeswarm-plot]
+will make our results clearer.
+We decide to create a new branch from `master` for each
+and then merge whichever we prefers back to `master` (FIXME: figure).
+After tossing a coin,
+we decide to experiment with violin plots first.
+To create the branch,
+we run:
+
+```shell
+$ git branch violin
+```
+
+We can check that the branch exists by running `git branch` again:
+
+```shell
+$ git branch
+```
+
+```text
+* master
+  violin
+```
+
+Our branch is there,
+but the asterisk `*` shows that we are still in the `master` branch.
+(By analogy,
+creating a new directory doesn't automatically move us into that directory.)
+As a further check,
+let's see what our repository's status is:
 
 ```shell
 $ git status
@@ -72,65 +85,62 @@ On branch master
 nothing to commit, working directory clean
 ```
 
-To switch to our new branch we can use the `checkout` command
-we learned earlier and check our work with `git branch`.
+To switch to our new branch we can use the `checkout` command that we first saw in Section \@ref(rse-git-cmdline-restore):
 
 ```shell
-$ git checkout pythondev
+$ git checkout violin
 $ git branch
 ```
 
 ```text
   master
-* pythondev
+* violin
 ```
 
-Before we used the `checkout` command to checkout a file from a specific commit
-using commit hashes or `HEAD` and the filename (`git checkout HEAD <file>`).
-The `checkout` command can also be used to checkout an entire previous version of the repository,
-updating all files in the repository to match the state of a desired commit.
+`git checkout` doesn't just check out a file from a specific commit:
+it can also check out the whole repository,
+i.e.,
+switch it from one saved state to another
+by updating all files in the repository to match the desired state.
+A branch is a human-readable name for one such state.
+We can (and should) choose the name to signal the purpose of the branch,
+just as we choose the names of files and variables to indicate what they are for.
 
-Branches allow us to do this using a human-readable name rather than memorizing a commit hash.
-This name also typically gives purpose to the set of changes in that branch.
-When we use the command `git checkout <branch_name>`, we are using
-a nickname to checkout a version of the repository that matches the most recent
-commit in that branch (a.k.a. the HEAD of that branch).
+At this point,
+`master` and `violin` are two names for the same repository state (FIXME: figure),
+so commands like `ls` and `git log` shows that the files and history haven't changed
+as we switch from `master` to `violin`.
+This will be true until some changes are committed to our new branch.
 
-Here you can use `git log` and `ls` to see that the history and 
-files are the same as our `master` branch. This will be true until
-some changes are committed to our new branch.
-
-Now lets make our python script.  
-For simplicity sake, we will `touch` the script making an empty file
-but imagine we spent hours working on this python script for our analysis.
-
-```shell
-$ touch analysis.py
-```
-
-Now we can add and commit the script to our branch.
+Let's make such a change by editing our analysis script,
+adding a lines to create the violin plot,
+and committing our changes:
 
 ```shell
-$ git add analysis.py
-$ git commit -m "Wrote and tested python analysis script"
+$ nano bin/analysis.sh
+$ git add bin/analysis.sh
+$ git commit -m "Created violin plots"
 ```
 
 ```text
-[pythondev x792csa1] Wrote and tested python analysis script
+[violin 3ff8195] Created violin plots
  1 file changed, 1 insertion(+)
- create mode 100644 analysis.py
 ```
 
-Lets check our work!
+If we look at the last couple of commits using `git log`,
+we see our most recent change:
 
 ```shell
-$ ls
-$ git log --oneline
+$ git log --oneline -n 2
 ```
 
-As expected, we see our commit in the log.
+```text
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+```
 
-Now let's switch back to the `master` branch.
+(We use `--oneline` and `-n 2` to shorten the log display.)
+But let's switch back to the `master` branch:
 
 ```shell
 $ git checkout master
@@ -139,48 +149,134 @@ $ git branch
 
 ```text
 * master
-  pythondev
+  violin
 ```
 
-Let's explore the repository a bit.
-
-Now that we've confirmed we are on the `master` branch again.
-Let's confirm that `analysis.py` and our last commit aren't in `master`.
+If we look at the log,
+our latest change is not there:
 
 ```shell
-$ ls
-$ git log --oneline
-```
-
-We no longer see the file `analysis.py` and our latest commit doesn't
-appear in this branch's history. But do not fear! All of our hard work
-remains in the `pythondev` branch. We can confirm this by moving back
-to that branch.
-
-```shell
-$ git checkout pythondev
-$ git branch
+$ git log --oneline -n 2
 ```
 
 ```text
-  master
-* pythondev
+64b802f (HEAD -> master) Adding overdue .gitignore file
+2fe5f6f Updating analysis script
 ```
+
+We have not lost our work:
+it just isn't included in this branch (FIXME: fig).
+We can prove this by switching back to the `violin` branch and checking the log again:
 
 ```shell
-$ ls
-$ git log --oneline
+$ git checkout violin
+$ git log --oneline -n 2
 ```
 
-And we see that our `analysis.py` file and respective commit have been
-preserved in the `pythondev` branch.
+```text
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+```
 
-Now we can repeat the process for our bash script in a branch called
-`bashdev`.
+We can also look inside `bin/analysis.sh` and see our changes.
+If we make another change and commit it,
+that change will also go into the `violin` branch (FIXME: figure):
 
-First we must checkout the `master` branch again. New branches will
-include the entire history up to the current commit, and we'd like
-to keep these two tasks separate.
+```shell
+$ nano bin/analysis.sh
+$ git add .
+$ git commit -m "Adding facets to the violin plot"
+```
+
+```text
+[violin db1d03f] Adding facets to the violin plot
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+```
+
+And if we want to see the differences between two branches,
+we can use `git diff` with the same double-dot `..` syntax we use
+to view differences between two revisions:
+
+```shell
+$ git diff master..violin
+```
+
+```text
+diff --git a/bin/analysis.sh b/bin/analysis.sh
+index 8de12fa..bbe78f7 100644
+--- a/bin/analysis.sh
++++ b/bin/analysis.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+ cat $1 | \
+   species --all | \
+-  plot --default > \
++  plot --violin --facet=species_name > \
+   plots/violin-by-species.png
+```
+
+We can repeat this process to experiment with beeswarm plots.
+Since we don't want to include any of the violin plot work in this branch,
+we make our new branch from `master`.
+To speed things up a bit,
+we use the `-b` option to `git checkout` to create the branch and switch to it
+in a single step:
+
+```shell
+$ git checkout master           # make sure of our starting point
+$ git checkout -b beeswarm      # make branch and switch to it
+$ nano bin/analysis.sh          # make our changes
+$ git add bin/analysis.sh       # add our changes
+$ git commit -m "Beeswarms"     # we really should use a more informative message...
+$ git log --oneline -n 2        # show history
+```
+
+```text
+917823d (HEAD -> beeswarm) Beeswarms
+64b802f (master) Adding overdue .gitignore file
+```
+
+The log shows that the changes in the `beeswarm` branch are
+on top of the changes in the `master` branch,
+and do *not* include the changes in the `violin` branch (FIXME: figure).
+If we're curious,
+we can use `git diff` to show the differences between the two plotting branches:
+
+```shell
+$ git diff beeswarm..violin
+```
+
+```text
+diff --git a/bin/analysis.sh b/bin/analysis.sh
+index 2ebd322..bbe78f7 100644
+--- a/bin/analysis.sh
++++ b/bin/analysis.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+ cat $1 | \
+   species --all | \
+-  plot --beeswarm --jitter=0.1 --facet=species_name > \
+-  plots/beeswarm-by-species.png
++  plot --violin --facet=species_name > \
++  plots/violin-by-species.png
+```
+
+## How do I merge work from separate branches? {#rse-git-advanced-merge}
+
+After a bit of experimentation,
+we decide that we prefer violin plots to beeswarm plots.
+We now have three options:
+
+1.  Add our changes to `bin/analysis.sh` once again in the `master` branch.
+2.  Stop working in `master` and start using the `violin` branch for future development.
+3.  [Merge][git-merge] the `violin` and `master` branches.
+
+The first option is tedious and error-prone,
+while the second option will lead to confusion
+and doesn't give us a way to combine changes made in two or more branches.
+The third option the simplest, fastest, and most reliable.
+To start,
+let's make sure we're in the `master` branch:
 
 ```shell
 $ git checkout master
@@ -188,180 +284,290 @@ $ git branch
 ```
 
 ```text
+  beeswarm
 * master
-  pythondev
+  violin
 ```
 
-This time let's create and switch two the `bashdev` branch
-in one command.
-
-We can do so by adding the `-b` flag to checkout.
+We can now merge the changes in `violin` branch into our current branch
+with a single command:
 
 ```shell
-$ git checkout -b bashdev
-$ git branch
+$ git merge violin
 ```
 
 ```text
-* bashdev
-  master
-  pythonndev
-```
-
-We can use `ls` and `git log` to see that this branch is 
-the same as our current `master` branch.
-
-Now we can make `analysis.sh` and add and commit it.
-Again imagine instead of `touch`ing the file we worked 
-on it for many hours.
-
-```shell
-$ touch analysis.sh
-$ git add analysis.sh
-$ git commit –m “Wrote and tested bash analysis script”
-```
-
-```text
-[bashdev 2n779ds] Wrote and tested bash analysis script
- 1 file changed, 1 insertion(+)
- create mode 100644 analysis.sh
-```
-
-Lets check our work again before we switch back to the master branch.
-
-```shell
-$ ls
-$ git log --oneline
-```
-
-So it turns out the python `analysis.py` is much faster than `analysis.sh`.
-
-Let's merge this version into our `master` branch so we can use it for
-our work going forward.
-
-Merging brings the changes from a different branch into 
-the current branch.
-
-First we must switch to the branch we're merging changes into, `master`.
-
-```shell
-$ git checkout master
-$ git branch
-```
-
-```text
-  bashdev
-* master
-  pythonndev
-```
-
-Now we can `merge` the `pythondev` branch into our current branch
-(`master`). In simple terms, this command could be stated as "`git`, please
-`merge` the changes in the `pythondev` branch into the current branch
-I'm in".
-
-```shell
-$ git merge pythondev
-```
-
-```text
-Updating 12687f6..x792csa1
+Updating 64b802f..db1d03f
 Fast-forward
- analysis.py | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 analysis.py
+ bin/analysis.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 ```
 
-Now that we've merged the `pythondev` into `master`, these changes
-exist in both branches. This could be confusing in the future if we
-stumble upon the `pythondev` branch again.
-
-We can delete our old branches so as to avoid this confusion later.
-We can do so by adding the `-d` flag to the `git branch` command.
+Merging doesn't change the source branch `violin` (FIXME: figure).
+Once the merge is done,
+though,
+all of the changes made in `violin` are also in the history of `master`:
 
 ```shell
-git branch -d pythondev
+$ git log --oneline -n 4
 ```
 
 ```text
-Deleted branch pythondev (was x792csa1).
+db1d03f (HEAD -> master, violin) Adding facets to the violin plot
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+2fe5f6f Updating analysis script
 ```
 
-And because we don't want to keep the changes in the `bashdev` branch,
-we can delete the `bashdev` branch as well
+Note that Git automatically creates a new commit (in this case, `db1d03f`) to represent the merge.
+If we now run `git diff master..violin`,
+Git doesn't print anything
+because there aren't any differences to show.
+
+Now that we have merged all of the changes from `violin` into `master`
+there is no need to keep the `violin` branch,
+so we can delete it:
 
 ```shell
-$ git branch -d bashdev
+$ git branch -d violin
 ```
 
 ```text
-error: The branch 'bashdev' is not fully merged.
-If you are sure you want to delete it, run 'git branch -D bashdev'.
+Deleted branch violin (was db1d03f).
 ```
 
-Since we've never merged the changes from the `bashdev` branch,
-Git warns us about deleting them and tells us to use the `-D` flag instead.
-
-Since we really want to delete this branch we will go ahead and do so.
+And since we don't want to keep the changes in the `beeswarm` branch,
+we can delete it as well:
 
 ```shell
-git branch -D bashdev
+$ git branch -d beeswarm
 ```
 
 ```text
-Deleted branch bashdev (was 2n779ds).
+error: The branch 'beeswarm' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D beeswarm'.
 ```
 
-> **Recap: Step-by-step guide to branching**
->
-> 1.  `git checkout master` to make sure you're working in the `master` branch.
->
-> 2.  `git pull origin master` to make sure that your starting point is up to date
->
-> 3.  `git checkout -b name-of-feature` to create a new branch. The branch's name should be as descriptive. 
->
-> 4.  Do the work you want to do.
->     If some other task occurs to you while you're doing it---for example,
->     if you're writing a new function and realize that the documentation for some other function should be updated---*don't*
->     do that work in this branch just because you happen to be there.
->     Instead,
->     commit your changes,
->     switch back to `master`,
->     create a new branch for the other work,
->     and carry on.
-> 
-> 5.  Periodically, you may `git push origin name-of-feature` to save your work to GitHub.
->
-> 6.  When the work is done,
->     you `git pull origin master` to get any changes that anyone else has put in the master copy
->     into your branch
->     and merge any conflicts.
->     This is an important step:
->     you want to do the merge *and test that everything still works* in *your* branch,
->     not in `master`.
->
-> 7.  Finally,
->     use `git checkout master` to switch back to the `master` branch on your machine
->     and `git merge name-of-feature master` to merge your changes into `master`.
->     Test it one more time,
->     and then `git push origin master` to send your changes to the remote repository
->     for everyone else to admire and use.
+Git refuses to do what we have asked
+because we have *not* merged the changes from `beeswarm` into `master`
+(or any other branch),
+so deleting it actually would erase work.
+If we are sure we want to do this,
+we would have to follow Git's instructions and use the `-D` option.
+We won't do this yet because we can use the changes in the `beeswarm` branch
+to illustrate another key feature of Git:
+handling conflicts.
 
+> **Not Just the Command Line**
+>
+> We have been creating, merging, and deleting branches on the command line,
+> but we can do all of these things using [GitKraken][gitkraken],
+> [the RStudio IDE][rstudio-ide],
+> and other GUIs.
+> The operations stay the same;
+> all that changes is how we tell the computer what we want to do.
 
-### A branching workflow
+## How do I handle conflicting changes? {#rse-git-advanced-conflict}
 
-Now that we're comfortable with creating and merging branches,
-we need to consider when and how we might use branches in our code development workflows.
+We now have two branches,
+`master` and `beeswarm`,
+in which we have changes the same lines of `bin/analysis.sh` in different ways:
 
-Experienced developers tend to use a "branch-per-feature" workflow,
-even when they are working on their own.
-Whenever they want to create a new feature,
-they create a new branch from `master` and do the work there.
-When it's done,
-they merge that branch back into `master.
+```shell
+$ git diff beeswarm..master
+```
 
-But what is a "feature," exactly?
-What's large enough to merit creation of a new branch?
+```text
+diff --git a/bin/analysis.sh b/bin/analysis.sh
+index 2ebd322..bbe78f7 100644
+--- a/bin/analysis.sh
++++ b/bin/analysis.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+ cat $1 | \
+   species --all | \
+-  plot --beeswarm --jitter=0.1 --facet=species_name > \
+-  plots/beeswarm-by-species.png
++  plot --violin --facet=species_name > \
++  plots/violin-by-species.png
+```
+
+When we try to merge `beeswarm` into `master`,
+Git doesn't know which of these changes we want to keep.
+This is called a [conflict][git-conflict]:
+
+```shell
+$ git merge beeswarm master
+```
+
+```text
+Auto-merging bin/analysis.sh
+CONFLICT (content): Merge conflict in bin/analysis.sh
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+If we look in `bin/analysis.sh`,
+we see that Git has kept both sets of changes,
+but has marked which came from where:
+
+```shell
+$ cat bin/analysis.sh
+```
+
+```text
+#!/usr/bin/env bash
+cat $1 | \
+  species --all | \
+<<<<<<< HEAD
+  plot --violin --facet=species_name > \
+  plots/violin-by-species.png
+=======
+  plot --beeswarm --jitter=0.1 --facet=species_name > \
+  plots/beeswarm-by-species.png
+>>>>>>> beeswarm
+```
+
+The lines from `<<<<<<< HEAD` to `=======` are what was in `master`,
+while the lines from there to `>>>>>>> beeswarm` show what was in `beeswarm`.
+If there were several conflicting regions in the same file,
+Git would mark each one this way.
+
+We have to decide what to do next:
+keep the `master` changes,
+keep those from `beeswarm`,
+edit this part of the file to combine them,
+or write something new.
+Whatever we do,
+we must remove the `>>>`, `===`, and `<<<` markers.
+Let's combine the two sets of changes to create side-by-side plots:
+
+```shell
+$ nano bin/analysis.sh
+$ cat bin/analysis.sh
+```
+
+```text
+#!/usr/bin/env bash
+cat $1 | \
+  species --all | \
+  plot -n 2 --violin --beeswarm --jitter=0.1 --facet=species_name > \
+  plots/by-species.png
+```
+
+This counts as yet another change to the file:
+
+```shell
+$ git status
+```
+
+```text
+On branch master
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+
+        modified:   bin/analysis.sh
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   bin/analysis.sh
+```
+
+Here,
+Git thinks that there are changes to be committed because of the merge,
+and that `bin/analysis.sh` has been modified again because of our edit.
+Let's add the file and commit the change:
+
+```shell
+$ git add bin/analysis.sh
+$ git commit -m "Merging beeswarm plots"
+```
+
+```text
+[master b0c3fc6] Merging beeswarm plots
+```
+
+The project's history now shows a single sequence of commits,
+with the `beeswarm` changes on top of the earlier `violin` changes:
+
+```shell
+$ git log --oneline
+```
+
+```text
+b0c3fc6 (HEAD -> master) Merging beeswarm plots
+917823d (beeswarm) Beeswarms
+db1d03f Adding facets to the violin plot
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+2fe5f6f Updating analysis script
+c89bf68 Northern data
+dc4adfb Initial commit
+```
+
+If we want to see what really happened,
+we can add the `--graph` option to `git log`:
+
+```shell
+$ git log --oneline --graph
+```
+
+```text
+*   b0c3fc6 (HEAD -> master) Merging beeswarm plots
+|\  
+| * 917823d (beeswarm) Beeswarms
+* | db1d03f Adding facets to the violin plot
+* | 3ff8195 Created violin plots
+|/  
+* 64b802f Adding overdue .gitignore file
+* 2fe5f6f Updating analysis script
+* c89bf68 Northern data
+* dc4adfb Initial commit
+```
+
+## How should I use branches? {#rse-git-advanced-workflow}
+
+People use Git in different ways,
+but all of those ways rely heavily on branches.
+If we are working on our own computer,
+this workflow will help us keep track of what we are doing:
+
+1.  `git checkout master` to make sure we are in the `master` branch.
+
+2.  `git checkout -b name-of-feature` to create a new branch.
+    We *always* create a branch when making changes,
+    since we never know what else might come up.
+    The branch name should be as descriptive as a variable name or filename would be.
+
+3.  Make our changes.
+    If something occurs to us along the way—for example,
+    if we are writing a new function and realize that
+    the documentation for some other function should be updated—we do *not*
+    do that work in this branch just because we happen to be there.
+    Instead,
+    we commit our changes,
+    switch back to `master`,
+    and create a new branch for the other work.
+
+4.  When the new feature is complete,
+    we `git merge master name-of-feature`
+    to get any changes we merged into `master` after creating `name-of-feature`
+    and resolve any conflicts.
+    This is an important step:
+    we want to do the merge and test that everything still works in our feature branch,
+    not in `master`.
+
+5.  Finally,
+    we switch back to `master` and `git merge name-of-feature master`
+    to merge our changes into `master`.
+    We should not have any conflicts,
+    and all of our tests should pass.
+
+Most experienced developers use this "branch-per-feature" workflow,
+but what exactly is a "feature"?
 These rules make sense for small projects with or without collaborators:
 
 1.  Anything cosmetic that is only one or two lines long can be done in `master` and committed right away.
@@ -370,19 +576,19 @@ These rules make sense for small projects with or without collaborators:
 
 2.  A pure addition that doesn't change anything else is a feature and goes into a branch.
     For example,
-    if you run a new analysis and save the results,
+    if we run a new analysis and save the results,
     that should be done on its own branch
     because it might take several tries to get the analysis to run,
-    and you might interrupt yourself several times to fix things that you've discovered aren't working.
+    and we might interrupt ourselves to fix things that we discover aren't working.
 
-3.  Every change to code that someone might want to undo later in one step gets done as a feature.
+3.  Every change to code that someone might want to undo later in one step gets is a feature.
     For example,
-    if a parameter is added to a function,
-    every call to the function has to be updated;
-    since neither alteration makes sense without the other,
-    it's considered a single feature and should be done in one branch.
+    if a new parameter is added to a function,
+    then every call to the function has to be updated.
+    Since neither alteration makes sense without the other,
+    those changes are considered a single feature and should be done in one branch.
 
-The hardest thing about using a branch-per-feature workflow is actually doing it for small changes.
+The hardest thing about using a branch-per-feature workflow is sticking to it for small changes.
 As the first point in the list above suggests,
 most people are pragmatic about this on small projects;
 on large ones,
@@ -390,540 +596,509 @@ where dozens of people might be committing,
 even the smallest and most innocuous change needs to be in its own branch
 so that it can be reviewed (which we discuss below).
 
+## How can I use someone else's work? {#rse-git-advanced-fork}
 
-## Pull requests  {#rse-git-advanced-pull-requests}
+So far we have used Git to manage individual work,
+but it really comes into its own when we are working with other people.
+We can do this in two ways:
 
-*FIXME: This lesson is from [UW-Madison](https://uw-madison-datascience.github.io/git-novice-custom/10-pull-requests/)
-and therefore doesn't quite match the storyline of the other lessons.*
+1.  Everyone has read and write access to a single shared repository.
 
-Pull requests are a great way to collaborate with others using GitHub.
-Instead of making changes directly to a repository, you can suggest changes via a pull request.
-This can be useful if you don't have permission to modify a repository directly or
-you want someone else to review your changes.
+2.  Everyone can read from the project's main repository,
+    but only a few people can commit changes to it.
+    The project's other contributors [fork][git-fork] the main repository to create one that they own,
+    do their work in that,
+    and then submit their changes to the main repository.
 
-To be more specific, a pull request is essentially a marker saying,
-"Someone would like to merge branch A into branch X".
-The pull request does *not* contain the changes:
-instead,
-it points at two branches,
-so that if either branch is changed,
-the differences displayed are always up to date.
+The first approach works well for teams of up to half a dozen people
+who are all comfortable using Git,
+but if the project is larger,
+or if contributors are worried that they might make a mess in the `master` branch,
+the second approach is safer.
 
-FIXME: figure
+Git itself doesn't have any notion of a "main repository",
+but [forges][forge] like GitHub, GitLab, and BitBucket all encourage people
+to use Git in ways that effectively create one.
+Suppose,
+for example,
+that Frances Bilas has put her plotting project online
+and that the repository's URL is `https://github.com/francesbilas/plotting`.
+Jean Jennings (another of the original ENIAC programmers) would like to contribute to the project,
+so she goes to that URL and clicks on the "Fork" button in the upper right corner (FIXME: screenshot).
+GitHub immediately creates a copy of Frances's repository within Jean's account on GitHub's own servers.
+When the command completes,
+the setup on GitHub now looks like this:
 
-Pull requests can be created between two branches in a single repository,
-or between branches of different repositories.
-The latter is common in projects with many contributors:
-each contributor works in a branch in their own [fork](glossary.html#fork) of the repository,
-and when they're done,
-they create a pull request offering to merge their changes into the `master` branch
-of the original repository.
-In order to update their own repository,
-they pull changes from the original:
+FIXME: picture of forked repo
 
-FIXME: figure
+Nothing has happened yet on Jean's own machine:
+the new repository exists only on GitHub.
+When Jean explores its history,
+she sees that it contains all of the changes Frances made.
 
-A pull request can store more than the location of the source and destination branch.
-In particular,
-it can store comments that people have made about the proposed merge.
-GitHub and other [forges](glossary.html#forge) allow users to add comments on the pull request as a whole,
+A copy of a repository is called a [clone][git-clone].
+In order to start working on the project,
+Jean needs to create a clone of *her* repository (not Frances's) on her own computer.
+We will modify Jean's prompt to include her desktop user ID (`jj`)
+and her working directory (initially `~`)
+to make it easier to follow what's happening:
+
+```shell
+jj:~ $ git clone https://github.com/jeanjennings/plotting.git
+```
+
+```text
+Cloning into 'plotting'...
+remote: Enumerating objects: 32, done.
+remote: Counting objects: 100% (32/32), done.
+remote: Compressing objects: 100% (16/16), done.
+remote: Total 32 (delta 5), reused 32 (delta 5), pack-reused 0
+Unpacking objects: 100% (32/32), done.
+```
+
+This command creates a new directory with the same name as the project,
+i.e., `plotting`.
+When Jean goes into this directory and runs `ls` and `git log`,
+she sees that all of the project's files and history are there:
+
+```shell
+jj:~ $ cd plotting
+jj:~/plotting $ ls
+```
+
+```text
+README.md       bin             data
+```
+
+```shell
+jj:~/plotting $ git log --oneline
+```
+
+```text
+b0c3fc6 Merging beeswarm plots
+917823d Beeswarms
+db1d03f Adding facets to the violin plot
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+2fe5f6f Updating analysis script
+c89bf68 Northern data
+dc4adfb Initial commit
+```
+
+She also sees that Git has automatically created a remote for her repository
+that points back at her repository on GitHub:
+
+```shell
+jj:~/plotting $ git remote -v
+```
+
+```text
+origin  https://github.com/jeanjennings/plotting.git (fetch)
+origin  https://github.com/jeanjennings/plotting.git (push)
+```
+
+Frances's original repository,
+Jean's fork on GitHub,
+and Jean's new clone on her desktop
+are now arranged as shown in FIXME: figure.
+Jean can pull changes from her fork and push work back there,
+but she needs to do one more thing before she can get changes from Frances's repository:
+
+```shell
+jj:~/plotting $ git remote add upstream https://github.com/francesbilas/plotting.git
+jj:~/plotting $ git remote -v
+```
+
+```text
+origin      https://github.com/jeanjennings/plotting.git (fetch)
+origin      https://github.com/jeanjennings/plotting.git (push)
+upstream    https://github.com/francesbilas/plotting.git (fetch)
+upstream    https://github.com/francesbilas/plotting.git (push)
+```
+
+Jean has called her new remote `upstream` because it points at the repository hers are derived from.
+She could use any name,
+but `upstream` is a nearly universal convention.
+
+With this remote in place,
+Jean is finally set up (FIXME: figure).
+Suppose,
+for example,
+that Frances has modified the project's `README.md` file to add Jean as a contributor.
+(Again, we show Frances's user ID and working directory in her prompt to make it clear who's doing what).
+
+```shell
+frances:~/plotting $ pwd
+```
+
+```text
+/Users/frances/plotting
+```
+
+```shell
+frances:~/plotting $ nano README.md
+frances:~/plotting $ cat README.md
+```
+
+```text
+# Plotting Species Distribution
+
+Contributors:
+
+-   Frances Bilas
+-   Jean Jennings
+```
+
+Frances commits her changes and pushes them to *her* repository on GitHub:
+
+```shell
+frances:~/plotting $ git commit -a -m "Adding Jean as a contributor"
+```
+
+```text
+[master 766c2cd] Adding Jean as a contributor
+ 1 file changed, 6 insertions(+)
+```
+
+```shell
+frances:~/plotting $ git push origin master
+```
+
+```text
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 340 bytes | 340.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/francesbilas/plotting.git
+   b0c3fc6..766c2cd  master -> master
+```
+
+The situation is now as shown in (FIXME: figure a),
+with Frances's changes on her desktop and in her GitHub repository
+but not in either of Jean's repositories.
+Since Jean has create a remote that points at Frances's GitHub repository,
+though,
+she can easily pull those changes to her desktop (FIXME: figure b):
+
+```shell
+jj:~/plotting $ git pull upstream master
+```
+
+```text
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From https://github.com/francesbilas/plotting
+ * branch            master     -> FETCH_HEAD
+ * [new branch]      master     -> upstream/master
+Updating b0c3fc6..766c2cd
+Fast-forward
+ README.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+```
+
+Pulling from a repository owned by someone else
+is no different than pulling from a repository we own.
+In either case,
+Git merges the changes and asks us to resolve any conflicts that arise.
+The only significant difference is that,
+as with `git push` and `git pull`,
+we have to specify both a remote and a branch:
+in this case,
+`upstream` and `master`.
+
+## What is a pull request and how do I create one? {#rse-git-advanced-pull-requests}
+
+Jean can now get Frances's work,
+but how can Frances get Jean's?
+One way would be for Frances to create a remote that pointed at Jean's repository on GitHub
+and then pull in Jean's changes periodically,
+but that would lead to chaos,
+since we could never be sure that everyone's work was in any one place at the same time.
+Instead,
+almost everyone uses [pull requests][pull-request] instead.
+
+Pull requests aren't part of Git itself,
+but a great way to collaborate with others using [forges][forge] like GitHub.
+A pull request is essentially a note saying,
+"Someone would like to merge branch A of repository B into branch X of repository Y".
+The pull request does not contain the changes,
+but instead points at two particular branches.
+If either branch changes,
+the difference displayed is always up to date (FIXME: figure A).
+
+A pull request can store more than just the source and destination branches:
+it can also store comments people have made about the proposed merge.
+GitHub and other [forges][forge] allow users to comment on the pull request as a whole,
 or on particular lines,
-and can mark old comments as out of date if the lines of code the comment is attached to are updated.
+and mark comments as out of date if the author of the pull request updates the code that the comment is attached to (FIXME: screenshot).
+It is common for complex changes to go through several rounds of review and revision
+before being merged.
 
-
-### Setting up contribution repositories
-
-To see this all in action,
-let's go ahead and work on the `countries` repository together.
-Open the GitHub link for the `countries` repo provided by the instructor 
-in your browser window.
-
-*TODO: Figure - Upstream repo [../fig/github_screenshot_upstream_repo.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_upstream_repo.png)*
-
-> **Repo owner differences**
->
-> You may have noticed that the `countries` repo in this lesson's pictures 
-> is owned by the 'McMahonLab' organization and this doesn't match
-> the address you were given.
-> This is to be expected because this will differ depending on 
-> what organization your instructor used to setup the `countries` repo.
-> 
-> You will also see your username where the 'sstevens2' is in the pictures.
-> 
-
-Once at the `countries` repo, click the **Fork** button which can be found
-in the upper right hand conner of the window. 
-Forking the repository makes us each our own copy of the repo in our GitHub 
-account which we can edit.
-
-*TODO: Figure - Upstream Forking [../fig/github_screenshot_upstream_forking.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_upstream_forking.png)*
-
-Next we need to get this repo on our local computer and
-setup connections from our computer to both our forked version 
-and the authoritative version we forked it from.
-
-First we will **clone** the repo from our forked version.
-The clone command does two things:
-
-1. Copies the repo to your local computer
-2. Sets up a remote called 'origin' between your computer and the GitHub repo
-
-Copy the web address for your forked version of repo 
-(from the web address line or click 'Clone and download' and copy that).
-
-*TODO: Figure - Clone Origin [../fig/github_screenshot_cloneOrigin.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_cloneOrigin.png)*
-
-At the command line, navigate to a folder you'd like to hold this repo,
-we will place it on our `Desktop`.
-Once there you can use the `clone` command with the link you copied as the first argument.
+To see this in action,
+suppose that Jean wants to add her email address to `README.md` in the plotting project.
+She creates a new branch and switches to it:
 
 ```shell
-$ cd ~/Desktop
-$ git clone https://github.com/USERNAME/countries.git
-```
-
-> **Why does the command above say 'USERNAME'?**
->
-> So that we can't copy the command above and accidentally clone someone else's
-> version of countries to our computer, the command above uses the placeholder
-> 'USERNAME' where you should put your own username if your copied from above
-> instead of copying the link from your browser and pasting it into the command.
-
-```text
-Cloning into 'countries'...
-remote: Counting objects: 6, done.
-remote: Compressing objects: 100% (4/4), done.
-remote: Total 6 (delta 0), reused 6 (delta 0), pack-reused 0
-Unpacking objects: 100% (6/6), done.
-```
-
-Next we will set up a connection or **remote** to the authoritative repository 
-(the original GitHub repository given to you by your instructor).
-In your browser, you can go back this repo by clicking on the link that says 'forked from'
-in the upper left hand corner, under your username and repo name.
-
-Copy the web address for this repo 
-(from the web address line or click the 'clone and download' and copy that).
-
-*TODO: Figure - Upstream Repo [../fig/github_screenshot_upstream_repo.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_upstream_repo.png)*
-
-Then back in your terminal, navigate into the cloned repo and add the remote 
-connection to this repository.
-For this command we must give the remote a different nickname, 
-where our original remote is 'origin'
-this new remote will be called 'upstream'.
-You could give it a different nickname but 'upstream' is a common nickname for
-the authoritative repository.
-
-```shell
-$ cd countries
-$ git remote add upstream https://github.com/INSTRUCTOR-GIVEN/countries.git
-```
-
-> **If you tried copying the command above...**
->
-> You will have to replace 'INSTRUCTOR-GIVEN' with the site your instructor
-> indicated at the beginning of this lesson. This will vary depending
-> on how your instructor set up for this lesson.
-
-At anytime you can see the remote connections your repo has using the following command:
-
-```shell
-$ git remote -v
+jj:~/plotting $ git checkout -b adding-email
 ```
 
 ```text
-origin	https://github.com/USERNAME/countries.git (fetch)
-origin	https://github.com/USERNAME/countries.git (push)
-upstream	https://github.com/INSTRUCTOR-GIVEN/countries.git (fetch)
-upstream	https://github.com/INSTRUCTOR-GIVEN/countries.git (push)
+Switched to a new branch 'adding-email'
 ```
 
-
-### Submitting a pull request
-
-Now that we have this setup done we will be able to suggest 
-changes to this repo using a pull request.
-Each person will add a new file with information about a new country in it.
-
-To start, the instructor will now add a single file to the repository containing 
-information about the United States.
-Next, we will update our local version of the repo to include this new file.
-We use a command called `pull` to bring these changes to our local repository.
-We must specify the remote and branch we want to pull from, in this case the 
-`upstream` remote's `master` branch.
+then makes her change and commits it:
 
 ```shell
-$ git pull upstream master
-```
-
-Now your local version of the repo is updated but your forked version of the 
-repo on GitHub is not yet up to date.
-You can reload your fork in GitHub and see it does not contain the new 
-`united_states.txt` file.
-To update it, we can `push` the changes in our local version to the master branch of our fork, 
-called 'origin'.
-
-```shell
-$ git push origin master
-```
-
-Now let's each add a new country to the repository.
-First, let's make a new branch to work on.
-This will keep our 'master' version in sync with the authoritative version of the repository.
-We can name our branch descriptively after the country we will be adding.
-(As an example, these lesson notes will `addFrance`.)
-
-```shell
-$ git checkout -b addFrance
+jj:~/plotting $ nano README.md
+jj:~/plotting $ git commit -a -m "Adding my email address"
 ```
 
 ```text
-Switched to a new branch 'addFrance'
+[master b8938eb] Adding my email address
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
-Next, copy `united_states.txt` and change the name to the name of your chosen country.
-Then you can use a text editor of your choice to edit the contents
-of the file to reflect the information of your chosen country.  
-Hint: You may need to do some internet searching to fill in the information.
-
 ```shell
-$ cp united_states.txt france.txt
-$ nano france.txt
-$ cat france.txt
+jj:~/plotting $ git diff -r HEAD~1
 ```
 
 ```text
-Population: 66,991,000
-Capital: Paris
+diff --git a/README.md b/README.md
+index a55a9bb..eb24a3f 100644
+--- a/README.md
++++ b/README.md
+@@ -3,4 +3,4 @@
+ Contributors:
+ 
+ -   Frances Bilas
+--   Jean Jennings
++-   Jean Jennings <jj@eniac.org>
 ```
 
-Next let's add and commit the changes to the repo.
+Her changes are in her desktop repository, and *only* in her desktop repository (FIXME: figure a).
+She cannot create a pull request until those changes are on GitHub,
+so she pushes her new branch to her repository on GitHub:
 
 ```shell
-$ git add france.txt
-$ git commit -m "Added file on france"
+jj:~/plotting $ git push origin adding-email
 ```
 
 ```text
-[addFrance 79a312a] Added file on france
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 307 bytes | 307.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote: 
+remote: Create a pull request for 'adding-email' on GitHub by visiting:
+remote:      https://github.com/jeanjennings/plotting/pull/new/adding-email
+remote: 
+To https://github.com/jeanjennings/plotting.git
+ * [new branch]      adding-email -> adding-email
+```
+
+When Jean goes to her GitHub repository in the browser,
+GitHub notices that she has just pushed a new branch
+and asks her if she wants to create a pull request:
+
+```{r image-after-jean-pushes, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/after-jean-pushes.png")
+```
+
+When Jean clicks on the button,
+GitHub displays a page showing the default source and destination of the pull request
+and a pair of editable boxes for the pull request's title and a longer comment:
+
+```{r image-pull-request-a, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pull-request-a.png")
+```
+
+If she scrolls down,
+she can see a summary of the changes that will be in the pull request:
+
+```{r image-pull-request-b, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pull-request-b.png")
+```
+
+She fills in the top two boxes:
+
+```{r image-fill-in-pull-request, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/fill-in-pull-request.png")
+```
+
+and clicks on "Create Pull Request".
+GitHub does that
+and then displays a page showing the new pull request:
+
+```{r image-new-pull-request, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/new-pull-request.png")
+```
+
+Note that this pull request is displayed in Frances's repository rather than Jean's
+since it is Frances's repository that will be affected if the pull request is merged.
+
+Some time later,
+Frances checks her repository and sees that there is a pull request:
+
+```{r image-viewing-new-pull-request, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/viewing-new-pull-request.png")
+```
+
+Clicking on the "Pull requests" tab brings up a list of [PRs][pr-abbreviation]:
+
+```{r image-pr-list, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-list.png")
+```
+
+and clicking on the pull link itself displays more information about it:
+
+```{r image-pr-details, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-details.png")
+```
+
+Since there are no conflicts,
+GitHub will allow Frances to merge the PR immediately using the "Merge pull request" button.
+She could also discard or reject it *without* merging using the "Close pull request" button.
+Instead,
+she clicks on the "Files changed" tab to see what Jean has changed:
+
+```{r image-pr-changes, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-changes.png")
+```
+
+If she moves her mouse over particular lines,
+a white-on-blue cross appears near the numbers to indicate that she can add comments:
+
+```{r image-pr-comment-marker, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-comment-marker.png")
+```
+
+She clicks on the marker beside her own name and writes a comment:
+
+```{r image-pr-writing-comment, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-writing-comment.png")
+```
+
+She only wants to make one comment rather than write a lengthier multi-comment review,
+so she clicks on "Add single comment".
+GitHub redisplays the page with her comment inserted inline:
+
+```{r image-pr-with-comment, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-with-comment.png")
+```
+
+While all of this has been doing on,
+GitHub has been emailing notifications to both Jean and Frances.
+When Jean clicks on the link in hers,
+it takes her to the PR and shows her Frances's comment.
+She changes `README.md`,
+commits,
+and pushes,
+but does *not* create a new pull request or do anything to the existing one.
+As explained above,
+a PR is a note asking that two branches be merged,
+so if either end of the merge changes,
+the PR updates automatically.
+
+Sure enough,
+when Frances looks at the PR again a few moments later she sees this:
+
+```{r image-pr-with-fix, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-with-fix.png")
+```
+
+Satisfied,
+she goes back to the "Conversation" tab and clicks on "Merge".
+The icon at the top of the PR's page changes text and color to show that the merge was successful:
+
+```{r image-pr-successful-merge, echo=FALSE}
+insert_graphic("figures/rse-git-advanced/pr-successful-merge.png")
+```
+
+To get those changes from GitHub to her desktop repository,
+Frances uses `git pull`:
+
+```shell
+frances:~/plotting $ git pull origin master
+```
+
+```text
+remote: Enumerating objects: 9, done.
+remote: Counting objects: 100% (9/9), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 7 (delta 3), reused 5 (delta 2), pack-reused 0
+Unpacking objects: 100% (7/7), done.
+From https://github.com/francesbilas/plotting
+ * branch            master     -> FETCH_HEAD
+   766c2cd..984b116  master     -> origin/master
+Updating 766c2cd..984b116
+Fast-forward
+ README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 ```
 
-Now we are ready to submit a pull request.
-In other words, we are ready to submit a **request** for a member of the upstream repository
-to **pull**  our changes into the upstream repository from our fork.
-Once the pull request has been initiated,
-they can make comments on our proposed changes and/or request further edits/improvements
-before accepting or rejecting our changes.
-
-In order to create this pull request,
-we must push our new branch containing the changes we'd like to submit
-to the remote linked to our fork, `origin`, on GitHub.
+To get the change she just made from her `adding-email` branch into her `master` branch,
+Jean could use `git merge` on the command line.
+It's a little clearer,
+though,
+if she also uses `git pull` from her `upstream` repository (i.e., Frances's repository)
+so that she's sure to get any other changes that Frances may have merged:
 
 ```shell
-$ git push origin addFrance
+jj:~/plotting $ git checkout master
 ```
 
 ```text
-Counting objects: 4, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 783 bytes | 0 bytes/s, done.
-Total 4 (delta 3), reused 0 (delta 0)
-remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
-To https://github.com/USERNAME/countries.git
-   2037539..79a312a  addFrance -> addFrance
-```
-
-Next go to your forked GitHub version of the repo and reload the page.
-You won't see the new file added in the list of files but you will see 
-that you recently pushed a new branch to the repository.
-
-*TODO: Figure - Add France [../fig/github_screenshot_origin_master_addFrance.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_origin_master_addFrance.png)*
-
-
-If you wish to view your new branch you can click on the 'Branch' drop down menu
-and select that branch.
-
-*TODO: Figure - Switch Branch [../fig/github_screenshot_switch_github_branch.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_switch_github_branch.png)*
-
-Then you should be able to view the files and commits in that branch.
-
-*TODO: Figure - Add France [../fig/github_screenshot_origin_master_addFrance.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_origin_master_addFrance.png)*
-
-GitHub already suspects that we are going to want to make a pull request so we can click
-the 'Compare & pull request' button to start a new pull request.
-
-*TODO: Figure - Pull Request (Part 1) [../fig/github_screenshot_makingPR1.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_makingPR1.png)*
-
-The base fork should be the upstream/authoritative version's master branch and then 
-the head fork should be the new branch of our fork.
-You can add more information into the comment section if there is anything you'd like 
-to add for the person who reviews your suggestion.
-Then you can click the 'create pull request button' to submit the pull request.
-
-*TODO: Figure - Pull Request (Part 2) [../fig/github_screenshot_makingPR2.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_makingPR2.png)*
-
-Now someone with privileges to the upstream repo can review it, give comments and
-suggestions, and merge it into the upstream version.
-In our pull request they can see any messages we left or click and look at the commits that were made and see the files changed.
-
-Our collaborator reviewing the pull request noticed that 
-we forgot to add the largest city so let's add it and update our pull request.
-
-```shell
-$ nano france.txt
-$ cat france.txt
-```
-
-```text
-Population: 66,991,000
-Capital: Paris
-Largest City: Paris
-```
-
-Next we will add and commit these changes.
-Then we can push them to our fork of the repo.
-
-```shell
-$ git add france.txt
-$ git commit -m "Added largest city to france file"
-$ git push origin addFrance
-```
-
-```text
-Counting objects: 3, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 387 bytes | 0 bytes/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
-To https://github.com/USERNAME/countries.git
-   31aa2e3..609acfe  addFrance -> addFrance
-```
-
-If we reload the pull request, we'll see that the new commit was added to the 
-pull request and the changes have been automatically updated.
-New commits pushed to the same branch are included in the previous pull request.
-If you want to suggest changes separately you need to make separate branches but 
-if you want the changes to be considered together you should put them in the same branch.
-
-*TODO: Figure - New Commit [../fig/github_screenshot_after_new_commit.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_after_new_commit.png)*
-
-
-### Dealing with Conflicting Changes
-
-When working with others it's possible that two people will edit the same code,
-creating a conflict when we try and merge changes.
-Here we will look at how to resolve conflicts when working collaboratively.
-
-We will continue to work in the `addFrance` branch from before and check we are
-in that branch before we start.
-
-
-```shell
-$ git branch
-```
-
-```text
-* addFrance
-  master
-```
-
-Next we will each add our country to the existing `README.md` file in the repository in the line directly following the `Countries:` line.
-
-```shell
-$ nano README.md
-$ cat README.md
-```
-
-```text
-# countries
-Sandbox for learning PR's in Software Carpentry workshop
-
-Countries:
-France
-```
-
-Next we need to add, commit, and push these requests to our existing pull request.
-
-```shell
-$ git add README.md
-$ git commit -m "Added France to list of countries in README"
-```
-
-```text
-[addFrance 66d7ebf] Added France to list of countries in README
- 1 file changed, 1 insertions(+), 1 deletions(-)
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
 ```
 
 ```shell
-$ git push origin addFrance
+jj:~/plotting $ git pull upstream master
 ```
 
 ```text
-Counting objects: 3, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 376 bytes | 0 bytes/s, done.
-Total 3 (delta 1), reused 0 (delta 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/USERNAME/countries.git
-   609acfe..66d7ebf  addFrance -> addFrance
-```
-
-Now if we reload the page we had a pull request we notice that our `addFrance`
-branch is conflicting with upstream's `master` branch.
-This is because someone else edited the same line of the `README.md` file by 
-adding 'United States' where we added 'France'.
-
-*TODO: Figure - Conflicting PR [../fig/github_screenshot_conflicting_PR.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_conflicting_PR.png)*
-
-In this case, it is possible to resolve this conflict in GitHub by 
-clicking the 'Resolve Conflicts' button.
-However, we can also resolve this conflict locally.
-
-First we need to pull down the changes from upstream's `master` branch into our
-`addFrance` branch.
-
-```shell
-$ git pull upstream master
-```
-
-```text
-From https://github.com/McMahonLab/countries
+remote: Enumerating objects: 1, done.
+remote: Counting objects: 100% (1/1), done.
+remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (1/1), done.
+From https://github.com/francesbilas/plotting
  * branch            master     -> FETCH_HEAD
-Auto-merging README.md
-CONFLICT (content): Merge conflict in README.md
-Automatic merge failed; fix conflicts and then commit the result.
+   766c2cd..984b116  master     -> upstream/master
+Updating 766c2cd..984b116
+Fast-forward
+ README.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 ```
 
-From the conflict error message we can see the conflict is in `README.md` or by running `git status` and seeing the 'both modified' status.
+All four repositories are now synchronized.
 
-```shell
-$ git status
-```
-
-```text
-On branch addFrance
-You have unmerged paths.
-  (fix conflicts and run "git commit")
-
-Unmerged paths:
-  (use "git add <file>..." to mark resolution)
-
-	both modified:   README.md
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
-
-Now we will resolve the conflict by editing the `README.md` file to contain both 
-'United States' and 'France' and none of the additional lines git added to
-indicate conflict
-
-```shell
-$ nano README.md
-$ cat README.md
-```
-
-```text
-# countries
-Sandbox for ComBEE GitHub workshop on PR's
-
-Countries:
-France
-United States
-```
-
-Then we add and commit our resolved conflict.
-
-```shell
-$ git add README.md
-$ git commit -m "Resolved conflict in readme w two countries"
-```
-
-```text
-[addFrance 912317b] Resolved conflict in readme w two countries
-```
-
-Finally we can update the pull request by pushing these changes to our GitHub 
-fork of the repository.
-
-```shell
-$ git push origin addFrance
-```
-
-```text
-git push origin addFrance
-Counting objects: 6, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (6/6), done.
-Writing objects: 100% (6/6), 732 bytes | 0 bytes/s, done.
-Total 6 (delta 2), reused 0 (delta 0)
-remote: Resolving deltas: 100% (2/2), completed with 1 local object.
-To https://github.com/USERNAME/countries.git
-   66d7ebf..912317b  addFrance -> addFrance
-```
-
-Now if we reload our browser we will see that the new commit is in the pull 
-request and it has no conflicts with the base branch.
-
-*TODO: Figure - Resolved Conflict [../fig/github_screenshot_resolved_PR_conflict.png](https://github.com/UW-Madison-DataScience/git-novice-custom/tree/gh-pages/fig/github_screenshot_resolved_PR_conflict.png)*
-
-Now the owner/administrator/manager of the authoritative repo can review our pull requests and decide to incorporate them.
-
-
-> **Recap: Step-by-step guide to pull requests**
->
-> 1.  "Fork" the repository that you'd like to submit a pull request to
->     by clicking the button on the GitHub (or equivalent) page for that repository
->
-> 2.  `git clone` the fork to your local computer
-> 
-> 3.  `git remote add upstream` to link your fork with the authoritative repository
->     (i.e. the original GitHub repository that you will submit the pull request to)
->
-> 4.  `git checkout -b new-branch` to create a new branch
->
-> 5.  Make your proposed edits/changes on that new branch  
->
-> 6.  `git push origin new-branch` to push your changes to the fork on GitHub
->
-> 7.  Navigate to the GitHub page for your fork and view the new branch.
->     The will be a "compare and pull request" button you can click to create 
->.    and submit the pull request.
-
+This process may seem overly complicated when it is described step by step,
+but it quickly becomes second nature.
+Everyone involved in the project can work at their own pace,
+picking up others' changes and submitting their own whenever they want.
+More importantly,
+everyone has a chance to review work before it lands in the main repository.
+As we discuss in Chapter \@ref(FIXME),
+doing reviews doesn't just prevent errors from creeping in:
+it is also an effective way to spread understanding and skills.
 
 ## Exercises {#rse-git-advanced-exercises}
 
+### Add new country file and make additional PR {#rse-git-advanced-ex-additional-pr}
 
-### Branches
-
-TODO.
-
-
-### Pull requests
-
-**Add new country file and make additional PR**
-
-* Starting in the master branch make a new branch
-* Copy other country file into a new country
-* Edit the file to include info on the new country
-* Add and commit this new file
-* Push the new changes to GitHub
-
-> *Solution*
-> 
-> ```shell
-> $ git checkout master
-> $ git checkout -b addItaly
-> $ cp united_states.txt italy.txt
-> $ nano italy.txt #Add the right info into the file
-> $ git add italy.txt
-> $ git commit -m "Added file on Italy"
-> $ git push origin addItaly
-> ```
-
+-   Starting in the master branch make a new branch
+-   Copy other country file into a new country
+-   Edit the file to include info on the new country
+-   Add and commit this new file
+-   Push the new changes to GitHub
 
 ## Key Points {#rse-git-advanced-keypoints}
 
