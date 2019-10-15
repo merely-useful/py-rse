@@ -22,6 +22,7 @@
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
 [climate-api]: http://data.worldbank.org/developers/climate-data-api
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
+[codecov]: https://codecov.io/
 [conda]: https://conda.io/
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
