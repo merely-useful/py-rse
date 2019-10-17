@@ -21,8 +21,8 @@
 [chocolatey]: https://chocolatey.org/
 [choose-license]: http://choosealicense.com/
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
+[cli]: glossary.html#cli
 [climate-api]: http://data.worldbank.org/developers/climate-data-api
-[clui]: glossary.html#clui
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [cognitive-load]: glossary.html#cognitive-load
 [command-argument]: glossary.html#command-argument
@@ -30,9 +30,11 @@
 [command-option]: glossary.html#command-option
 [command-shell]: glossary.html#command-shell
 [command-switch]: glossary.html#command-switch
+[comment]: FIXME
 [conda]: https://conda.io/
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
+[continuation-prompt]: FIXME
 [corpus]: FIXME
 [covenant]: https://www.contributor-covenant.org
 [cran]: https://cran.r-project.org/
@@ -45,6 +47,7 @@
 
 [dc]: https://datacarpentry.org/
 [declarative-programming]: glossary.html#declarative-programming
+[delimiter]: FIXME
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [doi]: FIXME
 [drake]: https://ropenscilabs.github.io/drake-manual/
@@ -56,8 +59,10 @@
 
 [f1000-research]: https://f1000research.com/
 [figshare]: https://figshare.com/
+[filename-extension]: FIXME
 [filename-stem]: glossary.html#filename-stem
 [filesystem]: glossary.html#filesystem
+[filter]: FIXME
 [folder]: glossary.html#folder
 
 [gdb]: https://www.gnu.org/software/gdb
@@ -72,8 +77,8 @@
 [github]: http://github.com
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [gnu-make]: http://www.gnu.org/software/make/
-[gnu-man]: http://www.gnu.org/manual/manual.html
 [gnu-man-coreutils]: http://www.gnu.org/software/coreutils/manual/coreutils.html
+[gnu-man]: http://www.gnu.org/manual/manual.html
 [go-fair]: https://www.go-fair.org/fair-principles/
 [gui]: glossary.html#gui
 [gutenberg]: https://www.gutenberg.org/
@@ -93,6 +98,7 @@
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 [lme4]: https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf
+[loop-body]: FIXME
 
 [magic-number]: glossary.html#magic-number
 [make-action]: glossary.html#make-action
@@ -111,6 +117,7 @@
 [mertz-documentation]: https://realpython.com/documenting-python-code/
 [model-coc]: http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
 
+[nano]: FIXME
 [noller-a-lot-happens]: http://jessenoller.com/blog/2015/9/27/a-lot-happens
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
 [numpy-docstring]: https://numpydoc.readthedocs.io/en/latest/format.html
@@ -123,7 +130,9 @@
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
 [osi-license-list]: http://opensource.org/licenses
+[overloading]: FIXME
 
+[pager]: FIXME
 [pandas-docstring]: https://pandas.pydata.org/pandas-docs/stable/development/contributing_docstring.html
 [pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
 [parent-directory]: glossary.html#parent-directory
@@ -131,6 +140,7 @@
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
+[process]: FIXME
 [prompt]: glossary.html#prompt
 [pypi]: https://pypi.org/
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
@@ -145,6 +155,9 @@
 [r-style-guide]: https://style.tidyverse.org/
 [r]: FIXME
 [readthedocs]: https://docs.readthedocs.io/en/latest/
+[recursion]: FIXME
+[redirection]: FIXME
+[regular-expression]: FIXME
 [relative-path]: glossary.html#relative-path
 [repl]: glossary.html#repl
 [reproducible-research]: FIXME
@@ -166,6 +179,7 @@
 [script]: glossary.html#script
 [select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [setuptools]: https://setuptools.readthedocs.io/
+[shell-script]: FIXME
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [so-keywords-builtins]: https://stackoverflow.com/a/22864250/2166823
@@ -179,7 +193,11 @@
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [stack-printer]: http://www.stackprinter.com/
+[standard-error]: FIXME
+[standard-input]: FIXME
+[standard-output]: FIXME
 [stderr]: glossary.html#stderr
+[stdin]: FIXME
 [stdout]: glossary.html#stdout
 [styler-pkg]: http://styler.r-lib.org/
 [sub-directory]: glossary.html#sub-directory
@@ -198,17 +216,21 @@
 [timestamp]: glossary.html#timestamp
 [tinytex]: https://yihui.name/tinytex/
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
+[tldr]: FIXME
 [transitive-dependency]: glossary.html#transitive-dependency
 [travis-ci]: https://travis-ci.org/
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [tyranny-structurelessness]: http://www.jofreeman.com/joreen/tyranny.htm
 
+[unix-command-history]: FIXME
+[unix-loop]: FIXME
 [unix-pipe]: glossary.html#unix-pipe
 [unix-shell]: glossary.html#unix-shell
 [unpaywall]: http://unpaywall.org/
 [usethis]: https://usethis.r-lib.org/
 
 [vanderplas-licensing]: http://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
+[variable]: FIXME
 [version-control]: https://peerj.com/preprints/3159/
 [vs-code]: https://code.visualstudio.com/
 
