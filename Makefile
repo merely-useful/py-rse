@@ -9,6 +9,7 @@ R_FILES=\
   r-index.Rmd \
   novice-goals.Rmd \
   r-intro.Rmd \
+  r-getting-started.Rmd \
   r-practice.Rmd \
   r-reproducibility.Rmd \
   r-data-manipulation.Rmd \
@@ -32,7 +33,6 @@ RSE_FILES=\
   rse-cmdline-git.Rmd \
   rse-advanced-git.Rmd \
   rse-automate.Rmd \
-  configure.Rmd \
   verify.Rmd \
   backlog.Rmd \
   style.Rmd \
