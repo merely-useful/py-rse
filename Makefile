@@ -3,6 +3,7 @@
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
 ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/rse/rse.pdf
+DATA=data climate-data zipfs-law
 
 R_FILES=\
   _r.yml \
@@ -46,7 +47,8 @@ RSE_FILES=\
   teamwork.Rmd \
   finale.Rmd \
   rse-objectives.Rmd \
-  rse-keypoints.Rmd
+  rse-keypoints.Rmd \
+  rse-solutions.Rmd
 
 COMMON_FILES=\
   _common.R \
@@ -70,29 +72,27 @@ commands :
 ## everything   : rebuild all HTML and PDF.
 everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 
-${INDEX_HTML} : ./_index.html
-	cp ./_index.html ${INDEX_HTML}
-	mkdir -p _book/static
-	cp ./static/* _book/static
-	mkdir -p _book/data
-	cp ./data/*.* _book/data
-
 #-------------------------------------------------------------------------------
 
 ## html         : build HTML version.
-html : ${ALL_HTML} ${INDEX_HTML}
+html : ${ALL_HTML}
 
-_book/r/index.html : ${R_FILES} ${COMMON_FILES}
+_book/r/index.html : ${R_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	cp r-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_r.yml'); warnings()"
 
-_book/py/index.html : ${PY_FILES} ${COMMON_FILES}
+_book/py/index.html : ${PY_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
 
-_book/rse/index.html : ${RSE_FILES} ${COMMON_FILES}
+_book/rse/index.html : ${RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_rse.yml'); warnings()"
+
+${INDEX_HTML} : ./_index.html
+	mkdir -p _book
+	cp ./_index.html ${INDEX_HTML}
+	cp -r ${DATA} _book
 
 #-------------------------------------------------------------------------------
 

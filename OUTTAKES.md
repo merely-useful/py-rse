@@ -1,3 +1,5 @@
+# Stylometry Project
+
 The second project is a simple form of [computational stylometry](glossary.html#computational-stylometry).
 Different writers have different styles;
 can a computer detect those differences,
@@ -30,3 +32,28 @@ we will see if the similarity measures we develop show that.
 | Bram Stoker                 | dracula.txt                     |
 | H. G. Wells                 | time_machine.txt                |
 | Edith Wharton               | ethan_frome.txt                 |
+
+---
+
+# Editor Recommendations
+
+However, because of this trait, it may 
+not be powerful enough or flexible enough for the work you need to do
+after this workshop. On Unix systems (such as Linux and Mac OS X),
+many programmers use [Emacs](http://www.gnu.org/software/emacs/) or
+[Vim](http://www.vim.org/) (both of which require more time to learn),
+or a graphical editor such as
+[Sublime Text](https://www.sublimetext.com/). On Windows, a popular editor is
+[Notepad++](http://notepad-plus-plus.org/). Windows also has a built-in
+editor called `notepad` and macOS has `TextEdit` which both can be run from
+the command line (`start notepad <file_name>` and `open -e <file_name>`,
+respectively).
+
+No matter what editor we use,
+we need to know where it searches for and saves files.
+If we start it from the shell,
+it will (probably) use your current working directory as its default location.
+If you use
+your computer's start menu, it may want to save files in your desktop or
+documents directory instead. You can change this by navigating to
+another directory the first time you "Save As..."
