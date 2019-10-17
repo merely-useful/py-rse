@@ -70,10 +70,28 @@ commands :
 ## everything   : rebuild all HTML and PDF.
 everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
 
+##   r          : rebuild novice R HTML and PDF.
+r : _book/r/index.html _book/r/rse.pdf
+
+##   py         : rebuild novice Python HTML and PDF.
+py : _book/py/index.html _book/py/rse.pdf
+
+##   rse        : rebuild RSE HTML and PDF.
+rse : _book/rse/index.html _book/rse/rse.pdf
+
 #-------------------------------------------------------------------------------
 
-## html         : build HTML version.
+## html         : build all HTML versions.
 html : ${ALL_HTML}
+
+##   r-html     : build novice R HTML.
+r-html : _book/r/index.html
+
+##   py-html    : build novice Python HTML.
+py-html : _book/py/index.html
+
+##   rse-html   : build RSE HTML.
+rse-html : _book/rse/index.html
 
 _book/r/index.html : ${R_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	cp r-index.Rmd index.Rmd
@@ -96,6 +114,15 @@ ${INDEX_HTML} : ./_index.html
 
 ## pdf          : build PDF version.
 pdf : ${ALL_PDF} ${INDEX_HTML}
+
+##   r-pdf      : build novice R PDF.
+r-pdf : _book/r/r.pdf
+
+##   py-pdf     : build novice Python PDF.
+py-pdf : _book/py/py.pdf
+
+##   rse-pdf    : build RSE PDF.
+rse-pdf : _book/rse/rse.pdf
 
 _book/r/r.pdf : ${R_FILES} ${COMMON_FILES}
 	cp r-index.Rmd index.Rmd
