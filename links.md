@@ -24,6 +24,7 @@
 [cli]: glossary.html#cli
 [climate-api]: http://data.worldbank.org/developers/climate-data-api
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
+[codecov]: https://codecov.io/
 [cognitive-load]: glossary.html#cognitive-load
 [command-argument]: glossary.html#command-argument
 [command-flag]: glossary.html#command-flag
@@ -96,7 +97,7 @@
 
 [joss]: https://joss.theoj.org/
 [jupyter]: http://jupyter.org/
-[jupytext]: FIXME
+[jupytext]: https://jupytext.readthedocs.io/en/latest/introduction.html
 
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -152,11 +153,14 @@
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [python]: FIXME
 
+[r]: https://cran.r-project.org/
 [r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
 [r-style-guide-files]: https://style.tidyverse.org/files.html
 [r-style-guide]: https://style.tidyverse.org/
-[r]: FIXME
+[r-pkg-book]: http://r-pkgs.had.co.nz/
+[r-pkg-book-testing]: http://r-pkgs.had.co.nz/tests.html
+[r-testthat]: https://testthat.r-lib.org/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [recursion]: FIXME
 [redirection]: FIXME
@@ -172,10 +176,11 @@
 [rothenberg-quote]: https://www.clir.org/wp-content/uploads/sites/6/ensuring.pdf
 [roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
 [rse]: FIXME
+[rstudio]: https://rstudio.com/
+[rstudio-addin]: https://rstudio.github.io/rstudioaddins/
 [rstudio-cloud]: https://rstudio.cloud/
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [rstudio-r-projects]: https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
-[rstudio]: FIXME
 [rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 
 [sci-reproducibility]: https://en.wikipedia.org/wiki/Reproducibility

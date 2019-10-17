@@ -297,9 +297,6 @@
 **Install**<a id="install"></a>
 :   FIXME
 
-**Instrumenting profiler**<a id="instrumenting-profiler"></a>
-:   FIXME
-
 **Integrated Development Environment**<a id="ide"></a> (IDE)
 :   FIXME
 
@@ -440,9 +437,6 @@
 **Product manager**<a id="product-manager"></a>
 :   FIXME
 
-**Profiler**<a id="profiler"></a>
-:   FIXME
-
 **Project manager**<a id="project-manager"></a>
 :   FIXME
 
@@ -510,9 +504,6 @@
 :   FIXME
 
 **Rule**<a id="make-rule"></a> (in Make)
-:   FIXME
-
-**Sampling profiler**<a id="sampling-profiler"></a>
 :   FIXME
 
 **Scalable Vector Graphics**<a id="svg"></a> (SVG)

@@ -34,6 +34,7 @@ RSE_FILES=\
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
   rse-automate.Rmd \
+  rse-unit-testing.Rmd \
   verify.Rmd \
   backlog.Rmd \
   style.Rmd \
@@ -41,7 +42,6 @@ RSE_FILES=\
   inclusive.Rmd \
   rse-ci.Rmd \
   rse-r-package.Rmd \
-  rse-r-testing.Rmd \
   rse-py-package.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
