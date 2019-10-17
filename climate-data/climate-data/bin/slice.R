@@ -5,13 +5,13 @@ firstYear <- as.numeric(args[1])
 lastYear <- as.numeric(args[2])
 filenames <- args[c(-1, -2)]
 
-slice <- function(name, from, to) {
+take_slice <- function(name, from, to) {
   read_csv(name) %>%
     filter(Year >= from) %>%
     filter(Year <= to)
 }
 
 data <- filenames %>%
-  map_dfr(slice, firstYear, lastYear) %>%
+  map_dfr(take_slice, firstYear, lastYear) %>%
   format_csv("") %>%
   cat()
