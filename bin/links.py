@@ -4,7 +4,7 @@
 links.py links_file [source_file...]
 
 Check that all of the links used in the given source files are defined in the
-links file, and that all defined links are used.  If no source files are given,
+links file and that all defined links are used.  If no source files are given,
 reads from standard input (but links file must still be named).
 '''
 
@@ -36,6 +36,6 @@ def find_uses(filename, reader):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Usage: checklinks.py links_file [source_file...]', file=sys.stderr)
+        print('Usage: links.py links_file [source_file...]', file=sys.stderr)
         sys.exit(1)
     main(sys.argv[1], sys.argv[2:])

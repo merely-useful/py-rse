@@ -34,8 +34,7 @@ RSE_FILES=\
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
   rse-automate.Rmd \
-  rse-unit-testing.Rmd \
-  verify.Rmd \
+  rse-correctness.Rmd \
   backlog.Rmd \
   style.Rmd \
   project.Rmd \
@@ -57,7 +56,6 @@ COMMON_FILES=\
   CONDUCT.md \
   CONTRIBUTING.md \
   gloss.md \
-  rules.Rmd \
   references.Rmd \
   links.md
 
@@ -121,6 +119,10 @@ clean :
 ## links        : check that all links are defined and used.
 links :
 	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+
+## images       : check that all images are defined and used.
+images :
+	@bin/images.py ./figures ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
 
 ## settings     : echo all variable values.
 settings :
