@@ -1,0 +1,596 @@
+# Unit Testing {#rse-unit-testing}
+
+## Questions {#rse-unit-testing-questions}
+
+```{r, child="questions/rse-unit-testing.md"}
+```
+
+## Introduction {#rse-unit-testing-intro}
+
+When you write software, 
+you likely think your code is doing exactly what you wrote it to do.
+But how do you *know* for sure, in a quantifiable and objective way?
+How do you know if your code correctly outputs or computes what you think it does?
+Well, like in science, to find out if something matches your expectation, 
+you test that expectation against reality.
+In this case, you write tests for your code to validate (or invalidate) your expectation.
+Over the course of this chapter we will explain and show how to make use of
+["unit tests"](glossary.html#rse-unit-testing-test) in both Python and R packages.
+
+## Manually testing your code {#rse-unit-testing-manual-testing}
+
+Without a formal framework for testing code, 
+how do you normally see if your code works?
+Like many of us before learning about unit testing, 
+you might test code interactively by running it yourself on different problems.
+
+For instance, let's say you wrote a function like this:
+
+```{r manual-test-r}
+# in R
+numSign <- function(x) {
+  if (x > 0) {
+    1
+  } else {
+    -1
+  }
+}
+
+numSign(1)
+```
+
+```{python manual-test-py}
+# In Python
+def numSign(x):
+    if x > 0:
+        out = 1
+    else:
+        out = -1
+    return(out)
+
+numSign(1)
+```
+
+A simple way to test the code is to run commands like:
+
+```{r manual-test-r-2}
+numSign(2) == 1
+numSign(0) == -1
+numSign(-4) == -1
+```
+
+You could go a step further and write a script with some simple tests:
+
+```{r stop-not-r}
+# In R
+stopifnot(numSign(1) == 1)
+stopifnot(numSign(-Inf) == -1)
+```
+
+`stopifnot()` runs the code and if it resolves to `true` than it continues.
+What if you want to test something that you know should fail?
+
+```{r show-stop-not-error, error=TRUE}
+stopifnot(numSign(NULL) == -1)
+```
+
+Which gives an error as expected.
+
+TODO: Need Python version of this.
+
+TODO: Finish this off...
+
+### Exercise
+
+- Write manually in the console/terminal a test to check if the function has an error or gives you what you expect.
+TODO: Need to complete this.
+
+### Why this quickly becomes a problem
+
+Writing simple tests on the fly and interactively (or informally), like above, 
+works for a while but quickly becomes unsustainable. 
+The above are not sufficient because:
+
+1. If you run the simple tests in a script that causes an error,
+the execution will halt at the first failed test.
+Any subsequent test won't then run and we may not know if the error was expected or not.
+
+2. The tests are not independent, given that if one test fails, 
+all subsequent tests won't be run.
+Good tests are independent of each other,
+so that all tests run and give an output on their success or failure.
+
+3. Each test prints the output to the screen (true/false... or no output at all),
+but there is no overall summary and no easy way to see what test produced what result.
+For only three tests like above, this isn't a problem.
+But once more tests are included and given no meaningful output is provided,
+this way of creating tests becomes unusable.
+
+Instead, we should use a formal framework for writing and running tests.
+
+## Framework for automatic testing {#rse-unit-testing-framework}
+
+To optimize your time writing code and developing tests, 
+a framework for testing software should:
+
+- make it easy for people to write tests (because otherwise they won't do it);
+- run a set of tests;
+- report which ones have failed; and,
+- give some idea of where or why they failed (to help debugging).
+
+Any single test can have one of three results:
+
+- [success](glossary.html#test-success), meaning that the test passed correctly;
+- [failure](glossary.html#test-failure), meaning that the software being tested didn't do what it was supposed to; or
+- [error](glossary.html#test-error), meaning that the test itself failed (in which case, we don't know anything about the software being tested).
+
+A formal [test framework](glossary.html#test-framework) is a package that supports writing and running tests.
+In Python, the tools to run the tests are called a [test runner](glossary.html#test-runner).
+The package will find the tests, execute them, and report the results of the tests.
+If any test fails, a summary of the failure will be given.
+
+Tests in this framework are usually called "unit tests",
+where individual components ("units") of your code are tested.
+A unit test is a function that runs your code (with associated tests) and produces one of the three results.
+Unit tests take an input (called a [fixture](glossary.html#fixture) in Python and simply "input" in R) 
+that are then sent to the functions or code we want to test.
+For each function/code we have a set of test "expectations",
+meaning that we compare our expected output of the function/code with what the code actually outputs.
+
+## Getting tests set up {#rse-unit-testing-getting-setup}
+
+There are several test frameworks in both Python and R. 
+In Python, the most recommended and most common package is [pytest][pytest].
+In R, it is the testthat package.
+
+We'll start with **Python**.
+Tests in pytest are structured according to three simple rules:
+
+1. All tests are put in files whose names begin with `test_`.
+2. Each test is a function whose name begins with `test_`.
+3. Test functions use `assert` to check that results are as expected.
+
+It's good practice to put all test files into the `tests/` folder. 
+Running tests is done by typing in the shell:
+
+```shell
+pytest
+```
+
+pytest searches for all files named `test_*.py` or `*_test.py` in the current directory and its sub-directories (e.g. `tests/`).
+If we want to run single tests, we run the command `pytest tests/test_filename.py` to run the tests in file `tests/test_filename.py`.
+We'll get into the specific anatomy of unit tests in the next section.
+
+**For R**, setting things up are a bit more straight-forward and automated. 
+To start, open the `.Rproj` in RStudio. In the console, type out:
+
+```r
+usethis::use_testthat()
+```
+
+which will create a new `tests/testthat/` directory, 
+add testthat to `Suggests` in the `DESCRIPTION` file,
+and creates a `tests/testthat.R` script that instructs R on how to run the tests.
+Creating a new test file is done with:
+
+```r
+usethis::use_test("name-of-file")
+```
+
+which will create a file called `tests/testthat/test-name-of-file.R`. 
+Generally, the name of the test file should reflect what you want to test,
+usually the contents of a specific R file inside `R/`.
+The basic template for writing the test is provided inside the new file.
+
+Running tests in R is done by either typing out:
+
+```r
+devtools::test()
+```
+
+or by using the keybinding "Ctrl/Cmd-Shift-T" in RStudio.
+For further learning on using unit tests in R packages, check out the
+[`testthat`][r-testthat] website and the [Testing Chapter][r-pkg-book-testing] of
+the [R Packages][r-pkg-book] book.
+
+### Exercise
+
+**In Python**:
+
+- Create a file called `test_add_two.py` in `tests/` by running in the terminal:
+
+    ```shell
+    touch tests/test_add_two.py
+    ```
+    
+    Open that file in the Python editor and write (or copy and paste) the below code into the file:
+    
+    TODO: Fix editor name here.
+    
+    ```python
+    def add_two(x, y):
+        val = x + y
+        return(val)
+    
+    # This will succeed
+    def test_add_two():
+        assert add_two(1, 2) == 3
+    
+    # This will fail    
+    def test_add_two_fail():
+        assert add_two(1, 2) == 4
+    ```
+    
+    TODO: Make sure this is correct.
+    
+    Now, run `pytest` in the terminal. What does the test results say?
+
+**In R**:
+
+- Making sure you are inside your R package in RStudio, 
+type out `usethis::use_testthat()` to set up testing, 
+if you haven't done so already.
+Next run the command:
+
+    ```r
+    usethis::use_test("mean")
+    ```
+    
+    The new test file should open up in RStudio. 
+    Write out (or copy and paste) the below code into the new file:
+    
+    ```r
+    context("Computing the mean")
+    
+    test_that("the mean is calculated correctly", {
+        # This will succeed
+        expect_identical(mean(1:10), 5.5)
+        
+        # This won't
+        expect_identical(mean(1:10), 4.5)
+    })
+    ```
+    
+    Run the tests using "Ctrl-Shift-T". What does the test results say?
+    
+## Anatomy of a unit test {#rse-unit-testing-anatomy-test}
+
+Unit tests all have a similar and basic structure:
+
+- Loading the packages and setting up any necessary inputs/fixtures.
+- Setting up the test function ("expectation") with the code and its expected out.
+
+So template of how it looks like would be (for **Python**):
+
+```python
+from package import function
+
+def test_name():
+    assert function(fixture) == expectation
+
+# and so on...
+```
+
+Load the function from the package, write the test name, set the function name
+with an input/fixture, and test against the expectation.
+
+In **R**, it would be:
+
+```r
+context("Short description of what is being tested")
+library(package)
+
+test_that("short description of what is expected", {
+  expect_identical(function_name(input), expectation)
+})
+```
+
+The `context()` is the short explanation, or documentation, 
+on what the is reason for doing the test.
+We'll cover writing these more in later sections.
+When writing `test_that()` unit tests, 
+the description part should be read as, e.g. "test that... the mean is correct".
+Then all tests inside the `test_that()` function should be related to the description.
+The testthat package has a ton of `expect_*` functions,
+which can be easily browsed by typing `testthat::expect_` and then hitting TAB for autocompletion and listing.
+
+### Exercise
+
+Using the tests created from the previous exercise, 
+fix the code so that all tests will succeed.
+Then re-run the tests (`pytest` or `devtools::test()`) and confirm that the tests passed.
+
+### Exercise
+
+- **In Python**: Create a new test file called `test_simple_arithmetic.py`. 
+Write out (or copy and paste) the code below into the newly created test file.
+Then fill in the blanks.
+
+    ```python
+    
+    ```
+
+TODO: Finish this.
+
+
+- **In R**: Create a new test by running `usethis::use_test("simple-arithmetic")`. 
+Write out (or copy and paste) the code below into the newly created test file. 
+Fill in the blanks.
+
+    ```r
+    context("Check simple calculations")
+    
+    test_that("plus and minus give correct outputs", {
+      expect_identical(1 + 2, 3)
+      ___(1 - 2, -1)
+      expect_identical(1 + NA, __)
+      expect_identical(___ - ___, NA)
+    })
+    ```
+
+## Describing and developing unit tests {#rse-unit-testing-develop-tests}
+
+TODO: What is the Python equivalent of context() and the message in test_that()?
+
+Like writing code, your tests should generally be written to be self-explanatory,
+and to provide enough documentation to understand what is going on.
+Each test file should also try to encompass a general topic
+or focus on a specific and similar set of functionality from your package.
+
+In **R**, testthat test's generally are created for one R script in the `R/` folder.
+testthat also has several other mechanisms to help clarify what is being tested:
+
+- Multiple forms of `expect_*` functions for different purposes.
+For instance, `expect_identical()` compares that actual and expected results are *identical* 
+while `expect_equal()` compares that the outputs are approximately equal. 
+This last one is used when numerical precision may change depending on operating system 
+or other characteristics of the computer influence precision. 
+These two are the most commonly used expectation functions. 
+Others include `expect_length()`, 
+which is used to check how many elements the output should have.
+
+- Documentation of the tests are also incorporated into the results output through
+`context("description")` and `test_that("message", ...)`. 
+`context()` describes the entire test file, 
+while `test_that("message", ...)` is specific to the individual unit test.
+
+TODO: Add python equivalent.
+
+```python
+
+```
+
+### Exercise
+
+- **In Python**:
+TODO: Is there an equivalent?
+
+- **In R**: Look at the test below. 
+Based on the contents, write appropriate `context()` 
+and `test_that()` messages by filling in the blanks. 
+There are no right answers, only more descriptive or less descriptive messages.
+
+    ```r
+    context("___")
+    
+    test_that("___", {
+      expect_identical(sum(c(1, 2)), 3)
+      expect_identical(sum(c(NA, 2)), NA)
+    })
+    
+    test_that("___", {
+      expect_identical(mean(c(1, 2)), 1.5)
+      expect_identical(mean(c(NA, 2)), NA)
+    })
+    ```
+
+### Exercise
+
+- Create a new test file. 
+Then, write a unit test for `count_words()` to check the following tests.
+In R, use a single `test_that()`. 
+(**Hint**: For R, use TAB auto-completion to search for useful `expect_*` functions.) 
+Test that `count_words()`:
+    - Outputs zero when given an empty string.
+    - Outputs NA when given NA.
+    - Outputs 2 when given two words, separated by a space.
+    - Outputs 2 when given two words, but not separated by a space.
+    
+TODO: Have coherence with functions they previously created? Or stand-alone?
+
+## Testing both code success *and* failure {#rse-unit-testing-test-failure}
+
+It might not seem immediately necessary, 
+but testing how your code *fails* is just as important as when it *succeeds*.
+Knowing how and when you code fails (outputs an error) is good practice,
+as it forces you to think about how a user might interact with your software
+and if your code actually fails when you write that it should.
+So our tests should actually include checks on expected errors too.
+
+In **Python**, we can test for an error by using:
+
+```python
+import pytest
+
+def test_text_not_empty():
+    with pytest.raises(ValueError):
+        count_words('')
+```
+
+This test includes the `pytest.raises` function to handle tests that checks for errors.
+We use `pytest.raises()` with Python's `with` keyword to indicate an expectation
+of an error in the code and to have the test fail if an error isn't raised.
+
+In **R**, there are specific testthat functions to test for errors (`expect_error()`)
+or warnings (`expect_warning()`):
+
+```r
+test_that("count words throws an error", {
+    expect_error(count_words(""))
+})
+```
+
+### Exercise
+
+- Using the same unit as the previous exercise, 
+create a new test to check when the code should throw an error. 
+Create the test for the `count_words()` function.
+
+## Checking what code is tested {#rse-unit-testing-coverage}
+
+Great, we've now gone over how to create unit tests. 
+But as you write more and more code, 
+you may start missing some code and forgetting to write unit tests for them.
+Or, you may have complex code with some conditionals (`if ... else ...`) 
+that don't always get executed. 
+For instance, take a moment to examine the code below.
+
+In **Python**:
+
+```{python}
+def first(left, right):
+    if left < right:
+        left, right = right, left
+    while left > right:
+        value = second(left, right)
+        left, right = right, int(right/2)
+    return value
+
+def second(check, balance):
+    if check > 0:
+        return balance
+    else:
+        return 0
+
+def main():
+    final = first(3, 5)
+    print(3, 5, final)
+
+if __name__ == '__main__':
+    main()
+```
+
+In **R**:
+
+```{r}
+first <- function(left, right) {
+  if (left < right) {
+    tmp <- left
+    left <- right
+    right <- tmp
+  }
+  
+  while (left > right) {
+    value <- second(left, right)
+    left <- right
+    right <- as.integer(right / 2)
+  }
+  
+  value
+}
+
+second <- function(check, balance) {
+    if (check > 0)
+        balance
+    else
+        0
+}
+
+c(3, 5, first(3, 5))
+```
+
+You probably have a hard time figuring out which lines of code were executed and which weren't.
+There's actually an easy way to find that out automatically.
+There is a tool called code [coverage](glossary.html#coverage) 
+to help see how much of your code gets executed by your tests,
+which is especially useful with tracking conditional activation.
+Code coverage measures which parts of your program are and are not executed.
+Essentially, a code coverage tool tracks the progress of execution through the code
+and identifies which exact lines gets executed.
+After the program finishes, 
+code coverage tells you what lines were not executed,
+and what percentage was.
+
+Use this tool to make sure a large portion of your code gets tested.
+But note, there is no "magic percentage" for how much [test coverage](glossary.html#test-coverage) to have.
+It's good to try getting as high a coverage as you can, 
+since anything that *isn't* tested may likely be wrong,
+while balancing writing tests and writing code.
+It usually isn't necessary to get 100% code coverage.
+
+For **Python**, if the above code were in a file, called `demo_coverage.py`,
+we can run the coverage with the package `coverage`:
+
+```shell
+coverage run demo_coverage.py
+coverage report
+```
+
+```text
+Name               Stmts   Miss  Cover
+--------------------------------------
+demo_coverage.py      16      1    94%
+```
+
+While **R** has similar functionality, it works best at a package level,
+rather than a file level.
+The covr package has several functions for checking coverage, 
+but for testing packages there is:
+
+```r
+covr::package_coverage()
+```
+
+(covr also has an [RStudio Addin][rstudio-addin] that gives quick access to this command.)
+
+This function will output a list of all R files in the package,
+with their corresponding percentage coverage. 
+This can give a good overview of where you might need to improve your testing.
+
+## What to test and when {#rse-unit-testing-what-when}
+
+So far we've discussed *how* to test and *why* to test, but we haven't really 
+covered *what* should we test and *when* do we start testing. 
+Here are two things to think about when writing tests:
+
+1. No amount of testing can prove the code is completely correct. 
+For a function with only a few arguments, 
+there may be dozens of possible combinations of inputs.
+You can't test all these possible inputs. 
+Nor can we write tests correctly all the time (we are only human, who make mistakes).
+Writing tests should focus on what is *most likely* going to be input 
+and what the software was intended for.
+
+2. Many test cases can be grouped into "classes" of tests. 
+For instance, functions with numbers as input could theoretically only need to test a few cases:
+infinity (`Inf`), missing values, and one or two tests on intended use.
+We may miss unique use cases for our functions when we test this way,
+but it makes it easier as the developer 
+and as the reader of the code if tests are grouped according to classes.
+
+One topic that often comes up when looking into unit testing is the practice of 
+[test-driven development](glossary.html#tdd) (TDD).
+Rather than writing code and then writing tests,
+TDD advocates suggest to write tests first so we know what the code is supposed to do,
+and then write just enough code to make those tests pass.
+Once the code works, clean it up and commit it, then move on to the next task.
+
+TDD's advocates claim that this approach emphasizes a focus on what the code should do
+so that the developer isn't subject to confirmation bias when viewing the test results.
+They also claim that TDD ensures that code actually *is* testable,
+and that tests are actually written.
+However, the evidence backing these claims is contradictory.
+Try TDD out and try to find out what works best for you and your specific problems.
+
+## Final exercise {#rse-unit-testing-final-exercise}
+
+1. Write unit tests for all functions you created from previous chapters on Zipf's Law.
+Try to think how a user may use your functions and write tests reflecting that.
+2. Run code coverage on your package. What is the percentage coverage? 
+Is there any way you could write more comprehensive unit tests to increase coverage?
+Try to write more to get the coverage higher.
+
+## Key Points {#rse-unit-testing-keypoints}
+
+```{r, child="keypoints/rse-unit-testing.md"}
+```
