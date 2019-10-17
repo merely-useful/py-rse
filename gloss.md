@@ -58,8 +58,11 @@
 **Bit rot**<a id="bit-rot"></a>
 :   FIXME
 
+**Build tool**<a id="build-tool"></a>
+:   FIXME <https://en.wikipedia.org/wiki/List_of_build_automation_software>
+
 **Branch-per-feature workflow**<a id="branch-per-feature-workflow"></a>
-:   [branch-per-feature][branch-per-feature]
+:   FIXME <https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow>
 
 **Breakpoint**<a id="breakpoint"></a>
 :   FIXME

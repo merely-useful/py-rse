@@ -1,218 +1,170 @@
 # Bash Shell {#rse-bash}
 
-## Questions {#rse-bash-questions}
-
-```{r, child="questions/bash.md"}
-```
-
-## Introduction {#rse-bash-intro}
-
 At a high level, computers do four things:
-
--   run programs
--   store data
--   communicate with each other, and
--   interact with us
-
+run programs,
+store data,
+communicate with each other,
+and interact with people.
 They can do the last of these in many different ways,
-including through a keyboard and mouse, touch screen interfaces, speech
-recognition systems, or even brain-computer interfaces.
-While touch and voice interfaces are becoming more commonplace, most interaction is still
-done using traditional screens, mice, touchpads and keyboards.
+of which a [graphical user interface][gui] (GUI) is the most widely used way.
+The computer displays icons to show us our files and programs,
+and we tell it to copy or run those by clicking with a mouse.
+This style of interaction is easy to learn but hard to automate,
+and doesn't create a record of what we did.
 
-The **graphical user interface** (GUI) is the most widely used way to interact with
-personal computers. We give instructions (to run a program, to copy a file, to create
-a new folder/directory) with the convenience of a few mouse clicks.
-This way of interacting with a computer is intuitive and easy to learn,
-but scales very poorly if we are to give a large stream of instructions.
+In contrast,
+when we use a [command-line interface][cli] (CLI)
+we communicate with the computer by typing commands,
+and the computer responds by displaying text.
+CLIs existed long before GUIs,
+and have survived because they are efficient,
+easy to automate,
+and automatically create a record of what we did.
 
-In a **command-line interface** (CLI),
-you communicate to the computer through writing commands instead of clicking with the mouse.
-This can be intimidating since it requires the knowledge of a few commands to get started,
-but just as when learning a natural language you can give quickly give
-efficient, precise instructions as your proficiency increases.
-Command-line interfaces are particularly good at automating repetitive tasks.
-For example,
-suppose we needed to copy the third line of each of a thousand text files stored
-in thousand different directories and paste it into a single file line by line.
-Using the traditional GUI approach of mouse clicks,
-this task would take several hours.
-With a command-line interface,
-a single instruction can be repeated (as is or with some modification) as many times as we want,
-so this task could be accomplished in a few minutes at most.
+The heart of every CLI is a [read-evaluate-print loop][repl].
+Its name comes from its basic operating cycle:
+when we type a command and press <kbd>Return</kbd> (also known as <kbd>Enter</kbd>)
+the CLI <strong>r</strong>eads the command,
+<strong>e</strong>valuates it (i.e., executes it),
+<strong>p</strong>rints its output,
+then <strong>l</strong>oops around and waits for another command.
 
-The heart of a command-line interface is a **read-evaluate-print loop** (REPL). It is called
-so because when you type a command and press <kbd>Return</kbd>
-(also known as <kbd>Enter</kbd>) the command-line interface
-reads your command,
-evaluates (or "executes") it,
-prints the output of your command,
-then loops back and waits for you to enter another command.
+If you have used an interactive console for R or Python,
+then you have already used a REPL and a simple CLI.
+This lesson will introduce another kind of CLI that lets us interact with our computer's operating system.
+It is called a [command shell][command-shell],
+or just "shell" for short,
+and in essence is a program that runs other programs on our behalf (FIXME: diagram).
+Those "other programs" can do things as simple as telling us what time it is
+or as complex as modeling global climate change;
+as long as they obey a few simple rules,
+the shell can run them without having to know what language they are written in
+or how they do what they do.
 
-### Unix shells
+Programmers have written many different shells over the last forty years.
+The most popular on Unix systems today,
+and in most packages that provide Unix-like tools for Windows,
+is called Bash
+(an acronym of <strong>B</strong>ourne <strong>A</strong>gain <strong>SH</strong>ell,
+which is a pun on the name of its predecessor,
+the Bourne shell).
+Like other shells,
+it allows us to combine programs to create pipelines
+that can handle large volumes of data.
+Sequences of commands can be saved in a [script][script],
+just as commands for R or Python can be saved in programs,
+which makes our workflows more reproducible.
+Finally,
+the command line is often the easiest way to interact with remote machines and supercomputers—in fact,
+the shell is practically essential for working with clusters and the cloud.
 
-GUIs and CLIs are examples of **shells**, interfaces that sits around the
-computers innermost software and interpret the our instructions whether they
-are mouse clicks or written commands. A Unix shell is a common CLI for Unix
-systems (such as Linux and macOS) and you will often hear the term "shell" used
-colloquially to specifically refer to Unix shells. In essence, a Unix shell is
-a program which can run built-in and external programs.
-Those programs can be as complicated as climate modeling software and as simple
-as a program that creates a new directory. The simple programs which are used
-to perform stand alone tasks are usually referred to as commands.
+## How can I explore my files and directories using the shell? {#rse-bash-explore}
 
-The most popular Unix shell is Bash, (the Bourne Again SHell -- named to pun
-its predecessor, the Bourne shell). Bash is the default shell on most modern
-implementations of Unix and in most packages that provide Unix-like tools for
-Windows. When Bash is first opened, you are presented with a **prompt**,
-indicating that the shell is waiting for input.
-
- <!--com: TODO change to R markdown -->
+When Bash runs it presents us with a [prompt][prompt] to indicate that it is waiting for input.
+By default,
+this prompt is a simple dollar sign:
 
 ```shell
 $
 ```
 
-Unix shells typically use `$ ` as the prompt, but may use a different symbol.
-In the examples for this lesson, we'll show the prompt as `$ `.
-Most importantly:
-when typing commands, either from these lessons or from other sources,
-*do not type the prompt*, only the commands that follow it.
+However,
+different shells may use a different symbol,
+and as we'll see later,
+we can customize the prompt to give us more information.
 
-So let's try our first command, which will tell us our username:
+> **Don't Type the Dollar Sign**
+>
+> We show the `$` prompt so that it's clear what you are supposed to type,
+> particularly when several commands appear in a row,
+> but you should *not* type it yourself.
+
+Let's run a command to find out who the shell thinks we are:
 
 ```shell
 $ whoami
 ```
 
 ```text
-beatrice
+amira
 ```
 
-(Beatrice is one of the learner personas described earlier.)
+Amira is one of the learners described in Section \@ref(rse-intro-personas);
+we will use her in the examples that follow.
 
-
-### Are CLIs more difficult to learn than GUIs?
-
-A CLI employs a different model of interaction than a GUI,
-which will take some effort and time to learn since most of us are used to working with GUIs.
-A GUI presents you with choices and you select one.
-With a CLI the choices are combinations of commands and parameters,
-more like words in a language than buttons on a screen.
-They are not presented to you so you must learn a few,
-like learning some vocabulary in a new language.
-But a small number of commands gets you a long way,
-and we'll cover those essential few in this lesson.
-
-### Flexibility and automation
-
-The grammar of a Unix shell allows you to combine existing tools into powerful
-pipelines and handle large volumes of data automatically. Sequences of
-commands can be written into a *script*, improving the reproducibility of
-workflows and allowing you to repeat them easily.
-
-In addition, the command-line is often the easiest way to interact with remote machines and supercomputers.
-Familiarity with the shell is near essential to run a variety of specialized tools and resources
-including high-performance computing systems.
-As clusters and cloud computing systems become more popular for scientific data crunching,
-being able to interact with the shell is becoming a necessary skill.
-We can build on the command-line skills covered here
-to tackle a wide range of scientific questions and computational challenges.
-
-## Navigating the filesystem {#rse-bash-navigation}
-
-The part of the operating system responsible for managing files and directories
-is called the **filesystem**.
-It organizes our data into files,
-which hold information,
-and directories (also called "folders"),
-which hold files or other directories.
-
-Several commands are frequently used to create, inspect, rename, and delete files and directories.
-To start exploring them, we'll go to our open Bash window.
-
-First let's find out where we are by running a command called `pwd`
-(which stands for "print working directory"). Directories are like *places* -- at any time
-while we are using the shell we are in exactly one place, called
-our **current working directory**. By default, commands mostly read and write files in the
-current working directory, so knowing where you are before running
-a command is important.
+Now that we know who we are,
+we can explore where we are and what we have.
+The part of the operating system responsible for managing files and directories (also called [folders][folder])
+is called the [filesystem][filesystem].
+Some of the most commonly-used commands in the shell create, inspect, rename, and delete files and directories.
+Let's start exploring them by running the command `pwd`,
+which stands for <strong>p</strong>rint <strong>w</strong>orking <strong>d</strong>irectory.
+The "print" part of its name is straightforward;
+the "working directory" part refers to the fact that
+the shell keeps track of our [current working directory][current-working-directory] at all times.
+Most commands read and write files in the current working directory
+unless we tell them to do something else,
+so knowing where we are before running a command is important.
 
 ```shell
 $ pwd
 ```
 
 ```text
-/Users/beatrice
+/Users/amira
 ```
 
 Here,
-the computer's response is `/Users/beatrice`,
-which is the path to Beatrice's **home directory**:
+the computer's response is `/Users/amira`,
+which tells us that we are in a directory called `amira` that is contained in a top-level directory called `User`.
+This directory is Amira's [home directory][home-directory],
+and to understand what that phrase means,
+we must first understand how the filesystem is organized.
+On Amira's computer, it looks like this:
 
-> **Home Directory Variation**
->
-> The home directory path will look different on different operating systems.
-> On Linux it may look like `/home/beatrice`,
-> and on Windows it will be similar to `C:\Documents and Settings\beatrice` or
-> `C:\Users\beatrice`.
-> (Note that it may look slightly different for different versions of Windows.)
-> In future examples, we've used Mac output as the default - Linux and Windows
-> output may differ slightly, but should be generally similar.
+FIXME: figure (filesystem)
 
-To understand what a "home directory" is,
-let's have a look at how the filesystem as a whole is organized. For the
-sake of this example, we'll be
-illustrating the filesystem on Beatrice's computer. After this
-illustration, you'll be learning commands to explore your own filesystem,
-which will be constructed in a similar way, but not be exactly identical.
-
-On Beatrice's computer, the filesystem looks like this:
-
-*TODO: Figure - The Filesystem [../fig/filesystem.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/filesystem.svg)*
-
-
-At the top is the **root directory**
-that holds everything else.
-We refer to it using a slash character, `/`, on its own;
-this is the leading slash in `/Users/beatrice`.
-
-Inside that directory are several other directories:
-`bin` (which is where some built-in programs are stored),
+At the top is the [root directory][root-directory] that holds everything else,
+which we can refer to using a slash character, `/` on its own.
+Inside that directory are several other directories,
+including `bin` (where some built-in programs are stored),
 `data` (for miscellaneous data files),
-`Users` (where users' personal directories are located),
 `tmp` (for temporary files that don't need to be stored long-term),
-and so on.
-
-We know that our current working directory `/Users/beatrice` is stored inside `/Users`
+and `Users` (where users' personal directories are located).
+We know that `/Users` is stored inside the root directory `/` because its name begins with `/`,
+and that our current working directory `/Users/amira` is stored inside `/Users`
 because `/Users` is the first part of its name.
-Similarly,
-we know that `/Users` is stored inside the root directory `/`
-because its name begins with `/`.
+A string like this is called a [path][path] because it tells us
+how to get from one place in the filesystem (in this case, the root directory)
+to another (in this case, Amira's home directory).
 
 > **Slashes**
 >
-> Notice that there are two meanings for the `/` character.
-> When it appears at the front of a file or directory name,
-> it refers to the root directory. When it appears *inside* a name,
-> it's just a separator. On Windows, backslashes (`\\ `) are used instead of
-> forward slashes as directory separators in paths.
+> The `/` character means two different things in a path.
+> At the front of a path or on its own,
+> it refers to the root directory.
+> When it appears inside a name, it is a separator.
+> Windows uses backslashes (`\\ `) instead of forward slashes as separators.
 
 Underneath `/Users`,
-we find one directory for each user with an account on this machine,
-namely Beatrice, Jun and Sami.
+we find one directory for each user with an account on this machine.
+Jun's files are stored in `/Users/jun`,
+Sami's in `/Users/sami`,
+and Amira's in `/Users/amira`.
+This is where the name "home directory" comes from:
+when we log in as a particular user,
+the shell starts us off in the directory that holds that user's files.
 
-*TODO: Figure - Home Directories [../fig/home-directories.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/home-directories.svg)*
+> **Home Directory Variations**
+>
+> Our home directory will be different on different operating systems.
+> On Linux it may look like `/home/amira`,
+> and on Windows it may be `C:\Documents and Settings\amira` or `C:\Users\amira`
+> (depending on the version of Windows).
+> Our examples show what we would see on MacOS.
 
-The user Jun's files are stored in `/Users/jun`,
-user Sami's in `/Users/sami`,
-and Beatrice's in `/Users/beatrice`.  Because Beatrice is the logged in user in
-our examples, `pwd` returns `/Users/beatrice` as our home directory.
-Typically, when you open a new command prompt you will be in
-your home directory to start.
-
-Now let's learn the command that will let us see the contents of our
-own filesystem.  We can see what's in our home directory by running `ls`,
+Now that we know where we are,
+let's see what we have using the command `ls`,
 which stands for "listing":
 
 ```shell
@@ -220,338 +172,154 @@ $ ls
 ```
 
 ```text
-Applications Documents    Library      Music        Public
-Desktop      Downloads    Movies       Pictures
+Applications Documents    Library      Music        Public         todo.txt
+Desktop      Downloads    Movies       Pictures     climate-data
 ```
 
-(Again, your results may be slightly different depending on your operating
-system and how you have customized your filesystem.)
-
 `ls` prints the names of the files and directories in the current directory.
-We can make its output more comprehensible by using the `-F` **option**
-(also known as a **switch** or a **flag**) ,
-which tells `ls` to classify the output
-by adding a marker to file and directory names to indicate what they are:
-- a trailing `/` indicates that this is a directory
-- `*` indicates an executable (i.e. a program we can run)
+(Again,
+our results may be different depending on our operating system
+and what files or directories we have.)
 
-Depending on your default options,
-the shell might also use colors to indicate whether each entry is a file or
-directory.
+We can make the output of `ls` more comprehensible by using the `-F` [option][command-option]
+(also sometimes called a [switch][command-switch] or a [flag][command-flag]).
+Options are exactly like arguments to a function in R or Python;
+in this case,
+`-F` tells `ls` to add markers to its output to tell us what things are.
+A trailing `/` indicates a directory,
+while a trailing `*` tell us that something is a runnable program.
+Depending on our setup,
+the shell might also use colors to indicate whether each entry is a file or directory.
 
 ```shell
 $ ls -F
 ```
 
 ```text
-Applications/ Documents/    Library/      Music/        Public/
-Desktop/      Downloads/    Movies/       Pictures/
+Applications/ Documents/    Library/      Music/        Public/        todo.txt
+Desktop/      Downloads/    Movies/       Pictures/     climate-data/
 ```
 
 Here,
-we can see that our home directory contains mostly **sub-directories**.
-Any names in your output that don't have a classification symbol
-are plain old **files**.
+we can see that almost everything in our home directory is a [sub-directory][sub-directory];
+the only thing that isn't is a file called `todo.tt`.
 
-### General syntax of a shell command
+> **Spaces Matter**
+>
+> `1+2` and `1 + 2` mean the same thing in mathematics,
+> but `ls -F` and `ls-F` are very different things in the shell.
+> The shell splits whatever we type into pieces based on spaces,
+> so if we forget to separate `ls` and `-F` with at least one space,
+> the shell will try to find a program called `ls-F` and (quite sensibly)
+> give an error message like `ls-F: command not found`.
 
-Consider the command below as a general example of a command,
-which we will dissect into its component parts:
-
-```shell
-$ ls -F /
-```
-
-`ls` is the **command**, with an **option** `-F` and an **argument** `/`.
-We've already encountered options (also called **switches** or **flags**) which
-either start with a single dash (`-`) or two dashes (`--`), and they change the behaviour of a command.
-Arguments often tell the command what to operate on (e.g. files and directories).
-Technically, an option is a type of argument.
-Arguments are referred to as **parameters** internally in the function during its execution.
-Command can often be called without options and arguments
-and with more than one option and more than one argument,
-
-Each part is separated by spaces: if you omit the space
-between `ls` and `-F` the shell will look for a command called `ls-F`, which
-doesn't exist. Also, capitalization is important: `ls -r` is different to `ls -R`.
-
-Putting all that together, our command above gives us a listing
-of files and directories in the root directory `/`.
-An example of the output you might get from the above command is given below:
+Some options tell a command how to behave,
+but others tell it what to act on.
+For example,
+if we want to see what's in the `/Users` directory,
+we can type:
 
 ```shell
-$ ls -F /
-Applications/         System/
-Library/              Users/
-Network/              Volumes/
-```
-
-### Getting help
-
-`ls` has lots of other **options**. There are two common ways to find out how
-to use a command and what options it accepts:
-
-1. We can pass a `--help` option to the command, such as: `$ ls --help`
-
-2. We can read its manual with `man`, such as: `$ man ls`
-
-Depending on your environment you might find that only one of these works
-(either `man` or `--help`).
-We'll describe both ways below.
-
-#### The `--help` option
-
-Many Bash built-in commands, and programs that people have written that can be
-run from within bash, support a `--help` option to display more
-information on how to use the command or program.
-
-```shell
-$ ls --help
+$ ls /Users
 ```
 
 ```text
-Usage: ls [OPTION]... [FILE]...
-List information about the FILEs (the current directory by default).
-Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
-
-Mandatory arguments to long options are mandatory for short options too.
-  -a, --all                  do not ignore entries starting with .
-  -A, --almost-all           do not list implied . and ..
-      --author               with -l, print the author of each file
-  -b, --escape               print C-style escapes for nongraphic characters
-      --block-size=SIZE      scale sizes by SIZE before printing them; e.g.,
-                               '--block-size=M' prints sizes in units of
-                               1,048,576 bytes; see SIZE format below
-  -B, --ignore-backups       do not list implied entries ending with ~
-  -c                         with -lt: sort by, and show, ctime (time of last
-                               modification of file status information);
-                               with -l: show ctime and sort by name;
-                               otherwise: sort by ctime, newest first
-  -C                         list entries by columns
-      --color[=WHEN]         colorize the output; WHEN can be 'always' (default
-                               if omitted), 'auto', or 'never'; more info below
-  -d, --directory            list directories themselves, not their contents
-  -D, --dired                generate output designed for Emacs' dired mode
-  -f                         do not sort, enable -aU, disable -ls --color
-  -F, --classify             append indicator (one of */=>@|) to entries
-      --file-type            likewise, except do not append '*'
-      --format=WORD          across -x, commas -m, horizontal -x, long -l,
-                               single-column -1, verbose -l, vertical -C
-      --full-time            like -l --time-style=full-iso
-  -g                         like -l, but do not list owner
-      --group-directories-first
-                             group directories before files;
-                               can be augmented with a --sort option, but any
-                               use of --sort=none (-U) disables grouping
-  -G, --no-group             in a long listing, don't print group names
-  -h, --human-readable       with -l and/or -s, print human readable sizes
-                               (e.g., 1K 234M 2G)
-      --si                   likewise, but use powers of 1000 not 1024
-  -H, --dereference-command-line
-                             follow symbolic links listed on the command line
-      --dereference-command-line-symlink-to-dir
-                             follow each command line symbolic link
-                               that points to a directory
-      --hide=PATTERN         do not list implied entries matching shell PATTERN
-                               (overridden by -a or -A)
-      --indicator-style=WORD  append indicator with style WORD to entry names:
-                               none (default), slash (-p),
-                               file-type (--file-type), classify (-F)
-  -i, --inode                print the index number of each file
-  -I, --ignore=PATTERN       do not list implied entries matching shell PATTERN
-  -k, --kibibytes            default to 1024-byte blocks for disk usage
-  -l                         use a long listing format
-  -L, --dereference          when showing file information for a symbolic
-                               link, show information for the file the link
-                               references rather than for the link itself
-  -m                         fill width with a comma separated list of entries
-  -n, --numeric-uid-gid      like -l, but list numeric user and group IDs
-  -N, --literal              print raw entry names (don't treat e.g. control
-                               characters specially)
-  -o                         like -l, but do not list group information
-  -p, --indicator-style=slash
-                             append / indicator to directories
-  -q, --hide-control-chars   print ? instead of nongraphic characters
-      --show-control-chars   show nongraphic characters as-is (the default,
-                               unless program is 'ls' and output is a terminal)
-  -Q, --quote-name           enclose entry names in double quotes
-      --quoting-style=WORD   use quoting style WORD for entry names:
-                               literal, locale, shell, shell-always,
-                               shell-escape, shell-escape-always, c, escape
-  -r, --reverse              reverse order while sorting
-  -R, --recursive            list subdirectories recursively
-  -s, --size                 print the allocated size of each file, in blocks
-  -S                         sort by file size, largest first
-      --sort=WORD            sort by WORD instead of name: none (-U), size (-S),
-                               time (-t), version (-v), extension (-X)
-      --time=WORD            with -l, show time as WORD instead of default
-                               modification time: atime or access or use (-u);
-                               ctime or status (-c); also use specified time
-                               as sort key if --sort=time (newest first)
-      --time-style=STYLE     with -l, show times using style STYLE:
-                               full-iso, long-iso, iso, locale, or +FORMAT;
-                               FORMAT is interpreted like in 'date'; if FORMAT
-                               is FORMAT1<newline>FORMAT2, then FORMAT1 applies
-                               to non-recent files and FORMAT2 to recent files;
-                               if STYLE is prefixed with 'posix-', STYLE
-                               takes effect only outside the POSIX locale
-  -t                         sort by modification time, newest first
-  -T, --tabsize=COLS         assume tab stops at each COLS instead of 8
-  -u                         with -lt: sort by, and show, access time;
-                               with -l: show access time and sort by name;
-                               otherwise: sort by access time, newest first
-  -U                         do not sort; list entries in directory order
-  -v                         natural sort of (version) numbers within text
-  -w, --width=COLS           set output width to COLS.  0 means no limit
-  -x                         list entries by lines instead of by columns
-  -X                         sort alphabetically by entry extension
-  -Z, --context              print any security context of each file
-  -1                         list one file per line.  Avoid '\n' with -q or -b
-      --help     display this help and exit
-      --version  output version information and exit
-
-The SIZE argument is an integer and optional unit (example: 10K is 10*1024).
-Units are K,M,G,T,P,E,Z,Y (powers of 1024) or KB,MB,... (powers of 1000).
-
-Using color to distinguish file types is disabled both by default and
-with --color=never.  With --color=auto, ls emits color codes only when
-standard output is connected to a terminal.  The LS_COLORS environment
-variable can change the settings.  Use the dircolors command to set it.
-
-Exit status:
- 0  if OK,
- 1  if minor problems (e.g., cannot access subdirectory),
- 2  if serious trouble (e.g., cannot access command-line argument).
-
-GNU coreutils online help: <http://www.gnu.org/software/coreutils/>
-Full documentation at: <http://www.gnu.org/software/coreutils/ls>
-or available locally via: info '(coreutils) ls invocation'
+Amira   Jun     Sami
 ```
 
-> **Unsupported command-line options**
->
-> If you try to use an option that is not supported, `ls` and other commands
-> will usually print an error message similar to:
->
-> ```shell
-> $ ls -j
-> ```
->
-> ```text
-> ls: invalid option -- 'j'
-> Try 'ls --help' for more information.
-> ```
+We often call the file and directory names that we give to commands [arguments][command-argument]
+to distinguish them from the built-in options.
+We can combine options and arguments:
 
-#### The `man` command
-
-The other way to learn about `ls` is to type
 ```shell
-$ man ls
+$ ls -F /Users
 ```
 
-This will display a description
-of the `ls` command and its options and some examples of how to use it.
-Likewise, `man man` will show the manual for the `man` command.
+```text
+Amira/  Jun/    Sami/
+```
 
-To navigate through the `man` pages,
-you may use <kbd>↑</kbd> and <kbd>↓</kbd> to move line-by-line,
-or try <kbd>Ctrl+Spacebar</kbd> and <kbd>Spacebar</kbd> to skip up and down by a full page.
-To search for a character or word in the `man` pages,
-use <kbd>/</kbd> followed by the character or word you are searching for.
-Sometimes a search will result in multiple hits.
-If so, you can move between hits using <kbd>n</kbd>
-(for moving forward) and <kbd>N</kbd> (for moving backward).
+but we must put the command's options (like `-F`)
+before the names of any files or directories we want to work on
+because once the command encounters one of the latter
+it assumes that we are done giving it built-in options:
 
-To quit the `man` pages, press <kbd>Q</kbd>.
+```shell
+$ ls /Users -F
+```
 
-> **Assistance on the web**
->
-> Of course there is a third way to access help for commands:
-> searching the internet via your web browser.
-> In many cases the first results from your search will be
-> [Stack Overflow](https://stackoverflow.com/questions/tagged/bash)
-> pages where someone has already asked (and hopefully had answered)
-> a question similar to yours.
->
-> GNU provides links to its
-> [manuals](http://www.gnu.org/manual/manual.html) including the
-> [core GNU utilities](http://www.gnu.org/software/coreutils/manual/coreutils.html),
-> which covers many commands introduced within this lesson.
-> There's also a community effort known as the [TLDR pages](https://tldr.sh/)
-> that aims to simplify the default man pages with practical examples.
+```text
+ls: -F: No such file or directory
+Amira   Jun     Sami
+```
 
-### Looking around and moving about
-`
-We can also use `ls` to see the contents of a different directory.  Let's take a
-look at our `Desktop` directory by running `ls -F Desktop`,
+FIXME: behaves differently on Linux (?)
+
+## How can I move around in the shell? {#rse-bash-navigate}
+
+Let's run `ls` again to look at what's in our current working directory,
+which is what the command shows if we don't ask it to show us anything else:
+
+```shell
+$ ls -F
+```
+
+```text
+Applications/ Documents/    Library/      Music/        Public/        todo.txt
+Desktop/      Downloads/    Movies/       Pictures/     climate-data/
+```
+
+If we want to see what's in `climate-data`,
+we can ask `ls` to list its contents:
+
+```shell
+$ ls -F climate-data
+```
+
+```text
+NOTES           bin/            docs/           thesis.md       tofu.config
+README.md       cleaned/        raw/            thesis.pdf
+```
+
+Notice that `climate-data` doesn't have a leading slash before its name.
+This absence tells the shell that it is a [relative path][relative-path],
 i.e.,
-the command `ls` with the `-F` **option** and the **argument**  `Desktop`.
-The argument `Desktop` tells `ls` that
-we want a listing of something other than our current working directory:
+that it should be interpreted starting from our current working directory.
+In contrast,
+a path like `/Users/amira` is an [absolute path][absolute-path]:
+it is always interpreted from the root directory down,
+so it always refers to the same thing.
+Using a relative path is like telling someone to go two kilometers north and then half a kilometer east;
+using an absolute path is like giving them the latitude and longitude of their destination.
 
-```shell
-$ ls -F Desktop
-```
-
-```text
-data-shell/
-```
-
-Your output should be a list of all the files and sub-directories on your
-Desktop, including the `data-shell` directory you downloaded at
-the [setup for this lesson](http://swcarpentry.github.io/shell-novice/setup.html).
-Take a look at your Desktop to confirm that your output is accurate.
-
-Now that we know the `data-shell` directory is located on our Desktop, we
-can do two things.
-First, we can look at its contents, using the same strategy as before, passing
-a directory name to `ls`:
-
-```shell
-$ ls -F Desktop/data-shell
-```
-
-```text
-creatures/          molecules/          notes.txt           solar.pdf
-data/               north-pacific-gyre/ pizza.cfg           writing/
-```
-
-Second, we can actually change our location to a different directory, so
-we are no longer located in
-our home directory.
-
-The command to change locations is `cd` followed by a
-directory name to change our working directory.
-`cd` stands for "change directory",
-which is a bit misleading:
+We can use whichever kind of path is easiest to type,
+but if we are going to do a lot of work with our climate data,
+the easiest thing would be to change our current working directory
+so that we don't have to type `climate-data` at all.
+The command to do this is `cd`,
+which stands for <strong>c</strong>hange <strong>d</strong>irectory.
+This name is a bit misleading:
 the command doesn't change the directory,
 it changes the shell's idea of what directory we are in.
-
-Let's say we want to move to the `data` directory we saw above.  We can
-use the following series of commands to get there:
+Let's try it out:
 
 ```shell
-$ cd Desktop
-$ cd data-shell
-$ cd data
+$ cd climate-data
 ```
 
-These commands will move us from our home directory onto our Desktop, then into
-the `data-shell` directory, then into the `data` directory.
-You will notice that `cd` doesn't print anything.
-This is normal.
-Many shell commands will not output anything to the screen when successfully executed.
-But if we run `pwd` after it, we can see that we are now in `/Users/beatrice/Desktop/data-shell/data`.
-If we run `ls` without arguments now,
-it lists the contents of `/Users/beatrice/Desktop/data-shell/data`,
-because that's where we now are:
+`cd` doesn't print anything.
+This is normal:
+many shell commands run silently unless something goes wrong,
+on the theory that they should only ask for our attention when they need it.
+To confirm that `cd` has done what we asked,
+we can use `pwd`:
 
 ```shell
 $ pwd
 ```
 
 ```text
-/Users/beatrice/Desktop/data-shell/data
+/Users/amira/climate-data
 ```
 
 ```shell
@@ -559,224 +327,193 @@ $ ls -F
 ```
 
 ```text
-amino-acids.txt   elements/     pdb/	        salmon.txt
-animals.txt       morse.txt     planets.txt     sunspot.txt
+NOTES           bin/            docs/           thesis.md       tofu.config
+README.md       cleaned/        raw/            thesis.pdf
 ```
 
-We now know how to go down the directory tree, but
-how do we go up?  We might try the following:
+> **Missing Directories and Unknown Options**
+>
+> If we give a command an option that it doesn't understand,
+> it will usually print an error message and (if we're lucky)
+> tersely remind us of what we should have done:
+>
+> ```shell
+> $ cd -j
+> ```
+>
+> ```text
+> -bash: cd: -j: invalid option
+> cd: usage: cd [-L|-P] [dir]
+> ```
+>
+> If, on the other hand,
+> we get the syntax right but make a mistake in the name of a file or directory,
+> it will tell us that:
+>
+> ```shell
+> $ cd whoops
+> ```
+>
+> ```text
+> -bash: cd: whoops: No such file or directory
+> ```
+
+We now know how to go down the directory tree,
+but how do we go up?
+This doesn't work:
 
 ```shell
-$ cd data-shell
+$ cd amira
 ```
 
 ```text
--bash: cd: data-shell: No such file or directory
+cd: amira: No such file or directory
 ```
 
-But we get an error!  Why is this?
+because `amira` on its own is a relative path meaning
+"a file or directory called `amira` *below our current working directory*".
+To get back home,
+we can either use an absolute path:
 
-With our methods so far,
-`cd` can only see sub-directories inside your current directory.  There are
-different ways to see directories above your current location; we'll start
-with the simplest.
+```shell
+$ cd /Users/amira
+```
 
-There is a shortcut in the shell to move up one directory level
-that looks like this:
+or a special relative path called `..` (two periods in a row with no spaces),
+which always means "the directory that contains the current one".
+The directory one level above the one we are in is called the [parent directory][parent-directory],
+and sure enough,
+`..` gets us there:
 
 ```shell
 $ cd ..
-```
-
-`..` is a special directory name meaning
-"the directory containing this one",
-or more succinctly,
-the **parent** of the current directory or the directory **above**.
-Sure enough,
-if we run `pwd` after running `cd ..`, we're back in `/Users/beatrice/Desktop/data-shell`:
-
-```shell
 $ pwd
 ```
 
 ```text
-/Users/beatrice/Desktop/data-shell
+/Users/amira
 ```
 
-The special directory `..` doesn't usually show up when we run `ls`.  If we want
-to display it, we can give `ls` the `-a` option:
+`ls` usually doesn't show us this special directory—since it's always there,
+displaying it every time would be a distraction.
+We can ask `ls` to include it using the `-a` option,
+which stands for "all":
 
 ```shell
 $ ls -F -a
 ```
 
 ```text
-./   .bash_profile  data/       north-pacific-gyre/  pizza.cfg  thesis/
-../  creatures/     molecules/  notes.txt            solar.pdf  writing/
+./              Applications/   Documents/      Library/        Music/          Public/         todo.txt
+../             Desktop/        Downloads/      Movies/         Pictures/       climate-data/
 ```
 
-`-a` stands for "show all";
-it forces `ls` to show us file and directory names that begin with `.`,
-such as `..` (which, if we're in `/Users/beatrice`, refers to the `/Users` directory)
-As you can see,
-it also displays another special directory that's just called `.`,
-which means "the current working directory".
+(Remember,
+we are now in `/Users/amira`.)
+The output also shows another special directory called `.` (a single period),
+which refers to the current working directory.
 It may seem redundant to have a name for it,
 but we'll see some uses for it soon.
 
-Note that in most command line tools, multiple options can be combined
-with a single `-` and no spaces between the options: `ls -F -a` is
-equivalent to `ls -Fa`.
+The special names `.` and `..` don't belong to `cd`:
+they are interpreted the same way by every program.
+For example,
+if we are in `/Users/amira/climate-data`,
+the command `ls ..` will display a listing of `/Users/amira`.
+When the meanings of the parts are the same no matter how they're combined,
+programmers say they are [orthogonal][orthogonality].
+Orthogonal systems tend to be easier for people to learn
+because there are fewer interactions and exceptions to keep track of.
 
 > **Other Hidden Files**
 >
-> In addition to the hidden directories `..` and `.`, you may also see a file
-> called `.bash_profile`. This file usually contains shell configuration
-> settings. You may also see other files and directories beginning
-> with `.`. These are usually files and directories that are used to configure
-> different programs on your computer. The prefix `.` is used to prevent these
-> configuration files from cluttering the terminal when a standard `ls` command
-> is used.
+> In addition to the hidden directories `..` and `.`,
+> we may also comes across files with names like `.jupyter` or `.Rhistory`.
+> These usually contain settings or other data for particular programs;
+> the prefix `.` is used to prevent `ls` from cluttering up the output
+> when we run `ls`.
+> We can always use the `-a` option to display them.
 
-> **Orthogonality**
->
-> The special names `.` and `..` don't belong to `cd`;
-> they are interpreted the same way by every program.
-> For example,
-> if we are in `/Users/beatrice/data`,
-> the command `ls ..` will give us a listing of `/Users/beatrice`.
-> When the meanings of the parts are the same no matter how they're combined,
-> programmers say they are **orthogonal**:
-> Orthogonal systems tend to be easier for people to learn
-> because there are fewer special cases and exceptions to keep track of.
->
-> **Moving beyond the parent directory**
->
-> Several `..` can be joined by the path separator to move higher than the
-> parent directory. To move two directories up, you would type `cd ../..`. This
-> means you can also move to a directory on the same level at the current
-> directory. For example, to move from `/Users/beatrice/data` to
-> `/Users/beatrice/molecules` you can type `cd ../molecules`.
+`cd` is a simple command,
+but it allows us to explore several new ideas.
+First,
+several `..` can be joined by the path separator
+to move higher than the parent directory in a single step.
+For example, `cd ../..` will move us up two directories
+(e.g., from `/Users/amira/climate-data` to `/Users`),
+while `cd ../Movies` will move us up from `climate-data` and back down into `Movies`.
 
-So these are the basic commands for navigating the filesystem on your computer:
-`pwd`, `ls` and `cd`.  Let's explore some variations on those commands.
-What happens if you type `cd` on its own, without giving a directory?
+What happens if we type `cd` on its own without giving a directory?
+
+```shell
+$ pwd
+```
+
+```text
+/Users/amira/Movies
+```
 
 ```shell
 $ cd
-```
-
-How can you check what happened? `pwd` gives us the answer:
-
-```shell
 $ pwd
 ```
 
 ```text
-/Users/beatrice
+/Users/amira
 ```
 
-It turns out that `cd` without an argument will return you to your home directory,
-which is great if you've gotten lost in your own filesystem.
-
-Let's try returning to the `data` directory from before.  Last time, we used
-three commands, but we can actually string together the list of directories
-to move to `data` in one step:
+This works no matter where we are:
+`cd` on its own always returns us to our home directory.
+We can achieve the same thing using the special directory name `~`,
+which is a shortcut for our home directory:
 
 ```shell
-$ cd Desktop/data-shell/data
-```
-
-Check that we've moved to the right place by running `pwd` and `ls -F`
-
-If we want to move up one level from the data directory, we could use `cd ..`.  But
-there is another way to move to any directory, regardless of your
-current location.
-
-So far, when specifying directory names, or even a directory path (as above),
-we have been using **relative paths**.  When you use a relative path with a command
-like `ls` or `cd`, it tries to find that location  from where we are,
-rather than from the root of the filesystem.
-
-However, it is possible to specify the **absolute path** to a directory by
-including its entire path from the root directory, which is indicated by a
-leading slash.  The leading `/` tells the computer to follow the path from
-the root of the filesystem, so it always refers to exactly one directory,
-no matter where we are when we run the command.
-
-This allows us to move to our `data-shell` directory from anywhere on
-the filesystem (including from inside `data`).  To find the absolute path
-we're looking for, we can use `pwd` and then extract the piece we need
-to move to `data-shell`.
-
-```shell
-$ pwd
+$ ls ~
 ```
 
 ```text
-/Users/beatrice/Desktop/data-shell/data
+Applications    Documents       Library         Music           Public          todo.txt
+Desktop         Downloads       Movies          Pictures        climate-data 
 ```
 
-```shell
-$ cd /Users/beatrice/Desktop/data-shell
-```
+(`ls` doesn't show any trailing slashes here because we haven't used `-F`.)
+We can use `~` in paths,
+so that (for example) `~/Downloads` always refers to our download directory.
 
-Run `pwd` and `ls -F` to ensure that we're in the directory we expect.
+Finally,
+`cd` interprets the shortcut `-` (a single dash) to mean the last directory we were in.
+Using this is usually faster and more reliable than trying to remember and type the path,
+but unlike `~`,
+it only works with `cd`:
+`ls -` tries to print a listing of a directory called `-`
+rather than showing us the contents of our previous directory.
 
-> **Two More Shortcuts**
->
-> The shell interprets the character `~` (tilde) at the start of a path to
-> mean "the current user's home directory". For example, if Beatrice's home
-> directory is `/Users/beatrice`, then `~/data` is equivalent to
-> `/Users/beatrice/data`. This only works if it is the first character in the
-> path: `here/there/~/elsewhere` is *not* `here/there/Users/beatrice/elsewhere`.
->
-> Another shortcut is the `-` (dash) character.  `cd` will translate `-` into
-> *the previous directory you were in*, which is faster than having to remember,
-> then type, the full path.  This is a *very* efficient way of moving back
-> and forth between directories. The difference between `cd ..` and `cd -` is
-> that the former brings you *up*, while the latter brings you *back*. You can
-> think of it as the *Last Channel* button on a TV remote.
-
-
-## Working With Files and Directories {#rse-bash-working}
-
-### Creating directories 
+## How can I create new files and directories? {#rse-bash-filedir}
  
 We now know how to explore files and directories,
-but how do we create them in the first place?
-
-Step one: see where we are and what we already have.
-Let's go back to our `data-shell` directory on the Desktop
-and use `ls -F` to see what it contains:
+but how do we create them?
+To find out,
+let's go back to our `climate-data` directory:
 
 ```shell
-$ pwd
-```
-
-```text
-/Users/beatrice/Desktop/data-shell
-```
-
-```shell
+$ cd ~/climate-data
 $ ls -F
 ```
 
 ```text
-creatures/  data/  molecules/  north-pacific-gyre/  notes.txt  pizza.cfg  solar.pdf  writing/
+NOTES           bin/            docs/           thesis.md       tofu.config
+README.md       cleaned/        raw/            thesis.pdf
 ```
 
-Let's create a new directory called `thesis` using the command `mkdir thesis`
-(which has no output):
+To create a new directory,
+we use the command `mkdir` (short for <strong>m</strong>a<strong>k</strong>e <strong>dir</strong>irectory):
 
 ```shell
-$ mkdir thesis
+$ mkdir analysis
 ```
 
-As you might guess from its name,
-`mkdir` means "make directory".
-Since `thesis` is a relative path
-(i.e., does not have a leading slash, like `/what/ever/thesis`),
+Since `analysis` is a relative path
+(i.e., does not have a leading slash)
 the new directory is created in the current working directory:
 
 ```shell
@@ -784,118 +521,109 @@ $ ls -F
 ```
 
 ```text
-creatures/  data/  molecules/  north-pacific-gyre/  notes.txt  pizza.cfg  solar.pdf  thesis/  writing/
+NOTES           analysis/       cleaned/        raw/            thesis.pdf
+README.md       bin/            docs/           thesis.md       tofu.config
 ```
 
-> **Two ways of doing the same thing**
->
-> Using the shell to create a directory is no different than using a file explorer.
-> If you open the current directory using your operating system's graphical file explorer,
-> the `thesis` directory will appear there too.
-> While the shell and the file explorer are two different ways of interacting with the files,
-> the files and directories themselves are the same.
+Using the shell to create a directory is no different than using a graphical tool.
+If we look at the current directory with our computer's file browser
+we will see the `analysis` directory there too.
+The shell and the file explorer are two different ways of interacting with the files;
+the files and directories themselves are the same.
 
+> **Naming Files and Directories**
+>
+> Complicated names of files and directories can make our life painful.
+> Following a few simple rules can save a lot of headaches:
+>
+> 1. **Don't use spaces.**
+>    Spaces can make a name easier to read,
+>    but since they are used to separate arguments on the command line,
+>    most shell commands interpret a name like `My Thesis` as two names `My` and `Thesis`.
+>    Use `-` or `_` instead,
+>    e.g, `climate-data` or `climate_data`.
+>
+> 2. **Don't begin the name with `-` (dash)**
+>    to avoid confusion with command options like `-F`.
+>
+> 3. **Stick with letters, digits, `.` (period or 'full stop'), `-` (dash) and `_` (underscore).**
+>    Many other characters mean special things in the shell.
+>    We will learn about some of these during this lesson,
+>    but these are always safe.
+>
+> If we need to refer to files or directories that have spaces or other special characters in their names,
+> we can surround the name in quotes (`""`).
+> For example, `ls "My Thesis"` will work where `ls My Thesis` does not.
 
-> **Good names for files and directories**
->
-> Complicated names of files and directories can make your life painful
-> when working on the command line. Here we provide a few useful
-> tips for the names of your files.
->
-> 1. Don't use spaces.
->
->    Spaces can make a name more meaningful,
->    but since spaces are used to separate arguments on the command line
->    it is better to avoid them in names of files and directories.
->    You can use `-` or `_` instead (e.g. `north-pacific-gyre/` rather than `north pacific gyre/`).
->
-> 2. Don't begin the name with `-` (dash).
->
->    Commands treat names starting with `-` as options.
->
-> 3. Stick with letters, numbers, `.` (period or 'full stop'), `-` (dash) and `_` (underscore).
->
->    Many other characters have special meanings on the command line.
->    We will learn about some of these during this lesson.
->    There are special characters that can cause your command to not work as
->    expected and can even result in data loss.
->
-> If you need to refer to names of files or directories that have spaces
-> or other special characters, you should surround the name in quotes (`""`).
-
-
-Since we've just created the `thesis` directory, there's nothing in it yet:
+Since we just created the `thesis` directory,
+it doesn't contain anything:
 
 ```shell
-$ ls -F thesis
+$ ls -F analysis
 ```
 
-### Create a text file
-
-Let's change our working directory to `thesis` using `cd`,
-then run a text editor called Nano to create a file called `draft.txt`:
+Let's change our working directory to `analysis` using `cd`,
+then use a very simple text editor called [Nano][nano] to create a file called `draft.txt`:
 
 ```shell
-$ cd thesis
+$ cd analysis
 $ nano draft.txt
 ```
 
-> **Which Editor?**
+We could just as easily have run `nano analysis/draft.txt` to edit the file.
+What's more important is that when we say "Nano is a text editor" we really do mean "text":
+it can only work with plain character data,
+not spreadsheets, images, Microsoft Word files, or anything else invented after 1970.
+We use it in this lesson because it runs everywhere
+and because it is as simple as something can be and still be called an editor.
+However,
+that last trait means that we *shouldn't* use it for larger tasks,
+such as writing a program or a paper.
+Chapter \@ref(tools) discusses some alternatives.
+
+> **Recycling Pixels**
 >
-> When we say, "`nano` is a text editor," we really do mean "text": it can
-> only work with plain character data, not tables, images, or any other
-> human-friendly media. We use it in examples because it is one of the 
-> least complex text editors. However, because of this trait, it may 
-> not be powerful enough or flexible enough for the work you need to do
-> after this workshop. On Unix systems (such as Linux and Mac OS X),
-> many programmers use [Emacs](http://www.gnu.org/software/emacs/) or
-> [Vim](http://www.vim.org/) (both of which require more time to learn), 
-> or a graphical editor such as
-> [Sublime Text](https://www.sublimetext.com/). On Windows, a popular editor is
-> [Notepad++](http://notepad-plus-plus.org/).  Windows also has a built-in
-> editor called `notepad` that can be run from the command line in the same
-> way as `nano` for the purposes of this lesson.  
->
-> No matter what editor you use, you will need to know where it searches
-> for and saves files. If you start it from the shell, it will (probably)
-> use your current working directory as its default location. If you use
-> your computer's start menu, it may want to save files in your desktop or
-> documents directory instead. You can change this by navigating to
-> another directory the first time you "Save As..."
+> Unlike most modern editors,
+> Nano runs *inside* the shell window instead of opening a new window of its own.
+> This is a holdover from an era when graphical terminals were a rarity
+> and different applications had to share a single character-only screen.
 
+Once Nano is open we can type in a few lines of text,
+then press <kbd>Ctrl</kbd>+<kbd>O</kbd>
+(the Control key and the letter 'O' at the same time)
+to save our work.
+Nano will ask us what file we want to save it to;
+press <kbd>Return</kbd> to accept the suggested default of `draft.txt`.
+Once our file is saved,
+we can use <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit the editor and return to the shell.
 
-Let's type in a few lines of text.
-Once we're happy with our text,
-we can press <kbd>Ctrl</kbd>+<kbd>O</kbd>
-(press the Ctrl or Control key and, while holding it down, press the O key)
-to write our data to disk
-(we'll be asked what file we want to save this to:
-press <kbd>Return</kbd> to accept the suggested default of `draft.txt`).
-
-*TODO: Figure - Nano in Action [../fig/nano-screenshot.png](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/nano-screenshot.png)*
-
-Once our file is saved, we can use `Ctrl-X` to quit the editor and
-return to the shell.
+FIXME: figure (Nano)
 
 > **Control, Ctrl, or ^ Key**
 >
-> The Control key is also called the "Ctrl" key. There are various ways
-> in which using the Control key may be described. For example, you may
-> see an instruction to press the Control key and, while holding it down,
-> press the X key, described as any of:
+> The Control key,
+> also called the "Ctrl" key,
+> can be described in a bewildering variety of ways.
+> For example,
+> holding down <kbd>Control</kbd> and <kbd>X</kbd> at the same time
+> may be written as any of:
 >
-> * `Control-X`
-> * `Control+X`
-> * `Ctrl-X`
-> * `Ctrl+X`
-> * `^X`
-> * `C-x`
+> -   `Control-X`
+> -   `Control+X`
+> -   `Ctrl-X`
+> -   `Ctrl+X`
+> -   `C-x`
+> -   `^X`
 >
-> In nano, along the bottom of the screen you'll see `^G Get Help ^O WriteOut`.
-> This means that you can use `Control-G` to get help and `Control-O` to save your
-> file.
+> When Nano runs
+> it displays some help in the bottom two lines of the screen
+> using the last of these notations:
+> for example,
+> `^G Get Help` means "use <kbd>Control</kbd>+<kbd>G</kbd> to get help"
+> and `^O WriteOut` means "use <kbd>Control</kbd>+<kbd>O</kbd> to write out the current file".
 
-`nano` doesn't leave any output on the screen after it exits,
+Nano doesn't leave any output on the screen after it exits,
+but we can use `ls` to show that we have indeed created a new file `draft.txt`:
 but `ls` now shows that we have created a file called `draft.txt`:
 
 ```shell
@@ -908,327 +636,540 @@ draft.txt
 
 > **What's In A Name?**
 >
-> You may have noticed that all of Beatrice's files are named "something dot
-> something", and in this part of the lesson, we always used the extension
-> `.txt`.  This is just a convention: we can call a file `mythesis` or
-> almost anything else we want. However, most people use two-part names
-> most of the time to help them (and their programs) tell different kinds
-> of files apart. The second part of such a name is called the
-> **filename extension**, and indicates
-> what type of data the file holds: `.txt` signals a plain text file, `.pdf`
-> indicates a PDF document, `.cfg` is a configuration file full of parameters
-> for some program or other, `.png` is a PNG image, and so on.
->
-> This is just a convention, albeit an important one. Files contain
-> bytes: it's up to us and our programs to interpret those bytes
-> according to the rules for plain text files, PDF documents, configuration
-> files, images, and so on.
->
-> Naming a PNG image of a whale as `whale.mp3` doesn't somehow
-> magically turn it into a recording of whalesong, though it *might*
-> cause the operating system to try to open it with a music player
+> All of Amira's files are named "something dot something".
+> This is just a convention:
+> we can call a file `mythesis` or almost anything else.
+> However,
+> most people use two-part names to help them (and their programs)
+> tell different kinds of files apart.
+> The second part of such a name is called the [filename extension][filename-extension]
+> and indicates what type of data the file holds:
+> `.txt` for plain text,
+> `.pdf` for a PDF document,
+> `.png` for a PNG image, and so on.
+> This is just a convention:
+> saving a PNG image of a whale as `whale.mp3`
+> doesn't somehow magically turn it into a recording of whalesong,
+> though it *might* cause the operating system to try to open it with a music player
 > when someone double-clicks it.
 
+## How can move files and directories around? {#rse-bash-move}
 
-### Moving files and directories
-
-Returning to the `data-shell` directory,
-
-```shell
-cd ~/Desktop/data-shell/
-```
-
-In our `thesis` directory we have a file `draft.txt`
-which isn't a particularly informative name,
-so let's change the file's name using `mv`,
-which is short for "move":
+Let's go back to our `climate-data` directory:
 
 ```shell
-$ mv thesis/draft.txt thesis/quotes.txt
+cd ~/climate-data
 ```
 
-The first argument tells `mv` what we're "moving",
-while the second is where it's to go.
+The `analysis` directory contains a file called `draft.txt`.
+That isn't a particularly informative name,
+so let's change it using `mv` (short for <strong>m</strong>o<strong>v</strong>e):
+
+```shell
+$ mv analysis/draft.txt analysis/prior-work.txt
+```
+
+The first argument tells `mv` what we are "moving",
+while the second is where it's to go:
+here,
+moving `analysis/draft.txt` to `analysis/prior-work.txt`
+has the same effect as renaming the file:
+
+```shell
+$ ls analysis
+```
+
+```text
+prior-work.txt
+```
+
+We must be careful when specifying the destination
+because `mv` will silently overwrite any existing file with the same name.
+An option `-i` (for "interactive") makes `mv` ask us for confirmation before overwriting.
+`mv` also works on directories,
+so `mv analysis first-paper` would rename the directory without changing its contents.
+
+Now suppose we want to move `prior-work.txt` into the current working directory.
+If we don't want to change the file's name,
+just its location,
+we can provide `mv` with a directory as a destination
+and it will move the file there.
 In this case,
-we're moving `thesis/draft.txt` to `thesis/quotes.txt`,
-which has the same effect as renaming the file.
-Sure enough,
-`ls` shows us that `thesis` now contains one file called `quotes.txt`:
+the directory we want is the special name `.` that we mentioned earlier:
 
 ```shell
-$ ls thesis
+$ mv analysis/prior-work.txt .
+```
+
+`ls` now shows us that `analysis` is empty:
+
+```shell
+$ ls analysis
+```
+
+and that our current directory now contains our file:
+
+```shell
+$ ls
 ```
 
 ```text
-quotes.txt
+NOTES           analysis/       cleaned/        prior-work.txt  thesis.md       tofu.config
+README.md       bin/            docs/           raw/            thesis.pdf
 ```
 
-One has to be careful when specifying the target file name, since `mv` will
-silently overwrite any existing file with the same name, which could
-lead to data loss. An additional option, `mv -i` (or `mv --interactive`),
-can be used to make `mv` ask you for confirmation before overwriting.
-
-Note that `mv` also works on directories.
-
-Let's move `quotes.txt` into the current working directory.
-We use `mv` once again,
-but this time we'll just use the name of a directory as the second argument
-to tell `mv` that we want to keep the filename,
-but put the file somewhere new.
-(This is why the command is called "move".)
-In this case,
-the directory name we use is the special directory name `.` that we mentioned earlier.
+If we only want to check that the file exists,
+we can give its name to `ls`
+just like we can give the command the name of a directory:
 
 ```shell
-$ mv thesis/quotes.txt .
-```
-
-The effect is to move the file from the directory it was in to the current working directory.
-`ls` now shows us that `thesis` is empty:
-
-```shell
-$ ls thesis
-```
-
-Further,
-`ls` with a filename or directory name as an argument only lists that file or directory.
-We can use this to see that `quotes.txt` is still in our current directory:
-
-```shell
-$ ls quotes.txt
+$ ls prior-work.txt
 ```
 
 ```text
-quotes.txt
+prior-work.txt
 ```
 
-### Copying files and directories
+## How can I copy files and directories? {#rse-bash-copy}
 
-The `cp` command works very much like `mv`,
-except it copies a file instead of moving it.
-We can check that it did the right thing using `ls`
-with two paths as arguments --- like most Unix commands,
-`ls` can be given multiple paths at once:
+The `cp` command
+(for <strong>c</strong>o<strong>p</strong>y,
+and no, we don't know why the creators of Unix seemed to be allergic to vowels)
+works like `mv` except it copies a file instead of moving it.
+We can check that it did the right thing using `ls` with two arguments:
 
 ```shell
-$ cp quotes.txt thesis/quotations.txt
-$ ls quotes.txt thesis/quotations.txt
+$ cp prior-work.txt analysis/section-1.txt
+$ ls prior-work.txt analysis/section-1.txt
 ```
 
 ```text
-quotes.txt   thesis/quotations.txt
+analysis/section-1.txt  prior-work.txt
 ```
 
-We can also copy a directory and all its contents by using the
-[recursive](https://en.wikipedia.org/wiki/Recursion) option `-r`,
-e.g. to back up a directory:
+Notice that `ls` shows the output in alphabetical order.
+If we leave off the second filename and ask it to show us a file and a directory
+(or multiple directories)
+it lists them one by one:
 
 ```shell
-$ cp -r thesis thesis_backup
-```
-
-We can check the result by listing the contents of both the `thesis` and `thesis_backup` directory:
-
-```shell
-$ ls thesis thesis_backup
+$ ls prior-work.txt analysis
 ```
 
 ```text
-thesis:
-quotations.txt
+prior-work.txt
 
-thesis_backup:
-quotations.txt
+analysis:
+section-1.txt
 ```
 
-
-### Removing files and directories
-
-Returning to the `data-shell` directory,
-let's tidy up this directory by removing the `quotes.txt` file we created.
-The Unix command we'll use for this is `rm` (short for 'remove'):
+Copying a directory and its content is a little more complicated.
+If we use `cp` on its own,
+we get an error message:
 
 ```shell
-$ rm quotes.txt
+$ cp analysis backup
+```
+
+```text
+cp: analysis is a directory (not copied).
+```
+
+If we really want to copy everything,
+we must give `cp` the `-r` option (meaning [<strong>r</strong>ecursive][recursion]:
+
+```shell
+$ cp -r analysis backup
+```
+
+Once again we can check the result with `ls`:
+
+```shell
+$ ls analysis backup
+```
+
+```text
+analysis/:
+section-1.txt
+
+backup/:
+section-1.txt
+```
+
+## How can I delete files and directories? {#rse-bash-rm}
+
+Let's tidy up by removing the `prior-work.txt` file we created in our `climate-data` directory.
+The command to do this is `rm` (for <strong>r</strong>e<strong>m</strong>ove):
+
+```shell
+$ rm prior-work.txt
 ```
 
 We can confirm the file has gone using `ls`:
 
 ```shell
-$ ls quotes.txt
+$ ls prior-work.txt
 ```
 
 ```text
-ls: cannot access 'quotes.txt': No such file or directory
+ls: prior-work.txt: No such file or directory
 ```
 
-> **Deleting Is Forever**
->
-> The Unix shell doesn't have a trash bin that we can recover deleted
-> files from (though most graphical interfaces to Unix do).  Instead,
-> when we delete files, they are unlinked from the filesystem so that
-> their storage space on disk can be recycled. Tools for finding and
-> recovering deleted files do exist, but there's no guarantee they'll
-> work in any particular situation, since the computer may recycle the
-> file's disk space right away.
+Deleting is forever:
+the Unix shell doesn't have a trash bin that we can recover deleted files from
+(though most graphical interfaces for Unix do),
+so when we delete a file,
+it really is gone—or at least gone-ish.
+Tools for finding and recovering deleted files do exist,
+but there is no guarantee they will work,
+since the computer may recycle the file's disk space at any time.
 
-
-If we try to remove the `thesis` directory using `rm thesis`,
-we get an error message:
+In a half-hearted attempt to stop us from erasing things accidentally,
+`rm` refuses to delete directories:
 
 ```shell
-$ rm thesis
+$ rm analysis
 ```
 
 ```text
-rm: cannot remove `thesis': Is a directory
+rm: analysis: is a directory
 ```
 
-This happens because `rm` by default only works on files, not directories.
-
-`rm` can remove a directory *and all its contents* if we use the 
-recursive option `-r`, and it will do so *without any confirmation prompts*:
+`rm` can remove a directory and everything it contains
+if we use the recursive option `-r`:
 
 ```shell
-$ rm -r thesis
+$ rm -r analysis
 ```
 
-Given that there is no way to retrieve files deleted using the shell,
-`rm -r` *should be used with great caution* (you might consider adding the interactive option `rm -r -i`).
+`rm -r` should be used with great caution:
+in most cases,
+it's safest to add the `-i` option (for <strong>i</strong>nteractive)
+to get `rm` to ask us to confirm each deletion.
+As a halfway measure,
+we can use `-v` (for <strong>v</strong>erbose)
+to get `rm` to print a message for each file it deletes.
+This options works the same way with `mv` and `cp`.
 
-### Operations with multiple files and directories
+## How can I run commands on lots of files at once? {#rse-bashwildcard}
 
-Oftentimes one needs to copy or move several files at once.
-This can be done by providing a list of individual filenames,
-or specifying a naming pattern using wildcards.  
+The `cleaned` directory in our climate data project contains
+precipitation and temperature records from four weather stations in Australia:
 
-> **Wildcards**
+```shell
+$ ls cleaned
+```
+
+```text
+andamooka_prec.csv      badingarra_prec.csv     bellambi_prec.csv       tuggeranong_prec.csv
+andamooka_temp.csv      badingarra_temp.csv     bellambi_temp.csv       tuggeranong_temp.csv
+```
+
+The `wc` command (short for <strong>w</strong>ord <strong>c</strong>ount)
+can tell us how many lines, words, and letters there are in one of these files:
+
+```shell
+$ wc cleaned/andamooka_prec.csv
+```
+
+```text
+20003   20004  401858 cleaned/andamooka_prec.csv
+```
+
+> **What's in a Word?**
 >
-> `*` is a **wildcard**, which matches zero or more  characters.
-> Let's consider the `data-shell/molecules` directory:
-> `*.pdb` matches `ethane.pdb`, `propane.pdb`, and every
-> file that ends with '.pdb'. On the other hand, `p*.pdb` only matches
-> `pentane.pdb` and `propane.pdb`, because the 'p' at the front only
-> matches filenames that begin with the letter 'p'.
->
-> `?` is also a wildcard, but it matches exactly one character.
-> So `?ethane.pdb` would match `methane.pdb` whereas
-> `*ethane.pdb` matches both `ethane.pdb`, and `methane.pdb`.
->
-> Wildcards can be used in combination with each other
-> e.g. `???ane.pdb` matches three characters followed by `ane.pdb`,
-> giving `cubane.pdb  ethane.pdb  octane.pdb`.
->
-> When the shell sees a wildcard, it expands the wildcard to create a
-> list of matching filenames *before* running the command that was
-> asked for. As an exception, if a wildcard expression does not match
-> any file, Bash will pass the expression as an argument to the command
-> as it is. For example typing `ls *.pdf` in the `molecules` directory
-> (which contains only files with names ending with `.pdb`) results in
-> an error message that there is no file called `*.pdf`.
-> However, generally commands like `wc` and `ls` see the lists of
-> file names matching these expressions, but not the wildcards
-> themselves. It is the shell, not the other programs, that deals with
-> expanding wildcards, and this is another example of orthogonal design.
+> The number of lines and number of words in this file are almost the same
+> because `wc` only considers spaces to be word breaks, not commas,
+> and the only space in this file occurs in the name of one of the columns.
 
+We could run `wc` seven more times to count find out how many lines there are in the other files,
+but that would be a lot of typing
+and we would probably make at least one mistake.
+We can't just give `wc` the name of the directory as we do with `ls`:
 
-## Pipes and Filters {#rse-bash-pipes}
+```shell
+$ wc cleaned
+```
+
+```text
+wc: cleaned: read: Is a directory
+```
+
+Instead,
+we can use [wildcards][wildcard] to select a set of filenames at once.
+The most commonly-used wildcard is `*`;
+it matches zero or more characters,
+so `cleaned/*.csv` matches all of the files in the `cleaned` directory:
+
+```text
+$ ls cleaned/*.csv
+```
+
+```text
+cleaned/andamooka_prec.csv       cleaned/badingarra_prec.csv      cleaned/bellambi_prec.csv        cleaned/tuggeranong_prec.csv
+cleaned/andamooka_temp.csv       cleaned/badingarra_temp.csv      cleaned/bellambi_temp.csv        cleaned/tuggeranong_temp.csv
+```
+
+while `cleaned/b*.csv` only matches the four whose names begin with a 'b':
+
+```shell
+$ ls cleaned/b*.csv
+```
+
+```text
+cleaned/badingarra_prec.csv      cleaned/badingarra_temp.csv      cleaned/bellambi_prec.csv        cleaned/bellambi_temp.csv
+```
+
+Wildcards are expanded to match filenames *before* commands are run,
+so they work exactly the same way for every command.
+This means that we can use them with `wc` to (for example)
+count the number of records in the precipitation files:
+
+```shell
+$ wc cleaned/*_prec.csv
+```
+
+```text
+   20003   20004  401858 cleaned/andamooka_prec.csv
+   21099   21100  406584 cleaned/badingarra_prec.csv
+    8315    8316  169740 cleaned/bellambi_prec.csv
+    8681    8682  175998 cleaned/tuggeranong_prec.csv
+   58098   58102 1154180 total
+```
+
+or the number of records in the files from Tuggeranong:
+
+```shell
+$ wc cleaned/tug*.csv
+```
+
+```text
+    8681    8682  175998 cleaned/tuggeranong_prec.csv
+    8680    8681  196212 cleaned/tuggeranong_temp.csv
+   17361   17363  372210 total
+```
+
+The exercises will introduce and explore other wildcards
+(such as `?`, which matches exactly one character).
+For now,
+the only other thing we need to know is that
+it's possible for a wildcard expression to *not* match anything.
+In this case,
+the command will usually print an error message:
+
+```shell
+$ wc cleaned/*.txt
+```
+
+```text
+wc: cleaned/*.txt: open: No such file or directory
+```
+
+## How can I find out what commands there are and how to use them? {#rse-bash-help}
+
+By default,
+`wc` displays lines, words, and characters,
+but we can ask it to display only a count of lines:
+
+```shell
+$ wc -l cleaned/*_prec.csv
+```
+
+```text
+   20003 cleaned/andamooka_prec.csv
+   21099 cleaned/badingarra_prec.csv
+    8315 cleaned/bellambi_prec.csv
+    8681 cleaned/tuggeranong_prec.csv
+   58098 total
+```
+
+`wc` has other options as well.
+We can use the `man` command (short for <strong>man</strong>ual)
+to find out what they are:
+
+```shell
+$ man wc
+```
+
+FIXME: typeset the text below as a figure with callouts pointing at its parts.
+
+```text
+WC(1)                     BSD General Commands Manual                    WC(1)
+
+NAME
+     wc -- word, line, character, and byte count
+
+SYNOPSIS
+     wc [-clmw] [file ...]
+
+DESCRIPTION
+     The wc utility displays the number of lines, words, and bytes contained
+     in each input file, or standard input (if no file is specified) to the
+     standard output.  A line is defined as a string of characters delimited
+     by a <newline> character.  Characters beyond the final <newline> charac-
+     ter will not be included in the line count.
+
+     A word is defined as a string of characters delimited by white space
+     characters.  White space characters are the set of characters for which
+     the iswspace(3) function returns true.  If more than one input file is
+     specified, a line of cumulative counts for all the files is displayed on
+     a separate line after the output for the last file.
+
+     The following options are available:
+
+     -c      The number of bytes in each input file is written to the standard
+             output.  This will cancel out any prior usage of the -m option.
+
+     -l      The number of lines in each input file is written to the standard
+             output.
+
+     -m      The number of characters in each input file is written to the
+             standard output.  If the current locale does not support multi-
+             byte characters, this is equivalent to the -c option.  This will
+             cancel out any prior usage of the -c option.
+
+     -w      The number of words in each input file is written to the standard
+             output.
+
+     When an option is specified, wc only reports the information requested by
+     that option.  The order of output always takes the form of line, word,
+     byte, and file name.  The default action is equivalent to specifying the
+     -c, -l and -w options.
+
+     If no files are specified, the standard input is used and no file name is
+     displayed.  The prompt will accept input until receiving EOF, or [^D] in
+     most environments.
+
+ENVIRONMENT
+     The LANG, LC_ALL and LC_CTYPE environment variables affect the execution
+     of wc as described in environ(7).
+
+EXIT STATUS
+     The wc utility exits 0 on success, and >0 if an error occurs.
+
+EXAMPLES
+     Count the number of characters, words and lines in each of the files
+     report1 and report2 as well as the totals for both:
+
+           wc -mlw report1 report2
+
+COMPATIBILITY
+     Historically, the wc utility was documented to define a word as a "maxi-
+     mal string of characters delimited by <space>, <tab> or <newline> charac-
+     ters".  The implementation, however, did not handle non-printing charac-
+     ters correctly so that "  ^D^E  " counted as 6 spaces, while
+     "foo^D^Ebar" counted as 8 characters.  4BSD systems after 4.3BSD modi-
+     fied the implementation to be consistent with the documentation.  This
+     implementation defines a "word" in terms of the iswspace(3) function,
+     as required by IEEE Std 1003.2 ("POSIX.2").
+
+SEE ALSO
+     iswspace(3)
+
+STANDARDS
+     The wc utility conforms to IEEE Std 1003.1-2001 ("POSIX.1").
+
+HISTORY
+     A wc command appeared in Version 1 AT&T UNIX.
+
+BSD                            February 23, 2005                           BSD
+```
+
+> **Navigating the Manual**
+>
+> If our screen is too small to display an entire manual page at once,
+> the shell will use a [pager][pager] called `less` to show it piece by piece.
+> We can use <kbd>↑</kbd> and <kbd>↓</kbd> to move line-by-line
+> or <kbd>Ctrl</kbd>+<kbd>Spacebar</kbd> and <kbd>Spacebar</kbd>
+> to skip up and down one page at a time.
+> (<kbd>B</kbd> and <kbd>F</kbd> also work.)
+> 
+> To search for a character or word,
+> use <kbd>/</kbd> followed by the character or word to search for.
+> If the search produces multiple hits,
+> we can move between them using <kbd>N</kbd> (for "next").
+> To quit, press <kbd>Q</kbd>.
+
+This is a lot of information,
+most of which isn't really useful.
+Some commands have a `--help` option to provide a succinct summary of possibilites,
+but the best place to go for help these days is probably the [TLDR][tldr] website.
+The acronym stands for "too long, didn't read",
+and its help for `wc` displays this:
+
+```
+wc
+Count words, bytes, or lines.
+
+Count lines in file:
+wc -l {{file}}
+
+Count words in file:
+wc -w {{file}}
+
+Count characters (bytes) in file:
+wc -c {{file}}
+
+Count characters in file (taking multi-byte character sets into account):
+wc -m {{file}}
+
+edit this page on github
+```
+
+As the last line suggests,
+all of its examples are in a public GitHub repository
+so that users like you can add the ones you wish it had.
+For more information,
+we can search on [Stack Overflow][so-bash]
+or browse the [GNU manuals][gnu-man]
+(particularly those for the [core GNU utilities][gnu-man-coreutils],
+which include many of the commands introduced in this lesson).
+In all cases,
+though,
+we need to have some idea of what we're looking for in the first place:
+someone who wants to know how many lines there are in a data file
+is unlikely to think to look for `wc`.
+
+## How can I combine commands? {#rse-bash-pipe}
 
 Now that we know a few basic commands,
-we can finally look at the shell's most powerful feature:
+we can introduce one of the shell's most powerful features:
 the ease with which it lets us combine existing programs in new ways.
-We'll start with a directory called `molecules`
-that contains six files describing some simple organic molecules.
-The `.pdb` extension indicates that these files are in Protein Data Bank format,
-a simple text format that specifies the type and position of each atom in the molecule.
+Let's go into the `climate-data/cleaned` directory
+and count the number of lines in each file once again:
 
 ```shell
-$ ls molecules
+$ cd ~/climate-data/cleaned
+$ wc -l *.csv
 ```
 
 ```text
-cubane.pdb    ethane.pdb    methane.pdb
-octane.pdb    pentane.pdb   propane.pdb
+   20003 andamooka_prec.csv
+   18541 andamooka_temp.csv
+   21099 badingarra_prec.csv
+   20002 badingarra_temp.csv
+    8315 bellambi_prec.csv
+    8314 bellambi_temp.csv
+    8681 tuggeranong_prec.csv
+    8680 tuggeranong_temp.csv
+  113635 total
 ```
 
-Let's go into that directory with `cd` and run the command `wc *.pdb`.
-`wc` is the "word count" command:
-it counts the number of lines, words, and characters in files (from left to right, in that order).
-
-The `*` in `*.pdb` matches zero or more characters,
-so the shell turns `*.pdb` into a list of all `.pdb` files in the current directory:
-
-```shell
-$ cd molecules
-$ wc *.pdb
-```
-
-```text
-  20  156  1158  cubane.pdb
-  12  84   622   ethane.pdb
-   9  57   422   methane.pdb
-  30  246  1828  octane.pdb
-  21  165  1226  pentane.pdb
-  15  111  825   propane.pdb
- 107  819  6081  total
-```
-
-If we run `wc -l` instead of just `wc`,
-the output shows only the number of lines per file:
-
-```shell
-$ wc -l *.pdb
-```
-
-```text
-  20  cubane.pdb
-  12  ethane.pdb
-   9  methane.pdb
-  30  octane.pdb
-  21  pentane.pdb
-  15  propane.pdb
- 107  total
-```
-
-> **Why Isn't It Doing Anything?**
->
-> What happens if a command is supposed to process a file, but we
-> don't give it a filename? For example, what if we type:
->
-> ```shell
-> $ wc -l
-> ```
->
-> but don't type `*.pdb` (or anything else) after the command? 
-> Since it doesn't have any filenames, `wc` assumes it is supposed to
-> process standard input, so it just sits there and waits for us to give
-> it some data interactively. From the outside, though, all we see is it
-> sitting there: the command doesn't appear to do anything.
->
-> If you make this kind of mistake, you can escape out of this state by holding down 
-> the control key (<kbd>Ctrl</kbd>) and typing the letter <kbd>C</kbd>
-> once and letting go of the <kbd>Ctrl</kbd> key.
-> <kbd>Ctrl</kbd>+<kbd>C</kbd>
-
-We can also use `-w` to get only the number of words,
-or `-c` to get only the number of characters.
-
-Which of these files contains the fewest lines?
-It's an easy question to answer when there are only six files,
-but what if there were 6000?
+Which of these files is shortest?
+It's easy to see when there are only eight files,
+but what if there were eight thousand?
 Our first step toward a solution is to run the command:
 
 ```shell
-$ wc -l *.pdb > lengths.txt
+$ wc -l *.csv > lengths.txt
 ```
 
-The greater than symbol, `>`, tells the shell to **redirect** the command's output
-to a file instead of printing it to the screen. (This is why there is no screen output:
-everything that `wc` would have printed has gone into the
-file `lengths.txt` instead.)  The shell will create
-the file if it doesn't exist. If the file exists, it will be
-silently overwritten, which may lead to data loss and thus requires
-some caution.
+The greater than symbol `>` tells the shell to [redirect][redirection] the command's output to a file
+instead of printing it.
+Nothing appears on the screen:
+everything that would have appeared has gone into the file `lengths.txt` instead.
+The shell creates this file if it doesn't exist,
+or overwrites it if it already exists.
 `ls lengths.txt` confirms that the file exists:
 
 ```shell
@@ -1239,814 +1180,896 @@ $ ls lengths.txt
 lengths.txt
 ```
 
-We can now send the content of `lengths.txt` to the screen using `cat lengths.txt`.
-`cat` stands for "concatenate":
-it prints the contents of files one after another.
-There's only one file in this case,
-so `cat` just shows us what it contains:
+We can print the contents of `lengths.txt` using `cat`
+(short for con<strong>cat</strong>enate).
+Its name comes from the fact that it will print as many files as we give it,
+one after the other.
+If we give it just one name,
+all we get is that file:
 
 ```shell
 $ cat lengths.txt
 ```
 
 ```text
-  20  cubane.pdb
-  12  ethane.pdb
-   9  methane.pdb
-  30  octane.pdb
-  21  pentane.pdb
-  15  propane.pdb
- 107  total
+   20003 andamooka_prec.csv
+   18541 andamooka_temp.csv
+   21099 badingarra_prec.csv
+   20002 badingarra_temp.csv
+    8315 bellambi_prec.csv
+    8314 bellambi_temp.csv
+    8681 tuggeranong_prec.csv
+    8680 tuggeranong_temp.csv
+  113635 total
 ```
 
-
-> **Output Page by Page**
->
-> We'll continue to use `cat` in this lesson, for convenience and consistency,
-> but it has the disadvantage that it always dumps the whole file onto your screen.
-> More useful in practice is the command `less`,
-> which you use with `less lengths.txt`.
-> This displays a screenful of the file, and then stops.
-> You can go forward one screenful by pressing the spacebar,
-> or back one by pressing `b`.  Press `q` to quit.
-
-
-Now let's use the `sort` command to sort its contents.
-
-We will also use the `-n` option to specify that the sort is
-numerical instead of alphanumerical.
-This does *not* change the file;
-instead, it sends the sorted result to the screen:
+We can now use `sort` to sort the lines in this file:
 
 ```shell
-$ sort -n lengths.txt
+$ sort lengths.txt
 ```
 
 ```text
-  9  methane.pdb
- 12  ethane.pdb
- 15  propane.pdb
- 20  cubane.pdb
- 21  pentane.pdb
- 30  octane.pdb
-107  total
+    8314 bellambi_temp.csv
+    8315 bellambi_prec.csv
+    8680 tuggeranong_temp.csv
+    8681 tuggeranong_prec.csv
+   18541 andamooka_temp.csv
+   20002 badingarra_temp.csv
+   20003 andamooka_prec.csv
+   21099 badingarra_prec.csv
+  113635 total
 ```
 
-We can put the sorted list of lines in another temporary file called `sorted-lengths.txt`
-by putting `> sorted-lengths.txt` after the command,
-just as we used `> lengths.txt` to put the output of `wc` into `lengths.txt`.
-Once we've done that,
-we can run another command called `head` to get the first few lines in `sorted-lengths.txt`:
+Just to be safe,
+we should use `sort`'s `-n` option to specify that we want to sort numerically;
+without this,
+`sort` would sort things alphabetically
+and `10` would come before `2`.
+
+`sort` does not change `lengths.txt`,
+but it sends its output to the screen just as `wc` did.
+We can therefore put the sorted list of lines in another temporary file called `sorted-lengths.txt` using `>`:
 
 ```shell
-$ sort -n lengths.txt > sorted-lengths.txt
-$ head -n 1 sorted-lengths.txt
+$ sort lengths.txt > sorted-lengths.txt
 ```
 
-```text
-  9  methane.pdb
-```
-
-Using `-n 1` with `head` tells it that
-we only want the first line of the file;
-`-n 20` would get the first 20,
-and so on.
-Since `sorted-lengths.txt` contains the lengths of our files ordered from least to greatest,
-the output of `head` must be the file with the fewest lines.
-
-> **Redirecting to the same file**
+> **Redirecting to the Same File**
 >
-> It's a very bad idea to try redirecting
-> the output of a command that operates on a file
-> to the same file. For example:
+> It's tempting to send the output of `sort` back to the file it reads:
 >
 > ```shell
 > $ sort -n lengths.txt > lengths.txt
 > ```
 >
-> Doing something like this may give you
-> incorrect results and/or delete
-> the contents of `lengths.txt`.
+> However, all this does is wipe out the contents of `lengths.txt`.
+> The reason is that when the shell sees the redirection,
+> it opens the file on the right of the `>` for writing,
+> which erases anything that file contained.
+> It then runs `sort`, which finds itself reading from a newly-empty file.
 
-
-If you think this is confusing,
-you're in good company:
-even once you understand what `wc`, `sort`, and `head` do,
-all those intermediate files make it hard to follow what's going on.
-We can make it easier to understand by running `sort` and `head` together:
+Creating intermediate files with names like `lengths.txt` and `sorted-lengths.txt` works,
+but keeping track of those files and cleaning them up when they're no longer needed is a burden.
+We can produce the same result more safely and with less typing using a [pipe][unix-pipe]:
 
 ```shell
-$ sort -n lengths.txt | head -n 1
+$ wc -l *.csv | sort -n
 ```
 
 ```text
-  9  methane.pdb
+    8314 bellambi_temp.csv
+    8315 bellambi_prec.csv
+    8680 tuggeranong_temp.csv
+    8681 tuggeranong_prec.csv
+   18541 andamooka_temp.csv
+   20002 badingarra_temp.csv
+   20003 andamooka_prec.csv
+   21099 badingarra_prec.csv
+  113635 total
 ```
 
-The vertical bar, `|`, between the two commands is called a **pipe**.
-It tells the shell that we want to use
-the output of the command on the left
+The vertical bar `|` between the `wc` and `sort` commands
+tells the shell that we want to use the output of the command on the left
 as the input to the command on the right.
-The computer might create a temporary file if it needs to,
-or copy data from one program to the other in memory,
-or something else entirely;
-we don't have to know or care.
+Putting it another way,
+the downstream command doesn't read from a file;
+instead,
+it reads the output of the upstream command.
 
-Nothing prevents us from chaining pipes consecutively.
-That is, we can for example send the output of `wc` directly to `sort`,
-and then the resulting output to `head`.
-Thus we first use a pipe to send the output of `wc` to `sort`:
+We can use `|` to build pipes of any length.
+For example,
+we can use the command `head` to get just the first three lines of sorted data:
 
 ```shell
-$ wc -l *.pdb | sort -n
+$ wc -l *.csv | sort -n | head -n 3
 ```
 
 ```text
-   9 methane.pdb
-  12 ethane.pdb
-  15 propane.pdb
-  20 cubane.pdb
-  21 pentane.pdb
-  30 octane.pdb
- 107 total
+    8314 bellambi_temp.csv
+    8315 bellambi_prec.csv
+    8680 tuggeranong_temp.csv
 ```
 
-And now we send the output of this pipe, through another pipe, to `head`, so that the full pipeline becomes:
+If we want the last line of this,
+we can add a call to the `tail` command:
 
 ```shell
-$ wc -l *.pdb | sort -n | head -n 1
+$ wc -l *.csv | sort -n | head -n 3 | tail -n 1
 ```
 
 ```text
-   9  methane.pdb
+    8680 tuggeranong_temp.csv
 ```
 
-This is exactly like a mathematician nesting functions like *log(3x)*
-and saying "the log of three times *x*".
-In our case,
-the calculation is "head of sort of line count of `*.pdb`".
+and finally save our result:
 
+```shell
+$ wc -l *.csv | sort -n | head -n 3 | tail -n 1 > results.txt
+```
 
-Here's what actually happens behind the scenes when we create a pipe.
-When a computer runs a program --- any program --- it creates a **process**
-in memory to hold the program's software and its current state.
-Every process has an input channel called **standard input**.
-(By this point, you may be surprised that the name is so memorable, but don't worry:
-most Unix programmers call it "stdin").
-Every process also has a default output channel called **standard output**
-(or "stdout"). A second output channel called **standard error** (stderr) also
-exists. This channel is typically used for error or diagnostic messages, and it
-allows a user to pipe the output of one program into another while still receiving
-error messages in the terminal.
+In practice,
+most Unix users would create this pipeline exactly as we have,
+by starting with a single command and adding others one by one,
+checking the output after each change.
+The shell makes this easy by letting us move up and down in our [command history][unix-command-history]
+using the <kbd>↑</kbd> and <kbd>↓</kbd> keys
+and editing old commands to create new ones.
 
-The shell is actually just another program.
-Under normal circumstances,
-whatever we type on the keyboard is sent to the shell on its standard input,
-and whatever it produces on standard output is displayed on our screen.
-When we tell the shell to run a program,
+## How do pipes work (and why do I need to know)? {#rse-bash-stdio}
+
+In order to use pipes and redirection effectively,
+we need to know just a little about how they work.
+When a computer runs a program—any program—it creates a [process][process] in memory
+to hold the program's instructions and data.
+Every process in Unix has an input channel called [standard input][standard-input]
+and an output channel called [standard output][standard-output].
+(By this point you may be surprised that their names are so memorable, but don't worry:
+most Unix programmers call them [stdin][stdin] and [stdout][stdout]).
+
+The shell is a program like any other,
+and like any other,
+it runs inside a process.
+Under normal circumstances its standard input is connected to our keyboard
+and its standard output to our screen,
+so it reads what we type and displays its output for us to see (FIXME: diagram).
+When we tell the shell to run a program
 it creates a new process
-and temporarily sends whatever we type on our keyboard to that process's standard input,
-and whatever the process sends to standard output to the screen.
+and temporarily reconnects the keyboard and stream
+to that process's standard input and output (FIXME: diagram).
 
-Here's what happens when we run `wc -l *.pdb > lengths.txt`.
-The shell starts by telling the computer to create a new process to run the `wc` program.
-Since we've provided some filenames as arguments,
-`wc` reads from them instead of from standard input.
-And since we've used `>` to redirect output to a file,
-the shell connects the process's standard output to that file.
-
-If we run `wc -l *.pdb | sort -n` instead,
-the shell creates two processes
-(one for each process in the pipe)
-so that `wc` and `sort` run simultaneously.
-The standard output of `wc` is fed directly to the standard input of `sort`;
-since there's no redirection with `>`,
-`sort`'s output goes to the screen.
-And if we run `wc -l *.pdb | sort -n | head -n 1`,
-we get three processes with data flowing from the files,
-through `wc` to `sort`,
-and from `sort` through `head` to the screen.
-
-*TODO: Figure - Redirects and Pipes [../fig/redirects-and-pipes.png](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/redirects-and-pipes.svg)*
-
-This simple idea is why Unix has been so successful.
-Instead of creating enormous programs that try to do many different things,
-Unix programmers focus on creating lots of simple tools that each do one job well,
-and that work well with each other.
-This programming model is called "pipes and filters".
-We've already seen pipes;
-a **filter** is a program like `wc` or `sort`
-that transforms a stream of input into a stream of output.
-Almost all of the standard Unix tools can work this way:
-unless told to do otherwise,
-they read from standard input,
-do something with what they've read,
-and write to standard output.
-
-The key is that any program that reads lines of text from standard input
-and writes lines of text to standard output
-can be combined with every other program that behaves this way as well.
-You can *and should* write your programs this way
-so that you and other people can put those programs into pipes to multiply their power.
-
-
-## Loops {#rse-bash-loops}
-
-**Loops** are a programming construct which allow us to repeat a command or set of commands
-for each item in a list.
-As such they are key to productivity improvements through automation.
-Similar to wildcards and tab completion, using loops also reduces the
-amount of typing required (and hence reduces the number of typing mistakes).
-
-Suppose we have several hundred genome data files named `basilisk.dat`, `unicorn.dat`, and so on.
-For this example,
-we'll use the `creatures` directory which only has two example files,
-but the principles can be applied to many many more files at once.
-We would like to print out the classification for each species, which is given on the second line of the file.
-For each file, we would need to execute the command `head -n 2` and pipe this to `tail -n 1`.
-We'll use a loop to solve this problem, but first let's look at the general form of a loop:
+Redirection with `>` tells the shell to connect the program's standard output to a file
+instead of to the screen (FIXME: diagram).
+If we provide one or more files for the command to read,
+as with `sort lengths.txt`,
+the program reads data from those files.
+If we don't provide any filenames,
+though,
+the Unix convention is for the program to read from standard input.
+We can test this by running `sort` on its own,
+typing in a few lines of text,
+and then pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> to signal the end of input.
+`sort` will then sort and print whatever we typed:
 
 ```shell
-for thing in list_of_things
-do
-    operation_using $thing    # Indentation within the loop is not required, but aids legibility
-done
+$ sort
+one
+two
+three
+four
+^D
 ```
 
-and we can apply this to our example like this:
+```text
+four
+one
+three
+two
+```
+
+When we create a pipe like `wc *.csv | sort`,
+the shell creates one process for each command so that `wc` and `sort` will run simultaneously,
+and then connects the standard output of `wc` directly to the standard input of `sort` (FIXME: diagram).
+`wc` doesn't know whether its output is going to the screen,
+another program,
+or to a file via `>`.
+Equally,
+`sort` doesn't know if its input is coming from the keyboard or another process;
+it just knows that it has to read, sort, and print.
+
+> **Why Isn't It Doing Anything?**
+>
+> What happens if a command is supposed to process a file
+> but we don't give it a filename?
+> For example, what if we type:
+>
+> ```shell
+> $ wc -l
+> ```
+>
+> but don't type `*.csv` (or anything else) after the command?
+> Since it doesn't have any filenames,
+> `wc` assumes it is supposed to read from the keyboard,
+> so it waits for us to type in some data.
+> It doesn't tell us this:
+> it just sits and waits.
+>
+> This mistake can be hard to spot,
+> particularly if we put the filename at the end of the pipeline:
+>
+> ```shell
+> $ wc -l | sort bellambi_temp.csv
+> ```
+>
+> In this case,
+> `sort` ignores standard input and reads the data in the file,
+> but `wc` still just sits there waiting for input.
+>
+> If we make this mistake,
+> we can end the program by typing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
+> We can also use this to interrupt programs that are taking a long time to run
+> or are trying to connect to a website that isn't responding.
+
+Just as we can redirect standard output with `>`,
+we can connect standard input to a file using `<`.
+In the case of a single file,
+this has the same effect as providing the file's name to the command:
 
 ```shell
-$ for filename in basilisk.dat unicorn.dat
+$ wc < bellambi_temp.csv
+```
+
+```text
+    8314    8316  184203
+```
+
+If we try to use redirection with a wildcard,
+though,
+the shell *doesn't* concatenate all of the matching files:
+
+```shell
+$ wc < *.csv
+```
+
+```text
+-bash: *.csv: ambiguous redirect
+```
+
+It also doesn't print the error message to standard output,
+which we can prove by redirecting:
+
+```shell
+$ wc < *.csv > all.txt
+```
+
+```text
+-bash: *.csv: ambiguous redirect
+```
+
+```shell
+$ cat all.txt
+```
+
+```text
+cat: all.txt: No such file or directory
+```
+
+Every process has a second output channel called [standard error][standard-error] (or [stderr][stderr]).
+Programs use it for error messages
+so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
+There are ways to redirect standard error,
+but doing so is almost always a bad idea.
+
+## How can I do the same operations on many files? {#rse-bash-loops}
+
+A [loop][unix-loop] is a way to repeat a set of commands for each item in a list.
+We can use them to build complex workflows out of simple pieces,
+and,
+like wildcards,
+they reduce the typing we have to do and the number of mistakes we might make.
+
+Let's suppose that we want to take a slice out of each temperature data file in the `cleaned` directory—
+more specifically,
+that we want to get the first three rows of each file
+*without* the header row.
+If we only cared about one file,
+we could use a simple pipeline to take the first four lines
+and then take the last three of those:
+
+```shell
+$ head -n 4 andamooka_temp.csv | tail -n 3
+```
+
+```text
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+```
+
+If we try to use a wildcard to select files,
+we only get three lines of output,
+not the 12 we expect:
+
+```shell
+$ head -n 4 *.csv | tail -n 3
+```
+
+```text
+70339,1996,1,1,,
+70339,1996,1,2,,
+70339,1996,1,3,,
+```
+
+The problem is that `head` is producing a single stream of output
+containing four lines for each file
+(along with a header telling us the file's name):
+
+```shell
+$ head -n 4 *.csv
+```
+
+```text
+==> andamooka_temp.csv <==
+Station,Year,Month,Day,Max Temp (C),Quality
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+
+==> badingarra_temp.csv <==
+Station,Year,Month,Day,Max Temp (C),Quality
+9037,1965,1,1,40.6,Y
+9037,1965,1,2,40,Y
+9037,1965,1,3,41.1,Y
+
+==> bellambi_temp.csv <==
+Station,Year,Month,Day,Max Temp (C),Quality
+68228,1997,1,1,,
+68228,1997,1,2,,
+68228,1997,1,3,,
+
+==> tuggeranong_temp.csv <==
+Station,Year,Month,Day,MaxTemp (C),Quality
+70339,1996,1,1,,
+70339,1996,1,2,,
+70339,1996,1,3,,
+```
+
+Let's try this instead:
+
+```shell
+$ for filename in andamooka_temp.csv badingarra_temp.csv
 > do
->    head -n 2 $filename | tail -n 1
+>   head -n 4 $filename
 > done
 ```
 
 ```text
-CLASSIFICATION: basiliscus vulgaris
-CLASSIFICATION: equus monoceros
+Station,Year,Month,Day,Max Temp (C),Quality
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+Station,Year,Month,Day,Max Temp (C),Quality
+9037,1965,1,1,40.6,Y
+9037,1965,1,2,40,Y
+9037,1965,1,3,41.1,Y
 ```
 
-> **Follow the Prompt**
->
-> The shell prompt changes from `$` to `>` and back again as we were
-> typing in our loop. The second prompt, `>`, is different to remind
-> us that we haven't finished typing a complete command yet. A semicolon, `;`,
-> can be used to separate two commands written on a single line.
+There is a lot going on here,
+so we will break it down into pieces:
 
+1.  The keywords `for`…`in`…`do`…`done` create the loop,
+    and must always appear in that order.
 
-When the shell sees the keyword `for`,
-it knows to repeat a command (or group of commands) once for each item in a list.
-Each time the loop runs (called an iteration), an item in the list is assigned in sequence to
-the **variable**, and the commands inside the loop are executed, before moving on to
-the next item in the list.
-Inside the loop,
-we call for the variable's value by putting `$` in front of it.
-The `$` tells the shell interpreter to treat
-the variable as a variable name and substitute its value in its place,
-rather than treat it as text or an external command.
+2.  `filename` is a [variable][variable].
+    At any moment it contains a value,
+    which can change over time.
 
-In this example, the list is two filenames: `basilisk.dat` and `unicorn.dat`.
-Each time the loop iterates, it will assign a file name to the variable `filename`
-and run the `head` command.
-The first time through the loop,
-`$filename` is `basilisk.dat`.
-The interpreter runs the command `head` on `basilisk.dat`,
-and then prints the
-first three lines of `basilisk.dat`.
-For the second iteration, `$filename` becomes
-`unicorn.dat`. This time, the shell runs `head` on `unicorn.dat`
-and prints the first three lines of `unicorn.dat`.
-Since the list was only two items, the shell exits the `for` loop.
+3.  The loop runs once for each item in the list.
+    Each time it runs,
+    it assigns the next item to the variable,
+    so in this case,
+    `filename` will be `andamooka_temp.csv` the first time around
+    and `badingarra_temp.csv` the second time.
+
+4.  The commands that the loop executes (which are called the [body][loop-body] of the loop)
+    appear between `do` and `done`.
+    Those commands use the current value of the variable `filename`,
+    but to get it,
+    we must put a dollar sign `$` in front of the variable's name.
+    If we forget and use `filename` instead of `$filename`,
+    the shell will think that we are actually referring to something called `filename`.
+
+5.  The shell prompt changes from `$` to `>` and back again as we type in our loop.
+    The second prompt is called a [continuation prompt][continuation-prompt];
+    it is different to remind us that we haven't finished typing a complete command yet.
+
+So what does the loop actually do?
+As the output shows,
+it runs our little pipeline separately for each file.
+Let's use a wildcard expression to select all four temperature files
+and add another stage to the pipeline:
+
+```shell
+$ for filename in *_temp.csv
+> do
+>   head -n 4 $filename | tail -n 3
+> done
+```
+
+```text
+16065,1969,1,1,,
+16065,1969,1,2,,
+16065,1969,1,3,,
+9037,1965,1,1,40.6,Y
+9037,1965,1,2,40,Y
+9037,1965,1,3,41.1,Y
+68228,1997,1,1,,
+68228,1997,1,2,,
+68228,1997,1,3,,
+70339,1996,1,1,,
+70339,1996,1,2,,
+70339,1996,1,3,,
+```
+
+The weather station IDs in the first column show that
+we are in fact getting exactly three rows from each of four files.
 
 > **Same Symbols, Different Meanings**
 >
-> Here we see `>` being used a shell prompt, whereas `>` is also
-> used to redirect output.
-> Similarly, `$` is used as a shell prompt, but, as we saw earlier,
-> it is also used to ask the shell to get the value of a variable.
->
-> If the *shell* prints `>` or `$` then it expects you to type something,
-> and the symbol is a prompt.
->
-> If *you* type `>` or `$` yourself, it is an instruction from you that
-> the shell should redirect output or get the value of a variable.
+> The computer displays `>` as a shell continuation prompt when we are typing,
+> but when we type `>` ourselves,
+> it means "redirect output".
+> Similarly,
+> `$` is a regular prompt when the computer prints it
+> but means "get the value of a variable" when we type.
+> This [overloading][overloading] is sometimes confusing,
+> but there are only so many symbols on a standard keyboard.
 
+## What do variable names mean? {#rse-bash-meaningless}
 
-When using variables it is also
-possible to put the names into curly braces to clearly delimit the variable
-name: `$filename` is equivalent to `${filename}`, but is different from
-`${file}name`. You may find this notation in other people's programs.
-
+The short answer to this section's title is "nothing".
 We have called the variable in this loop `filename`
-in order to make its purpose clearer to human readers.
-The shell itself doesn't care what the variable is called;
-if we wrote this loop as:
+to make its purpose clear to human readers,
+but the shell doesn't care what the variable is called.
+We could equally well write our loop as:
 
 ```shell
-$ for x in basilisk.dat unicorn.dat
+$ for f in *_temp.csv
 > do
->    head -n 2 $x | tail -n 1
+>   head -n 4 $f | tail -n 3
 > done
 ```
 
 or:
 
 ```shell
-$ for temperature in basilisk.dat unicorn.dat
+$ for username in *_temp.csv
 > do
->    head -n 2 $temperature | tail -n 1
+>   head -n 4 $username | tail -n 3
 > done
 ```
 
-it would work exactly the same way.
 *Don't do this.*
 Programs are only useful if people can understand them,
-so meaningless names (like `x`) or misleading names (like `temperature`)
-increase the odds that the program won't do what its readers think it does.
+so meaningless names like `f` and misleading names like `username`
+increase the odds of misunderstanding.
 
+## How can I re-do things I have done recently? {#rse-bash-history}
 
-Let's continue with our example in the `data-shell/creatures` directory.
-Here's a slightly more complicated loop:
-
-```shell
-$ for filename in *.dat
-> do
->     echo $filename
->     head -n 100 $filename | tail -n 20
-> done
-```
-
-The shell starts by expanding `*.dat` to create the list of files it will process.
-The **loop body**
-then executes two commands for each of those files.
-The first, `echo`, just prints its command-line arguments to standard output.
-For example:
+Loops are useful if we know in advance what we want to repeat,
+but if we have already run commands,
+we can still repeat.
+One way is to use <kbd>↑</kbd> and <kbd>↓</kbd> to go up and down in our command history as described earlier.
+Another is to use the `history` command to get a list of the last few hundred commands that have been executed:
 
 ```shell
-$ echo hello there
+$ history
 ```
-
-prints:
 
 ```text
-hello there
+  ...
+  571  wc -l *.csv | sort -n | head n 3
+  572  wc -l *.csv | sort -n | head -n 3
+  573  wc -l *.csv | sort -n | head -n 3 | tail -n 1
+  ...
 ```
 
-In this case,
-since the shell expands `$filename` to be the name of a file,
-`echo $filename` just prints the name of the file.
-Note that we can't write this as:
+and then use an exclamation mark `!` followed by a number to repeat one of those commands:
 
 ```shell
-$ for filename in *.dat
+$ !572
+```
+
+```shell
+wc -l *.csv | sort -n | head -n 3
+    8314 bellambi_temp.csv
+    8315 bellambi_prec.csv
+    8680 tuggeranong_temp.csv
+```
+
+The shell prints the command it is going to run to standard error rather than to standard output,
+so that (for example) `!572 > results.txt` puts the command's output into a file
+*without* also writing the command.
+
+Having an accurate record of what we have done
+and a simple way to repeat it
+are yet another reason why people use the Unix shell.
+In fact,
+being able to repeat history is such a powerful idea
+that the shell gives us several ways to do it.
+
+-   `!head` re-runs the most recent command starting with `head`,
+    while `!wc` re-runs the most recent starting with `wc`.
+-   If we type <kbd>Ctrl</kbd>+<kbd>R</kbd>
+    the shell does an interactive reverse search for whatever we type next.
+    If we don't like the first thing it finds,
+    we can type <kbd>Ctrl</kbd>+<kbd>R</kbd> again to go further back.
+
+If we use `history`, <kbd>↑</kbd>, or <kbd>Ctrl</kbd>+<kbd>R</kbd>,
+we will quickly notice that loops don't have to be broken across lines.
+Instead,
+their parts can be separated with semi-colons:
+
+```shell
+$ for filename in *_temp.csv; do head -n 4 $filename | tail -n 3; done
+```
+
+This is fairly readable,
+although even experienced users have a tendency to put the semi-colon after `do` instead of before it.
+If our loop contains multiple commands,
+though,
+the multi-line format is much easier to read—compare this:
+
+```shell
+$ for filename in *_temp.csv
 > do
->     $filename
->     head -n 100 $filename | tail -n 20
+>   echo $filename
+>   head -n 4 $filename | tail -n 3
 > done
 ```
 
-because then the first time through the loop,
-when `$filename` expanded to `basilisk.dat`, the shell would try to run `basilisk.dat` as a program.
-Finally,
-the `head` and `tail` combination selects lines 81-100
-from whatever file is being processed
-(assuming the file has at least 100 lines).
-
-> **Spaces in Names**
->
-> Spaces are used to separate the elements of the list
-> that we are going to loop over. If one of those elements
-> contains a space character, we need to surround it with
-> quotes, and do the same thing to our loop variable.
-> Suppose our data files are named:
->
-> ```text
-> red dragon.dat
-> purple unicorn.dat
-> ```
->
-> To loop over these files, we would need to add double quotes like so:
->
-> ```shell
-> $ for filename in "red dragon.dat" "purple unicorn.dat"
-> do
->     head -n 100 "$filename" | tail -n 20
-> done
-> ```
->
-> It is simpler just to avoid using spaces (or other special characters) in filenames.
->
-> The files above don't exist, so if we run the above code, the `head` command will be unable
-> to find them, however the error message returned will show the name of the files it is
-> expecting:
-> ```text
-> head: cannot open ‘red dragon.dat’ for reading: No such file or directory
-> head: cannot open ‘purple unicorn.dat’ for reading: No such file or directory
-> ```
->
-> Try removing the quotes around `$filename` in the loop above
-> to see the effect of the quote marks on spaces.
-> Note that we get a result from the loop command for unicorn.dat
-> when we run this code in the `creatures` directory:
-> ```text
-> head: cannot open ‘red’ for reading: No such file or directory
-> head: cannot open ‘dragon.dat’ for reading: No such file or directory
-> head: cannot open ‘purple’ for reading: No such file or directory
-> CGGTACCGAA
-> AAGGGTCGCG
-> CAAGTGTTCC
-> ```
-
-We would like to modify each of the files in `data-shell/creatures`, but also save a version
-of the original files, naming the copies `original-basilisk.dat` and `original-unicorn.dat`.
-We can't use:
+with this:
 
 ```shell
-$ cp *.dat original-*.dat
+$ for filename in *_temp.csv; do echo $filename; head -n 4 $filename | tail -n 3; done
 ```
 
-because that would expand to:
+## How can I create new filenames automatically? {#rse-bash-autoname}
+
+Suppose we want to create a backup copy of each precipitation data file.
+If we don't want to change the files' names,
+we can do this with `cp`:
 
 ```shell
-$ cp basilisk.dat unicorn.dat original-*.dat
+$ cd ~/climate-data
+$ mkdir backup
+$ cp cleaned/*_prec.csv backup
 ```
 
-This wouldn't back up our files, instead we get an error:
+But what if we want the backup files to have the [extension][filename-extension] `.bak` instead of `.csv`?
+`cp` can do this for a single file:
+
+```shell
+$ cp cleaned/andamooka_prec.csv backup/andamooka_prec.bak
+```
+
+but can't do all the files at once:
+
+```shell
+$ cp cleaned/*_prec.csv backup/*_prec.bak
+```
 
 ```text
-cp: target `original-*.dat' is not a directory
+usage: cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file target_file
+       cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file ... target_directory
 ```
 
-This problem arises when `cp` receives more than two inputs. When this happens, it
-expects the last input to be a directory where it can copy all the files it was passed.
-Since there is no directory named `original-*.dat` in the `creatures` directory we get an
-error.
+`backup/*_prec.bak` doesn't match anything—those files don't yet exist—so
+what we are actually asking `cp` to do is:
 
-Instead, we can use a loop:
 ```shell
-$ for filename in *.dat
+$ cp cleaned/andamooka_prec.csv cleaned/badingarra_prec.csv cleaned/bellambi_prec.csv cleaned/tuggeranong_prec.csv
+```
+
+This doesn't work because `cp` only understands how to do two things:
+copy a single file to create another file,
+or copy a bunch of files into a directory.
+If we give it more than two names as arguments,
+it expects the last one to be a directory;
+since it isn't,
+it reports an error.
+
+Instead,
+let's copy all the files and then rename them:
+
+```shell
+$ cp cleaned/*_prec.csv backup
+$ for filename in backup/*.csv
 > do
->     cp $filename original-$filename
+>   mv $filename $filename.bak
 > done
+$ ls backup
 ```
 
-This loop runs the `cp` command once for each filename.
-The first time,
-when `$filename` expands to `basilisk.dat`,
-the shell executes:
-
-```shell
-cp basilisk.dat original-basilisk.dat
+```text
+andamooka_prec.csv.bak badingarra_prec.csv.bak bellambi_prec.csv.bak tuggeranong_prec.csv.bak
 ```
 
-The second time, the command is:
+## How can I create new commands of my own? {#rse-bash-script}
 
-```shell
-cp unicorn.dat original-unicorn.dat
-```
-
-Since the `cp` command does not normally produce any output, it's hard to check
-that the loop is doing the correct thing.
-However, we learned earlier how to print strings using `echo`, and we can modify the loop
-to use `echo` to print our commands without actually executing them.
-As such we can check what commands *would be* run in the unmodified loop.
-
-The following diagram
-shows what happens when the modified loop is executed, and demonstrates how the
-judicious use of `echo` is a good debugging technique.
-
-*TODO: Figure - For Loop in Action [../fig/shell_script_for_loop_flow_chart.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/shell_script_for_loop_flow_chart.svg)*
-
-
-> **Those Who Know History Can Choose to Repeat It**
->
-> Another way to repeat previous work is to use the `history` command to
-> get a list of the last few hundred commands that have been executed, and
-> then to use `!123` (where "123" is replaced by the command number) to
-> repeat one of those commands. For example, if Beatrice types this:
->
-> ```shell
-> $ history | tail -n 5
-> ```
-> 
-> ```shell
->   456  ls -l NENE0*.txt
->   457  rm stats-NENE01729B.txt.txt
->   458  bash goostats NENE01729B.txt stats-NENE01729B.txt
->   459  ls -l NENE0*.txt
->   460  history
-> ```
->
-> then she can re-run `goostats` on `NENE01729B.txt` simply by typing
-> `!458`.
-
-
-> **Other History Commands**
->
-> There are a number of other shortcut commands for getting at the history.
->
-> - `Ctrl-R` enters a history search mode "reverse-i-search" and finds the
-> most recent command in your history that matches the text you enter next.
-> Press `Ctrl-R` one or more additional times to search for earlier matches.
-> - `!!` retrieves the immediately preceding command
-> (you may or may not find this more convenient than using the up-arrow)
-> - `!$` retrieves the last word of the last command.
-> That's useful more often than you might expect: after
-> `bash goostats NENE01729B.txt stats-NENE01729B.txt`, you can type
-> `less !$` to look at the file `stats-NENE01729B.txt`, which is
-> quicker than doing up-arrow and editing the command-line.
-
-
-## Shell Scripts {#rse-bash-scripts}
-
-We are finally ready to see what makes the shell such a powerful programming environment.
-We are going to take the commands we repeat frequently and save them in files
-so that we can re-run all those operations again later by typing a single command.
+Loops and history let us do tasks repeatedly,
+but we can go even further and save commands in files
+so that we can re-run complex sequences of operations with a few keystrokes.
 For historical reasons,
-a bunch of commands saved in a file is usually called a **shell script**,
-but make no mistake:
-these are actually small programs.
+a file full of shell commands is usually called a [shell script][shell-script],
+but it is really just another kind of program.
 
-Let's start by going back to `molecules/` and creating a new file, `middle.sh` which will
-become our shell script:
+Let's start by going into `climate-data` and creating a new file called `years.sh`
+to hold our shell script:
 
 ```shell
-$ cd molecules
-$ nano middle.sh
+$ cd ~/climate-data
+$ nano years.sh
 ```
 
-The command `nano middle.sh` opens the file `middle.sh` within the text editor "nano"
-(which runs within the shell).
-If the file does not exist, it will be created.
-We can use the text editor to directly edit the file -- we'll simply insert the following line:
+Insert this line:
 
 ```text
-head -n 15 octane.pdb | tail -n 5
+cut -d , -f 2 cleaned/bellambi_temp.csv
 ```
 
-This is a variation on the pipe we constructed earlier:
-it selects lines 11-15 of the file `octane.pdb`.
-Remember, we are *not* running it as a command just yet:
-we are putting the commands in a file.
+This uses the `cut` command to split the CSV file on commas
+and select the second field from each line.
+(The option `-d` stands for [delimiter][delimiter]:
+we can provide any character we want to split lines on colons, spaces, and so on.)
+Note that we do *not* put a dollar sign `$` at the front of the line:
+we have been showing that for interactive commands,
+but in this case we are putting the command in a file rather than running it immediately.
 
-Then we save the file (`Ctrl-O` in nano),
-and exit the text editor (`Ctrl-X` in nano).
-Check that the directory `molecules` now contains a file called `middle.sh`.
-
-Once we have saved the file,
-we can ask the shell to execute the commands it contains.
-Our shell is called `bash`, so we run the following command:
+Once we have added this line to the file,
+we can write it out with <kbd>Ctrl</kbd>+<kbd>O</kbd>
+and exit with <kbd>Ctrl</kbd>+<kbd>O</kbd>.
+`ls` shows that our file now exists:
 
 ```shell
-$ bash middle.sh
+$ ls
 ```
 
 ```text
-ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
-ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
-ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
-ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
-ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+NOTES           backup/         cleaned/        raw/            thesis.pdf      years.sh
+README.md       bin/            docs/           thesis.md       tofu.config
+```
+
+and we can check its contents using `cat years.sh`.
+More importantly,
+we can now ask the shell to run this file:
+
+```shell
+$ bash years.sh
+```
+
+```text
+Year
+1997
+1997
+...many more lines...
+2019
+2019
+2019
 ```
 
 Sure enough,
-our script's output is exactly what we would get if we ran that pipeline directly.
-
-> **Text vs. Whatever**
->
-> We usually call programs like Microsoft Word or LibreOffice Writer "text
-> editors", but we need to be a bit more careful when it comes to
-> programming. By default, Microsoft Word uses `.docx` files to store not
-> only text, but also formatting information about fonts, headings, and so
-> on. This extra information isn't stored as characters, and doesn't mean
-> anything to tools like `head`: they expect input files to contain
-> nothing but the letters, digits, and punctuation on a standard computer
-> keyboard. When editing programs, therefore, you must either use a plain
-> text editor, or be careful to save files as plain text.
-
-What if we want to select lines from an arbitrary file?
-We could edit `middle.sh` each time to change the filename,
-but that would probably take longer than just retyping the command.
-Instead, let's edit `middle.sh` and make it more versatile:
+our script's output is exactly what we would get if we ran the command directly.
+For example,
+we can count how many lines of output there are by putting our script in a pipeline:
 
 ```shell
-$ nano middle.sh
+$ bash years.sh | wc -l
 ```
 
+```text
+    8314
+```
 
-Now, within "nano", replace the text `octane.pdb` with the special variable called `$1`:
+What if we want to remove duplicates from the output?
+The command `uniq` will do what we want,
+so let's edit our script,
+add it,
+look at our changes,
+and then run the modified script:
 
 ```shell
-head -n 15 "$1" | tail -n 5
+$ nano years.sh
+$ cat years.sh
+```
+
+```text
+cut -d , -f 2 cleaned/bellambi_temp.csv | uniq
+```
+
+```shell
+$ bash years.sh
+```
+
+```text
+Year
+1997
+1998
+1999
+...one line per year...
+2017
+2018
+2019
+```
+
+Once again,
+we can pipe the output of our script into other commands
+just as we would pipe the output from any other program:
+
+```shell
+$ bash years.sh | wc -l
+```
+
+```text
+      24
+```
+
+## How can I make my scripts more versatile? {#rse-bash-params}
+
+Creating a list of distinct years in a single specific data file isn't all that useful.
+What we really want is a way to get the years from any of our files.
+Let's edit `years.sh` again and replace `cleaned/bellambi_temp.csv`
+with a special variable `$1`.
+Once our change is made,
+`years.sh` should contain:
+
+```text
+cut -d , -f 2 $1 | uniq
 ```
 
 Inside a shell script,
-`$1` means "the first filename (or other argument) on the command line".
+`$1` means "the first argument on the command line".
 We can now run our script like this:
 
 ```shell
-$ bash middle.sh octane.pdb
+$ bash years.sh cleaned/bellambi_temp.csv
 ```
+
+and get exactly the same output as before,
+or give it a different filename:
+
+```shell
+$ bash years.sh cleaned/andamooka_prec.csv 
+```
+
+and get the years from that file instead.
+
+Our little script is now doing something useful,
+but it may take the next person who reads it a moment to figure out exactly what that is.
+We can improve our script by adding [comments][comment] at the top:
 
 ```text
-ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
-ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
-ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
-ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
-ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+# Select distinct years from column 2 of climate data file.
+# Usage: bash years.sh /path/to/file.csv
+cut -d , -f 2 $1 | uniq
 ```
 
-
-or on a different file like this:
-
-```shell
-$ bash middle.sh pentane.pdb
-```
-
-```text
-ATOM      9  H           1       1.324   0.350  -1.332  1.00  0.00
-ATOM     10  H           1       1.271   1.378   0.122  1.00  0.00
-ATOM     11  H           1      -0.074  -0.384   1.288  1.00  0.00
-ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
-ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
-```
-
-> **Double-Quotes Around Arguments**
->
-> For the same reason that we put the loop variable inside double-quotes,
-> in case the filename happens to contain any spaces,
-> we surround `$1` with double-quotes.
-
-
-We still need to edit `middle.sh` each time we want to adjust the range of lines,
-though.
-Let's fix that by using the special variables `$2` and `$3` for the
-number of lines to be passed to `head` and `tail` respectively:
-
-```shell
-$ nano middle.sh
-```
-
-```shell
-head -n "$2" "$1" | tail -n "$3"
-```
-
-We can now run:
-
-```shell
-$ bash middle.sh pentane.pdb 15 5
-```
-
-```text
-ATOM      9  H           1       1.324   0.350  -1.332  1.00  0.00
-ATOM     10  H           1       1.271   1.378   0.122  1.00  0.00
-ATOM     11  H           1      -0.074  -0.384   1.288  1.00  0.00
-ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
-ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
-```
-
-By changing the arguments to our command we can change our script's
-behaviour:
-
-```shell
-$ bash middle.sh pentane.pdb 20 5
-```
-
-
-```text
-ATOM     14  H           1      -1.259   1.420   0.112  1.00  0.00
-ATOM     15  H           1      -2.608  -0.407   1.130  1.00  0.00
-ATOM     16  H           1      -2.540  -1.303  -0.404  1.00  0.00
-ATOM     17  H           1      -3.393   0.254  -0.321  1.00  0.00
-TER      18              1
-```
-
-This works,
-but it may take the next person who reads `middle.sh` a moment to figure out what it does.
-We can improve our script by adding some **comments** at the top:
-
-```shell
-$ nano middle.sh
-```
-
-```text
-# Select lines from the middle of a file.
-# Usage: bash middle.sh filename end_line num_lines
-head -n "$2" "$1" | tail -n "$3"
-```
-
-A comment starts with a `#` character and runs to the end of the line.
+As in R and Python,
+a comment starts with a `#` character and runs to the end of the line.
 The computer ignores comments,
-but they're invaluable for helping people (including your future self) understand and use scripts.
-The only caveat is that each time you modify the script,
-you should check that the comment is still accurate:
-an explanation that sends the reader in the wrong direction is worse than none at all.
+but they help people (including your future self) understand and use scripts.
 
-What if we want to process many files in a single pipeline?
-For example, if we want to sort our `.pdb` files by length, we would type:
+Let's make one more change to our script.
+Instead of always selecting the second column,
+let's have it select whatever column the user specified:
 
-```shell
-$ wc -l *.pdb | sort -n
+```text
+# Select distinct years from column 2 of climate data file.
+# Usage: bash years.sh /path/to/file.csv
+cut -d , -f $2 $1 | uniq
 ```
 
-because `wc -l` lists the number of lines in the files
-(recall that `wc` stands for 'word count', adding the `-l` option means 'count lines' instead)
-and `sort -n` sorts things numerically.
-We could put this in a file,
-but then it would only ever sort a list of `.pdb` files in the current directory.
-If we want to be able to get a sorted list of other kinds of files,
-we need a way to get all those names into the script.
-We can't use `$1`, `$2`, and so on
-because we don't know how many files there are.
-Instead, we use the special variable `$@`,
-which means,
-"All of the command-line arguments to the shell script."
-We also should put `$@` inside double-quotes
-to handle the case of arguments containing spaces
-(`"$@"` is equivalent to `"$1"` `"$2"` ...)
-Here's an example:
+The change is very small:
+we have replaced the fixed column number `2` with a reference to the special variable `$2`,
+which is assigned the value of the second command-line argument we give the script when we run it.
+Let's check that it works by asking for column 1,
+which is the weather station ID:
 
 ```shell
-$ nano sorted.sh
+$ bash years.sh cleaned/bellambi_prec.csv 1
 ```
 
 ```text
-# Sort filenames by their length.
-# Usage: bash sorted.sh one_or_more_filenames
-wc -l "$@" | sort -n
+Station
+68228
 ```
+
+But we have made a common mistake:
+we have changed the script without changing the comment.
+A description that sends readers in the wrong direction is worse than none at all,
+so we should go back and update it.
+We should probably also change the script's name from `years.sh` to `column.sh`,
+since a program's name is the first piece of documentation anyone sees.
+
+And finally,
+we should add one more command to our pipeline.
+If we run the script as-is for column 3,
+which holds months,
+we get this:
 
 ```shell
-$ bash sorted.sh *.pdb ../creatures/*.dat
+$ bash years.sh cleaned/bellambi_prec.csv 3
 ```
+Month
+1
+2
+...
+11
+12
+1
+2
+...
+8
+9
+10
+```
+
+Duplicate months aren't removed because `uniq` only removes *adjacent* duplicates.
+If we want to get rid of them all,
+we must sort the data so that redundant lines are next to one another.
+Here's our final script:
 
 ```text
-9 methane.pdb
-12 ethane.pdb
-15 propane.pdb
-20 cubane.pdb
-21 pentane.pdb
-30 octane.pdb
-163 ../creatures/basilisk.dat
-163 ../creatures/unicorn.dat
-433 total
+# Select distinct values from a column of a climate data file.
+# Usage: bash years.sh /path/to/file.csv column_number
+cut -d , -f $2 $1 | uniq
 ```
 
+## How can I turn interactive work into a script? {#rse-bash-capture}
 
-Suppose we have just run a series of commands that did something useful --- for example,
-that created a graph we'd like to use in a paper.
-We'd like to be able to re-create the graph later if we need to,
-so we want to save the commands in a file.
-Instead of typing them in again
+Suppose we have just run a series of commands that did something useful,
+such as creating a plot for a paper.
+Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
-we can do this:
+we can run this:
 
 ```shell
-$ history | tail -n 5 > redo-figure-3.sh
+$ history 6 > make-figure-3.sh
 ```
 
-The file `redo-figure-3.sh` now contains:
+to put the most recent five commands in `make-figure-3.sh`.
 
 ```text
-297 bash goostats NENE01729B.txt stats-NENE01729B.txt
-298 bash goodiff stats-NENE01729B.txt /data/validated/01729.txt > 01729-differences.txt
-299 cut -d ',' -f 2-3 01729-differences.txt > 01729-time-series.txt
-300 ygraph --format scatter --color bw --borders none 01729-time-series.txt figure-3.png
-301 history | tail -n 5 > redo-figure-3.sh
+297 bash stats.sh cleaned/*_temp.csv > temperature_stats.csv
+298 bash trim-outliers.sh temperature_stats.csv > plot_data.txt
+299 date
+300 ygraph --format scatter --color bw --borders none plot_data.txt figure-3.png
+301 rm temperature_stats.csv plot_data.txt
+302 history 6 > make-figure-3.sh
 ```
 
-After a moment's work in an editor to remove the serial numbers on the commands,
-and to remove the final line where we called the `history` command,
-we have a completely accurate record of how we created that figure.
+It only takes a few moments in an editor to remove the serial numbers
+and delete the use of `date`
+(which prints the current time and date)
+to create a script that accurately captures what we actually did.
+This is how we usually develop shell scripts:
+run commands interactively a few times to make sure they are doing the right thing,
+then save our recent history to a file and turn that into a reusable script.
 
-In practice, most people develop shell scripts by running commands at the shell prompt a few times
-to make sure they're doing the right thing,
-then saving them in a file for re-use.
-This style of work allows people to recycle
-what they discover about their data and their workflow with one call to `history`
-and a bit of editing to clean up the output
-and save it as a shell script.
+## How can I find things in a file? {#rse-bash-grep}
 
-
-## Finding Things {#rse-bash-finding}
-
-In the same way that many of us now use "Google" as a 
-verb meaning "to find", Unix programmers often use the 
-word "grep".
-"grep" is a contraction of "global/regular expression/print",
-a common sequence of operations in early Unix text editors.
-It is also the name of a very useful command-line program.
-
-`grep` finds and prints lines in files that match a pattern.
-For our examples,
-we will use a file that contains three haikus taken from a
-1998 competition in *Salon* magazine. For this set of examples,
-we're going to be working in the writing subdirectory:
+We can use `head` and `tail` to select lines from a file by position,
+but we also often want to select lines that contain certain values.
+This operation is called [filtering][filter] When we are working with database tables or dataframes,
+and in the shell,
+we usually do it using a command called `grep`.
+The name comes from "global regular expression print",
+which was a common sequence of operations in early Unix text editors.
+To show how `grep` works,
+we will use a file that contains three haikus
+taken from a 1998 competition in *Salon* magazine.
 
 ```shell
-$ cd
-$ cd Desktop/data-shell/writing
 $ cat haiku.txt
 ```
 
@@ -2064,14 +2087,12 @@ Today it is not working
 Software is like that.
 ```
 
-
 > **Forever, or Five Years**
 >
 > We haven't linked to the original haikus because they don't appear to be on *Salon*'s site any longer.
-> As [Jeff Rothenberg said](https://www.clir.org/wp-content/uploads/sites/6/ensuring.pdf),
-> "Digital information lasts forever --- or five years, whichever comes first."
-> Luckily, popular content often [has backups](http://wiki.c2.com/?ComputerErrorHaiku).
-
+> As [Jeff Rothenberg said][rothenberg-quote],
+> "Digital information lasts forever—or five years, whichever comes first."
+> Luckily, popular content often [has backups][rothenberg-backup].
 
 Let's find lines that contain the word "not":
 
@@ -2085,20 +2106,10 @@ Is not the true Tao, until
 Today it is not working
 ```
 
-Here, `not` is the pattern we're searching for.
-The grep command searches through the file,
-looking for matches to the pattern specified.
-To use it type `grep`,
-then the pattern we're searching for
-and finally the name of the file (or files) we're searching in.
-
-The output is the three lines in the file that contain the letters "not".
-
-By default, grep searches for a pattern in a case-sensitive way.
-In addition, the search pattern we have selected does not have to form a complete word,
-as we will see in the next example.
-
-Let's search for the pattern: "The".
+Here, `not` is our (very simple) pattern.
+`grep` searches the file line by line
+and shows those lines that contain matches.
+Let's search for the pattern `The`:
 
 ```shell
 $ grep The haiku.txt
@@ -2109,15 +2120,11 @@ The Tao that is seen
 "My Thesis" not found.
 ```
 
-This time, two lines that include the letters "The" are outputted,
-one of which contained our search pattern within a larger word, "Thesis".
-
-To restrict matches to lines containing the word "The" on its own,
-we can give `grep` with the `-w` option.
-This will limit matches to word boundaries.
-
-Later in this lesson,
-we will also see how we can change the search behavior of grep with respect to its case sensitivity.
+Two lines match,
+but in one of them,
+our pattern is part of a larger word `Thesis`.
+To restrict matching to lines containing `The` on its own,
+we can give `grep` with the `-w` option:
 
 ```shell
 $ grep -w The haiku.txt
@@ -2127,30 +2134,78 @@ $ grep -w The haiku.txt
 The Tao that is seen
 ```
 
-Note that a "word boundary" includes the start and end of a line, so not
-just letters surrounded by spaces. 
-Sometimes we don't
-want to search for a single word, but a phrase. This is also easy to do with
-`grep` by putting the phrase in quotes.
+What if we want to search for a phrase rather than a single word?
 
 ```shell
-$ grep -w "is not" haiku.txt
+$ grep is not haiku.txt
+```
+
+```text
+grep: not: No such file or directory
+haiku.txt:The Tao that is seen
+haiku.txt:"My Thesis" not found.
+haiku.txt:Today it is not working
+haiku.txt:Software is like that.
+```
+
+In this case,
+`grep` uses `is` as the pattern
+and tries to find it in the files `not` and `haiku.txt`.
+It then tells us that the file `not` cannot be found,
+but prints `haiku.txt` as a prefix to each other line of output
+to tell us which file those lines came from.
+
+If we want to give `grep` both words as a single argument,
+we must wrap them in quotation marks:
+
+```shell
+$ grep "is not" haiku.txt
 ```
 
 ```text
 Today it is not working
 ```
 
-We've now seen that you don't have to have quotes around single words,
-but it is useful to use quotes when searching for multiple words.
-It also helps to make it easier to distinguish between the search term or phrase
-and the file being searched.
-We will use quotes in the remaining examples.
+> **Quoting**
+>
+> Quotation marks aren't specific to `grep`:
+> the shell interprets them before running the command,
+> just as it expands wildcards to create actual filenames
+> no matter what we're asking it to do.
+> This allows us to do things like `head -n 5 "My Thesis.txt"`
+> if we want to edit a file that has a space in its name.
+> It is also why many programmers write `"$variable"` instead of just `$variable`
+> when creating loops or shell scripts:
+> if there's any chance at all that the variable's value will contain spaces,
+> it's safest to quote it.
 
-Another useful option is `-n`, which numbers the lines that match:
+`grep` has many options—so many,
+in fact,
+that almost every letter of the alphabet means something to it:
 
 ```shell
-$ grep -n "it" haiku.txt
+$ man grep
+```
+
+```text
+GREP(1)                   BSD General Commands Manual                  GREP(1)
+
+NAME
+     grep, egrep, fgrep, zgrep, zegrep, zfgrep -- file pattern searcher
+
+SYNOPSIS
+     grep [-abcdDEFGHhIiJLlmnOopqRSsUVvwxZ] [-A num] [-B num] [-C[num]]
+          [-e pattern] [-f file] [--binary-files=value] [--color[=when]]
+          [--colour[=when]] [--context[=num]] [--label] [--line-buffered]
+          [--null] [pattern] [file ...]
+...more...
+```
+
+One of the most useful options is `-n`,
+which numbers the lines that match:
+
+```shell
+$ grep -n it haiku.txt
 ```
 
 ```text
@@ -2159,126 +2214,143 @@ $ grep -n "it" haiku.txt
 10:Today it is not working
 ```
 
-
-Here, we can see that lines 5, 9, and 10 contain the letters "it".
+Another is `-i`,
+which does case-insensitive matching:
 
 We can combine options (i.e. flags) as we do with other Unix commands.
 For example, let's find the lines that contain the word "the". We can combine
 the option `-w` to find the lines that contain the word "the" and `-n` to number the lines that match:
 
 ```shell
-$ grep -n -w "the" haiku.txt
+$ grep -i to haiku.txt
 ```
-
 
 ```text
-2:Is not the true Tao, until
-6:and the presence of absence:
+You bring fresh toner.
+Today it is not working
 ```
 
-Now we want to use the option `-i` to make our search case-insensitive:
+We can combine options as with other commands:
 
 ```shell
-$ grep -n -w -i "the" haiku.txt
+$ grep -i -n haiku.txt
 ```
 
 ```text
-1:The Tao that is seen
-2:Is not the true Tao, until
-6:and the presence of absence:
-```
-
-Now, we want to use the option `-v` to invert our search, i.e., we want to output
-the lines that do not contain the word "the".
-
-```shell
-$ grep -n -w -v "the" haiku.txt
-```
-
-```text
-1:The Tao that is seen
 3:You bring fresh toner.
+10:Today it is not working
+```
+
+We can also invert the match—i.e., print lines that *don't* match the pattern—using `-v`:
+
+```shell
+$ grep -i -n -v to haiku.txt
+```
+
+```text
+1:The Tao that is seen
+2:Is not the true Tao, until
 4:
 5:With searching comes loss
+6:and the presence of absence:
 7:"My Thesis" not found.
 8:
 9:Yesterday it worked
-10:Today it is not working
 11:Software is like that.
 ```
 
-`grep` has lots of other options. To find out what they are, we can type:
+If we want to search several files at once,
+all we have to do is give `grep` all of their names.
+We will frequently use wildcards to do this,
+so if we want to count how many records in our climate data come from the year 2001,
+we can do this:
 
 ```shell
-$ grep --help
+$ grep 2001 cleaned/*.csv | wc -l
 ```
 
 ```text
-Usage: grep [OPTION]... PATTERN [FILE]...
-Search for PATTERN in each FILE or standard input.
-PATTERN is, by default, a basic regular expression (BRE).
-Example: grep -i 'hello world' menu.h main.c
-
-Regexp selection and interpretation:
-  -E, --extended-regexp     PATTERN is an extended regular expression (ERE)
-  -F, --fixed-strings       PATTERN is a set of newline-separated fixed strings
-  -G, --basic-regexp        PATTERN is a basic regular expression (BRE)
-  -P, --perl-regexp         PATTERN is a Perl regular expression
-  -e, --regexp=PATTERN      use PATTERN for matching
-  -f, --file=FILE           obtain PATTERN from FILE
-  -i, --ignore-case         ignore case distinctions
-  -w, --word-regexp         force PATTERN to match only whole words
-  -x, --line-regexp         force PATTERN to match only whole lines
-  -z, --null-data           a data line ends in 0 byte, not newline
-
-Miscellaneous:
-...        ...        ...
+    2920
 ```
 
-> **Wildcards**
->
-> `grep`'s real power doesn't come from its options, though; it comes from
-> the fact that patterns can include wildcards. (The technical name for
-> these is **regular expressions**, which
-> is what the "re" in "grep" stands for.) Regular expressions are both complex
-> and powerful; if you want to do complex searches, please look at the lesson
-> on [our website](http://v4.software-carpentry.org/regexp/index.html). As a taster, we can
-> find lines that have an 'o' in the second position like this:
->
-> ```shell
-> $ grep -E '^.o' haiku.txt
-> ```
->
-> ```text
-> You bring fresh toner.
-> Today it is not working
-> Software is like that.
-> ```
->
-> We use the `-E` option and put the pattern in quotes to prevent the shell
-> from trying to interpret it. (If the pattern contained a `*`, for
-> example, the shell would try to expand it before running `grep`.) The
-> `^` in the pattern anchors the match to the start of the line. The `.`
-> matches a single character (just like `?` in the shell), while the `o`
-> matches an actual 'o'.
+Finally,
+the `-r` option (for "recursive") tells `grep` to search all of the files
+in or below a directory:
 
+```shell
+$ grep -r . FIXME | wc -l
+```
 
-While `grep` finds lines in files,
+```text
+      28
+```
+
+`grep`'s real power comes from the fact that its patterns can include
+a powerful kind of wildcards called [regular expressions][regular-expression].
+For example,
+this command finds lines that start with the letter 'T':
+
+```shell
+$ grep -E "^T" haiku.txt
+```
+
+```text
+The Tao that is seen
+Today it is not working
+```
+
+The `-E` option tells `grep` to interpret the pattern as a regular expression
+rather than taking it literally.
+The quotes prevent the shell from treating any special characters in the pattern as wildcards,
+and the `^` in front of the `T` means, "Only match at the start of the line."
+
+Many tools support regular expressions:
+we can use them in programming languages,
+database queries,
+online search engines,
+and most text editors (though not Nano—its creators wanted to keep it as small as possible).
+Chapter \@ref(FIXME) has pointers to a few tutorials if you would like to explore them further.
+
+## How can I find files? {#rse-bash-find}
+
+While `grep` finds things in files,
 the `find` command finds files themselves.
-Again,
-it has a lot of options;
-to show how the simplest ones work, we'll use the directory tree shown below.
+It also has a lot of options,
+but unlike most Unix commands these are written as full words rather than abbreviations.
+To show how it works,
+we will explore the `docs` directory within `climate-data`:
 
-*TODO: Figure - File Tree for Find Example [../fig/find-file-tree.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/find-file-tree.svg)*
+```shell
+$ cd docs
+$ tree .
+```
 
-Beatrice's `writing` directory contains one file called `haiku.txt` and three subdirectories:
-`thesis` (which contains a sadly empty file, `empty-draft.md`);
-`data` (which contains three files `LittleWomen.txt`, `one.txt` and `two.txt`);
-and a `tools` directory that contains the programs `format` and `stats`,
-and a subdirectory called `old`, with a file `oldtool`.
+```text
+.
+├── bibliography.bib
+├── chapter-1
+│   └── index.html
+├── chapter-2
+│   └── index.html
+├── chapter-3
+│   └── index.html
+├── figures
+│   ├── figure-1.png
+│   ├── figure-2.png
+│   ├── figure-3.png
+│   └── figure-4.png
+└── index.html
 
+4 directories, 9 files
+```
+
+This directory contains `index.html`, `bibliography.bib`, and four sub-directories:
+three for chapters and one for figures.
 For our first command,
-let's run `find .` (remember to run this command from the `data-shell/writing` folder).
+let's run `find .` to find and list everything in this directory.
+(As always,
+`.` on its own means the current working directory,
+which is where we want our search to start.)
 
 ```shell
 $ find .
@@ -2286,49 +2358,37 @@ $ find .
 
 ```text
 .
-./data
-./data/one.txt
-./data/LittleWomen.txt
-./data/two.txt
-./tools
-./tools/format
-./tools/old
-./tools/old/oldtool
-./tools/stats
-./haiku.txt
-./thesis
-./thesis/empty-draft.md
+./index.html
+./chapter-1
+./chapter-1/index.html
+./figures
+./figures/figure-4.png
+./figures/figure-1.png
+./figures/figure-3.png
+./figures/figure-2.png
+./chapter-3
+./chapter-3/index.html
+./chapter-2
+./chapter-2/index.html
+./bibliography.bib
 ```
 
-As always,
-the `.` on its own means the current working directory,
-which is where we want our search to start.
-`find`'s output is the names of every file **and** directory
-under the current working directory.
-This can seem useless at first but `find` has many options
-to filter the output and in this lesson we will discover some 
-of them.
-
-The first option in our list is
-`-type d` that means "things that are directories".
-Sure enough,
-`find`'s output is the names of the five directories in our little tree
-(including `.`):
+If we only want to find directories,
+we can tell `find` to show us things of type `d`:
 
 ```shell
 $ find . -type d
 ```
 
 ```text
-./
-./data
-./thesis
-./tools
-./tools/old
+.
+./chapter-1
+./figures
+./chapter-3
+./chapter-2
 ```
 
-Notice that the objects `find` finds are not listed in any particular order.
-If we change `-type d` to `-type f`,
+If we change `-type d` to `-type f`
 we get a listing of all the files instead:
 
 ```shell
@@ -2336,163 +2396,114 @@ $ find . -type f
 ```
 
 ```text
-./haiku.txt
-./tools/stats
-./tools/old/oldtool
-./tools/format
-./thesis/empty-draft.md
-./data/one.txt
-./data/LittleWomen.txt
-./data/two.txt
+./index.html
+./chapter-1/index.html
+./figures/figure-4.png
+./figures/figure-1.png
+./figures/figure-3.png
+./figures/figure-2.png
+./chapter-3/index.html
+./chapter-2/index.html
+./bibliography.bib
 ```
 
 Now let's try matching by name:
 
 ```shell
-$ find . -name *.txt
+$ find . -name "*.png"
 ```
 
 ```text
-./haiku.txt
+./figures/figure-4.png
+./figures/figure-1.png
+./figures/figure-3.png
+./figures/figure-2.png
 ```
-
-We expected it to find all the text files,
-but it only prints out `./haiku.txt`.
-The problem is that the shell expands wildcard characters like `*` *before* commands run.
-Since `*.txt` in the current directory expands to `haiku.txt`,
-the command we actually ran was:
-
-```shell
-$ find . -name haiku.txt
-```
-
-`find` did what we asked; we just asked for the wrong thing.
-
-To get what we want,
-let's do what we did with `grep`:
-put `*.txt` in single quotes to prevent the shell from expanding the `*` wildcard.
-This way,
-`find` actually gets the pattern `*.txt`, not the expanded filename `haiku.txt`:
-
-```shell
-$ find . -name '*.txt'
-```
-
-```text
-./data/one.txt
-./data/LittleWomen.txt
-./data/two.txt
-./haiku.txt
-```
-
-> **Listing vs. Finding**
->
-> `ls` and `find` can be made to do similar things given the right options,
-> but under normal circumstances,
-> `ls` lists everything it can,
-> while `find` searches for things with certain properties and shows them.
-
 
 As we said earlier,
 the command line's power lies in combining tools.
-We've seen how to do that with pipes;
-let's look at another technique.
-As we just saw,
-`find . -name '*.txt'` gives us a list of all text files in or below the current directory.
-How can we combine that with `wc -l` to count the lines in all those files?
-
-The simplest way is to put the `find` command inside `$()`:
+We have seen how to do that with pipes;
+let's use another technique to see how large our HTML files are:
 
 ```shell
-$ wc -l $(find . -name '*.txt')
+$ wc -l $(find . -name "*.html")
 ```
 
 ```text
-11 ./haiku.txt
-300 ./data/two.txt
-21022 ./data/LittleWomen.txt
-70 ./data/one.txt
-21403 total
+      16 ./index.html
+      14 ./chapter-1/index.html
+      15 ./chapter-3/index.html
+      11 ./chapter-2/index.html
+      56 total
 ```
 
 When the shell executes this command,
-the first thing it does is run whatever is inside the `$()`.
-It then replaces the `$()` expression with that command's output.
-Since the output of `find` is the four filenames `./data/one.txt`,
-`./data/LittleWomen.txt`, `./data/two.txt`, and `./haiku.txt`,
+it runs whatever is inside the `$()`
+and then replaces `$()` with that command's output.
+Since the output of `find` is the paths of four HTML files,
 the shell constructs the command:
 
 ```shell
-$ wc -l ./data/one.txt ./data/LittleWomen.txt ./data/two.txt ./haiku.txt
+$ wc -l ./index.html ./chapter-1/index.html ./chapter-2/index.html ./chapter-3/index.html
 ```
 
 which is what we wanted.
-This expansion is exactly what the shell does when it expands wildcards like `*` and `?`,
-but lets us use any command we want as our own "wildcard".
+It is exactly like expanding the wildcard in `*.html`,
+but more flexible.
 
-It's very common to use `find` and `grep` together.
-The first finds files that match a pattern;
-the second looks for lines inside those files that match another pattern.
-Here, for example, we can find PDB files that contain iron atoms
-by looking for the string "FE" in all the `.pdb` files above the current directory:
+We will often use `find` and `grep` together.
+The first finds files whose names match a pattern,
+while the second looks for lines inside those files that match another pattern.
+For example,
+we can look for the titles of all our HTML files:
 
 ```shell
-$ grep "FE" $(find .. -name '*.pdb')
+$ grep "<title>" $(find . -name "*.html")
 ```
 
 ```text
-../data/pdb/heme.pdb:ATOM     25 FE           1      -0.924   0.535  -0.518
+./index.html:    <title>Climate Change in the Australian Subcontinent</title>
+./chapter-1/index.html:    <title>Climate Change in the Australian Subcontinent: Introduction</title>
+./chapter-3/index.html:    <title>Climate Change in the Australian Subcontinent: Methods</title>
+./chapter-2/index.html:    <title>Climate Change in the Australian Subcontinent: Background</title>
 ```
 
-> **Binary Files**
->
-> We have focused exclusively on finding patterns in text files. What if
-> your data is stored as images, in databases, or in some other format?
->
-> A handful of tools extend `grep` to handle a few non text formats. But a
-> more generalizable approach is to convert the data to text, or
-> extract the text-like elements from the data. On the one hand, it makes simple
-> things easy to do. On the other hand, complex things are usually impossible. For
-> example, it's easy enough to write a program that will extract X and Y
-> dimensions from image files for `grep` to play with, but how would you
-> write something to find values in a spreadsheet whose cells contained
-> formulas?
->
-> A last option is to recognize that the shell and text processing have
-> their limits, and to use another programming language.
-> When the time comes to do this, don't be too hard on the shell: many
-> modern programming languages have borrowed a lot of
-> ideas from it, and imitation is also the sincerest form of praise.
+We can also use `$()` expansion to create a list of filenames to use in a loop:
 
+```shell
+$ for page in $(find . -name "*.html")
+> do
+> cp $page $page.bak
+> done
+$ find . -name "*.bak"
+```
 
+```text
+./chapter-1/index.html.bak
+./index.html.bak
+./chapter-3/index.html.bak
+./chapter-2/index.html.bak
+```
 
 ## Summary {#rse-bash-summary}
 
-What have we learned in these lessons on the bash shell?
-The [Navigating Files and Directories](#bash-navigation) and
-[Working With Files and Directories](#bash-working) content 
-means that we can now get around in a command line environment.
-This is especially useful if we are doing our data analysis 
-by logging onto a high performance computing facility, for instance,
-as the command line interface is often the only way to interact with such a facility.
+FIXME: concept map
 
-The [Loops](#bash-loops), [Shell Scripts](#bash-scripts) and
-[Finding Things](#bash-finding) content means that we can now save time
-by getting the computer to do repetitive tasks for us.
+The original Unix shell was created in 1971,
+and will soon celebrate its fiftieth anniversary.
+Its syntax may be cryptic and inconsistent,
+but few programs have lasted as long,
+and fewer still remain in daily use.
 
-Finally, the [Pipes and Filters](#bash-pipes) content means we've been introduced
-to a fundamentally important concept:
-rather than writing monolithic functions/programs that do many things at once,
-it's better to write small functions/programs that do perform a well-defined, discrete task,
-and then combine them in myriad different ways to conduct your data analysis.
-
+The secret to its success was and is its generality:
+any program that reads text from standard input
+and prints text to standard output
+can work with any other.
+Chapter \@ref(FIXME) will look at how to write tools of our own that do this.
 
 ## Exercises {#rse-bash-exercises}
 
-
-### Navigating Files and Directories
-
-**Exploring More `ls` Flags**
+### Exploring more `ls` flags {#rse-bash-ex-more-ls}
 
 You can also use two options at the same time. What does the command `ls` do when used
 with the `-l` option? What about if you use both the `-l` and the `-h` option?
@@ -2501,16 +2512,7 @@ Some of its output is about properties that we do not cover in this lesson (such
 as file permissions and ownership), but the rest should be useful
 nevertheless.
 
-> *Solution*  
->
-> The `-l` option makes `ls` use a **l**ong listing format, showing not only
-> the file/directory names but also additional information such as the file size
-> and the time of its last modification. If you use both the `-h` option and the `-l` option,
-> this makes the file size "**h**uman readable", i.e. displaying something like `5.3K`
-> instead of `5369`.
-
-
-**Listing Recursively and By Time**
+### Listing recursively and by time {#rse-bash-ex-ls-rt}
 
 The command `ls -R` lists the contents of directories recursively, i.e., lists
 their sub-directories, sub-sub-directories, and so on at each level. The command
@@ -2520,12 +2522,7 @@ directories first.
 In what order does `ls -R -t` display things? Hint: `ls -l` uses a long listing
 format to view timestamps.
 
-> *Solution*  
->
-> The files/directories in each directory are sorted by time of last change.
-
-
-**Absolute vs Relative Paths**
+### Absolute and relative paths {#rse-bash-ex-paths}
 
 Starting from `/Users/amanda/data`,
 which of the following commands could Amanda use to navigate to her home directory,
@@ -2541,19 +2538,7 @@ which is `/Users/amanda`?
 8. `cd`
 9. `cd ..`
 
-> *Solution*
->
-> 1. No: `.` stands for the current directory.
-> 2. No: `/` stands for the root directory.
-> 3. No: Amanda's home directory is `/Users/amanda`.
-> 4. No: this goes up two levels, i.e. ends in `/Users`.
-> 5. Yes: `~` stands for the user's home directory, in this case `/Users/amanda`.
-> 6. No: this would navigate into a directory `home` in the current directory if it exists.
-> 7. Yes: unnecessarily complicated, but correct.
-> 8. Yes: shortcut to go back to the user's home directory.
-> 9. Yes: goes up one level.
-
-**Relative Path Resolution**
+### Relative path resolution {#rse-bash-ex-resolve-rel-path}
 
 Using the filesystem diagram below, if `pwd` displays `/Users/thing`,
 what will `ls -F ../backup` display?
@@ -2563,18 +2548,9 @@ what will `ls -F ../backup` display?
 3.  `2012-12-01/ 2013-01-08/ 2013-01-27/`
 4.  `original/ pnas_final/ pnas_sub/`
 
-TODO: Figure - Filesystem for Challenge Questions [../fig/filesystem-challenge.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/filesystem-challenge.svg)
+FIXME: figure (filesystem for exercises)
 
-> *Solution*
->
-> 1. No: there *is* a directory `backup` in `/Users`.
-> 2. No: this is the content of `Users/thing/backup`,
->    but with `..` we asked for one level further up.
-> 3. No: see previous explanation.
-> 4. Yes: `../backup/` refers to `/Users/backup/`.
-
-
-**`ls` Reading Comprehension**
+### `ls` reading comprehension {#rse-bash-ex-reading-ls}
 
 Using the filesystem diagram below,
 if `pwd` displays `/Users/backup`,
@@ -2585,23 +2561,13 @@ what command(s) will result in the following output:
 pnas_sub/ pnas_final/ original/
 ```
 
-TODO: Figure - Filesystem for Challenge Questions [../fig/filesystem-challenge.svg](https://github.com/swcarpentry/shell-novice/blob/gh-pages/fig/filesystem-challenge.svg)
+FIXME: figure (filesystem for exercises)
 
 1.  `ls pwd`
 2.  `ls -r -F`
 3.  `ls -r -F /Users/backup`
 
-> *Solution*
->
->  1. No: `pwd` is not the name of a directory.
->  2. Yes: `ls` without directory argument lists files and directories
->     in the current directory.
->  3. Yes: uses the absolute path explicitly.
-
-
-### Working With Files and Directories
-
-**Creating Files a Different Way**
+### Creating files a different way {#rse-bash-ex-touch}
 
 We have seen how to create text files using the `nano` editor.
 Now, try the following command:
@@ -2618,27 +2584,7 @@ $ touch my_file.txt
 
 3.  When might you want to create a file this way?
 
-> *Solution*
->
-> 1.  The `touch` command generates a new file called `my_file.txt` in
->     your current directory.  You
->     can observe this newly generated file by typing `ls` at the 
->     command line prompt.  `my_file.txt` can also be viewed in your
->     GUI file explorer.
->
-> 2.  When you inspect the file with `ls -l`, note that the size of
->     `my_file.txt` is 0 bytes.  In other words, it contains no data.
->     If you open `my_file.txt` using your text editor it is blank.
->
-> 3.  Some programs do not generate output files themselves, but
->     instead require that empty files have already been generated.
->     When the program is run, it searches for an existing file to
->     populate with its output.  The touch command allows you to
->     efficiently generate a blank text file to be used by such
->     programs.
-
-
-**Moving to the Current Folder**
+### Moving to the current folder {#rse-bash-ex-move-dot}
 
 After running the following commands,
 Jamie realizes that she put the files `sucrose.dat` and `maltose.dat` into the wrong folder:
@@ -2658,17 +2604,7 @@ Fill in the blanks to move these files to the current folder
 $ mv ___/sucrose.dat  ___/maltose.dat ___
 ```
 
-> *Solution*
->
-> ```shell
-> $ mv ../analyzed/sucrose.dat ../analyzed/maltose.dat .
-> ```
->
-> Recall that `..` refers to the parent directory (i.e. one above the current directory)
-> and that `.` refers to the current directory.
-
-
-**Renaming Files**
+### Renaming files {#rse-bash-ex-renaming-files}
 
 Suppose that you created a plain-text file in your current directory to contain a list of the
 statistical tests you will need to do to analyze your data, and named it: `statstics.txt`
@@ -2681,18 +2617,7 @@ correct the mistake, which of the following commands could you use to do so?
 3. `mv statstics.txt .`
 4. `cp statstics.txt .`
 
-> *Solution*
->
-> 1. No.  While this would create a file with the correct name,
-> the incorrectly named file still exists in the directory and would need to be deleted.
-> 2. Yes, this would work to rename the file.
-> 3. No, the period(.) indicates where to move the file, but does not provide a new file name;
-> identical file names cannot be created.
-> 4. No, the period(.) indicates where to copy the file, but does not provide a new file name;
-> identical file names cannot be created.
-
-
-**Moving and Copying**
+### Moving and copying {#rse-bash-ex-last-ls}
 
 What is the output of the closing `ls` command in the sequence shown below?
 
@@ -2724,41 +2649,12 @@ $ ls
 3.   `proteins.dat recombine`
 4.   `proteins-saved.dat`
 
-> *Solution*
->
-> We start in the `/Users/jamie/data` directory, and create a new folder called `recombine`.
-> The second line moves (`mv`) the file `proteins.dat` to the new folder (`recombine`).
-> The third line makes a copy of the file we just moved.  The tricky part here is where the file was
-> copied to.  Recall that `..` means "go up a level", so the copied file is now in `/Users/jamie`.
-> Notice that `..` is interpreted with respect to the current working
-> directory, **not** with respect to the location of the file being copied.
-> So, the only thing that will show using ls (in `/Users/jamie/data`) is the recombine folder.
->
-> 1. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
-> 2. Yes
-> 3. No, see explanation above.  `proteins.dat` is located at `/Users/jamie/data/recombine`
-> 4. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
-
-
-**Using `rm` Safely**
+### Using `rm` safely {#rse-bash-ex-safe-rm}
 
 What happens when we execute `rm -i thesis_backup/quotations.txt`?
 Why would we want this protection when using `rm`?
 
-> *Solution*
->
-> ```shell
-> $ rm: remove regular file 'thesis_backup/quotations.txt'? y
-> ```
-> 
-> The `-i` option will prompt before (every) removal
-> (use <kbd>Y</kbd> to confirm deletion or <kbd>N</kbd> to keep the file).
-> The Unix shell doesn't have a trash bin, so all the files removed will disappear forever.
-> By using the `-i` option, we have the chance to check that we are deleting
-> only the files that we want to remove.
-
-
-**Copy with Multiple Filenames**
+### Copy with multiple filenames {#rse-bash-ex-copy-multi}
 
 For this exercise, you can test the commands in the `data-shell/data` directory.
 
@@ -2783,20 +2679,7 @@ amino-acids.txt  animals.txt  backup/  elements/  morse.txt  pdb/  planets.txt  
 $ cp amino-acids.txt animals.txt morse.txt 
 ```
 
-> *Solution*
->
-> If given more than one file name followed by a directory name (i.e. the destination directory must 
-> be the last argument), `cp` copies the files to the named directory.
->
-> If given three file names, `cp` throws an error such as the one below, because it is expecting a directory
-> name as the last argument.
->
-> ```text
-> cp: target ‘morse.txt’ is not a directory
-> ```
-
-
-**List filenames matching a pattern**
+### List filenames matching a pattern {#rse-bash-ex-ls-match}
 
 When run in the `molecules` directory, which `ls` command(s) will
 produce this output?
@@ -2808,25 +2691,7 @@ produce this output?
 3. `ls *t??ne.pdb`
 4. `ls ethane.*`
 
-> *Solution*
->
->  The solution is `3.`
->
-> `1.` shows all files whose names contain zero or more characters (`*`) followed by the letter `t`,
-> then zero or more characters (`*`) followed by `ane.pdb`.
-> This gives `ethane.pdb  methane.pdb  octane.pdb  pentane.pdb`. 
->
-> `2.` shows all files whose names start with zero or more characters (`*`) followed by the letter `t`,
-> then a single character (`?`), then `ne.` followed by zero or more characters (`*`).
-> This will give us `octane.pdb` and `pentane.pdb` but doesn't match anything which ends in `thane.pdb`.
->
-> `3.` fixes the problems of option 2 by matching two characters (`??`) between `t` and `ne`.
-> This is the solution.
->
-> `4.` only shows files starting with `ethane.`.
-
-
-**More on Wildcards**
+### More on wildcards {#rse-bash-ex-more-wildcards}
 
 Sam has a directory containing calibration data, datasets, and descriptions of
 the datasets:
@@ -2911,16 +2776,7 @@ The resulting directory structure should look like this
         └── 2015-11-23-dataset_overview.txt
 ```
 
-> *Solution*
->
-> ```shell
-> $ cp *calibration.txt backup/calibration
-> $ cp 2015-11-* send_to_bob/all_november_files/
-> $ cp *-23-dataset* send_to_bob/all_datasets_created_on_a_23rd/
-> ```
-
-
-**Organizing Directories and Files**
+### Organizing directories and files {#rse-bash-ex-organizing}
 
 Jamie is working on a project and she sees that her files aren't very well
 organized:
@@ -2953,18 +2809,7 @@ $ ls analyzed
 fructose.dat    sucrose.dat
 ```
 
-> *Solution*
->
-> ```shell
-> mv *.dat analyzed
-> ```
-> 
-> Jamie needs to move her files `fructose.dat` and `sucrose.dat` to the `analyzed` directory.
-> The shell will expand *.dat to match all .dat files in the current directory.
-> The `mv` command then moves the list of .dat files to the "analyzed" directory.
-
-
-**Reproduce a folder structure**
+### Reproduce a directory structure {#rse-bash-ex-reproduce-structure}
 
 You're starting a new experiment, and would like to duplicate the directory
 structure from your previous experiment so you can add new data.
@@ -3011,22 +2856,7 @@ $ mkdir data
 $ mkdir raw processed
 ```
  
-> *Solution*
->
-> The first two sets of commands achieve this objective.
-> The first set uses relative paths to create the top level directory before
-> the subdirectories.
->
-> The third set of commands will give an error because `mkdir` won't create a subdirectory
-> of a non-existant directory: the intermediate level folders must be created first.
-> 
-> The final set of commands generates the 'raw' and 'processed' directories at the same level
-> as the 'data' directory.
-
-
-### Pipes and Filters
-
-**What Does `sort -n` Do?**
+### What does `sort -n` do? {#rse-bash-ex-sort-n}
 
 If we run `sort` on a file containing the following lines:
 
@@ -3060,12 +2890,7 @@ If we run `sort -n` on the same input, we get this instead:
 
 Explain why `-n` has this effect.
 
-> *Solution*
->
-> The `-n` option specifies a numerical rather than an alphanumerical sort.
-
-
-**What Does `>>` Mean?**
+### What does `>>` mean? {#rse-bash-ex-redirect-append}
 
 We have seen the use of `>`, but there is a similar operator `>>` which works slightly differently.
 We'll learn about the differences between these two operators by printing some strings.
@@ -3093,17 +2918,7 @@ $ echo hello >> testfile02.txt
 
 Hint: Try executing each command twice in a row and then examining the output files.
 
-> *Solution*
->
-> In the first example with `>`, the string "hello" is written to `testfile01.txt`,
-> but the file gets overwritten each time we run the command.
->
-> We see from the second example that the `>>` operator also writes "hello" to a file
-> (in this case`testfile02.txt`),
-> but appends the string to the file if it already exists (i.e. when we run it for the second time).
-
-
-**Appending Data**
+### Appending data {#rse-bash-ex-append-data}
 
 We have already met the `head` command, which prints lines from the start of a file.
 `tail` is similar, but prints lines from the end of a file instead.
@@ -3122,15 +2937,7 @@ $ tail -n 2 animals.txt >> animals-subset.txt
 3. The first three lines and the last two lines of `animals.txt`
 4. The second and third lines of `animals.txt`
 
-> *Solution*
-> Option 3 is correct.
-> For option 1 to be correct we would only run the `head` command.
-> For option 2 to be correct we would only run the `tail` command.
-> For option 4 to be correct we would have to pipe the output of `head` into `tail -n 2`
-> by doing `head -n 3 animals.txt | tail -n 2 > animals-subset.txt`
-
-
-**Piping Commands Together**
+### Piping commands {#rse-bash-ex-piping}
 
 In our current directory, we want to find the 3 files which have the least number of
 lines. Which command listed below would work?
@@ -3140,16 +2947,7 @@ lines. Which command listed below would work?
 3. `wc -l * | head -n 3 | sort -n`
 4. `wc -l * | sort -n | head -n 3`
 
-> *Solution*
->
-> Option 4 is the solution.
-> The pipe character `|` is used to feed the standard output from one process to
-> the standard input of another.
-> `>` is used to redirect standard output to a file.
-> Try it in the `data-shell/molecules` directory!
-
-
-**Why Does `uniq` Only Remove Adjacent Duplicates?**
+### Why does `uniq` only remove adjacent duplicates? {#rse-bash-ex-uniq-adjacent}
 
 The command `uniq` removes adjacent duplicated lines from its input.
 For example, the file `data-shell/data/salmon.txt` contains:
@@ -3176,13 +2974,7 @@ Why do you think `uniq` only removes *adjacent* duplicated lines?
 (Hint: think about very large data sets.) What other command could
 you combine with it in a pipe to remove all duplicated lines?
 
-> *Solution*
-> ```shell
-> $ sort salmon.txt | uniq
-> ```
-
-
-**Pipe Reading Comprehension**
+### Pipe reading comprehension {#rse-bash-ex-reading-pipes}
 
 A file called `animals.txt` (in the `data-shell/data` folder) contains the following data:
 
@@ -3205,22 +2997,7 @@ $ cat animals.txt | head -n 5 | tail -n 3 | sort -r > final.txt
  
 Hint: build the pipeline up one command at a time to test your understanding
 
-> *Solution*
->
-> The `head` command extracts the first 5 lines from `animals.txt`.
-> Then, the last 3 lines are extracted from the previous 5 by using the `tail` command.
-> With the `sort -r` command those 3 lines are sorted in reverse order and finally,
-> the output is redirected to a file `final.txt`.
-> The content of this file can be checked by executing `cat final.txt`.
-> The file should contain the following lines:
-> ```text
-> 2012-11-06,rabbit
-> 2012-11-06,deer
-> 2012-11-05,raccoon
-> ```
-
-
-**Pipe Construction**
+### Pipe construction {#rse-bash-ex-pipe-construction}
 
 For the file `animals.txt` from the previous exercise, consider the following command:
 
@@ -3253,14 +3030,7 @@ What other command(s) could be added to this in a pipeline to find
 out what animals the file contains (without any duplicates in their
 names)?
 
-> *Solution*
->
-> ```shell
-> $ cut -d , -f 2 animals.txt | sort | uniq
-> ```
-
-
-**Which Pipe?**
+### Which pipe? {#rse-bash-ex-which-pipe}
 
 The file `animals.txt` contains 8 lines of data formatted as follows:
 
@@ -3283,14 +3053,7 @@ a table that shows the total count of each type of animal in the file?
 4.  `cut -d, -f 2 animals.txt | sort | uniq -c`
 5.  `cut -d, -f 2 animals.txt | sort | uniq -c | wc -l`
 
-> *Solution*
->
-> Option 4. is the correct answer.
-> If you have difficulty understanding why, try running the commands, or sub-sections of
-> the pipelines (make sure you are in the `data-shell/data` directory).
-
-
-**Wildcard Expressions**
+### Wildcard expressions {#rse-bash-ex-wildcard-expressions}
 
 Wildcard expressions can be very complex, but you can sometimes write
 them in ways that only use simple syntax, at the expense of being a bit
@@ -3311,19 +3074,7 @@ this.
 3.  Under what circumstances would your new expression produce an error message
     where the original one would not?
     
-> *Solution*
->
-> 1. A solution using two wildcard expressions:
->     ```shell
->     $ ls *A.txt
->     $ ls *B.txt
->     ```
-> 2. The output from the new commands is separated because there are two commands.
-> 3. When there are no files ending in `A.txt`, or there are no files ending in
-> `B.txt`.
-
-
-**Removing Unneeded Files**
+### Removing unneeded files {#rse-bash-ex-remove-unneeded}
 
 Suppose you want to delete your processed data files, and only keep
 your raw files and processing script to save storage.
@@ -3336,20 +3087,7 @@ and *only* the processed data files?
 3. `rm * .txt`
 4. `rm *.*`
 
-> *Solution*
->
-> 1. This would remove `.txt` files with one-character names
-> 2. This is correct answer
-> 3. The shell would expand `*` to match everything in the current directory,
-> so the command would try to remove all matched files and an additional
-> file called `.txt`
-> 4. The shell would expand `*.*` to match all files with any extension,
-> so this command would delete all files
-
-
-### Loops
-
-**Doing a Dry Run**
+### Doing a dry run {#rse-bash-ex-loop-dry-run}
 
 A loop is a way to do many things at once --- or to make many mistakes at
 once if it does the wrong thing. One way to check what a loop *would* do
@@ -3384,21 +3122,7 @@ $ for file in *.pdb
 > done
 ```
 
-> *Solution*
->
-> The second version is the one we want to run.
-> This prints to screen everything enclosed in the quote marks, expanding the
-> loop variable name because we have prefixed it with a dollar sign.
->
-> The first version redirects the output from the command `echo analyze $file` to
-> a file, `analyzed-$file`. A series of files is generated: `analyzed-cubane.pdb`,
-> `analyzed-ethane.pdb` etc.
->
-> Try both versions for yourself to see the output! Be sure to open the
-> `analyzed-*.pdb` files to view their contents.
-
-
-**Nested Loops**
+### Nested loops {#rse-bash-ex-nested-loops}
 
 Suppose we want to set up up a directory structure to organize
 some experiments measuring reaction rate constants with different compounds
@@ -3415,16 +3139,7 @@ $ for species in cubane ethane methane
 > done
 ```
 
-> *Solution*
->
-> We have a nested loop, i.e. contained within another loop, so for each species
-> in the outer loop, the inner loop (the nested loop) iterates over the list of
-> temperatures, and creates a new directory for each combination.
->
-> Try running the code for yourself to see which directories are created!
-
-
-**Variables in Loops**
+### Variables in loops {#rse-bash-ex-loop-variables}
 
 This exercise refers to the `data-shell/molecules` directory.
 `ls` gives the following output:
@@ -3453,45 +3168,7 @@ $ for datafile in *.pdb
 
 Why do these two loops give different outputs?
 
-> *Solution*
->
-> The first code block gives the same output on each iteration through
-> the loop.
-> Bash expands the wildcard `*.pdb` within the loop body (as well as
-> before the loop starts) to match all files ending in `.pdb`
-> and then lists them using `ls`.
-> The expanded loop would look like this:
-> ```shell
-> $ for datafile in cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> > do
-> >	ls cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> > done
-> ```
->
-> ```text
-> cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> ```
->
-> The second code block lists a different file on each loop iteration.
-> The value of the `datafile` variable is evaluated using `$datafile`,
-> and then listed using `ls`.
->
-> ```text
-> cubane.pdb
-> ethane.pdb
-> methane.pdb
-> octane.pdb
-> pentane.pdb
-> propane.pdb
-> ```
-
-
-**Limiting Sets of Files**
+### Limiting sets of files {#rse-bash-ex-limiting-file-sets}
 
 What would be the output of running the following loop in the `data-shell/molecules` directory?
 
@@ -3506,11 +3183,6 @@ $ for filename in c*
 2.  All files are listed.
 3.  Only `cubane.pdb`, `octane.pdb` and `pentane.pdb` are listed.
 4.  Only `cubane.pdb` is listed.
-
-> *Solution*
->
-> 4 is the correct answer. `*` matches zero or more characters, so any file name starting with
-> the letter c, followed by zero or more other characters will be matched.
 
 How would the output differ from using this command instead?
 
@@ -3527,13 +3199,7 @@ $ for filename in *c*
 4.  The files `cubane.pdb` and `octane.pdb` will be listed.
 5.  Only the file `octane.pdb` will be listed.
 
-> *Solution*
->
-> 4 is the correct answer. `*` matches zero or more characters, so a file name with zero or more
-> characters before a letter c and zero or more characters after the letter c will be matched.
-
-
-**Saving to a File in a Loop - Part One**
+### Saving to a file in a loop {#rse-bash-ex-loop-save}
 
 In the `data-shell/molecules` directory, what is the effect of this loop?
 
@@ -3553,15 +3219,6 @@ for alkanes in *.pdb
     from `propane.pdb` will be saved to a file called `alkanes.pdb`.
 4.  None of the above.
 
-> *Solution*
->
-> 1. The text from each file in turn gets written to the `alkanes.pdb` file.
-> However, the file gets overwritten on each loop interation, so the final content of `alkanes.pdb`
-> is the text from the `propane.pdb` file.
-
-
-**Saving to a File in a Loop - Part Two**
-
 Also in the `data-shell/molecules` directory, what would be the output of the following loop?
 
 ```shell
@@ -3579,16 +3236,7 @@ for datafile in *.pdb
 4.  All of the text from `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, `pentane.pdb`
     and `propane.pdb` would be printed to the screen and saved to a file called `all.pdb`.
 
-> *Solution*
->
-> 3 is the correct answer. `>>` appends to a file, rather than overwriting it with the redirected
-> output from a command.
-> Given the output from the `cat` command has been redirected, nothing is printed to the screen.
-
-
-### Shell Scripts
-
-**List Unique Species**
+### List unique species {#rse-bash-ex-list-unique}
 
 Leah has several hundred data files, each of which is formatted like this:
 
@@ -3615,23 +3263,7 @@ filenames as command-line arguments,
 and uses a variation of the above command to print a list
 of the unique species appearing in each of those files separately.
 
-> *Solution*
->
-> ```text
-> # Script to find unique species in csv files where species is the second data field
-> # This script accepts any number of file names as command line arguments
->
-> # Loop over all files
-> for file in $@ 
-> do
-> 	echo "Unique species in $file:"
-> 	# Extract species names
-> 	cut -d , -f 2 $file | sort | uniq
-> done
-> ```
-
-
-**Why Record Commands in the History Before Running Them?**
+### Why does `history` record commands before running them? {#rse-bash-ex-history-order}
 
 If you run the command:
 
@@ -3644,15 +3276,7 @@ the shell has added `history` to the command log before actually
 running it. In fact, the shell *always* adds commands to the log
 before running them. Why do you think it does this?
 
-> *Solution*
->
-> If a command causes something to crash or hang, it might be useful
-> to know what that command was, in order to investigate the problem.
-> Were the command only be recorded after running it, we would not
-> have a record of the last command run in the event of a crash.
-
-
-**Variables in Shell Scripts**
+### Variables in shell scripts {#rse-bash-ex-script-variables}
 
 In the `molecules` directory, imagine you have a shell script called `script.sh` containing the
 following commands:
@@ -3676,24 +3300,7 @@ Which of the following outputs would you expect to see?
 3. The first and the last line of each file in the `molecules` directory
 4. An error because of the quotes around `*.pdb`
 
-> *Solution*
->
-> The correct answer is 2. 
->
-> The special variables $1, $2 and $3 represent the command line arguments given to the
-> script, such that the commands run are:
->
-> ```shell
-> $ head -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
-> $ tail -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
-> ```
-> 
-> The shell does not expand `'*.pdb'` because it is enclosed by quote marks.
-> As such, the first argument to the script is `'*.pdb'` which gets expanded within the
-> script by `head` and `tail`.
-
-
-**Find the Longest File With a Given Extension**
+### Find the longest file with a given extension {#rse-bash-ex-longest-with-extension}
 
 Write a shell script called `longest.sh` that takes the name of a
 directory and a filename extension as its arguments, and prints
@@ -3707,20 +3314,7 @@ $ bash longest.sh /tmp/data pdb
 would print the name of the `.pdb` file in `/tmp/data` that has
 the most lines.
 
-> *Solution*
->
-> ```text
-> # Shell script which takes two arguments: 
-> #    1. a directory name
-> #    2. a file extension
-> # and prints the name of the file in that directory
-> # with the most lines which matches the file extension.
-> 
-> wc -l $1/*.$2 | sort -n | tail -n 2 | head -n 1
-> ```
-
-
-**Script Reading Comprehension**
+### Script reading comprehension {#rse-bash-ex-reading-scripts}
 
 For this question, consider the `data-shell/molecules` directory once again.
 This contains a number of `.pdb` files in addition to any other files you
@@ -3746,28 +3340,7 @@ for filename in $1 $2 $3
 echo $@.pdb
 ```
 
-> *Solution*
->
-> In each case, the shell expands the wildcard in `*.pdb` before passing the resulting
-> list of file names as arguments to the script.
->
-> Script 1 would print out a list of all files containing a dot in their name.
-> The arguments passed to the script are not actually used anywhere in the script.
->
-> Script 2 would print the contents of the first 3 files with a `.pdb` file extension.
-> `$1`, `$2`, and `$3` refer to the first, second, and third argument respectively.
-> 
-> Script 3 would print all the arguments to the script (i.e. all the `.pdb` files),
-> followed by `.pdb`.
-> `$@` refers to *all* the arguments given to a shell script.
-> ```text
-> cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
-> ```
-
-
-### Finding Things
-
-**Using `grep`**
+### Using `grep` {#rse-bash-ex-using-grep}
 
 Which command would result in the following output:
 
@@ -3780,13 +3353,7 @@ and the presence of absence:
 3. `grep -w "of" haiku.txt`
 4. `grep -i "of" haiku.txt`
 
-> *Solution*
->
-> The correct answer is 3, because the `-w` option looks only for whole-word matches.
-> The other options will also match "of" when part of another word.
-
-
-**Tracking a Species**
+### Tracking a species {#rse-bash-ex-tracking-species}
  
 Leah has several hundred 
 data files saved in one directory, each of which is formatted like this:
@@ -3826,19 +3393,7 @@ and `man cut` to select more than one field in a line.
 
 An example of such a file is provided in `data-shell/data/animal-counts/animals.txt`
 
-> *Solution*
->
-> ```shell
-> grep -w $1 -r $2 | cut -d : -f 2 | cut -d , -f 1,3  > $1.txt
-> ```
->
-> You would call the script above like this:
->
-> ```shell
-> $ bash count-species.sh bear .
-> ```
-
-**Little Women**
+### Counting names {#rse-bash-ex-little-women}
 
 You and your friend, having just finished reading *Little Women* by
 Louisa May Alcott, are in an argument.  Of the four sisters in the
@@ -3856,31 +3411,7 @@ There is often more than one way to solve a programming task, so a
 particular solution is usually chosen based on a combination of
 yielding the correct result, elegance, readability, and speed.
 
-> *Solution*
->
-> ```text
-> for sis in Jo Meg Beth Amy
-> do
-> 	echo $sis:
->	grep -ow $sis LittleWomen.txt | wc -l
-> done
-> ```
->
-> Alternative, slightly inferior solution:
-> ```text
-> for sis in Jo Meg Beth Amy
-> do
-> 	echo $sis:
->	grep -ocw $sis LittleWomen.txt
-> done
-> ```
->
-> This solution is inferior because `grep -c` only reports the number of lines matched.
-> The total number of matches reported by this method will be lower if there is more
-> than one match per line.
-
-
-**Matching and Subtracting**
+### Matching and subtracting {#rse-bash-ex-match-subtract}
 
 The `-v` option to `grep` inverts pattern matching, so that only lines
 which do *not* match the pattern are printed. Given that, which of
@@ -3895,19 +3426,7 @@ directory.
 3.  `grep -v "temp" $(find data -name '*s.txt')`
 4.  None of the above.
 
-> *Solution*
->
-> The correct answer is 1. Putting the match expression in quotes prevents the shell
-> expanding it, so it gets passed to the `find` command.
->
-> Option 2 is incorrect because the shell expands `*s.txt` instead of passing the wildcard
-> expression to `find`.
->
-> Option 3 is incorrect because it searches the contents of the files for lines which
-> do not match "temp", rather than searching the file names.
-
-
-**`find` Pipeline Reading Comprehension**
+### `find` pipeline reading comprehension {#rse-bash-ex-reading-find}
 
 Write a short explanatory comment for the following shell script:
 
@@ -3915,14 +3434,7 @@ Write a short explanatory comment for the following shell script:
 wc -l $(find . -name '*.dat') | sort -n
 ```
 
-> *Solution*
->
-> 1. Find all files with a `.dat` extension recursively from the current directory
-> 2. Count the number of lines each of these files contains
-> 3. Sort the output from step 2. numerically
-
-
-**Finding Files With Different Properties**
+### Finding files with different properties {#rse-bash-ex-find-properties}
  
 The `find` command can be given several other criteria known as "tests"
 to locate files with specific attributes, such as creation time, size,
@@ -3934,14 +3446,15 @@ Hint 1: you will need to use three tests: `-type`, `-mtime`, and `-user`.
 
 Hint 2: The value for `-mtime` will need to be negative---why?
 
-> *Solution*
->
-> Assuming that Nelle’s home is our working directory we type:
->
-> ```shell
-> $ find ./ -type f -mtime -1 -user ahmed
-> ```
+### Combining options {#rse-bash-ex-combining-options}
 
+FIXME: Note that in most command line tools, multiple options can be combined
+with a single `-` and no spaces between the options: `ls -F -a` is equivalent to
+`ls -Fa`.
+
+### Other wildcards {#rse-bash-ex-other-wildcards}
+
+FIXME: introduce ? and other wildcards.
 
 ## Key Points {#rse-bash-keypoints}
 
