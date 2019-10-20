@@ -1,3 +1,0 @@
-- How can I manage the packages my project relies on?
-- How can I package up my work for others to use?
-- How should I announce my work?

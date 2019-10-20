@@ -3,6 +3,7 @@
 [advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
+[assertr]: https://cran.r-project.org/web/packages/assertr/index.html
 [at]: https://en.wikipedia.org/wiki/At_(command)
 
 [bash]: FIXME
@@ -18,6 +19,7 @@
 [carpentries]: https://carpentries.org/
 [caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: http://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
+[checkr]: https://cran.r-project.org/web/packages/checkr/index.html
 [chocolatey]: https://chocolatey.org/
 [choose-license]: http://choosealicense.com/
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
@@ -238,6 +240,7 @@
 [usethis]: https://usethis.r-lib.org/
 [uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
 
+[validate-r]: https://cran.r-project.org/web/packages/validate/index.html
 [vanderplas-licensing]: http://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [variable]: FIXME
 [version-control]: https://peerj.com/preprints/3159/

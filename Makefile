@@ -3,7 +3,7 @@
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
 ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/rse/rse.pdf
-DATA=data climate-data zipfs-law
+EXTRA=climate-data data src zipfs-law
 
 R_FILES=\
   _r.yml \
@@ -34,14 +34,14 @@ RSE_FILES=\
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
   rse-automate.Rmd \
-  rse-correctness.Rmd \
   backlog.Rmd \
   style.Rmd \
   project.Rmd \
   inclusive.Rmd \
   rse-ci.Rmd \
-  rse-r-package.Rmd \
-  rse-py-package.Rmd \
+  rse-package-r.Rmd \
+  rse-package-py.Rmd \
+  rse-correct.Rmd \
   rse-publish.Rmd \
   teamwork.Rmd \
   finale.Rmd \
@@ -108,7 +108,7 @@ _book/rse/index.html : ${RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 ${INDEX_HTML} : ./_index.html
 	mkdir -p _book
 	cp ./_index.html ${INDEX_HTML}
-	cp -r ${DATA} _book
+	cp -r ${EXTRA} _book
 
 #-------------------------------------------------------------------------------
 
