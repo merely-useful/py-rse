@@ -36,7 +36,7 @@ RSE_FILES=\
   rse-automate.Rmd \
   backlog.Rmd \
   style.Rmd \
-  project.Rmd \
+  rse-project.Rmd \
   inclusive.Rmd \
   rse-ci.Rmd \
   rse-package-r.Rmd \
