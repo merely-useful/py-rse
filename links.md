@@ -38,6 +38,7 @@
 [config-email]: mailto:gvwilson@third-bit.com
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
 [continuation-prompt]: FIXME
+[cookiecutter]: https://drivendata.github.io/cookiecutter-data-science/
 [corpus]: FIXME
 [covenant]: https://www.contributor-covenant.org
 [cran]: https://cran.r-project.org/

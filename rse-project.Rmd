@@ -1,0 +1,378 @@
+# Project Structure {#project}
+
+Project organization is like a diet:
+everyone has one,
+it's just a question of whether it's healthy or not.
+In the case of a project,
+"healthy" means that people can find what they need and do what they want without becoming frustrated.
+This depends on two things:
+how well organized the project is,
+and how familiar people are with that style of organization.
+
+As with coding style,
+small pieces in predictable places with readable names are easier to find and use
+than large chunks that vary from project to project
+and have names like "stuff".
+While we can be messy while we are working and then tidy up later,
+experience teaches that we will be more productive if we make tidiness a habit
+and put things in the right place right from the start.
+This lesson therefore describes a widely-used template
+for organizing small and medium-sized data analysis projects @Nobl2009.
+
+> **Version First**
+>
+> This chapter assumes that a project's history and development is managed with Git,
+> and that each project lives in a single repository.
+> If you are organizing something messy,
+> please start using version control before you make any changes
+> so that you don't accidentally lose valuable work.
+
+## What is a project? {#project-thinking}
+
+The first decision we have to make is what exactly constitutes a "project" @Wils2017.
+Some examples are:
+
+-   A dataset that is being used by several research projects.
+    The project includes the raw data,
+    the programs used to tidy that data,
+    the tidied data,
+    the extra files needed to make the dataset an R package (Chapter \@ref(rse-package-r)),
+    and a few text files describing the data's authors, license, and [provenance][provenance].
+
+-   A set of annual reports written for an [NGO][ngo].
+    The project includes several Jupyter notebooks,
+    some supporting Python libraries used by those notebooks,
+    copies of the HTML and PDF versions of the reports,
+    a text file containing links to the datasets used in the report
+    (which can't be stored on GitHub since they contain personal identifying information),
+    and a text file explaining details of the analysis that the authors didn't include in the reports themselves.
+
+-   A software library that provides an interactive glossary of data science terms in both Python and R.
+    The project contains the files needed to create a package in both languages,
+    a Markdown file full of terms and definitions,
+    and a Makefile with targets to check cross-references, compile packages, and so on.
+
+More generally,
+some common criteria for creating projects are one per publication,
+one per deliverable piece of software,
+or one per team.
+The first tends to be too small:
+a good dataset will result in several reports,
+and the goal of some projects is to produce a steady stream of reports (such as monthly forecasts).
+The second is a good fit for software engineering projects
+whose primary aim is to produce tools rather than results,
+but can be an awkward fit for data analysis work.
+The third tends to be too large:
+a team of half a dozen people may work on many different things at once,
+and a repository that holds them all quickly looks like someone's basement.
+
+The best rule of thumb for deciding what is and isn't a project
+is to ask what people have meetings about.
+If the same set of people need to get together on a regular basis to talk about something,
+that "something" probably deserves its own repository.
+And if the list of people changes slowly over time but the meetings continue,
+that's an even stronger sign.
+
+## What files should every project contain? {#project-boilerplate}
+
+Most projects' repositories contain four files.
+Three of these are so widely used in open source software projects that GitHub provides support for them,
+while the fourth is common in research work.
+All of these files may be plain text or Markdown,
+and may have a `.txt` or `.md` suffix (or no suffix at all),
+but should use the principal names given in upper case
+since a growing number of tools expect them.
+
+-   `README` includes the project's title and a one-paragraph description of its purpose or content.
+    GitHub displays the content of this file on the project's home page.
+
+-   `LICENSE` is the project's license (discussed in Chapter \@ref(inclusive)).
+
+-   `CONDUCT` is its code of conduct (also discussed in Chapter \@ref(inclusive)).
+
+-   `CITATION` explains how the work should be cited.
+    This file should contains a plain text citation that can be copied and pasted into email,
+    and may also include entries formatted for various bibliographic systems like [BibTeX][bibtex].
+
+Other information may be included as sections in these files or put into files of their own:
+
+-   `CONTRIBUTORS`
+    lists everyone who has contributed to the project.
+    Software projects often put this information in `README`,
+    while research projects make it a section in `CITATION`.
+
+-   `CONTRIBUTING`
+    explains how to contribute,
+    i.e.,
+    what naming conventions to use for functions,
+    what tags to put on issues (Chapter \@ref(FIXME)),
+    or how to install and configure the software needed to start work on the project.
+    These instructions can also be included as a section in `README`;
+    wherever they go,
+    remember that the easier it is for people to get set up and contribute,
+    the more likely they are to do so @Stei2014.
+
+-   `GOVERNANCE`
+    explains how the project is run.
+    It is still uncommon for this to be in a file of its own—it is more often included
+    in `README` or `CONTRIBUTING`—but the open source and open science communities have learned the hard way
+    that *not* being explicit about who has a voice in which decisions
+    and how contributors can tell when a decision has been made
+    causes trouble sooner or later.
+
+Even the four core files may seem like a lot,
+but two of these (`LICENSE` and `CONDUCT`) are usually chosen rather than written (Chapter \@ref(inclusive))
+and the others (`README` and `CITATION`) can be quite short to start with.
+Having these files helps new contributors orient themselves,
+and also signals that the project is well run.
+
+## How should I structure the rest of my project? {#rse-project-organize}
+
+@Nobl2009 described a way to organize small bioinformatics projects
+that is equally useful for other kinds of research computing.
+Each project is put in a separate Git repository,
+and the directories in the root of this repository are organized according to purpose.
+It specifies five top-level directories:
+
+-   The `./src/` directory (short for "source") holds source code
+    for programs written in languages like C or C++ that need to be compiled.
+    Many projects don't have this directory
+    because all of their code is written in languages that don't need compilation.
+
+-   Runnable programs go in `./bin/` (an old Unix abbreviation for "binary", meaning "not text").
+    This includes the compiled and runnable versions of C and C++ programs,
+    and also shell scripts,
+    Python or R programs,
+    and everything else that can be executed.
+
+-   Raw data goes in in `./data/` and is never modified after being stored.
+
+-   Results are put in `./results/`.
+    This includes cleaned-up data,
+    figures,
+    and everything else that can be rebuilt using what's in `./bin/` and `./data/`.
+    If intermediate results can be re-created quickly and easily,
+    they might not be stored in version control,
+    but anything that is included in a manuscript should be here.
+
+-   Finally,
+    documentation and manuscripts go in `./doc/`.
+
+```{r project-noble, echo=FALSE, fig.cap="Project Layout"}
+if (knitr::is_latex_output()) {
+  knitr::include_graphics("figures/project/noble.pdf")
+} else {
+  knitr::include_graphics("figures/project/noble.svg")
+}
+```
+
+Figure \@ref(fig:project-noble) below shows this layout for a project called `g-trans`.
+A few things to notice are:
+
+-   The documentation for the `regulate` script appears in the root of `./doc/`,
+    while the paper for JCMB is stored in a sub-directory,
+    since it contains several files.
+
+-   The `./src/` directory contains a Makefile to re-build the `regulate` program (Chapter \@ref(rse-automate)).
+    Some projects put the Makefile in the root directory,
+    reasoning that since it affects both `./src/` and `./bin/`,
+    it belongs above them both rather than in either one.
+
+-   There are several sub-directories underneath `./data/` and `./results/`.
+    Each of the sub-directories in `./results/` has a Makefile
+    to re-create the contents of that directory.
+
+While the directories in the top level of each project are organized by purpose,
+the directories within `./data/` and `./results/` are organized chronologically
+to make it easy to see when data was gathered and when results were generated.
+These directories all have names in [ISO date format][iso-date-format] like `YYYY-MM-DD`
+to make it easy to sort them chronologically.
+This naming is particularly helpful when data and results are used in several reports.
+
+At all levels,
+filenames are chosen so that they will be easy to match with simple shell wildcards.
+For example,
+a project might use <code><em>species</em>_<em>organ</em>_<em>treatment</em>.csv</code>
+as a file-naming convention,
+giving filenames like `gorilla_kidney_cm200.csv`.
+This allows `gorilla_*_cm200.csv` to match all gorilla organs
+or `*_kidney_*.csv` to match all kidney data.
+It does produce long filenames,
+but [tab completion][tab-completion] means that we only have to type the full name once.
+Long filenames are just as easy to match in programs:
+Python's `glob` and R's `Sys.glob` will both take a pattern and return a list of matching filenames.
+
+@Marw2018 describes a simple layout:
+
+```
+├── DESCRIPTION
+├── README.md
+├── LICENSE
+├── data
+│   └── my_data.csv
+└── analysis
+    └── my_report.Rmd
+```
+
+The key differences are:
+
+-   The `DESCRIPTION` file in the root directory contains
+    the information needed to make the project an R package (Chapter \@ref(rse-package-r)).
+
+-   Instead of having a separate directory for tidied tata,
+    this layout assumes that all work (including data tidying) is done with [computational notebooks][computational-notebook],
+    so Noble's `bin`, `src`, and `results` directories are combined.
+
+Going in the other direction,
+[Cookiecutter Data Science][cookiecutter] describes a more elaborate layout
+with separate sub-directories for models, features, visualizations, and much more.
+All of these share a few key advantages:
+
+-   People can find things easily,
+    and can easily tell where to put new work.
+
+-   Programs within the project can find things just as easily
+    (e.g., by using simple filename patterns).
+
+-   External tools such as GitHub can [aggregate][aggregate] information
+    so that the project itself is easier to find.
+
+-   We don't have to document the structure ourselves.
+
+## How should I manage a mix of compiled programs and scripts? {#project-scripts}
+
+Programming languages come in two flavors: compiled and interpreted.
+In order to run a program in a [compiled language][compiled-language] such as C++ or Java,
+we give the source files to a [compiler][compiler]
+that translates them into instructions a computer can actually execute
+and saves those instructions in files (FIXME: figure a).
+Those files full of instructions can then be re-used as often as we want.
+If we are using an [interpreted language][interpreted-language] like R or Python,
+on the other hand,
+we give our source files to an [interpreter][interpeter].
+It also translates the code into instructions,
+but puts those instructions in memory and executes them immediately (FIXME: figure b).
+
+Saving instructions in files versus executing them immediately may seem like a small difference,
+but historically it led to very different styles of programming.
+Compiled languages usually ran faster than interpreted languages,
+but compilation took time,
+so interpreted languages were better for [exploratory programming][exploratory-programmming].
+The differences are much smaller these days than they were twenty years ago,
+but we do still tend to use compiled languages for anything that has to interact directly with hardware
+and then [wrap][wrap-code] those libraries for use in interpreted languages.
+
+> **Why `bin`?**
+>
+> The name `bin` is short for "binary",
+> and comes from the fact that the source files of compiled programs are human-readable text,
+> but files containing the compiler's output are not.
+> Programmers often call files that aren't text "binaries",
+> even though text is itself stored in binary as well.
+
+All of this is preamble to deciding where to put things if a project contains compiled programs.
+Most software engineers put source code in version control
+and recompile it as needed to produce executables:
+
+1.  It saves disk space.
+
+2.  Version control tools can't diff or merge a compiled program.
+
+3.  Compiled programs are much more sensitive to small differences
+    between operating system versions and external dependencies
+    than interpreted programs,
+    so something compiled on one computer might not work on another anyway.
+
+The authors of this book handle all of this in different ways:
+
+1.  Put the source code for compiled languages in `./src/`,
+    the runnable programs produced from this code in `./bin/`,
+    and programs for interpreted languages in `./scripts/`.
+    This makes version control easy—ignore what's in `./bin/` and save everything else—but
+    means users have to look in two places to run things.
+
+2.  Put the source for compiled programs in `./src/`
+    and both the compiler's output and interpreted programs in `./bin/`.
+    This makes version control a little more complicated,
+    since some of what's in `./bin/` needs to be saved and some doesn't,
+    but means there's only one place to look for runnable programs.
+    (It's also easy to delete the hand-written scripts in `./bin/` by accident
+    when we only meant to delete the compiled programs,
+    but since we have everything under version control,
+    that's not a problem, right?)
+
+3.  Put all source files in `./src/` and the compiler's output in `./bin/`.
+    This is slightly simpler than the first option,
+    but still means users have to look in two places for things they can run.
+
+As always,
+the approach matters less than being consistent
+and including a note in `CONTRIBUTING` or elsewhere to document the decision.
+
+## How should I document a project? {#rse-project-docs}
+
+Noble's layout places documentation and manuscripts in `./docs/`.
+We recommend separating these into `./docs/` and `./reports/`:
+
+1.  Most projects generate the documentation for their software directly from the source code
+    (Chapters \@ref(rse-package-r) and \@ref(rse-package-py)).
+    Putting these files in the same directory as handwritten files
+    has the same problems as putting a compiler's output in the same directory as handwritten scripts.
+    In fact,
+    it's often worse,
+    since [documentation generators][documentation-generator] often create many sub-directories and support files.
+
+2.  We often create several reports for a single project,
+    which complicates file management even further.
+
+TODO: What does someone need to know beyond the collection of files in the project? 
+ 
+TODO: What should go in a `README`? Use Elizabeth's Step 4: "Administrative and personnel details" and "Project information" prompts as a guide. https://www.ideals.illinois.edu/bitstream/handle/2142/91611/W2%20-%20DataDocumentationHandout.docx
+
+TODO: Why is data special? Why isn't there a section called "How should I document code?", "How should I document my workflow?" Because we assume that these are done explicitly e.g. putting code in a package and using formal documentation or implicitly like using make to document workflow.  There is so much more to know about data than the data itself.
+
+TODO: Re-use Elizabeth's "Activity 1" to get learners thinking about the importance of documentation and metadata. https://www.ideals.illinois.edu/handle/2142/91611
+
+TODO: Use Elizabeth's "Minimum viable documentation" https://www.ideals.illinois.edu/handle/2142/91611
+
+TODO: Focus on documentation data files in repo with README. Re-use Elizabeth's "Activity 1 Step 4": Idenify the relevant sectons for your documentation file, "Data file information"
+
+## How should I manage data that can't be stored in version control? {#rse-project-external}
+
+Small datasets that don't contain sensitive information should be stored in version control:
+as a rule of thumb,
+anything you would send as an email attachment is probably small enough to be put into Git,
+while anything that might reveal someone's identity should not be.
+If data is large or sensitive,
+there should still be something in `./data/` to show its existence,
+and that "something" should be easy for programs to read.
+One option is a CSV file whose columns are:
+
+-   the name of the dataset,
+-   its URL or other unique identifier,
+-   the date it was last checked, and
+-   its size (so that users will have some idea of how much work is involved in processing it).
+
+Another option is to have one file per dataset,
+so that instead of reading `gorilla_genome.bam`,
+the program reads `gorilla_genome.yml` and then uses the `url` key in that file to find the data it actually wants.
+Whatever you do,
+you should always include a `README.md` file in `./data/`
+that documents the [provenance][provenance] and organization of the data
+(Section \@ref(rse-publish-data)).
+
+## Summary {#project-summary}
+
+FIXME: create concept map for project structure
+
+## Exercises {#project-exercises}
+
+FIXME: mimic Elizabeth's data exercise from https://www.ideals.illinois.edu/handle/2142/91611 to look at a couple of projects on GitHub and complete some set tasks.  
+Get learners to reflect on what makes it easy to navigate an unfamiliar project.  
+
+TODO:  "Exercise: Think about a project you have and all the files it it.  What would it look like in one of these structures?"
+
+## Key Points {#project-keypoints}
+
+```{r, child="keypoints/project.md"}
+```
