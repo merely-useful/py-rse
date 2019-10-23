@@ -1,4 +1,4 @@
-.PHONY : all clean commands html settings
+.PHONY : all clean chapters commands crossrefs html link settings
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
@@ -145,13 +145,19 @@ clean :
 chapters :
 	@make settings | bin/chapters.py _rse.yml RSE_FILES rse-objectives.Rmd rse-keypoints.Rmd
 
-## links        : check that all links are defined and used.
-links :
-	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+## crossrefs    : check cross-references.
+crossrefs :
+	@bin/crossrefs.py "Novice R" ${R_FILES} ${COMMON_FILES}
+	@bin/crossrefs.py "Novice Python" ${PY_FILES} ${COMMON_FILES}
+	@bin/crossrefs.py "RSE" ${RSE_FILES} ${COMMON_FILES}
 
 ## images       : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+
+## links        : check that all links are defined and used.
+links :
+	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
 
 ## settings     : echo all variable values.
 settings :
@@ -160,4 +166,4 @@ settings :
 	@echo R_FILES: ${R_FILES}
 	@echo PY_FILES: ${PY_FILES}
 	@echo RSE_FILES: ${RSE_FILES}
-@echo COMMON_FILES: ${COMMON_FILES}
+	@echo COMMON_FILES: ${COMMON_FILES}
