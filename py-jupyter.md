@@ -55,7 +55,7 @@ or a new empty one is created if there is no next cell.
 You can press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to stay on the current cell after running code.
 
 In an input cell,
-you can split the code across several lines as needed.
+you can write multiple lines of code that will all be executed when the cell is run.
 
 ```{python}
 a = 4
@@ -64,7 +64,7 @@ a * 2
 
 You might have noticed that there is a little counter on the left of each cell.
 This counter keeps track of in which order the cells were executed,
-so that you are aware if they cells have been run out of sequential order.
+so that you are aware if cells have been run out of sequential order.
 The counter symbol changes to an `*` when a computation is running,
 to indicate that Python is busy and won't be able to execute new cells
 until the current one finishes
@@ -80,7 +80,7 @@ without needing to rerun the code cells.
 
 You can change the input cell type from Python code to Markdown
 by clicking on the little dropdown menu in the toolbar that reads "Code".
-Markdown is a simple formatting system,
+Markdown is a simple formatting system
 which allows you to document your analysis within the notebook.
 It is a plain text format
 that includes brief markup tags that indicates how text should be rendered,
@@ -96,7 +96,7 @@ Below is a short example of the syntax:
 - *Emphasis in italics*
 - **Strong emphasis in bold**
 
-This is a [link to learn more about markdown](https://guides.github.com/features/mastering-markdown/)
+This is a [link to learn more about markdown](https://guides.github.com/features/mastering-markdown/).
 ```
 
 The combination of code, plots, and markdown is powerful.
@@ -109,23 +109,23 @@ a table of contents, links to sections and files, footnotes, images, and even vi
 Creating a report in a notebook makes it easier to reproduce the findings,
 since the code for creating the figures is kept together with the figures in the notebook.
 Notebooks can be exported to HTML, PDF, and many other formats,
-which facilitates sharing your results with others,
-and publishing online which we will learn more about in the publishing charter.
+which facilitates sharing your results with others
+and publishing online, which we will learn more about in the publishing chapter.
 <!--com: TODO link to pub -->
-Exporting can be done via `File --> Export Notebook As...`.
+You can export the notebook to different file types via `File --> Export Notebook As...`.
 When you export to PDF for the first time,
 you might be asked to download the Latex packages,
 which are needed to create the PDF.
 
-JupyterLab can run other applications than notebooks,
+JupyterLab can also run applications other than notebooks,
 e.g. there is a Python console, a text editor, and a terminal emulator.
 These can be opened via the launcher page or `File --> New`.
-Application can be placed side by side through drag and drop,
+Applications can be placed side by side by dragging and dropping their windows,
 and all currently running applications can be viewed
 in the "Running" tab in the sidebar.
 The next icon in the sidebar is the "Commands Palette" (the color palette icon),
 which can be used to search among all available toolbar commands for the notebook,
-e.g. you can search for "Run All" to find that command that runs all cells
+e.g. you can search for "Run All" to find the command that runs all cells
 (also available via `Run --> Run all cells` in the toolbar menu).
 Conveniently,
 the command palette also shows a command's keyboard shortcut.
@@ -164,18 +164,18 @@ The unformatted docstring can be seen by prepending or appending a `?` to the fu
 Two `?` (`numpy.mean??`) will show the full source code for the function.
 
 When you start getting familiar with typing function names,
-you will notice that this is often faster than looking for functions in menus,
-such as in spreadsheet program.
+you will notice that typing is often faster than looking for functions in menus,
+such as in a spreadsheet program.
 However,
 sometimes you forget
 and it is useful to get hints via the help systems described above.
 
 ### Version control with notebooks {#py-version-control-with-notebooks}
 
-Jupyter notebooks are stored as JSON-files with an .ipynb extension.
-These are specially formatted text files,
+Jupyter notebooks are stored as JSON files with a .ipynb extension.
+These are specially-formatted text files
 which are read and rendered by JupyterLab.
-JSON files are efficiently read by machine and it is a common data exchange format.
+The JSON file format is efficiently read by machines and it is a common data exchange format.
 However,
 they are not always that easy to read for humans,
 which can create problems when working with Jupyter notebooks under version control.
@@ -184,7 +184,7 @@ and facilitates reading version control diffs and making more granular commits.
 You also don't have to worry about accidentally misplacing braces within the JSON file,
 which would cause the notebook to fail to render.
 
-Jupytext is a JupyterLab extension that enables saving of notebook in plain text formats,
+Jupytext is a JupyterLab extension that can automatically save Jupyter notebooks in plain text formats,
 such as Markdown.
 The plain text notebook is two-way synced with the `.ipynb` file,
 so that when either of the files change,
@@ -193,8 +193,8 @@ Jupytext supports the R Markdown format,
 which extends the Markdown syntax with some useful features for notebooks,
 and which is used to generate reproducible reports from R Notebooks
 via the R Studio IDE.
-Using the R Markdown format for our notebooks,
-we take advantage of a well established format for reproducible analysis.
+By using the R Markdown format for our notebooks,
+we take advantage of a well-established format for reproducible analysis.
 If needed, we also have access to the publishing options
 available via the R Studio IDE
 (R Markdown builds upon Pandoc,
@@ -219,11 +219,11 @@ Click on "Pair Notebook with R Markdown",
  <!--TODO Screenshot from doc? -->
 this is the only Jupytext command we need to use.
 That's it!
-Your `.ipynb` notebook is now linked to an `.Rmd` file with the same name.
+After the next file save, your `.ipynb` notebook is now linked to a `.Rmd` file with the same name.
 Open up the File Browser from the sidebar
 and you can see that the new file has been created in the same directory.
 The pairing needs to be done once for each notebook,
-or can be setup to occur for [all notebooks automatically][jupytext-global-config].
+or can be set up to occur for [all notebooks automatically][jupytext-global-config].
 
 [jupytext-global-config]: https://jupytext.readthedocs.io/en/latest/using-server.html#global-configuration
 
@@ -241,9 +241,9 @@ Otherwise,
 you might have run some of the cells out of order,
 or are working with a variable from a cell that you have since deleted,
 so that once your collaborator tries to run the file in sequential order,
-the would (in the best case scenario) get an error 
+they would (in the best case scenario) get an error 
 and (in the worst case scenario) they might get a different output without noticing.
-Collaborating with `.Rmd` files makes it easier for collaborators to review pull request,
+Collaborating with `.Rmd` files makes it easier for collaborators to see and make changes,
 but it is also important to remember that in order to run the notebook locally,
 all collaborators need to have Jupytext installed.
 
