@@ -151,8 +151,8 @@ you can type out the full name and then press <kbd>Shift + Tab</kbd>
 to bring up a help dialogue.
 For the `numpy.mean` function
 you can see that the first argument `a` should be "array-like".
-An array is essentially just a sequence of numbers,
-such as a list `[]` or tuple `()`.
+(An "array-like" object is a sequence of numbers
+such as a list `[]`, tuple `()`, or numpy array.)
 Instead of manually activating the pop up menu every time,
 JupyterLab offers a tool called "Contextual Help",
 which displays help information automatically as you type.
