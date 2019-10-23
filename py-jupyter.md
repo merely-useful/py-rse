@@ -137,7 +137,8 @@ which is outside the scope of this material.
  <!--TODO Depending on where this section will be in the book, some of these concepts might not have been introduced (packages, lists). -->
 
 Once you start out using Python,
-you don't know what functions are available within each package.
+When you start out using Python, 
+it's hard to know what functions are available within each package.
 If you're working with the `numpy` package in a Jupyter notebook,
 you can type `numpy.`<kbd>Tab</kbd> (that is numpy + period + tab-key)
 and a small menu will pop up showing all the available functions in the `numpy` module.
