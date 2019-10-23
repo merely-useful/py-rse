@@ -34,17 +34,15 @@ RSE_FILES=\
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
   rse-automate.Rmd \
-  backlog.Rmd \
+  rse-teams.Rmd \
   style.Rmd \
   rse-project.Rmd \
-  inclusive.Rmd \
   rse-ci.Rmd \
   rse-package-r.Rmd \
   rse-package-py.Rmd \
   rse-correct.Rmd \
   rse-publish.Rmd \
-  teamwork.Rmd \
-  finale.Rmd \
+  rse-finale.Rmd \
   rse-objectives.Rmd \
   rse-keypoints.Rmd \
   rse-solutions.Rmd
@@ -142,6 +140,10 @@ _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
 clean :
 	@rm -rf _book _bookdown_files _main.Rmd *.log rse.Rmd
 	@find . -name '*~' -exec rm {} \;
+
+## chapters     : check consistency of chapters.
+chapters :
+	@make settings | bin/chapters.py _rse.yml RSE_FILES rse-objectives.Rmd rse-keypoints.Rmd
 
 ## links        : check that all links are defined and used.
 links :

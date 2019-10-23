@@ -1,4 +1,0 @@
--   Create issues for bugs, enhancement requests, and discussions.
--   Add people to issues to show who is responsible for working on what.
--   Add labels to issues to identify their purpose.
--   Use rules for issue state transitions to define a workflow for a project.
