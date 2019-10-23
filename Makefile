@@ -138,7 +138,7 @@ _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf _book _bookdown_files _main.Rmd *.log rse.Rmd
+	@rm -rf _book _bookdown_files _main.Rmd *.log index.Rmd r.Rmd py.Rmd rse.Rmd
 	@find . -name '*~' -exec rm {} \;
 
 ## chapters     : check consistency of chapters.
