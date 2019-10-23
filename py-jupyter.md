@@ -157,12 +157,16 @@ such as a list `[]`, tuple `()`, or numpy array.)
 Instead of manually activating the pop up menu every time,
 JupyterLab offers a tool called "Contextual Help",
 which displays help information automatically as you type.
-This very useful and it is a good habit to always have it open next to the Notebook.
+When you're using unfamiliar packages and functions,
+it is a good habit to leave the Contextual Help open next to the notebook.
+You can achieve this by dragging opening the Contextual Help tab
+and dragging it to either side of the notebook window.
+The unformatted docstring can be seen by prepending or appending a `?` to the function name,
+e.g. `numpy.mean?`.
+Two `?` (`numpy.mean??`) will show the full source code for the function.
 More help is available via the "Help" menu,
 which links to useful online resources
 (for example `Help --> JupyterLab Reference`).
-The unformatted docstring can be seen by prepending or appending a `?` to the function name, e.g. `numpy.mean?`.
-Two `?` (`numpy.mean??`) will show the full source code for the function.
 
 When you start getting familiar with typing function names,
 you will notice that typing is often faster than looking for functions in menus,
