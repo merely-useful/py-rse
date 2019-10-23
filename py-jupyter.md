@@ -27,7 +27,7 @@ by finding it in the `Anaconda navigator`,
 or directly from the start menu if your operating system supports it.
 This should output some text in the terminal and open a new tab in your default browser.
 The JupyterLab launcher page is shown on startup.
-to create a new notebook,
+To create a new notebook,
 click the big Python tile under the notebook section or go to `File --> New --> Notebook`.
 If you click on the File Browser in the sidebar to the left (the topmost folder icon),
 you will see that a new file has been created in the current directory.
