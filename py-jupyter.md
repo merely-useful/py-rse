@@ -48,7 +48,7 @@ click the play button in the toolbar or press <kbd>Shift</kbd> + <kbd>Enter</kbd
 4 + 5
 ```
 
-The output will appears just under the input cell.
+The output will appear just under the input cell.
 By default,
 the next existing cell is selected,
 or a new empty one is created if there is no next cell.
