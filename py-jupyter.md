@@ -3,7 +3,7 @@
 Although the Python interpreter is very powerful,
 it is commonly bundled with other useful tools and interfaces
 specifically designed for exploratory data analysis.
-One such interface is the JupyterLab from the Jupyter project.
+One such interface is JupyterLab from the Jupyter project.
 
 Jupyter originates from a project called IPython,
 an effort to make Python development more interactive.
