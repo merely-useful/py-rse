@@ -228,7 +228,7 @@ or can be set up to occur for [all notebooks automatically][jupytext-global-conf
 [jupytext-global-config]: https://jupytext.readthedocs.io/en/latest/using-server.html#global-configuration
 
 Since Jupytext can open `.Rmd` files as notebooks,
-you only need to commit the `.Rmd` file to version control.
+you only need to commit the `.Rmd` file to version control, and you only need the `.Rmd` file to regenerate the notebook file.
 `.Rmd` files open as text when double clicked in the JupyterLab file browser.
 To open them as notebooks,
 right click the filename and select "Open with".
