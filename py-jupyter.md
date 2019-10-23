@@ -186,8 +186,6 @@ they are not always that easy to read for humans,
 which can create problems when working with Jupyter notebooks under version control.
 The Markdown format is easier for us to read
 and facilitates reading version control diffs and making more granular commits.
-You also don't have to worry about accidentally misplacing braces within the JSON file,
-which would cause the notebook to fail to render.
 
 Jupytext is a JupyterLab extension that can automatically save Jupyter notebooks in plain text formats,
 such as Markdown.
