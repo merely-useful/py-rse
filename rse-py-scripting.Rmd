@@ -1,0 +1,154 @@
+# Command line programs {#rse-py-scripting}
+
+## Questions {#rse-py-scripting-questions}
+
+```{r, child="questions/rse-py-scripting.md"}
+```
+
+
+## Introduction {#rse-py-scripting-intro}
+
+The Jupyter Notebook, PyCharm and other interactive tools
+are great for prototyping code and exploring data,
+but in many cases you will ultimately want to take the code you've developed
+using those tools and apply it to thousands of data files, 
+run it with many different parameters,
+and/or combine it with other programs in a data analysis pipeline. 
+To effectively perform these tasks,
+it is often necessary to turn the code you've developed into a standalone program 
+that can be run from the Unix shell,
+just like other command-line tools.
+
+In this chapter we take the code we developed earlier (TODO: Link)
+and turn it into a Python script (i.e. a command line program written in Python).
+
+
+## A template script {#rse-py-scripting-template}
+
+In general, the first thing that gets added to any Python script is the following:
+
+```python
+if __name__ == '__main__':
+    main()
+```
+
+The reason we need these two lines of code
+is to differentiate between running a Python file as a standalone program
+and importing it as a module. 
+When you import a Python file as a module,
+the `__name__` variable is automatically set to the name of the file
+(e.g. when importing script.py, `__name__` is `script`).
+When running a Python file as a standalone program,
+`__name__` is always set to `__main__`.
+This means that we can separate the two cases above by checking the value of `__name__`.
+When the Python file is running as a standalone program,
+we want to execute its main functionality.
+Conventionally, this functionality is defined inside a function named `main()`,
+but you could call this function whatever you prefer.
+
+The next thing you'll need is a library to parse the command line for input arguments.
+The most widely used option is 
+[argparse](https://docs.python.org/3/library/argparse.html).
+
+Putting those together,
+let's create a basic python script called `script_template.py` 
+by opening our favourite text editor and entering the following:
+
+```python
+import argparse
+
+#
+# All your functions (that will be called by main()) go here.
+#
+
+def main(inargs):
+    """Run the program."""
+
+    print('Input file: ', inargs.infile)
+    print('Output file: ', inargs.outfile)
+
+
+if __name__ == '__main__':
+
+    description='Print the input arguments to the screen.'
+    parser = argparse.ArgumentParser(description=description)
+    
+    parser.add_argument("infile", type=str, help="Input file name")
+    parser.add_argument("outfile", type=str, help="Output file name")
+
+    args = parser.parse_args()            
+    main(args)
+```
+
+By running `script_template.py` at the command line
+we'll see that `argparse` handles all the input arguments:
+
+```shell
+$ python script_template.py in.csv out.png
+```
+
+```text
+Input file:  in.csv
+Output file:  out.png
+```
+
+It also generates help information for the user:
+
+```shell
+$ python script_template.py -h
+```
+
+```text
+usage: script_template.py [-h] infile outfile
+
+Print the input arguments to the screen.
+
+positional arguments:
+  infile      Input file name
+  outfile     Output file name
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+and issues errors when users give the program invalid arguments:
+
+```shell
+$ python script_template.py in.csv
+```
+
+```text
+usage: script_template.py [-h] infile outfile
+script_template.py: error: the following arguments are required: outfile
+```
+
+## Adding our code {#rse-py-scripting-code}
+
+Using this template as a starting point,
+we can add the functions we developed previously to a script called...
+
+TODO: In this section we will take the code developed in the novice book
+and turn it into a Python script that can be executed at the command line.
+See [this lesson](https://carpentrieslab.github.io/python-aos-lesson/04-cmdline/index.html)
+for an example of this approach in action.
+
+> **Code reuse**
+>
+> In the novice lessons,
+> we learned how to reuse (rather than cut and paste)
+> code by defining functions (TODO: link to relevant novice sections).
+> In order to use those functions in other python notebooks/scripts,
+> we saw that we can save them in a file (called a module)
+> that can be imported (TODO: link to relevant novice sections).
+> In this chapter, we've seen that we can go one step further
+> and run our Python code outside of a Python environment,
+> by writing Python scripts that can be executed at the command line.
+
+
+## Key Points {#rse-pyscripts-keypoints}
+
+```{r, child="keypoints/rse-py-scripting.md"}
+```
+
+```{r, child="./links.md"}
+```
