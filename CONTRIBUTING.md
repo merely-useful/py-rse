@@ -1,4 +1,4 @@
-# Contributing
+# Contributing {#contributing}
 
 Contributions of all kinds are welcome.
 By offering a contribution, you agree to abide by our [Code of Conduct](CONDUCT.md)
@@ -19,7 +19,7 @@ and that your work may be made available under the terms of [our license](LICENS
     and put `Closes #N` (e.g., `Closes #20`)
     on a line by itself at the end of the PR's long description.
 
-## Style Guide
+## Style Guide {#contributing-style}
 
 We follow the [tidyverse style guide](https://style.tidyverse.org/) for R and
 [PEP 8](https://www.python.org/dev/peps/pep-0008/) for Python as closely as
