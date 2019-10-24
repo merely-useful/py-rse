@@ -30,7 +30,8 @@ PY_FILES=\
 RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
-  rse-bash.Rmd \
+  rse-bash-basics.Rmd \
+  rse-bash-advanced.Rmd \
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
   rse-automate.Rmd \

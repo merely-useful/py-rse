@@ -1,4 +1,4 @@
-# The Basics of the Bash Shell {#rse-bash-basics}
+# The Basics of the Unix Shell {#rse-bash-basics}
 
 ```{r rse-bash-setup, include=FALSE}
 source("_common.R")
@@ -1800,6 +1800,779 @@ andamooka_prec.csv.bak badingarra_prec.csv.bak bellambi_prec.csv.bak tuggeranong
 ```
 
 ## Exercises {#rse-bash-basics-exercises}
+
+### Exploring more `ls` flags {#rse-bash-basics-ex-more-ls}
+
+You can also use two options at the same time. What does the command `ls` do when used
+with the `-l` option? What about if you use both the `-l` and the `-h` option?
+
+Some of its output is about properties that we do not cover in this lesson (such
+as file permissions and ownership), but the rest should be useful
+nevertheless.
+
+### Listing recursively and by time {#rse-bash-basics-ex-ls-rt}
+
+The command `ls -R` lists the contents of directories recursively, i.e., lists
+their sub-directories, sub-sub-directories, and so on at each level. The command
+`ls -t` lists things by time of last change, with most recently changed files or
+directories first.
+
+In what order does `ls -R -t` display things? Hint: `ls -l` uses a long listing
+format to view timestamps.
+
+### Absolute and relative paths {#rse-bash-basics-ex-paths}
+
+Starting from `/Users/amanda/data`,
+which of the following commands could Amanda use to navigate to her home directory,
+which is `/Users/amanda`?
+
+1. `cd .`
+2. `cd /`
+3. `cd /home/amanda`
+4. `cd ../..`
+5. `cd ~`
+6. `cd home`
+7. `cd ~/data/..`
+8. `cd`
+9. `cd ..`
+
+### Relative path resolution {#rse-bash-basics-ex-resolve-rel-path}
+
+Using the filesystem diagram below, if `pwd` displays `/Users/thing`,
+what will `ls -F ../backup` display?
+
+1.  `../backup: No such file or directory`
+2.  `2012-12-01 2013-01-08 2013-01-27`
+3.  `2012-12-01/ 2013-01-08/ 2013-01-27/`
+4.  `original/ pnas_final/ pnas_sub/`
+
+FIXME: figure (filesystem for exercises)
+
+### `ls` reading comprehension {#rse-bash-basics-ex-reading-ls}
+
+Using the filesystem diagram below,
+if `pwd` displays `/Users/backup`,
+and `-r` tells `ls` to display things in reverse order,
+what command(s) will result in the following output:
+
+```shell
+pnas_sub/ pnas_final/ original/
+```
+
+FIXME: figure (filesystem for exercises)
+
+1.  `ls pwd`
+2.  `ls -r -F`
+3.  `ls -r -F /Users/backup`
+
+### Creating files a different way {#rse-bash-basics-ex-touch}
+
+We have seen how to create text files using the `nano` editor.
+Now, try the following command:
+
+```shell
+$ touch my_file.txt
+```
+
+1.  What did the `touch` command do?
+    When you look at your current directory using the GUI file explorer,
+    does the file show up?
+
+2.  Use `ls -l` to inspect the files.  How large is `my_file.txt`?
+
+3.  When might you want to create a file this way?
+
+### Moving to the current folder {#rse-bash-basics-ex-move-dot}
+
+After running the following commands,
+Jamie realizes that she put the files `sucrose.dat` and `maltose.dat` into the wrong folder:
+
+```shell
+$ ls -F
+  analyzed/ raw/
+$ ls -F analyzed
+  fructose.dat glucose.dat maltose.dat sucrose.dat
+$ cd raw/
+```
+
+Fill in the blanks to move these files to the current folder
+(i.e., the one she is currently in):
+
+```shell
+$ mv ___/sucrose.dat  ___/maltose.dat ___
+```
+
+### Renaming files {#rse-bash-basics-ex-renaming-files}
+
+Suppose that you created a plain-text file in your current directory to contain a list of the
+statistical tests you will need to do to analyze your data, and named it: `statstics.txt`
+
+After creating and saving this file you realize you misspelled the filename! You want to
+correct the mistake, which of the following commands could you use to do so?
+
+1. `cp statstics.txt statistics.txt`
+2. `mv statstics.txt statistics.txt`
+3. `mv statstics.txt .`
+4. `cp statstics.txt .`
+
+### Moving and copying {#rse-bash-basics-ex-last-ls}
+
+What is the output of the closing `ls` command in the sequence shown below?
+
+```shell
+$ pwd
+```
+ 
+```text
+/Users/jamie/data
+```
+ 
+```shell
+$ ls
+```
+ 
+```text
+proteins.dat
+```
+ 
+```shell
+$ mkdir recombine
+$ mv proteins.dat recombine/
+$ cp recombine/proteins.dat ../proteins-saved.dat
+$ ls
+```
+
+1.   `proteins-saved.dat recombine`
+2.   `recombine`
+3.   `proteins.dat recombine`
+4.   `proteins-saved.dat`
+
+### Using `rm` safely {#rse-bash-basics-ex-safe-rm}
+
+What happens when we execute `rm -i thesis_backup/quotations.txt`?
+Why would we want this protection when using `rm`?
+
+### Copy with multiple filenames {#rse-bash-basics-ex-copy-multi}
+
+For this exercise, you can test the commands in the `data-shell/data` directory.
+
+In the example below, what does `cp` do when given several filenames and a directory name?
+
+```shell
+$ mkdir backup
+$ cp amino-acids.txt animals.txt backup/
+```
+
+In the example below, what does `cp` do when given three or more file names?
+
+```shell
+$ ls -F
+```
+
+```text
+amino-acids.txt  animals.txt  backup/  elements/  morse.txt  pdb/  planets.txt  salmon.txt  sunspot.txt
+```
+
+```shell
+$ cp amino-acids.txt animals.txt morse.txt 
+```
+
+### List filenames matching a pattern {#rse-bash-basics-ex-ls-match}
+
+When run in the `molecules` directory, which `ls` command(s) will
+produce this output?
+
+`ethane.pdb   methane.pdb`
+
+1. `ls *t*ane.pdb`
+2. `ls *t?ne.*`
+3. `ls *t??ne.pdb`
+4. `ls ethane.*`
+
+### More on wildcards {#rse-bash-basics-ex-more-wildcards}
+
+Sam has a directory containing calibration data, datasets, and descriptions of
+the datasets:
+
+```text
+.
+├── 2015-10-23-calibration.txt
+├── 2015-10-23-dataset1.txt
+├── 2015-10-23-dataset2.txt
+├── 2015-10-23-dataset_overview.txt
+├── 2015-10-26-calibration.txt
+├── 2015-10-26-dataset1.txt
+├── 2015-10-26-dataset2.txt
+├── 2015-10-26-dataset_overview.txt
+├── 2015-11-23-calibration.txt
+├── 2015-11-23-dataset1.txt
+├── 2015-11-23-dataset2.txt
+├── 2015-11-23-dataset_overview.txt
+├── backup
+│   ├── calibration
+│   └── datasets
+└── send_to_bob
+    ├── all_datasets_created_on_a_23rd
+    └── all_november_files
+```
+
+Before heading off to another field trip, she wants to back up her data and
+send some datasets to her colleague Bob. Sam uses the following commands
+to get the job done:
+
+```shell
+$ cp *dataset* backup/datasets
+$ cp ____calibration____ backup/calibration
+$ cp 2015-____-____ send_to_bob/all_november_files/
+$ cp ____ send_to_bob/all_datasets_created_on_a_23rd/
+```
+
+Help Sam by filling in the blanks.
+
+The resulting directory structure should look like this
+```text
+.
+├── 2015-10-23-calibration.txt
+├── 2015-10-23-dataset1.txt
+├── 2015-10-23-dataset2.txt
+├── 2015-10-23-dataset_overview.txt
+├── 2015-10-26-calibration.txt
+├── 2015-10-26-dataset1.txt
+├── 2015-10-26-dataset2.txt
+├── 2015-10-26-dataset_overview.txt
+├── 2015-11-23-calibration.txt
+├── 2015-11-23-dataset1.txt
+├── 2015-11-23-dataset2.txt
+├── 2015-11-23-dataset_overview.txt
+├── backup
+│   ├── calibration
+│   │   ├── 2015-10-23-calibration.txt
+│   │   ├── 2015-10-26-calibration.txt
+│   │   └── 2015-11-23-calibration.txt
+│   └── datasets
+│       ├── 2015-10-23-dataset1.txt
+│       ├── 2015-10-23-dataset2.txt
+│       ├── 2015-10-23-dataset_overview.txt
+│       ├── 2015-10-26-dataset1.txt
+│       ├── 2015-10-26-dataset2.txt
+│       ├── 2015-10-26-dataset_overview.txt
+│       ├── 2015-11-23-dataset1.txt
+│       ├── 2015-11-23-dataset2.txt
+│       └── 2015-11-23-dataset_overview.txt
+└── send_to_bob
+    ├── all_datasets_created_on_a_23rd
+    │   ├── 2015-10-23-dataset1.txt
+    │   ├── 2015-10-23-dataset2.txt
+    │   ├── 2015-10-23-dataset_overview.txt
+    │   ├── 2015-11-23-dataset1.txt
+    │   ├── 2015-11-23-dataset2.txt
+    │   └── 2015-11-23-dataset_overview.txt
+    └── all_november_files
+        ├── 2015-11-23-calibration.txt
+        ├── 2015-11-23-dataset1.txt
+        ├── 2015-11-23-dataset2.txt
+        └── 2015-11-23-dataset_overview.txt
+```
+
+### Organizing directories and files {#rse-bash-basics-ex-organizing}
+
+Jamie is working on a project and she sees that her files aren't very well
+organized:
+
+```shell
+$ ls -F
+```
+
+```text
+analyzed/  fructose.dat    raw/   sucrose.dat
+```
+
+The `fructose.dat` and `sucrose.dat` files contain output from her data
+analysis. What command(s) covered in this lesson does she need to run so that the commands below will
+produce the output shown?
+
+```shell
+$ ls -F
+```
+
+```text
+analyzed/   raw/
+```
+ 
+```shell
+$ ls analyzed
+```
+
+```text
+fructose.dat    sucrose.dat
+```
+
+### Reproduce a directory structure {#rse-bash-basics-ex-reproduce-structure}
+
+You're starting a new experiment, and would like to duplicate the directory
+structure from your previous experiment so you can add new data.
+
+Assume that the previous experiment is in a folder called '2016-05-18',
+which contains a `data` folder that in turn contains folders named `raw` and
+`processed` that contain data files.  The goal is to copy the folder structure
+of the `2016-05-18-data` folder into a folder called `2016-05-20`
+so that your final directory structure looks like this:
+
+	2016-05-20/
+	└── data
+	    ├── processed
+	    └── raw
+ 
+Which of the following set of commands would achieve this objective?
+
+What would the other commands do?
+
+```shell
+$ mkdir 2016-05-20
+$ mkdir 2016-05-20/data
+$ mkdir 2016-05-20/data/processed
+$ mkdir 2016-05-20/data/raw
+```
+
+```shell
+$ mkdir 2016-05-20
+$ cd 2016-05-20
+$ mkdir data
+$ cd data
+$ mkdir raw processed
+```
+
+```shell
+$ mkdir 2016-05-20/data/raw
+$ mkdir 2016-05-20/data/processed
+```
+ 
+```shell
+$ mkdir 2016-05-20
+$ cd 2016-05-20
+$ mkdir data
+$ mkdir raw processed
+```
+ 
+### What does `sort -n` do? {#rse-bash-basics-ex-sort-n}
+
+If we run `sort` on a file containing the following lines:
+
+```text
+10
+2
+19
+22
+6
+```
+
+the output is:
+
+```text
+10
+19
+2
+22
+6
+```
+
+If we run `sort -n` on the same input, we get this instead:
+
+```text
+2
+6
+10
+19
+22
+```
+
+Explain why `-n` has this effect.
+
+### What does `>>` mean? {#rse-bash-basics-ex-redirect-append}
+
+We have seen the use of `>`, but there is a similar operator `>>` which works slightly differently.
+We'll learn about the differences between these two operators by printing some strings.
+We can use the `echo` command to print strings e.g.
+
+```shell
+$ echo The echo command prints text
+```
+
+```text
+The echo command prints text
+```
+
+Now test the commands below to reveal the difference between the two operators:
+
+```shell
+$ echo hello > testfile01.txt
+```
+
+and:
+
+```shell
+$ echo hello >> testfile02.txt
+```
+
+Hint: Try executing each command twice in a row and then examining the output files.
+
+### Appending data {#rse-bash-basics-ex-append-data}
+
+We have already met the `head` command, which prints lines from the start of a file.
+`tail` is similar, but prints lines from the end of a file instead.
+
+Consider the file `data-shell/data/animals.txt`.
+After these commands, select the answer that
+corresponds to the file `animals-subset.txt`:
+
+```shell
+$ head -n 3 animals.txt > animals-subset.txt
+$ tail -n 2 animals.txt >> animals-subset.txt
+```
+
+1. The first three lines of `animals.txt`
+2. The last two lines of `animals.txt`
+3. The first three lines and the last two lines of `animals.txt`
+4. The second and third lines of `animals.txt`
+
+### Piping commands {#rse-bash-basics-ex-piping}
+
+In our current directory, we want to find the 3 files which have the least number of
+lines. Which command listed below would work?
+
+1. `wc -l * > sort -n > head -n 3`
+2. `wc -l * | sort -n | head -n 1-3`
+3. `wc -l * | head -n 3 | sort -n`
+4. `wc -l * | sort -n | head -n 3`
+
+### Why does `uniq` only remove adjacent duplicates? {#rse-bash-basics-ex-uniq-adjacent}
+
+The command `uniq` removes adjacent duplicated lines from its input.
+For example, the file `data-shell/data/salmon.txt` contains:
+
+```text
+coho
+coho
+steelhead
+coho
+steelhead
+steelhead
+```
+
+Running the command `uniq salmon.txt` from the `data-shell/data` directory produces:
+
+```text
+coho
+steelhead
+coho
+steelhead
+```
+
+Why do you think `uniq` only removes *adjacent* duplicated lines?
+(Hint: think about very large data sets.) What other command could
+you combine with it in a pipe to remove all duplicated lines?
+
+### Pipe reading comprehension {#rse-bash-basics-ex-reading-pipes}
+
+A file called `animals.txt` (in the `data-shell/data` folder) contains the following data:
+
+```text
+2012-11-05,deer
+2012-11-05,rabbit
+2012-11-05,raccoon
+2012-11-06,rabbit
+2012-11-06,deer
+2012-11-06,fox
+2012-11-07,rabbit
+2012-11-07,bear
+```
+
+What text passes through each of the pipes and the final redirect in the pipeline below?
+
+```shell
+$ cat animals.txt | head -n 5 | tail -n 3 | sort -r > final.txt
+```
+ 
+Hint: build the pipeline up one command at a time to test your understanding
+
+### Pipe construction {#rse-bash-basics-ex-pipe-construction}
+
+For the file `animals.txt` from the previous exercise, consider the following command:
+
+```shell
+$ cut -d , -f 2 animals.txt
+```
+
+The `cut` command is used to remove or "cut out" certain sections of each line in the file.
+The `-d` option is used to define the delimiter.
+A **delimiter** is a character that is used to separate each line of text into columns.
+The default delimiter is <kbd>Tab</kbd>,
+meaning that the `cut` command will automatically assume that
+values in different columns will be separated by a tab.
+The `-f` option is used to specify the field (column) to cut out.
+The command above uses the `-d` option to split each line by comma,
+and the `-f` option to print the second field in each line, to give the following output:
+
+```text
+deer
+rabbit
+raccoon
+rabbit
+deer
+fox
+rabbit
+bear
+```
+
+What other command(s) could be added to this in a pipeline to find
+out what animals the file contains (without any duplicates in their
+names)?
+
+### Which pipe? {#rse-bash-basics-ex-which-pipe}
+
+The file `animals.txt` contains 8 lines of data formatted as follows:
+
+```text
+2012-11-05,deer
+2012-11-05,rabbit
+2012-11-05,raccoon
+2012-11-06,rabbit
+...
+```
+
+The `uniq` command has a `-c` option which gives a count of the
+number of times a line occurs in its input.  Assuming your current
+directory is `data-shell/data/`, what command would you use to produce
+a table that shows the total count of each type of animal in the file?
+
+1.  `sort animals.txt | uniq -c`
+2.  `sort -t, -k2,2 animals.txt | uniq -c`
+3.  `cut -d, -f 2 animals.txt | uniq -c`
+4.  `cut -d, -f 2 animals.txt | sort | uniq -c`
+5.  `cut -d, -f 2 animals.txt | sort | uniq -c | wc -l`
+
+### Wildcard expressions {#rse-bash-basics-ex-wildcard-expressions}
+
+Wildcard expressions can be very complex, but you can sometimes write
+them in ways that only use simple syntax, at the expense of being a bit
+more verbose.
+Consider the directory `data-shell/north-pacific-gyre/2012-07-03` :
+the wildcard expression `*[AB].txt`
+matches all files ending in `A.txt` or `B.txt`. Imagine you forgot about
+this.
+
+1.  Can you match the same set of files with basic wildcard expressions
+    that do not use the `[]` syntax? *Hint*: You may need more than one
+    expression.
+
+2.  The expression that you found and the expression from the lesson match the
+    same set of files in this example. What is the small difference between the
+    outputs?
+
+3.  Under what circumstances would your new expression produce an error message
+    where the original one would not?
+    
+### Removing unneeded files {#rse-bash-basics-ex-remove-unneeded}
+
+Suppose you want to delete your processed data files, and only keep
+your raw files and processing script to save storage.
+The raw files end in `.dat` and the processed files end in `.txt`.
+Which of the following would remove all the processed data files,
+and *only* the processed data files?
+
+1. `rm ?.txt`
+2. `rm *.txt`
+3. `rm * .txt`
+4. `rm *.*`
+
+### Doing a dry run {#rse-bash-basics-ex-loop-dry-run}
+
+A loop is a way to do many things at once --- or to make many mistakes at
+once if it does the wrong thing. One way to check what a loop *would* do
+is to `echo` the commands it would run instead of actually running them.
+
+Suppose we want to preview the commands the following loop will execute
+without actually running those commands:
+
+```shell
+$ for file in *.pdb
+> do
+>   analyze $file > analyzed-$file
+> done
+```
+
+What is the difference between the two loops below, and which one would we
+want to run?
+
+```shell
+# Version 1
+$ for file in *.pdb
+> do
+>   echo analyze $file > analyzed-$file
+> done
+```
+
+```shell
+# Version 2
+$ for file in *.pdb
+> do
+>   echo "analyze $file > analyzed-$file"
+> done
+```
+
+### Nested loops {#rse-bash-basics-ex-nested-loops}
+
+Suppose we want to set up up a directory structure to organize
+some experiments measuring reaction rate constants with different compounds
+*and* different temperatures.  What would be the
+result of the following code:
+
+```shell
+$ for species in cubane ethane methane
+> do
+>     for temperature in 25 30 37 40
+>     do
+>         mkdir $species-$temperature
+>     done
+> done
+```
+
+### Variables in loops {#rse-bash-basics-ex-loop-variables}
+
+This exercise refers to the `data-shell/molecules` directory.
+`ls` gives the following output:
+
+```text
+cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
+```
+
+What is the output of the following code?
+
+```shell
+$ for datafile in *.pdb
+> do
+>    ls *.pdb
+> done
+```
+
+Now, what is the output of the following code?
+
+```shell
+$ for datafile in *.pdb
+> do
+>	ls $datafile
+> done
+```
+
+Why do these two loops give different outputs?
+
+### Limiting sets of files {#rse-bash-basics-ex-limiting-file-sets}
+
+What would be the output of running the following loop in the `data-shell/molecules` directory?
+
+```shell
+$ for filename in c*
+> do
+>    ls $filename
+> done
+```
+
+1.  No files are listed.
+2.  All files are listed.
+3.  Only `cubane.pdb`, `octane.pdb` and `pentane.pdb` are listed.
+4.  Only `cubane.pdb` is listed.
+
+How would the output differ from using this command instead?
+
+```shell
+$ for filename in *c*
+> do
+>    ls $filename
+> done
+```
+
+1.  The same files would be listed.
+2.  All the files are listed this time.
+3.  No files are listed this time.
+4.  The files `cubane.pdb` and `octane.pdb` will be listed.
+5.  Only the file `octane.pdb` will be listed.
+
+### Saving to a file in a loop {#rse-bash-basics-ex-loop-save}
+
+In the `data-shell/molecules` directory, what is the effect of this loop?
+
+```shell
+for alkanes in *.pdb
+> do
+>     echo $alkanes
+>     cat $alkanes > alkanes.pdb
+> done
+```
+
+1.  Prints `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, `pentane.pdb` and `propane.pdb`,
+    and the text from `propane.pdb` will be saved to a file called `alkanes.pdb`.
+2.  Prints `cubane.pdb`, `ethane.pdb`, and `methane.pdb`, and the text from all three files would be
+    concatenated and saved to a file called `alkanes.pdb`.
+3.  Prints `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, and `pentane.pdb`, and the text
+    from `propane.pdb` will be saved to a file called `alkanes.pdb`.
+4.  None of the above.
+
+Also in the `data-shell/molecules` directory, what would be the output of the following loop?
+
+```shell
+for datafile in *.pdb
+> do
+>     cat $datafile >> all.pdb
+> done
+```
+
+1.  All of the text from `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, and
+    `pentane.pdb` would be concatenated and saved to a file called `all.pdb`.
+2.  The text from `ethane.pdb` will be saved to a file called `all.pdb`.
+3.  All of the text from `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, `pentane.pdb`
+    and `propane.pdb` would be concatenated and saved to a file called `all.pdb`.
+4.  All of the text from `cubane.pdb`, `ethane.pdb`, `methane.pdb`, `octane.pdb`, `pentane.pdb`
+    and `propane.pdb` would be printed to the screen and saved to a file called `all.pdb`.
+
+### List unique species {#rse-bash-basics-ex-list-unique}
+
+Leah has several hundred data files, each of which is formatted like this:
+
+```text
+2013-11-05,deer,5
+2013-11-05,rabbit,22
+2013-11-05,raccoon,7
+2013-11-06,rabbit,19
+2013-11-06,deer,2
+2013-11-06,fox,1
+2013-11-07,rabbit,18
+2013-11-07,bear,1
+```
+
+An example of this type of file is given in `data-shell/data/animal-counts/animals.txt`.
+ 
+We can use the command `cut -d , -f 2 animals.txt | sort | uniq`
+to produce the unique species in `animals.txt`.
+In order to avoid having to type out this series of commands every time,
+a scientist may choose to write a shell script instead.
+
+Write a shell script called `species.sh` that takes any number of
+filenames as command-line arguments,
+and uses a variation of the above command to print a list
+of the unique species appearing in each of those files separately.
+
+### Why does `history` record commands before running them? {#rse-bash-basics-ex-history-order}
+
+If you run the command:
+
+```shell
+$ history | tail -n 5 > recent.sh
+```
+
+the last command in the file is the `history` command itself, i.e.,
+the shell has added `history` to the command log before actually
+running it. In fact, the shell *always* adds commands to the log
+before running them. Why do you think it does this?
 
 ## Key Points {#rse-bash-basics-keypoints}
 
