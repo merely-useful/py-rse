@@ -1,3 +1,6 @@
+-   Explain what an issue tracking tool does and what it should be used for.
+-   Explain how to use labels on issues to manage work.
+-   Describe the information a well-written issue should contain.
 -   Explain the purpose of a Code of Conduct and the essential features an effective one must have.
 -   Explain why adding licensing information to a repository is important.
 -   Explain differences in licensing and social expectations.

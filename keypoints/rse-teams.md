@@ -1,3 +1,7 @@
+-   Create issues for bugs, enhancement requests, and discussions.
+-   Add people to issues to show who is responsible for working on what.
+-   Add labels to issues to identify their purpose.
+-   Use rules for issue state transitions to define a workflow for a project.
 -   Create an explicit Code of Conduct for your project modelled on the Contributor Covenant.
 -   Be clear about how to report violations of the Code of Conduct and who will handle such reports.
 -   People who are not lawyers should not try to write licenses.
@@ -5,3 +9,4 @@
 -   People who incorporate GPL'd software into their own software must make their software also open under the GPL license; most other open licenses do not require this.
 -   The Creative Commons family of licenses allow people to mix and match requirements and restrictions on attribution, creation of derivative works, further sharing, and commercialization.
 -   Be proactive about welcoming and nurturing community members.
+

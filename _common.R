@@ -1,4 +1,3 @@
-
 #' Insert graphics sensibly into an R Markdown document.
 #'
 #' @param file The path to the figure.

@@ -1,4 +1,4 @@
-.PHONY : all clean commands html settings
+.PHONY : all clean chapters commands crossrefs html link settings
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
@@ -30,22 +30,21 @@ PY_FILES=\
 RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
-  rse-bash.Rmd \
+  rse-bash-basics.Rmd \
+  rse-bash-advanced.Rmd \
   rse-py-scripting.Rmd \
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
   rse-automate.Rmd \
-  backlog.Rmd \
+  rse-teams.Rmd \
   style.Rmd \
   rse-project.Rmd \
-  inclusive.Rmd \
   rse-ci.Rmd \
   rse-package-r.Rmd \
   rse-package-py.Rmd \
   rse-correct.Rmd \
   rse-publish.Rmd \
-  teamwork.Rmd \
-  finale.Rmd \
+  rse-finale.Rmd \
   rse-objectives.Rmd \
   rse-keypoints.Rmd \
   rse-solutions.Rmd
@@ -141,16 +140,26 @@ _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf _book _bookdown_files _main.Rmd *.log rse.Rmd
+	@rm -rf _book _bookdown_files _main.Rmd *.log index.Rmd r.Rmd py.Rmd rse.Rmd
 	@find . -name '*~' -exec rm {} \;
 
-## links        : check that all links are defined and used.
-links :
-	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+## chapters     : check consistency of chapters.
+chapters :
+	@make settings | bin/chapters.py _rse.yml RSE_FILES rse-objectives.Rmd rse-keypoints.Rmd
+
+## crossrefs    : check cross-references.
+crossrefs :
+	@bin/crossrefs.py "Novice R" ${R_FILES} ${COMMON_FILES}
+	@bin/crossrefs.py "Novice Python" ${PY_FILES} ${COMMON_FILES}
+	@bin/crossrefs.py "RSE" ${RSE_FILES} ${COMMON_FILES}
 
 ## images       : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+
+## links        : check that all links are defined and used.
+links :
+	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
 
 ## settings     : echo all variable values.
 settings :
@@ -159,4 +168,4 @@ settings :
 	@echo R_FILES: ${R_FILES}
 	@echo PY_FILES: ${PY_FILES}
 	@echo RSE_FILES: ${RSE_FILES}
-@echo COMMON_FILES: ${COMMON_FILES}
+	@echo COMMON_FILES: ${COMMON_FILES}

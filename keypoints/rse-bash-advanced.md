@@ -1,0 +1,11 @@
+- Save commands in files (usually called shell scripts) for re-use.
+- `bash filename` runs the commands saved in a file.
+- `$@` refers to all of a shell script's command-line arguments.
+- `$1`, `$2`, etc., refer to the first command-line argument, the second command-line argument, etc.
+- Place variables in quotes if the values might have spaces in them.
+- Letting users decide what files to process is more flexible and more consistent with built-in Unix commands.
+- `find` finds files with specific properties that match patterns.
+- `grep` selects lines in files that match patterns.
+- `--help` is an option supported by many bash commands, and programs that can be run from within Bash, to display more information on how to use these commands or programs.
+- `man command` displays the manual page for a given command.
+- `$(command)` inserts a command's output in place.
