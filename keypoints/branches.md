@@ -1,3 +1,0 @@
--   Create a new branch for every feature, and only work on that feature in that branch.
--   Always create branches from `master`, and always merge to `master`.
--   Use rebasing to combine several related commits into a single commit before merging.

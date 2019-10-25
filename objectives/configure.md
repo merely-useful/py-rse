@@ -1,4 +1,0 @@
--   Describe the four levels of configuration typically used by robust software.
--   Explain what an overlay configuration is.
--   Explain why nested configuration options are usually not a good idea.
--   Add flat overlay configuration to a small application.
