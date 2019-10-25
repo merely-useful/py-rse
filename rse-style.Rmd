@@ -1,17 +1,8 @@
-# Code Style and Review {#style}
+# Code Style, Review, and Refactoring {#rse-style}
 
 ```{r style-setup, include=FALSE}
 source("_common.R")
 ```
-
-## Questions {#style-questions}
-
--   How should I name my variables and functions?
--   How should I organize my code so that other people can understand it?
--   How can I make functions more reusable?
--   What should my code do when an error occurs?
-
-## Introduction {#style-intro}
 
 To paraphrase @Dobz1973,
 nothing in software development makes sense except in light of human psychology.
@@ -40,7 +31,7 @@ as small as one @Petr2014.
 This lesson will look at the mechanics of code review
 and present some short examples of the kinds of things reviewers should look for.
 
-## How should I review someone else's code: {#style-github}
+## How should I review someone else's code? {#rse-style-github}
 
 How you review is just as important as what you look for:
 being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
@@ -129,7 +120,7 @@ Thank your reviewers.
 :   If someone has taken the time to read your code carefully,
     thank them for doing it.
 
-## What are the standard rules of good style for Python programs? {#style-pep8}
+## What are the standard rules of good style for Python programs? {#rse-style-pep8}
 
 The single most important rule of style is to be consistent,
 both internally and with other programs.
@@ -140,6 +131,8 @@ Some of its rules are listed below,
 along with others borrowed from "[Code Smells and Feels][code-smells-and-feels]":
 
 FIXME: add before-and-after examples for each of these.
+
+FIXME: move this to the novice material.
 
 ### Always indent code blocks using 4 spaces, and use spaces instead of tabs.
 
@@ -206,16 +199,14 @@ Nothing should be more than a page long
 or have more than three levels of indentation because of nested loops and conditionals.
 Anything longer or more deeply nested will be hard for readers to fit into [working memory](glossary.html#working-memory);
 when you find yourself needing to break these limits,
-extract a function (Section \@ref(refactor-extract-function)).
+extract a function.
 
 ### Handle special cases at the start of the function.
 
 This helps readers mentally get them out of the way
 and focus on the "normal" case.
-Section \@ref(refactor-short-circuits)
-discusses this in more detail.
 
-## How can I check that code follows style guidelines? {#style-check}
+## How can I check that code follows style guidelines? {#rse-style-check}
 
 Checking that code conforms to guidelines like the ones above can be time consuming,
 but luckily it doesn't have to be done by hand.
@@ -228,7 +219,6 @@ that will do this.
 For example,
 this program is supposed to count the number of stop words in a document:
 
-<!-- src="style/count_stops_1.py" -->
 ```python
 stops = ['a', 'A', 'the', 'The', 'and']
 
@@ -252,14 +242,12 @@ n = count(lines)
 print('number', n)
 ```
 
-<!-- == noindent -->
 When we run this command:
 
 ```shell
 $ pycodestyle count_stops.py
 ```
 
-<!-- == noindent -->
 it prints this report:
 
 ```text
@@ -273,7 +261,6 @@ src/style/count_stops_before.py:15:1: E402 module level import not at top of fil
 
 Fixing these issues gives us this:
 
-<!-- src="style/count_stops_2.py" -->
 ```python
 import sys
 
@@ -330,7 +317,6 @@ Here are things that should be changed:
 After making all these changes,
 our little program looks like this:
 
-<!-- src="style/count_stops_3.py" -->
 ```python
 import sys
 
@@ -352,11 +338,11 @@ if __name__ == '__main__':
     print('number', n)
 ```
 
-## How should I collaborate with people when doing code reviews? {#style-how}
+## How should I collaborate with people when doing code reviews? {#rse-style-how}
 
 FIXME: how to review on GitHub.
 
-## In what order should functions be defined? {#style-order}
+## In what order should functions be defined? {#rse-style-order}
 
 When encountering code for the first time,
 most people scan it from top to bottom.
@@ -374,7 +360,6 @@ Three common patterns that people might match against are:
 3.  Process it.
 4.  Write output.
 
-<!-- == noindent -->
 or:
 
 1.  Figure out what the user has asked for.
@@ -384,7 +369,6 @@ or:
     3.  Write file-specific output (if any).
 3.  Write summary output (if any).
 
-<!-- == noindent -->
 or:
 
 1.  Figure out what the user has asked for.
@@ -414,7 +398,7 @@ this is a good practice even if they're only used by one program,
 since it signals even more clearly which functions are in the "structural" layer
 and which are in the "utility" layer.
 
-## How can I specify default values for functions' parameters? {#style-defaults}
+## How can I specify default values for functions' parameters? {#rse-style-defaults}
 
 [Working memory](glossary.html#working-memory) can only hold a few items at once:
 initial estimates in the 1950s put the number at 7 plus or minus 2 @Mill1956,
@@ -447,7 +431,6 @@ def image_diff(left, right, per_pixel=0, fraction=0.01):
     # ...implementation...
 ```
 
-<!-- == noindent -->
 When this function is called using `image_diff(old, new)`,
 those default values apply.
 However,
@@ -469,7 +452,6 @@ def collect(new_value, accumulator=set()):
     return accumulator
 ```
 
-<!-- == noindent -->
 it calls `set()` to create a new empty set,
 and then uses that set as the default value for `accumulator` every time the function is called.
 It does *not* call `set()` anew for each call,
@@ -493,7 +475,7 @@ def collect(new_value, accumulator=None):
     return accumulator
 ```
 
-## How can I write functions to handle a variable number of arguments? {#style-varargs}
+## How can I write functions to handle a variable number of arguments? {#rse-style-varargs}
 
 We can often make programs simpler by writing functions that take a variable number of arguments,
 just like `print` and `max`.
@@ -508,13 +490,13 @@ and pass that as the argument.
 By convention,
 this argument is called `args`:
 
-<!-- src="style/find_limits.py" -->
 ```python
 def find_limits(*args):
     print(args)
 
 find_limits(1, 3, 5, 2, 4)
 ```
+
 ```text
 (1, 3, 5, 2, 4)
 ```
@@ -522,7 +504,6 @@ find_limits(1, 3, 5, 2, 4)
 This catch-all parameter can be used with regular parameters,
 but must come last in the parameter list to avoid ambiguity:
 
-<!-- src="style/select_outside.py" -->
 ```python
 def select_outside(low, high, *values):
     result = []
@@ -533,6 +514,7 @@ def select_outside(low, high, *values):
 
 print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
 ```
+
 ```text
 [-0.2, -0.5, 1.7]
 ```
@@ -545,7 +527,6 @@ When this is used,
 the function is given a [dictionary](glossary.html#dictionary) of names and values
 rather than a list:
 
-<!-- src="style/set_options.py" -->
 ```python
 def set_options(tag, **kwargs):
     result = '<{}'.format(tag)
@@ -557,23 +538,22 @@ def set_options(tag, **kwargs):
 print(set_options('h1', color='blue'))
 print(set_options('p', align='center', size='150%'))
 ```
+
 ```text
 <h1 color="blue"/>
 <p align="center" size="150%"/>
 ```
 
-<!-- == noindent -->
 Notice that the names of parameters are not quoted:
 the call is `color='blue'` and not `'color'='blue'`.
 
-## How can I pass an unknown number of parameters? {#style-starargs}
+## How can I pass an unknown number of parameters? {#rse-style-starargs}
 
 We can use the inverse of `*args` and `**kwargs` to match a list of values to arguments.
 In this case,
 we put the `*` in front of a list and `**` in front of a dictionary when *calling* the function,
 rather than in front of the parameter when *defining* it:
 
-<!-- src="style/trim_value.py" -->
 ```python
 def trim_value(data, low, high):
     print(data, "with", low, "and", high)
@@ -582,22 +562,23 @@ parameters = ['some matrix', 'lower bound']
 named_parameters = {'high': 'upper bound'}
 trim_value(*parameters, **named_parameters)
 ```
+
 ```text
 some matrix with lower bound and upper bound
 ```
 
-## How can I get values out of structured data more easily? {#style-destructure}
+## How can I get values out of structured data more easily? {#rse-style-destructure}
 
 Modern programming languages have lots of other tools to make life more convenient for programmers.
 One that's particularly useful is [destructuring](glossary.html#destructuring):
 
-<!-- src="style/destructuring.py" -->
 ```python
 [first, [second, third]] = [1, [2, 3]]
 print(first)
 print(second)
 print(third)
 ```
+
 ```text
 1
 2
@@ -609,7 +590,6 @@ if the variables on the left are arranged in the same way as the values on the r
 Python will automatically unpack the values and assign them correctly.
 This is particularly useful when looping over lists of structured values:
 
-<!-- src="style/looping.py" -->
 ```python
 people = [
     [['Kay', 'McNulty'], 'mcnulty@eniac.org'],
@@ -619,13 +599,445 @@ people = [
 for [[first, last], email] in people:
     print('{} {} <{}>'.format(first, last, email))
 ```
+
 ```text
 Kay McNulty <mcnulty@eniac.org>
 Betty Jennings <jennings@eniac.org>
 Marlyn Wescoff <mwescoff@eniac.org>
 ```
 
-## Summary {#style-summary}
+## What should I look for when reviewing code? {#rse-style-refactor}
+
+The best way to answer the question in this section's title is
+to describe some of the things people should change in their software.
+[Refactoring][refactoring] means changing the structure of code without changing what it does,
+like refactoring an equation to simplify it.
+It is just as much a part of programming as writing code in the first place:
+nobody gets things right the first time @Bran1995,
+and needs or insights can change over time.
+
+Most discussions of refactoring focus on [object-oriented programming][oop],
+but many patterns can and should be used to clean up [procedural][procedural-programming] code.
+This lesson describes and motivates some of the most useful patterns;
+These rules are examples of [design patterns][design-pattern]:
+general solutions to commonly occurring problems in software design.
+Knowing them and their names will help you create better software,
+and also make it easier for you to communicate with your peers.
+
+### Do not repeat values
+
+Our first and simplest refactoring is called "replace value with name".
+It tells us to replace magic numbers with names,
+i.e., to define constants.
+This can seem ridiculous in simple cases
+(why define and use `inches_per_foot` instead of just writing 12?).
+However,
+what may be obvious to you when you're writing code won't be obvious to the next person,
+particularly if they're working in a different context
+(most of the world uses the metric system and doesn't know how many inches are in a foot).
+It's also a matter of habit:
+if you write numbers without explanation in your code for simple cases,
+you're more likely to do so for complex cases,
+and more likely to regret it afterward.
+
+Using names instead of raw values also makes it easier to understand code when you read it aloud,
+which is always a good test of its style.
+Finally,
+a single value defined in one place is much easier to change
+than a bunch of numbers scattered throughout your program.
+You may not think you will have to change it,
+but then people want to use your software on Mars and you discover that constants aren't [Mak2006](#BIB).
+
+```python
+# ...before...
+seconds_elapsed = num_days * 24 * 60 * 60
+```
+
+```python
+# ...after...
+SECONDS_PER_DAY = 24 * 60 * 60
+# ...other code...
+seconds_elapsed = num_days * SECONDS_PER_DAY
+```
+
+### Do not repeat calculations in loops
+
+It's inefficient to calculate the same value over and over again.
+It also makes code less readable:
+if a calculation is inside a loop or a function,
+readers will assume that it might change each time the code is executed.
+
+Our second refactoring,
+"hoist repeated calculation out of loop",
+tells us to move the repeated calculation out of the loop or function.
+Doing this signals that its value is always the same.
+And by naming that common value,
+you help readers understand what its purpose is.
+
+```python
+# ...before...
+for sample in signals:
+    output.append(2 * pi * sample / weight)
+```
+
+```python
+# ...after...
+scaling = 2 * pi / weight
+for sample in signals:
+    output.append(sample * scaling)
+```
+
+### Replace tests with flags to clarify repeated tests
+
+Novice programmers frequently write conditional tests like this:
+
+```python
+if (a > b) == True:
+    # ...do something...
+```
+
+The comparison to `True` is unnecessary because `a > b` is a Boolean value
+that is itself either `True` or `False`.
+Like any other value,
+Booleans can be assigned to variables,
+and those variables can then be used directly in tests:
+
+```python
+was_greater = estimate > 0.0
+# ...other code that might change estimate...
+if was_greater:
+    # ...do something...
+```
+
+This refactoring is called "replace repeated test with flag".
+When it is used,
+there is no need to write `if was_greater == True`:
+that always produces the same result as `if was_greater`.
+Similarly, the equality tests in `if was_greater == False` is redundant:
+the expression can simply be written `if not was_greater`.
+Creating and using a [flag](#g:flag) instead of repeating the test
+is therefore like moving a calculation out of a loop:
+even if that value is only used once,
+it makes our intention clearer---these really are the same test.
+
+```python
+# ...before...
+def process_data(data, scaling):
+    if len(data) > THRESHOLD:
+        scaling = sqrt(scaling)
+    # ...process data to create score...
+    if len(data) > THRESHOLD:
+        score = score ** 2
+```
+
+```python
+# ...after...
+def process_data(data, scaling):
+    is_large_data = len(data) > THRESHOLD
+    if is_large_data:
+        scaling = sqrt(scaling)
+    # ...process data to create score...
+    if is_large_data:
+        score = score ** 2
+```
+
+If it takes many lines of code to process data and create a score,
+and the test then needs to change from `>` to `>=`,
+we're more likely to get the refactored version right the first time,
+since the test only appears in one place and its result is given a name.
+
+### Use in-place operators to avoid duplicating expression
+
+An [in-place operator][in-place-operator],
+sometimes called an [update operator](#g:update-operator),
+does a calculation with two values
+and overwrites one of the values.
+For example,
+instead of writing:
+
+```python
+step = step + 1
+```
+
+we can write:
+
+```python
+step += 1
+```
+
+In-place operators save us some typing.
+They also make the intention clearer,
+and most importantly,
+they make it harder to get complex assignments wrong.
+For example:
+
+```python
+samples[least_factor_index, max(current_offset, offset_limit)] *= scaling_factor
+```
+
+is much easier to read than the equivalent expression:
+
+```python
+samples[least_factor_index, max(current_offset, offset_limit)] = \
+    scaling_factor * samples[least_factor_index, max(current_limit, offset_limit)]
+```
+
+(The proof of this claim is that you probably didn't notice on first reading
+that the long form uses different expressions to index `samples`
+on the left and right of the assignment.)
+The refactoring "use in-place operator" does what its name suggests:
+converts normal assignments into their briefer equivalents.
+
+```python
+# ...before...
+for least_factor in all_factors:
+    samples[least_factor] = \
+        samples[least_factor] * bayesian_scaling
+```
+
+```python
+# ...after...
+for least_factor in all_factors:
+    samples[least_factor] *= bayesian_scaling
+```
+
+### Handle special cases first
+
+A [short circuit test][short-circuit-test] is a quick check to handle a special case,
+such as checking the length of a list of values
+and returning `math.nan` for the average if the list is empty.
+"Place short circuits early" tells us to put short-circuit tests near the start of functions
+so that readers can mentally remove special cases from their thinking
+while reading the code that handles the usual case.
+
+```python
+# ...before...
+def rescale_by_average(values, factors, weights):
+    a = 0.0
+    for (f, w) in zip(factors, weights):
+        a += f * w
+    if a == 0.0:
+        return
+    a /= len(f)
+    if not values:
+        return
+    else:
+        for (i, v) in enumerate(values):
+            values[i] = v / a
+```
+
+```python
+# ...after...
+def rescale_by_average(values, factors, weights):
+    if (not values) or (not factors) or (not weights):
+        return
+    a = 0.0
+    for (f, w) in zip(factors, weights):
+        a += f * w
+    a /= len(f)
+    for (i, v) in enumerate(values):
+        values[i] = v / a
+```
+
+A related refactoring pattern is called "default and override".
+To use it,
+find cases where a value is set conditionally;
+assign the default or most common value unconditionally,
+and then override it in a special case.
+The result is fewer lines of code and clearer control flow;
+however,
+it does mean executing two assignments instead of one,
+so it shouldn't be used if the common case is expensive
+(e.g., involves a database lookup or a web request).
+
+```python
+# ...before..
+if configuration['threshold'] > UPPER_BOUND:
+    scale = 0.8
+else:
+    scale = 1.0
+```
+
+```python
+# ...after...
+scale = 1.0
+if configuration['threshold'] > UPPER_BOUND:
+    scale = 0.8
+```
+
+In simple cases,
+people will sometimes put the test and assignment on a single line:
+
+```python
+scale = 1.0
+if configuration['threshold'] > UPPER_BOUND: scale = 0.8
+```
+
+Some programmers take this even further
+and use a [conditional expression](#g:conditional-expression):
+
+```python
+scale = 0.8 if configuration['threshold'] > UPPER_BOUND else 1.0
+```
+
+However,
+this puts the default last instead of first,
+which is less clear.
+
+### Use functions to make code more comprehensible
+
+Functions were created so that programmers could write common operations and re-use them
+in order to reduce the amount of code that needed to be compiled.
+Moving complex operations into functions also reduces [cognitive load][cognitive-load]
+by reducing the number of things that have to be understood simultaneously.
+
+```python
+# ...before...
+def check_neighbors(grid, point):
+    if (0 < point.x) and (point.x < grid.width-1) and \
+       (0 < point.y) and (point.y < grid.height-1):
+        # ...look at all four neighbors
+```
+
+```python
+# ...after..
+def check_neighbors(grid, point):
+    if in_interior(grid, point):
+        # ...look at all four neighbors...
+
+def in_interior(grid, point):
+    return \
+    (0 < point.x) and (point.x < grid.width-1) and \
+    (0 < point.y) and (point.y < grid.height-1)
+```
+
+You should always extract functions when code can be used in other contests.
+Even if it can't,
+you should extract functions whenever it makes the function clearer
+when it is read aloud.
+Multi-part conditionals,
+parts of long equations,
+and the bodies of loops are good candidates for extraction;
+if you can't think of a plausible name,
+or if a lot of data has to be passed into the function after it's extracted,
+the code should probably be left where it is.
+Finally,
+it's often helpful to keep using the original variable names as parameter names during refactoring
+to reduce typing.
+
+### Combine operations in functions
+
+"Combine functions" is the opposite of "extract function".
+If operations are always done together,
+it can sometimes be be more efficient to do them together,
+and *might* be easier to understand.
+However,
+combining functions often reduces their reusability and readability;
+one sign that functions shouldn't have been combined is
+how often people use the combination and throw some results away.
+
+The fragment below shows how two functions can be combined:
+
+```python
+# ...before...
+def count_vowels(text):
+    num = 0
+    for char in text:
+        if char in VOWELS:
+            num += 1
+    return num
+
+def count_consonants(text):
+    num = 0
+    for char in text:
+        if char in CONSONANTS:
+            num += 1
+    return num
+```
+
+```python
+# ...after...
+def count_vowels_and_consonants(text):
+    num_vowels = 0
+    num_consonants = 0
+    for char in text:
+        if char in VOWELS:
+            num_vowels += 1
+        elif char in CONSONANTS:
+            num_consonants += 1
+    return num_vowels, num_consonants
+```
+
+One thing you may not notice about the combination is that
+it assumes characters are either vowels or consonants,
+which means it might work differently than separate calls to the two original functions.
+Issues like this are why experienced developers write unit tests (Chapter \@ref(rse-correct))
+*before* starting to refactor.
+
+### Replace code with data
+
+It is sometimes easier to understand and maintain lookup tables than complicated conditionals,
+so the "create lookup table" refactoring tells us to turn the latter into the former:
+
+```python
+# ...before..
+def count_vowels_and_consonants(text):
+    num_vowels = 0
+    num_consonants = 0
+    for char in text:
+        if char in VOWELS:
+            num_vowels += 1
+        elif char in CONSONANTS:
+            num_consonants += 1
+    return num_vowels, num_consonants
+```
+
+```python
+# ...after...
+IS_VOWEL = {'a' : 1, 'b' : 0, 'c' : 0, ... }
+IS_CONSONANT = {'a' : 0, 'b' : 1, 'c' : 1, ... }
+
+def count_vowels_and_consonants(text):
+    num_vowels = num_consonants = 0
+    for char in text:
+        num_vowels += IS_VOWEL[char]
+        num_consonants += IS_CONSONANT[char]
+    return num_vowels, num_consonants
+```
+
+The more distinct cases there are,
+the greater the advantage lookup tables have over multi-branch conditionals.
+Those advantages multiply when items can belong to more than one category,
+in which case the table is often best written as a dictionary with items as keys
+and sets of categories as values:
+
+```python
+LETTERS = {
+    'A' : {'vowel', 'upper_case'},
+    'B' : {'consonant', 'upper_case'},
+    # ...other upper-case letters...
+    'a' : {'vowel', 'lower_case'},
+    'b' : {'consonant', 'lower_case'},
+    # ...other lower-case letters...
+    '+' : {'punctuation'},
+    '@' : {'punctuation'},
+    # ...other punctuation...
+}
+
+def count_vowels_and_consonants(text):
+    num_vowels = num_consonants = 0
+    for char in text:
+        num_vowels += int('vowel' in LETTERS[char])
+        num_consonants += int('consonant' in LETTERS[char])
+    return num_vowels, num_consonants
+```
+
+The expressions used to update `num_vowels` and `num_consonants` make use of the fact that
+`in` produces either `True` or `False`,
+which the function `int` converts to either 1 or 0.
+We will explore ways of making this code more readable in the exercises.
+
+## Summary {#rse-style-summary}
 
 George Orwell laid out [six rules for good writing][orwells-rules],
 the last and most important of which is,
@@ -636,13 +1048,13 @@ There will always be cases where your code will be easier to understand
 if you *don't* do the things described in this lesson,
 but there are probably fewer of them than you think.
 
-FIXME: create concept map for review.
+FIXME: create concept map for style and review.
 
-## Exercises {#style-exercises}
+## Exercises {#rse-style-exercises}
 
 FIXME: create exercises for review.
 
-## Key Points {#style-keypoints}
+## Key Points {#rse-style-keypoints}
 
 ```{r, child="keypoints/style.md"}
 ```

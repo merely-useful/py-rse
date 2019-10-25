@@ -35,9 +35,9 @@ RSE_FILES=\
   rse-py-scripting.Rmd \
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
+  rse-style.Rmd \
   rse-automate.Rmd \
   rse-teams.Rmd \
-  style.Rmd \
   rse-project.Rmd \
   rse-ci.Rmd \
   rse-package-r.Rmd \
