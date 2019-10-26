@@ -1,4 +1,4 @@
-.PHONY : all clean chapters commands crossrefs html link settings
+.PHONY : all clean chapters commands crossrefs html links nbspref settings
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
@@ -160,6 +160,10 @@ images :
 ## links        : check that all links are defined and used.
 links :
 	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+
+## nbspref      : check that all cross-references are prefixed with a non-breaking space.
+nbspref :
+	@bin/nbspref.py ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
 
 ## settings     : echo all variable values.
 settings :
