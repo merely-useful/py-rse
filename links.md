@@ -148,6 +148,7 @@
 [jupyter]: http://jupyter.org/
 [jupytext]: https://jupytext.readthedocs.io/en/latest/introduction.html
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
+[lc]: https://librarycarpentry.org
 [learned-helplessness]: FIXME
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 [lme4]: https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf
