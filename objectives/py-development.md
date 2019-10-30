@@ -1,8 +1,6 @@
-- Describe why functions are used and are major components of programming.
-- Create a function that takes both positional arguments and keyword arguments.
-- Use assert to check that a function input parameter is within a certain range
-  of values.
-- Formulate a question with a minimal reproducible example.
-- Describe why there are packages and why not all code is included with
-  the default Python installation.
-- Install and use a package.
+-   Describe why functions are used and are major components of programming.
+-   Create a function that takes both positional arguments and keyword arguments.
+-   Use assert to check that a function input parameter is within a certain range of values.
+-   Formulate a question with a minimal reproducible example.
+-   Describe why there are packages and why not all code is included with the default Python installation.
+-   Install and use a package.

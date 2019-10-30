@@ -1,4 +1,4 @@
-.PHONY : all clean chapters commands crossrefs html link settings
+.PHONY : all clean chapters commands crossrefs fixme html links nbspref settings
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
@@ -35,9 +35,9 @@ RSE_FILES=\
   rse-py-scripting.Rmd \
   rse-git-cmdline.Rmd \
   rse-git-advanced.Rmd \
+  rse-style.Rmd \
   rse-automate.Rmd \
   rse-teams.Rmd \
-  style.Rmd \
   rse-project.Rmd \
   rse-ci.Rmd \
   rse-package-r.Rmd \
@@ -58,6 +58,8 @@ COMMON_FILES=\
   gloss.md \
   references.Rmd \
   links.md
+
+ALL_FILES=${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
 
 #-------------------------------------------------------------------------------
 
@@ -153,13 +155,21 @@ crossrefs :
 	@bin/crossrefs.py "Novice Python" ${PY_FILES} ${COMMON_FILES}
 	@bin/crossrefs.py "RSE" ${RSE_FILES} ${COMMON_FILES}
 
+## fixme        : list all the FIXME markers
+fixme :
+	@fgrep FIXME ${ALL_FILES}
+
 ## images       : check that all images are defined and used.
 images :
-	@bin/images.py ./figures ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+	@bin/images.py ./figures ${ALL_FILES}
 
 ## links        : check that all links are defined and used.
 links :
-	@bin/links.py ./links.md ${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+	@bin/links.py ./links.md ${ALL_FILES}
+
+## nbspref      : check that all cross-references are prefixed with a non-breaking space.
+nbspref :
+	@bin/nbspref.py ${ALL_FILES}
 
 ## settings     : echo all variable values.
 settings :
@@ -169,3 +179,4 @@ settings :
 	@echo PY_FILES: ${PY_FILES}
 	@echo RSE_FILES: ${RSE_FILES}
 	@echo COMMON_FILES: ${COMMON_FILES}
+	@echo ALL_FILES: ${ALL_FILES}

@@ -10,7 +10,7 @@ source("_common.R")
 > This was…a good survival trait.
 > It meant that in times of danger you spent the day sitting very quietly in a building with very thick walls.
 >
-> -- Terry Pratchett
+> — Terry Pratchett
 
 The more software you write,
 the more you realize that a programming language is a way to build and combine software libraries.
@@ -23,8 +23,8 @@ This material is based in part on [Python 102][python-102] by [Ashwin Srinath][s
 ## How can I turn a set of Python source files into a module? {#rse-package-py-modules}
 
 Any Python source file can be imported by any other.
-(This is why Python files should be named using [`pothole_case`](glossary.html#pothole-case)
-instead of [`kebab-case`](glossary.html#kebab-case):
+(This is why Python files should be named using [`pothole_case`][pothole-case]
+instead of [`kebab-case`][kebab-case]:
 an expression like `import some-thing` isn't allowed
 because `some-thing` isn't a legal variable name.)
 When a file is imported,
@@ -84,20 +84,20 @@ it checks the timestamp on `zipf.py` and the timestamp on the corresponding file
 If the latter is more recent,
 Python doesn't bother to recompile the file:
 it just loads the bytes in the cached version and uses those.
-In the general spirit of ["Don't Repeat Yourself (DRY)"](glossary.html#dry)
-we typically don't put both the original and processed versions of files in 
+In the general spirit of ["Don't Repeat Yourself (DRY)"][dry]
+we typically don't put both the original and processed versions of files in
 version control (it can be convenient, but then you have to have processes
 in place to make sure that they stay in sync) so we normally add the
 `__pycache__` directory to in `.gitignore`.
 
 ### Exercise: Hello, Zipf!
 
-Put a statement 
+Put a statement
 
 ```python
 print("Hello, Zipf!")
 ```
-at the end of `zipf.py`. 
+at the end of `zipf.py`.
 
 1. What happens when you start Python interactively and import the
 module with the command `import zipf`?
@@ -143,8 +143,6 @@ if __name__ == '__main__':
     sys.exit(0)
 ```
 
-<!-- used="rse-package-py/02/use.py" -->
-
 Here,
 the code guarded by `if __name__ == '__main__'` isn't executed when the file loaded by something else.
 We can test this by re-running `use.py` as before:
@@ -168,9 +166,8 @@ printed?
 
 Let's say we wanted to add some capabilities to what
 we've built: we want to be able to generate noisy
-Zipf distributions -- noise within the same default `RELATIVE_ERROR` --
-and we want to add a Zipf-checker that can handle
-unsorted inputs:
+Zipf distributions—noise within the same default `RELATIVE_ERROR`—and
+we want to add a Zipf-checker that can handle unsorted inputs:
 
 ```python
 ...as before...
@@ -203,7 +200,7 @@ def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
 
 As our package grows,
 we should split its source code into multiple files,
-and this is now starting to look like two broad types of 
+and this is now starting to look like two broad types of
 related functionality: generating a Zipf distribution, and
 checking against a Zipf distribution.  But they are related;
 and what's more, there are constants that would be common
@@ -229,10 +226,10 @@ package zipfpy.
 
 1. Create a `zipfpy` directory and move the file `zipf.py` into that directory.
 2. Create an empty file `zipfpy/__init__.py`.
-3. Modify the test suite so that it runs; functions will now be found in the [`namespace`](glossary.html#namespace) `zipfpy.zipf` rather than `zipf`.
+3. Modify the test suite so that it runs; functions will now be found in the [`namespace`][namespace] `zipfpy.zipf` rather than `zipf`.
 4. Run the test suite with `pytest`
 
-FIXME: should introduce the name 'namespace' earlier if it doesn't come up in earlier sections
+FIXME: introduce the name 'namespace' earlier if it doesn't come up in earlier sections
 
 ### Exercise: "Hello `__init__.py`"
 
@@ -270,15 +267,15 @@ def make_noisy_zipf(length, rel=RELATIVE_ERROR):
     ...
 ```
 
-and a `zipf/check.py`.  Now here we have another 
+and a `zipf/check.py`.  Now here we have another
 change to make; the the `is_zipf` function refers
 to the `generate` routine, which is in another file,
 but within the same module.
 
-In this case of within-package imports, we have to use [`relative imports`](glossary.html#relative-import) to 
-refer to other files within the module; this is 
+In this case of within-package imports, we have to use [`relative imports`][relative-import] to
+refer to other files within the module; this is
 a little bit like using relative paths vs absolutely
-paths in the shell, right down to `.` referring 
+paths in the shell, right down to `.` referring
 to the current directory.  We could use:
 
 ```python
@@ -288,7 +285,7 @@ from . import generate
 x = generate.make_zipf(...)
 ```
 
-or 
+or
 
 ```python
 from .generate import make_zipf
@@ -346,7 +343,7 @@ def test_default_tolerance(length=5):
 
 ### Exercise: Factor out the package-wide constant `RELATIVE_ERROR`
 
-It's perfectly valid for an `__init__.py` file to be empty, 
+It's perfectly valid for an `__init__.py` file to be empty,
 but it is also a very useful place to put definitions that are
 common to the entire package.
 
@@ -354,7 +351,7 @@ Here, both `generate` and `check` use the same default `RELATIVE_ERROR`;
 let's move that into `__init__.py`:
 
 1. Add the line `RELATIVE_ERROR = 0.05` to `__init__.py`;
-2. Now we can remove the line definining `RELATIVE_ERROR` from `check.py` 
+2. Now we can remove the line definining `RELATIVE_ERROR` from `check.py`
 and `generate.py`, but;
 3. We still need to import that definition somehow, or else those functions
 won't know what a `RELATIVE_ERROR` is; add the line `from . import RELATIVE_ERROR`
@@ -362,15 +359,15 @@ to each so that it is visible.  When we don't specify a file, it imports the
 definition from `__init__.py` (just as `import zipfpy` will read the `__init__.py`)
 4. Run the test suite with `pytest`
 
-We haven't shortened the code any here --- we've replaced a `RELATIVE_ERROR = 0.05`
-with an `from . import RELATIVE_ERROR` --- but now the constant is defined in only
+We haven't shortened the code any here—we've replaced a `RELATIVE_ERROR = 0.05`
+with an `from . import RELATIVE_ERROR`—but now the constant is defined in only
 one location so we don't have to worry about editing it in one location and that
 value being out of sync in the other.
 
-### Exercise: Importing from within __init__.py 
+### Exercise: Importing from within __init__.py
 
-Since any code that does an `import zipf` will read `__init__.py`, it 
-can be convenient to put import statments in `__init__.py` itself, to 
+Since any code that does an `import zipf` will read `__init__.py`, it
+can be convenient to put import statments in `__init__.py` itself, to
 ensure that some key definitions are readily available when the package
 is imported.
 
@@ -384,8 +381,8 @@ Make those changes
 3. Run the test suite with `pytest`
 
 Note that it doesn't make sense to import absolutely everything like we
-have here into the `zipfpy` namespace --- it kind of defeats the purpose
-of having split up the files --- but for a modest number of key definitions
+have here into the `zipfpy` namespace—it kind of defeats the purpose
+of having split up the files—but for a modest number of key definitions
 this can be very convenient for the package users.
 
 4. Undo the changes you made in 1. and 2., and make sure the test suite
@@ -406,14 +403,12 @@ and installs it.
 
 But what does it mean to install a Python package?
 
-You've seen that when you have a Python module or package in the current 
+You've seen that when you have a Python module or package in the current
 directory named, say, `zipfpy`, Python will successfully find that module
 and directory when it runs `import zipfpy`.  But clearly having all of the
 Python standard library, all installed packages, and our own code in the
 same directory gets unwieldly quickly - especially if we want to run our
 routines from a directory full of data!
-
-FIXME: make sure the shell chapter covers `$PATH`
 
 Just as the `PATH` environment in the shell contains a list of directories that
 the shell searches for programs it can execute, in Python a variable `sys.path`
@@ -448,7 +443,7 @@ To install a package, then means to copy the contents of the
 package in some form into one of the directories that Python
 will search from.
 
-### Exercise: Find a package in pip list 
+### Exercise: Find a package in pip list
 
 The `pip list` command will generate a list of Python packages
 installed using pip in the current environment.  Here we'll find
@@ -478,14 +473,16 @@ something more helpful than "I don't know, it works for me", by making sure we
 can install and run our package in a completely empty environment, so we can tell
 that we're not accidentlly relying on some other package being installed.
 
-A very handy answer to both of those needs is a [virtual environment](glossary.html#virtual-environment).
+A very handy answer to both of those needs is a [virtual environment][virtual-environment].
 A virtual environment is a layer on top of an existing Python installation.
 Whenever Python needs to find a library,
 This gives us a place to install packages that only some projects need,
 or that are still under development,
-without affecting the main installation.
+without affecting the main installation (Figure \@ref(fig:rse-package-py-virtualenv).
 
-FIXME: figure
+```{r rse-package-py-virtualenv, echo=FALSE, fig.cap="Virtual Environments"}
+knitr::include_graphics("figures/FIXME.png")
+```
 
 We can create and manage virtual environments using a tool called `virtualenv`.
 To install it,
@@ -504,7 +501,7 @@ done.
 ```
 
 `virtualenv` creates a new directory called `test`,
-which contains sub-directories called `bin`, `lib`, and so on---everything
+which contains sub-directories called `bin`, `lib`, and so on—everything
 needed for a minimal Python installation.
 Crucially,
 `test/bin/python` checks for packages in `test/lib` *before* checking the system-wide install.
@@ -593,13 +590,13 @@ using virtual environment names that match the names of your projects
 quickly becomes essential.
 
 
-### Exercises: Examining the virtual environment 
+### Exercises: Examining the virtual environment
 
 1. If you haven't already, create a `test` virtual environment and activate it.  Your prompt should now start with `(test)`.
-2. Run `pip list` -- what packages are installed?
-3. Run the `showpath.py` script from the earlier section, and note that the paths are different from your 
+2. Run `pip list`. What packages are installed?
+3. Run the `showpath.py` script from the earlier section, and note that the paths are different from your
 base environment where you looked for packages.  They probably look like `/Users/pterry/envs/test/lib/python-3.7/site-packages`.
-4. Pick a package you know you have installed in your base environment -- pick `pytest` if you can't think of one -- and
+4. Pick a package you know you have installed in your base environment—pick `pytest` if you can't think of one—and
 try to import it in a Python interpreter.  Can it be found?
 5. Deactive the environment and try again.
 
@@ -778,7 +775,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-Great!  Let's make sure it works from scratch.  Let's deactivate and 
+Great!  Let's make sure it works from scratch.  Let's deactivate and
 completely delete the previous environment and try again:
 
 ```text
@@ -810,8 +807,6 @@ test_zipf.py ...                                                                
 ```
 
 Success!
-
-FIXME:  need some clever exercises here
 
 ## How can I distribute command-line scripts in my Python package? {#rse-package-py-distrib-scripts}
 
@@ -898,12 +893,6 @@ setup(
 ```
 
 
-<!-- used="rse-package-py/08/requirements.txt" -->
-<!-- used="rse-package-py/08/test_zipfpy.py" -->
-<!-- used="rse-package-py/08/zipfpy/__init__.py" -->
-<!-- used="rse-package-py/08/zipfpy/check.py" -->
-<!-- used="rse-package-py/08/zipfpy/generate.py" -->
-
 Now we we'll install the updated package in a virtual environment:
 
 ```text
@@ -930,8 +919,6 @@ Successfully installed zipfpy-0.1
 True: [100, 50, 33, 25]
 ```
 
-FIXME: clever exercises
-
 ## How should I document my package for others? {#rse-package-py-document}
 
 As we get our package ready for sharing with others, we should
@@ -941,7 +928,7 @@ use key functionality.
 
 Ideally we've been maintaining documentation throughout the development
 process.  But the documentation we keep through that process is often
-intended for a different audience and purpose -- that is, it's meant for
+intended for a different audience and purpose—that is, it's meant for
 us while developing the code, and so includes things that are good and
 useful like code comments reminding us why steps are taken, but may
 not include overviews of the package and how (and why!) to use it, which
@@ -951,8 +938,8 @@ We should certainly have a README for the package, describing how to
 install the package and how to use it in a couple of key use cases,
 so let's add that.
 
-In the Python community, much documentation is written in 
-[reStructuredText](glossary.html#restructured-text), which is
+In the Python community, much documentation is written in
+[reStructuredText][restructured-text], which is
 a markup format for plain text documents which can be rendered
 into documents with quite complex indexes and cross-linking
 by many documentation tools; GitHub will recognize reST files
@@ -986,7 +973,7 @@ Use
 You can use the package after installation with `import zipfpy`, with functions
 in the modules `check` and `generate`.
 
-You can also use the command line tool `check_zipf.py` which tests to see if 
+You can also use the command line tool `check_zipf.py` which tests to see if
 a provided list of countsfollows a Zipf distribution::
 
     $ check_zipf.py 100 50 33 25
@@ -1062,7 +1049,7 @@ def make_zipf(length):
     return result
 ```
 
-Not only is the documentation then useful for those reading the 
+Not only is the documentation then useful for those reading the
 code, but it helpfully shows up when a user types, for instance,
 `help(zipfpy)`.
 
@@ -1072,7 +1059,7 @@ code, but it helpfully shows up when a user types, for instance,
 
 ## How do I generate web pages of documentation for my package? {#rse-package-py-sphinx}
 
-When you've viewed documentation for large Python packages, they 
+When you've viewed documentation for large Python packages, they
 have very likely been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
 a package for writing software documentation and generating web packages
 for that documentation that is widely used in the Python community.
@@ -1210,7 +1197,7 @@ supported site which hosts software documentation free of charge.
 
 Read The Docs integrates nicely with GitHub, which will allow
 you to have the documentation re-built automatically upon update
-of your repository.  Thus we recommend 
+of your repository.  Thus we recommend
 [registering for Read The Docs](https://readthedocs.org/accounts/signup/) with your GitHub
 account.
 
@@ -1221,9 +1208,9 @@ from your github repository; Read The Docs will then build the documentation
 the source files (in our case, `docs/source/modules.rst`, `docs/source/zipfpy.rst`,
 `docs/Makefile`, `docs.conf.py`) need to be checked into your repository.
 
-Then you should be able to build; after a few minutes, your documents should 
-be visible!  If you named your project, _e.g._, `pterry_zipfpy`, your 
-documents will be available at 
+Then you should be able to build; after a few minutes, your documents should
+be visible!  If you named your project, _e.g._, `pterry_zipfpy`, your
+documents will be available at
 [`https://pterry_zipfpy.readthedocs.io/en/latest/`](https://pterry_zipfpy.readthedocs.io/en/latest/).
 
 As with [continuous integration with Travis-CI](integrate.html#integrate-basic),
@@ -1248,7 +1235,7 @@ a link to follow when the image is clicked, and `:alt:` for alternate text for t
 
 ## How can I distribute software packages that I have created? {#rse-package-py-distribute}
 
-With our package working, testable, installable, and documented, 
+With our package working, testable, installable, and documented,
 we should distribute it so anyone can just `pip install pterry_zipfpy`
 and start running!
 
@@ -1405,7 +1392,6 @@ But first we have a few improvements to make to our setup.py so that
 our package webpage is useful and to make it easier for potential users
 to find, understand, and install our package.
 
-
 ### Exercise: Clean up warning messages
 
 -   FIXME: clean up warning messages from `python setup.py sdist`
@@ -1421,7 +1407,6 @@ to find, understand, and install our package.
 ## Announcing Work {#rse-package-py-announce}
 
 FIXME: <https://medium.com/indeed-engineering/marketing-for-data-science-a-7-step-go-to-market-plan-for-your-next-data-product-60c034c34d55>
-
 
 ## Summary {#rse-package-py-summary}
 
