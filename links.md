@@ -9,10 +9,11 @@
 [ally]: FIXME
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
 [assertr]: https://cran.r-project.org/web/packages/assertr/index.html
-[at]: https://en.wikipedia.org/wiki/At_(command)
+[auto-completion]: FIXME
 [bash]: FIXME
 [beeswarm-plot]: FIXME
 [bibtex]: http://www.bibtex.org/
+[binary-code]: FIXME
 [bootswatch]: https://bootswatch.com/3/
 [branch-per-feature]: glossary.html#branch-per-feature-workflow
 [branch]: FIXME
@@ -20,6 +21,7 @@
 [bug-report]: FIXME
 [bug-tracker]: FIXME
 [build-tool]: glossary.html#build-tool
+[byte-code]: FIXME
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
@@ -56,6 +58,7 @@
 [config-repo]: https://github.com/merely-useful/merely-useful.github.io/
 [confirmation-bias]: FIXME
 [continuation-prompt]: FIXME
+[continuous-integration]: FIXME
 [cookiecutter]: https://drivendata.github.io/cookiecutter-data-science/
 [corpus]: FIXME
 [covenant]: https://www.contributor-covenant.org
@@ -66,22 +69,29 @@
 [curb-cuts]: https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
 [current-working-directory]: glossary.html#current-working-directory
 [cv]: https://stats.stackexchange.com/
+[data-package]: FIXME
 [dc]: https://datacarpentry.org/
 [declarative-programming]: glossary.html#declarative-programming
 [delimiter]: FIXME
+[destructuring]: FIXME
+[dictionary]: FIXME
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [documentation-generator]: FIXME
 [doi]: FIXME
 [down-vote]: FIXME
 [drake]: https://ropenscilabs.github.io/drake-manual/
+[dry]: FIXME
 [dryad]: https://datadryad.org/
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
+[embedded-documentation]: FIXME
 [eniac]: FIXME
-[error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co?noredirect=1&lq=1
+[environment]: FIXME
+[error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co
 [exception-raise]: FIXME
 [exception]: FIXME
 [expected-result]: FIXME
+[exploratory-programming]: FIXME
 [exploratory-programmming]: FIXME
 [exponent]: FIXME
 [f1000-research]: https://f1000research.com/
@@ -96,6 +106,7 @@
 [fixture]: FIXME
 [folder]: glossary.html#folder
 [forge]: FIXME
+[fully-qualified-name]: FIXME
 [gdb]: https://www.gnu.org/software/gdb
 [geek-feminism]: http://geekfeminism.wikia.com/
 [ggplot2]: https://ggplot2.tidyverse.org/
@@ -131,9 +142,11 @@
 [hitchhiker]: FIXME
 [home-directory]: glossary.html#home-directory
 [huff-testing]: https://github.com/katyhuff/python-testing
+[impostor-syndrome]: FIXME
 [impostor-syndrone]: FIXME
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
+[install]: FIXME
 [intellij-idea]: https://www.jetbrains.com/idea/
 [interpeter]: FIXME
 [interpreted-language]: FIXME
@@ -150,7 +163,9 @@
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lc]: https://librarycarpentry.org
 [learned-helplessness]: FIXME
+[library]: FIXME
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
+[linter]: FIXME
 [lme4]: https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf
 [log-file]: FIXME
 [loop-body]: FIXME
@@ -180,6 +195,7 @@
 [noller-a-lot-happens]: http://jessenoller.com/blog/2015/9/27/a-lot-happens
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
 [numpy-docstring]: https://numpydoc.readthedocs.io/en/latest/format.html
+[object]: FIXME
 [open-license]: FIXME
 [open-science]: FIXME
 [operating-system]: glossary.html#operating-system
@@ -191,6 +207,7 @@
 [osf]: https://osf.io/
 [osi-license-list]: http://opensource.org/licenses
 [overloading]: FIXME
+[package]: FIXME
 [pager]: FIXME
 [pandas-docstring]: https://pandas.pydata.org/pandas-docs/stable/development/contributing_docstring.html
 [pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
@@ -201,7 +218,9 @@
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
+[pothole-case]: FIXME
 [pr-abbreviation]: FIXME
+[precision]: FIXME
 [privilege]: FIXME
 [process]: FIXME
 [product-manager]: FIXME
@@ -235,6 +254,7 @@
 [reprex]: FIXME
 [reproducible-research]: FIXME
 [requests]: http://docs.python-requests.org
+[restructured-text]: FIXME
 [revision]: FIXME
 [rmd-appearance]: FIXME
 [rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
@@ -254,10 +274,13 @@
 [select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [sense-vote]: FIXME
 [setuptools]: https://setuptools.readthedocs.io/
+[shebang]: FIXME
 [shell-script]: FIXME
+[side-effects]: FIXME
 [sign]: FIXME
 [silent-failure]: FIXME
 [situational-action]: FIXME
+[snake-case]: FIXME
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [so-keywords-builtins]: https://stackoverflow.com/a/22864250/2166823
@@ -265,6 +288,7 @@
 [so-mre-r]: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
 [so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
 [so]: https://stackoverflow.com/
+[source-code]: FIXME
 [sphinx]: http://www.sphinx-doc.org/en/master/
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-exchange-data-explorer]: https://data.stackexchange.com/
@@ -277,6 +301,7 @@
 [stderr]: glossary.html#stderr
 [stdin]: FIXME
 [stdout]: glossary.html#stdout
+[streaming-data]: FIXME
 [styler-pkg]: http://styler.r-lib.org/
 [sub-command]: FIXME
 [sub-directory]: glossary.html#sub-directory
@@ -307,6 +332,7 @@
 [three-stickies]: FIXME
 [ticket]: FIXME
 [ticketing-system]: FIXME
+[tidy-data]: FIXME
 [timestamp]: glossary.html#timestamp
 [tinytex]: https://yihui.name/tinytex/
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
@@ -316,6 +342,7 @@
 [travis-ci]: https://travis-ci.org/
 [triage]: FIXME
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
+[tuple]: FIXME
 [tyranny-structurelessness]: http://www.jofreeman.com/joreen/tyranny.htm
 [unit-test]: FIXME
 [unix-command-history]: FIXME
@@ -334,6 +361,7 @@
 [verification]: FIXME
 [version-control]: https://peerj.com/preprints/3159/
 [violin-plot]: FIXME
+[virtual-environment]: FIXME
 [vs-code]: https://code.visualstudio.com/
 [wickham-packages]: http://r-pkgs.had.co.nz/
 [wiki-rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
@@ -342,6 +370,7 @@
 [wing-ide]: https://wingware.com/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
 [womens-pockets]: https://pudding.cool/2018/08/pockets/
+[working-memory]: FIXME
 [wrap-code]: FIXME
 [xcode]: https://developer.apple.com/xcode/ide/
 [xkcd-duty-calls]: https://xkcd.com/386/
