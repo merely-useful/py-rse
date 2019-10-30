@@ -6,7 +6,7 @@ source("_common.R")
 
 ## Introduction {#rse-ci-intro}
 
-[Continuous integration](glossary.html#continuous-integration) (CI) in software
+[Continuous integration][continuous-integration] (CI) in software
 development is a simple idea: to frequently merge in ("integrate") additions of or
 modifications to code so that a software project gets developed and tested in
 small, regular increments. The purpose of CI is to catch bugs or problems early
@@ -21,11 +21,11 @@ The most widely used CI system is [Travis CI][travis-ci]. It integrates well
 with [Github][github], and will run tests on multiple platforms and with
 multiple versions of tools. At a minimum, Travis will build the software. If
 you want to confirm that your software works as intended, you should create tests
-as detailed in Chapter \@ref(rse-correct). If tests exist, Travis will run them
+as detailed in Chapter \@ref(rse-correct). If tests exist, Travis will run them
 and print the results for you to check. Remember, the tests that the CI runs are
 only as good as you've written them.
 
-TODO: Confirm unit test chapter ref.
+FIXME: Confirm unit test chapter ref.
 
 So why should you use CI? There are several reasons:
 
@@ -73,7 +73,7 @@ Travis is to tell it about your repository. Go to [Travis-CI][travis-ci] and
 on the left, besides the "My Repositories", click the "+" to add a repository
 that is already on GitHub.
 
-```{r image-add-repo, echo=FALSE}
+```{r image-add-repo, echo=FALSE, fig.cap="ci-add-repo"}
 knitr::include_graphics("figures/rse-ci/add-repo.png")
 ```
 
@@ -81,7 +81,7 @@ Then, find your repository in the list and flick the switch button on (so it is
 green). You may have to re-sync the list of repositories with GitHub if you
 can't find the repository (green "Sync account" button on the left sidebar).
 
-```{r image-list-repos, echo=FALSE}
+```{r image-list-repos, echo=FALSE, fig.cap="ci-list-repos"}
 knitr::include_graphics("figures/rse-ci/list-repos.png")
 ```
 
@@ -93,24 +93,24 @@ any commands as needed.
 Next we need to create a file called `.travis.yml` in the root directory of the
 repository. The leading `.` in the name is used by Unix-like systems (Mac OS or
 Linux) to hide the file, but on Windows systems it won't be hidden. This file
-contains [YAML](glossary.html#yaml) key-value settings that Travis will use and
+contains [YAML][yaml] key-value settings that Travis will use and
 interpret. A simple template `.travis.yml` configuration file may look like:
 
 ```yaml
 # Which programming language to use, e.g. Python
-language: ... 
+language: ...
 
 # Python specific. Sets the Python version
 python:
-- ... 
+- ...
 
 # Commands to use to install, such as extra software packages
 install:
-- ... 
+- ...
 
 # Commands to run in order to build or test your software
 script:
-- ... 
+- ...
 ```
 
 Let's break it down what each key does:
@@ -121,7 +121,7 @@ you want to use, e.g. `"3.6"`. You can ask Travis to test our project with
 several different versions by adding more `-` items.
 - `install` tells Travis how to install the software you need for your package.
 For Python packages, the convention is to put a list of packages in a file
-called `requirements.txt` for `pip` to use (Chapter \@ref(rse-package-py)).
+called `requirements.txt` for `pip` to use (Chapter \@ref(rse-package-py)).
 - `script` tells Travis how to actually run the tests. We can put almost
 anything here, provided the code doesn't need human interaction (no question prompts
 for answers).
@@ -139,10 +139,10 @@ install:
 
 script:
 # if an example build.py file was in the src folder
-- python src/build.py 
+- python src/build.py
 ```
 
-After we've added and committed this file to Git, pushed up to GitHub, and (if 
+After we've added and committed this file to Git, pushed up to GitHub, and (if
 Travis is watching the GitHub repository) Travis will start. Every time commits
 are pushed to the GitHub repository, Travis will:
 
@@ -155,10 +155,10 @@ and REPO is the name of the repository).
 
 Travis' summary report tells us whether the build passed or failed. It fails when
 it encounters warnings or errors. In the image below, the main thing to look for
-is whether the colour is green and says "passed" (as shown), or if the colours 
+is whether the colour is green and says "passed" (as shown), or if the colours
 are red and the message is "failed" or "error".
 
-```{r image-build-overview, echo=FALSE, fig.cap="Travis build overview."}
+```{r image-build-overview, echo=FALSE, fig.cap="Travis Build Overview"}
 knitr::include_graphics("figures/rse-ci/build-overview.png")
 ```
 
@@ -173,16 +173,14 @@ Travis's dashboard is very useful, but it would also be nice to have a short,
 quick display of the Travis build status on our software project's README since
 that is where people first go to look for information on the project. To add
 this status "badge", click the "build icon" as shown in the top right corner of
-Figure FIXME. This will bring up a dialog box where you can select the item
+Figure \@ref(fig:image-github-icon). This will bring up a dialog box where you can select the item
 "Markdown" in the "Format" menu list. In the "Result" box will be the markdown
 text you can copy and paste into your repository's `README.md` file. It's best to
 paste the text right below the first `#` header. Commit and push to GitHub and
-your project will now show the "badge" for the Travis CI build, like shown in 
-the image below.
+your project will now show the "badge" for the Travis CI build as shown in
+Figure \@ref(fig:image-github-icon).
 
-TODO: Add ref to image?
-
-```{r image-github-icon, echo=FALSE, fig.cap="The Travis build badge in the README file on GitHub."}
+```{r image-github-icon, echo=FALSE, fig.cap="The Travis Build Badge"}
 knitr::include_graphics("figures/rse-ci/github-icon.png")
 ```
 
@@ -219,7 +217,7 @@ R packages, running tests is built into Travis CI so you don't need to modify
 anything. For Python packages, the `script` key in the `.travis.yml` file needs
 to have `pytest` added, like so:
 
-TODO: Reference to unit test chapter.
+FIXME: Reference to unit test chapter.
 
 ```yaml
 language: python
@@ -233,21 +231,21 @@ script:
 
 After committing and pushing to your GitHub repository, Travis will now always
 run your tests in it's clean environment. If the tests fail, Travis will update
-the status to "failed" or "error". Then you can go through the Travis log and 
+the status to "failed" or "error". Then you can go through the Travis log and
 start debugging what went wrong, which can sometimes be a very difficult task
 and is always different depending on the project, tests, and programming language.
 All details about the build are contained in the Travis "Job log", right below
 the build overview. Searching for the problem can sometimes be quite tedious.
-In the final exercise we'll get you to intentionally fail the Travis build to 
+In the final exercise we'll get you to intentionally fail the Travis build to
 see how it looks.
 
-TODO: Do we want to add more explanation about this? I feel running unit tests are basically the biggest reason to use CI.
+FIXME: Do we want to add more explanation about this? I feel running unit tests are basically the biggest reason to use CI.
 
 ## Using CI to test coverage {#rse-ci-coverage}
 
 We can also add code coverage,
-which is in Section \@ref(rse-correct-coverage),
-to the CI. To add code coverage to your CI, 
+which is in Section \@ref(rse-correct-coverage),
+to the CI. To add code coverage to your CI,
 add two more lines to your `.travis.yml` file:
 
 ```yaml
@@ -265,12 +263,12 @@ after_success:
 - codecov
 ```
 
-The CI needs to install the code coverage with `pip`. 
-We install `codecov` in this case, 
+The CI needs to install the code coverage with `pip`.
+We install `codecov` in this case,
 as it is a [service][codecov] like Travis for reporting on coverage.
-To send the code to FIXME
+To send the code to FIXME: finish this paragraph.
 
-In **R**, the process is simple. 
+In **R**, the process is simple.
 Type out and run this command, which it will set everything up:
 
 ```r
@@ -309,24 +307,24 @@ deploy:
   skip_cleanup: true
 ```
 
-The `deploy` key is the important one here, as it is the one that tells Travis 
+The `deploy` key is the important one here, as it is the one that tells Travis
 to send the generated website files to be put online (via [GitHub Pages][github-pages]).
 
-TODO: Add information for Python projects
+FIXME: Add information for Python projects
 
 ## Summary {#rse-ci-summary}
 
-FIXME: create concept map for integration.
+FIXME: create concept map for continuous integration.
 
 ## Exercises {#rse-ci-exercises}
 
-TODO: Get feedback on this and fill it out more later.
+FIXME: Get feedback on this and fill it out more later.
 
 1. Setup Travis CI for the package you've been working on (for the course).
 2. Get Travis to run unit tests of your package (not applicable for R packages).
 3. Write a new unit test in your package that you *know* will fail. Push the changes
 up to GitHub.
-4. Go through the Travis CI log and see what the log says about the failure and 
+4. Go through the Travis CI log and see what the log says about the failure and
 how to fix it. Since you made it purposefully fail, you will already know how to
 fix it, but the point is to get comfortable looking through Travis' logs.
 5. Correct the test, push to GitHub, and get Travis to build your package

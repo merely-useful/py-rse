@@ -1,4 +1,10 @@
-- `git branch` creates a new branch where new features can be developed while leaving the master branch untouched.
-
-- `git clone` copies a remote repository to create a local repository with a remote called origin automatically set up.
-- Pull requests suggest changes to repos where you don’t have write privileges.
+-   `git branch` creates a new branch where new features can be developed while leaving the master branch untouched.
+-   `git clone` copies a remote repository to create a local repository with a remote called origin automatically set up.
+-   Pull requests suggest changes to repos where you don’t have write privileges.
+-   Reorganizing code in consistent ways makes errors less likely.
+-   Replace a value with a name to make code more readable and to forestall typing errors.
+-   Replace a repeated test with a flag to ensure consistency.
+-   Turn small pieces of large functions into functions in their own right, even if they are only used once.
+-   Combine functions if they are always used together on the same inputs.
+-   Use lookup tables to make decision rules easier to follow.
+-   Use comprehensions instead of loops.
