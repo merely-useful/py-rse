@@ -1,7 +1,0 @@
--   Use short command-line parameters to set commonly-changed options.
--   Allow long command-line parameters to change all other options to facilitate scripting.
--   Use the `getopt` library to parse command-line flags.
--   Read a system-wide configuration file, then a user configuration file, then a job configuration file.
--   Format configuration files using YAML.
--   Dump all configuration values in the same format used for input on request.
--   Include the software version number in the dumped configuration.
