@@ -57,7 +57,8 @@ COMMON_FILES=\
   CONTRIBUTING.md \
   gloss.md \
   references.Rmd \
-  links.md
+  links.md \
+  book.bib
 
 ALL_FILES=${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
 
