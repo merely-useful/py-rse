@@ -1,4 +1,4 @@
-.PHONY : all clean chapters commands crossrefs fixme html links nbspref settings
+.PHONY : all clean chapters commands crossrefs fixme gloss html links nbspref settings
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
@@ -159,6 +159,10 @@ crossrefs :
 ## fixme        : list all the FIXME markers
 fixme :
 	@fgrep FIXME ${ALL_FILES}
+
+## gloss        : check that all glossary definitions are defined and used.
+gloss :
+	@bin/gloss.py ./gloss.md ${ALL_FILES}
 
 ## images       : check that all images are defined and used.
 images :

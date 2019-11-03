@@ -14,14 +14,14 @@ import re
 from util import read_all_files, report
 
 
-PAT_DEF = re.compile(r'^\*\*.+?\*\*<a\s+id="(.+?)"></a>', re.MULTILINE + re.DOTALL)
-PAT_USE = re.compile(r'\[.+?\]\(glossary.html#(.+?)\)')
+PAT_DEF = re.compile(r'\*\*.+?\*\*<a\s+id="(.+?)"></a>')
+PAT_USE = re.compile(r'glossary.html#([-\w]+)\s')
 
 
-def main(links_file, source_files):
+def main(gloss_file, source_files):
     '''Main driver.'''
 
-    with open(links_file, 'r') as reader:
+    with open(gloss_file, 'r') as reader:
         defined = set(PAT_DEF.findall(reader.read()))
     used = read_all_files(source_files, find_uses)
     report('Terms: undefined', used - defined)

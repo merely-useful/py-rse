@@ -20,7 +20,7 @@ The modern Unix convention is to provide four levels of configuration:
 3.  A job-specific file with settings for a specific run.
 4.  Command-line options to change things that commonly change.
 
-This is sometimes called [overlay configuration](glossary.html#overlay-configuration)
+This is sometimes called [overlay configuration][overlay-configuration]
 because each level overrides the ones above it:
 the user's configuration file overrides the system settings,
 the job configuration overrides the user's defaults,
@@ -32,7 +32,7 @@ Modern Python programs use the `argparse` library for handling command-line argu
 but the older and simpler `getopt` library will illustrate the core ideas,
 so we will use it.
 
-`getopt` works by matching a specification of what [flags](glossary.html#flag) are allowed
+`getopt` works by matching a specification of what [flags][command-flag] are allowed
 against a list of actual command-line arguments.
 In simplest form,
 the spec is string listing all the single-letter flags,
@@ -88,12 +88,12 @@ print('Log file is {} and quiet is {}'.format(logfile, quiet))
 Log file is /tmp/log.txt and quiet is True
 ```
 
-This pattern is called [set and override](glossary.html#set-and-override),
+This pattern is called [set and override][set-and-override],
 and makes programs easier to understand
 by putting all of the default settings in one place.
 Since we will often want to pass those settings into functions that do the actual work,
-it's very common to put the entire configuration in a [dictionary](glossary.html#dictionary)
-so that we have a single [configuration object](glossary.html#configuration-object) to pass around.
+it's very common to put the entire configuration in a [dictionary][dictionary]
+so that we have a single [configuration object][configuration-object] to pass around.
 It's also common to check that some configuration values aren't accidentally being set twice.
 After rearranging our code a little,
 we get this:
@@ -138,7 +138,7 @@ Quiet True
 Extras ['first.txt']
 ```
 
-We really shouldn't use [`assert`](glossary.html#assertion) to handle errors here;
+We really shouldn't use [`assert`][assertion] to handle errors here;
 Chapter \@ref(logging) will explore a better approach.
 
 ## What do I do when I run out of memorable single-letter flags? {#configure-long}
@@ -194,7 +194,7 @@ One possibility is to write the configuration as a Python data structure
 and then load it as if it was a library.
 This is clever,
 but it's hard for tools in other languages to process.
-Programers are also fond of [JSON](glossary.html#json),
+Programers are also fond of [JSON][json],
 which is a subset of the syntax that JavaScript uses for data structures,
 but that involves a lot of curly braces.
 A third option is the [Windows INI format][ini-format],
@@ -212,9 +212,9 @@ key_4=value_4
 
 INI files are simple to read and write,
 but the format is slowly falling out of use.
-What seems to be replacing it is [YAML](glossary.html#yaml),
+What seems to be replacing it is [YAML][yaml],
 which stands for "Yet Another Markup Language".
-Since YAML is used in [GitHub Pages](glossary.html#github-pages),
+Since YAML is used in [GitHub Pages][github-pages],
 and (unlike JSON) allows comments,
 we'll explore it in this section.
 
