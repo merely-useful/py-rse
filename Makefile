@@ -178,6 +178,9 @@ nbspref :
 
 ## tex-packages : install required LaTeX packages.
 tex-packages :
+	wget -qO- "https://yihui.name/gh/tinytex/tools/install-unx.sh" | sh
+	@echo AFTER TinyTex PATH is ${PATH}
+	@echo AFTER TinyTex xelatex is `which xelatex`
 	-tlmgr install $$(cat ./tex-packages.txt)
 
 ## settings     : echo all variable values.
