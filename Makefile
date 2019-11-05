@@ -47,7 +47,8 @@ RSE_FILES=\
   rse-finale.Rmd \
   rse-objectives.Rmd \
   rse-keypoints.Rmd \
-  rse-solutions.Rmd
+  rse-solutions.Rmd \
+  rse-yaml.Rmd
 
 COMMON_FILES=\
   _common.R \
