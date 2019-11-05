@@ -192,6 +192,7 @@
 [mertz-documentation]: https://realpython.com/documenting-python-code/
 [mit-license]: glossary.html#mit-license
 [model-coc]: http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[namespace]: glossary.html#namespace
 [nano]: glossary.html#nano
 [ngo]: glossary.html#ngo
 [noller-a-lot-happens]: http://jessenoller.com/blog/2015/9/27/a-lot-happens
