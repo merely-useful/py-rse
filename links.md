@@ -4,11 +4,12 @@
 [accuracy]: glossary.html#accuracy
 [action-make]: glossary.html#action-make
 [actual-result]: glossary.html#actual-result
-[advanced-r-performance]: http://adv-r.had.co.nz/Performance.html
 [aggregate]: glossary.html#aggregate
-[ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
 [ally]: glossary.html#ally
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
+[api]: glossary.html#api
+[append-mode]: glossary.html#append-mode
+[argparse]: https://docs.python.org/3/library/argparse.html
 [assertr]: https://cran.r-project.org/web/packages/assertr/index.html
 [authentic-task]: glossary.html#authentic-task
 [auto-completion]: glossary.html#auto-completion
@@ -22,13 +23,16 @@
 [branch-per-feature]: glossary.html#branch-per-feature-workflow
 [branch]: glossary.html#branch
 [broman-packages]: https://kbroman.org/pkg_primer/
+[buffer]: glossary.html#buffer
 [bug-report]: glossary.html#bug-report
 [bug-tracker]: glossary.html#bug-tracker
 [build-tool]: glossary.html#build-tool
 [byte-code]: glossary.html#byte-code
+[call-stack]: glossary.html#call-stack
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
+[catch]: glossary.html#catch
 [caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [cc-0]: glossary.html#cc-0
 [cc-by]: glossary.html#cc-by
@@ -40,10 +44,8 @@
 [choose-license]: http://choosealicense.com/
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
 [cli]: glossary.html#cli
-[climate-api]: http://data.worldbank.org/developers/climate-data-api
 [code-coverage]: glossary.html#code-coverage
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
-[codecov]: https://codecov.io/
 [cognitive-load]: glossary.html#cognitive-load
 [command-argument]: glossary.html#command-argument
 [command-flag]: glossary.html#command-flag
@@ -61,8 +63,6 @@
 [computational-notebook]: glossary.html#computational-notebook
 [conda]: https://conda.io/
 [conditional-expression]: glossary.html#conditional-expression
-[config-email]: mailto:gvwilson@third-bit.com
-[config-repo]: https://github.com/merely-useful/merely-useful.github.io/
 [confirmation-bias]: glossary.html#confirmation-bias
 [continuation-prompt]: glossary.html#continuation-prompt
 [continuous-integration]: glossary.html#continuous-integration
@@ -71,7 +71,6 @@
 [covenant]: https://www.contributor-covenant.org
 [cran]: https://cran.r-project.org/
 [creative-commons]: https://creativecommons.org/
-[cron]: https://en.wikipedia.org/wiki/Cron
 [csv]: glossary.html#csv
 [curb-cuts]: glossary.html#curb-cuts
 [current-working-directory]: glossary.html#current-working-directory
@@ -102,6 +101,7 @@
 [expert]: glossary.html#expert
 [exploratory-programming]: glossary.html#exploratory-programming
 [exponent]: glossary.html#exponent
+[external-error]: glossary.html#external-error
 [f1000-research]: https://f1000research.com/
 [false-beginner]: glossary.html#false-beginner
 [false-negative]: glossary.html#false-negative
@@ -117,6 +117,7 @@
 [flag-variable]: glossary.html#flag-variable
 [folder]: glossary.html#folder
 [forge]: glossary.html#forge
+[format-string]: glossary.html#format-string
 [full-identifier-git]: glossary.html#full-identifier-git
 [fully-qualified-name]: glossary.html#fully-qualified-name
 [function-make]: glossary.html#function-make
@@ -159,6 +160,7 @@
 [insight]: https://www.insightdatascience.com/
 [install]: glossary.html#install
 [intellij-idea]: https://www.jetbrains.com/idea/
+[internal-error]: glossary.html#internal-error
 [interpeter]: glossary.html#interpeter
 [interpreted-language]: glossary.html#interpreted-language
 [interruption-bingo]: glossary.html#interruption-bingo
@@ -179,6 +181,7 @@
 [linter]: glossary.html#linter
 [lme4]: https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf
 [log-file]: glossary.html#log-file
+[logging-framework]: glossary.html#logging-framework
 [loop-body]: glossary.html#loop-body
 [loop-unix]: glossary.html#loop-unix
 [magic-number]: glossary.html#magic-number
@@ -252,6 +255,7 @@
 [r-testthat]: https://testthat.r-lib.org/
 [r]: https://cran.r-project.org/
 [raise-exception]: glossary.html#raise-exception
+[raise]: glossary.html#raise
 [raster-image]: glossary.html#raster-image
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [recursion]: glossary.html#recursion
@@ -271,6 +275,7 @@
 [rmd-documentation]: https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style
 [rmd-themes]: FIXME
 [root-directory]: glossary.html#root-directory
+[rotating-file]: glossary.html#rotating-file
 [rothenberg-backup]: http://wiki.c2.com/?ComputerErrorHaiku
 [rothenberg-quote]: https://www.clir.org/wp-content/uploads/sites/6/ensuring.pdf
 [roxygen-md]: https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html
@@ -378,7 +383,9 @@
 [version-control]: https://peerj.com/preprints/3159/
 [violin-plot]: glossary.html#violin-plot
 [virtual-environment]: glossary.html#virtual-environment
+[virtual-machine]: glossary.html#virtual-machine
 [vs-code]: https://code.visualstudio.com/
+[wayback-machine]: http://web.archive.org/
 [wickham-packages]: http://r-pkgs.had.co.nz/
 [wiki-rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3

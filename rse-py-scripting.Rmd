@@ -1,109 +1,109 @@
 # Command Line Programs in Python {#rse-py-scripting}
 
-The Jupyter Notebook, PyCharm and other interactive tools
+The Jupyter Notebook, PyCharm and other graphical interfaces
 are great for prototyping code and exploring data,
-but in many cases you will ultimately want to take the code you've developed
-using those tools and apply it to thousands of data files,
+but in many cases we ultimately need to apply our code to thousands of data files,
 run it with many different parameters,
-and/or combine it with other programs in a data analysis pipeline.
-To effectively perform these tasks,
-it is often necessary to turn the code you've developed into a standalone program
-that can be run from the Unix shell,
-just like other command-line tools.
+or combine it with other programs in a data analysis pipeline.
+The easiest way to do this effectively is often
+to turn our code into a standalone program that can be run in the Unix shell
+just like other command-line tools [@Tasc2017].
 
-In this chapter we take the code we developed in Chapter \@ref(FIXME)
-and turn it into a Python script (i.e. a command line program written in Python).
+In this chapter we will develop a command-line Python program
+that can be controlled by several option flags,
+handles input and output in ways that other command-line tools expect,
+and provides useful information when things go wrong.
+The result will have more scaffolding than useful application code,
+but that scaffolding stays more or less the same as programs get larger.
 
-## How are command-line scripts structured? {#rse-py-scripting-template}
+## How can I tell if my code is a program or a module? {#rse-py-scripting-main}
 
-In general,
-the first thing that gets added to any Python script is the following:
+If we are going to run a Python program from the command line,
+the first thing we should do is add this to the bottom of the file:
 
 ```python
 if __name__ == '__main__':
     main()
 ```
 
-The reason we need these two lines of code
-is to differentiate between running a Python file as a standalone program
+These two lines of code differentiate between
+running a Python file as a standalone program
 and importing it as a module.
-When you import a Python file as a module,
-the `__name__` variable is automatically set to the name of the file
-(e.g. when importing script.py, `__name__` is `script`).
-When running a Python file as a standalone program,
-`__name__` is always set to `__main__`.
-This means that we can separate the two cases above by checking the value of `__name__`.
-When the Python file is running as a standalone program,
-we want to execute its main functionality.
-Conventionally, this functionality is defined inside a function named `main()`,
-but you could call this function whatever you prefer.
+When we import a Python file as a module in another program,
+the `__name__` variable is automatically set to the name of the file:
+for example,
+if we run:
 
-The next thing you'll need is a library to parse the command line for input arguments.
-The most widely used option is
-[argparse](https://docs.python.org/3/library/argparse.html).
+```python
+import utilities
+```
 
-Putting those together,
-let's create a basic python script called `script_template.py`
-by opening our favourite text editor and entering the following:
+then for the code inside `utilities.py`,
+`__name__` is `utilities`.
+When we run a Python file as a standalone program,
+on the other hand,
+`__name__` is always set to the special string `"__main__"`.
+This means that we can separate the two cases above
+by checking the value of the variable `__name__`.
+If that tells us that the file is running as a standalone program,
+we can then handle command-line options, print help, or whatever else is appropriate.
+Conventionally,
+we define this functionality inside a function called `main`,
+but we can call it whatever we want.
+(We can also put this code directly under the `if` statement,
+but that's generally considered bad practice,
+since it makes testing harder.)
+
+## How can I handle command-line options? {#rse-py-scripting-options}
+
+The next thing we need is
+a library to parse any options given to the program on the command line.
+The most commonly used library in Python is [`argparse`][argparse],
+which can handle options with or without arguments,
+convert those arguments from strings to numbers or other types,
+display help,
+and many other things.
+
+The simplest way to explain how `argparse` works is by example,
+so let's create a short Python script called `script_template.py`:
 
 ```python
 import argparse
 
-#
-# All your functions (that will be called by main()) go here.
-#
 
-def main(inargs):
-    """Run the program."""
+def main(args):
+    '''Run the program.'''
 
-    print('Input file: ', inargs.infile)
-    print('Output file: ', inargs.outfile)
+    print('Input file:', args.infile)
+    print('Output file:', args.outfile)
 
 
 if __name__ == '__main__':
 
-    description='Print the input arguments to the screen.'
+    description = 'Print options to the screen.'
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument("infile", type=str, help="Input file name")
-    parser.add_argument("outfile", type=str, help="Output file name")
+    parser.add_argument('infile', type=str, help='Input file name')
+    parser.add_argument('outfile', type=str, help='Output file name')
 
     args = parser.parse_args()
     main(args)
 ```
 
-By running `script_template.py` at the command line
-we'll see that `argparse` handles all the input arguments:
+When we run `script_template.py` at the command line like this:
 
 ```shell
 $ python script_template.py in.csv out.png
 ```
 
-```text
-Input file:  in.csv
-Output file:  out.png
-```
-
-It also generates help information for the user:
-
-```shell
-$ python script_template.py -h
-```
+we see that `argparse` handles all the input arguments:
 
 ```text
-usage: script_template.py [-h] infile outfile
-
-Print the input arguments to the screen.
-
-positional arguments:
-  infile      Input file name
-  outfile     Output file name
-
-optional arguments:
-  -h, --help  show this help message and exit
+Input file: in.csv
+Output file: out.png
 ```
 
-and issues errors when users give the program invalid arguments:
+It also issues errors when users give the program invalid arguments:
 
 ```shell
 $ python script_template.py in.csv
@@ -114,31 +114,480 @@ usage: script_template.py [-h] infile outfile
 script_template.py: error: the following arguments are required: outfile
 ```
 
-## Where should I put my code? {#rse-py-scripting-code}
+and automatically generates help to tell us what we did wrong:
 
-Using this template as a starting point,
-we can add the functions we developed previously to a script called...
+```shell
+$ python script_template.py -h
+```
 
-FIXME: In this section we will take the code developed in the novice book
-and turn it into a Python script that can be executed at the command line.
-See [this lesson](https://carpentrieslab.github.io/python-aos-lesson/04-cmdline/index.html)
-for an example of this approach in action.
+```text
+usage: script_template.py [-h] infile outfile
 
-> **Code Reuse**
+Print options to the screen.
+
+positional arguments:
+  infile      Input file name
+  outfile     Output file name
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+As the `--help` hint shows,
+`argparse` can handle [long options][long-option-shell] as well as traditional single-letter options;
+the online help has examples of this and much more.
+
+## How can I configure common options for a program? {#rse-py-scripting-configure}
+
+A program that does exactly the same thing every time we run it
+isn't as useful as one that can work on different files
+or analyze data with different thresholds.
+Software of all kinds needs to be controlled;
+some things change more often than others,
+so we need a simple, uniform way to specify some options and leave others alone.
+
+The modern Unix convention is to provide multiple levels of configuration:
+
+1.  A system-wide configuration file for general settings.
+2.  A user-specific configuration file for personal preferences.
+3.  A job-specific file with settings for a specific run.
+4.  Command-line options to change things that commonly change.
+
+This is sometimes called [overlay configuration][overlay-configuration]
+because each level overrides the ones above it:
+the user's configuration file overrides the system settings,
+the job configuration overrides the user's defaults,
+and the command-line options overrides that.
+
+Programmers have invented many formats for configuration files,
+so please do not create your own.
+One possibility is to write the configuration as a Python data structure
+and then load it as if it was a library.
+This is clever,
+but it's hard for tools in other languages to process.
+Programers are also fond of [JSON][json],
+but that involves a lot of curly braces.
+A third option is the [Windows INI format][ini-format],
+which is laid out like this:
+
+```text
+[section_1]
+key_1=value_1
+key_2=value_2
+
+[section_2]
+key_3=value_3
+key_4=value_4
+```
+
+INI files are simple to read and write,
+but the format is slowly falling out of use in favor of [YAML][yaml]
+(Appendix \@ref(rse-yaml)).
+Here's a sample YAML configuration file:
+
+```yaml
+# Standard settings for thesis.
+logfile: "/tmp/log.txt"
+quiet: false
+overwrite: false
+fonts:
+- Verdana
+- Serif
+```
+
+And here's a short Python program that reads and prints that configuration:
+
+```python
+import yaml
+
+with open('config.yml', 'r') as reader:
+    config = yaml.load(reader)
+print(config)
+```
+
+```text
+{'logfile': '/tmp/log.txt', 'quiet': False, 'overwrite': False, 'fonts': ['Verdana', 'Serif']}
+```
+
+When a file like this is read in Python,
+the result is a [dictionary][dictionary].
+YAML allows nested keys and lists,
+but if you need them,
+you're probably doing something wrong [@Xu2015]:
+most users never use most configuration options and find their presence confusing.
+
+## Where should configuration files go? {#rse-py-scripting-config-loc}
+
+System-wide settings for an application called `app` are often stored in `/etc/app.yml`.
+(Older programs sometimes use a name like `app.rc` for their configuration file,
+where `rc` stands for "resource control".)
+Alternatively,
+some programs will set an environment variable (Section \@ref(rse-bash-advanced-vars))
+to the name of the installation directory,
+and then read the system configuration file from there.
+For example,
+if the application's environment variable is `THESIS`,
+we can read configuration from:
+
+```python
+install_dir = os.getenv('THESIS')
+config_file = os.path.join(install_dir, 'config.yml')
+if os.path.isfile(config_file):
+    with open(config_file, 'r') as reader:
+        config = yaml.load(reader)
+```
+
+Similarly,
+we can get personal settings from `$HOME/.thesis.yml`;
+the leading '.' hides the configuration file from `ls`.
+Finally,
+per-job settings can come from `thesis.yml` in the current directory,
+where again "app" is replaced with the name of the program.
+
+## How can I keep a record of the actual configuration that produced particular results? {#s:configure-dump}
+
+We don't need to write any of this when we first create a new tool.
+However,
+experience teaches that little tools grow into big ones.
+As soon as we have more than a couple of configuration parameters,
+or as soon as some of them are usually set to the same value,
+we should start to think about saving our settings in files.
+
+This is particularly important if we want others (including our future self) to be able to reproduce our work.
+Careful record keeping is essential to reproducible science,
+and if we add just a few lines to our program,
+the computer can save the entire configuration for a particular run of a program.
+For example,
+if we have stored our settings in a Python dictionary called `settings` like this:
+
+```python
+settings = {
+    'logfile': '/tmp/thesis.log',
+    'quiet': False,
+    'overwrite': True,
+    'fonts': ['Comic Sans']
+}
+```
+
+we can save that as YAML using this short function:
+
+```python
+def save_config(filename, settings):
+    '''Save configuration settings to a file.'''
+
+    with open(filename, 'w') as writer:
+        yaml.dump(settings, writer)
+
+save_config('thesis.yml', settings)
+```
+
+```shell
+$ cat thesis.yml
+```
+
+```text
+logfile: "/tmp/thesis.log"
+quiet: false
+overwrite: true
+fonts:
+- Comic Sans
+```
+
+This lets us re-create configuration on another machine
+even if it has different default settings.
+The test is whether our program can load a dumped configuration,
+then dump it again and get the same result.
+
+> **Version Everything**
 >
-> In the novice lessons,
-> we learned how to reuse (rather than cut and paste)
-> code by defining functions (Section \@ref(FIXME)).
-> In order to use those functions in other python notebooks/scripts,
-> we saw that we can save them in a file (called a module)
-> that can be imported (Section \@ref(FIXME)).
-> In this chapter, we've seen that we can go one step further
-> and run our Python code outside of a Python environment,
-> by writing Python scripts that can be executed at the command line.
+> We should always include a version number as a field in the dumped configuration
+> (Section \@ref(rse-git-advanced-tag)),
+> and our program should print this when given a `--version` option.
+> We need this because how we interpret options will change over time,
+> and if you don't know what the version of the program was,
+> we'll have to guess what options mean.
+
+## How can I detect errors? {#rse-py-scripting-exceptions}
+
+People will give our programs options that aren't supported
+or ask those programs to read files that don't exist.
+Our code will also inevitably contain bugs,
+so we should plan from the start to catch and handle errors.
+
+Most modern programming languages use [exceptions][exception] for error handling.
+As the name suggests,
+an exception is a way to represent an exceptional or unusual occurrence
+that doesn't fit neatly into the program's expected operation.
+The code below shows a very simple example that reports attempts to divide by zero:
+
+```python
+for denom in [-5, 0, 5]:
+    try:
+        result = 1/denom
+        print('1/{} == {}'.format(denom, result))
+    except:
+        print('{} has no reciprocal'.format(denom))
+```
+
+```text
+1/-5 == -0.2
+0 has no reciprocal
+1/5 == 0.2
+```
+
+`try`/`except` looks like `if`/`else` and works in a similar fashion.
+If nothing unexpected happens inside the `try` block,
+the `except` block isn't run.
+If something *does* happen inside the `try`,
+the program jumps immediately to the `except`.
+This is why the `print` statement inside the `try` doesn't run when `denom` is 0:
+as soon as Python tries to calculate `1/denom`,
+it skips directly to the error message.
+
+FIXME: diagram of exception handling control flow
+
+We often want to know what exactly went wrong,
+so Python and other languages store information about the error
+in an object (also called an exception).
+We can [catch][catch] this object and inspect it as follows:
+
+```python
+for denom in [-5, 0, 5]:
+    try:
+        result = 1/denom
+        print('1/{} == {}'.format(denom, result))
+    except Exception as error:
+        print('{} has no reciprocal: {}'.format(denom, error))
+```
+
+```text
+1/-5 == -0.2
+0 has no reciprocal: division by zero
+1/5 == 0.2
+```
+
+We can use any variable name we like instead of `error`;
+Python will assign the exception object to that variable
+so that we can do things with it in the `except` block.
+
+Python also allows us to specify what kind of exception we want to catch.
+For example,
+we can write code to handle out-of-range indexing and division by zero separately:
+
+```python
+numbers = [-5, 0, 5]
+for i in [0, 1, 2, 3]:
+    try:
+        denom = numbers[i]
+        result = 1/denom
+        print('1/{} == {}'.format(denom, result))
+    except IndexError as error:
+        print('index {} out of range'.format(i))
+    except ZeroDivisionError as error:
+        print('{} has no reciprocal: {}'.format(denom, error))
+```
+
+```text
+1/-5 == -0.2
+0 has no reciprocal: division by zero
+1/5 == 0.2
+index 3 out of range
+```
+
+Exceptions are organized in a hierarchy:
+for example,
+`FloatingPointError`, `OverflowError`, and `ZeroDivisionError`
+are all special cases of `ArithmeticError`,
+so an `except` that catches the latter will catch all three of the former,
+but an `except` that catches an `OverflowError`
+*won't* catch a `ZeroDivisionError`.
+The Python documentation describes all of[the built-in exception types][python-exceptions];
+in practice,
+the ones that people handle most often are:
+
+-   `ArithmeticError`:
+    something has gone wrong in a calculation.
+-   `IndexError` and `KeyError`:
+    something has gone wrong indexing a list or lookup something up in a dictionary.
+-   `OSError`:
+    covers cases like a file not being found,
+    the program not having permission to read or write it,
+    and so on.
+
+So where do exceptions come from?
+The answer is that programmers can [raise][raise] them explicitly:
+
+```python
+for number in [1, 0, -1]:
+    try:
+        if number < 0:
+            raise ValueError('negative values not supported: {}'.format(number))
+        print(number)
+    except ValueError as error:
+        print('exception: {}'.format(error))
+```
+
+```text
+1
+0
+exception: negative values not supported: -1
+```
+
+We can define our own exception types,
+and many libraries do,
+but the built-in types are enough to cover common cases.
+
+One final note is that exceptions don't have to be handled where they are raised—in fact,
+their greatest strength is that they allow long-range error handling.
+If an exception occurs inside a function and there is no `except` for it there,
+Python looks in whoever called that function.
+It keeps working its way through the [call stack][call-stack]
+until it finds a matching `except`;
+if there isn't one,
+it takes care of the exception itself.
+
+```python
+def sum_reciprocals(values):
+    result = 0
+    for v in values:
+        result += 1/v
+    return result
+
+numbers = [-1, 0, 1]
+try:
+    one_over = sum_reciprocals(numbers)
+except ArithmeticError as error:
+    print('Error trying to sum reciprocals: {}'.format(error))
+```
+
+```text
+Error trying to sum reciprocals: division by zero
+```
+
+This leasd to the rule "throw low, catch high":
+write most of your code without exception handlers,
+since there's nothing useful you can do in the middle of a small utility function,
+but put a few handlers in the main body of your program
+to catch and report all errors.
+
+## What exceptions should I raise and catch? {#rse-py-scripting-where}
+
+Broadly speaking there are two approaches to error handling:
+"look before your leap"
+and
+"it's easier to ask for forgiveness than permission".
+When using the first,
+we check if an operation will be allowed before trying it:
+
+```python
+LOG_DIR = "/tmp/mylogdir"
+
+def write_message(filename, message):
+    if os.path.isdir(LOG_DIR):
+        path = os.path.join(LOG_DIR, filename)
+        with open(path, 'a') as writer:
+            writer.write(message)
+    else:
+        print('No log directory {}'.format(LOG_DIR), file=sys.stderr)
+```
+
+With the second,
+we try the operation and catch the exception if one is raised:
+
+```python
+LOG_DIR = "/tmp/mylogdir"
+
+def write_message(filename, message):
+    try:
+        path = os.path.join(LOG_DIR, filename)
+        with open(path, 'a') as writer:
+            writer.write(message)
+    except OSError as error:
+        print('Unable to write log message to {}: {}'.format(path, error))
+```{: title="logging/ask_permission_not_forgiveness.py"}
+
+The first approach doesn't actually need exception handlers,
+except it does:
+programmers can never anticipate all of the things that can go wrong in the real world,
+so there should always be an `except` somewhere.
+Since that's the case,
+most programmers prefer the second approach.
+
+When we are raising exceptions ourselves,
+we should make the information as specific as possible.
+For example,
+suppose a program contains this:
+
+```python
+if (val is not None) and (min_val < val < max_val) and (val % 2 == 0) and (val >= prev_val):
+    # OK branch
+else:
+    raise ValueError('Bad value: {}'.format(val))
+```
+
+Knowing what value caused the error is helpful,
+but the message in the exception doesn't tell us why it was bad.
+Was it not between `min_val` and `max_val`?
+Was it less than `prev_val`?
+Whoever has to debug the problem will want to know,
+but breaking the test up into cases makes the code harder to read:
+
+```python
+if val is None:
+    raise ValueError('Value {} is None'.format(val))
+elif (val <= min_val) or (max_val <= val):
+    raise ValueError('Value {} is out of range ({}, {})'.format(val, min_val, max_val))
+elif val % 2 != 0:
+    raise ValueError('Value {} is odd'.format(val))
+elif val < prev_val:
+    raise ValueError('Value {} is not less than previous value {}'.format(val, prev_val))
+else:
+    # OK branch
+```
+
+Generally speaking,
+we should distinguish between [internal errors][internal-error],
+such as calling a function with `None` instead of a list,
+and [external errors][external-error],
+such as trying to read a file that doesn't exist.
+Internal errors should be forestalled by unit testing (Chapter \@ref(rse-correct)),
+but software always encounters new situations in the real world
+and those situations can trigger previously unseen bugs.
+When an internal error occurs,
+the only thing we can do in most cases is report it and halt the program.
+If a function has been passed `None` instead of a valid list,
+for example,
+the odds are good that one of our data structures is corrupted
+(or at least in an unexpected state).
+We can try to guess what the problem is and take corrective action,
+but experience teaches us that our guess will often be wrong
+and our attempt to correct the problem might actually make things worse.
+
+External errors,
+on the other hand,
+are usually caused by interactions between the program and the outside world:
+for example,
+a user may mis-type a filename or the network might be down.
+Section \@ref(rse-correct-random) described some ways to write unit tests
+to check that software is doing the right thing in these situations,
+but we still need to report them.
+Alternatively,
+if we're interacting with a user,
+it might make sense for us to prompt them to try again:
+it's easy to mis-type a password or select the wrong file for analysis,
+and users shouldn't have to re-start the program to correct something like this.
+
+The one rule we should *always* follow is to check for errors as early as possible
+so that we don't waste the user's time.
+Few things are as frustrating as being told at the end of an hour-long calculation
+that the program doesn't have permission to write to an output directory.
+It's a little extra work to check things like this up front,
+but the larger your program or the longer it runs,
+the more useful those checks will be.
 
 ## How can I write useful error messages? {#rse-py-scripting-error-messages}
 
-The error message shown in Figure \@ref(fig:rse-py-scripting-error-message)(#FIG) is not helpful:
+The error message shown in Figure \@ref(fig:rse-py-scripting-error-message) is not helpful:
 
 ```{r rse-py-scripting-error-message, echo=FALSE, fig.cap="An Unhelpful Error Message"}
 knitr::include_graphics("figures/rse-py-scripting/error-message.png")
@@ -268,10 +717,210 @@ ERROR_MESSAGES[user_language]['cannot_read_file']
 
 where `user_language` is a two-letter code for the user's preferred language.
 
-## Key Points {#rse-pyscripts-keypoints}
+## How should I report errors? {#rse-py-scripting-logging}
+
+Programs should report things that go wrong.
+They should also sometimes report things that go right
+so that people can monitor their progress
+and down the sources of errors.
+Adding `print` statements for debugging is a common approach,
+but removing them or commenting them out,
+only to add them again,
+is tedious—especially when the software is in production.
+
+A better approach is to use a [logging framework][logging-framework],
+such as Python's `logging` library.
+This lets you leave your debugging statements in your code
+and turn them on or off at will.
+It also lets you send output to any of several destinations,
+which is helpful when your data analysis pipeline has several stages
+and you're trying to figure out which one contains a bug
+(or whether the problem lies in their interaction).
+
+To understand how logging frameworks work,
+suppose we want to turn `print` statements in our program on or off
+without editing the program's source code.
+We would probably wind up with code like this:
+
+```python
+DEBUG_LEVEL = 2 # or some other number
+
+def complex_function():
+    # ...lots of complicated code...
+    if (DEBUG_LEVEL > 0):
+        print('Everything seems to be going well')
+    # ...more complicated code...
+    if (DEBUG_LEVEL > 1):
+        print('Current alpha value {}'.format(alpha))
+```
+
+Here,
+`DEBUG_LEVEL` acts as a threshold:
+any debugging output at a lower level isn't printed.
+
+Logging frameworks combine the `if` and the `print` statements,
+and define standard names for the levels.
+In order of increasing severity, the levels are:
+
+-   `DEBUG`: very detailed information used for localizing errors.
+-   `INFO`: confirmation that things are working as expected.
+-   `WARNING`: something unexpected happened, but the program will keep going.
+-   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
+-   `CRITICAL`: potential loss of data, security breach, etc.
+
+Each of these has a corresponding function:
+we can use `logging.debug`, `logging.info`, etc. to write messages at these levels.
+By default,
+only `WARNING` and above are displayed;
+messages appear on [standard error][standard-error] so that the flow of data in pipes isn't affected.
+The source of the message appears as well:
+by default, the source is called "root" for reasons that will become clear later.
+Thus,
+if we run the small program shown below,
+only the warning message appears:
+
+```python
+import logging
+
+logging.warning('This is a warning.')
+logging.info('This is just for information.')
+```
+
+```text
+WARNING:root:This is a warning.
+```
+
+We can configure logging to send messages to a file instead of to standard error
+using `logging.basicConfig`.
+(This has to be done before we make any logging calls:
+it's not retroactive.)
+We can use the same function to set the logging level:
+everything at or above the specified level is displayed.
+
+```python
+import logging
+
+logging.basicConfig(level=logging.DEBUG, filename='everything.log')
+
+logging.debug('This is for debugging.')
+logging.info('This is just for information.')
+logging.warning('This is a warning.')
+logging.error('Something went wrong.')
+logging.critical('Something went seriously wrong.')
+```
+
+```text
+DEBUG:root:This is for debugging.
+INFO:root:This is just for information.
+WARNING:root:This is a warning.
+ERROR:root:Something went wrong.
+CRITICAL:root:Something went seriously wrong.
+```
+
+By default,
+`basicConfig` re-opens the log file in [append mode][append-mode];
+we can use `filemode='w'` to overwrite the existing log data.
+This is useful during debugging,
+but we should think twice before doing in production,
+since the information we throw away always turns out to have been exactly what we needed to find a bug.
+
+Many programs allow users to specify logging levels and log file names as command-line parameters.
+At its simplest,
+this is a single flag `-v` or `--verbose` that changes the logging level from `WARNING` (the default)
+to `DEBUG` (the noisiest level).
+There may also be a corresponding flag `-q` or `--quiet` that changes the level to `ERROR`,
+and a flag `-l` or `--logfile` that specifies a log file name
+(with standard error being the default for message output).
+
+> **`tail -f`**
+>
+> A handy trick during development is to configure logging to send messages to a file,
+> and then open another terminal window and run <code>tail -f <em>filename</em></code>
+> to display changes to that file as information is appended.
+> Doing this gives you a record of the log output
+> while allowing you to monitor your program's progress interactively.
+
+Libraries like `logging` can send messages to many destinations:
+[rotating files][rotating-file] so that the system always has messages from the last few hours
+but doesn't fill up the disk,
+for example,
+or a centralized logging server of some kind that collates logs from many different systems.
+We don't need any of these when we start,
+but the data engineers and system administrators who eventually have to install and maintain your programs
+will be very grateful that you used `logging`,
+because then they can set it up the way they want with very little work.
+
+## How should I log my program's configuration? {#rse-py-scripting-log-config}
+
+One of the most important things a program can record
+is its configuration—its *entire* configuration,
+so that its operation can be reproduced exactly later on.
+Unfortunately,
+the configuration for even a moderately complex program consists of many values,
+and logging frameworks are designed to log one thing at a time.
+This leaves us with some hard choices:
+
+Write the configuration to a separate file.
+:   If the program can read configuration files,
+    then the configuration written by an old run can be read in directly for a new run.
+    However,
+    we now have to look in two places to find out what happened in a particular run.
+
+Write the configuration to the log, one value at a time.
+:   Some programs write name/value pairs, one per setting, at `INFO` level.
+    This puts all the information in one place (the log file),
+    but someone now has to write software to get configuration values out of the log
+    so that they can be re-used.
+
+Write the configuration to the log as one big string.
+:   If the configuration is stored in a configuration object,
+    that object can be converted to a JSON string
+    and written to the log as one looooong entry.
+    This puts all of the information in one place,
+    and it's relatively easy to recover,
+    but the log entry isn't particularly readable.
+
+Use a structured log instead of a line-oriented log.
+:   Most log files are written line-by-line because lines of text are the universal language of Unix pipelines.
+    Some people are now experimenting with logs that use more structured storage formats,
+    and if everything in the log is JSON anyway,
+    writing the configuration as a blob of JSON is straightforward.
+
+On balance,
+we recommend the third option:
+convert the configuration to a JSON structure and write that as a single log entry.
+
+## Summary {#rse-py-scripting-summary}
+
+In the novice lessons,
+we learned how to reuse (rather than cut and paste)
+code by defining functions.
+In order to use those functions in other python notebooks/scripts,
+we saw that we can save them in a file (called a module) that can be imported.
+In this chapter we have seen that we can go one step further
+and run our Python code outside of a Python environment,
+by writing Python scripts that can be executed at the command line.
+
+## Exercises {#rse-py-scripting-exercises}
+
+### Set the logging level {#rse-py-scripting-ex-set-level}
+
+-   FIXME: use `getopt` and `--level NAME` to set logging level.
+
+### Display logging configuration {#rse-py-scripting-ex-display-log-config}
+
+-   FIXME: use `logging_tree.printout()` to display logging configuration.
+
+### Log to standard error as well as a file {#rse-py-scripting-ex-log-stderr}
+
+-   FIXME: modify `create_logger` to log to standard error as well as to a file.
+
+## Key Points {#rse-py-scripting-keypoints}
 
 ```{r, child="keypoints/rse-py-scripting.md"}
 ```
+
+## Exercises {#rse-py-scripting-ex}
 
 ```{r, child="./links.md"}
 ```

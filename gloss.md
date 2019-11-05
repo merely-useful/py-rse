@@ -705,9 +705,6 @@
 **Raise**<a id="raise"></a>
 :   FIXME
 
-**Raise**<a id="raise-exception"></a> (exception):
-   FIXME
-
 **Raster image**<a id="raster-image"></a>
 :   FIXME
 
