@@ -284,6 +284,7 @@
 [rule-make]: glossary.html#rule-make
 [sci-reproducibility]: https://en.wikipedia.org/wiki/Reproducibility
 [script]: glossary.html#script
+[search-path]: glossary.html#search-path
 [select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [sense-vote]: glossary.html#sense-vote
 [setuptools]: https://setuptools.readthedocs.io/

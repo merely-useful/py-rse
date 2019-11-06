@@ -792,6 +792,9 @@
 **Script**<a id="script"></a>
 :   FIXME
 
+**Search path**<a id="search path"></a>
+:   FIXME
+
 **Seed**<a id="prng-seed"></a> (for pseudorandom number generator):
    FIXME
 
