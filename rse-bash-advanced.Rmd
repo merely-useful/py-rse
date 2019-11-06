@@ -174,7 +174,7 @@ cut -d , -f 2 $1 | uniq
 As in R and Python,
 a comment starts with a `#` character and runs to the end of the line.
 The computer ignores comments,
-but they help people (including your future self) understand and use scripts.
+but they help people (including our future self) understand and use scripts.
 
 Let's make one more change to our script.
 Instead of always selecting the second column,
@@ -701,6 +701,181 @@ $ find . -name "*.bak"
 ./chapter-3/index.html.bak
 ./chapter-2/index.html.bak
 ```
+
+## How can I change the shell's settings? {#rse-bash-advanced-vars}
+
+The shell is just a program, and like other programs, it has variables.
+Those variables control its execution,
+so by changing their values
+we can change how the shell and other programs behave.
+
+Let's run the command `set` and look at some of the variables in a typical shell session:
+
+```shell
+$ set
+```
+
+```text
+COMPUTERNAME=TURING
+HOME=/home/amira
+HOMEDRIVE=C:
+HOSTNAME=TURING
+HOSTTYPE=i686
+NUMBER_OF_PROCESSORS=4
+OS=Windows_NT
+PATH=/Users/amira/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+PWD=/home/amira
+UID=1000
+USERNAME=amira
+...
+```
+
+There are quite a few—many more than are shown here.
+And yes,
+using `set` to *show* things might seem a little strange,
+even for Unix,
+but if we don't give it any arguments,
+it might as well show us things we *could* set.
+
+Every variable has a name.
+By convention, variables that are always present are given upper-case names.
+All shell variables' values are strings, even those (like `UID`) that look like numbers.
+It's up to programs to convert these strings to other types when necessary.
+For example, if a program wanted to find out how many processors the computer had,
+it would convert the value of the `NUMBER_OF_PROCESSORS` variable from a string to an integer.
+
+Similarly, some variables (like `PATH`) store lists of values.
+In this case, the convention is to use a colon ':' as a separator.
+If a program wants the individual elements of such a list,
+it's the program's responsibility to split the variable's string value into pieces.
+
+Let's have a closer look at `PATH`.
+Its value defines the shell's [search path]({{ page.root }}/reference/{{ site.index }}#search-path),
+i.e., the list of directories that the shell looks in for runnable programs
+when we type in a program name without specifying what directory it is in.
+
+For example,
+when we type a command like `analyze`,
+the shell needs to decide whether to run `./analyze` or `/bin/analyze`.
+The rule it uses is simple:
+the shell checks each directory in the `PATH` variable in turn,
+looking for a program with the requested name in that directory.
+As soon as it finds a match, it stops searching and runs the program.
+
+To show how this works,
+here are the components of `PATH` listed one per line:
+
+```shell
+/Users/amira/bin
+/usr/local/git/bin
+/usr/bin
+/bin
+/usr/sbin
+/sbin
+/usr/local/bin
+```
+
+On our computer,
+there are actually three programs called `analyze`
+in three different directories:
+`/bin/analyze`,
+`/usr/local/bin/analyze`,
+and `/users/amira/analyze`.
+Since the shell searches the directories in the order they're listed in `PATH`,
+it finds `/bin/analyze` first and runs that.
+Notice that it will *never* find the program `/users/amira/analyze`
+unless we type in the full path to the program,
+since the directory `/users/amira` isn't in `PATH`.
+
+Let's show the value of the variable `HOME`:
+
+```shell
+$ echo HOME
+```
+
+```text
+HOME
+```
+
+That just prints "HOME", which isn't what we wanted
+(though it is what we actually asked for).
+Let's try this instead:
+
+```shell
+$ echo $HOME
+```
+
+```text
+/home/amira
+```
+
+The dollar sign tells the shell that we want the value of the variable
+rather than its name.
+This works just like wildcards:
+the shell does the replacement before running the program we've asked for.
+Thanks to this expansion, what we actually run is `echo /home/amira`,
+which displays the right thing.
+
+Creating a variable is easy—we just assign a value to a name using "=",
+and put quotes around the value if it contains spaces or special characters:
+
+```shell
+$ DEPARTMENT="Library Science"
+$ echo $DEPARTMENT
+```
+
+```text
+Library Science
+```
+
+To change the value, we just assign a new one:
+
+```shell
+$ DEPARTMENT="Information Science"
+$ echo $DEPARTMENT
+```
+
+```text
+Information Science
+```
+
+If we want to set some variables automatically every time we run a shell,
+we can put commands to do this in a file called `.bashrc` in our home directory.
+(The '.' character at the front prevents `ls` from listing this file
+unless we specifically ask it to using `-a`.
+The "rc" at the end is an abbreviation for "run control",
+which meant something really important decades ago,
+and is now just a convention everyone follows without understanding why.)
+For example,
+here are two lines in `/home/amira/.bashrc`:
+
+```text
+export DEPARTMENT="Library Science"
+export TEMP_DIR=/tmp
+export BACKUP_DIR=$TEMP_DIR/backup
+```
+
+These three lines create the variables `DEPARTMENT`,
+`TEMP_DIR`,
+and `BACKUP_DIR`,
+and export them so that any programs the shell runs can see them as well.
+Notice that `BACKUP_DIR`'s definition relies on the value of `TEMP_DIR`,
+so that if we change where we put temporary files,
+our backups will be relocated automatically.
+
+While we're here,
+it's also common to use the `alias` command to create shortcuts for things we frequently type.
+For example, we can define the alias `backup`
+to run `/bin/zback` with a specific set of arguments:
+
+```shell
+alias backup=/bin/zback -v --nostir -R 20000 $HOME $BACKUP_DIR
+```
+
+Aliases can save us a lot of typing, and hence a lot of typing mistakes.
+We can find interesting suggestions for other aliases
+and other bash tricks by searching for "sample bashrc"
+in your favorite search engine.
 
 ## Summary {#rse-bash-advanced-summary}
 
