@@ -48,7 +48,8 @@ RSE_FILES=\
   rse-objectives.Rmd \
   rse-keypoints.Rmd \
   rse-solutions.Rmd \
-  rse-yaml.Rmd
+  rse-yaml.Rmd \
+  rse-ssh.Rmd
 
 COMMON_FILES=\
   _common.R \
@@ -129,14 +130,17 @@ py-pdf : _book/py/py.pdf
 rse-pdf : _book/rse/rse.pdf
 
 _book/r/r.pdf : ${R_FILES} ${COMMON_FILES}
+	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_r.yml'); warnings()"
 
 _book/py/py.pdf : ${PY_FILES} ${COMMON_FILES}
+	rm -f py.Rmd
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py.yml'); warnings()"
 
 _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
+	rm -f rse.Rmd
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_rse.yml'); warnings()"
 
