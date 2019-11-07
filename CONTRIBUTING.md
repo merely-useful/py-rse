@@ -28,12 +28,14 @@ only when it is considered that it will improve clarity.
 
 Specific conventions include:
 
-- `function_name()` and `method_name()` (snake_case, include parentheses)
 - `variable_name` (snake_case)
+- `function_name` and `method_name` (snake_case)
+  - Please do _not_ include empty parentheses to indicate a function,
+    as this makes it hard to distinguish a function name from a call with no arguments.
 - `folder-name/` (hyphens instead of underscores, trailing slash for clarity)
 - `file-name` (hyphens instead of underscores)
-- `'string'` and `"string"` (single or double quotes, It seems people prefer
-  different options here)
+- `'string'` and `"string"`
+  - We will settle on single vs. double quotes before we publish :-)
 - Method chaining in pandas:
 
     ```
@@ -47,12 +49,23 @@ Specific conventions include:
 
 For markdown, we use ATX-headers (`#` prefix) rather than Setext headers (`=/-`
 underlines), links with `[linkname][tag]` rather than `[linkname](url)`, and
-fenced code blocks rather than indented blocks. More details on the writing
-process can be found in [CONTRIBUTING.md](CONTRIBUTING.md).
+fenced code blocks rather than indented blocks.
 
 There are more details for what we recommend for learners in
-[style.Rmd](style.Rmd) (Python only so far). Discuss further in [issue
-#116](https://github.com/merely-useful/merely-useful.github.io/issues/116).
+[rse-style.Rmd](rse-style.Rmd). Discuss further in [issue #116](https://github.com/merely-useful/merely-useful.github.io/issues/116).
 
 Please note that we use Simplified English rather than Traditional English,
 i.e., American rather than British spelling and grammar.
+
+## Setting Up
+
+This book is written in [Bookdown](https://bookdown.org/).
+If you want to preview builds on your own computer, please:
+
+1.  Follow the instructions for installing Bookdown.
+2.  Run `make everything` to recompile everything.
+    -   Run `make` on its own to see a list of targets for rebuilding specific volumes as HTML or PDF.
+
+Please note that Bookdown works best with [TinyTeX](https://yihui.name/tinytex/).
+After installing it, you can run `make tex-packages` to install all the packages this book depends on.
+You do _not_ need to do this if you are only building and previewing the HTML versions of the books.

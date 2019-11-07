@@ -1,4 +1,4 @@
-.PHONY : all clean chapters commands crossrefs fixme gloss html links nbspref settings
+.PHONY : all clean chapters commands crossrefs fixme gloss html links nbspref settings tex-packages
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
@@ -176,6 +176,10 @@ links :
 ## nbspref      : check that all cross-references are prefixed with a non-breaking space.
 nbspref :
 	@bin/nbspref.py ${ALL_FILES}
+
+## tex-packages : install required LaTeX packages.
+tex-packages :
+	-tlmgr install $$(cat ./tex-packages.txt)
 
 ## settings     : echo all variable values.
 settings :
