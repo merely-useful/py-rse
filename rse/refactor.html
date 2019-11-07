@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 12 Refactoring | Merely Useful: RSE</title>
+  <meta name="description" content="Chapter 12 Refactoring | Merely Useful: RSE" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 12 Refactoring | Merely Useful: RSE" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Chapter 12 Refactoring | Merely Useful: RSE" />
+  <meta name="github-repo" content="merely-useful/merely-useful.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 12 Refactoring | Merely Useful: RSE" />
+  
+  <meta name="twitter:description" content="Chapter 12 Refactoring | Merely Useful: RSE" />
+  
+
+<meta name="author" content="Dhavide Aruliah, Madeleine Bonsma-Fisher, Kate Hertweck, Damien Irving, Luke Johnston, Christina Koch, Sara Mahallati, Brandeis Marshall, Joel Ostblom, Elizabeth Wickes, Charlotte Wickham, and Greg Wilson" />
+
+
+<meta name="date" content="2019-10-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="docs.html"/>
+<link rel="next" href="project.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { background-color: #f8f8f8; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Merely Useful</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#rse-intro-personas"><i class="fa fa-check"></i><b>1.1</b> Who are these lessons for?</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#summary"><i class="fa fa-check"></i><b>1.1.1</b> Summary</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.1.2</b> Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#rse-intro-big-picture"><i class="fa fa-check"></i><b>1.2</b> What’s the big picture?</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#why-isnt-all-of-this-already-normal"><i class="fa fa-check"></i><b>1.2.1</b> Why isn’t all of this already normal?</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#syllabus"><i class="fa fa-check"></i><b>1.2.2</b> Syllabus</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#rse-intro-ack"><i class="fa fa-check"></i><b>1.3</b> Acknowledgments</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="rse-bash.html"><a href="rse-bash.html"><i class="fa fa-check"></i><b>2</b> Bash Shell</a><ul>
+<li class="chapter" data-level="2.1" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-questions"><i class="fa fa-check"></i><b>2.1</b> Questions</a></li>
+<li class="chapter" data-level="2.2" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-intro"><i class="fa fa-check"></i><b>2.2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="rse-bash.html"><a href="rse-bash.html#unix-shells"><i class="fa fa-check"></i><b>2.2.1</b> Unix shells</a></li>
+<li class="chapter" data-level="2.2.2" data-path="rse-bash.html"><a href="rse-bash.html#are-clis-more-difficult-to-learn-than-guis"><i class="fa fa-check"></i><b>2.2.2</b> Are CLIs more difficult to learn than GUIs?</a></li>
+<li class="chapter" data-level="2.2.3" data-path="rse-bash.html"><a href="rse-bash.html#flexibility-and-automation"><i class="fa fa-check"></i><b>2.2.3</b> Flexibility and automation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-navigation"><i class="fa fa-check"></i><b>2.3</b> Navigating the filesystem</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="rse-bash.html"><a href="rse-bash.html#general-syntax-of-a-shell-command"><i class="fa fa-check"></i><b>2.3.1</b> General syntax of a shell command</a></li>
+<li class="chapter" data-level="2.3.2" data-path="rse-bash.html"><a href="rse-bash.html#getting-help"><i class="fa fa-check"></i><b>2.3.2</b> Getting help</a></li>
+<li class="chapter" data-level="2.3.3" data-path="rse-bash.html"><a href="rse-bash.html#looking-around-and-moving-about"><i class="fa fa-check"></i><b>2.3.3</b> Looking around and moving about</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-working"><i class="fa fa-check"></i><b>2.4</b> Working With Files and Directories</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="rse-bash.html"><a href="rse-bash.html#creating-directories"><i class="fa fa-check"></i><b>2.4.1</b> Creating directories</a></li>
+<li class="chapter" data-level="2.4.2" data-path="rse-bash.html"><a href="rse-bash.html#create-a-text-file"><i class="fa fa-check"></i><b>2.4.2</b> Create a text file</a></li>
+<li class="chapter" data-level="2.4.3" data-path="rse-bash.html"><a href="rse-bash.html#moving-files-and-directories"><i class="fa fa-check"></i><b>2.4.3</b> Moving files and directories</a></li>
+<li class="chapter" data-level="2.4.4" data-path="rse-bash.html"><a href="rse-bash.html#copying-files-and-directories"><i class="fa fa-check"></i><b>2.4.4</b> Copying files and directories</a></li>
+<li class="chapter" data-level="2.4.5" data-path="rse-bash.html"><a href="rse-bash.html#removing-files-and-directories"><i class="fa fa-check"></i><b>2.4.5</b> Removing files and directories</a></li>
+<li class="chapter" data-level="2.4.6" data-path="rse-bash.html"><a href="rse-bash.html#operations-with-multiple-files-and-directories"><i class="fa fa-check"></i><b>2.4.6</b> Operations with multiple files and directories</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-pipes"><i class="fa fa-check"></i><b>2.5</b> Pipes and Filters</a></li>
+<li class="chapter" data-level="2.6" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-loops"><i class="fa fa-check"></i><b>2.6</b> Loops</a></li>
+<li class="chapter" data-level="2.7" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-scripts"><i class="fa fa-check"></i><b>2.7</b> Shell Scripts</a></li>
+<li class="chapter" data-level="2.8" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-finding"><i class="fa fa-check"></i><b>2.8</b> Finding Things</a></li>
+<li class="chapter" data-level="2.9" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-summary"><i class="fa fa-check"></i><b>2.9</b> Summary</a></li>
+<li class="chapter" data-level="2.10" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-exercises"><i class="fa fa-check"></i><b>2.10</b> Exercises</a><ul>
+<li class="chapter" data-level="2.10.1" data-path="rse-bash.html"><a href="rse-bash.html#navigating-files-and-directories"><i class="fa fa-check"></i><b>2.10.1</b> Navigating Files and Directories</a></li>
+<li class="chapter" data-level="2.10.2" data-path="rse-bash.html"><a href="rse-bash.html#working-with-files-and-directories"><i class="fa fa-check"></i><b>2.10.2</b> Working With Files and Directories</a></li>
+<li class="chapter" data-level="2.10.3" data-path="rse-bash.html"><a href="rse-bash.html#pipes-and-filters"><i class="fa fa-check"></i><b>2.10.3</b> Pipes and Filters</a></li>
+<li class="chapter" data-level="2.10.4" data-path="rse-bash.html"><a href="rse-bash.html#loops"><i class="fa fa-check"></i><b>2.10.4</b> Loops</a></li>
+<li class="chapter" data-level="2.10.5" data-path="rse-bash.html"><a href="rse-bash.html#shell-scripts"><i class="fa fa-check"></i><b>2.10.5</b> Shell Scripts</a></li>
+<li class="chapter" data-level="2.10.6" data-path="rse-bash.html"><a href="rse-bash.html#finding-things"><i class="fa fa-check"></i><b>2.10.6</b> Finding Things</a></li>
+</ul></li>
+<li class="chapter" data-level="2.11" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-keypoints"><i class="fa fa-check"></i><b>2.11</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html"><i class="fa fa-check"></i><b>3</b> Git at the command line</a><ul>
+<li class="chapter" data-level="3.1" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-questions"><i class="fa fa-check"></i><b>3.1</b> Questions</a></li>
+<li class="chapter" data-level="3.2" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-intro"><i class="fa fa-check"></i><b>3.2</b> Introduction</a></li>
+<li class="chapter" data-level="3.3" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-setup"><i class="fa fa-check"></i><b>3.3</b> Setting up Git</a></li>
+<li class="chapter" data-level="3.4" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-repos"><i class="fa fa-check"></i><b>3.4</b> Creating a repository</a></li>
+<li class="chapter" data-level="3.5" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-changes"><i class="fa fa-check"></i><b>3.5</b> Tracking changes</a></li>
+<li class="chapter" data-level="3.6" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-remotes"><i class="fa fa-check"></i><b>3.6</b> Remotes in GitHub</a></li>
+<li class="chapter" data-level="3.7" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-history"><i class="fa fa-check"></i><b>3.7</b> Exploring history</a></li>
+<li class="chapter" data-level="3.8" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#creating-a-repository"><i class="fa fa-check"></i><b>3.8.1</b> Creating a repository</a></li>
+<li class="chapter" data-level="3.8.2" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#tracking-changes"><i class="fa fa-check"></i><b>3.8.2</b> Tracking changes</a></li>
+<li class="chapter" data-level="3.8.3" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#ignoring-things"><i class="fa fa-check"></i><b>3.8.3</b> Ignoring things</a></li>
+<li class="chapter" data-level="3.8.4" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#remotes-in-github"><i class="fa fa-check"></i><b>3.8.4</b> Remotes in GitHub</a></li>
+<li class="chapter" data-level="3.8.5" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#exploring-history"><i class="fa fa-check"></i><b>3.8.5</b> Exploring history</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-keypoints"><i class="fa fa-check"></i><b>3.9</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html"><i class="fa fa-check"></i><b>4</b> Advanced Git</a><ul>
+<li class="chapter" data-level="4.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-questions"><i class="fa fa-check"></i><b>4.1</b> Questions</a></li>
+<li class="chapter" data-level="4.2" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-intro"><i class="fa fa-check"></i><b>4.2</b> Introduction</a></li>
+<li class="chapter" data-level="4.3" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-branches"><i class="fa fa-check"></i><b>4.3</b> Branches</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#a-branching-workflow"><i class="fa fa-check"></i><b>4.3.1</b> A branching workflow</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-pull-requests"><i class="fa fa-check"></i><b>4.4</b> Pull requests</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#setting-up-contribution-repositories"><i class="fa fa-check"></i><b>4.4.1</b> Setting up contribution repositories</a></li>
+<li class="chapter" data-level="4.4.2" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#submitting-a-pull-request"><i class="fa fa-check"></i><b>4.4.2</b> Submitting a pull request</a></li>
+<li class="chapter" data-level="4.4.3" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#dealing-with-conflicting-changes"><i class="fa fa-check"></i><b>4.4.3</b> Dealing with Conflicting Changes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-exercises"><i class="fa fa-check"></i><b>4.5</b> Exercises</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#branches"><i class="fa fa-check"></i><b>4.5.1</b> Branches</a></li>
+<li class="chapter" data-level="4.5.2" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#pull-requests"><i class="fa fa-check"></i><b>4.5.2</b> Pull requests</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-keypoints"><i class="fa fa-check"></i><b>4.6</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="configure.html"><a href="configure.html"><i class="fa fa-check"></i><b>5</b> Configuring Software</a><ul>
+<li class="chapter" data-level="5.1" data-path="configure.html"><a href="configure.html#configure-questions"><i class="fa fa-check"></i><b>5.1</b> Questions</a></li>
+<li class="chapter" data-level="5.2" data-path="configure.html"><a href="configure.html#configure-intro"><i class="fa fa-check"></i><b>5.2</b> Introduction</a></li>
+<li class="chapter" data-level="5.3" data-path="configure.html"><a href="configure.html#configure-cmdline"><i class="fa fa-check"></i><b>5.3</b> How can I handle command-line flags consistently?</a></li>
+<li class="chapter" data-level="5.4" data-path="configure.html"><a href="configure.html#configure-long"><i class="fa fa-check"></i><b>5.4</b> What do I do when I run out of memorable single-letter flags?</a></li>
+<li class="chapter" data-level="5.5" data-path="configure.html"><a href="configure.html#configure-files"><i class="fa fa-check"></i><b>5.5</b> How can I manage configuration files consistently?</a></li>
+<li class="chapter" data-level="5.6" data-path="configure.html"><a href="configure.html#configure-overlay"><i class="fa fa-check"></i><b>5.6</b> How can I implement overlay configuration?</a></li>
+<li class="chapter" data-level="5.7" data-path="configure.html"><a href="configure.html#configure-find"><i class="fa fa-check"></i><b>5.7</b> How can I find configuration files?</a></li>
+<li class="chapter" data-level="5.8" data-path="configure.html"><a href="configure.html#configure-dump"><i class="fa fa-check"></i><b>5.8</b> How can I keep a record of the actual configuration that produced particular results?</a></li>
+<li class="chapter" data-level="5.9" data-path="configure.html"><a href="configure.html#configure-summary"><i class="fa fa-check"></i><b>5.9</b> Summary</a></li>
+<li class="chapter" data-level="5.10" data-path="configure.html"><a href="configure.html#configure-exercises"><i class="fa fa-check"></i><b>5.10</b> Exercises</a><ul>
+<li class="chapter" data-level="5.10.1" data-path="configure.html"><a href="configure.html#dump-and-check-configuration"><i class="fa fa-check"></i><b>5.10.1</b> Dump and check configuration</a></li>
+<li class="chapter" data-level="5.10.2" data-path="configure.html"><a href="configure.html#read-configuration-solely-from-file"><i class="fa fa-check"></i><b>5.10.2</b> Read configuration solely from file</a></li>
+<li class="chapter" data-level="5.10.3" data-path="configure.html"><a href="configure.html#implement-a-usage-function"><i class="fa fa-check"></i><b>5.10.3</b> Implement a usage function</a></li>
+<li class="chapter" data-level="5.10.4" data-path="configure.html"><a href="configure.html#read-standard-input-if-no-files-specified"><i class="fa fa-check"></i><b>5.10.4</b> Read standard input if no files specified</a></li>
+</ul></li>
+<li class="chapter" data-level="5.11" data-path="configure.html"><a href="configure.html#configure-keypoints"><i class="fa fa-check"></i><b>5.11</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="rse-automate.html"><a href="rse-automate.html"><i class="fa fa-check"></i><b>6</b> Automating Analyses</a><ul>
+<li class="chapter" data-level="6.0.1" data-path="rse-automate.html"><a href="rse-automate.html#setting-up"><i class="fa fa-check"></i><b>6.0.1</b> Setting Up</a></li>
+<li class="chapter" data-level="6.0.2" data-path="rse-automate.html"><a href="rse-automate.html#acknowledgements"><i class="fa fa-check"></i><b>6.0.2</b> Acknowledgements</a></li>
+<li class="chapter" data-level="6.1" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-single-file"><i class="fa fa-check"></i><b>6.1</b> How can I update a single file using Make?</a></li>
+<li class="chapter" data-level="6.2" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-multiple"><i class="fa fa-check"></i><b>6.2</b> How can I manage multiple files?</a></li>
+<li class="chapter" data-level="6.3" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-phony"><i class="fa fa-check"></i><b>6.3</b> How can I update several files at once?</a></li>
+<li class="chapter" data-level="6.4" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-depend-programs"><i class="fa fa-check"></i><b>6.4</b> How can I update files when programs change?</a></li>
+<li class="chapter" data-level="6.5" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-variables"><i class="fa fa-check"></i><b>6.5</b> How can I reduce repetition in a Makefile?</a></li>
+<li class="chapter" data-level="6.6" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-autovar"><i class="fa fa-check"></i><b>6.6</b> How can I take specific filenames out of my rules?</a></li>
+<li class="chapter" data-level="6.7" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-pattern"><i class="fa fa-check"></i><b>6.7</b> How can I write a generic rule to update many files?</a></li>
+<li class="chapter" data-level="6.8" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-functions"><i class="fa fa-check"></i><b>6.8</b> How can I automatically define a set of files?</a></li>
+<li class="chapter" data-level="6.9" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-doc"><i class="fa fa-check"></i><b>6.9</b> How can I document my Makefile?</a></li>
+<li class="chapter" data-level="6.10" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-pipeline"><i class="fa fa-check"></i><b>6.10</b> How can I create entire analysis pipelines?</a></li>
+<li class="chapter" data-level="6.11" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-summary"><i class="fa fa-check"></i><b>6.11</b> Summary</a></li>
+<li class="chapter" data-level="6.12" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-exercises"><i class="fa fa-check"></i><b>6.12</b> Exercises</a><ul>
+<li class="chapter" data-level="6.12.1" data-path="rse-automate.html"><a href="rse-automate.html#create-a-summary-results-file."><i class="fa fa-check"></i><b>6.12.1</b> Create a summary results file.</a></li>
+<li class="chapter" data-level="6.12.2" data-path="rse-automate.html"><a href="rse-automate.html#generate-a-plot-for-the-top-n-words."><i class="fa fa-check"></i><b>6.12.2</b> Generate a plot for the top N words.</a></li>
+<li class="chapter" data-level="6.12.3" data-path="rse-automate.html"><a href="rse-automate.html#make-sure-the-output-directory-exists."><i class="fa fa-check"></i><b>6.12.3</b> Make sure the output directory exists.</a></li>
+<li class="chapter" data-level="6.12.4" data-path="rse-automate.html"><a href="rse-automate.html#report-results-that-would-change."><i class="fa fa-check"></i><b>6.12.4</b> Report results that would change.</a></li>
+<li class="chapter" data-level="6.12.5" data-path="rse-automate.html"><a href="rse-automate.html#create-more-readable-help."><i class="fa fa-check"></i><b>6.12.5</b> Create more readable help.</a></li>
+<li class="chapter" data-level="6.12.6" data-path="rse-automate.html"><a href="rse-automate.html#the-perils-of-shell-wildcards."><i class="fa fa-check"></i><b>6.12.6</b> The perils of shell wildcards.</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="unit.html"><a href="unit.html"><i class="fa fa-check"></i><b>7</b> Unit Testing</a><ul>
+<li class="chapter" data-level="7.1" data-path="unit.html"><a href="unit.html#unit-questions"><i class="fa fa-check"></i><b>7.1</b> Questions</a></li>
+<li class="chapter" data-level="7.2" data-path="unit.html"><a href="unit.html#unit-intro"><i class="fa fa-check"></i><b>7.2</b> Introduction</a></li>
+<li class="chapter" data-level="7.3" data-path="unit.html"><a href="unit.html#unit-goals"><i class="fa fa-check"></i><b>7.3</b> What are realistic goals for testing?</a></li>
+<li class="chapter" data-level="7.4" data-path="unit.html"><a href="unit.html#unit-systematic"><i class="fa fa-check"></i><b>7.4</b> What does a systematic software testing framework look like?</a></li>
+<li class="chapter" data-level="7.5" data-path="unit.html"><a href="unit.html#unit-pytest"><i class="fa fa-check"></i><b>7.5</b> How can I manage tests systematically?</a></li>
+<li class="chapter" data-level="7.6" data-path="unit.html"><a href="unit.html#unit-exception"><i class="fa fa-check"></i><b>7.6</b> How can I tell if my software failed as it was supposed to?</a></li>
+<li class="chapter" data-level="7.7" data-path="unit.html"><a href="unit.html#unit-random"><i class="fa fa-check"></i><b>7.7</b> How can I test software that includes randomness?</a></li>
+<li class="chapter" data-level="7.8" data-path="unit.html"><a href="unit.html#unit-io"><i class="fa fa-check"></i><b>7.8</b> How can I test software that does I/O?</a></li>
+<li class="chapter" data-level="7.9" data-path="unit.html"><a href="unit.html#unit-coverage"><i class="fa fa-check"></i><b>7.9</b> How can I tell which parts of my software have (not) been tested?</a></li>
+<li class="chapter" data-level="7.10" data-path="unit.html"><a href="unit.html#unit-summary"><i class="fa fa-check"></i><b>7.10</b> Summary</a></li>
+<li class="chapter" data-level="7.11" data-path="unit.html"><a href="unit.html#unit-exercises"><i class="fa fa-check"></i><b>7.11</b> Exercises</a><ul>
+<li class="chapter" data-level="7.11.1" data-path="unit.html"><a href="unit.html#handle-the-wrong-kind-of-exception"><i class="fa fa-check"></i><b>7.11.1</b> Handle the wrong kind of exception</a></li>
+</ul></li>
+<li class="chapter" data-level="7.12" data-path="unit.html"><a href="unit.html#unit-keypoints"><i class="fa fa-check"></i><b>7.12</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="verify.html"><a href="verify.html"><i class="fa fa-check"></i><b>8</b> Verification</a><ul>
+<li class="chapter" data-level="8.1" data-path="verify.html"><a href="verify.html#verify-questions"><i class="fa fa-check"></i><b>8.1</b> Questions</a></li>
+<li class="chapter" data-level="8.2" data-path="verify.html"><a href="verify.html#verify-intro"><i class="fa fa-check"></i><b>8.2</b> Introduction</a></li>
+<li class="chapter" data-level="8.3" data-path="verify.html"><a href="verify.html#verify-diff"><i class="fa fa-check"></i><b>8.3</b> What is the difference between testing in software engineering and in data analysis?</a></li>
+<li class="chapter" data-level="8.4" data-path="verify.html"><a href="verify.html#verify-float"><i class="fa fa-check"></i><b>8.4</b> Why should I be cautious when using floating-point numbers?</a></li>
+<li class="chapter" data-level="8.5" data-path="verify.html"><a href="verify.html#verify-error"><i class="fa fa-check"></i><b>8.5</b> How can I express how close one number is to another?</a></li>
+<li class="chapter" data-level="8.6" data-path="verify.html"><a href="verify.html#verify-numeric"><i class="fa fa-check"></i><b>8.6</b> How should I write tests that involved floating-point values?</a></li>
+<li class="chapter" data-level="8.7" data-path="verify.html"><a href="verify.html#verify-plots"><i class="fa fa-check"></i><b>8.7</b> How can I test plots and other graphical results?</a></li>
+<li class="chapter" data-level="8.8" data-path="verify.html"><a href="verify.html#verify-simple"><i class="fa fa-check"></i><b>8.8</b> How can I test the steps in a data analysis pipeline during development?</a></li>
+<li class="chapter" data-level="8.9" data-path="verify.html"><a href="verify.html#verify-operational"><i class="fa fa-check"></i><b>8.9</b> How can I check the steps in a data analysis pipeline in production?</a></li>
+<li class="chapter" data-level="8.10" data-path="verify.html"><a href="verify.html#verify-infer"><i class="fa fa-check"></i><b>8.10</b> How can I infer and check properties of my data?</a></li>
+<li class="chapter" data-level="8.11" data-path="verify.html"><a href="verify.html#verify-summary"><i class="fa fa-check"></i><b>8.11</b> Summary</a></li>
+<li class="chapter" data-level="8.12" data-path="verify.html"><a href="verify.html#verify-exercises"><i class="fa fa-check"></i><b>8.12</b> Exercises</a></li>
+<li class="chapter" data-level="8.13" data-path="verify.html"><a href="verify.html#verify-keypoints"><i class="fa fa-check"></i><b>8.13</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="backlog.html"><a href="backlog.html"><i class="fa fa-check"></i><b>9</b> Managing Backlog</a><ul>
+<li class="chapter" data-level="9.1" data-path="backlog.html"><a href="backlog.html#backlog-questions"><i class="fa fa-check"></i><b>9.1</b> Questions</a></li>
+<li class="chapter" data-level="9.2" data-path="backlog.html"><a href="backlog.html#backlog-intro"><i class="fa fa-check"></i><b>9.2</b> Introduction</a></li>
+<li class="chapter" data-level="9.3" data-path="backlog.html"><a href="backlog.html#backlog-issues"><i class="fa fa-check"></i><b>9.3</b> How can I manage the work I still have to do?</a></li>
+<li class="chapter" data-level="9.4" data-path="backlog.html"><a href="backlog.html#backlog-bugs"><i class="fa fa-check"></i><b>9.4</b> How can I write a good bug report?</a></li>
+<li class="chapter" data-level="9.5" data-path="backlog.html"><a href="backlog.html#backlog-label"><i class="fa fa-check"></i><b>9.5</b> How can I use labels to organize work?</a></li>
+<li class="chapter" data-level="9.6" data-path="backlog.html"><a href="backlog.html#backlog-triage"><i class="fa fa-check"></i><b>9.6</b> How can I use labels to prioritize work?</a></li>
+<li class="chapter" data-level="9.7" data-path="backlog.html"><a href="backlog.html#backlog-workflow"><i class="fa fa-check"></i><b>9.7</b> How can I use issues to enforce a workflow for a project?</a></li>
+<li class="chapter" data-level="9.8" data-path="backlog.html"><a href="backlog.html#backlog-summary"><i class="fa fa-check"></i><b>9.8</b> Summary</a></li>
+<li class="chapter" data-level="9.9" data-path="backlog.html"><a href="backlog.html#backlog-exercises"><i class="fa fa-check"></i><b>9.9</b> Exercises</a></li>
+<li class="chapter" data-level="9.10" data-path="backlog.html"><a href="backlog.html#backlog-keypoints"><i class="fa fa-check"></i><b>9.10</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="style.html"><a href="style.html"><i class="fa fa-check"></i><b>10</b> Code Style and Review</a><ul>
+<li class="chapter" data-level="10.1" data-path="style.html"><a href="style.html#style-questions"><i class="fa fa-check"></i><b>10.1</b> Questions</a></li>
+<li class="chapter" data-level="10.2" data-path="style.html"><a href="style.html#style-intro"><i class="fa fa-check"></i><b>10.2</b> Introduction</a></li>
+<li class="chapter" data-level="10.3" data-path="style.html"><a href="style.html#style-github"><i class="fa fa-check"></i><b>10.3</b> How should I review someone else’s code:</a></li>
+<li class="chapter" data-level="10.4" data-path="style.html"><a href="style.html#style-pep8"><i class="fa fa-check"></i><b>10.4</b> What are the standard rules of good style for Python programs?</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="style.html"><a href="style.html#always-indent-code-blocks-using-4-spaces-and-use-spaces-instead-of-tabs."><i class="fa fa-check"></i><b>10.4.1</b> Always indent code blocks using 4 spaces, and use spaces instead of tabs.</a></li>
+<li class="chapter" data-level="10.4.2" data-path="style.html"><a href="style.html#do-not-put-spaces-inside-parentheses"><i class="fa fa-check"></i><b>10.4.2</b> Do not put spaces inside parentheses</a></li>
+<li class="chapter" data-level="10.4.3" data-path="style.html"><a href="style.html#always-use-spaces-around-comparisons-like-and-."><i class="fa fa-check"></i><b>10.4.3</b> Always use spaces around comparisons like <code>&gt;</code> and <code>&lt;=</code>.</a></li>
+<li class="chapter" data-level="10.4.4" data-path="style.html"><a href="style.html#use-all_caps_with_underscores-for-constants-also-called-global-variables."><i class="fa fa-check"></i><b>10.4.4</b> Use <code>ALL_CAPS_WITH_UNDERSCORES</code> for constants (also called global variables).</a></li>
+<li class="chapter" data-level="10.4.5" data-path="style.html"><a href="style.html#use-lower_case_with_underscores-for-the-names-of-functions-and-variables."><i class="fa fa-check"></i><b>10.4.5</b> Use <code>lower_case_with_underscores</code> for the names of functions and variables.</a></li>
+<li class="chapter" data-level="10.4.6" data-path="style.html"><a href="style.html#put-two-blank-links-between-each-function-definition."><i class="fa fa-check"></i><b>10.4.6</b> Put two blank links between each function definition.</a></li>
+<li class="chapter" data-level="10.4.7" data-path="style.html"><a href="style.html#avoid-abbreviations-in-function-and-variable-names."><i class="fa fa-check"></i><b>10.4.7</b> Avoid abbreviations in function and variable names.</a></li>
+<li class="chapter" data-level="10.4.8" data-path="style.html"><a href="style.html#use-short-names-for-short-lived-local-variables-but-longer-names-for-things-with-wider-scope."><i class="fa fa-check"></i><b>10.4.8</b> Use short names for short-lived local variables but longer names for things with wider scope.</a></li>
+<li class="chapter" data-level="10.4.9" data-path="style.html"><a href="style.html#put-everything-in-a-file-in-order."><i class="fa fa-check"></i><b>10.4.9</b> Put everything in a file in order.</a></li>
+<li class="chapter" data-level="10.4.10" data-path="style.html"><a href="style.html#do-not-comment-and-uncomment-sections-of-code-to-change-behavior."><i class="fa fa-check"></i><b>10.4.10</b> Do not comment and uncomment sections of code to change behavior.</a></li>
+<li class="chapter" data-level="10.4.11" data-path="style.html"><a href="style.html#keep-functions-short."><i class="fa fa-check"></i><b>10.4.11</b> Keep functions short.</a></li>
+<li class="chapter" data-level="10.4.12" data-path="style.html"><a href="style.html#handle-special-cases-at-the-start-of-the-function."><i class="fa fa-check"></i><b>10.4.12</b> Handle special cases at the start of the function.</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="style.html"><a href="style.html#style-check"><i class="fa fa-check"></i><b>10.5</b> How can I check that code follows style guidelines?</a></li>
+<li class="chapter" data-level="10.6" data-path="style.html"><a href="style.html#style-how"><i class="fa fa-check"></i><b>10.6</b> How should I collaborate with people when doing code reviews?</a></li>
+<li class="chapter" data-level="10.7" data-path="style.html"><a href="style.html#style-order"><i class="fa fa-check"></i><b>10.7</b> In what order should functions be defined?</a></li>
+<li class="chapter" data-level="10.8" data-path="style.html"><a href="style.html#style-defaults"><i class="fa fa-check"></i><b>10.8</b> How can I specify default values for functions’ parameters?</a></li>
+<li class="chapter" data-level="10.9" data-path="style.html"><a href="style.html#style-varargs"><i class="fa fa-check"></i><b>10.9</b> How can I write functions to handle a variable number of arguments?</a></li>
+<li class="chapter" data-level="10.10" data-path="style.html"><a href="style.html#style-starargs"><i class="fa fa-check"></i><b>10.10</b> How can I pass an unknown number of parameters?</a></li>
+<li class="chapter" data-level="10.11" data-path="style.html"><a href="style.html#style-destructure"><i class="fa fa-check"></i><b>10.11</b> How can I get values out of structured data more easily?</a></li>
+<li class="chapter" data-level="10.12" data-path="style.html"><a href="style.html#style-summary"><i class="fa fa-check"></i><b>10.12</b> Summary</a></li>
+<li class="chapter" data-level="10.13" data-path="style.html"><a href="style.html#style-exercises"><i class="fa fa-check"></i><b>10.13</b> Exercises</a></li>
+<li class="chapter" data-level="10.14" data-path="style.html"><a href="style.html#style-keypoints"><i class="fa fa-check"></i><b>10.14</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="docs.html"><a href="docs.html"><i class="fa fa-check"></i><b>11</b> Documentation</a><ul>
+<li class="chapter" data-level="11.1" data-path="docs.html"><a href="docs.html#docs-questions"><i class="fa fa-check"></i><b>11.1</b> Questions</a></li>
+<li class="chapter" data-level="11.2" data-path="docs.html"><a href="docs.html#docs-intro"><i class="fa fa-check"></i><b>11.2</b> Introduction</a></li>
+<li class="chapter" data-level="11.3" data-path="docs.html"><a href="docs.html#docs-error-messages"><i class="fa fa-check"></i><b>11.3</b> How can I write useful error messages?</a></li>
+<li class="chapter" data-level="11.4" data-path="docs.html"><a href="docs.html#docs-what"><i class="fa fa-check"></i><b>11.4</b> What should I document for whom?</a></li>
+<li class="chapter" data-level="11.5" data-path="docs.html"><a href="docs.html#docs-docstrings"><i class="fa fa-check"></i><b>11.5</b> How should I write documentation for code?</a></li>
+<li class="chapter" data-level="11.6" data-path="docs.html"><a href="docs.html#docs-infer"><i class="fa fa-check"></i><b>11.6</b> What should I document?</a></li>
+<li class="chapter" data-level="11.7" data-path="docs.html"><a href="docs.html#docs-faq"><i class="fa fa-check"></i><b>11.7</b> How can I create a useful FAQ?</a></li>
+<li class="chapter" data-level="11.8" data-path="docs.html"><a href="docs.html#docs-summary"><i class="fa fa-check"></i><b>11.8</b> Summary</a></li>
+<li class="chapter" data-level="11.9" data-path="docs.html"><a href="docs.html#docs-exercises"><i class="fa fa-check"></i><b>11.9</b> Exercises</a></li>
+<li class="chapter" data-level="11.10" data-path="docs.html"><a href="docs.html#docs-keypoints"><i class="fa fa-check"></i><b>11.10</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="refactor.html"><a href="refactor.html"><i class="fa fa-check"></i><b>12</b> Refactoring</a><ul>
+<li class="chapter" data-level="12.1" data-path="refactor.html"><a href="refactor.html#refactor-questions"><i class="fa fa-check"></i><b>12.1</b> Questions</a></li>
+<li class="chapter" data-level="12.2" data-path="refactor.html"><a href="refactor.html#refactor-intro"><i class="fa fa-check"></i><b>12.2</b> Introduction</a></li>
+<li class="chapter" data-level="12.3" data-path="refactor.html"><a href="refactor.html#refactor-replace-value-with-name"><i class="fa fa-check"></i><b>12.3</b> How can I avoid repeating values in code?</a></li>
+<li class="chapter" data-level="12.4" data-path="refactor.html"><a href="refactor.html#refactor-hoist-repeated"><i class="fa fa-check"></i><b>12.4</b> How can I avoid repeating calculations in code?</a></li>
+<li class="chapter" data-level="12.5" data-path="refactor.html"><a href="refactor.html#refactor-repeated-test"><i class="fa fa-check"></i><b>12.5</b> How can I make repeated conditional tests clearer?</a></li>
+<li class="chapter" data-level="12.6" data-path="refactor.html"><a href="refactor.html#refactor-in-place"><i class="fa fa-check"></i><b>12.6</b> How can I avoid duplicating expressions in assignment statements?</a></li>
+<li class="chapter" data-level="12.7" data-path="refactor.html"><a href="refactor.html#refactor-short-circuits"><i class="fa fa-check"></i><b>12.7</b> How can I make special cases easier to spot?</a></li>
+<li class="chapter" data-level="12.8" data-path="refactor.html"><a href="refactor.html#refactor-extract-function"><i class="fa fa-check"></i><b>12.8</b> How can I divide code into more comprehensible chunks?</a></li>
+<li class="chapter" data-level="12.9" data-path="refactor.html"><a href="refactor.html#refactor-combine-functions"><i class="fa fa-check"></i><b>12.9</b> When and how should I combine code into a single function?</a></li>
+<li class="chapter" data-level="12.10" data-path="refactor.html"><a href="refactor.html#refactor-lookup"><i class="fa fa-check"></i><b>12.10</b> How can I replace code with data?</a></li>
+<li class="chapter" data-level="12.11" data-path="refactor.html"><a href="refactor.html#refactor-comprehension"><i class="fa fa-check"></i><b>12.11</b> What can I use instead of explicit loops?</a></li>
+<li class="chapter" data-level="12.12" data-path="refactor.html"><a href="refactor.html#refactor-summary"><i class="fa fa-check"></i><b>12.12</b> Summary</a></li>
+<li class="chapter" data-level="12.13" data-path="refactor.html"><a href="refactor.html#refactor-exercises"><i class="fa fa-check"></i><b>12.13</b> Exercises</a><ul>
+<li class="chapter" data-level="12.13.1" data-path="refactor.html"><a href="refactor.html#make-lookup-tables-easier-to-read"><i class="fa fa-check"></i><b>12.13.1</b> Make lookup tables easier to read</a></li>
+</ul></li>
+<li class="chapter" data-level="12.14" data-path="refactor.html"><a href="refactor.html#refactor-keypoints"><i class="fa fa-check"></i><b>12.14</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="project.html"><a href="project.html"><i class="fa fa-check"></i><b>13</b> Project Structure</a><ul>
+<li class="chapter" data-level="13.1" data-path="project.html"><a href="project.html#project-questions"><i class="fa fa-check"></i><b>13.1</b> Questions</a></li>
+<li class="chapter" data-level="13.2" data-path="project.html"><a href="project.html#project-intro"><i class="fa fa-check"></i><b>13.2</b> Introduction</a></li>
+<li class="chapter" data-level="13.3" data-path="project.html"><a href="project.html#project-noble"><i class="fa fa-check"></i><b>13.3</b> What are Noble’s Rules?</a></li>
+<li class="chapter" data-level="13.4" data-path="project.html"><a href="project.html#project-filenames"><i class="fa fa-check"></i><b>13.4</b> How should files and sub-directories be named?</a></li>
+<li class="chapter" data-level="13.5" data-path="project.html"><a href="project.html#project-scripts"><i class="fa fa-check"></i><b>13.5</b> How should I manage a mix of compiled programs and scripts?</a></li>
+<li class="chapter" data-level="13.6" data-path="project.html"><a href="project.html#project-docs"><i class="fa fa-check"></i><b>13.6</b> Should I separate documentation from manuscripts?</a></li>
+<li class="chapter" data-level="13.7" data-path="project.html"><a href="project.html#project-big-data"><i class="fa fa-check"></i><b>13.7</b> How should I handle data can’t be stored in version control?</a></li>
+<li class="chapter" data-level="13.8" data-path="project.html"><a href="project.html#project-boilerplate"><i class="fa fa-check"></i><b>13.8</b> What other files should every project contain?</a></li>
+<li class="chapter" data-level="13.9" data-path="project.html"><a href="project.html#project-thinking"><i class="fa fa-check"></i><b>13.9</b> What <em>is</em> a project?</a></li>
+<li class="chapter" data-level="13.10" data-path="project.html"><a href="project.html#project-summary"><i class="fa fa-check"></i><b>13.10</b> Summary</a></li>
+<li class="chapter" data-level="13.11" data-path="project.html"><a href="project.html#project-exercises"><i class="fa fa-check"></i><b>13.11</b> Exercises</a></li>
+<li class="chapter" data-level="13.12" data-path="project.html"><a href="project.html#project-keypoints"><i class="fa fa-check"></i><b>13.12</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="inclusive.html"><a href="inclusive.html"><i class="fa fa-check"></i><b>14</b> Including Everyone</a><ul>
+<li class="chapter" data-level="14.1" data-path="inclusive.html"><a href="inclusive.html#inclusive-questions"><i class="fa fa-check"></i><b>14.1</b> Questions</a></li>
+<li class="chapter" data-level="14.2" data-path="inclusive.html"><a href="inclusive.html#inclusive-intro"><i class="fa fa-check"></i><b>14.2</b> Introduction</a></li>
+<li class="chapter" data-level="14.3" data-path="inclusive.html"><a href="inclusive.html#inclusive-rules"><i class="fa fa-check"></i><b>14.3</b> Why does a project need explicit rules?</a></li>
+<li class="chapter" data-level="14.4" data-path="inclusive.html"><a href="inclusive.html#inclusive-software-license"><i class="fa fa-check"></i><b>14.4</b> How should I license my software?</a></li>
+<li class="chapter" data-level="14.5" data-path="inclusive.html"><a href="inclusive.html#inclusive-software-text"><i class="fa fa-check"></i><b>14.5</b> How should I license my data and reports?</a></li>
+<li class="chapter" data-level="14.6" data-path="inclusive.html"><a href="inclusive.html#inclusive-conduct"><i class="fa fa-check"></i><b>14.6</b> Why should I establish a code of conduct for my project?</a></li>
+<li class="chapter" data-level="14.7" data-path="inclusive.html"><a href="inclusive.html#inclusive-why-ally"><i class="fa fa-check"></i><b>14.7</b> Why can I be a good ally for members of marginalized groups?</a></li>
+<li class="chapter" data-level="14.8" data-path="inclusive.html"><a href="inclusive.html#inclusive-how-ally"><i class="fa fa-check"></i><b>14.8</b> How can I be a good ally for members of marginalized groups?</a></li>
+<li class="chapter" data-level="14.9" data-path="inclusive.html"><a href="inclusive.html#inclusive-summary"><i class="fa fa-check"></i><b>14.9</b> Summary</a></li>
+<li class="chapter" data-level="14.10" data-path="inclusive.html"><a href="inclusive.html#inclusive-exercises"><i class="fa fa-check"></i><b>14.10</b> Exercises</a></li>
+<li class="chapter" data-level="14.11" data-path="inclusive.html"><a href="inclusive.html#inclusive-keypoints"><i class="fa fa-check"></i><b>14.11</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="teamwork.html"><a href="teamwork.html"><i class="fa fa-check"></i><b>15</b> Teamwork</a><ul>
+<li class="chapter" data-level="15.1" data-path="teamwork.html"><a href="teamwork.html#teamwork-questions"><i class="fa fa-check"></i><b>15.1</b> Questions</a></li>
+<li class="chapter" data-level="15.2" data-path="teamwork.html"><a href="teamwork.html#teamwork-intro"><i class="fa fa-check"></i><b>15.2</b> Introduction</a></li>
+<li class="chapter" data-level="15.3" data-path="teamwork.html"><a href="teamwork.html#teamwork-efficient"><i class="fa fa-check"></i><b>15.3</b> How can we run meetings more efficiently?</a></li>
+<li class="chapter" data-level="15.4" data-path="teamwork.html"><a href="teamwork.html#teamwork-after"><i class="fa fa-check"></i><b>15.4</b> What should we do when the meeting is over?</a></li>
+<li class="chapter" data-level="15.5" data-path="teamwork.html"><a href="teamwork.html#teamwork-fair"><i class="fa fa-check"></i><b>15.5</b> How can we keep people from talking too much or too little?</a></li>
+<li class="chapter" data-level="15.6" data-path="teamwork.html"><a href="teamwork.html#teamwork-online"><i class="fa fa-check"></i><b>15.6</b> How should we run online meetings?</a></li>
+<li class="chapter" data-level="15.7" data-path="teamwork.html"><a href="teamwork.html#teamwork-people"><i class="fa fa-check"></i><b>15.7</b> What sort of people make teamwork hard?</a></li>
+<li class="chapter" data-level="15.8" data-path="teamwork.html"><a href="teamwork.html#teamwork-conflict"><i class="fa fa-check"></i><b>15.8</b> How should we handle conflict within the team?</a></li>
+<li class="chapter" data-level="15.9" data-path="teamwork.html"><a href="teamwork.html#teamwork-summary"><i class="fa fa-check"></i><b>15.9</b> Summary</a></li>
+<li class="chapter" data-level="15.10" data-path="teamwork.html"><a href="teamwork.html#teamwork-keypoints"><i class="fa fa-check"></i><b>15.10</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="rse-r-package.html"><a href="rse-r-package.html"><i class="fa fa-check"></i><b>16</b> R Packaging</a><ul>
+<li class="chapter" data-level="16.1" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-questions"><i class="fa fa-check"></i><b>16.1</b> Questions</a></li>
+<li class="chapter" data-level="16.2" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-intro"><i class="fa fa-check"></i><b>16.2</b> What’s in an R package?</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-what-packages-do-you-have"><i class="fa fa-check"></i><b>16.2.1</b> Exercise: What packages do you have?</a></li>
+<li class="chapter" data-level="16.2.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-can-you-build-a-package"><i class="fa fa-check"></i><b>16.2.2</b> Exercise: Can you build a package?</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-background"><i class="fa fa-check"></i><b>16.3</b> What <em>is</em> a package, exactly?</a></li>
+<li class="chapter" data-level="16.4" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-create"><i class="fa fa-check"></i><b>16.4</b> How do I create a package?</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-packaging-the-co2-functions"><i class="fa fa-check"></i><b>16.4.1</b> Exercise: Packaging the CO2 functions</a></li>
+<li class="chapter" data-level="16.4.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-exploring-a-package"><i class="fa fa-check"></i><b>16.4.2</b> Exercise: Exploring a package</a></li>
+<li class="chapter" data-level="16.4.3" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-ignoring-files"><i class="fa fa-check"></i><b>16.4.3</b> Exercise: Ignoring Files</a></li>
+</ul></li>
+<li class="chapter" data-level="16.5" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-use"><i class="fa fa-check"></i><b>16.5</b> How do I use a package while I’m creating it?</a></li>
+<li class="chapter" data-level="16.6" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-document"><i class="fa fa-check"></i><b>16.6</b> How do I document a R package?</a><ul>
+<li class="chapter" data-level="16.6.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-document-a-function"><i class="fa fa-check"></i><b>16.6.1</b> Exercise: Document a function</a></li>
+<li class="chapter" data-level="16.6.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-use-markdown-documentation"><i class="fa fa-check"></i><b>16.6.2</b> Exercise: Use Markdown documentation</a></li>
+</ul></li>
+<li class="chapter" data-level="16.7" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-docwhat"><i class="fa fa-check"></i><b>16.7</b> What should I document?</a><ul>
+<li class="chapter" data-level="16.7.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-fixing-documentation"><i class="fa fa-check"></i><b>16.7.1</b> Exercise: Fixing documentation</a></li>
+<li class="chapter" data-level="16.7.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-cross-references"><i class="fa fa-check"></i><b>16.7.2</b> Exercise: Cross-references</a></li>
+<li class="chapter" data-level="16.7.3" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-documenting-error-conditions"><i class="fa fa-check"></i><b>16.7.3</b> Exercise: Documenting error conditions</a></li>
+</ul></li>
+<li class="chapter" data-level="16.8" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-dependencies"><i class="fa fa-check"></i><b>16.8</b> How do I manage package dependencies?</a><ul>
+<li class="chapter" data-level="16.8.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-document-dependencies"><i class="fa fa-check"></i><b>16.8.1</b> Exercise: Document dependencies</a></li>
+<li class="chapter" data-level="16.8.2" data-path="rse-r-package.html"><a href="rse-r-package.html#importing"><i class="fa fa-check"></i><b>16.8.2</b> Importing</a></li>
+</ul></li>
+<li class="chapter" data-level="16.9" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-github"><i class="fa fa-check"></i><b>16.9</b> How can I share my package via GitHub?</a></li>
+<li class="chapter" data-level="16.10" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-data"><i class="fa fa-check"></i><b>16.10</b> How can I add data to a package?</a><ul>
+<li class="chapter" data-level="16.10.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-letting-usethis-do-even-more-work"><i class="fa fa-check"></i><b>16.10.1</b> Exercise: Letting <code>usethis</code> do even more work</a></li>
+<li class="chapter" data-level="16.10.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-scripting-data-creation"><i class="fa fa-check"></i><b>16.10.2</b> Exercise: Scripting data creation</a></li>
+<li class="chapter" data-level="16.10.3" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-add-sample-data-to-the-co2-package"><i class="fa fa-check"></i><b>16.10.3</b> Exercise: Add sample data to the CO2 package</a></li>
+<li class="chapter" data-level="16.10.4" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-reproducible-data-set-creation"><i class="fa fa-check"></i><b>16.10.4</b> Exercise: Reproducible data set creation</a></li>
+</ul></li>
+<li class="chapter" data-level="16.11" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-summary"><i class="fa fa-check"></i><b>16.11</b> Summary</a></li>
+<li class="chapter" data-level="16.12" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-keypoints"><i class="fa fa-check"></i><b>16.12</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="rse-py-package.html"><a href="rse-py-package.html"><i class="fa fa-check"></i><b>17</b> Python Packaging</a><ul>
+<li class="chapter" data-level="17.1" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-questions"><i class="fa fa-check"></i><b>17.1</b> Questions</a></li>
+<li class="chapter" data-level="17.2" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-objectives"><i class="fa fa-check"></i><b>17.2</b> Objectives</a></li>
+<li class="chapter" data-level="17.3" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-intro"><i class="fa fa-check"></i><b>17.3</b> Introduction</a></li>
+<li class="chapter" data-level="17.4" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-modules"><i class="fa fa-check"></i><b>17.4</b> How can I turn a set of Python source files into a module?</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-hello-zipf"><i class="fa fa-check"></i><b>17.4.1</b> Exercise: Hello, Zipf!</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-import"><i class="fa fa-check"></i><b>17.5</b> How can I control what is executed during import and what isn’t?</a><ul>
+<li class="chapter" data-level="17.5.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-what-is-__name__-in-different-contexts"><i class="fa fa-check"></i><b>17.5.1</b> Exercise: What is <code>__name__</code> in different contexts?</a></li>
+<li class="chapter" data-level="17.5.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-turn-use.py-into-a-unit-test"><i class="fa fa-check"></i><b>17.5.2</b> Exercise: Turn <code>use.py</code> into a unit test</a></li>
+</ul></li>
+<li class="chapter" data-level="17.6" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-creating"><i class="fa fa-check"></i><b>17.6</b> How do I create a package?</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-create-a-package-for-our-zipf-code."><i class="fa fa-check"></i><b>17.6.1</b> Exercise: Create a package for our Zipf code.</a></li>
+<li class="chapter" data-level="17.6.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-hello-__init__.py"><i class="fa fa-check"></i><b>17.6.2</b> Exercise: “Hello <code>__init__.py</code>”</a></li>
+</ul></li>
+<li class="chapter" data-level="17.7" data-path="rse-py-package.html"><a href="rse-py-package.html#referring-to-modules-within-the-same-package-multiple-files"><i class="fa fa-check"></i><b>17.7</b> Referring to modules within the same package: multiple files</a><ul>
+<li class="chapter" data-level="17.7.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-factor-out-the-package-wide-constant-relative_error"><i class="fa fa-check"></i><b>17.7.1</b> Exercise: Factor out the package-wide constant <code>RELATIVE_ERROR</code></a></li>
+<li class="chapter" data-level="17.7.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-importing-from-within-init.py"><i class="fa fa-check"></i><b>17.7.2</b> Exercise: Importing from within <strong>init</strong>.py</a></li>
+</ul></li>
+<li class="chapter" data-level="17.8" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-install"><i class="fa fa-check"></i><b>17.8</b> What does it mean to install a Python package?</a><ul>
+<li class="chapter" data-level="17.8.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-find-a-package-in-pip-list"><i class="fa fa-check"></i><b>17.8.1</b> Exercise: Find a package in pip list</a></li>
+</ul></li>
+<li class="chapter" data-level="17.9" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-virtualenv"><i class="fa fa-check"></i><b>17.9</b> How can I have only the packages my projects need?</a><ul>
+<li class="chapter" data-level="17.9.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercises-examining-the-virtual-environment"><i class="fa fa-check"></i><b>17.9.1</b> Exercises: Examining the virtual environment</a></li>
+<li class="chapter" data-level="17.9.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercises-installing-a-package-into-the-virtual-environment"><i class="fa fa-check"></i><b>17.9.2</b> Exercises: Installing a package into the virtual environment</a></li>
+</ul></li>
+<li class="chapter" data-level="17.10" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-package"><i class="fa fa-check"></i><b>17.10</b> How can I create an installable Python package?</a></li>
+<li class="chapter" data-level="17.11" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-distrib-scripts"><i class="fa fa-check"></i><b>17.11</b> How can I distribute command-line scripts in my Python package?</a></li>
+<li class="chapter" data-level="17.12" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-document"><i class="fa fa-check"></i><b>17.12</b> How should I document my package for others?</a></li>
+<li class="chapter" data-level="17.13" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-sphinx"><i class="fa fa-check"></i><b>17.13</b> How do I generate web pages of documentation for my package?</a></li>
+<li class="chapter" data-level="17.14" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-rtd"><i class="fa fa-check"></i><b>17.14</b> How do I put the documentation for my package online?</a></li>
+<li class="chapter" data-level="17.15" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-distribute"><i class="fa fa-check"></i><b>17.15</b> How can I distribute software packages that I have created?</a><ul>
+<li class="chapter" data-level="17.15.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-clean-up-warning-messages"><i class="fa fa-check"></i><b>17.15.1</b> Exercise: Clean up warning messages</a></li>
+<li class="chapter" data-level="17.15.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-license-longinfo-and-classification-metadata"><i class="fa fa-check"></i><b>17.15.2</b> Exercise License, longinfo, and classification metadata</a></li>
+<li class="chapter" data-level="17.15.3" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-requirements-in-setup.py"><i class="fa fa-check"></i><b>17.15.3</b> Exercise: Requirements in setup.py</a></li>
+</ul></li>
+<li class="chapter" data-level="17.16" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-announce"><i class="fa fa-check"></i><b>17.16</b> Announcing Work</a></li>
+<li class="chapter" data-level="17.17" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-summary"><i class="fa fa-check"></i><b>17.17</b> Summary</a></li>
+<li class="chapter" data-level="17.18" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-keypoints"><i class="fa fa-check"></i><b>17.18</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="rse-ci.html"><a href="rse-ci.html"><i class="fa fa-check"></i><b>18</b> Continuous Integration</a><ul>
+<li class="chapter" data-level="18.1" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-questions"><i class="fa fa-check"></i><b>18.1</b> Questions</a></li>
+<li class="chapter" data-level="18.2" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-intro"><i class="fa fa-check"></i><b>18.2</b> Introduction</a></li>
+<li class="chapter" data-level="18.3" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-basic"><i class="fa fa-check"></i><b>18.3</b> The basics of setting up CI on a repository?</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="rse-ci.html"><a href="rse-ci.html#travis-is-watching-your-repo"><i class="fa fa-check"></i><b>18.3.1</b> Travis is watching (your repo)</a></li>
+<li class="chapter" data-level="18.3.2" data-path="rse-ci.html"><a href="rse-ci.html#configure-your-project-for-travis"><i class="fa fa-check"></i><b>18.3.2</b> Configure your project for Travis</a></li>
+<li class="chapter" data-level="18.3.3" data-path="rse-ci.html"><a href="rse-ci.html#display-ci-build-status-in-readme"><i class="fa fa-check"></i><b>18.3.3</b> Display CI build status in README</a></li>
+<li class="chapter" data-level="18.3.4" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-setting-up-with-r"><i class="fa fa-check"></i><b>18.3.4</b> Setting up Travis in R</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-testing"><i class="fa fa-check"></i><b>18.4</b> Using Travis to test your software</a></li>
+<li class="chapter" data-level="18.5" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-deploying"><i class="fa fa-check"></i><b>18.5</b> How can I use CI for non-testing purposes?</a></li>
+<li class="chapter" data-level="18.6" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-summary"><i class="fa fa-check"></i><b>18.6</b> Summary</a></li>
+<li class="chapter" data-level="18.7" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-exercises"><i class="fa fa-check"></i><b>18.7</b> Exercises</a></li>
+<li class="chapter" data-level="18.8" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-keypoints"><i class="fa fa-check"></i><b>18.8</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="rse-r-testing.html"><a href="rse-r-testing.html"><i class="fa fa-check"></i><b>19</b> Software Testing in R</a></li>
+<li class="chapter" data-level="20" data-path="publish.html"><a href="publish.html"><i class="fa fa-check"></i><b>20</b> Publishing</a><ul>
+<li class="chapter" data-level="20.1" data-path="publish.html"><a href="publish.html#publish-questions"><i class="fa fa-check"></i><b>20.1</b> Questions</a></li>
+<li class="chapter" data-level="20.2" data-path="publish.html"><a href="publish.html#publish-intro"><i class="fa fa-check"></i><b>20.2</b> Introduction</a></li>
+<li class="chapter" data-level="20.3" data-path="publish.html"><a href="publish.html#publish-identifiers"><i class="fa fa-check"></i><b>20.3</b> Identification</a></li>
+<li class="chapter" data-level="20.4" data-path="publish.html"><a href="publish.html#publish-document"><i class="fa fa-check"></i><b>20.4</b> Publishing a report</a></li>
+<li class="chapter" data-level="20.5" data-path="publish.html"><a href="publish.html#publish-data"><i class="fa fa-check"></i><b>20.5</b> Publishing data</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="publish.html"><a href="publish.html#what-is-the-most-useful-way-to-share-my-data"><i class="fa fa-check"></i><b>20.5.1</b> What is the most useful way to share my data?</a></li>
+<li class="chapter" data-level="20.5.2" data-path="publish.html"><a href="publish.html#what-standards-of-data-sharing-should-i-aspire-to"><i class="fa fa-check"></i><b>20.5.2</b> What standards of data sharing should I aspire to?</a></li>
+<li class="chapter" data-level="20.5.3" data-path="publish.html"><a href="publish.html#how-and-where-do-i-publish-the-data"><i class="fa fa-check"></i><b>20.5.3</b> How and where do I publish the data?</a></li>
+</ul></li>
+<li class="chapter" data-level="20.6" data-path="publish.html"><a href="publish.html#publish-software"><i class="fa fa-check"></i><b>20.6</b> Publishing analysis software</a></li>
+<li class="chapter" data-level="20.7" data-path="publish.html"><a href="publish.html#publish-scripts"><i class="fa fa-check"></i><b>20.7</b> Publishing analysis scripts</a><ul>
+<li class="chapter" data-level="20.7.1" data-path="publish.html"><a href="publish.html#software-description"><i class="fa fa-check"></i><b>20.7.1</b> Software description</a></li>
+<li class="chapter" data-level="20.7.2" data-path="publish.html"><a href="publish.html#analysis-scripts"><i class="fa fa-check"></i><b>20.7.2</b> Analysis scripts</a></li>
+<li class="chapter" data-level="20.7.3" data-path="publish.html"><a href="publish.html#data-processing-steps"><i class="fa fa-check"></i><b>20.7.3</b> Data processing steps</a></li>
+<li class="chapter" data-level="20.7.4" data-path="publish.html"><a href="publish.html#where-to-publish-all-this-stuff"><i class="fa fa-check"></i><b>20.7.4</b> Where to publish all this stuff?</a></li>
+</ul></li>
+<li class="chapter" data-level="20.8" data-path="publish.html"><a href="publish.html#publish-summary"><i class="fa fa-check"></i><b>20.8</b> Summary</a></li>
+<li class="chapter" data-level="20.9" data-path="publish.html"><a href="publish.html#publish-exercises"><i class="fa fa-check"></i><b>20.9</b> Exercises</a></li>
+<li class="chapter" data-level="20.10" data-path="publish.html"><a href="publish.html#publish-keypoints"><i class="fa fa-check"></i><b>20.10</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="finale.html"><a href="finale.html"><i class="fa fa-check"></i><b>21</b> Finale</a><ul>
+<li class="chapter" data-level="21.1" data-path="finale.html"><a href="finale.html#finale-questions"><i class="fa fa-check"></i><b>21.1</b> Questions</a></li>
+<li class="chapter" data-level="21.2" data-path="finale.html"><a href="finale.html#finale-intro"><i class="fa fa-check"></i><b>21.2</b> Introduction</a></li>
+<li class="chapter" data-level="21.3" data-path="finale.html"><a href="finale.html#finale-programs-data"><i class="fa fa-check"></i><b>21.3</b> Programs are data.</a></li>
+<li class="chapter" data-level="21.4" data-path="finale.html"><a href="finale.html#finale-understand"><i class="fa fa-check"></i><b>21.4</b> Computers don’t understand anything.</a></li>
+<li class="chapter" data-level="21.5" data-path="finale.html"><a href="finale.html#finale-abstractions"><i class="fa fa-check"></i><b>21.5</b> Programming is about creating and combining abstractions.</a></li>
+<li class="chapter" data-level="21.6" data-path="finale.html"><a href="finale.html#finale-redundancy"><i class="fa fa-check"></i><b>21.6</b> Every redundancy in software is an abstraction trying to be born.</a></li>
+<li class="chapter" data-level="21.7" data-path="finale.html"><a href="finale.html#finale-models-views"><i class="fa fa-check"></i><b>21.7</b> Create models for computers and views for human beings.</a></li>
+<li class="chapter" data-level="21.8" data-path="finale.html"><a href="finale.html#finale-paranoia"><i class="fa fa-check"></i><b>21.8</b> Paranoia makes us productive.</a></li>
+<li class="chapter" data-level="21.9" data-path="finale.html"><a href="finale.html#finale-immutable"><i class="fa fa-check"></i><b>21.9</b> Things that don’t change are easier to understand than things that do.</a></li>
+<li class="chapter" data-level="21.10" data-path="finale.html"><a href="finale.html#finale-algorithms"><i class="fa fa-check"></i><b>21.10</b> Better algorithms are better than better hardware.</a></li>
+<li class="chapter" data-level="21.11" data-path="finale.html"><a href="finale.html#finale-distributed"><i class="fa fa-check"></i><b>21.11</b> Distributed is different.</a></li>
+<li class="chapter" data-level="21.12" data-path="finale.html"><a href="finale.html#finale-privacy"><i class="fa fa-check"></i><b>21.12</b> Privacy, security, fairness, and responsibility can’t be added after the fact.</a></li>
+<li class="chapter" data-level="21.13" data-path="finale.html"><a href="finale.html#finale-summary"><i class="fa fa-check"></i><b>21.13</b> Summary</a></li>
+<li class="chapter" data-level="21.14" data-path="finale.html"><a href="finale.html#finale-exercises"><i class="fa fa-check"></i><b>21.14</b> Exercises</a></li>
+<li class="chapter" data-level="21.15" data-path="finale.html"><a href="finale.html#finale-keypoints"><i class="fa fa-check"></i><b>21.15</b> Key Points</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="license.html"><a href="license.html"><i class="fa fa-check"></i><b>A</b> License</a></li>
+<li class="chapter" data-level="B" data-path="conduct.html"><a href="conduct.html"><i class="fa fa-check"></i><b>B</b> Code of Conduct</a><ul>
+<li class="chapter" data-level="B.1" data-path="conduct.html"><a href="conduct.html#conduct-standards"><i class="fa fa-check"></i><b>B.1</b> Our Standards</a></li>
+<li class="chapter" data-level="B.2" data-path="conduct.html"><a href="conduct.html#conduct-responsibilities"><i class="fa fa-check"></i><b>B.2</b> Our Responsibilities</a></li>
+<li class="chapter" data-level="B.3" data-path="conduct.html"><a href="conduct.html#conduct-scope"><i class="fa fa-check"></i><b>B.3</b> Scope</a></li>
+<li class="chapter" data-level="B.4" data-path="conduct.html"><a href="conduct.html#conduct-enforcement"><i class="fa fa-check"></i><b>B.4</b> Enforcement</a></li>
+<li class="chapter" data-level="B.5" data-path="conduct.html"><a href="conduct.html#conduct-attribution"><i class="fa fa-check"></i><b>B.5</b> Attribution</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="contributing.html"><a href="contributing.html"><i class="fa fa-check"></i><b>C</b> Contributing</a><ul>
+<li class="chapter" data-level="C.1" data-path="contributing.html"><a href="contributing.html#style-guide"><i class="fa fa-check"></i><b>C.1</b> Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="D" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>D</b> Glossary</a></li>
+<li class="chapter" data-level="E" data-path="objectives.html"><a href="objectives.html"><i class="fa fa-check"></i><b>E</b> RSE Learning Objectives</a><ul>
+<li class="chapter" data-level="E.1" data-path="objectives.html"><a href="objectives.html#the-unix-shell"><i class="fa fa-check"></i><b>E.1</b> The Unix Shell</a></li>
+<li class="chapter" data-level="E.2" data-path="objectives.html"><a href="objectives.html#automating-analyses"><i class="fa fa-check"></i><b>E.2</b> Automating Analyses</a></li>
+<li class="chapter" data-level="E.3" data-path="objectives.html"><a href="objectives.html#configuring-software"><i class="fa fa-check"></i><b>E.3</b> Configuring Software</a></li>
+<li class="chapter" data-level="E.4" data-path="objectives.html"><a href="objectives.html#unit-testing"><i class="fa fa-check"></i><b>E.4</b> Unit Testing</a></li>
+<li class="chapter" data-level="E.5" data-path="glossary.html"><a href="glossary.html#verification"><i class="fa fa-check"></i><b>E.5</b> Verification</a></li>
+<li class="chapter" data-level="E.6" data-path="objectives.html"><a href="objectives.html#a-branching-workflow-1"><i class="fa fa-check"></i><b>E.6</b> A Branching Workflow</a></li>
+<li class="chapter" data-level="E.7" data-path="objectives.html"><a href="objectives.html#managing-backlog"><i class="fa fa-check"></i><b>E.7</b> Managing Backlog</a></li>
+<li class="chapter" data-level="E.8" data-path="objectives.html"><a href="objectives.html#code-style-and-review"><i class="fa fa-check"></i><b>E.8</b> Code Style and Review</a></li>
+<li class="chapter" data-level="E.9" data-path="objectives.html"><a href="objectives.html#development-process"><i class="fa fa-check"></i><b>E.9</b> Development Process</a></li>
+<li class="chapter" data-level="E.10" data-path="glossary.html"><a href="glossary.html#continuous-integration"><i class="fa fa-check"></i><b>E.10</b> Continuous Integration</a></li>
+<li class="chapter" data-level="E.11" data-path="objectives.html"><a href="objectives.html#working-remotely"><i class="fa fa-check"></i><b>E.11</b> Working Remotely</a></li>
+<li class="chapter" data-level="E.12" data-path="objectives.html"><a href="objectives.html#other-tools"><i class="fa fa-check"></i><b>E.12</b> Other Tools</a></li>
+<li class="chapter" data-level="E.13" data-path="objectives.html"><a href="objectives.html#documentation"><i class="fa fa-check"></i><b>E.13</b> Documentation</a></li>
+<li class="chapter" data-level="E.14" data-path="objectives.html"><a href="objectives.html#refactoring"><i class="fa fa-check"></i><b>E.14</b> Refactoring</a></li>
+<li class="chapter" data-level="E.15" data-path="objectives.html"><a href="objectives.html#project-structure"><i class="fa fa-check"></i><b>E.15</b> Project Structure</a></li>
+<li class="chapter" data-level="E.16" data-path="objectives.html"><a href="objectives.html#including-everyone"><i class="fa fa-check"></i><b>E.16</b> Including Everyone</a></li>
+<li class="chapter" data-level="E.17" data-path="objectives.html"><a href="objectives.html#python-packaging"><i class="fa fa-check"></i><b>E.17</b> Python Packaging</a></li>
+<li class="chapter" data-level="E.18" data-path="objectives.html"><a href="objectives.html#publishing"><i class="fa fa-check"></i><b>E.18</b> Publishing</a></li>
+<li class="chapter" data-level="E.19" data-path="objectives.html"><a href="objectives.html#teamwork-1"><i class="fa fa-check"></i><b>E.19</b> Teamwork</a></li>
+<li class="chapter" data-level="E.20" data-path="objectives.html"><a href="objectives.html#pacing"><i class="fa fa-check"></i><b>E.20</b> Pacing</a></li>
+<li class="chapter" data-level="E.21" data-path="objectives.html"><a href="objectives.html#finale-1"><i class="fa fa-check"></i><b>E.21</b> Finale</a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="keypoints.html"><a href="keypoints.html"><i class="fa fa-check"></i><b>F</b> RSE Key Points</a><ul>
+<li class="chapter" data-level="F.1" data-path="keypoints.html"><a href="keypoints.html#the-unix-shell-1"><i class="fa fa-check"></i><b>F.1</b> The Unix Shell</a></li>
+<li class="chapter" data-level="F.2" data-path="keypoints.html"><a href="keypoints.html#automating-analyses-1"><i class="fa fa-check"></i><b>F.2</b> Automating Analyses</a></li>
+<li class="chapter" data-level="F.3" data-path="keypoints.html"><a href="keypoints.html#configuring-software-1"><i class="fa fa-check"></i><b>F.3</b> Configuring Software</a></li>
+<li class="chapter" data-level="F.4" data-path="keypoints.html"><a href="keypoints.html#unit-testing-1"><i class="fa fa-check"></i><b>F.4</b> Unit Testing</a></li>
+<li class="chapter" data-level="F.5" data-path="keypoints.html"><a href="keypoints.html#verification-1"><i class="fa fa-check"></i><b>F.5</b> Verification</a></li>
+<li class="chapter" data-level="F.6" data-path="keypoints.html"><a href="keypoints.html#a-branching-workflow-2"><i class="fa fa-check"></i><b>F.6</b> A Branching Workflow</a></li>
+<li class="chapter" data-level="F.7" data-path="keypoints.html"><a href="keypoints.html#managing-backlog-1"><i class="fa fa-check"></i><b>F.7</b> Managing Backlog</a></li>
+<li class="chapter" data-level="F.8" data-path="keypoints.html"><a href="keypoints.html#code-style-and-review-1"><i class="fa fa-check"></i><b>F.8</b> Code Style and Review</a></li>
+<li class="chapter" data-level="F.9" data-path="keypoints.html"><a href="keypoints.html#development-process-1"><i class="fa fa-check"></i><b>F.9</b> Development Process</a></li>
+<li class="chapter" data-level="F.10" data-path="keypoints.html"><a href="keypoints.html#continuous-integration-1"><i class="fa fa-check"></i><b>F.10</b> Continuous Integration</a></li>
+<li class="chapter" data-level="F.11" data-path="keypoints.html"><a href="keypoints.html#working-remotely-1"><i class="fa fa-check"></i><b>F.11</b> Working Remotely</a></li>
+<li class="chapter" data-level="F.12" data-path="keypoints.html"><a href="keypoints.html#other-tools-1"><i class="fa fa-check"></i><b>F.12</b> Other Tools</a></li>
+<li class="chapter" data-level="F.13" data-path="keypoints.html"><a href="keypoints.html#documentation-1"><i class="fa fa-check"></i><b>F.13</b> Documentation</a></li>
+<li class="chapter" data-level="F.14" data-path="keypoints.html"><a href="keypoints.html#refactoring-1"><i class="fa fa-check"></i><b>F.14</b> Refactoring</a></li>
+<li class="chapter" data-level="F.15" data-path="keypoints.html"><a href="keypoints.html#project-structure-1"><i class="fa fa-check"></i><b>F.15</b> Project Structure</a></li>
+<li class="chapter" data-level="F.16" data-path="keypoints.html"><a href="keypoints.html#including-everyone-1"><i class="fa fa-check"></i><b>F.16</b> Including Everyone</a></li>
+<li class="chapter" data-level="F.17" data-path="keypoints.html"><a href="keypoints.html#python-packaging-1"><i class="fa fa-check"></i><b>F.17</b> Python Packaging</a></li>
+<li class="chapter" data-level="F.18" data-path="keypoints.html"><a href="keypoints.html#publishing-1"><i class="fa fa-check"></i><b>F.18</b> Publishing</a></li>
+<li class="chapter" data-level="F.19" data-path="keypoints.html"><a href="keypoints.html#teamwork-2"><i class="fa fa-check"></i><b>F.19</b> Teamwork</a></li>
+<li class="chapter" data-level="F.20" data-path="keypoints.html"><a href="keypoints.html#pacing-1"><i class="fa fa-check"></i><b>F.20</b> Pacing</a></li>
+<li class="chapter" data-level="F.21" data-path="keypoints.html"><a href="keypoints.html#finale-2"><i class="fa fa-check"></i><b>F.21</b> Finale</a></li>
+</ul></li>
+<li class="chapter" data-level="G" data-path="rules.html"><a href="rules.html"><i class="fa fa-check"></i><b>G</b> The Rules</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Merely Useful: RSE</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="refactor" class="section level1">
+<h1><span class="header-section-number">Chapter 12</span> Refactoring</h1>
+<div id="refactor-questions" class="section level2">
+<h2><span class="header-section-number">12.1</span> Questions</h2>
+<ul>
+<li>How can I improve code that already works?</li>
+</ul>
+</div>
+<div id="refactor-intro" class="section level2">
+<h2><span class="header-section-number">12.2</span> Introduction</h2>
+<p><a href="glossary.html#refactor">Refactoring</a> means changing the structure of code without changing what it does,
+like refactoring an equation to simplify it.
+It is just as much a part of programming as writing code in the first place:
+nobody gets things right the first time <span class="citation">Brand (<a href="references.html#ref-Bran1995">1995</a>)</span>,
+and needs or insights can change over time.</p>
+<p>Most discussions of refactoring focus on <a href="glossary.html#oop">object-oriented programming</a>,
+but many patterns can and should be used to clean up <a href="glossary.html#procedural-programming">procedural</a> code.
+This lesson describes and motivates some of the most useful patterns;
+These rules are examples of <a href="glossary.html#design-patterns">design patterns</a>:
+general solutions to commonly occurring problems in software design.
+Knowing them and their names will help you create better software,
+and also make it easier for you to communicate with your peers.</p>
+</div>
+<div id="refactor-replace-value-with-name" class="section level2">
+<h2><span class="header-section-number">12.3</span> How can I avoid repeating values in code?</h2>
+<p>Our first and simplest refactoring is called “replace value with name”.
+It tells us to replace magic numbers with names,
+i.e., to define constants.
+This can seem ridiculous in simple cases
+(why define and use <code>inches_per_foot</code> instead of just writing 12?).
+However,
+what may be obvious to you when you’re writing code won’t be obvious to the next person,
+particularly if they’re working in a different context
+(most of the world uses the metric system and doesn’t know how many inches are in a foot).
+It’s also a matter of habit:
+if you write numbers without explanation in your code for simple cases,
+you’re more likely to do so for complex cases,
+and more likely to regret it afterward.</p>
+<p>Using names instead of raw values also makes it easier to understand code when you read it aloud,
+which is always a good test of its style.
+Finally,
+a single value defined in one place is much easier to change
+than a bunch of numbers scattered throughout your program.
+You may not think you will have to change it,
+but then people want to use your software on Mars and you discover that constants aren’t <span class="citation">Mak (<a href="references.html#ref-Mak2006">2006</a>)</span>.</p>
+<p>FIXME: include refactor/replace_value_with_name.html</p>
+</div>
+<div id="refactor-hoist-repeated" class="section level2">
+<h2><span class="header-section-number">12.4</span> How can I avoid repeating calculations in code?</h2>
+<p>It’s inefficient to calculate the same value over and over again.
+It also makes code less readable:
+if a calculation is inside a loop or a function,
+readers will assume that it might change each time the code is executed.</p>
+<p>Our second refactoring,
+“hoist repeated calculation out of loop”,
+tells us to move the repeated calculation out of the loop or function.
+Doing this signals that its value is always the same.
+And by naming that common value,
+you help readers understand what its purpose is.</p>
+<p>FIXME: include refactor/hoist_repeated_calculation.html</p>
+</div>
+<div id="refactor-repeated-test" class="section level2">
+<h2><span class="header-section-number">12.5</span> How can I make repeated conditional tests clearer?</h2>
+<p>Novice programmers frequently write conditional tests like this:</p>
+<div class="sourceCode" id="cb582"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb582-1" data-line-number="1"><span class="cf">if</span> (a <span class="op">&gt;</span> b) <span class="op">==</span> <span class="va">True</span>:</a>
+<a class="sourceLine" id="cb582-2" data-line-number="2">    <span class="co"># ...do something...</span></a></code></pre></div>
+<!-- == noindent -->
+<p>The comparison to <code>True</code> is unnecessary because <code>a &gt; b</code> is a Boolean value
+that is itself either <code>True</code> or <code>False</code>.
+Like any other value,
+Booleans can be assigned to variables,
+and those variables can then be used directly in tests:</p>
+<div class="sourceCode" id="cb583"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb583-1" data-line-number="1">was_greater <span class="op">=</span> estimate <span class="op">&gt;</span> <span class="fl">0.0</span></a>
+<a class="sourceLine" id="cb583-2" data-line-number="2"><span class="co"># ...other code that might change estimate...</span></a>
+<a class="sourceLine" id="cb583-3" data-line-number="3"><span class="cf">if</span> was_greater:</a>
+<a class="sourceLine" id="cb583-4" data-line-number="4">    <span class="co"># ...do something...</span></a></code></pre></div>
+<!-- == noindent -->
+<p>This refactoring is called “replace repeated test with flag”.
+When it is used,
+there is no need to write <code>if was_greater == True</code>:
+that always produces the same result as <code>if was_greater</code>.
+Similarly, the equality tests in <code>if was_greater == False</code> is redundant:
+the expression can simply be written <code>if not was_greater</code>.
+Creating and using a <a href="glossary.html#flag">flag</a> instead of repeating the test
+is therefore like moving a calculation out of a loop:
+even if that value is only used once,
+it makes our intention clearer—these really are the same test.</p>
+<p>FIXME: include refactor/replace_repeated_test_with_flag.html</p>
+<!-- == noindent -->
+<p>If it takes many lines of code to process data and create a score,
+and the test then needs to change from <code>&gt;</code> to <code>&gt;=</code>,
+we’re more likely to get the refactored version right the first time,
+since the test only appears in one place and its result is given a name.</p>
+</div>
+<div id="refactor-in-place" class="section level2">
+<h2><span class="header-section-number">12.6</span> How can I avoid duplicating expressions in assignment statements?</h2>
+<p>An <a href="glossary.html#in-place-operator">in-place operator</a>,
+sometimes called an <a href="glossary.html#update-operator">update operator</a>,
+does a calculation with two values
+and overwrites one of the values.
+For example,
+instead of writing:</p>
+<div class="sourceCode" id="cb584"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb584-1" data-line-number="1">step <span class="op">=</span> step <span class="op">+</span> <span class="dv">1</span></a></code></pre></div>
+<!-- == noindent -->
+<p>we can write:</p>
+<div class="sourceCode" id="cb585"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb585-1" data-line-number="1">step <span class="op">+=</span> <span class="dv">1</span></a></code></pre></div>
+<p>In-place operators save us some typing.
+They also make the intention clearer,
+and most importantly,
+they make it harder to get complex assignments wrong.
+For example:</p>
+<div class="sourceCode" id="cb586"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb586-1" data-line-number="1">samples[least_factor_index, <span class="bu">max</span>(current_offset, offset_limit)] <span class="op">*=</span> scaling_factor</a></code></pre></div>
+<!-- == noindent -->
+<p>is much easier to read than the equivalent expression:</p>
+<div class="sourceCode" id="cb587"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb587-1" data-line-number="1">samples[least_factor_index, <span class="bu">max</span>(current_offset, offset_limit)] <span class="op">=</span> <span class="op">\</span></a>
+<a class="sourceLine" id="cb587-2" data-line-number="2">    scaling_factor <span class="op">*</span> samples[least_factor_index, <span class="bu">max</span>(current_limit, offset_limit)]</a></code></pre></div>
+<!-- == noindent -->
+<p>(The proof of this claim is that you probably didn’t notice on first reading
+that the long form uses different expressions to index <code>samples</code>
+on the left and right of the assignment.)
+The refactoring “use in-place operator” does what its name suggests:
+converts normal assignments into their briefer equivalents.</p>
+<p>FIXME: include refactor/use-in-place-operator.html</p>
+</div>
+<div id="refactor-short-circuits" class="section level2">
+<h2><span class="header-section-number">12.7</span> How can I make special cases easier to spot?</h2>
+<p>A <a href="glossary.html#short-circuit-test">short circuit test</a> is a quick check to handle a special case,
+such as checking the length of a list of values
+and returning <code>math.nan</code> for the average if the list is empty.
+“Place short circuits early” tells us to put short-circuit tests near the start of functions
+so that readers can mentally remove special cases from their thinking
+while reading the code that handles the usual case.</p>
+<p>FIXME: include refactor/place-short-circuits-early.html</p>
+<p>A related refactoring pattern is called “default and override”.
+To use it,
+find cases where a value is set conditionally;
+assign the default or most common value unconditionally,
+and then override it in a special case.
+The result is fewer lines of code and clearer control flow;
+however,
+it does mean executing two assignments instead of one,
+so it shouldn’t be used if the common case is expensive
+(e.g., involves a database lookup or a web request).</p>
+<p>FIXME: include refactor/default-and-override.html</p>
+<p>In simple cases,
+people will sometimes put the test and assignment on a single line:</p>
+<div class="sourceCode" id="cb588"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb588-1" data-line-number="1">scale <span class="op">=</span> <span class="fl">1.0</span></a>
+<a class="sourceLine" id="cb588-2" data-line-number="2"><span class="cf">if</span> configuration[<span class="st">&#39;threshold&#39;</span>] <span class="op">&gt;</span> UPPER_BOUND: scale <span class="op">=</span> <span class="fl">0.8</span></a></code></pre></div>
+<!-- == noindent -->
+<p>Some programmers take this even further
+and use a <a href="glossary.html#conditional-expression">conditional expression</a>:</p>
+<div class="sourceCode" id="cb589"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb589-1" data-line-number="1">scale <span class="op">=</span> <span class="fl">0.8</span> <span class="cf">if</span> configuration[<span class="st">&#39;threshold&#39;</span>] <span class="op">&gt;</span> UPPER_BOUND <span class="cf">else</span> <span class="fl">1.0</span></a></code></pre></div>
+<!-- == noindent -->
+<p>However,
+this puts the default last instead of first,
+which is less clear.</p>
+</div>
+<div id="refactor-extract-function" class="section level2">
+<h2><span class="header-section-number">12.8</span> How can I divide code into more comprehensible chunks?</h2>
+<p>Functions were created so that programmers could write common operations and re-use them
+in order to reduce the amount of code that needed to be compiled.
+It turns out that moving complex operations into functions also reduces <a href="glossary.html#cognitive-load">cognitive load</a>:
+by reducing the number of things that have to be understood simultaneously.</p>
+<p>FIXME: include refactor/extract-function.html</p>
+<p>You should always extract functions when code can be used in other contests.
+Even if it can’t,
+you should extract functions whenever it makes the function clearer
+when it is read aloud.
+Multi-part conditionals,
+parts of long equations,
+and the bodies of loops are good candidates for extraction;
+if you can’t think of a plausible name,
+or if a lot of data has to be passed into the function after it’s extracted,
+the code should probably be left where it is.
+Finally,
+it’s often helpful to keep using the original variable names as parameter names during refactoring
+to reduce typing.</p>
+</div>
+<div id="refactor-combine-functions" class="section level2">
+<h2><span class="header-section-number">12.9</span> When and how should I combine code into a single function?</h2>
+<p>“Combine functions” is the opposite of “extract function”.
+If operations are always done together,
+it can sometimes be be more efficient to do them together,
+and <em>might</em> be easier to understand.
+However,
+combining functions often reduces their reusability and readability;
+one sign that functions shouldn’t have been combined is
+how often people use the combination and throw some results away.</p>
+<p>The fragment below shows how two functions can be combined:</p>
+<p>FIXME: include refactor/combine-functions.html</p>
+<!-- == noindent -->
+<p>One thing you may not notice about the combination is that
+it assumes characters are either vowels or consonants,
+which means it might work differently than separate calls to the two original functions.
+Issues like this are why experienced developers write unit tests (Chapter <a href="unit.html#unit">7</a>)
+<em>before</em> starting to refactor.</p>
+</div>
+<div id="refactor-lookup" class="section level2">
+<h2><span class="header-section-number">12.10</span> How can I replace code with data?</h2>
+<p>It is sometimes easier to understand and maintain lookup tables than complicated conditionals,
+so the “create lookup table” refactoring tells us to turn the latter into the former:</p>
+<p>FIXME: include refactor/create-lookup-table.html</p>
+<p>The more distinct cases there are,
+the greater the advantage lookup tables have over multi-branch conditionals.
+Those advantages multiply when items can belong to more than one category,
+in which case the table is often best written as a dictionary with items as keys
+and sets of categories as values:</p>
+<!-- src="refactor/set_lookup_table.py" -->
+<div class="sourceCode" id="cb590"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb590-1" data-line-number="1">LETTERS <span class="op">=</span> {</a>
+<a class="sourceLine" id="cb590-2" data-line-number="2">    <span class="st">&#39;A&#39;</span> : {<span class="st">&#39;vowel&#39;</span>, <span class="st">&#39;upper_case&#39;</span>},</a>
+<a class="sourceLine" id="cb590-3" data-line-number="3">    <span class="st">&#39;B&#39;</span> : {<span class="st">&#39;consonant&#39;</span>, <span class="st">&#39;upper_case&#39;</span>},</a>
+<a class="sourceLine" id="cb590-4" data-line-number="4">    <span class="co"># ...other upper-case letters...</span></a>
+<a class="sourceLine" id="cb590-5" data-line-number="5">    <span class="st">&#39;a&#39;</span> : {<span class="st">&#39;vowel&#39;</span>, <span class="st">&#39;lower_case&#39;</span>},</a>
+<a class="sourceLine" id="cb590-6" data-line-number="6">    <span class="st">&#39;b&#39;</span> : {<span class="st">&#39;consonant&#39;</span>, <span class="st">&#39;lower_case&#39;</span>},</a>
+<a class="sourceLine" id="cb590-7" data-line-number="7">    <span class="co"># ...other lower-case letters...</span></a>
+<a class="sourceLine" id="cb590-8" data-line-number="8">    <span class="st">&#39;+&#39;</span> : {<span class="st">&#39;punctuation&#39;</span>},</a>
+<a class="sourceLine" id="cb590-9" data-line-number="9">    <span class="st">&#39;@&#39;</span> : {<span class="st">&#39;punctuation&#39;</span>},</a>
+<a class="sourceLine" id="cb590-10" data-line-number="10">    <span class="co"># ...other punctuation...</span></a>
+<a class="sourceLine" id="cb590-11" data-line-number="11">}</a>
+<a class="sourceLine" id="cb590-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb590-13" data-line-number="13"><span class="kw">def</span> count_vowels_and_consonants(text):</a>
+<a class="sourceLine" id="cb590-14" data-line-number="14">    num_vowels <span class="op">=</span> num_consonants <span class="op">=</span> <span class="dv">0</span></a>
+<a class="sourceLine" id="cb590-15" data-line-number="15">    <span class="cf">for</span> char <span class="kw">in</span> text:</a>
+<a class="sourceLine" id="cb590-16" data-line-number="16">        num_vowels <span class="op">+=</span> <span class="bu">int</span>(<span class="st">&#39;vowel&#39;</span> <span class="kw">in</span> LETTERS[char])</a>
+<a class="sourceLine" id="cb590-17" data-line-number="17">        num_consonants <span class="op">+=</span> <span class="bu">int</span>(<span class="st">&#39;consonant&#39;</span> <span class="kw">in</span> LETTERS[char])</a>
+<a class="sourceLine" id="cb590-18" data-line-number="18">    <span class="cf">return</span> num_vowels, num_consonants</a></code></pre></div>
+<!-- == noindent -->
+<p>The expressions used to update <code>num_vowels</code> and <code>num_consonants</code> make use of the fact that
+<code>in</code> produces either <code>True</code> or <code>False</code>,
+which the function <code>int</code> converts to either 1 or 0.
+We will explore ways of making this code more readable in the exercises.</p>
+</div>
+<div id="refactor-comprehension" class="section level2">
+<h2><span class="header-section-number">12.11</span> What can I use instead of explicit loops?</h2>
+<p>When programmers see a pattern in many different contexts,
+they will often add features to the language to support it.
+Many language features therefore exist to give programmers something to refactor <em>to</em>.</p>
+<p>One such feature is called a <a href="glossary.html#list-comprehension">list comprehensions</a>,
+which can be used in place of a loop that processes one list to create another.
+The word “comprehension” is used in the sense of “comprehensive”:
+every element of the original list is processed,
+and in simple cases,
+produces exactly one element in the result.</p>
+<p>FIXME: include refactor/simple-comprehension.html</p>
+<p>List comprehensions can be easier to read than loops for simple calculations,
+but they become more complicated to understand when conditional expressions are included.
+The <code>if</code> case isn’t too base:</p>
+<p>FIXME: include refactor/comprehension-if.html</p>
+<!-- == noindent -->
+<p>but <code>if</code>-<code>else</code> is structured differently in comprehensions than it is in a one-line conditional:</p>
+<p>FIXME: include refactor/comprehension-else.html</p>
+<p>Similarly,
+cross-product loops are straightforward
+(for some definition of “straightforward”):</p>
+<p>FIXME: include refactor/cross-product-comprehension.html</p>
+<!-- == noindent -->
+<p>but the equivalent of nested loops in which the inner loop depends on the value of the outer loop
+always feels back-to-front:</p>
+<p>FIXME: include refactor/nested-comprehension.html</p>
+<p>Python comprehensions work for sets, dictionaries, and anything else that can be iterated over.</p>
+</div>
+<div id="refactor-summary" class="section level2">
+<h2><span class="header-section-number">12.12</span> Summary</h2>
+<ul>
+<li>A good test of code quality: each plausible small change to functionality requires one change in one place</li>
+</ul>
+<p>FIXME: create concept map for refactoring</p>
+</div>
+<div id="refactor-exercises" class="section level2">
+<h2><span class="header-section-number">12.13</span> Exercises</h2>
+<div id="make-lookup-tables-easier-to-read" class="section level3">
+<h3><span class="header-section-number">12.13.1</span> Make lookup tables easier to read</h3>
+<p>FIXME: make last example of lookup tables easier to read.</p>
+</div>
+</div>
+<div id="refactor-keypoints" class="section level2">
+<h2><span class="header-section-number">12.14</span> Key Points</h2>
+<ul>
+<li>Reorganizing code in consistent ways makes errors less likely.</li>
+<li>Replace a value with a name to make code more readable and to forestall typing errors.</li>
+<li>Replace a repeated test with a flag to ensure consistency.</li>
+<li>Turn small pieces of large functions into functions in their own right, even if they are only used once.</li>
+<li>Combine functions if they are always used together on the same inputs.</li>
+<li>Use lookup tables to make decision rules easier to follow.</li>
+<li>Use comprehensions instead of loops.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="docs.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="project.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/merely-useful/merely-useful.github.io/edit/master/refactor.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["rse.pdf", "rse.epub"],
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

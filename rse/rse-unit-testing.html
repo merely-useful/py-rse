@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 14 Unit Testing | Merely Useful: RSE</title>
+  <meta name="description" content="Chapter 14 Unit Testing | Merely Useful: RSE" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 14 Unit Testing | Merely Useful: RSE" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Chapter 14 Unit Testing | Merely Useful: RSE" />
+  <meta name="github-repo" content="merely-useful/merely-useful.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 14 Unit Testing | Merely Useful: RSE" />
+  
+  <meta name="twitter:description" content="Chapter 14 Unit Testing | Merely Useful: RSE" />
+  
+
+<meta name="author" content="Madeleine Bonsma-Fisher, Kate Hertweck, Damien Irving, Luke Johnston, Christina Koch, Sara Mahallati, Brandeis Marshall, Joel Ostblom, Elizabeth Wickes, Charlotte Wickham, and Greg Wilson" />
+
+
+<meta name="date" content="2019-10-20" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="rse-py-package.html"/>
+<link rel="next" href="rse-ci.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { background-color: #f8f8f8; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Merely Useful</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#rse-intro-personas"><i class="fa fa-check"></i><b>1.1</b> Who are these lessons for?</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#summary"><i class="fa fa-check"></i><b>1.1.1</b> Summary</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.1.2</b> Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#rse-intro-big-picture"><i class="fa fa-check"></i><b>1.2</b> What’s the big picture?</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#why-isnt-all-of-this-already-normal"><i class="fa fa-check"></i><b>1.2.1</b> Why isn’t all of this already normal?</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#syllabus"><i class="fa fa-check"></i><b>1.2.2</b> Syllabus</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#rse-intro-ack"><i class="fa fa-check"></i><b>1.3</b> Acknowledgments</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="rse-bash.html"><a href="rse-bash.html"><i class="fa fa-check"></i><b>2</b> Bash Shell</a><ul>
+<li class="chapter" data-level="2.1" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-explore"><i class="fa fa-check"></i><b>2.1</b> How can I explore my files and directories using the shell?</a></li>
+<li class="chapter" data-level="2.2" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-navigate"><i class="fa fa-check"></i><b>2.2</b> How can I move around in the shell?</a></li>
+<li class="chapter" data-level="2.3" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-filedir"><i class="fa fa-check"></i><b>2.3</b> How can I create new files and directories?</a></li>
+<li class="chapter" data-level="2.4" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-move"><i class="fa fa-check"></i><b>2.4</b> How can move files and directories around?</a></li>
+<li class="chapter" data-level="2.5" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-copy"><i class="fa fa-check"></i><b>2.5</b> How can I copy files and directories?</a></li>
+<li class="chapter" data-level="2.6" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-rm"><i class="fa fa-check"></i><b>2.6</b> How can I delete files and directories?</a></li>
+<li class="chapter" data-level="2.7" data-path="rse-bash.html"><a href="rse-bash.html#rse-bashwildcard"><i class="fa fa-check"></i><b>2.7</b> How can I run commands on lots of files at once?</a></li>
+<li class="chapter" data-level="2.8" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-help"><i class="fa fa-check"></i><b>2.8</b> How can I find out what commands there are and how to use them?</a></li>
+<li class="chapter" data-level="2.9" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-pipe"><i class="fa fa-check"></i><b>2.9</b> How can I combine commands?</a></li>
+<li class="chapter" data-level="2.10" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-stdio"><i class="fa fa-check"></i><b>2.10</b> How do pipes work (and why do I need to know)?</a></li>
+<li class="chapter" data-level="2.11" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-loops"><i class="fa fa-check"></i><b>2.11</b> How can I do the same operations on many files?</a></li>
+<li class="chapter" data-level="2.12" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-meaningless"><i class="fa fa-check"></i><b>2.12</b> What do variable names mean?</a></li>
+<li class="chapter" data-level="2.13" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-history"><i class="fa fa-check"></i><b>2.13</b> How can I re-do things I have done recently?</a></li>
+<li class="chapter" data-level="2.14" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-autoname"><i class="fa fa-check"></i><b>2.14</b> How can I create new filenames automatically?</a></li>
+<li class="chapter" data-level="2.15" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-script"><i class="fa fa-check"></i><b>2.15</b> How can I create new commands of my own?</a></li>
+<li class="chapter" data-level="2.16" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-params"><i class="fa fa-check"></i><b>2.16</b> How can I make my scripts more versatile?</a></li>
+<li class="chapter" data-level="2.17" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-capture"><i class="fa fa-check"></i><b>2.17</b> How can I turn interactive work into a script?</a></li>
+<li class="chapter" data-level="2.18" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-grep"><i class="fa fa-check"></i><b>2.18</b> How can I find things in a file?</a></li>
+<li class="chapter" data-level="2.19" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-find"><i class="fa fa-check"></i><b>2.19</b> How can I find files?</a></li>
+<li class="chapter" data-level="2.20" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-summary"><i class="fa fa-check"></i><b>2.20</b> Summary</a></li>
+<li class="chapter" data-level="2.21" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-exercises"><i class="fa fa-check"></i><b>2.21</b> Exercises</a><ul>
+<li class="chapter" data-level="2.21.1" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-more-ls"><i class="fa fa-check"></i><b>2.21.1</b> Exploring more <code>ls</code> flags</a></li>
+<li class="chapter" data-level="2.21.2" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-ls-rt"><i class="fa fa-check"></i><b>2.21.2</b> Listing recursively and by time</a></li>
+<li class="chapter" data-level="2.21.3" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-paths"><i class="fa fa-check"></i><b>2.21.3</b> Absolute and relative paths</a></li>
+<li class="chapter" data-level="2.21.4" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-resolve-rel-path"><i class="fa fa-check"></i><b>2.21.4</b> Relative path resolution</a></li>
+<li class="chapter" data-level="2.21.5" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-reading-ls"><i class="fa fa-check"></i><b>2.21.5</b> <code>ls</code> reading comprehension</a></li>
+<li class="chapter" data-level="2.21.6" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-touch"><i class="fa fa-check"></i><b>2.21.6</b> Creating files a different way</a></li>
+<li class="chapter" data-level="2.21.7" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-move-dot"><i class="fa fa-check"></i><b>2.21.7</b> Moving to the current folder</a></li>
+<li class="chapter" data-level="2.21.8" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-renaming-files"><i class="fa fa-check"></i><b>2.21.8</b> Renaming files</a></li>
+<li class="chapter" data-level="2.21.9" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-last-ls"><i class="fa fa-check"></i><b>2.21.9</b> Moving and copying</a></li>
+<li class="chapter" data-level="2.21.10" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-safe-rm"><i class="fa fa-check"></i><b>2.21.10</b> Using <code>rm</code> safely</a></li>
+<li class="chapter" data-level="2.21.11" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-copy-multi"><i class="fa fa-check"></i><b>2.21.11</b> Copy with multiple filenames</a></li>
+<li class="chapter" data-level="2.21.12" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-ls-match"><i class="fa fa-check"></i><b>2.21.12</b> List filenames matching a pattern</a></li>
+<li class="chapter" data-level="2.21.13" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-more-wildcards"><i class="fa fa-check"></i><b>2.21.13</b> More on wildcards</a></li>
+<li class="chapter" data-level="2.21.14" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-organizing"><i class="fa fa-check"></i><b>2.21.14</b> Organizing directories and files</a></li>
+<li class="chapter" data-level="2.21.15" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-reproduce-structure"><i class="fa fa-check"></i><b>2.21.15</b> Reproduce a directory structure</a></li>
+<li class="chapter" data-level="2.21.16" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-sort-n"><i class="fa fa-check"></i><b>2.21.16</b> What does <code>sort -n</code> do?</a></li>
+<li class="chapter" data-level="2.21.17" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-redirect-append"><i class="fa fa-check"></i><b>2.21.17</b> What does <code>&gt;&gt;</code> mean?</a></li>
+<li class="chapter" data-level="2.21.18" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-append-data"><i class="fa fa-check"></i><b>2.21.18</b> Appending data</a></li>
+<li class="chapter" data-level="2.21.19" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-piping"><i class="fa fa-check"></i><b>2.21.19</b> Piping commands</a></li>
+<li class="chapter" data-level="2.21.20" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-uniq-adjacent"><i class="fa fa-check"></i><b>2.21.20</b> Why does <code>uniq</code> only remove adjacent duplicates?</a></li>
+<li class="chapter" data-level="2.21.21" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-reading-pipes"><i class="fa fa-check"></i><b>2.21.21</b> Pipe reading comprehension</a></li>
+<li class="chapter" data-level="2.21.22" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-pipe-construction"><i class="fa fa-check"></i><b>2.21.22</b> Pipe construction</a></li>
+<li class="chapter" data-level="2.21.23" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-which-pipe"><i class="fa fa-check"></i><b>2.21.23</b> Which pipe?</a></li>
+<li class="chapter" data-level="2.21.24" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-wildcard-expressions"><i class="fa fa-check"></i><b>2.21.24</b> Wildcard expressions</a></li>
+<li class="chapter" data-level="2.21.25" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-remove-unneeded"><i class="fa fa-check"></i><b>2.21.25</b> Removing unneeded files</a></li>
+<li class="chapter" data-level="2.21.26" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-loop-dry-run"><i class="fa fa-check"></i><b>2.21.26</b> Doing a dry run</a></li>
+<li class="chapter" data-level="2.21.27" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-nested-loops"><i class="fa fa-check"></i><b>2.21.27</b> Nested loops</a></li>
+<li class="chapter" data-level="2.21.28" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-loop-variables"><i class="fa fa-check"></i><b>2.21.28</b> Variables in loops</a></li>
+<li class="chapter" data-level="2.21.29" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-limiting-file-sets"><i class="fa fa-check"></i><b>2.21.29</b> Limiting sets of files</a></li>
+<li class="chapter" data-level="2.21.30" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-loop-save"><i class="fa fa-check"></i><b>2.21.30</b> Saving to a file in a loop</a></li>
+<li class="chapter" data-level="2.21.31" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-list-unique"><i class="fa fa-check"></i><b>2.21.31</b> List unique species</a></li>
+<li class="chapter" data-level="2.21.32" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-history-order"><i class="fa fa-check"></i><b>2.21.32</b> Why does <code>history</code> record commands before running them?</a></li>
+<li class="chapter" data-level="2.21.33" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-script-variables"><i class="fa fa-check"></i><b>2.21.33</b> Variables in shell scripts</a></li>
+<li class="chapter" data-level="2.21.34" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-longest-with-extension"><i class="fa fa-check"></i><b>2.21.34</b> Find the longest file with a given extension</a></li>
+<li class="chapter" data-level="2.21.35" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-reading-scripts"><i class="fa fa-check"></i><b>2.21.35</b> Script reading comprehension</a></li>
+<li class="chapter" data-level="2.21.36" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-using-grep"><i class="fa fa-check"></i><b>2.21.36</b> Using <code>grep</code></a></li>
+<li class="chapter" data-level="2.21.37" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-tracking-species"><i class="fa fa-check"></i><b>2.21.37</b> Tracking a species</a></li>
+<li class="chapter" data-level="2.21.38" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-little-women"><i class="fa fa-check"></i><b>2.21.38</b> Counting names</a></li>
+<li class="chapter" data-level="2.21.39" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-match-subtract"><i class="fa fa-check"></i><b>2.21.39</b> Matching and subtracting</a></li>
+<li class="chapter" data-level="2.21.40" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-reading-find"><i class="fa fa-check"></i><b>2.21.40</b> <code>find</code> pipeline reading comprehension</a></li>
+<li class="chapter" data-level="2.21.41" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-find-properties"><i class="fa fa-check"></i><b>2.21.41</b> Finding files with different properties</a></li>
+<li class="chapter" data-level="2.21.42" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-combining-options"><i class="fa fa-check"></i><b>2.21.42</b> Combining options</a></li>
+<li class="chapter" data-level="2.21.43" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-ex-other-wildcards"><i class="fa fa-check"></i><b>2.21.43</b> Other wildcards</a></li>
+</ul></li>
+<li class="chapter" data-level="2.22" data-path="rse-bash.html"><a href="rse-bash.html#rse-bash-keypoints"><i class="fa fa-check"></i><b>2.22</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html"><i class="fa fa-check"></i><b>3</b> Git at the command line</a><ul>
+<li class="chapter" data-level="3.1" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-questions"><i class="fa fa-check"></i><b>3.1</b> Questions</a></li>
+<li class="chapter" data-level="3.2" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-intro"><i class="fa fa-check"></i><b>3.2</b> Introduction</a></li>
+<li class="chapter" data-level="3.3" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-setup"><i class="fa fa-check"></i><b>3.3</b> Setting up Git</a></li>
+<li class="chapter" data-level="3.4" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-repos"><i class="fa fa-check"></i><b>3.4</b> Creating a repository</a></li>
+<li class="chapter" data-level="3.5" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-changes"><i class="fa fa-check"></i><b>3.5</b> Tracking changes</a></li>
+<li class="chapter" data-level="3.6" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-remotes"><i class="fa fa-check"></i><b>3.6</b> Remotes in GitHub</a></li>
+<li class="chapter" data-level="3.7" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-history"><i class="fa fa-check"></i><b>3.7</b> Exploring history</a></li>
+<li class="chapter" data-level="3.8" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-exercises"><i class="fa fa-check"></i><b>3.8</b> Exercises</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#creating-a-repository"><i class="fa fa-check"></i><b>3.8.1</b> Creating a repository</a></li>
+<li class="chapter" data-level="3.8.2" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#tracking-changes"><i class="fa fa-check"></i><b>3.8.2</b> Tracking changes</a></li>
+<li class="chapter" data-level="3.8.3" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#ignoring-things"><i class="fa fa-check"></i><b>3.8.3</b> Ignoring things</a></li>
+<li class="chapter" data-level="3.8.4" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#remotes-in-github"><i class="fa fa-check"></i><b>3.8.4</b> Remotes in GitHub</a></li>
+<li class="chapter" data-level="3.8.5" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#exploring-history"><i class="fa fa-check"></i><b>3.8.5</b> Exploring history</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="rse-cmdline-git.html"><a href="rse-cmdline-git.html#rse-cmdline-git-keypoints"><i class="fa fa-check"></i><b>3.9</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html"><i class="fa fa-check"></i><b>4</b> Advanced Git</a><ul>
+<li class="chapter" data-level="4.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-questions"><i class="fa fa-check"></i><b>4.1</b> Questions</a></li>
+<li class="chapter" data-level="4.2" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-intro"><i class="fa fa-check"></i><b>4.2</b> Introduction</a></li>
+<li class="chapter" data-level="4.3" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-branches"><i class="fa fa-check"></i><b>4.3</b> Branches</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#a-branching-workflow"><i class="fa fa-check"></i><b>4.3.1</b> A branching workflow</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-pull-requests"><i class="fa fa-check"></i><b>4.4</b> Pull requests</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#setting-up-contribution-repositories"><i class="fa fa-check"></i><b>4.4.1</b> Setting up contribution repositories</a></li>
+<li class="chapter" data-level="4.4.2" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#submitting-a-pull-request"><i class="fa fa-check"></i><b>4.4.2</b> Submitting a pull request</a></li>
+<li class="chapter" data-level="4.4.3" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#dealing-with-conflicting-changes"><i class="fa fa-check"></i><b>4.4.3</b> Dealing with Conflicting Changes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-exercises"><i class="fa fa-check"></i><b>4.5</b> Exercises</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#branches"><i class="fa fa-check"></i><b>4.5.1</b> Branches</a></li>
+<li class="chapter" data-level="4.5.2" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#pull-requests"><i class="fa fa-check"></i><b>4.5.2</b> Pull requests</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="rse-advanced-git.html"><a href="rse-advanced-git.html#rse-advanced-git-keypoints"><i class="fa fa-check"></i><b>4.6</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="rse-automate.html"><a href="rse-automate.html"><i class="fa fa-check"></i><b>5</b> Automating Analyses</a><ul>
+<li class="chapter" data-level="5.0.1" data-path="rse-automate.html"><a href="rse-automate.html#setting-up"><i class="fa fa-check"></i><b>5.0.1</b> Setting Up</a></li>
+<li class="chapter" data-level="5.0.2" data-path="rse-automate.html"><a href="rse-automate.html#acknowledgements"><i class="fa fa-check"></i><b>5.0.2</b> Acknowledgements</a></li>
+<li class="chapter" data-level="5.1" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-single-file"><i class="fa fa-check"></i><b>5.1</b> How can I update a single file using Make?</a></li>
+<li class="chapter" data-level="5.2" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-multiple"><i class="fa fa-check"></i><b>5.2</b> How can I manage multiple files?</a></li>
+<li class="chapter" data-level="5.3" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-phony"><i class="fa fa-check"></i><b>5.3</b> How can I update several files at once?</a></li>
+<li class="chapter" data-level="5.4" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-depend-programs"><i class="fa fa-check"></i><b>5.4</b> How can I update files when programs change?</a></li>
+<li class="chapter" data-level="5.5" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-variables"><i class="fa fa-check"></i><b>5.5</b> How can I reduce repetition in a Makefile?</a></li>
+<li class="chapter" data-level="5.6" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-autovar"><i class="fa fa-check"></i><b>5.6</b> How can I take specific filenames out of my rules?</a></li>
+<li class="chapter" data-level="5.7" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-pattern"><i class="fa fa-check"></i><b>5.7</b> How can I write a generic rule to update many files?</a></li>
+<li class="chapter" data-level="5.8" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-functions"><i class="fa fa-check"></i><b>5.8</b> How can I automatically define a set of files?</a></li>
+<li class="chapter" data-level="5.9" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-doc"><i class="fa fa-check"></i><b>5.9</b> How can I document my Makefile?</a></li>
+<li class="chapter" data-level="5.10" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-pipeline"><i class="fa fa-check"></i><b>5.10</b> How can I create entire analysis pipelines?</a></li>
+<li class="chapter" data-level="5.11" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-summary"><i class="fa fa-check"></i><b>5.11</b> Summary</a></li>
+<li class="chapter" data-level="5.12" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-exercises"><i class="fa fa-check"></i><b>5.12</b> Exercises</a><ul>
+<li class="chapter" data-level="5.12.1" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-create-summary-results"><i class="fa fa-check"></i><b>5.12.1</b> Create a summary results file</a></li>
+<li class="chapter" data-level="5.12.2" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-plot-top-n"><i class="fa fa-check"></i><b>5.12.2</b> Generate a plot for the top N words</a></li>
+<li class="chapter" data-level="5.12.3" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-mkdir"><i class="fa fa-check"></i><b>5.12.3</b> Make sure the output directory exists</a></li>
+<li class="chapter" data-level="5.12.4" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-report-change"><i class="fa fa-check"></i><b>5.12.4</b> Report results that would change</a></li>
+<li class="chapter" data-level="5.12.5" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-readable-help"><i class="fa fa-check"></i><b>5.12.5</b> Create more readable help</a></li>
+<li class="chapter" data-level="5.12.6" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-wildcard-perils"><i class="fa fa-check"></i><b>5.12.6</b> The perils of shell wildcards</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="verify.html"><a href="verify.html"><i class="fa fa-check"></i><b>6</b> Verification</a><ul>
+<li class="chapter" data-level="6.1" data-path="verify.html"><a href="verify.html#verify-questions"><i class="fa fa-check"></i><b>6.1</b> Questions</a></li>
+<li class="chapter" data-level="6.2" data-path="verify.html"><a href="verify.html#verify-intro"><i class="fa fa-check"></i><b>6.2</b> Introduction</a></li>
+<li class="chapter" data-level="6.3" data-path="verify.html"><a href="verify.html#verify-diff"><i class="fa fa-check"></i><b>6.3</b> What is the difference between testing in software engineering and in data analysis?</a></li>
+<li class="chapter" data-level="6.4" data-path="verify.html"><a href="verify.html#verify-float"><i class="fa fa-check"></i><b>6.4</b> Why should I be cautious when using floating-point numbers?</a></li>
+<li class="chapter" data-level="6.5" data-path="verify.html"><a href="verify.html#verify-error"><i class="fa fa-check"></i><b>6.5</b> How can I express how close one number is to another?</a></li>
+<li class="chapter" data-level="6.6" data-path="verify.html"><a href="verify.html#verify-numeric"><i class="fa fa-check"></i><b>6.6</b> How should I write tests that involved floating-point values?</a></li>
+<li class="chapter" data-level="6.7" data-path="verify.html"><a href="verify.html#verify-plots"><i class="fa fa-check"></i><b>6.7</b> How can I test plots and other graphical results?</a></li>
+<li class="chapter" data-level="6.8" data-path="verify.html"><a href="verify.html#verify-simple"><i class="fa fa-check"></i><b>6.8</b> How can I test the steps in a data analysis pipeline during development?</a></li>
+<li class="chapter" data-level="6.9" data-path="verify.html"><a href="verify.html#verify-operational"><i class="fa fa-check"></i><b>6.9</b> How can I check the steps in a data analysis pipeline in production?</a></li>
+<li class="chapter" data-level="6.10" data-path="verify.html"><a href="verify.html#verify-infer"><i class="fa fa-check"></i><b>6.10</b> How can I infer and check properties of my data?</a></li>
+<li class="chapter" data-level="6.11" data-path="verify.html"><a href="verify.html#verify-summary"><i class="fa fa-check"></i><b>6.11</b> Summary</a></li>
+<li class="chapter" data-level="6.12" data-path="verify.html"><a href="verify.html#verify-exercises"><i class="fa fa-check"></i><b>6.12</b> Exercises</a></li>
+<li class="chapter" data-level="6.13" data-path="verify.html"><a href="verify.html#verify-keypoints"><i class="fa fa-check"></i><b>6.13</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="backlog.html"><a href="backlog.html"><i class="fa fa-check"></i><b>7</b> Managing Backlog</a><ul>
+<li class="chapter" data-level="7.1" data-path="backlog.html"><a href="backlog.html#backlog-questions"><i class="fa fa-check"></i><b>7.1</b> Questions</a></li>
+<li class="chapter" data-level="7.2" data-path="backlog.html"><a href="backlog.html#backlog-intro"><i class="fa fa-check"></i><b>7.2</b> Introduction</a></li>
+<li class="chapter" data-level="7.3" data-path="backlog.html"><a href="backlog.html#backlog-issues"><i class="fa fa-check"></i><b>7.3</b> How can I manage the work I still have to do?</a></li>
+<li class="chapter" data-level="7.4" data-path="backlog.html"><a href="backlog.html#backlog-bugs"><i class="fa fa-check"></i><b>7.4</b> How can I write a good bug report?</a></li>
+<li class="chapter" data-level="7.5" data-path="backlog.html"><a href="backlog.html#backlog-label"><i class="fa fa-check"></i><b>7.5</b> How can I use labels to organize work?</a></li>
+<li class="chapter" data-level="7.6" data-path="backlog.html"><a href="backlog.html#backlog-triage"><i class="fa fa-check"></i><b>7.6</b> How can I use labels to prioritize work?</a></li>
+<li class="chapter" data-level="7.7" data-path="backlog.html"><a href="backlog.html#backlog-workflow"><i class="fa fa-check"></i><b>7.7</b> How can I use issues to enforce a workflow for a project?</a></li>
+<li class="chapter" data-level="7.8" data-path="backlog.html"><a href="backlog.html#backlog-summary"><i class="fa fa-check"></i><b>7.8</b> Summary</a></li>
+<li class="chapter" data-level="7.9" data-path="backlog.html"><a href="backlog.html#backlog-exercises"><i class="fa fa-check"></i><b>7.9</b> Exercises</a></li>
+<li class="chapter" data-level="7.10" data-path="backlog.html"><a href="backlog.html#backlog-keypoints"><i class="fa fa-check"></i><b>7.10</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="style.html"><a href="style.html"><i class="fa fa-check"></i><b>8</b> Code Style and Review</a><ul>
+<li class="chapter" data-level="8.1" data-path="style.html"><a href="style.html#style-questions"><i class="fa fa-check"></i><b>8.1</b> Questions</a></li>
+<li class="chapter" data-level="8.2" data-path="style.html"><a href="style.html#style-intro"><i class="fa fa-check"></i><b>8.2</b> Introduction</a></li>
+<li class="chapter" data-level="8.3" data-path="style.html"><a href="style.html#style-github"><i class="fa fa-check"></i><b>8.3</b> How should I review someone else’s code:</a></li>
+<li class="chapter" data-level="8.4" data-path="style.html"><a href="style.html#style-pep8"><i class="fa fa-check"></i><b>8.4</b> What are the standard rules of good style for Python programs?</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="style.html"><a href="style.html#always-indent-code-blocks-using-4-spaces-and-use-spaces-instead-of-tabs."><i class="fa fa-check"></i><b>8.4.1</b> Always indent code blocks using 4 spaces, and use spaces instead of tabs.</a></li>
+<li class="chapter" data-level="8.4.2" data-path="style.html"><a href="style.html#do-not-put-spaces-inside-parentheses"><i class="fa fa-check"></i><b>8.4.2</b> Do not put spaces inside parentheses</a></li>
+<li class="chapter" data-level="8.4.3" data-path="style.html"><a href="style.html#always-use-spaces-around-comparisons-like-and-."><i class="fa fa-check"></i><b>8.4.3</b> Always use spaces around comparisons like <code>&gt;</code> and <code>&lt;=</code>.</a></li>
+<li class="chapter" data-level="8.4.4" data-path="style.html"><a href="style.html#use-all_caps_with_underscores-for-constants-also-called-global-variables."><i class="fa fa-check"></i><b>8.4.4</b> Use <code>ALL_CAPS_WITH_UNDERSCORES</code> for constants (also called global variables).</a></li>
+<li class="chapter" data-level="8.4.5" data-path="style.html"><a href="style.html#use-lower_case_with_underscores-for-the-names-of-functions-and-variables."><i class="fa fa-check"></i><b>8.4.5</b> Use <code>lower_case_with_underscores</code> for the names of functions and variables.</a></li>
+<li class="chapter" data-level="8.4.6" data-path="style.html"><a href="style.html#put-two-blank-links-between-each-function-definition."><i class="fa fa-check"></i><b>8.4.6</b> Put two blank links between each function definition.</a></li>
+<li class="chapter" data-level="8.4.7" data-path="style.html"><a href="style.html#avoid-abbreviations-in-function-and-variable-names."><i class="fa fa-check"></i><b>8.4.7</b> Avoid abbreviations in function and variable names.</a></li>
+<li class="chapter" data-level="8.4.8" data-path="style.html"><a href="style.html#use-short-names-for-short-lived-local-variables-but-longer-names-for-things-with-wider-scope."><i class="fa fa-check"></i><b>8.4.8</b> Use short names for short-lived local variables but longer names for things with wider scope.</a></li>
+<li class="chapter" data-level="8.4.9" data-path="style.html"><a href="style.html#put-everything-in-a-file-in-order."><i class="fa fa-check"></i><b>8.4.9</b> Put everything in a file in order.</a></li>
+<li class="chapter" data-level="8.4.10" data-path="style.html"><a href="style.html#do-not-comment-and-uncomment-sections-of-code-to-change-behavior."><i class="fa fa-check"></i><b>8.4.10</b> Do not comment and uncomment sections of code to change behavior.</a></li>
+<li class="chapter" data-level="8.4.11" data-path="style.html"><a href="style.html#keep-functions-short."><i class="fa fa-check"></i><b>8.4.11</b> Keep functions short.</a></li>
+<li class="chapter" data-level="8.4.12" data-path="style.html"><a href="style.html#handle-special-cases-at-the-start-of-the-function."><i class="fa fa-check"></i><b>8.4.12</b> Handle special cases at the start of the function.</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="style.html"><a href="style.html#style-check"><i class="fa fa-check"></i><b>8.5</b> How can I check that code follows style guidelines?</a></li>
+<li class="chapter" data-level="8.6" data-path="style.html"><a href="style.html#style-how"><i class="fa fa-check"></i><b>8.6</b> How should I collaborate with people when doing code reviews?</a></li>
+<li class="chapter" data-level="8.7" data-path="style.html"><a href="style.html#style-order"><i class="fa fa-check"></i><b>8.7</b> In what order should functions be defined?</a></li>
+<li class="chapter" data-level="8.8" data-path="style.html"><a href="style.html#style-defaults"><i class="fa fa-check"></i><b>8.8</b> How can I specify default values for functions’ parameters?</a></li>
+<li class="chapter" data-level="8.9" data-path="style.html"><a href="style.html#style-varargs"><i class="fa fa-check"></i><b>8.9</b> How can I write functions to handle a variable number of arguments?</a></li>
+<li class="chapter" data-level="8.10" data-path="style.html"><a href="style.html#style-starargs"><i class="fa fa-check"></i><b>8.10</b> How can I pass an unknown number of parameters?</a></li>
+<li class="chapter" data-level="8.11" data-path="style.html"><a href="style.html#style-destructure"><i class="fa fa-check"></i><b>8.11</b> How can I get values out of structured data more easily?</a></li>
+<li class="chapter" data-level="8.12" data-path="style.html"><a href="style.html#style-summary"><i class="fa fa-check"></i><b>8.12</b> Summary</a></li>
+<li class="chapter" data-level="8.13" data-path="style.html"><a href="style.html#style-exercises"><i class="fa fa-check"></i><b>8.13</b> Exercises</a></li>
+<li class="chapter" data-level="8.14" data-path="style.html"><a href="style.html#style-keypoints"><i class="fa fa-check"></i><b>8.14</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="project.html"><a href="project.html"><i class="fa fa-check"></i><b>9</b> Project Structure</a><ul>
+<li class="chapter" data-level="9.1" data-path="project.html"><a href="project.html#project-questions"><i class="fa fa-check"></i><b>9.1</b> Questions</a></li>
+<li class="chapter" data-level="9.2" data-path="project.html"><a href="project.html#project-intro"><i class="fa fa-check"></i><b>9.2</b> Introduction</a></li>
+<li class="chapter" data-level="9.3" data-path="project.html"><a href="project.html#project-noble"><i class="fa fa-check"></i><b>9.3</b> What are Noble’s Rules?</a></li>
+<li class="chapter" data-level="9.4" data-path="project.html"><a href="project.html#project-filenames"><i class="fa fa-check"></i><b>9.4</b> How should files and sub-directories be named?</a></li>
+<li class="chapter" data-level="9.5" data-path="project.html"><a href="project.html#project-scripts"><i class="fa fa-check"></i><b>9.5</b> How should I manage a mix of compiled programs and scripts?</a></li>
+<li class="chapter" data-level="9.6" data-path="project.html"><a href="project.html#project-docs"><i class="fa fa-check"></i><b>9.6</b> Should I separate documentation from manuscripts?</a></li>
+<li class="chapter" data-level="9.7" data-path="project.html"><a href="project.html#project-big-data"><i class="fa fa-check"></i><b>9.7</b> How should I handle data can’t be stored in version control?</a></li>
+<li class="chapter" data-level="9.8" data-path="project.html"><a href="project.html#project-boilerplate"><i class="fa fa-check"></i><b>9.8</b> What other files should every project contain?</a></li>
+<li class="chapter" data-level="9.9" data-path="project.html"><a href="project.html#project-thinking"><i class="fa fa-check"></i><b>9.9</b> What <em>is</em> a project?</a></li>
+<li class="chapter" data-level="9.10" data-path="project.html"><a href="project.html#project-summary"><i class="fa fa-check"></i><b>9.10</b> Summary</a></li>
+<li class="chapter" data-level="9.11" data-path="project.html"><a href="project.html#project-exercises"><i class="fa fa-check"></i><b>9.11</b> Exercises</a></li>
+<li class="chapter" data-level="9.12" data-path="project.html"><a href="project.html#project-keypoints"><i class="fa fa-check"></i><b>9.12</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="inclusive.html"><a href="inclusive.html"><i class="fa fa-check"></i><b>10</b> Including Everyone</a><ul>
+<li class="chapter" data-level="10.1" data-path="inclusive.html"><a href="inclusive.html#inclusive-questions"><i class="fa fa-check"></i><b>10.1</b> Questions</a></li>
+<li class="chapter" data-level="10.2" data-path="inclusive.html"><a href="inclusive.html#inclusive-intro"><i class="fa fa-check"></i><b>10.2</b> Introduction</a></li>
+<li class="chapter" data-level="10.3" data-path="inclusive.html"><a href="inclusive.html#inclusive-rules"><i class="fa fa-check"></i><b>10.3</b> Why does a project need explicit rules?</a></li>
+<li class="chapter" data-level="10.4" data-path="inclusive.html"><a href="inclusive.html#inclusive-software-license"><i class="fa fa-check"></i><b>10.4</b> How should I license my software?</a></li>
+<li class="chapter" data-level="10.5" data-path="inclusive.html"><a href="inclusive.html#inclusive-software-text"><i class="fa fa-check"></i><b>10.5</b> How should I license my data and reports?</a></li>
+<li class="chapter" data-level="10.6" data-path="inclusive.html"><a href="inclusive.html#inclusive-conduct"><i class="fa fa-check"></i><b>10.6</b> Why should I establish a code of conduct for my project?</a></li>
+<li class="chapter" data-level="10.7" data-path="inclusive.html"><a href="inclusive.html#inclusive-why-ally"><i class="fa fa-check"></i><b>10.7</b> Why can I be a good ally for members of marginalized groups?</a></li>
+<li class="chapter" data-level="10.8" data-path="inclusive.html"><a href="inclusive.html#inclusive-how-ally"><i class="fa fa-check"></i><b>10.8</b> How can I be a good ally for members of marginalized groups?</a></li>
+<li class="chapter" data-level="10.9" data-path="inclusive.html"><a href="inclusive.html#inclusive-summary"><i class="fa fa-check"></i><b>10.9</b> Summary</a></li>
+<li class="chapter" data-level="10.10" data-path="inclusive.html"><a href="inclusive.html#inclusive-exercises"><i class="fa fa-check"></i><b>10.10</b> Exercises</a></li>
+<li class="chapter" data-level="10.11" data-path="inclusive.html"><a href="inclusive.html#inclusive-keypoints"><i class="fa fa-check"></i><b>10.11</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="teamwork.html"><a href="teamwork.html"><i class="fa fa-check"></i><b>11</b> Teamwork</a><ul>
+<li class="chapter" data-level="11.1" data-path="teamwork.html"><a href="teamwork.html#teamwork-questions"><i class="fa fa-check"></i><b>11.1</b> Questions</a></li>
+<li class="chapter" data-level="11.2" data-path="teamwork.html"><a href="teamwork.html#teamwork-intro"><i class="fa fa-check"></i><b>11.2</b> Introduction</a></li>
+<li class="chapter" data-level="11.3" data-path="teamwork.html"><a href="teamwork.html#teamwork-efficient"><i class="fa fa-check"></i><b>11.3</b> How can we run meetings more efficiently?</a></li>
+<li class="chapter" data-level="11.4" data-path="teamwork.html"><a href="teamwork.html#teamwork-after"><i class="fa fa-check"></i><b>11.4</b> What should we do when the meeting is over?</a></li>
+<li class="chapter" data-level="11.5" data-path="teamwork.html"><a href="teamwork.html#teamwork-fair"><i class="fa fa-check"></i><b>11.5</b> How can we keep people from talking too much or too little?</a></li>
+<li class="chapter" data-level="11.6" data-path="teamwork.html"><a href="teamwork.html#teamwork-online"><i class="fa fa-check"></i><b>11.6</b> How should we run online meetings?</a></li>
+<li class="chapter" data-level="11.7" data-path="teamwork.html"><a href="teamwork.html#teamwork-people"><i class="fa fa-check"></i><b>11.7</b> What sort of people make teamwork hard?</a></li>
+<li class="chapter" data-level="11.8" data-path="teamwork.html"><a href="teamwork.html#teamwork-conflict"><i class="fa fa-check"></i><b>11.8</b> How should we handle conflict within the team?</a></li>
+<li class="chapter" data-level="11.9" data-path="teamwork.html"><a href="teamwork.html#teamwork-summary"><i class="fa fa-check"></i><b>11.9</b> Summary</a></li>
+<li class="chapter" data-level="11.10" data-path="teamwork.html"><a href="teamwork.html#teamwork-keypoints"><i class="fa fa-check"></i><b>11.10</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="rse-r-package.html"><a href="rse-r-package.html"><i class="fa fa-check"></i><b>12</b> R Packaging</a><ul>
+<li class="chapter" data-level="12.1" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-questions"><i class="fa fa-check"></i><b>12.1</b> Questions</a></li>
+<li class="chapter" data-level="12.2" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-intro"><i class="fa fa-check"></i><b>12.2</b> What’s in an R package?</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-what-packages-do-you-have"><i class="fa fa-check"></i><b>12.2.1</b> Exercise: What packages do you have?</a></li>
+<li class="chapter" data-level="12.2.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-can-you-build-a-package"><i class="fa fa-check"></i><b>12.2.2</b> Exercise: Can you build a package?</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-background"><i class="fa fa-check"></i><b>12.3</b> What <em>is</em> a package, exactly?</a></li>
+<li class="chapter" data-level="12.4" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-create"><i class="fa fa-check"></i><b>12.4</b> How do I create a package?</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-packaging-the-co2-functions"><i class="fa fa-check"></i><b>12.4.1</b> Exercise: Packaging the CO2 functions</a></li>
+<li class="chapter" data-level="12.4.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-exploring-a-package"><i class="fa fa-check"></i><b>12.4.2</b> Exercise: Exploring a package</a></li>
+<li class="chapter" data-level="12.4.3" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-ignoring-files"><i class="fa fa-check"></i><b>12.4.3</b> Exercise: Ignoring Files</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-use"><i class="fa fa-check"></i><b>12.5</b> How do I use a package while I’m creating it?</a></li>
+<li class="chapter" data-level="12.6" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-document"><i class="fa fa-check"></i><b>12.6</b> How do I document a R package?</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-document-a-function"><i class="fa fa-check"></i><b>12.6.1</b> Exercise: Document a function</a></li>
+<li class="chapter" data-level="12.6.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-use-markdown-documentation"><i class="fa fa-check"></i><b>12.6.2</b> Exercise: Use Markdown documentation</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-docwhat"><i class="fa fa-check"></i><b>12.7</b> What should I document?</a><ul>
+<li class="chapter" data-level="12.7.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-fixing-documentation"><i class="fa fa-check"></i><b>12.7.1</b> Exercise: Fixing documentation</a></li>
+<li class="chapter" data-level="12.7.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-cross-references"><i class="fa fa-check"></i><b>12.7.2</b> Exercise: Cross-references</a></li>
+<li class="chapter" data-level="12.7.3" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-documenting-error-conditions"><i class="fa fa-check"></i><b>12.7.3</b> Exercise: Documenting error conditions</a></li>
+</ul></li>
+<li class="chapter" data-level="12.8" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-dependencies"><i class="fa fa-check"></i><b>12.8</b> How do I manage package dependencies?</a><ul>
+<li class="chapter" data-level="12.8.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-document-dependencies"><i class="fa fa-check"></i><b>12.8.1</b> Exercise: Document dependencies</a></li>
+<li class="chapter" data-level="12.8.2" data-path="rse-r-package.html"><a href="rse-r-package.html#importing"><i class="fa fa-check"></i><b>12.8.2</b> Importing</a></li>
+</ul></li>
+<li class="chapter" data-level="12.9" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-github"><i class="fa fa-check"></i><b>12.9</b> How can I share my package via GitHub?</a></li>
+<li class="chapter" data-level="12.10" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-data"><i class="fa fa-check"></i><b>12.10</b> How can I add data to a package?</a><ul>
+<li class="chapter" data-level="12.10.1" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-letting-usethis-do-even-more-work"><i class="fa fa-check"></i><b>12.10.1</b> Exercise: Letting <code>usethis</code> do even more work</a></li>
+<li class="chapter" data-level="12.10.2" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-scripting-data-creation"><i class="fa fa-check"></i><b>12.10.2</b> Exercise: Scripting data creation</a></li>
+<li class="chapter" data-level="12.10.3" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-add-sample-data-to-the-co2-package"><i class="fa fa-check"></i><b>12.10.3</b> Exercise: Add sample data to the CO2 package</a></li>
+<li class="chapter" data-level="12.10.4" data-path="rse-r-package.html"><a href="rse-r-package.html#exercise-reproducible-data-set-creation"><i class="fa fa-check"></i><b>12.10.4</b> Exercise: Reproducible data set creation</a></li>
+</ul></li>
+<li class="chapter" data-level="12.11" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-summary"><i class="fa fa-check"></i><b>12.11</b> Summary</a></li>
+<li class="chapter" data-level="12.12" data-path="rse-r-package.html"><a href="rse-r-package.html#rse-r-package-keypoints"><i class="fa fa-check"></i><b>12.12</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="rse-py-package.html"><a href="rse-py-package.html"><i class="fa fa-check"></i><b>13</b> Python Packaging</a><ul>
+<li class="chapter" data-level="13.1" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-questions"><i class="fa fa-check"></i><b>13.1</b> Questions</a></li>
+<li class="chapter" data-level="13.2" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-objectives"><i class="fa fa-check"></i><b>13.2</b> Objectives</a></li>
+<li class="chapter" data-level="13.3" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-intro"><i class="fa fa-check"></i><b>13.3</b> Introduction</a></li>
+<li class="chapter" data-level="13.4" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-modules"><i class="fa fa-check"></i><b>13.4</b> How can I turn a set of Python source files into a module?</a><ul>
+<li class="chapter" data-level="13.4.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-hello-zipf"><i class="fa fa-check"></i><b>13.4.1</b> Exercise: Hello, Zipf!</a></li>
+</ul></li>
+<li class="chapter" data-level="13.5" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-import"><i class="fa fa-check"></i><b>13.5</b> How can I control what is executed during import and what isn’t?</a><ul>
+<li class="chapter" data-level="13.5.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-what-is-__name__-in-different-contexts"><i class="fa fa-check"></i><b>13.5.1</b> Exercise: What is <code>__name__</code> in different contexts?</a></li>
+<li class="chapter" data-level="13.5.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-turn-use.py-into-a-unit-test"><i class="fa fa-check"></i><b>13.5.2</b> Exercise: Turn <code>use.py</code> into a unit test</a></li>
+</ul></li>
+<li class="chapter" data-level="13.6" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-creating"><i class="fa fa-check"></i><b>13.6</b> How do I create a package?</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-create-a-package-for-our-zipf-code."><i class="fa fa-check"></i><b>13.6.1</b> Exercise: Create a package for our Zipf code.</a></li>
+<li class="chapter" data-level="13.6.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-hello-__init__.py"><i class="fa fa-check"></i><b>13.6.2</b> Exercise: “Hello <code>__init__.py</code>”</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="rse-py-package.html"><a href="rse-py-package.html#referring-to-modules-within-the-same-package-multiple-files"><i class="fa fa-check"></i><b>13.7</b> Referring to modules within the same package: multiple files</a><ul>
+<li class="chapter" data-level="13.7.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-factor-out-the-package-wide-constant-relative_error"><i class="fa fa-check"></i><b>13.7.1</b> Exercise: Factor out the package-wide constant <code>RELATIVE_ERROR</code></a></li>
+<li class="chapter" data-level="13.7.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-importing-from-within-init.py"><i class="fa fa-check"></i><b>13.7.2</b> Exercise: Importing from within <strong>init</strong>.py</a></li>
+</ul></li>
+<li class="chapter" data-level="13.8" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-install"><i class="fa fa-check"></i><b>13.8</b> What does it mean to install a Python package?</a><ul>
+<li class="chapter" data-level="13.8.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-find-a-package-in-pip-list"><i class="fa fa-check"></i><b>13.8.1</b> Exercise: Find a package in pip list</a></li>
+</ul></li>
+<li class="chapter" data-level="13.9" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-virtualenv"><i class="fa fa-check"></i><b>13.9</b> How can I have only the packages my projects need?</a><ul>
+<li class="chapter" data-level="13.9.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercises-examining-the-virtual-environment"><i class="fa fa-check"></i><b>13.9.1</b> Exercises: Examining the virtual environment</a></li>
+<li class="chapter" data-level="13.9.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercises-installing-a-package-into-the-virtual-environment"><i class="fa fa-check"></i><b>13.9.2</b> Exercises: Installing a package into the virtual environment</a></li>
+</ul></li>
+<li class="chapter" data-level="13.10" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-package"><i class="fa fa-check"></i><b>13.10</b> How can I create an installable Python package?</a></li>
+<li class="chapter" data-level="13.11" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-distrib-scripts"><i class="fa fa-check"></i><b>13.11</b> How can I distribute command-line scripts in my Python package?</a></li>
+<li class="chapter" data-level="13.12" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-document"><i class="fa fa-check"></i><b>13.12</b> How should I document my package for others?</a></li>
+<li class="chapter" data-level="13.13" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-sphinx"><i class="fa fa-check"></i><b>13.13</b> How do I generate web pages of documentation for my package?</a></li>
+<li class="chapter" data-level="13.14" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-rtd"><i class="fa fa-check"></i><b>13.14</b> How do I put the documentation for my package online?</a></li>
+<li class="chapter" data-level="13.15" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-distribute"><i class="fa fa-check"></i><b>13.15</b> How can I distribute software packages that I have created?</a><ul>
+<li class="chapter" data-level="13.15.1" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-clean-up-warning-messages"><i class="fa fa-check"></i><b>13.15.1</b> Exercise: Clean up warning messages</a></li>
+<li class="chapter" data-level="13.15.2" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-license-longinfo-and-classification-metadata"><i class="fa fa-check"></i><b>13.15.2</b> Exercise License, longinfo, and classification metadata</a></li>
+<li class="chapter" data-level="13.15.3" data-path="rse-py-package.html"><a href="rse-py-package.html#exercise-requirements-in-setup.py"><i class="fa fa-check"></i><b>13.15.3</b> Exercise: Requirements in setup.py</a></li>
+</ul></li>
+<li class="chapter" data-level="13.16" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-announce"><i class="fa fa-check"></i><b>13.16</b> Announcing Work</a></li>
+<li class="chapter" data-level="13.17" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-summary"><i class="fa fa-check"></i><b>13.17</b> Summary</a></li>
+<li class="chapter" data-level="13.18" data-path="rse-py-package.html"><a href="rse-py-package.html#rse-py-package-keypoints"><i class="fa fa-check"></i><b>13.18</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html"><i class="fa fa-check"></i><b>14</b> Unit Testing</a><ul>
+<li class="chapter" data-level="14.1" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-questions"><i class="fa fa-check"></i><b>14.1</b> Questions</a></li>
+<li class="chapter" data-level="14.2" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-intro"><i class="fa fa-check"></i><b>14.2</b> Introduction</a></li>
+<li class="chapter" data-level="14.3" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-manual-testing"><i class="fa fa-check"></i><b>14.3</b> Manually testing your code</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#exercise"><i class="fa fa-check"></i><b>14.3.1</b> Exercise</a></li>
+<li class="chapter" data-level="14.3.2" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#why-this-quickly-becomes-a-problem"><i class="fa fa-check"></i><b>14.3.2</b> Why this quickly becomes a problem</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-framework"><i class="fa fa-check"></i><b>14.4</b> Framework for automatic testing</a></li>
+<li class="chapter" data-level="14.5" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-getting-setup"><i class="fa fa-check"></i><b>14.5</b> Getting tests set up</a><ul>
+<li class="chapter" data-level="14.5.1" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#exercise-1"><i class="fa fa-check"></i><b>14.5.1</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-anatomy-test"><i class="fa fa-check"></i><b>14.6</b> Anatomy of a unit test</a><ul>
+<li class="chapter" data-level="14.6.1" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#exercise-2"><i class="fa fa-check"></i><b>14.6.1</b> Exercise</a></li>
+<li class="chapter" data-level="14.6.2" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#exercise-3"><i class="fa fa-check"></i><b>14.6.2</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-develop-tests"><i class="fa fa-check"></i><b>14.7</b> Describing and developing unit tests</a><ul>
+<li class="chapter" data-level="14.7.1" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#exercise-4"><i class="fa fa-check"></i><b>14.7.1</b> Exercise</a></li>
+<li class="chapter" data-level="14.7.2" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#exercise-5"><i class="fa fa-check"></i><b>14.7.2</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="14.8" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-test-failure"><i class="fa fa-check"></i><b>14.8</b> Testing both code success <em>and</em> failure</a><ul>
+<li class="chapter" data-level="14.8.1" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#exercise-6"><i class="fa fa-check"></i><b>14.8.1</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="14.9" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-coverage"><i class="fa fa-check"></i><b>14.9</b> Checking what code is tested</a></li>
+<li class="chapter" data-level="14.10" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-what-when"><i class="fa fa-check"></i><b>14.10</b> What to test and when</a></li>
+<li class="chapter" data-level="14.11" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-final-exercise"><i class="fa fa-check"></i><b>14.11</b> Final exercise</a></li>
+<li class="chapter" data-level="14.12" data-path="rse-unit-testing.html"><a href="rse-unit-testing.html#rse-unit-testing-keypoints"><i class="fa fa-check"></i><b>14.12</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="rse-ci.html"><a href="rse-ci.html"><i class="fa fa-check"></i><b>15</b> Continuous Integration</a><ul>
+<li class="chapter" data-level="15.1" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-questions"><i class="fa fa-check"></i><b>15.1</b> Questions</a></li>
+<li class="chapter" data-level="15.2" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-intro"><i class="fa fa-check"></i><b>15.2</b> Introduction</a></li>
+<li class="chapter" data-level="15.3" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-basic"><i class="fa fa-check"></i><b>15.3</b> The basics of setting up CI on a repository?</a><ul>
+<li class="chapter" data-level="15.3.1" data-path="rse-ci.html"><a href="rse-ci.html#travis-is-watching-your-repo"><i class="fa fa-check"></i><b>15.3.1</b> Travis is watching (your repo)</a></li>
+<li class="chapter" data-level="15.3.2" data-path="rse-ci.html"><a href="rse-ci.html#configure-your-project-for-travis"><i class="fa fa-check"></i><b>15.3.2</b> Configure your project for Travis</a></li>
+<li class="chapter" data-level="15.3.3" data-path="rse-ci.html"><a href="rse-ci.html#display-ci-build-status-in-readme"><i class="fa fa-check"></i><b>15.3.3</b> Display CI build status in README</a></li>
+<li class="chapter" data-level="15.3.4" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-setting-up-with-r"><i class="fa fa-check"></i><b>15.3.4</b> Setting up Travis in R</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-testing"><i class="fa fa-check"></i><b>15.4</b> Using Travis to test your software</a></li>
+<li class="chapter" data-level="15.5" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-coverage"><i class="fa fa-check"></i><b>15.5</b> Using CI to test coverage</a></li>
+<li class="chapter" data-level="15.6" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-deploying"><i class="fa fa-check"></i><b>15.6</b> How can I use CI for non-testing purposes?</a></li>
+<li class="chapter" data-level="15.7" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-summary"><i class="fa fa-check"></i><b>15.7</b> Summary</a></li>
+<li class="chapter" data-level="15.8" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-exercises"><i class="fa fa-check"></i><b>15.8</b> Exercises</a></li>
+<li class="chapter" data-level="15.9" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-keypoints"><i class="fa fa-check"></i><b>15.9</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="publish.html"><a href="publish.html"><i class="fa fa-check"></i><b>16</b> Publishing</a><ul>
+<li class="chapter" data-level="16.1" data-path="publish.html"><a href="publish.html#publish-questions"><i class="fa fa-check"></i><b>16.1</b> Questions</a></li>
+<li class="chapter" data-level="16.2" data-path="publish.html"><a href="publish.html#publish-intro"><i class="fa fa-check"></i><b>16.2</b> Introduction</a></li>
+<li class="chapter" data-level="16.3" data-path="publish.html"><a href="publish.html#publish-identifiers"><i class="fa fa-check"></i><b>16.3</b> Identification</a></li>
+<li class="chapter" data-level="16.4" data-path="publish.html"><a href="publish.html#publish-document"><i class="fa fa-check"></i><b>16.4</b> Publishing a report</a></li>
+<li class="chapter" data-level="16.5" data-path="publish.html"><a href="publish.html#publish-data"><i class="fa fa-check"></i><b>16.5</b> Publishing data</a><ul>
+<li class="chapter" data-level="16.5.1" data-path="publish.html"><a href="publish.html#what-is-the-most-useful-way-to-share-my-data"><i class="fa fa-check"></i><b>16.5.1</b> What is the most useful way to share my data?</a></li>
+<li class="chapter" data-level="16.5.2" data-path="publish.html"><a href="publish.html#what-standards-of-data-sharing-should-i-aspire-to"><i class="fa fa-check"></i><b>16.5.2</b> What standards of data sharing should I aspire to?</a></li>
+<li class="chapter" data-level="16.5.3" data-path="publish.html"><a href="publish.html#how-and-where-do-i-publish-the-data"><i class="fa fa-check"></i><b>16.5.3</b> How and where do I publish the data?</a></li>
+</ul></li>
+<li class="chapter" data-level="16.6" data-path="publish.html"><a href="publish.html#publish-software"><i class="fa fa-check"></i><b>16.6</b> Publishing analysis software</a></li>
+<li class="chapter" data-level="16.7" data-path="publish.html"><a href="publish.html#publish-scripts"><i class="fa fa-check"></i><b>16.7</b> Publishing analysis scripts</a><ul>
+<li class="chapter" data-level="16.7.1" data-path="publish.html"><a href="publish.html#software-description"><i class="fa fa-check"></i><b>16.7.1</b> Software description</a></li>
+<li class="chapter" data-level="16.7.2" data-path="publish.html"><a href="publish.html#analysis-scripts"><i class="fa fa-check"></i><b>16.7.2</b> Analysis scripts</a></li>
+<li class="chapter" data-level="16.7.3" data-path="publish.html"><a href="publish.html#data-processing-steps"><i class="fa fa-check"></i><b>16.7.3</b> Data processing steps</a></li>
+<li class="chapter" data-level="16.7.4" data-path="publish.html"><a href="publish.html#where-to-publish-all-this-stuff"><i class="fa fa-check"></i><b>16.7.4</b> Where to publish all this stuff?</a></li>
+</ul></li>
+<li class="chapter" data-level="16.8" data-path="publish.html"><a href="publish.html#publish-summary"><i class="fa fa-check"></i><b>16.8</b> Summary</a></li>
+<li class="chapter" data-level="16.9" data-path="publish.html"><a href="publish.html#publish-exercises"><i class="fa fa-check"></i><b>16.9</b> Exercises</a></li>
+<li class="chapter" data-level="16.10" data-path="publish.html"><a href="publish.html#publish-keypoints"><i class="fa fa-check"></i><b>16.10</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="finale.html"><a href="finale.html"><i class="fa fa-check"></i><b>17</b> Finale</a><ul>
+<li class="chapter" data-level="17.1" data-path="finale.html"><a href="finale.html#finale-questions"><i class="fa fa-check"></i><b>17.1</b> Questions</a></li>
+<li class="chapter" data-level="17.2" data-path="finale.html"><a href="finale.html#finale-intro"><i class="fa fa-check"></i><b>17.2</b> Introduction</a></li>
+<li class="chapter" data-level="17.3" data-path="finale.html"><a href="finale.html#finale-programs-data"><i class="fa fa-check"></i><b>17.3</b> Programs are data.</a></li>
+<li class="chapter" data-level="17.4" data-path="finale.html"><a href="finale.html#finale-understand"><i class="fa fa-check"></i><b>17.4</b> Computers don’t understand anything.</a></li>
+<li class="chapter" data-level="17.5" data-path="finale.html"><a href="finale.html#finale-abstractions"><i class="fa fa-check"></i><b>17.5</b> Programming is about creating and combining abstractions.</a></li>
+<li class="chapter" data-level="17.6" data-path="finale.html"><a href="finale.html#finale-redundancy"><i class="fa fa-check"></i><b>17.6</b> Every redundancy in software is an abstraction trying to be born.</a></li>
+<li class="chapter" data-level="17.7" data-path="finale.html"><a href="finale.html#finale-models-views"><i class="fa fa-check"></i><b>17.7</b> Create models for computers and views for human beings.</a></li>
+<li class="chapter" data-level="17.8" data-path="finale.html"><a href="finale.html#finale-paranoia"><i class="fa fa-check"></i><b>17.8</b> Paranoia makes us productive.</a></li>
+<li class="chapter" data-level="17.9" data-path="finale.html"><a href="finale.html#finale-immutable"><i class="fa fa-check"></i><b>17.9</b> Things that don’t change are easier to understand than things that do.</a></li>
+<li class="chapter" data-level="17.10" data-path="finale.html"><a href="finale.html#finale-algorithms"><i class="fa fa-check"></i><b>17.10</b> Better algorithms are better than better hardware.</a></li>
+<li class="chapter" data-level="17.11" data-path="finale.html"><a href="finale.html#finale-distributed"><i class="fa fa-check"></i><b>17.11</b> Distributed is different.</a></li>
+<li class="chapter" data-level="17.12" data-path="finale.html"><a href="finale.html#finale-privacy"><i class="fa fa-check"></i><b>17.12</b> Privacy, security, fairness, and responsibility can’t be added after the fact.</a></li>
+<li class="chapter" data-level="17.13" data-path="finale.html"><a href="finale.html#finale-summary"><i class="fa fa-check"></i><b>17.13</b> Summary</a></li>
+<li class="chapter" data-level="17.14" data-path="finale.html"><a href="finale.html#finale-exercises"><i class="fa fa-check"></i><b>17.14</b> Exercises</a></li>
+<li class="chapter" data-level="17.15" data-path="finale.html"><a href="finale.html#finale-keypoints"><i class="fa fa-check"></i><b>17.15</b> Key Points</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="license.html"><a href="license.html"><i class="fa fa-check"></i><b>A</b> License</a></li>
+<li class="chapter" data-level="B" data-path="conduct.html"><a href="conduct.html"><i class="fa fa-check"></i><b>B</b> Code of Conduct</a><ul>
+<li class="chapter" data-level="B.1" data-path="conduct.html"><a href="conduct.html#conduct-standards"><i class="fa fa-check"></i><b>B.1</b> Our Standards</a></li>
+<li class="chapter" data-level="B.2" data-path="conduct.html"><a href="conduct.html#conduct-responsibilities"><i class="fa fa-check"></i><b>B.2</b> Our Responsibilities</a></li>
+<li class="chapter" data-level="B.3" data-path="conduct.html"><a href="conduct.html#conduct-scope"><i class="fa fa-check"></i><b>B.3</b> Scope</a></li>
+<li class="chapter" data-level="B.4" data-path="conduct.html"><a href="conduct.html#conduct-enforcement"><i class="fa fa-check"></i><b>B.4</b> Enforcement</a></li>
+<li class="chapter" data-level="B.5" data-path="conduct.html"><a href="conduct.html#conduct-attribution"><i class="fa fa-check"></i><b>B.5</b> Attribution</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="contributing.html"><a href="contributing.html"><i class="fa fa-check"></i><b>C</b> Contributing</a><ul>
+<li class="chapter" data-level="C.1" data-path="contributing.html"><a href="contributing.html#style-guide"><i class="fa fa-check"></i><b>C.1</b> Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="D" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>D</b> Glossary</a></li>
+<li class="chapter" data-level="E" data-path="objectives.html"><a href="objectives.html"><i class="fa fa-check"></i><b>E</b> RSE Learning Objectives</a><ul>
+<li class="chapter" data-level="E.1" data-path="objectives.html"><a href="objectives.html#the-unix-shell"><i class="fa fa-check"></i><b>E.1</b> The Unix Shell</a></li>
+<li class="chapter" data-level="E.2" data-path="objectives.html"><a href="objectives.html#automating-analyses"><i class="fa fa-check"></i><b>E.2</b> Automating Analyses</a></li>
+<li class="chapter" data-level="E.3" data-path="objectives.html"><a href="objectives.html#configuring-software"><i class="fa fa-check"></i><b>E.3</b> Configuring Software</a></li>
+<li class="chapter" data-level="E.4" data-path="objectives.html"><a href="objectives.html#unit-testing"><i class="fa fa-check"></i><b>E.4</b> Unit Testing</a></li>
+<li class="chapter" data-level="E.5" data-path="glossary.html"><a href="glossary.html#verification"><i class="fa fa-check"></i><b>E.5</b> Verification</a></li>
+<li class="chapter" data-level="E.6" data-path="objectives.html"><a href="objectives.html#a-branching-workflow-1"><i class="fa fa-check"></i><b>E.6</b> A Branching Workflow</a></li>
+<li class="chapter" data-level="E.7" data-path="objectives.html"><a href="objectives.html#managing-backlog"><i class="fa fa-check"></i><b>E.7</b> Managing Backlog</a></li>
+<li class="chapter" data-level="E.8" data-path="objectives.html"><a href="objectives.html#code-style-and-review"><i class="fa fa-check"></i><b>E.8</b> Code Style and Review</a></li>
+<li class="chapter" data-level="E.9" data-path="objectives.html"><a href="objectives.html#development-process"><i class="fa fa-check"></i><b>E.9</b> Development Process</a></li>
+<li class="chapter" data-level="E.10" data-path="glossary.html"><a href="glossary.html#continuous-integration"><i class="fa fa-check"></i><b>E.10</b> Continuous Integration</a></li>
+<li class="chapter" data-level="E.11" data-path="objectives.html"><a href="objectives.html#working-remotely"><i class="fa fa-check"></i><b>E.11</b> Working Remotely</a></li>
+<li class="chapter" data-level="E.12" data-path="objectives.html"><a href="objectives.html#other-tools"><i class="fa fa-check"></i><b>E.12</b> Other Tools</a></li>
+<li class="chapter" data-level="E.13" data-path="objectives.html"><a href="objectives.html#documentation"><i class="fa fa-check"></i><b>E.13</b> Documentation</a></li>
+<li class="chapter" data-level="E.14" data-path="objectives.html"><a href="objectives.html#refactoring"><i class="fa fa-check"></i><b>E.14</b> Refactoring</a></li>
+<li class="chapter" data-level="E.15" data-path="objectives.html"><a href="objectives.html#project-structure"><i class="fa fa-check"></i><b>E.15</b> Project Structure</a></li>
+<li class="chapter" data-level="E.16" data-path="objectives.html"><a href="objectives.html#including-everyone"><i class="fa fa-check"></i><b>E.16</b> Including Everyone</a></li>
+<li class="chapter" data-level="E.17" data-path="objectives.html"><a href="objectives.html#python-packaging"><i class="fa fa-check"></i><b>E.17</b> Python Packaging</a></li>
+<li class="chapter" data-level="E.18" data-path="objectives.html"><a href="objectives.html#publishing"><i class="fa fa-check"></i><b>E.18</b> Publishing</a></li>
+<li class="chapter" data-level="E.19" data-path="objectives.html"><a href="objectives.html#teamwork-1"><i class="fa fa-check"></i><b>E.19</b> Teamwork</a></li>
+<li class="chapter" data-level="E.20" data-path="objectives.html"><a href="objectives.html#pacing"><i class="fa fa-check"></i><b>E.20</b> Pacing</a></li>
+<li class="chapter" data-level="E.21" data-path="objectives.html"><a href="objectives.html#finale-1"><i class="fa fa-check"></i><b>E.21</b> Finale</a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="keypoints.html"><a href="keypoints.html"><i class="fa fa-check"></i><b>F</b> RSE Key Points</a><ul>
+<li class="chapter" data-level="F.1" data-path="keypoints.html"><a href="keypoints.html#the-unix-shell-1"><i class="fa fa-check"></i><b>F.1</b> The Unix Shell</a></li>
+<li class="chapter" data-level="F.2" data-path="keypoints.html"><a href="keypoints.html#automating-analyses-1"><i class="fa fa-check"></i><b>F.2</b> Automating Analyses</a></li>
+<li class="chapter" data-level="F.3" data-path="keypoints.html"><a href="keypoints.html#configuring-software-1"><i class="fa fa-check"></i><b>F.3</b> Configuring Software</a></li>
+<li class="chapter" data-level="F.4" data-path="keypoints.html"><a href="keypoints.html#unit-testing-1"><i class="fa fa-check"></i><b>F.4</b> Unit Testing</a></li>
+<li class="chapter" data-level="F.5" data-path="keypoints.html"><a href="keypoints.html#verification-1"><i class="fa fa-check"></i><b>F.5</b> Verification</a></li>
+<li class="chapter" data-level="F.6" data-path="keypoints.html"><a href="keypoints.html#a-branching-workflow-2"><i class="fa fa-check"></i><b>F.6</b> A Branching Workflow</a></li>
+<li class="chapter" data-level="F.7" data-path="keypoints.html"><a href="keypoints.html#managing-backlog-1"><i class="fa fa-check"></i><b>F.7</b> Managing Backlog</a></li>
+<li class="chapter" data-level="F.8" data-path="keypoints.html"><a href="keypoints.html#code-style-and-review-1"><i class="fa fa-check"></i><b>F.8</b> Code Style and Review</a></li>
+<li class="chapter" data-level="F.9" data-path="keypoints.html"><a href="keypoints.html#development-process-1"><i class="fa fa-check"></i><b>F.9</b> Development Process</a></li>
+<li class="chapter" data-level="F.10" data-path="keypoints.html"><a href="keypoints.html#continuous-integration-1"><i class="fa fa-check"></i><b>F.10</b> Continuous Integration</a></li>
+<li class="chapter" data-level="F.11" data-path="keypoints.html"><a href="keypoints.html#working-remotely-1"><i class="fa fa-check"></i><b>F.11</b> Working Remotely</a></li>
+<li class="chapter" data-level="F.12" data-path="keypoints.html"><a href="keypoints.html#other-tools-1"><i class="fa fa-check"></i><b>F.12</b> Other Tools</a></li>
+<li class="chapter" data-level="F.13" data-path="keypoints.html"><a href="keypoints.html#documentation-1"><i class="fa fa-check"></i><b>F.13</b> Documentation</a></li>
+<li class="chapter" data-level="F.14" data-path="keypoints.html"><a href="keypoints.html#refactoring-1"><i class="fa fa-check"></i><b>F.14</b> Refactoring</a></li>
+<li class="chapter" data-level="F.15" data-path="keypoints.html"><a href="keypoints.html#project-structure-1"><i class="fa fa-check"></i><b>F.15</b> Project Structure</a></li>
+<li class="chapter" data-level="F.16" data-path="keypoints.html"><a href="keypoints.html#including-everyone-1"><i class="fa fa-check"></i><b>F.16</b> Including Everyone</a></li>
+<li class="chapter" data-level="F.17" data-path="keypoints.html"><a href="keypoints.html#python-packaging-1"><i class="fa fa-check"></i><b>F.17</b> Python Packaging</a></li>
+<li class="chapter" data-level="F.18" data-path="keypoints.html"><a href="keypoints.html#publishing-1"><i class="fa fa-check"></i><b>F.18</b> Publishing</a></li>
+<li class="chapter" data-level="F.19" data-path="keypoints.html"><a href="keypoints.html#teamwork-2"><i class="fa fa-check"></i><b>F.19</b> Teamwork</a></li>
+<li class="chapter" data-level="F.20" data-path="keypoints.html"><a href="keypoints.html#pacing-1"><i class="fa fa-check"></i><b>F.20</b> Pacing</a></li>
+<li class="chapter" data-level="F.21" data-path="keypoints.html"><a href="keypoints.html#finale-2"><i class="fa fa-check"></i><b>F.21</b> Finale</a></li>
+</ul></li>
+<li class="chapter" data-level="G" data-path="rse-solutions.html"><a href="rse-solutions.html"><i class="fa fa-check"></i><b>G</b> Solutions</a><ul>
+<li class="chapter" data-level="G.1" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-bash"><i class="fa fa-check"></i><b>G.1</b> Chapter @ref(rse-bash)</a><ul>
+<li class="chapter" data-level="G.1.1" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-more-ls"><i class="fa fa-check"></i><b>G.1.1</b> Exercise @ref(#rse-bash-ex-more-ls)</a></li>
+<li class="chapter" data-level="G.1.2" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-ls-rt"><i class="fa fa-check"></i><b>G.1.2</b> Exercise @ref(#rse-bash-ex-ls-rt)</a></li>
+<li class="chapter" data-level="G.1.3" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-paths"><i class="fa fa-check"></i><b>G.1.3</b> Exercise @ref(#rse-bash-ex-paths)</a></li>
+<li class="chapter" data-level="G.1.4" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-resolve-rel-path"><i class="fa fa-check"></i><b>G.1.4</b> Exercise @ref(#rse-bash-ex-resolve-rel-path)</a></li>
+<li class="chapter" data-level="G.1.5" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-reading-ls"><i class="fa fa-check"></i><b>G.1.5</b> Exercise @ref(#rse-bash-ex-reading-ls)</a></li>
+<li class="chapter" data-level="G.1.6" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-touch"><i class="fa fa-check"></i><b>G.1.6</b> Exercise @ref(#rse-bash-ex-touch)</a></li>
+<li class="chapter" data-level="G.1.7" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-move-dot"><i class="fa fa-check"></i><b>G.1.7</b> Exercise @ref(#rse-bash-ex-move-dot)</a></li>
+<li class="chapter" data-level="G.1.8" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-renaming-files"><i class="fa fa-check"></i><b>G.1.8</b> Exercise @ref(#rse-bash-ex-renaming-files)</a></li>
+<li class="chapter" data-level="G.1.9" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-last-ls"><i class="fa fa-check"></i><b>G.1.9</b> Exercise @ref(#rse-bash-ex-last-ls)</a></li>
+<li class="chapter" data-level="G.1.10" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-safe-rm"><i class="fa fa-check"></i><b>G.1.10</b> Exercise @ref(#rse-bash-ex-safe-rm)</a></li>
+<li class="chapter" data-level="G.1.11" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-copy-multi"><i class="fa fa-check"></i><b>G.1.11</b> Exercise @ref(#rse-bash-ex-copy-multi)</a></li>
+<li class="chapter" data-level="G.1.12" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-ls-match"><i class="fa fa-check"></i><b>G.1.12</b> Exercise @ref(#rse-bash-ex-ls-match)</a></li>
+<li class="chapter" data-level="G.1.13" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-more-wildcards"><i class="fa fa-check"></i><b>G.1.13</b> Exercise @ref(#rse-bash-ex-more-wildcards)</a></li>
+<li class="chapter" data-level="G.1.14" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-organizing"><i class="fa fa-check"></i><b>G.1.14</b> Exercise @ref(#rse-bash-ex-organizing)</a></li>
+<li class="chapter" data-level="G.1.15" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-reproduce-structure"><i class="fa fa-check"></i><b>G.1.15</b> Exercise @ref(#rse-bash-ex-reproduce-structure)</a></li>
+<li class="chapter" data-level="G.1.16" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-sort-n"><i class="fa fa-check"></i><b>G.1.16</b> Exercise @ref(#rse-bash-ex-sort-n)</a></li>
+<li class="chapter" data-level="G.1.17" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-redirect-append"><i class="fa fa-check"></i><b>G.1.17</b> Exercise @ref(#rse-bash-ex-redirect-append)</a></li>
+<li class="chapter" data-level="G.1.18" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-append-data"><i class="fa fa-check"></i><b>G.1.18</b> Exercise @ref(#rse-bash-ex-append-data)</a></li>
+<li class="chapter" data-level="G.1.19" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-piping"><i class="fa fa-check"></i><b>G.1.19</b> Exercise @ref(#rse-bash-ex-piping)</a></li>
+<li class="chapter" data-level="G.1.20" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-uniq-adjacent"><i class="fa fa-check"></i><b>G.1.20</b> Exercise @ref(#rse-bash-ex-uniq-adjacent)</a></li>
+<li class="chapter" data-level="G.1.21" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-reading-pipes"><i class="fa fa-check"></i><b>G.1.21</b> Exercise @ref(#rse-bash-ex-reading-pipes)</a></li>
+<li class="chapter" data-level="G.1.22" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-pipe-construction"><i class="fa fa-check"></i><b>G.1.22</b> Exercise @ref(#rse-bash-ex-pipe-construction)</a></li>
+<li class="chapter" data-level="G.1.23" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-which-pipe"><i class="fa fa-check"></i><b>G.1.23</b> Exercise @ref(#rse-bash-ex-which-pipe)</a></li>
+<li class="chapter" data-level="G.1.24" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-wildcard-expressions"><i class="fa fa-check"></i><b>G.1.24</b> Exercise @ref(#rse-bash-ex-wildcard-expressions)</a></li>
+<li class="chapter" data-level="G.1.25" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-remove-unneeded"><i class="fa fa-check"></i><b>G.1.25</b> Exercise @ref(#rse-bash-ex-remove-unneeded)</a></li>
+<li class="chapter" data-level="G.1.26" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-loop-dry-run"><i class="fa fa-check"></i><b>G.1.26</b> Exercise @ref(#rse-bash-ex-loop-dry-run)</a></li>
+<li class="chapter" data-level="G.1.27" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-nested-loops"><i class="fa fa-check"></i><b>G.1.27</b> Exercise @ref(#rse-bash-ex-nested-loops)</a></li>
+<li class="chapter" data-level="G.1.28" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-loop-variables"><i class="fa fa-check"></i><b>G.1.28</b> Exercise @ref(#rse-bash-ex-loop-variables)</a></li>
+<li class="chapter" data-level="G.1.29" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-limiting-file-sets"><i class="fa fa-check"></i><b>G.1.29</b> Exercise @ref(#rse-bash-ex-limiting-file-sets)</a></li>
+<li class="chapter" data-level="G.1.30" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-loop-save"><i class="fa fa-check"></i><b>G.1.30</b> Exercise @ref(#rse-bash-ex-loop-save)</a></li>
+<li class="chapter" data-level="G.1.31" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-list-unique"><i class="fa fa-check"></i><b>G.1.31</b> Exercise @ref(#rse-bash-ex-list-unique)</a></li>
+<li class="chapter" data-level="G.1.32" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-history-order"><i class="fa fa-check"></i><b>G.1.32</b> Exercise @ref(#rse-bash-ex-history-order)</a></li>
+<li class="chapter" data-level="G.1.33" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-script-variables"><i class="fa fa-check"></i><b>G.1.33</b> Exercise @ref(#rse-bash-ex-script-variables)</a></li>
+<li class="chapter" data-level="G.1.34" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-longest-with-extension"><i class="fa fa-check"></i><b>G.1.34</b> Exercise @ref(#rse-bash-ex-longest-with-extension)</a></li>
+<li class="chapter" data-level="G.1.35" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-reading-scripts"><i class="fa fa-check"></i><b>G.1.35</b> Exercise @ref(#rse-bash-ex-reading-scripts)</a></li>
+<li class="chapter" data-level="G.1.36" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-using-grep"><i class="fa fa-check"></i><b>G.1.36</b> Exercise @ref(#rse-bash-ex-using-grep)</a></li>
+<li class="chapter" data-level="G.1.37" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-tracking-species"><i class="fa fa-check"></i><b>G.1.37</b> Exercise @ref(#rse-bash-ex-tracking-species)</a></li>
+<li class="chapter" data-level="G.1.38" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-little-women"><i class="fa fa-check"></i><b>G.1.38</b> Exercise @ref(#rse-bash-ex-little-women)</a></li>
+<li class="chapter" data-level="G.1.39" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-match-subtract"><i class="fa fa-check"></i><b>G.1.39</b> Exercise @ref(#rse-bash-ex-match-subtract)</a></li>
+<li class="chapter" data-level="G.1.40" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-reading-find"><i class="fa fa-check"></i><b>G.1.40</b> Exercise @ref(#rse-bash-ex-reading-find)</a></li>
+<li class="chapter" data-level="G.1.41" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-find-properties"><i class="fa fa-check"></i><b>G.1.41</b> Exercise @ref(#rse-bash-ex-find-properties)</a></li>
+<li class="chapter" data-level="G.1.42" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-combining-options"><i class="fa fa-check"></i><b>G.1.42</b> Exercise @ref(#rse-bash-ex-combining-options)</a></li>
+<li class="chapter" data-level="G.1.43" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-ex-other-wildcards"><i class="fa fa-check"></i><b>G.1.43</b> Exercise @ref(#rse-bash-ex-other-wildcards)</a></li>
+</ul></li>
+<li class="chapter" data-level="G.2" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-automate"><i class="fa fa-check"></i><b>G.2</b> Chapter @ref(rse-automate)</a><ul>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-create-summary-results"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-create-summary-results)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-plot-top-n"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-plot-top-n)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-mkdir"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-mkdir)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-report-change"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-report-change)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-readable-help"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-readable-help)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-wildcard-perils"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-wildcard-perils)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="H" data-path="rules.html"><a href="rules.html"><i class="fa fa-check"></i><b>H</b> The Rules</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Merely Useful: RSE</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="rse-unit-testing" class="section level1">
+<h1><span class="header-section-number">Chapter 14</span> Unit Testing</h1>
+<div id="rse-unit-testing-questions" class="section level2">
+<h2><span class="header-section-number">14.1</span> Questions</h2>
+<ul>
+<li>How do I know if my code does what I think it does?</li>
+<li>How can I test that my code is correct?</li>
+<li>How do I write and use tests for checking my software?</li>
+<li>What code should I test?</li>
+<li>How can I find out how much of my code is tested?</li>
+</ul>
+</div>
+<div id="rse-unit-testing-intro" class="section level2">
+<h2><span class="header-section-number">14.2</span> Introduction</h2>
+<p>When you write software,
+you likely think your code is doing exactly what you wrote it to do.
+But how do you <em>know</em> for sure, in a quantifiable and objective way?
+How do you know if your code correctly outputs or computes what you think it does?
+Well, like in science, to find out if something matches your expectation,
+you test that expectation against reality.
+In this case, you write tests for your code to validate (or invalidate) your expectation.
+Over the course of this chapter we will explain and show how to make use of
+<a href="glossary.html#rse-unit-testing-test">“unit tests”</a> in both Python and R packages.</p>
+</div>
+<div id="rse-unit-testing-manual-testing" class="section level2">
+<h2><span class="header-section-number">14.3</span> Manually testing your code</h2>
+<p>Without a formal framework for testing code,
+how do you normally see if your code works?
+Like many of us before learning about unit testing,
+you might test code interactively by running it yourself on different problems.</p>
+<p>For instance, let’s say you wrote a function like this:</p>
+<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb653-1" data-line-number="1"><span class="co"># in R</span></a>
+<a class="sourceLine" id="cb653-2" data-line-number="2">numSign &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb653-3" data-line-number="3">  <span class="cf">if</span> (x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb653-4" data-line-number="4">    <span class="dv">1</span></a>
+<a class="sourceLine" id="cb653-5" data-line-number="5">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb653-6" data-line-number="6">    <span class="dv">-1</span></a>
+<a class="sourceLine" id="cb653-7" data-line-number="7">  }</a>
+<a class="sourceLine" id="cb653-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb653-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb653-10" data-line-number="10"><span class="kw">numSign</span>(<span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode" id="cb655"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb655-1" data-line-number="1"><span class="co"># In Python</span></a>
+<a class="sourceLine" id="cb655-2" data-line-number="2"><span class="kw">def</span> numSign(x):</a>
+<a class="sourceLine" id="cb655-3" data-line-number="3">    <span class="cf">if</span> x <span class="op">&gt;</span> <span class="dv">0</span>:</a>
+<a class="sourceLine" id="cb655-4" data-line-number="4">        out <span class="op">=</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb655-5" data-line-number="5">    <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb655-6" data-line-number="6">        out <span class="op">=</span> <span class="dv">-1</span></a>
+<a class="sourceLine" id="cb655-7" data-line-number="7">    <span class="cf">return</span>(out)</a>
+<a class="sourceLine" id="cb655-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb655-9" data-line-number="9">numSign(<span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## 1</code></pre>
+<p>A simple way to test the code is to run commands like:</p>
+<div class="sourceCode" id="cb657"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb657-1" data-line-number="1"><span class="kw">numSign</span>(<span class="dv">2</span>) <span class="op">==</span><span class="st"> </span><span class="dv">1</span></a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb659"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb659-1" data-line-number="1"><span class="kw">numSign</span>(<span class="dv">0</span>) <span class="op">==</span><span class="st"> </span><span class="dv">-1</span></a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb661-1" data-line-number="1"><span class="kw">numSign</span>(<span class="op">-</span><span class="dv">4</span>) <span class="op">==</span><span class="st"> </span><span class="dv">-1</span></a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>You could go a step further and write a script with some simple tests:</p>
+<div class="sourceCode" id="cb663"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb663-1" data-line-number="1"><span class="co"># In R</span></a>
+<a class="sourceLine" id="cb663-2" data-line-number="2"><span class="kw">stopifnot</span>(<span class="kw">numSign</span>(<span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb663-3" data-line-number="3"><span class="kw">stopifnot</span>(<span class="kw">numSign</span>(<span class="op">-</span><span class="ot">Inf</span>) <span class="op">==</span><span class="st"> </span><span class="dv">-1</span>)</a></code></pre></div>
+<p><code>stopifnot()</code> runs the code and if it resolves to <code>true</code> than it continues.
+What if you want to test something that you know should fail?</p>
+<div class="sourceCode" id="cb664"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb664-1" data-line-number="1"><span class="kw">stopifnot</span>(<span class="kw">numSign</span>(<span class="ot">NULL</span>) <span class="op">==</span><span class="st"> </span><span class="dv">-1</span>)</a></code></pre></div>
+<pre><code>## Error in if (x &gt; 0) {: argument is of length zero</code></pre>
+<p>Which gives an error as expected.</p>
+<p>TODO: Need Python version of this.</p>
+<p>TODO: Finish this off…</p>
+<div id="exercise" class="section level3">
+<h3><span class="header-section-number">14.3.1</span> Exercise</h3>
+<ul>
+<li>Write manually in the console/terminal a test to check if the function has an error or gives you what you expect.
+TODO: Need to complete this.</li>
+</ul>
+</div>
+<div id="why-this-quickly-becomes-a-problem" class="section level3">
+<h3><span class="header-section-number">14.3.2</span> Why this quickly becomes a problem</h3>
+<p>Writing simple tests on the fly and interactively (or informally), like above,
+works for a while but quickly becomes unsustainable.
+The above are not sufficient because:</p>
+<ol style="list-style-type: decimal">
+<li><p>If you run the simple tests in a script that causes an error,
+the execution will halt at the first failed test.
+Any subsequent test won’t then run and we may not know if the error was expected or not.</p></li>
+<li><p>The tests are not independent, given that if one test fails,
+all subsequent tests won’t be run.
+Good tests are independent of each other,
+so that all tests run and give an output on their success or failure.</p></li>
+<li><p>Each test prints the output to the screen (true/false… or no output at all),
+but there is no overall summary and no easy way to see what test produced what result.
+For only three tests like above, this isn’t a problem.
+But once more tests are included and given no meaningful output is provided,
+this way of creating tests becomes unusable.</p></li>
+</ol>
+<p>Instead, we should use a formal framework for writing and running tests.</p>
+</div>
+</div>
+<div id="rse-unit-testing-framework" class="section level2">
+<h2><span class="header-section-number">14.4</span> Framework for automatic testing</h2>
+<p>To optimize your time writing code and developing tests,
+a framework for testing software should:</p>
+<ul>
+<li>make it easy for people to write tests (because otherwise they won’t do it);</li>
+<li>run a set of tests;</li>
+<li>report which ones have failed; and,</li>
+<li>give some idea of where or why they failed (to help debugging).</li>
+</ul>
+<p>Any single test can have one of three results:</p>
+<ul>
+<li><a href="glossary.html#test-success">success</a>, meaning that the test passed correctly;</li>
+<li><a href="glossary.html#test-failure">failure</a>, meaning that the software being tested didn’t do what it was supposed to; or</li>
+<li><a href="glossary.html#test-error">error</a>, meaning that the test itself failed (in which case, we don’t know anything about the software being tested).</li>
+</ul>
+<p>A formal <a href="glossary.html#test-framework">test framework</a> is a package that supports writing and running tests.
+In Python, the tools to run the tests are called a <a href="glossary.html#test-runner">test runner</a>.
+The package will find the tests, execute them, and report the results of the tests.
+If any test fails, a summary of the failure will be given.</p>
+<p>Tests in this framework are usually called “unit tests”,
+where individual components (“units”) of your code are tested.
+A unit test is a function that runs your code (with associated tests) and produces one of the three results.
+Unit tests take an input (called a <a href="glossary.html#fixture">fixture</a> in Python and simply “input” in R)
+that are then sent to the functions or code we want to test.
+For each function/code we have a set of test “expectations”,
+meaning that we compare our expected output of the function/code with what the code actually outputs.</p>
+</div>
+<div id="rse-unit-testing-getting-setup" class="section level2">
+<h2><span class="header-section-number">14.5</span> Getting tests set up</h2>
+<p>There are several test frameworks in both Python and R.
+In Python, the most recommended and most common package is <a href="http://pytest.org/">pytest</a>.
+In R, it is the testthat package.</p>
+<p>We’ll start with <strong>Python</strong>.
+Tests in pytest are structured according to three simple rules:</p>
+<ol style="list-style-type: decimal">
+<li>All tests are put in files whose names begin with <code>test_</code>.</li>
+<li>Each test is a function whose name begins with <code>test_</code>.</li>
+<li>Test functions use <code>assert</code> to check that results are as expected.</li>
+</ol>
+<p>It’s good practice to put all test files into the <code>tests/</code> folder.
+Running tests is done by typing in the shell:</p>
+<pre class="shell"><code>pytest</code></pre>
+<p>pytest searches for all files named <code>test_*.py</code> or <code>*_test.py</code> in the current directory and its sub-directories (e.g. <code>tests/</code>).
+If we want to run single tests, we run the command <code>pytest tests/test_filename.py</code> to run the tests in file <code>tests/test_filename.py</code>.
+We’ll get into the specific anatomy of unit tests in the next section.</p>
+<p><strong>For R</strong>, setting things up are a bit more straight-forward and automated.
+To start, open the <code>.Rproj</code> in RStudio. In the console, type out:</p>
+<div class="sourceCode" id="cb667"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb667-1" data-line-number="1">usethis<span class="op">::</span><span class="kw">use_testthat</span>()</a></code></pre></div>
+<p>which will create a new <code>tests/testthat/</code> directory,
+add testthat to <code>Suggests</code> in the <code>DESCRIPTION</code> file,
+and creates a <code>tests/testthat.R</code> script that instructs R on how to run the tests.
+Creating a new test file is done with:</p>
+<div class="sourceCode" id="cb668"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb668-1" data-line-number="1">usethis<span class="op">::</span><span class="kw">use_test</span>(<span class="st">&quot;name-of-file&quot;</span>)</a></code></pre></div>
+<p>which will create a file called <code>tests/testthat/test-name-of-file.R</code>.
+Generally, the name of the test file should reflect what you want to test,
+usually the contents of a specific R file inside <code>R/</code>.
+The basic template for writing the test is provided inside the new file.</p>
+<p>Running tests in R is done by either typing out:</p>
+<div class="sourceCode" id="cb669"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb669-1" data-line-number="1">devtools<span class="op">::</span><span class="kw">test</span>()</a></code></pre></div>
+<p>or by using the keybinding “Ctrl/Cmd-Shift-T” in RStudio.
+For further learning on using unit tests in R packages, check out the
+<a href="https://testthat.r-lib.org/"><code>testthat</code></a> website and the <a href="http://r-pkgs.had.co.nz/tests.html">Testing Chapter</a> of
+the <a href="http://r-pkgs.had.co.nz/">R Packages</a> book.</p>
+<div id="exercise-1" class="section level3">
+<h3><span class="header-section-number">14.5.1</span> Exercise</h3>
+<p><strong>In Python</strong>:</p>
+<ul>
+<li><p>Create a file called <code>test_add_two.py</code> in <code>tests/</code> by running in the terminal:</p>
+<pre class="shell"><code>touch tests/test_add_two.py</code></pre>
+<p>Open that file in the Python editor and write (or copy and paste) the below code into the file:</p>
+<p>TODO: Fix editor name here.</p>
+<div class="sourceCode" id="cb671"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb671-1" data-line-number="1"><span class="kw">def</span> add_two(x, y):</a>
+<a class="sourceLine" id="cb671-2" data-line-number="2">    val <span class="op">=</span> x <span class="op">+</span> y</a>
+<a class="sourceLine" id="cb671-3" data-line-number="3">    <span class="cf">return</span>(val)</a>
+<a class="sourceLine" id="cb671-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb671-5" data-line-number="5"><span class="co"># This will succeed</span></a>
+<a class="sourceLine" id="cb671-6" data-line-number="6"><span class="kw">def</span> test_add_two():</a>
+<a class="sourceLine" id="cb671-7" data-line-number="7">    <span class="cf">assert</span> add_two(<span class="dv">1</span>, <span class="dv">2</span>) <span class="op">==</span> <span class="dv">3</span></a>
+<a class="sourceLine" id="cb671-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb671-9" data-line-number="9"><span class="co"># This will fail    </span></a>
+<a class="sourceLine" id="cb671-10" data-line-number="10"><span class="kw">def</span> test_add_two_fail():</a>
+<a class="sourceLine" id="cb671-11" data-line-number="11">    <span class="cf">assert</span> add_two(<span class="dv">1</span>, <span class="dv">2</span>) <span class="op">==</span> <span class="dv">4</span></a></code></pre></div>
+<p>TODO: Make sure this is correct.</p>
+<p>Now, run <code>pytest</code> in the terminal. What does the test results say?</p></li>
+</ul>
+<p><strong>In R</strong>:</p>
+<ul>
+<li><p>Making sure you are inside your R package in RStudio,
+type out <code>usethis::use_testthat()</code> to set up testing,
+if you haven’t done so already.
+Next run the command:</p>
+<div class="sourceCode" id="cb672"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb672-1" data-line-number="1">usethis<span class="op">::</span><span class="kw">use_test</span>(<span class="st">&quot;mean&quot;</span>)</a></code></pre></div>
+<p>The new test file should open up in RStudio.
+Write out (or copy and paste) the below code into the new file:</p>
+<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb673-1" data-line-number="1"><span class="kw">context</span>(<span class="st">&quot;Computing the mean&quot;</span>)</a>
+<a class="sourceLine" id="cb673-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb673-3" data-line-number="3"><span class="kw">test_that</span>(<span class="st">&quot;the mean is calculated correctly&quot;</span>, {</a>
+<a class="sourceLine" id="cb673-4" data-line-number="4">    <span class="co"># This will succeed</span></a>
+<a class="sourceLine" id="cb673-5" data-line-number="5">    <span class="kw">expect_identical</span>(<span class="kw">mean</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>), <span class="fl">5.5</span>)</a>
+<a class="sourceLine" id="cb673-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb673-7" data-line-number="7">    <span class="co"># This won&#39;t</span></a>
+<a class="sourceLine" id="cb673-8" data-line-number="8">    <span class="kw">expect_identical</span>(<span class="kw">mean</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>), <span class="fl">4.5</span>)</a>
+<a class="sourceLine" id="cb673-9" data-line-number="9">})</a></code></pre></div>
+<p>Run the tests using “Ctrl-Shift-T”. What does the test results say?</p></li>
+</ul>
+</div>
+</div>
+<div id="rse-unit-testing-anatomy-test" class="section level2">
+<h2><span class="header-section-number">14.6</span> Anatomy of a unit test</h2>
+<p>Unit tests all have a similar and basic structure:</p>
+<ul>
+<li>Loading the packages and setting up any necessary inputs/fixtures.</li>
+<li>Setting up the test function (“expectation”) with the code and its expected out.</li>
+</ul>
+<p>So template of how it looks like would be (for <strong>Python</strong>):</p>
+<div class="sourceCode" id="cb674"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb674-1" data-line-number="1"><span class="im">from</span> package <span class="im">import</span> function</a>
+<a class="sourceLine" id="cb674-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb674-3" data-line-number="3"><span class="kw">def</span> test_name():</a>
+<a class="sourceLine" id="cb674-4" data-line-number="4">    <span class="cf">assert</span> function(fixture) <span class="op">==</span> expectation</a>
+<a class="sourceLine" id="cb674-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb674-6" data-line-number="6"><span class="co"># and so on...</span></a></code></pre></div>
+<p>Load the function from the package, write the test name, set the function name
+with an input/fixture, and test against the expectation.</p>
+<p>In <strong>R</strong>, it would be:</p>
+<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb675-1" data-line-number="1"><span class="kw">context</span>(<span class="st">&quot;Short description of what is being tested&quot;</span>)</a>
+<a class="sourceLine" id="cb675-2" data-line-number="2"><span class="kw">library</span>(package)</a>
+<a class="sourceLine" id="cb675-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb675-4" data-line-number="4"><span class="kw">test_that</span>(<span class="st">&quot;short description of what is expected&quot;</span>, {</a>
+<a class="sourceLine" id="cb675-5" data-line-number="5">  <span class="kw">expect_identical</span>(<span class="kw">function_name</span>(input), expectation)</a>
+<a class="sourceLine" id="cb675-6" data-line-number="6">})</a></code></pre></div>
+<p>The <code>context()</code> is the short explanation, or documentation,
+on what the is reason for doing the test.
+We’ll cover writing these more in later sections.
+When writing <code>test_that()</code> unit tests,
+the description part should be read as, e.g. “test that… the mean is correct”.
+Then all tests inside the <code>test_that()</code> function should be related to the description.
+The testthat package has a ton of <code>expect_*</code> functions,
+which can be easily browsed by typing <code>testthat::expect_</code> and then hitting TAB for autocompletion and listing.</p>
+<div id="exercise-2" class="section level3">
+<h3><span class="header-section-number">14.6.1</span> Exercise</h3>
+<p>Using the tests created from the previous exercise,
+fix the code so that all tests will succeed.
+Then re-run the tests (<code>pytest</code> or <code>devtools::test()</code>) and confirm that the tests passed.</p>
+</div>
+<div id="exercise-3" class="section level3">
+<h3><span class="header-section-number">14.6.2</span> Exercise</h3>
+<ul>
+<li><p><strong>In Python</strong>: Create a new test file called <code>test_simple_arithmetic.py</code>.
+Write out (or copy and paste) the code below into the newly created test file.
+Then fill in the blanks.</p>
+<div class="sourceCode" id="cb676"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div></li>
+</ul>
+<p>TODO: Finish this.</p>
+<ul>
+<li><p><strong>In R</strong>: Create a new test by running <code>usethis::use_test(&quot;simple-arithmetic&quot;)</code>.
+Write out (or copy and paste) the code below into the newly created test file.
+Fill in the blanks.</p>
+<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb677-1" data-line-number="1"><span class="kw">context</span>(<span class="st">&quot;Check simple calculations&quot;</span>)</a>
+<a class="sourceLine" id="cb677-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb677-3" data-line-number="3"><span class="kw">test_that</span>(<span class="st">&quot;plus and minus give correct outputs&quot;</span>, {</a>
+<a class="sourceLine" id="cb677-4" data-line-number="4">  <span class="kw">expect_identical</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb677-5" data-line-number="5">  <span class="kw">___</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">-1</span>)</a>
+<a class="sourceLine" id="cb677-6" data-line-number="6">  <span class="kw">expect_identical</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="ot">NA</span>, __)</a>
+<a class="sourceLine" id="cb677-7" data-line-number="7">  <span class="kw">expect_identical</span>(___ <span class="op">-</span><span class="st"> </span>___, <span class="ot">NA</span>)</a>
+<a class="sourceLine" id="cb677-8" data-line-number="8">})</a></code></pre></div></li>
+</ul>
+</div>
+</div>
+<div id="rse-unit-testing-develop-tests" class="section level2">
+<h2><span class="header-section-number">14.7</span> Describing and developing unit tests</h2>
+<p>TODO: What is the Python equivalent of context() and the message in test_that()?</p>
+<p>Like writing code, your tests should generally be written to be self-explanatory,
+and to provide enough documentation to understand what is going on.
+Each test file should also try to encompass a general topic
+or focus on a specific and similar set of functionality from your package.</p>
+<p>In <strong>R</strong>, testthat test’s generally are created for one R script in the <code>R/</code> folder.
+testthat also has several other mechanisms to help clarify what is being tested:</p>
+<ul>
+<li><p>Multiple forms of <code>expect_*</code> functions for different purposes.
+For instance, <code>expect_identical()</code> compares that actual and expected results are <em>identical</em>
+while <code>expect_equal()</code> compares that the outputs are approximately equal.
+This last one is used when numerical precision may change depending on operating system
+or other characteristics of the computer influence precision.
+These two are the most commonly used expectation functions.
+Others include <code>expect_length()</code>,
+which is used to check how many elements the output should have.</p></li>
+<li><p>Documentation of the tests are also incorporated into the results output through
+<code>context(&quot;description&quot;)</code> and <code>test_that(&quot;message&quot;, ...)</code>.
+<code>context()</code> describes the entire test file,
+while <code>test_that(&quot;message&quot;, ...)</code> is specific to the individual unit test.</p></li>
+</ul>
+<p>TODO: Add python equivalent.</p>
+<div class="sourceCode" id="cb678"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+<div id="exercise-4" class="section level3">
+<h3><span class="header-section-number">14.7.1</span> Exercise</h3>
+<ul>
+<li><p><strong>In Python</strong>:
+TODO: Is there an equivalent?</p></li>
+<li><p><strong>In R</strong>: Look at the test below.
+Based on the contents, write appropriate <code>context()</code>
+and <code>test_that()</code> messages by filling in the blanks.
+There are no right answers, only more descriptive or less descriptive messages.</p>
+<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb679-1" data-line-number="1"><span class="kw">context</span>(<span class="st">&quot;___&quot;</span>)</a>
+<a class="sourceLine" id="cb679-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb679-3" data-line-number="3"><span class="kw">test_that</span>(<span class="st">&quot;___&quot;</span>, {</a>
+<a class="sourceLine" id="cb679-4" data-line-number="4">  <span class="kw">expect_identical</span>(<span class="kw">sum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)), <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb679-5" data-line-number="5">  <span class="kw">expect_identical</span>(<span class="kw">sum</span>(<span class="kw">c</span>(<span class="ot">NA</span>, <span class="dv">2</span>)), <span class="ot">NA</span>)</a>
+<a class="sourceLine" id="cb679-6" data-line-number="6">})</a>
+<a class="sourceLine" id="cb679-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb679-8" data-line-number="8"><span class="kw">test_that</span>(<span class="st">&quot;___&quot;</span>, {</a>
+<a class="sourceLine" id="cb679-9" data-line-number="9">  <span class="kw">expect_identical</span>(<span class="kw">mean</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)), <span class="fl">1.5</span>)</a>
+<a class="sourceLine" id="cb679-10" data-line-number="10">  <span class="kw">expect_identical</span>(<span class="kw">mean</span>(<span class="kw">c</span>(<span class="ot">NA</span>, <span class="dv">2</span>)), <span class="ot">NA</span>)</a>
+<a class="sourceLine" id="cb679-11" data-line-number="11">})</a></code></pre></div></li>
+</ul>
+</div>
+<div id="exercise-5" class="section level3">
+<h3><span class="header-section-number">14.7.2</span> Exercise</h3>
+<ul>
+<li>Create a new test file.
+Then, write a unit test for <code>count_words()</code> to check the following tests.
+In R, use a single <code>test_that()</code>.
+(<strong>Hint</strong>: For R, use TAB auto-completion to search for useful <code>expect_*</code> functions.)
+Test that <code>count_words()</code>:
+<ul>
+<li>Outputs zero when given an empty string.</li>
+<li>Outputs NA when given NA.</li>
+<li>Outputs 2 when given two words, separated by a space.</li>
+<li>Outputs 2 when given two words, but not separated by a space.</li>
+</ul></li>
+</ul>
+<p>TODO: Have coherence with functions they previously created? Or stand-alone?</p>
+</div>
+</div>
+<div id="rse-unit-testing-test-failure" class="section level2">
+<h2><span class="header-section-number">14.8</span> Testing both code success <em>and</em> failure</h2>
+<p>It might not seem immediately necessary,
+but testing how your code <em>fails</em> is just as important as when it <em>succeeds</em>.
+Knowing how and when you code fails (outputs an error) is good practice,
+as it forces you to think about how a user might interact with your software
+and if your code actually fails when you write that it should.
+So our tests should actually include checks on expected errors too.</p>
+<p>In <strong>Python</strong>, we can test for an error by using:</p>
+<div class="sourceCode" id="cb680"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb680-1" data-line-number="1"><span class="im">import</span> pytest</a>
+<a class="sourceLine" id="cb680-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb680-3" data-line-number="3"><span class="kw">def</span> test_text_not_empty():</a>
+<a class="sourceLine" id="cb680-4" data-line-number="4">    <span class="cf">with</span> pytest.raises(<span class="pp">ValueError</span>):</a>
+<a class="sourceLine" id="cb680-5" data-line-number="5">        count_words(<span class="st">&#39;&#39;</span>)</a></code></pre></div>
+<p>This test includes the <code>pytest.raises</code> function to handle tests that checks for errors.
+We use <code>pytest.raises()</code> with Python’s <code>with</code> keyword to indicate an expectation
+of an error in the code and to have the test fail if an error isn’t raised.</p>
+<p>In <strong>R</strong>, there are specific testthat functions to test for errors (<code>expect_error()</code>)
+or warnings (<code>expect_warning()</code>):</p>
+<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb681-1" data-line-number="1"><span class="kw">test_that</span>(<span class="st">&quot;count words throws an error&quot;</span>, {</a>
+<a class="sourceLine" id="cb681-2" data-line-number="2">    <span class="kw">expect_error</span>(<span class="kw">count_words</span>(<span class="st">&quot;&quot;</span>))</a>
+<a class="sourceLine" id="cb681-3" data-line-number="3">})</a></code></pre></div>
+<div id="exercise-6" class="section level3">
+<h3><span class="header-section-number">14.8.1</span> Exercise</h3>
+<ul>
+<li>Using the same unit as the previous exercise,
+create a new test to check when the code should throw an error.
+Create the test for the <code>count_words()</code> function.</li>
+</ul>
+</div>
+</div>
+<div id="rse-unit-testing-coverage" class="section level2">
+<h2><span class="header-section-number">14.9</span> Checking what code is tested</h2>
+<p>Great, we’ve now gone over how to create unit tests.
+But as you write more and more code,
+you may start missing some code and forgetting to write unit tests for them.
+Or, you may have complex code with some conditionals (<code>if ... else ...</code>)
+that don’t always get executed.
+For instance, take a moment to examine the code below.</p>
+<p>In <strong>Python</strong>:</p>
+<div class="sourceCode" id="cb682"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb682-1" data-line-number="1"><span class="kw">def</span> first(left, right):</a>
+<a class="sourceLine" id="cb682-2" data-line-number="2">    <span class="cf">if</span> left <span class="op">&lt;</span> right:</a>
+<a class="sourceLine" id="cb682-3" data-line-number="3">        left, right <span class="op">=</span> right, left</a>
+<a class="sourceLine" id="cb682-4" data-line-number="4">    <span class="cf">while</span> left <span class="op">&gt;</span> right:</a>
+<a class="sourceLine" id="cb682-5" data-line-number="5">        value <span class="op">=</span> second(left, right)</a>
+<a class="sourceLine" id="cb682-6" data-line-number="6">        left, right <span class="op">=</span> right, <span class="bu">int</span>(right<span class="op">/</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb682-7" data-line-number="7">    <span class="cf">return</span> value</a>
+<a class="sourceLine" id="cb682-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb682-9" data-line-number="9"><span class="kw">def</span> second(check, balance):</a>
+<a class="sourceLine" id="cb682-10" data-line-number="10">    <span class="cf">if</span> check <span class="op">&gt;</span> <span class="dv">0</span>:</a>
+<a class="sourceLine" id="cb682-11" data-line-number="11">        <span class="cf">return</span> balance</a>
+<a class="sourceLine" id="cb682-12" data-line-number="12">    <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb682-13" data-line-number="13">        <span class="cf">return</span> <span class="dv">0</span></a>
+<a class="sourceLine" id="cb682-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb682-15" data-line-number="15"><span class="kw">def</span> main():</a>
+<a class="sourceLine" id="cb682-16" data-line-number="16">    final <span class="op">=</span> first(<span class="dv">3</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb682-17" data-line-number="17">    <span class="bu">print</span>(<span class="dv">3</span>, <span class="dv">5</span>, final)</a>
+<a class="sourceLine" id="cb682-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb682-19" data-line-number="19"><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</a>
+<a class="sourceLine" id="cb682-20" data-line-number="20">    main()</a></code></pre></div>
+<pre><code>## 3 5 0</code></pre>
+<p>In <strong>R</strong>:</p>
+<div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb684-1" data-line-number="1">first &lt;-<span class="st"> </span><span class="cf">function</span>(left, right) {</a>
+<a class="sourceLine" id="cb684-2" data-line-number="2">  <span class="cf">if</span> (left <span class="op">&lt;</span><span class="st"> </span>right) {</a>
+<a class="sourceLine" id="cb684-3" data-line-number="3">    tmp &lt;-<span class="st"> </span>left</a>
+<a class="sourceLine" id="cb684-4" data-line-number="4">    left &lt;-<span class="st"> </span>right</a>
+<a class="sourceLine" id="cb684-5" data-line-number="5">    right &lt;-<span class="st"> </span>tmp</a>
+<a class="sourceLine" id="cb684-6" data-line-number="6">  }</a>
+<a class="sourceLine" id="cb684-7" data-line-number="7">  </a>
+<a class="sourceLine" id="cb684-8" data-line-number="8">  <span class="cf">while</span> (left <span class="op">&gt;</span><span class="st"> </span>right) {</a>
+<a class="sourceLine" id="cb684-9" data-line-number="9">    value &lt;-<span class="st"> </span><span class="kw">second</span>(left, right)</a>
+<a class="sourceLine" id="cb684-10" data-line-number="10">    left &lt;-<span class="st"> </span>right</a>
+<a class="sourceLine" id="cb684-11" data-line-number="11">    right &lt;-<span class="st"> </span><span class="kw">as.integer</span>(right <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb684-12" data-line-number="12">  }</a>
+<a class="sourceLine" id="cb684-13" data-line-number="13">  </a>
+<a class="sourceLine" id="cb684-14" data-line-number="14">  value</a>
+<a class="sourceLine" id="cb684-15" data-line-number="15">}</a>
+<a class="sourceLine" id="cb684-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb684-17" data-line-number="17">second &lt;-<span class="st"> </span><span class="cf">function</span>(check, balance) {</a>
+<a class="sourceLine" id="cb684-18" data-line-number="18">    <span class="cf">if</span> (check <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb684-19" data-line-number="19">        balance</a>
+<a class="sourceLine" id="cb684-20" data-line-number="20">    <span class="cf">else</span></a>
+<a class="sourceLine" id="cb684-21" data-line-number="21">        <span class="dv">0</span></a>
+<a class="sourceLine" id="cb684-22" data-line-number="22">}</a>
+<a class="sourceLine" id="cb684-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb684-24" data-line-number="24"><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="kw">first</span>(<span class="dv">3</span>, <span class="dv">5</span>))</a></code></pre></div>
+<pre><code>## [1] 3 5 0</code></pre>
+<p>You probably have a hard time figuring out which lines of code were executed and which weren’t.
+There’s actually an easy way to find that out automatically.
+There is a tool called code <a href="glossary.html#coverage">coverage</a>
+to help see how much of your code gets executed by your tests,
+which is especially useful with tracking conditional activation.
+Code coverage measures which parts of your program are and are not executed.
+Essentially, a code coverage tool tracks the progress of execution through the code
+and identifies which exact lines gets executed.
+After the program finishes,
+code coverage tells you what lines were not executed,
+and what percentage was.</p>
+<p>Use this tool to make sure a large portion of your code gets tested.
+But note, there is no “magic percentage” for how much <a href="glossary.html#test-coverage">test coverage</a> to have.
+It’s good to try getting as high a coverage as you can,
+since anything that <em>isn’t</em> tested may likely be wrong,
+while balancing writing tests and writing code.
+It usually isn’t necessary to get 100% code coverage.</p>
+<p>For <strong>Python</strong>, if the above code were in a file, called <code>demo_coverage.py</code>,
+we can run the coverage with the package <code>coverage</code>:</p>
+<pre class="shell"><code>coverage run demo_coverage.py
+coverage report</code></pre>
+<pre class="text"><code>Name               Stmts   Miss  Cover
+--------------------------------------
+demo_coverage.py      16      1    94%</code></pre>
+<p>While <strong>R</strong> has similar functionality, it works best at a package level,
+rather than a file level.
+The covr package has several functions for checking coverage,
+but for testing packages there is:</p>
+<div class="sourceCode" id="cb688"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb688-1" data-line-number="1">covr<span class="op">::</span><span class="kw">package_coverage</span>()</a></code></pre></div>
+<p>(covr also has an <a href="https://rstudio.github.io/rstudioaddins/">RStudio Addin</a> that gives quick access to this command.)</p>
+<p>This function will output a list of all R files in the package,
+with their corresponding percentage coverage.
+This can give a good overview of where you might need to improve your testing.</p>
+</div>
+<div id="rse-unit-testing-what-when" class="section level2">
+<h2><span class="header-section-number">14.10</span> What to test and when</h2>
+<p>So far we’ve discussed <em>how</em> to test and <em>why</em> to test, but we haven’t really
+covered <em>what</em> should we test and <em>when</em> do we start testing.
+Here are two things to think about when writing tests:</p>
+<ol style="list-style-type: decimal">
+<li><p>No amount of testing can prove the code is completely correct.
+For a function with only a few arguments,
+there may be dozens of possible combinations of inputs.
+You can’t test all these possible inputs.
+Nor can we write tests correctly all the time (we are only human, who make mistakes).
+Writing tests should focus on what is <em>most likely</em> going to be input
+and what the software was intended for.</p></li>
+<li><p>Many test cases can be grouped into “classes” of tests.
+For instance, functions with numbers as input could theoretically only need to test a few cases:
+infinity (<code>Inf</code>), missing values, and one or two tests on intended use.
+We may miss unique use cases for our functions when we test this way,
+but it makes it easier as the developer
+and as the reader of the code if tests are grouped according to classes.</p></li>
+</ol>
+<p>One topic that often comes up when looking into unit testing is the practice of
+<a href="glossary.html#tdd">test-driven development</a> (TDD).
+Rather than writing code and then writing tests,
+TDD advocates suggest to write tests first so we know what the code is supposed to do,
+and then write just enough code to make those tests pass.
+Once the code works, clean it up and commit it, then move on to the next task.</p>
+<p>TDD’s advocates claim that this approach emphasizes a focus on what the code should do
+so that the developer isn’t subject to confirmation bias when viewing the test results.
+They also claim that TDD ensures that code actually <em>is</em> testable,
+and that tests are actually written.
+However, the evidence backing these claims is contradictory.
+Try TDD out and try to find out what works best for you and your specific problems.</p>
+</div>
+<div id="rse-unit-testing-final-exercise" class="section level2">
+<h2><span class="header-section-number">14.11</span> Final exercise</h2>
+<ol style="list-style-type: decimal">
+<li>Write unit tests for all functions you created from previous chapters on Zipf’s Law.
+Try to think how a user may use your functions and write tests reflecting that.</li>
+<li>Run code coverage on your package. What is the percentage coverage?
+Is there any way you could write more comprehensive unit tests to increase coverage?
+Try to write more to get the coverage higher.</li>
+</ol>
+</div>
+<div id="rse-unit-testing-keypoints" class="section level2">
+<h2><span class="header-section-number">14.12</span> Key Points</h2>
+<ul>
+<li>Testing can only ever show that software has flaws, not that it is correct.</li>
+<li>The real purpose is to convince people (including yourself) that software is
+correct enough, and to make tolerances on ‘enough’ explicit.</li>
+<li>A testing suite finds and runs tests written in a prescribed fashion and reports
+their results.</li>
+<li>A unit test can pass (work as expected), fail (meaning the software under test
+is flawed), or produce an error (meaning the test itself is flawed).</li>
+<li>Every unit test should be independent of each other so results are
+comprehensible, contained, and reliable.</li>
+<li>Tests should be built to test that the software fails when and as it is supposed.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="rse-py-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rse-ci.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/merely-useful/merely-useful.github.io/edit/master/rse-unit-testing.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["rse.pdf", "rse.epub"],
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

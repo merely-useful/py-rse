@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 10 Project Structure | Merely Useful: RSE</title>
+  <meta name="description" content="Chapter 10 Project Structure | Merely Useful: RSE" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 10 Project Structure | Merely Useful: RSE" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="merely-useful/merely-useful.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 10 Project Structure | Merely Useful: RSE" />
+  
+  
+  
+
+<meta name="author" content="Madeleine Bonsma-Fisher, Kate Hertweck, Damien Irving, Luke Johnston, Christina Koch, Sara Mahallati, Brandeis Marshall, Joel Ostblom, Elizabeth Wickes, Charlotte Wickham, and Greg Wilson" />
+
+
+<meta name="date" content="2019-11-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="rse-teams.html"/>
+<link rel="next" href="rse-ci.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { background-color: #f8f8f8; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Merely Useful</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#rse-intro-personas"><i class="fa fa-check"></i><b>1.1</b> Who are these lessons for?</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#summary"><i class="fa fa-check"></i><b>1.1.1</b> Summary</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.1.2</b> Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#rse-intro-big-picture"><i class="fa fa-check"></i><b>1.2</b> What’s the big picture?</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#why-isnt-all-of-this-already-normal"><i class="fa fa-check"></i><b>1.2.1</b> Why isn’t all of this already normal?</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#syllabus"><i class="fa fa-check"></i><b>1.2.2</b> Syllabus</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#rse-intro-ack"><i class="fa fa-check"></i><b>1.3</b> Acknowledgments</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html"><i class="fa fa-check"></i><b>2</b> The Basics of the Unix Shell</a><ul>
+<li class="chapter" data-level="2.1" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-explore"><i class="fa fa-check"></i><b>2.1</b> How can I explore my files and directories using the shell?</a></li>
+<li class="chapter" data-level="2.2" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-navigate"><i class="fa fa-check"></i><b>2.2</b> How can I move around in the shell?</a></li>
+<li class="chapter" data-level="2.3" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-filedir"><i class="fa fa-check"></i><b>2.3</b> How can I create new files and directories?</a></li>
+<li class="chapter" data-level="2.4" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-move"><i class="fa fa-check"></i><b>2.4</b> How can move files and directories around?</a></li>
+<li class="chapter" data-level="2.5" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-copy"><i class="fa fa-check"></i><b>2.5</b> How can I copy files and directories?</a></li>
+<li class="chapter" data-level="2.6" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-rm"><i class="fa fa-check"></i><b>2.6</b> How can I delete files and directories?</a></li>
+<li class="chapter" data-level="2.7" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basicswildcard"><i class="fa fa-check"></i><b>2.7</b> How can I run commands on lots of files at once?</a></li>
+<li class="chapter" data-level="2.8" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-help"><i class="fa fa-check"></i><b>2.8</b> How can I find out what commands there are and how to use them?</a></li>
+<li class="chapter" data-level="2.9" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-pipe"><i class="fa fa-check"></i><b>2.9</b> How can I combine commands?</a></li>
+<li class="chapter" data-level="2.10" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-stdio"><i class="fa fa-check"></i><b>2.10</b> How do pipes work (and why do I need to know)?</a></li>
+<li class="chapter" data-level="2.11" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-loops"><i class="fa fa-check"></i><b>2.11</b> How can I do the same operations on many files?</a></li>
+<li class="chapter" data-level="2.12" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-meaningless"><i class="fa fa-check"></i><b>2.12</b> What do variable names mean?</a></li>
+<li class="chapter" data-level="2.13" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-history"><i class="fa fa-check"></i><b>2.13</b> How can I re-do things I have done recently?</a></li>
+<li class="chapter" data-level="2.14" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-autoname"><i class="fa fa-check"></i><b>2.14</b> How can I create new filenames automatically?</a></li>
+<li class="chapter" data-level="2.15" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-exercises"><i class="fa fa-check"></i><b>2.15</b> Exercises</a><ul>
+<li class="chapter" data-level="2.15.1" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-more-ls"><i class="fa fa-check"></i><b>2.15.1</b> Exploring more <code>ls</code> flags</a></li>
+<li class="chapter" data-level="2.15.2" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-ls-rt"><i class="fa fa-check"></i><b>2.15.2</b> Listing recursively and by time</a></li>
+<li class="chapter" data-level="2.15.3" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-paths"><i class="fa fa-check"></i><b>2.15.3</b> Absolute and relative paths</a></li>
+<li class="chapter" data-level="2.15.4" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-resolve-rel-path"><i class="fa fa-check"></i><b>2.15.4</b> Relative path resolution</a></li>
+<li class="chapter" data-level="2.15.5" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-reading-ls"><i class="fa fa-check"></i><b>2.15.5</b> <code>ls</code> reading comprehension</a></li>
+<li class="chapter" data-level="2.15.6" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-touch"><i class="fa fa-check"></i><b>2.15.6</b> Creating files a different way</a></li>
+<li class="chapter" data-level="2.15.7" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-move-dot"><i class="fa fa-check"></i><b>2.15.7</b> Moving to the current folder</a></li>
+<li class="chapter" data-level="2.15.8" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-renaming-files"><i class="fa fa-check"></i><b>2.15.8</b> Renaming files</a></li>
+<li class="chapter" data-level="2.15.9" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-last-ls"><i class="fa fa-check"></i><b>2.15.9</b> Moving and copying</a></li>
+<li class="chapter" data-level="2.15.10" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-safe-rm"><i class="fa fa-check"></i><b>2.15.10</b> Using <code>rm</code> safely</a></li>
+<li class="chapter" data-level="2.15.11" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-copy-multi"><i class="fa fa-check"></i><b>2.15.11</b> Copy with multiple filenames</a></li>
+<li class="chapter" data-level="2.15.12" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-ls-match"><i class="fa fa-check"></i><b>2.15.12</b> List filenames matching a pattern</a></li>
+<li class="chapter" data-level="2.15.13" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-more-wildcards"><i class="fa fa-check"></i><b>2.15.13</b> More on wildcards</a></li>
+<li class="chapter" data-level="2.15.14" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-organizing"><i class="fa fa-check"></i><b>2.15.14</b> Organizing directories and files</a></li>
+<li class="chapter" data-level="2.15.15" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-reproduce-structure"><i class="fa fa-check"></i><b>2.15.15</b> Reproduce a directory structure</a></li>
+<li class="chapter" data-level="2.15.16" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-sort-n"><i class="fa fa-check"></i><b>2.15.16</b> What does <code>sort -n</code> do?</a></li>
+<li class="chapter" data-level="2.15.17" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-redirect-append"><i class="fa fa-check"></i><b>2.15.17</b> What does <code>&gt;&gt;</code> mean?</a></li>
+<li class="chapter" data-level="2.15.18" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-append-data"><i class="fa fa-check"></i><b>2.15.18</b> Appending data</a></li>
+<li class="chapter" data-level="2.15.19" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-piping"><i class="fa fa-check"></i><b>2.15.19</b> Piping commands</a></li>
+<li class="chapter" data-level="2.15.20" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-uniq-adjacent"><i class="fa fa-check"></i><b>2.15.20</b> Why does <code>uniq</code> only remove adjacent duplicates?</a></li>
+<li class="chapter" data-level="2.15.21" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-reading-pipes"><i class="fa fa-check"></i><b>2.15.21</b> Pipe reading comprehension</a></li>
+<li class="chapter" data-level="2.15.22" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-pipe-construction"><i class="fa fa-check"></i><b>2.15.22</b> Pipe construction</a></li>
+<li class="chapter" data-level="2.15.23" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-which-pipe"><i class="fa fa-check"></i><b>2.15.23</b> Which pipe?</a></li>
+<li class="chapter" data-level="2.15.24" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-wildcard-expressions"><i class="fa fa-check"></i><b>2.15.24</b> Wildcard expressions</a></li>
+<li class="chapter" data-level="2.15.25" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-remove-unneeded"><i class="fa fa-check"></i><b>2.15.25</b> Removing unneeded files</a></li>
+<li class="chapter" data-level="2.15.26" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-loop-dry-run"><i class="fa fa-check"></i><b>2.15.26</b> Doing a dry run</a></li>
+<li class="chapter" data-level="2.15.27" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-nested-loops"><i class="fa fa-check"></i><b>2.15.27</b> Nested loops</a></li>
+<li class="chapter" data-level="2.15.28" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-loop-variables"><i class="fa fa-check"></i><b>2.15.28</b> Variables in loops</a></li>
+<li class="chapter" data-level="2.15.29" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-limiting-file-sets"><i class="fa fa-check"></i><b>2.15.29</b> Limiting sets of files</a></li>
+<li class="chapter" data-level="2.15.30" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-loop-save"><i class="fa fa-check"></i><b>2.15.30</b> Saving to a file in a loop</a></li>
+<li class="chapter" data-level="2.15.31" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-list-unique"><i class="fa fa-check"></i><b>2.15.31</b> List unique species</a></li>
+<li class="chapter" data-level="2.15.32" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-ex-history-order"><i class="fa fa-check"></i><b>2.15.32</b> Why does <code>history</code> record commands before running them?</a></li>
+</ul></li>
+<li class="chapter" data-level="2.16" data-path="rse-bash-basics.html"><a href="rse-bash-basics.html#rse-bash-basics-keypoints"><i class="fa fa-check"></i><b>2.16</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html"><i class="fa fa-check"></i><b>3</b> Going Further with the Unix Shell</a><ul>
+<li class="chapter" data-level="3.1" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-script"><i class="fa fa-check"></i><b>3.1</b> How can I create new commands of my own?</a></li>
+<li class="chapter" data-level="3.2" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-params"><i class="fa fa-check"></i><b>3.2</b> How can I make my scripts more versatile?</a></li>
+<li class="chapter" data-level="3.3" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-capture"><i class="fa fa-check"></i><b>3.3</b> How can I turn interactive work into a script?</a></li>
+<li class="chapter" data-level="3.4" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-grep"><i class="fa fa-check"></i><b>3.4</b> How can I find things in a file?</a></li>
+<li class="chapter" data-level="3.5" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-find"><i class="fa fa-check"></i><b>3.5</b> How can I find files?</a></li>
+<li class="chapter" data-level="3.6" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-summary"><i class="fa fa-check"></i><b>3.6</b> Summary</a></li>
+<li class="chapter" data-level="3.7" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-exercises"><i class="fa fa-check"></i><b>3.7</b> Exercises</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-script-variables"><i class="fa fa-check"></i><b>3.7.1</b> Variables in shell scripts</a></li>
+<li class="chapter" data-level="3.7.2" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-longest-with-extension"><i class="fa fa-check"></i><b>3.7.2</b> Find the longest file with a given extension</a></li>
+<li class="chapter" data-level="3.7.3" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-reading-scripts"><i class="fa fa-check"></i><b>3.7.3</b> Script reading comprehension</a></li>
+<li class="chapter" data-level="3.7.4" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-using-grep"><i class="fa fa-check"></i><b>3.7.4</b> Using <code>grep</code></a></li>
+<li class="chapter" data-level="3.7.5" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-tracking-species"><i class="fa fa-check"></i><b>3.7.5</b> Tracking a species</a></li>
+<li class="chapter" data-level="3.7.6" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-little-women"><i class="fa fa-check"></i><b>3.7.6</b> Counting names</a></li>
+<li class="chapter" data-level="3.7.7" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-match-subtract"><i class="fa fa-check"></i><b>3.7.7</b> Matching and subtracting</a></li>
+<li class="chapter" data-level="3.7.8" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-reading-find"><i class="fa fa-check"></i><b>3.7.8</b> <code>find</code> pipeline reading comprehension</a></li>
+<li class="chapter" data-level="3.7.9" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-find-properties"><i class="fa fa-check"></i><b>3.7.9</b> Finding files with different properties</a></li>
+<li class="chapter" data-level="3.7.10" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-combining-options"><i class="fa fa-check"></i><b>3.7.10</b> Combining options</a></li>
+<li class="chapter" data-level="3.7.11" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-ex-other-wildcards"><i class="fa fa-check"></i><b>3.7.11</b> Other wildcards</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="rse-bash-advanced.html"><a href="rse-bash-advanced.html#rse-bash-advanced-keypoints"><i class="fa fa-check"></i><b>3.8</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="rse-py-scripting.html"><a href="rse-py-scripting.html"><i class="fa fa-check"></i><b>4</b> Command Line Programs in Python</a><ul>
+<li class="chapter" data-level="4.1" data-path="rse-py-scripting.html"><a href="rse-py-scripting.html#rse-py-scripting-template"><i class="fa fa-check"></i><b>4.1</b> How are command-line scripts structured?</a></li>
+<li class="chapter" data-level="4.2" data-path="rse-py-scripting.html"><a href="rse-py-scripting.html#rse-py-scripting-code"><i class="fa fa-check"></i><b>4.2</b> Where should I put my code?</a></li>
+<li class="chapter" data-level="4.3" data-path="rse-py-scripting.html"><a href="rse-py-scripting.html#rse-py-scripting-error-messages"><i class="fa fa-check"></i><b>4.3</b> How can I write useful error messages?</a></li>
+<li class="chapter" data-level="4.4" data-path="rse-py-scripting.html"><a href="rse-py-scripting.html#rse-pyscripts-keypoints"><i class="fa fa-check"></i><b>4.4</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html"><i class="fa fa-check"></i><b>5</b> Git at the Command Line</a><ul>
+<li class="chapter" data-level="5.1" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-setup"><i class="fa fa-check"></i><b>5.1</b> How can I set up Git for command-line use?</a></li>
+<li class="chapter" data-level="5.2" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-repos"><i class="fa fa-check"></i><b>5.2</b> How can I create a new repository?</a></li>
+<li class="chapter" data-level="5.3" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-changes"><i class="fa fa-check"></i><b>5.3</b> How can I save and track changes?</a></li>
+<li class="chapter" data-level="5.4" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-remotes"><i class="fa fa-check"></i><b>5.4</b> How can I synchronize with other repositories?</a></li>
+<li class="chapter" data-level="5.5" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-history"><i class="fa fa-check"></i><b>5.5</b> How can I explore a project’s history?</a></li>
+<li class="chapter" data-level="5.6" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-restore"><i class="fa fa-check"></i><b>5.6</b> How can I restore old versions of files?</a></li>
+<li class="chapter" data-level="5.7" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ignore"><i class="fa fa-check"></i><b>5.7</b> How can I tell Git to ignore some files?</a></li>
+<li class="chapter" data-level="5.8" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-exercises"><i class="fa fa-check"></i><b>5.8</b> Exercises</a><ul>
+<li class="chapter" data-level="5.8.1" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-places"><i class="fa fa-check"></i><b>5.8.1</b> Places to create Git repositories</a></li>
+<li class="chapter" data-level="5.8.2" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-commit"><i class="fa fa-check"></i><b>5.8.2</b> Committing changes</a></li>
+<li class="chapter" data-level="5.8.3" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-multiple"><i class="fa fa-check"></i><b>5.8.3</b> Committing multiple files</a></li>
+<li class="chapter" data-level="5.8.4" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-bio"><i class="fa fa-check"></i><b>5.8.4</b> Write a biography</a></li>
+<li class="chapter" data-level="5.8.5" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-ignore-nested"><i class="fa fa-check"></i><b>5.8.5</b> Ignoring nested files</a></li>
+<li class="chapter" data-level="5.8.6" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-include"><i class="fa fa-check"></i><b>5.8.6</b> Including specific files</a></li>
+<li class="chapter" data-level="5.8.7" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-github-interface"><i class="fa fa-check"></i><b>5.8.7</b> Exploring the GitHub interface</a></li>
+<li class="chapter" data-level="5.8.8" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-timestamp"><i class="fa fa-check"></i><b>5.8.8</b> GitHub timestamps</a></li>
+<li class="chapter" data-level="5.8.9" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-push-commit"><i class="fa fa-check"></i><b>5.8.9</b> Push versus commit</a></li>
+<li class="chapter" data-level="5.8.10" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-boilerplate"><i class="fa fa-check"></i><b>5.8.10</b> License and README files</a></li>
+<li class="chapter" data-level="5.8.11" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-recover"><i class="fa fa-check"></i><b>5.8.11</b> Recovering older versions of a file</a></li>
+<li class="chapter" data-level="5.8.12" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-history"><i class="fa fa-check"></i><b>5.8.12</b> Workflow and history</a></li>
+<li class="chapter" data-level="5.8.13" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-diff"><i class="fa fa-check"></i><b>5.8.13</b> Understanding <code>git diff</code></a></li>
+<li class="chapter" data-level="5.8.14" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-unstage"><i class="fa fa-check"></i><b>5.8.14</b> Getting rid of staged changes</a></li>
+<li class="chapter" data-level="5.8.15" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-ex-blame"><i class="fa fa-check"></i><b>5.8.15</b> Figuring out who did what</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="rse-git-cmdline.html"><a href="rse-git-cmdline.html#rse-git-cmdline-keypoints"><i class="fa fa-check"></i><b>5.9</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html"><i class="fa fa-check"></i><b>6</b> Advanced Git</a><ul>
+<li class="chapter" data-level="6.1" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-create-branch"><i class="fa fa-check"></i><b>6.1</b> What is a branch and how do I create one?</a></li>
+<li class="chapter" data-level="6.2" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-merge"><i class="fa fa-check"></i><b>6.2</b> How do I merge work from separate branches?</a></li>
+<li class="chapter" data-level="6.3" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-conflict"><i class="fa fa-check"></i><b>6.3</b> How do I handle conflicting changes?</a></li>
+<li class="chapter" data-level="6.4" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-workflow"><i class="fa fa-check"></i><b>6.4</b> How should I use branches?</a></li>
+<li class="chapter" data-level="6.5" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-fork"><i class="fa fa-check"></i><b>6.5</b> How can I use someone else’s work?</a></li>
+<li class="chapter" data-level="6.6" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-pull-requests"><i class="fa fa-check"></i><b>6.6</b> What is a pull request and how do I create one?</a></li>
+<li class="chapter" data-level="6.7" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-tag"><i class="fa fa-check"></i><b>6.7</b> How can I label a particular version of my project?</a></li>
+<li class="chapter" data-level="6.8" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-exercises"><i class="fa fa-check"></i><b>6.8</b> Exercises</a><ul>
+<li class="chapter" data-level="6.8.1" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-ex-additional-pr"><i class="fa fa-check"></i><b>6.8.1</b> Add new country file and make additional PR</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="rse-git-advanced.html"><a href="rse-git-advanced.html#rse-git-advanced-keypoints"><i class="fa fa-check"></i><b>6.9</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="rse-style.html"><a href="rse-style.html"><i class="fa fa-check"></i><b>7</b> Code Style, Review, and Refactoring</a><ul>
+<li class="chapter" data-level="7.1" data-path="rse-style.html"><a href="rse-style.html#rse-style-github"><i class="fa fa-check"></i><b>7.1</b> How should I review someone else’s code?</a></li>
+<li class="chapter" data-level="7.2" data-path="rse-style.html"><a href="rse-style.html#rse-style-pep8"><i class="fa fa-check"></i><b>7.2</b> What are the standard rules of good style for Python programs?</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="rse-style.html"><a href="rse-style.html#always-indent-code-blocks-using-4-spaces-and-use-spaces-instead-of-tabs."><i class="fa fa-check"></i><b>7.2.1</b> Always indent code blocks using 4 spaces, and use spaces instead of tabs.</a></li>
+<li class="chapter" data-level="7.2.2" data-path="rse-style.html"><a href="rse-style.html#do-not-put-spaces-inside-parentheses"><i class="fa fa-check"></i><b>7.2.2</b> Do not put spaces inside parentheses</a></li>
+<li class="chapter" data-level="7.2.3" data-path="rse-style.html"><a href="rse-style.html#always-use-spaces-around-comparisons-like-and-."><i class="fa fa-check"></i><b>7.2.3</b> Always use spaces around comparisons like <code>&gt;</code> and <code>&lt;=</code>.</a></li>
+<li class="chapter" data-level="7.2.4" data-path="rse-style.html"><a href="rse-style.html#use-all_caps_with_underscores-for-constants-also-called-global-variables."><i class="fa fa-check"></i><b>7.2.4</b> Use <code>ALL_CAPS_WITH_UNDERSCORES</code> for constants (also called global variables).</a></li>
+<li class="chapter" data-level="7.2.5" data-path="rse-style.html"><a href="rse-style.html#use-lower_case_with_underscores-for-the-names-of-functions-and-variables."><i class="fa fa-check"></i><b>7.2.5</b> Use <code>lower_case_with_underscores</code> for the names of functions and variables.</a></li>
+<li class="chapter" data-level="7.2.6" data-path="rse-style.html"><a href="rse-style.html#put-two-blank-links-between-each-function-definition."><i class="fa fa-check"></i><b>7.2.6</b> Put two blank links between each function definition.</a></li>
+<li class="chapter" data-level="7.2.7" data-path="rse-style.html"><a href="rse-style.html#avoid-abbreviations-in-function-and-variable-names."><i class="fa fa-check"></i><b>7.2.7</b> Avoid abbreviations in function and variable names.</a></li>
+<li class="chapter" data-level="7.2.8" data-path="rse-style.html"><a href="rse-style.html#use-short-names-for-short-lived-local-variables-but-longer-names-for-things-with-wider-scope."><i class="fa fa-check"></i><b>7.2.8</b> Use short names for short-lived local variables but longer names for things with wider scope.</a></li>
+<li class="chapter" data-level="7.2.9" data-path="rse-style.html"><a href="rse-style.html#put-everything-in-a-file-in-order."><i class="fa fa-check"></i><b>7.2.9</b> Put everything in a file in order.</a></li>
+<li class="chapter" data-level="7.2.10" data-path="rse-style.html"><a href="rse-style.html#do-not-comment-and-uncomment-sections-of-code-to-change-behavior."><i class="fa fa-check"></i><b>7.2.10</b> Do not comment and uncomment sections of code to change behavior.</a></li>
+<li class="chapter" data-level="7.2.11" data-path="rse-style.html"><a href="rse-style.html#keep-functions-short."><i class="fa fa-check"></i><b>7.2.11</b> Keep functions short.</a></li>
+<li class="chapter" data-level="7.2.12" data-path="rse-style.html"><a href="rse-style.html#handle-special-cases-at-the-start-of-the-function."><i class="fa fa-check"></i><b>7.2.12</b> Handle special cases at the start of the function.</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="rse-style.html"><a href="rse-style.html#rse-style-check"><i class="fa fa-check"></i><b>7.3</b> How can I check that code follows style guidelines?</a></li>
+<li class="chapter" data-level="7.4" data-path="rse-style.html"><a href="rse-style.html#rse-style-how"><i class="fa fa-check"></i><b>7.4</b> How should I collaborate with people when doing code reviews?</a></li>
+<li class="chapter" data-level="7.5" data-path="rse-style.html"><a href="rse-style.html#rse-style-order"><i class="fa fa-check"></i><b>7.5</b> In what order should functions be defined?</a></li>
+<li class="chapter" data-level="7.6" data-path="rse-style.html"><a href="rse-style.html#rse-style-defaults"><i class="fa fa-check"></i><b>7.6</b> How can I specify default values for functions’ parameters?</a></li>
+<li class="chapter" data-level="7.7" data-path="rse-style.html"><a href="rse-style.html#rse-style-varargs"><i class="fa fa-check"></i><b>7.7</b> How can I write functions to handle a variable number of arguments?</a></li>
+<li class="chapter" data-level="7.8" data-path="rse-style.html"><a href="rse-style.html#rse-style-starargs"><i class="fa fa-check"></i><b>7.8</b> How can I pass an unknown number of parameters?</a></li>
+<li class="chapter" data-level="7.9" data-path="rse-style.html"><a href="rse-style.html#rse-style-destructure"><i class="fa fa-check"></i><b>7.9</b> How can I get values out of structured data more easily?</a></li>
+<li class="chapter" data-level="7.10" data-path="rse-style.html"><a href="rse-style.html#rse-style-refactor"><i class="fa fa-check"></i><b>7.10</b> What should I look for when reviewing code?</a><ul>
+<li class="chapter" data-level="7.10.1" data-path="rse-style.html"><a href="rse-style.html#do-not-repeat-values"><i class="fa fa-check"></i><b>7.10.1</b> Do not repeat values</a></li>
+<li class="chapter" data-level="7.10.2" data-path="rse-style.html"><a href="rse-style.html#do-not-repeat-calculations-in-loops"><i class="fa fa-check"></i><b>7.10.2</b> Do not repeat calculations in loops</a></li>
+<li class="chapter" data-level="7.10.3" data-path="rse-style.html"><a href="rse-style.html#replace-tests-with-flags-to-clarify-repeated-tests"><i class="fa fa-check"></i><b>7.10.3</b> Replace tests with flags to clarify repeated tests</a></li>
+<li class="chapter" data-level="7.10.4" data-path="rse-style.html"><a href="rse-style.html#use-in-place-operators-to-avoid-duplicating-expression"><i class="fa fa-check"></i><b>7.10.4</b> Use in-place operators to avoid duplicating expression</a></li>
+<li class="chapter" data-level="7.10.5" data-path="rse-style.html"><a href="rse-style.html#handle-special-cases-first"><i class="fa fa-check"></i><b>7.10.5</b> Handle special cases first</a></li>
+<li class="chapter" data-level="7.10.6" data-path="rse-style.html"><a href="rse-style.html#use-functions-to-make-code-more-comprehensible"><i class="fa fa-check"></i><b>7.10.6</b> Use functions to make code more comprehensible</a></li>
+<li class="chapter" data-level="7.10.7" data-path="rse-style.html"><a href="rse-style.html#combine-operations-in-functions"><i class="fa fa-check"></i><b>7.10.7</b> Combine operations in functions</a></li>
+<li class="chapter" data-level="7.10.8" data-path="rse-style.html"><a href="rse-style.html#replace-code-with-data"><i class="fa fa-check"></i><b>7.10.8</b> Replace code with data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.11" data-path="rse-style.html"><a href="rse-style.html#rse-style-summary"><i class="fa fa-check"></i><b>7.11</b> Summary</a></li>
+<li class="chapter" data-level="7.12" data-path="rse-style.html"><a href="rse-style.html#rse-style-exercises"><i class="fa fa-check"></i><b>7.12</b> Exercises</a></li>
+<li class="chapter" data-level="7.13" data-path="rse-style.html"><a href="rse-style.html#rse-style-keypoints"><i class="fa fa-check"></i><b>7.13</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="rse-automate.html"><a href="rse-automate.html"><i class="fa fa-check"></i><b>8</b> Automating Analyses</a><ul>
+<li class="chapter" data-level="8.0.1" data-path="rse-automate.html"><a href="rse-automate.html#setting-up"><i class="fa fa-check"></i><b>8.0.1</b> Setting Up</a></li>
+<li class="chapter" data-level="8.0.2" data-path="rse-automate.html"><a href="rse-automate.html#acknowledgements"><i class="fa fa-check"></i><b>8.0.2</b> Acknowledgements</a></li>
+<li class="chapter" data-level="8.1" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-single-file"><i class="fa fa-check"></i><b>8.1</b> How can I update a single file using Make?</a></li>
+<li class="chapter" data-level="8.2" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-multiple"><i class="fa fa-check"></i><b>8.2</b> How can I manage multiple files?</a></li>
+<li class="chapter" data-level="8.3" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-phony"><i class="fa fa-check"></i><b>8.3</b> How can I update several files at once?</a></li>
+<li class="chapter" data-level="8.4" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-depend-programs"><i class="fa fa-check"></i><b>8.4</b> How can I update files when programs change?</a></li>
+<li class="chapter" data-level="8.5" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-variables"><i class="fa fa-check"></i><b>8.5</b> How can I reduce repetition in a Makefile?</a></li>
+<li class="chapter" data-level="8.6" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-autovar"><i class="fa fa-check"></i><b>8.6</b> How can I take specific filenames out of my rules?</a></li>
+<li class="chapter" data-level="8.7" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-pattern"><i class="fa fa-check"></i><b>8.7</b> How can I write a generic rule to update many files?</a></li>
+<li class="chapter" data-level="8.8" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-functions"><i class="fa fa-check"></i><b>8.8</b> How can I automatically define a set of files?</a></li>
+<li class="chapter" data-level="8.9" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-doc"><i class="fa fa-check"></i><b>8.9</b> How can I document my Makefile?</a></li>
+<li class="chapter" data-level="8.10" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-pipeline"><i class="fa fa-check"></i><b>8.10</b> How can I create entire analysis pipelines?</a></li>
+<li class="chapter" data-level="8.11" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-summary"><i class="fa fa-check"></i><b>8.11</b> Summary</a></li>
+<li class="chapter" data-level="8.12" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-exercises"><i class="fa fa-check"></i><b>8.12</b> Exercises</a><ul>
+<li class="chapter" data-level="8.12.1" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-create-summary-results"><i class="fa fa-check"></i><b>8.12.1</b> Create a summary results file</a></li>
+<li class="chapter" data-level="8.12.2" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-plot-top-n"><i class="fa fa-check"></i><b>8.12.2</b> Generate a plot for the top N words</a></li>
+<li class="chapter" data-level="8.12.3" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-mkdir"><i class="fa fa-check"></i><b>8.12.3</b> Make sure the output directory exists</a></li>
+<li class="chapter" data-level="8.12.4" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-report-change"><i class="fa fa-check"></i><b>8.12.4</b> Report results that would change</a></li>
+<li class="chapter" data-level="8.12.5" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-readable-help"><i class="fa fa-check"></i><b>8.12.5</b> Create more readable help</a></li>
+<li class="chapter" data-level="8.12.6" data-path="rse-automate.html"><a href="rse-automate.html#rse-automate-ex-wildcard-perils"><i class="fa fa-check"></i><b>8.12.6</b> The perils of shell wildcards</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="rse-teams.html"><a href="rse-teams.html"><i class="fa fa-check"></i><b>9</b> Working in Teams</a><ul>
+<li class="chapter" data-level="9.1" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-software-license"><i class="fa fa-check"></i><b>9.1</b> How should we license our software?</a></li>
+<li class="chapter" data-level="9.2" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-other-license"><i class="fa fa-check"></i><b>9.2</b> How should we license our data and reports?</a></li>
+<li class="chapter" data-level="9.3" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-issues"><i class="fa fa-check"></i><b>9.3</b> How can we keep track of the work we still have to do?</a></li>
+<li class="chapter" data-level="9.4" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-bugs"><i class="fa fa-check"></i><b>9.4</b> How can we write good bug reports?</a></li>
+<li class="chapter" data-level="9.5" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-labels"><i class="fa fa-check"></i><b>9.5</b> How can we use labels to organize work?</a></li>
+<li class="chapter" data-level="9.6" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-workflow"><i class="fa fa-check"></i><b>9.6</b> How can we enforce a workflow for a project?</a></li>
+<li class="chapter" data-level="9.7" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-martha"><i class="fa fa-check"></i><b>9.7</b> How can we make decisions?</a></li>
+<li class="chapter" data-level="9.8" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-meetings"><i class="fa fa-check"></i><b>9.8</b> How can we run meetings more efficiently?</a></li>
+<li class="chapter" data-level="9.9" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-fair"><i class="fa fa-check"></i><b>9.9</b> How can we keep people from talking too much or too little?</a></li>
+<li class="chapter" data-level="9.10" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-online"><i class="fa fa-check"></i><b>9.10</b> How should we run online meetings?</a></li>
+<li class="chapter" data-level="9.11" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-conflict"><i class="fa fa-check"></i><b>9.11</b> How should we handle conflict within the team?</a></li>
+<li class="chapter" data-level="9.12" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-conduct"><i class="fa fa-check"></i><b>9.12</b> Why should we establish a code of conduct for a project?</a></li>
+<li class="chapter" data-level="9.13" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-allyship"><i class="fa fa-check"></i><b>9.13</b> How can we be good allies for members of marginalized groups?</a></li>
+<li class="chapter" data-level="9.14" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-summary"><i class="fa fa-check"></i><b>9.14</b> Summary</a></li>
+<li class="chapter" data-level="9.15" data-path="rse-teams.html"><a href="rse-teams.html#rse-teams-exercises"><i class="fa fa-check"></i><b>9.15</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="rse-project.html"><a href="rse-project.html"><i class="fa fa-check"></i><b>10</b> Project Structure</a><ul>
+<li class="chapter" data-level="10.1" data-path="rse-project.html"><a href="rse-project.html#rse-project-thinking"><i class="fa fa-check"></i><b>10.1</b> What is a project?</a></li>
+<li class="chapter" data-level="10.2" data-path="rse-project.html"><a href="rse-project.html#rse-project-boilerplate"><i class="fa fa-check"></i><b>10.2</b> What files should every project contain?</a></li>
+<li class="chapter" data-level="10.3" data-path="rse-project.html"><a href="rse-project.html#rse-project-organize"><i class="fa fa-check"></i><b>10.3</b> How should I structure the rest of my project?</a></li>
+<li class="chapter" data-level="10.4" data-path="rse-project.html"><a href="rse-project.html#rse-project-scripts"><i class="fa fa-check"></i><b>10.4</b> How should I manage a mix of compiled programs and scripts?</a></li>
+<li class="chapter" data-level="10.5" data-path="rse-project.html"><a href="rse-project.html#rse-project-software-docs"><i class="fa fa-check"></i><b>10.5</b> How should I document the software in a project?</a></li>
+<li class="chapter" data-level="10.6" data-path="rse-project.html"><a href="rse-project.html#rse-project-infer"><i class="fa fa-check"></i><b>10.6</b> What should I document?</a></li>
+<li class="chapter" data-level="10.7" data-path="rse-project.html"><a href="rse-project.html#rse-project-faq"><i class="fa fa-check"></i><b>10.7</b> How can I create a useful FAQ?</a></li>
+<li class="chapter" data-level="10.8" data-path="rse-project.html"><a href="rse-project.html#rse-project-data-vs-code"><i class="fa fa-check"></i><b>10.8</b> How does documentation for data differ from documentation for code?</a></li>
+<li class="chapter" data-level="10.9" data-path="rse-project.html"><a href="rse-project.html#rse-project-data-docs"><i class="fa fa-check"></i><b>10.9</b> How should I document the data in a project?</a></li>
+<li class="chapter" data-level="10.10" data-path="rse-project.html"><a href="rse-project.html#rse-project-data-start"><i class="fa fa-check"></i><b>10.10</b> How can I get started documenting my data?</a></li>
+<li class="chapter" data-level="10.11" data-path="rse-project.html"><a href="rse-project.html#rse-project-data-first"><i class="fa fa-check"></i><b>10.11</b> What data documentation should I create first?</a></li>
+<li class="chapter" data-level="10.12" data-path="rse-project.html"><a href="rse-project.html#rse-project-external"><i class="fa fa-check"></i><b>10.12</b> How should I manage data that can’t be stored in version control?</a></li>
+<li class="chapter" data-level="10.13" data-path="rse-project.html"><a href="rse-project.html#rse-project-summary"><i class="fa fa-check"></i><b>10.13</b> Summary</a></li>
+<li class="chapter" data-level="10.14" data-path="rse-project.html"><a href="rse-project.html#exercises"><i class="fa fa-check"></i><b>10.14</b> Exercises</a><ul>
+<li class="chapter" data-level="10.14.1" data-path="rse-project.html"><a href="rse-project.html#rse-project-ex-understand-project"><i class="fa fa-check"></i><b>10.14.1</b> Understand a project</a></li>
+<li class="chapter" data-level="10.14.2" data-path="rse-project.html"><a href="rse-project.html#rse-project-ex-audience"><i class="fa fa-check"></i><b>10.14.2</b> Determining the audience for documentation</a></li>
+<li class="chapter" data-level="10.14.3" data-path="rse-project.html"><a href="rse-project.html#rse-project-ex-create-doc-template"><i class="fa fa-check"></i><b>10.14.3</b> Creating documentation template</a></li>
+<li class="chapter" data-level="10.14.4" data-path="rse-project.html"><a href="rse-project.html#rse-project-ex-permanent-links"><i class="fa fa-check"></i><b>10.14.4</b> Making permanent links</a></li>
+</ul></li>
+<li class="chapter" data-level="10.15" data-path="rse-project.html"><a href="rse-project.html#rse-project-keypoints"><i class="fa fa-check"></i><b>10.15</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="rse-ci.html"><a href="rse-ci.html"><i class="fa fa-check"></i><b>11</b> Continuous Integration</a><ul>
+<li class="chapter" data-level="11.1" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-basic"><i class="fa fa-check"></i><b>11.1</b> How do I set up continuous integration?</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="rse-ci.html"><a href="rse-ci.html#watching-a-repository"><i class="fa fa-check"></i><b>11.1.1</b> Watching a repository</a></li>
+<li class="chapter" data-level="11.1.2" data-path="rse-ci.html"><a href="rse-ci.html#configuring-a-project"><i class="fa fa-check"></i><b>11.1.2</b> Configuring a project</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-display-github"><i class="fa fa-check"></i><b>11.2</b> How can I display my project’s status on GitHub?</a></li>
+<li class="chapter" data-level="11.3" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-setting-up-with-r"><i class="fa fa-check"></i><b>11.3</b> How can I set up Travis CI for an R project?</a></li>
+<li class="chapter" data-level="11.4" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-testing"><i class="fa fa-check"></i><b>11.4</b> How can I use Travis CI to test my project?</a></li>
+<li class="chapter" data-level="11.5" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-deploying"><i class="fa fa-check"></i><b>11.5</b> How can I use CI for other purposes?</a></li>
+<li class="chapter" data-level="11.6" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-summary"><i class="fa fa-check"></i><b>11.6</b> Summary</a></li>
+<li class="chapter" data-level="11.7" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-exercises"><i class="fa fa-check"></i><b>11.7</b> Exercises</a></li>
+<li class="chapter" data-level="11.8" data-path="rse-ci.html"><a href="rse-ci.html#rse-ci-keypoints"><i class="fa fa-check"></i><b>11.8</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="rse-package-r.html"><a href="rse-package-r.html"><i class="fa fa-check"></i><b>12</b> R Packaging</a><ul>
+<li class="chapter" data-level="12.1" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-intro"><i class="fa fa-check"></i><b>12.1</b> What’s in an R package?</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-what-packages-do-you-have"><i class="fa fa-check"></i><b>12.1.1</b> Exercise: What packages do you have?</a></li>
+<li class="chapter" data-level="12.1.2" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-can-you-build-a-package"><i class="fa fa-check"></i><b>12.1.2</b> Exercise: Can you build a package?</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-background"><i class="fa fa-check"></i><b>12.2</b> What <em>is</em> a package, exactly?</a></li>
+<li class="chapter" data-level="12.3" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-create"><i class="fa fa-check"></i><b>12.3</b> How do I create a package?</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-packaging-the-co2-functions"><i class="fa fa-check"></i><b>12.3.1</b> Exercise: Packaging the CO2 functions</a></li>
+<li class="chapter" data-level="12.3.2" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-exploring-a-package"><i class="fa fa-check"></i><b>12.3.2</b> Exercise: Exploring a package</a></li>
+<li class="chapter" data-level="12.3.3" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-ignoring-files"><i class="fa fa-check"></i><b>12.3.3</b> Exercise: Ignoring Files</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-use"><i class="fa fa-check"></i><b>12.4</b> How do I use a package while I’m creating it?</a></li>
+<li class="chapter" data-level="12.5" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-document"><i class="fa fa-check"></i><b>12.5</b> How do I document a R package?</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-document-a-function"><i class="fa fa-check"></i><b>12.5.1</b> Exercise: Document a function</a></li>
+<li class="chapter" data-level="12.5.2" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-use-markdown-documentation"><i class="fa fa-check"></i><b>12.5.2</b> Exercise: Use Markdown documentation</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-docwhat"><i class="fa fa-check"></i><b>12.6</b> What should I document?</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-fixing-documentation"><i class="fa fa-check"></i><b>12.6.1</b> Exercise: Fixing documentation</a></li>
+<li class="chapter" data-level="12.6.2" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-cross-references"><i class="fa fa-check"></i><b>12.6.2</b> Exercise: Cross-references</a></li>
+<li class="chapter" data-level="12.6.3" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-documenting-error-conditions"><i class="fa fa-check"></i><b>12.6.3</b> Exercise: Documenting error conditions</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-dependencies"><i class="fa fa-check"></i><b>12.7</b> How do I manage package dependencies?</a><ul>
+<li class="chapter" data-level="12.7.1" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-document-dependencies"><i class="fa fa-check"></i><b>12.7.1</b> Exercise: Document dependencies</a></li>
+<li class="chapter" data-level="12.7.2" data-path="rse-package-r.html"><a href="rse-package-r.html#importing"><i class="fa fa-check"></i><b>12.7.2</b> Importing</a></li>
+</ul></li>
+<li class="chapter" data-level="12.8" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-github"><i class="fa fa-check"></i><b>12.8</b> How can I share my package via GitHub?</a></li>
+<li class="chapter" data-level="12.9" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-data"><i class="fa fa-check"></i><b>12.9</b> How can I add data to a package?</a><ul>
+<li class="chapter" data-level="12.9.1" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-letting-usethis-do-even-more-work"><i class="fa fa-check"></i><b>12.9.1</b> Exercise: Letting <code>usethis</code> do even more work</a></li>
+<li class="chapter" data-level="12.9.2" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-scripting-data-creation"><i class="fa fa-check"></i><b>12.9.2</b> Exercise: Scripting data creation</a></li>
+<li class="chapter" data-level="12.9.3" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-add-sample-data-to-the-co2-package"><i class="fa fa-check"></i><b>12.9.3</b> Exercise: Add sample data to the CO2 package</a></li>
+<li class="chapter" data-level="12.9.4" data-path="rse-package-r.html"><a href="rse-package-r.html#exercise-reproducible-data-set-creation"><i class="fa fa-check"></i><b>12.9.4</b> Exercise: Reproducible data set creation</a></li>
+</ul></li>
+<li class="chapter" data-level="12.10" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-summary"><i class="fa fa-check"></i><b>12.10</b> Summary</a></li>
+<li class="chapter" data-level="12.11" data-path="rse-package-r.html"><a href="rse-package-r.html#rse-package-r-keypoints"><i class="fa fa-check"></i><b>12.11</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="rse-package-py.html"><a href="rse-package-py.html"><i class="fa fa-check"></i><b>13</b> Python Packaging</a><ul>
+<li class="chapter" data-level="13.1" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-modules"><i class="fa fa-check"></i><b>13.1</b> How can I turn a set of Python source files into a module?</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-hello-zipf"><i class="fa fa-check"></i><b>13.1.1</b> Exercise: Hello, Zipf!</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-import"><i class="fa fa-check"></i><b>13.2</b> How can I control what is executed during import and what isn’t?</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-what-is-__name__-in-different-contexts"><i class="fa fa-check"></i><b>13.2.1</b> Exercise: What is <code>__name__</code> in different contexts?</a></li>
+<li class="chapter" data-level="13.2.2" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-turn-use.py-into-a-unit-test"><i class="fa fa-check"></i><b>13.2.2</b> Exercise: Turn <code>use.py</code> into a unit test</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-creating"><i class="fa fa-check"></i><b>13.3</b> How do I create a package?</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-create-a-package-for-our-zipf-code."><i class="fa fa-check"></i><b>13.3.1</b> Exercise: Create a package for our Zipf code.</a></li>
+<li class="chapter" data-level="13.3.2" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-hello-__init__.py"><i class="fa fa-check"></i><b>13.3.2</b> Exercise: “Hello <code>__init__.py</code>”</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="rse-package-py.html"><a href="rse-package-py.html#referring-to-modules-within-the-same-package-multiple-files"><i class="fa fa-check"></i><b>13.4</b> Referring to modules within the same package: multiple files</a><ul>
+<li class="chapter" data-level="13.4.1" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-factor-out-the-package-wide-constant-relative_error"><i class="fa fa-check"></i><b>13.4.1</b> Exercise: Factor out the package-wide constant <code>RELATIVE_ERROR</code></a></li>
+<li class="chapter" data-level="13.4.2" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-importing-from-within-init.py"><i class="fa fa-check"></i><b>13.4.2</b> Exercise: Importing from within <strong>init</strong>.py</a></li>
+</ul></li>
+<li class="chapter" data-level="13.5" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-install"><i class="fa fa-check"></i><b>13.5</b> What does it mean to install a Python package?</a><ul>
+<li class="chapter" data-level="13.5.1" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-find-a-package-in-pip-list"><i class="fa fa-check"></i><b>13.5.1</b> Exercise: Find a package in pip list</a></li>
+</ul></li>
+<li class="chapter" data-level="13.6" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-virtualenv"><i class="fa fa-check"></i><b>13.6</b> How can I have only the packages my projects need?</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="rse-package-py.html"><a href="rse-package-py.html#exercises-examining-the-virtual-environment"><i class="fa fa-check"></i><b>13.6.1</b> Exercises: Examining the virtual environment</a></li>
+<li class="chapter" data-level="13.6.2" data-path="rse-package-py.html"><a href="rse-package-py.html#exercises-installing-a-package-into-the-virtual-environment"><i class="fa fa-check"></i><b>13.6.2</b> Exercises: Installing a package into the virtual environment</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-package"><i class="fa fa-check"></i><b>13.7</b> How can I create an installable Python package?</a></li>
+<li class="chapter" data-level="13.8" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-distrib-scripts"><i class="fa fa-check"></i><b>13.8</b> How can I distribute command-line scripts in my Python package?</a></li>
+<li class="chapter" data-level="13.9" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-document"><i class="fa fa-check"></i><b>13.9</b> How should I document my package for others?</a></li>
+<li class="chapter" data-level="13.10" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-sphinx"><i class="fa fa-check"></i><b>13.10</b> How do I generate web pages of documentation for my package?</a></li>
+<li class="chapter" data-level="13.11" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-rtd"><i class="fa fa-check"></i><b>13.11</b> How do I put the documentation for my package online?</a></li>
+<li class="chapter" data-level="13.12" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-distribute"><i class="fa fa-check"></i><b>13.12</b> How can I distribute software packages that I have created?</a><ul>
+<li class="chapter" data-level="13.12.1" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-clean-up-warning-messages"><i class="fa fa-check"></i><b>13.12.1</b> Exercise: Clean up warning messages</a></li>
+<li class="chapter" data-level="13.12.2" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-license-longinfo-and-classification-metadata"><i class="fa fa-check"></i><b>13.12.2</b> Exercise License, longinfo, and classification metadata</a></li>
+<li class="chapter" data-level="13.12.3" data-path="rse-package-py.html"><a href="rse-package-py.html#exercise-requirements-in-setup.py"><i class="fa fa-check"></i><b>13.12.3</b> Exercise: Requirements in setup.py</a></li>
+</ul></li>
+<li class="chapter" data-level="13.13" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-announce"><i class="fa fa-check"></i><b>13.13</b> Announcing Work</a></li>
+<li class="chapter" data-level="13.14" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-summary"><i class="fa fa-check"></i><b>13.14</b> Summary</a></li>
+<li class="chapter" data-level="13.15" data-path="rse-package-py.html"><a href="rse-package-py.html#rse-package-py-keypoints"><i class="fa fa-check"></i><b>13.15</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="rse-correct.html"><a href="rse-correct.html"><i class="fa fa-check"></i><b>14</b> Correctness</a><ul>
+<li class="chapter" data-level="14.1" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-manual"><i class="fa fa-check"></i><b>14.1</b> How can I test functions manually?</a></li>
+<li class="chapter" data-level="14.2" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-features"><i class="fa fa-check"></i><b>14.2</b> What features do we want a testing framework to have?</a></li>
+<li class="chapter" data-level="14.3" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-create-python"><i class="fa fa-check"></i><b>14.3</b> How do I create and run unit tests in Python?</a></li>
+<li class="chapter" data-level="14.4" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-create-r"><i class="fa fa-check"></i><b>14.4</b> How do I create and run unit tests in R?</a></li>
+<li class="chapter" data-level="14.5" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-fixtures"><i class="fa fa-check"></i><b>14.5</b> How should I set up fixtures my unit tests?</a></li>
+<li class="chapter" data-level="14.6" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-check"><i class="fa fa-check"></i><b>14.6</b> How should I check the results of tests?</a></li>
+<li class="chapter" data-level="14.7" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-failure"><i class="fa fa-check"></i><b>14.7</b> Why and how should I test that software fails correctly?</a></li>
+<li class="chapter" data-level="14.8" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-coverage"><i class="fa fa-check"></i><b>14.8</b> How can I tell whether my code has been tested or not?</a></li>
+<li class="chapter" data-level="14.9" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-enough"><i class="fa fa-check"></i><b>14.9</b> How much testing is enough?</a></li>
+<li class="chapter" data-level="14.10" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-tdd"><i class="fa fa-check"></i><b>14.10</b> When should I write my tests?</a></li>
+<li class="chapter" data-level="14.11" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-float"><i class="fa fa-check"></i><b>14.11</b> Why should I be cautious when using floating-point numbers?</a></li>
+<li class="chapter" data-level="14.12" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-numeric"><i class="fa fa-check"></i><b>14.12</b> How should I write tests that involved floating-point values?</a></li>
+<li class="chapter" data-level="14.13" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-infer"><i class="fa fa-check"></i><b>14.13</b> How can I infer and check properties of my data?</a></li>
+<li class="chapter" data-level="14.14" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-summary"><i class="fa fa-check"></i><b>14.14</b> Summary</a></li>
+<li class="chapter" data-level="14.15" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-exercises"><i class="fa fa-check"></i><b>14.15</b> Exercises</a><ul>
+<li class="chapter" data-level="14.15.1" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-ex-numsign"><i class="fa fa-check"></i><b>14.15.1</b> Fixing <code>numSign</code></a></li>
+<li class="chapter" data-level="14.15.2" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-ex-simple-calc"><i class="fa fa-check"></i><b>14.15.2</b> Checking simple calculations</a></li>
+<li class="chapter" data-level="14.15.3" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-ex-purpose"><i class="fa fa-check"></i><b>14.15.3</b> Explain the purpose of tests</a></li>
+<li class="chapter" data-level="14.15.4" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-ex-count-words"><i class="fa fa-check"></i><b>14.15.4</b> Testing <code>count_words</code></a></li>
+<li class="chapter" data-level="14.15.5" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-ex-check-errors"><i class="fa fa-check"></i><b>14.15.5</b> Checking for errors</a></li>
+</ul></li>
+<li class="chapter" data-level="14.16" data-path="rse-correct.html"><a href="rse-correct.html#rse-correct-keypoints"><i class="fa fa-check"></i><b>14.16</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="rse-publish.html"><a href="rse-publish.html"><i class="fa fa-check"></i><b>15</b> Publishing</a><ul>
+<li class="chapter" data-level="15.1" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-identifiers"><i class="fa fa-check"></i><b>15.1</b> Identification</a></li>
+<li class="chapter" data-level="15.2" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-document"><i class="fa fa-check"></i><b>15.2</b> Publishing a report</a></li>
+<li class="chapter" data-level="15.3" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-data"><i class="fa fa-check"></i><b>15.3</b> Publishing data</a><ul>
+<li class="chapter" data-level="15.3.1" data-path="rse-publish.html"><a href="rse-publish.html#what-is-the-most-useful-way-to-share-my-data"><i class="fa fa-check"></i><b>15.3.1</b> What is the most useful way to share my data?</a></li>
+<li class="chapter" data-level="15.3.2" data-path="rse-publish.html"><a href="rse-publish.html#what-standards-of-data-sharing-should-i-aspire-to"><i class="fa fa-check"></i><b>15.3.2</b> What standards of data sharing should I aspire to?</a></li>
+<li class="chapter" data-level="15.3.3" data-path="rse-publish.html"><a href="rse-publish.html#how-and-where-do-i-publish-the-data"><i class="fa fa-check"></i><b>15.3.3</b> How and where do I publish the data?</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-software"><i class="fa fa-check"></i><b>15.4</b> Publishing analysis software</a></li>
+<li class="chapter" data-level="15.5" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-scripts"><i class="fa fa-check"></i><b>15.5</b> Publishing analysis scripts</a><ul>
+<li class="chapter" data-level="15.5.1" data-path="rse-publish.html"><a href="rse-publish.html#software-description"><i class="fa fa-check"></i><b>15.5.1</b> Software description</a></li>
+<li class="chapter" data-level="15.5.2" data-path="rse-publish.html"><a href="rse-publish.html#analysis-scripts"><i class="fa fa-check"></i><b>15.5.2</b> Analysis scripts</a></li>
+<li class="chapter" data-level="15.5.3" data-path="rse-publish.html"><a href="rse-publish.html#data-processing-steps"><i class="fa fa-check"></i><b>15.5.3</b> Data processing steps</a></li>
+<li class="chapter" data-level="15.5.4" data-path="rse-publish.html"><a href="rse-publish.html#where-to-publish-all-this-stuff"><i class="fa fa-check"></i><b>15.5.4</b> Where to publish all this stuff?</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-summary"><i class="fa fa-check"></i><b>15.6</b> Summary</a></li>
+<li class="chapter" data-level="15.7" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-exercises"><i class="fa fa-check"></i><b>15.7</b> Exercises</a><ul>
+<li class="chapter" data-level="15.7.1" data-path="rse-publish.html"><a href="rse-publish.html#orcid"><i class="fa fa-check"></i><b>15.7.1</b> ORCID</a></li>
+<li class="chapter" data-level="15.7.2" data-path="rse-publish.html"><a href="rse-publish.html#a-fair-test"><i class="fa fa-check"></i><b>15.7.2</b> A FAIR test</a></li>
+<li class="chapter" data-level="15.7.3" data-path="rse-publish.html"><a href="rse-publish.html#publishing-your-code"><i class="fa fa-check"></i><b>15.7.3</b> Publishing your code</a></li>
+</ul></li>
+<li class="chapter" data-level="15.8" data-path="rse-publish.html"><a href="rse-publish.html#rse-publish-keypoints"><i class="fa fa-check"></i><b>15.8</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="rse-finale.html"><a href="rse-finale.html"><i class="fa fa-check"></i><b>16</b> Finale</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="license.html"><a href="license.html"><i class="fa fa-check"></i><b>A</b> License</a></li>
+<li class="chapter" data-level="B" data-path="conduct.html"><a href="conduct.html"><i class="fa fa-check"></i><b>B</b> Code of Conduct</a><ul>
+<li class="chapter" data-level="B.1" data-path="conduct.html"><a href="conduct.html#conduct-standards"><i class="fa fa-check"></i><b>B.1</b> Our Standards</a></li>
+<li class="chapter" data-level="B.2" data-path="conduct.html"><a href="conduct.html#conduct-responsibilities"><i class="fa fa-check"></i><b>B.2</b> Our Responsibilities</a></li>
+<li class="chapter" data-level="B.3" data-path="conduct.html"><a href="conduct.html#conduct-scope"><i class="fa fa-check"></i><b>B.3</b> Scope</a></li>
+<li class="chapter" data-level="B.4" data-path="conduct.html"><a href="conduct.html#conduct-enforcement"><i class="fa fa-check"></i><b>B.4</b> Enforcement</a></li>
+<li class="chapter" data-level="B.5" data-path="conduct.html"><a href="conduct.html#conduct-attribution"><i class="fa fa-check"></i><b>B.5</b> Attribution</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="contributing.html"><a href="contributing.html"><i class="fa fa-check"></i><b>C</b> Contributing</a><ul>
+<li class="chapter" data-level="C.1" data-path="contributing.html"><a href="contributing.html#contributing-style"><i class="fa fa-check"></i><b>C.1</b> Style Guide</a></li>
+<li class="chapter" data-level="C.2" data-path="contributing.html"><a href="contributing.html#setting-up-1"><i class="fa fa-check"></i><b>C.2</b> Setting Up</a></li>
+</ul></li>
+<li class="chapter" data-level="D" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>D</b> Glossary</a></li>
+<li class="chapter" data-level="E" data-path="rse-objectives.html"><a href="rse-objectives.html"><i class="fa fa-check"></i><b>E</b> Learning Objectives</a><ul>
+<li class="chapter" data-level="E.1" data-path="rse-objectives.html"><a href="rse-objectives.html#the-basics-of-the-unix-shell"><i class="fa fa-check"></i><b>E.1</b> The Basics of the Unix Shell</a></li>
+<li class="chapter" data-level="E.2" data-path="rse-objectives.html"><a href="rse-objectives.html#going-further-with-the-unix-shell"><i class="fa fa-check"></i><b>E.2</b> Going Further with the Unix Shell</a></li>
+<li class="chapter" data-level="E.3" data-path="rse-objectives.html"><a href="rse-objectives.html#git-at-the-command-line"><i class="fa fa-check"></i><b>E.3</b> Git at the Command Line</a></li>
+<li class="chapter" data-level="E.4" data-path="rse-objectives.html"><a href="rse-objectives.html#advanced-git"><i class="fa fa-check"></i><b>E.4</b> Advanced Git</a></li>
+<li class="chapter" data-level="E.5" data-path="rse-objectives.html"><a href="rse-objectives.html#code-style-review-and-refactoring"><i class="fa fa-check"></i><b>E.5</b> Code Style, Review, and Refactoring</a></li>
+<li class="chapter" data-level="E.6" data-path="rse-objectives.html"><a href="rse-objectives.html#automating-analyses"><i class="fa fa-check"></i><b>E.6</b> Automating Analyses</a></li>
+<li class="chapter" data-level="E.7" data-path="rse-objectives.html"><a href="rse-objectives.html#working-in-teams"><i class="fa fa-check"></i><b>E.7</b> Working in Teams</a></li>
+<li class="chapter" data-level="E.8" data-path="rse-objectives.html"><a href="rse-objectives.html#project-structure"><i class="fa fa-check"></i><b>E.8</b> Project Structure</a></li>
+<li class="chapter" data-level="E.9" data-path="glossary.html"><a href="glossary.html#continuous-integration"><i class="fa fa-check"></i><b>E.9</b> Continuous Integration</a></li>
+<li class="chapter" data-level="E.10" data-path="rse-objectives.html"><a href="rse-objectives.html#r-packaging"><i class="fa fa-check"></i><b>E.10</b> R Packaging</a></li>
+<li class="chapter" data-level="E.11" data-path="rse-objectives.html"><a href="rse-objectives.html#python-packaging"><i class="fa fa-check"></i><b>E.11</b> Python Packaging</a></li>
+<li class="chapter" data-level="E.12" data-path="rse-objectives.html"><a href="rse-objectives.html#correctness"><i class="fa fa-check"></i><b>E.12</b> Correctness</a></li>
+<li class="chapter" data-level="E.13" data-path="rse-objectives.html"><a href="rse-objectives.html#publishing"><i class="fa fa-check"></i><b>E.13</b> Publishing</a></li>
+</ul></li>
+<li class="chapter" data-level="F" data-path="rse-keypoints.html"><a href="rse-keypoints.html"><i class="fa fa-check"></i><b>F</b> Key Points</a><ul>
+<li class="chapter" data-level="F.1" data-path="rse-keypoints.html"><a href="rse-keypoints.html#the-basics-of-the-unix-shell-1"><i class="fa fa-check"></i><b>F.1</b> The Basics of the Unix Shell</a></li>
+<li class="chapter" data-level="F.2" data-path="rse-keypoints.html"><a href="rse-keypoints.html#going-further-with-the-unix-shell-1"><i class="fa fa-check"></i><b>F.2</b> Going Further with the Unix Shell</a></li>
+<li class="chapter" data-level="F.3" data-path="rse-keypoints.html"><a href="rse-keypoints.html#git-at-the-command-line-1"><i class="fa fa-check"></i><b>F.3</b> Git at the Command Line</a></li>
+<li class="chapter" data-level="F.4" data-path="rse-keypoints.html"><a href="rse-keypoints.html#advanced-git-1"><i class="fa fa-check"></i><b>F.4</b> Advanced Git</a></li>
+<li class="chapter" data-level="F.5" data-path="rse-keypoints.html"><a href="rse-keypoints.html#code-style-review-and-refactoring-1"><i class="fa fa-check"></i><b>F.5</b> Code Style, Review, and Refactoring</a></li>
+<li class="chapter" data-level="F.6" data-path="rse-keypoints.html"><a href="rse-keypoints.html#automating-analyses-1"><i class="fa fa-check"></i><b>F.6</b> Automating Analyses</a></li>
+<li class="chapter" data-level="F.7" data-path="rse-keypoints.html"><a href="rse-keypoints.html#working-in-teams-1"><i class="fa fa-check"></i><b>F.7</b> Working in Teams</a></li>
+<li class="chapter" data-level="F.8" data-path="rse-keypoints.html"><a href="rse-keypoints.html#project-structure-1"><i class="fa fa-check"></i><b>F.8</b> Project Structure</a></li>
+<li class="chapter" data-level="F.9" data-path="rse-keypoints.html"><a href="rse-keypoints.html#continuous-integration-1"><i class="fa fa-check"></i><b>F.9</b> Continuous Integration</a></li>
+<li class="chapter" data-level="F.10" data-path="rse-keypoints.html"><a href="rse-keypoints.html#r-packaging-1"><i class="fa fa-check"></i><b>F.10</b> R Packaging</a></li>
+<li class="chapter" data-level="F.11" data-path="rse-keypoints.html"><a href="rse-keypoints.html#python-packaging-1"><i class="fa fa-check"></i><b>F.11</b> Python Packaging</a></li>
+<li class="chapter" data-level="F.12" data-path="rse-keypoints.html"><a href="rse-keypoints.html#correctness-1"><i class="fa fa-check"></i><b>F.12</b> Correctness</a></li>
+<li class="chapter" data-level="F.13" data-path="rse-keypoints.html"><a href="rse-keypoints.html#publishing-1"><i class="fa fa-check"></i><b>F.13</b> Publishing</a></li>
+</ul></li>
+<li class="chapter" data-level="G" data-path="rse-solutions.html"><a href="rse-solutions.html"><i class="fa fa-check"></i><b>G</b> Solutions</a><ul>
+<li class="chapter" data-level="G.1" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-bash-basics"><i class="fa fa-check"></i><b>G.1</b> Chapter @ref(rse-bash-basics)</a><ul>
+<li class="chapter" data-level="G.1.1" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-more-ls"><i class="fa fa-check"></i><b>G.1.1</b> Exercise @ref(rse-bash-basics-ex-more-ls)</a></li>
+<li class="chapter" data-level="G.1.2" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-ls-rt"><i class="fa fa-check"></i><b>G.1.2</b> Exercise @ref(rse-bash-basics-ex-ls-rt)</a></li>
+<li class="chapter" data-level="G.1.3" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-paths"><i class="fa fa-check"></i><b>G.1.3</b> Exercise @ref(rse-bash-basics-ex-paths)</a></li>
+<li class="chapter" data-level="G.1.4" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-resolve-rel-path"><i class="fa fa-check"></i><b>G.1.4</b> Exercise @ref(rse-bash-basics-ex-resolve-rel-path)</a></li>
+<li class="chapter" data-level="G.1.5" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-reading-ls"><i class="fa fa-check"></i><b>G.1.5</b> Exercise @ref(rse-bash-basics-ex-reading-ls)</a></li>
+<li class="chapter" data-level="G.1.6" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-touch"><i class="fa fa-check"></i><b>G.1.6</b> Exercise @ref(rse-bash-basics-ex-touch)</a></li>
+<li class="chapter" data-level="G.1.7" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-move-dot"><i class="fa fa-check"></i><b>G.1.7</b> Exercise @ref(rse-bash-basics-ex-move-dot)</a></li>
+<li class="chapter" data-level="G.1.8" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-renaming-files"><i class="fa fa-check"></i><b>G.1.8</b> Exercise @ref(rse-bash-basics-ex-renaming-files)</a></li>
+<li class="chapter" data-level="G.1.9" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-last-ls"><i class="fa fa-check"></i><b>G.1.9</b> Exercise @ref(rse-bash-basics-ex-last-ls)</a></li>
+<li class="chapter" data-level="G.1.10" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-safe-rm"><i class="fa fa-check"></i><b>G.1.10</b> Exercise @ref(rse-bash-basics-ex-safe-rm)</a></li>
+<li class="chapter" data-level="G.1.11" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-copy-multi"><i class="fa fa-check"></i><b>G.1.11</b> Exercise @ref(rse-bash-basics-ex-copy-multi)</a></li>
+<li class="chapter" data-level="G.1.12" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-ls-match"><i class="fa fa-check"></i><b>G.1.12</b> Exercise @ref(rse-bash-basics-ex-ls-match)</a></li>
+<li class="chapter" data-level="G.1.13" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-more-wildcards"><i class="fa fa-check"></i><b>G.1.13</b> Exercise @ref(rse-bash-basics-ex-more-wildcards)</a></li>
+<li class="chapter" data-level="G.1.14" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-organizing"><i class="fa fa-check"></i><b>G.1.14</b> Exercise @ref(rse-bash-basics-ex-organizing)</a></li>
+<li class="chapter" data-level="G.1.15" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-reproduce-structure"><i class="fa fa-check"></i><b>G.1.15</b> Exercise @ref(rse-bash-basics-ex-reproduce-structure)</a></li>
+<li class="chapter" data-level="G.1.16" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-sort-n"><i class="fa fa-check"></i><b>G.1.16</b> Exercise @ref(rse-bash-basics-ex-sort-n)</a></li>
+<li class="chapter" data-level="G.1.17" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-redirect-append"><i class="fa fa-check"></i><b>G.1.17</b> Exercise @ref(rse-bash-basics-ex-redirect-append)</a></li>
+<li class="chapter" data-level="G.1.18" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-append-data"><i class="fa fa-check"></i><b>G.1.18</b> Exercise @ref(rse-bash-basics-ex-append-data)</a></li>
+<li class="chapter" data-level="G.1.19" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-piping"><i class="fa fa-check"></i><b>G.1.19</b> Exercise @ref(rse-bash-basics-ex-piping)</a></li>
+<li class="chapter" data-level="G.1.20" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-uniq-adjacent"><i class="fa fa-check"></i><b>G.1.20</b> Exercise @ref(rse-bash-basics-ex-uniq-adjacent)</a></li>
+<li class="chapter" data-level="G.1.21" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-reading-pipes"><i class="fa fa-check"></i><b>G.1.21</b> Exercise @ref(rse-bash-basics-ex-reading-pipes)</a></li>
+<li class="chapter" data-level="G.1.22" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-pipe-construction"><i class="fa fa-check"></i><b>G.1.22</b> Exercise @ref(rse-bash-basics-ex-pipe-construction)</a></li>
+<li class="chapter" data-level="G.1.23" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-which-pipe"><i class="fa fa-check"></i><b>G.1.23</b> Exercise @ref(rse-bash-basics-ex-which-pipe)</a></li>
+<li class="chapter" data-level="G.1.24" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-wildcard-expressions"><i class="fa fa-check"></i><b>G.1.24</b> Exercise @ref(rse-bash-basics-ex-wildcard-expressions)</a></li>
+<li class="chapter" data-level="G.1.25" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-remove-unneeded"><i class="fa fa-check"></i><b>G.1.25</b> Exercise @ref(rse-bash-basics-ex-remove-unneeded)</a></li>
+<li class="chapter" data-level="G.1.26" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-loop-dry-run"><i class="fa fa-check"></i><b>G.1.26</b> Exercise @ref(rse-bash-basics-ex-loop-dry-run)</a></li>
+<li class="chapter" data-level="G.1.27" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-nested-loops"><i class="fa fa-check"></i><b>G.1.27</b> Exercise @ref(rse-bash-basics-ex-nested-loops)</a></li>
+<li class="chapter" data-level="G.1.28" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-loop-variables"><i class="fa fa-check"></i><b>G.1.28</b> Exercise @ref(rse-bash-basics-ex-loop-variables)</a></li>
+<li class="chapter" data-level="G.1.29" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-limiting-file-sets"><i class="fa fa-check"></i><b>G.1.29</b> Exercise @ref(rse-bash-basics-ex-limiting-file-sets)</a></li>
+<li class="chapter" data-level="G.1.30" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-loop-save"><i class="fa fa-check"></i><b>G.1.30</b> Exercise @ref(rse-bash-basics-ex-loop-save)</a></li>
+<li class="chapter" data-level="G.1.31" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-list-unique"><i class="fa fa-check"></i><b>G.1.31</b> Exercise @ref(rse-bash-basics-ex-list-unique)</a></li>
+<li class="chapter" data-level="G.1.32" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-basics-ex-history-order"><i class="fa fa-check"></i><b>G.1.32</b> Exercise @ref(rse-bash-basics-ex-history-order)</a></li>
+</ul></li>
+<li class="chapter" data-level="G.2" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-bash-advanced"><i class="fa fa-check"></i><b>G.2</b> Chapter @ref(rse-bash-advanced)</a><ul>
+<li class="chapter" data-level="G.2.1" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-script-variables"><i class="fa fa-check"></i><b>G.2.1</b> Exercise @ref(rse-bash-advanced-ex-script-variables)</a></li>
+<li class="chapter" data-level="G.2.2" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-longest-with-extension"><i class="fa fa-check"></i><b>G.2.2</b> Exercise @ref(rse-bash-advanced-ex-longest-with-extension)</a></li>
+<li class="chapter" data-level="G.2.3" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-reading-scripts"><i class="fa fa-check"></i><b>G.2.3</b> Exercise @ref(rse-bash-advanced-ex-reading-scripts)</a></li>
+<li class="chapter" data-level="G.2.4" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-using-grep"><i class="fa fa-check"></i><b>G.2.4</b> Exercise @ref(rse-bash-advanced-ex-using-grep)</a></li>
+<li class="chapter" data-level="G.2.5" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-tracking-species"><i class="fa fa-check"></i><b>G.2.5</b> Exercise @ref(rse-bash-advanced-ex-tracking-species)</a></li>
+<li class="chapter" data-level="G.2.6" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-little-women"><i class="fa fa-check"></i><b>G.2.6</b> Exercise @ref(rse-bash-advanced-ex-little-women)</a></li>
+<li class="chapter" data-level="G.2.7" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-match-subtract"><i class="fa fa-check"></i><b>G.2.7</b> Exercise @ref(rse-bash-advanced-ex-match-subtract)</a></li>
+<li class="chapter" data-level="G.2.8" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-reading-find"><i class="fa fa-check"></i><b>G.2.8</b> Exercise @ref(rse-bash-advanced-ex-reading-find)</a></li>
+<li class="chapter" data-level="G.2.9" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-find-properties"><i class="fa fa-check"></i><b>G.2.9</b> Exercise @ref(rse-bash-advanced-ex-find-properties)</a></li>
+<li class="chapter" data-level="G.2.10" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-combining-options"><i class="fa fa-check"></i><b>G.2.10</b> Exercise @ref(rse-bash-advanced-ex-combining-options)</a></li>
+<li class="chapter" data-level="G.2.11" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-bash-advanced-ex-other-wildcards"><i class="fa fa-check"></i><b>G.2.11</b> Exercise @ref(rse-bash-advanced-ex-other-wildcards)</a></li>
+</ul></li>
+<li class="chapter" data-level="G.3" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-automate"><i class="fa fa-check"></i><b>G.3</b> Chapter @ref(rse-automate)</a><ul>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-create-summary-results"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-create-summary-results)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-plot-top-n"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-plot-top-n)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-mkdir"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-mkdir)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-report-change"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-report-change)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-readable-help"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-readable-help)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-automate-ex-wildcard-perils"><i class="fa fa-check"></i>Exercise @ref(rse-automate-ex-wildcard-perils)</a></li>
+</ul></li>
+<li class="chapter" data-level="G.4" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-git-cmdline"><i class="fa fa-check"></i><b>G.4</b> Chapter @ref(rse-git-cmdline)</a><ul>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-places"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-places)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-commit"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-commit)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-multiple"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-multiple)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-bio"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-bio)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-ignore-nested"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-ignore-nested)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-include"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-include)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-github-interface"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-github-interface)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-timestamp"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-timestamp)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-push-commit"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-push-commit)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-boilerplate"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-boilerplate)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-recover"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-recover)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-history"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-history)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exericserefrse-git-cmdline-ex-diff"><i class="fa fa-check"></i>Exericse @ref(rse-git-cmdline-ex-diff)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-unstage"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-unstage)</a></li>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-cmdline-ex-blame"><i class="fa fa-check"></i>Exercise @ref(rse-git-cmdline-ex-blame)</a></li>
+</ul></li>
+<li class="chapter" data-level="G.5" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-git-advanced"><i class="fa fa-check"></i><b>G.5</b> Chapter @ref(rse-git-advanced)</a><ul>
+<li class="chapter" data-level="" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-git-advanced-ex-additional-pr"><i class="fa fa-check"></i>Exercise @ref(rse-git-advanced-ex-additional-pr)</a></li>
+</ul></li>
+<li class="chapter" data-level="G.6" data-path="rse-solutions.html"><a href="rse-solutions.html#chapterrefrse-project"><i class="fa fa-check"></i><b>G.6</b> Chapter @ref(rse-project}</a><ul>
+<li class="chapter" data-level="G.6.1" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-project-ex-understand-project"><i class="fa fa-check"></i><b>G.6.1</b> Exercise @ref(rse-project-ex-understand-project)</a></li>
+<li class="chapter" data-level="G.6.2" data-path="rse-solutions.html"><a href="rse-solutions.html#exerciserefrse-project-ex-permanent-links"><i class="fa fa-check"></i><b>G.6.2</b> Exercise @ref(rse-project-ex-permanent-links)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="H" data-path="rse-yaml.html"><a href="rse-yaml.html"><i class="fa fa-check"></i><b>H</b> YAML</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Merely Useful: RSE</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="rse-project" class="section level1">
+<h1><span class="header-section-number">Chapter 10</span> Project Structure</h1>
+<p>Project organization is like a diet:
+everyone has one,
+it’s just a question of whether it’s healthy or not.
+In the case of a project,
+“healthy” means that people can find what they need and do what they want without becoming frustrated.
+This depends on two things:
+how well organized the project is,
+and how familiar people are with that style of organization.</p>
+<p>As with coding style,
+small pieces in predictable places with readable names are easier to find and use
+than large chunks that vary from project to project
+and have names like “stuff”.
+While we can be messy while we are working and then tidy up later,
+experience teaches that we will be more productive if we make tidiness a habit
+and put things in the right place right from the start.
+This lesson therefore describes a widely-used template
+for organizing small and medium-sized data analysis projects <span class="citation">Noble (<a href="references.html#ref-Nobl2009">2009</a>)</span>.</p>
+<blockquote>
+<p><strong>Version First</strong></p>
+<p>This chapter assumes that a project’s history and development is managed with Git,
+and that each project lives in a single repository.
+If you are organizing something messy,
+please start using version control before you make any changes
+so that you don’t accidentally lose valuable work.</p>
+</blockquote>
+<div id="rse-project-thinking" class="section level2">
+<h2><span class="header-section-number">10.1</span> What is a project?</h2>
+<p>The first decision we have to make is what exactly constitutes a “project” <span class="citation">Wilson et al. (<a href="references.html#ref-Wils2017">2017</a>)</span>.
+Some examples are:</p>
+<ul>
+<li><p>A dataset that is being used by several research projects.
+The project includes the raw data,
+the programs used to tidy that data,
+the tidied data,
+the extra files needed to make the dataset an R package (Chapter <a href="rse-package-r.html#rse-package-r">12</a>),
+and a few text files describing the data’s authors, license, and <a href="glossary.html#provenance">provenance</a>.</p></li>
+<li><p>A set of annual reports written for an <a href="glossary.html#ngo">NGO</a>.
+The project includes several Jupyter notebooks,
+some supporting Python libraries used by those notebooks,
+copies of the HTML and PDF versions of the reports,
+a text file containing links to the datasets used in the report
+(which can’t be stored on GitHub since they contain personal identifying information),
+and a text file explaining details of the analysis that the authors didn’t include in the reports themselves.</p></li>
+<li><p>A software library that provides an interactive glossary of data science terms in both Python and R.
+The project contains the files needed to create a package in both languages,
+a Markdown file full of terms and definitions,
+and a Makefile with targets to check cross-references, compile packages, and so on.</p></li>
+</ul>
+<p>More generally,
+some common criteria for creating projects are one per publication,
+one per deliverable piece of software,
+or one per team.
+The first tends to be too small:
+a good dataset will result in several reports,
+and the goal of some projects is to produce a steady stream of reports (such as monthly forecasts).
+The second is a good fit for software engineering projects
+whose primary aim is to produce tools rather than results,
+but can be an awkward fit for data analysis work.
+The third tends to be too large:
+a team of half a dozen people may work on many different things at once,
+and a repository that holds them all quickly looks like someone’s basement.</p>
+<p>The best rule of thumb for deciding what is and isn’t a project
+is to ask what people have meetings about.
+If the same set of people need to get together on a regular basis to talk about something,
+that “something” probably deserves its own repository.
+And if the list of people changes slowly over time but the meetings continue,
+that’s an even stronger sign.</p>
+</div>
+<div id="rse-project-boilerplate" class="section level2">
+<h2><span class="header-section-number">10.2</span> What files should every project contain?</h2>
+<p>Most projects’ repositories contain four files.
+Three of these are so widely used in open source software projects that GitHub provides support for them,
+while the fourth is common in research work.
+All of these files may be plain text or Markdown,
+and may have a <code>.txt</code> or <code>.md</code> suffix (or no suffix at all),
+but should use the principal names given in upper case
+since a growing number of tools expect them.</p>
+<ul>
+<li><p><code>README</code> includes the project’s title and a one-paragraph description of its purpose or content.
+GitHub displays the content of this file on the project’s home page.</p></li>
+<li><p><code>LICENSE</code> is the project’s license (discussed in Chapter <a href="rse-teams.html#rse-teams-software-license">9.1</a>).</p></li>
+<li><p><code>CONDUCT</code> is its code of conduct (also discussed in Chapter <a href="rse-teams.html#rse-teams-conduct">9.12</a>).</p></li>
+<li><p><code>CITATION</code> explains how the work should be cited.
+This file should contains a plain text citation that can be copied and pasted into email,
+and may also include entries formatted for various bibliographic systems like <a href="http://www.bibtex.org/">BibTeX</a>.</p></li>
+</ul>
+<p>Other information may be included as sections in these files or put into files of their own:</p>
+<ul>
+<li><p><code>CONTRIBUTORS</code>
+lists everyone who has contributed to the project.
+Software projects often put this information in <code>README</code>,
+while research projects make it a section in <code>CITATION</code>.</p></li>
+<li><p><code>CONTRIBUTING</code>
+explains how to contribute,
+i.e.,
+what naming conventions to use for functions,
+what tags to put on issues (Section <a href="rse-git-advanced.html#rse-git-advanced-tag">6.7</a>),
+or how to install and configure the software needed to start work on the project.
+These instructions can also be included as a section in <code>README</code>;
+wherever they go,
+remember that the easier it is for people to get set up and contribute,
+the more likely they are to do so <span class="citation">Steinmacher et al. (<a href="references.html#ref-Stei2014">2014</a>)</span>.</p></li>
+<li><p><code>GOVERNANCE</code>
+explains how the project is run.
+It is still uncommon for this to be in a file of its own—it is more often included
+in <code>README</code> or <code>CONTRIBUTING</code>—but the open source and open science communities have learned the hard way
+that <em>not</em> being explicit about who has a voice in which decisions
+and how contributors can tell when a decision has been made
+causes trouble sooner or later.</p></li>
+</ul>
+<p>Even the four core files may seem like a lot,
+but two of these (<code>LICENSE</code> and <code>CONDUCT</code>) are usually chosen rather than written (Chapter <a href="rse-teams.html#rse-teams-conduct">9.12</a>)
+and the others (<code>README</code> and <code>CITATION</code>) can be quite short to start with.
+Having these files helps new contributors orient themselves,
+and also signals that the project is well run.</p>
+<p>What’s more,
+much of this content is <a href="glossary.html#boilerplate">boilerplate</a>,
+i.e.,
+the files are copied from one project to another without any changes.
+Once someone knows that a project is using the MIT License (Section <a href="rse-teams.html#rse-teams-software-license">9.1</a>)
+and the Contributor Covenant (Section <a href="rse-teams.html#rse-teams-conduct">9.12</a>),
+they don’t need to read the files to know what’s there.</p>
+</div>
+<div id="rse-project-organize" class="section level2">
+<h2><span class="header-section-number">10.3</span> How should I structure the rest of my project?</h2>
+<p><span class="citation">Noble (<a href="references.html#ref-Nobl2009">2009</a>)</span> described a way to organize small bioinformatics projects
+that is equally useful for other kinds of research computing.
+Each project is put in a separate Git repository,
+and the directories in the root of this repository are organized according to purpose.
+It specifies five top-level directories:</p>
+<ul>
+<li><p>The <code>./src/</code> directory (short for “source”) holds source code
+for programs written in languages like C or C++ that need to be compiled.
+Many projects don’t have this directory
+because all of their code is written in languages that don’t need compilation.</p></li>
+<li><p>Runnable programs go in <code>./bin/</code> (an old Unix abbreviation for “binary”, meaning “not text”).
+This includes the compiled and runnable versions of C and C++ programs,
+and also shell scripts,
+Python or R programs,
+and everything else that can be executed.</p></li>
+<li><p>Raw data goes in in <code>./data/</code> and is never modified after being stored.</p></li>
+<li><p>Results are put in <code>./results/</code>.
+This includes cleaned-up data,
+figures,
+and everything else that can be rebuilt using what’s in <code>./bin/</code> and <code>./data/</code>.
+If intermediate results can be re-created quickly and easily,
+they might not be stored in version control,
+but anything that is included in a manuscript should be here.</p></li>
+<li><p>Finally,
+documentation and manuscripts go in <code>./doc/</code>.</p></li>
+</ul>
+<div class="figure"><span id="fig:project-noble"></span>
+<img src="figures/rse-project/noble.svg" alt="Project Layout"  />
+<p class="caption">
+Figure 10.1: Project Layout
+</p>
+</div>
+<p>Figure <a href="rse-project.html#fig:project-noble">10.1</a> below shows this layout for a project called <code>g-trans</code>.
+A few things to notice are:</p>
+<ul>
+<li><p>The documentation for the <code>regulate</code> script appears in the root of <code>./doc/</code>,
+while the paper for JCMB is stored in a subdirectory,
+since it contains several files.</p></li>
+<li><p>The <code>./src/</code> directory contains a Makefile to re-build the <code>regulate</code> program (Chapter <a href="rse-automate.html#rse-automate">8</a>).
+Some projects put the Makefile in the root directory,
+reasoning that since it affects both <code>./src/</code> and <code>./bin/</code>,
+it belongs above them both rather than in either one.</p></li>
+<li><p>There are several subdirectories underneath <code>./data/</code> and <code>./results/</code>.
+Each of the subdirectories in <code>./results/</code> has a Makefile
+to re-create the contents of that directory.</p></li>
+</ul>
+<p>While the directories in the top level of each project are organized by purpose,
+the directories within <code>./data/</code> and <code>./results/</code> are organized chronologically
+to make it easy to see when data was gathered and when results were generated.
+These directories all have names in <a href="glossary.html#iso-date-format">ISO date format</a> like <code>YYYY-MM-DD</code>
+to make it easy to sort them chronologically.
+This naming is particularly helpful when data and results are used in several reports.</p>
+<p>At all levels,
+filenames are chosen so that they will be easy to match with simple shell wildcards.
+For example,
+a project might use <code><em>species</em><em><em>organ</em></em><em>treatment</em>.csv</code>
+as a file-naming convention,
+giving filenames like <code>gorilla_kidney_cm200.csv</code>.
+This allows <code>gorilla_*_cm200.csv</code> to match all gorilla organs
+or <code>*_kidney_*.csv</code> to match all kidney data.
+It does produce long filenames,
+but <a href="glossary.html#tab-completion">tab completion</a> means that we only have to type the full name once.
+Long filenames are just as easy to match in programs:
+Python’s <code>glob</code> and R’s <code>Sys.glob</code> will both take a pattern and return a list of matching filenames.</p>
+<p><span class="citation">Marwick et al. (<a href="references.html#ref-Marw2018">2018</a>)</span> describes a simple layout:</p>
+<pre><code>├── DESCRIPTION
+├── README.md
+├── LICENSE
+├── data
+│   └── my_data.csv
+└── analysis
+    └── my_report.Rmd</code></pre>
+<p>The key differences are:</p>
+<ul>
+<li><p>The <code>DESCRIPTION</code> file in the root directory contains
+the information needed to make the project an R package (Chapter <a href="rse-package-r.html#rse-package-r">12</a>).</p></li>
+<li><p>Instead of having a separate directory for tidied tata,
+this layout assumes that all work (including data tidying) is done with <a href="glossary.html#computational-notebook">computational notebooks</a>,
+so Noble’s <code>bin</code>, <code>src</code>, and <code>results</code> directories are combined.</p></li>
+</ul>
+<p>Going in the other direction,
+<a href="https://drivendata.github.io/cookiecutter-data-science/">Cookiecutter Data Science</a> describes a more elaborate layout
+with separate subdirectories for models, features, visualizations, and much more.
+All of these share a few key advantages:</p>
+<ul>
+<li><p>People can find things easily,
+and can easily tell where to put new work.</p></li>
+<li><p>Programs within the project can find things just as easily
+(e.g., by using simple filename patterns).</p></li>
+<li><p>External tools such as GitHub can <a href="glossary.html#aggregate">aggregate</a> information
+so that the project itself is easier to find.</p></li>
+<li><p>We don’t have to document the structure ourselves.</p></li>
+</ul>
+</div>
+<div id="rse-project-scripts" class="section level2">
+<h2><span class="header-section-number">10.4</span> How should I manage a mix of compiled programs and scripts?</h2>
+<p>Programming languages come in two flavors: compiled and interpreted.
+In order to run a program in a <a href="glossary.html#compiled-language">compiled language</a> such as C++ or Java,
+we give the source files to a <a href="glossary.html#compiler">compiler</a>
+that translates them into instructions a computer can actually execute
+and saves those instructions in files (Figure <a href="rse-project.html#fig:rse-project-languages">10.2</a>a).
+Those files full of instructions can then be re-used as often as we want.
+If we are using an <a href="glossary.html#interpreted-language">interpreted language</a> like R or Python,
+on the other hand,
+we give our source files to an <a href="glossary.html#interpeter">interpreter</a>.
+It also translates the code into instructions,
+but puts those instructions in memory and executes them immediately (Figure <a href="rse-project.html#fig:rse-project-languages">10.2</a>b).</p>
+<div class="figure"><span id="fig:rse-project-languages"></span>
+<img src="figures/FIXME.png" alt="Language Types"  />
+<p class="caption">
+Figure 10.2: Language Types
+</p>
+</div>
+<p>Saving instructions in files versus executing them immediately may seem like a small difference,
+but historically it led to very different styles of programming.
+Compiled languages usually ran faster than interpreted languages,
+but compilation took time,
+so interpreted languages were better for <a href="glossary.html#exploratory-programming">exploratory programming</a>.
+The differences are much smaller these days than they were twenty years ago,
+but we do still tend to use compiled languages for anything that has to interact directly with hardware
+and then <a href="glossary.html#wrap-code">wrap</a> those libraries for use in interpreted languages.</p>
+<blockquote>
+<p><strong>Why <code>bin</code>?</strong></p>
+<p>The name <code>bin</code> is short for “binary”,
+and comes from the fact that the source files of compiled programs are human-readable text,
+but files containing the compiler’s output are not.
+Programmers often call files that aren’t text “binaries”,
+even though text is itself stored in binary as well.</p>
+</blockquote>
+<p>All of this is preamble to deciding where to put things if a project contains compiled programs.
+Most software engineers put source code in version control
+and recompile it as needed to produce executables:</p>
+<ol style="list-style-type: decimal">
+<li><p>It saves disk space.</p></li>
+<li><p>Version control tools can’t diff or merge a compiled program.</p></li>
+<li><p>Compiled programs are much more sensitive to small differences
+between operating system versions and external dependencies
+than interpreted programs,
+so something compiled on one computer might not work on another anyway.</p></li>
+</ol>
+<p>The authors of this book handle all of this in different ways:</p>
+<ol style="list-style-type: decimal">
+<li><p>Put the source code for compiled languages in <code>./src/</code>,
+the runnable programs produced from this code in <code>./bin/</code>,
+and programs for interpreted languages in <code>./scripts/</code>.
+This makes version control easy—ignore what’s in <code>./bin/</code> and save everything else—but
+means users have to look in two places to run things.</p></li>
+<li><p>Put the source for compiled programs in <code>./src/</code>
+and both the compiler’s output and interpreted programs in <code>./bin/</code>.
+This makes version control a little more complicated,
+since some of what’s in <code>./bin/</code> needs to be saved and some doesn’t,
+but means there’s only one place to look for runnable programs.
+(It’s also easy to delete the hand-written scripts in <code>./bin/</code> by accident
+when we only meant to delete the compiled programs,
+but since we have everything under version control,
+that’s not a problem, right?)</p></li>
+<li><p>Put all source files in <code>./src/</code> and the compiler’s output in <code>./bin/</code>.
+This is slightly simpler than the first option,
+but still means users have to look in two places for things they can run.</p></li>
+</ol>
+<p>As always,
+the approach matters less than being consistent
+and including a note in <code>CONTRIBUTING</code> or elsewhere to document the decision.</p>
+</div>
+<div id="rse-project-software-docs" class="section level2">
+<h2><span class="header-section-number">10.5</span> How should I document the software in a project?</h2>
+<p>An old proverb says, “Trust, but verify.”
+The equivalent in programming is, “Be clear, but document.”
+No matter how well software is written,
+it always embodies decisions that aren’t explicit in the final code
+or accommodates complications that aren’t going to be obvious to the next reader.
+Putting it another way,
+the best function names in the world aren’t going to answer the questions
+“Why does the software do this?”
+and
+“Why doesn’t it do this in a simpler way?”
+This lesson will explore who we should write documentation for,
+what we should write for them,
+and where it should go.</p>
+<p>Noble’s layout places documentation and manuscripts in <code>./docs/</code>.
+We recommend separating these into <code>./docs/</code> and <code>./reports/</code>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Most projects generate the documentation for their software directly from the source code
+(Chapters <a href="rse-package-r.html#rse-package-r">12</a> and <a href="rse-package-py.html#rse-package-py">13</a>).
+Putting these files in the same directory as handwritten files
+has the same problems as putting a compiler’s output in the same directory as handwritten scripts.
+In fact,
+it’s often worse,
+since <a href="glossary.html#documentation-generator">documentation generators</a> often create many subdirectories and support files.</p></li>
+<li><p>We often create several reports for a single project,
+which complicates file management even further.</p></li>
+</ol>
+<p>There are three kinds of people in any domain:
+<a href="glossary.html#novice">novices</a>,
+<a href="glossary.html#competent-practitioner">competent practitioners</a>,
+and <a href="glossary.html#expert">experts</a> <span class="citation">Wilson (<a href="references.html#ref-Wils2018">2019</a><a href="references.html#ref-Wils2018">a</a>)</span>.
+A novice doesn’t yet have a <a href="glossary.html#mental-model">mental model</a> of the domain;
+they don’t know what the key terms are,
+how they relate,
+what the causes of their problems are,
+or how to tell whether a solution to their problem is appropriate or not.</p>
+<p>Competent practitioners know enough to accomplish routine tasks with routine effort:
+they may need to check <a href="https://stackoverflow.com/">Stack Overflow</a> every few minutes,
+but they know what to search for and what “done” looks like.
+Finally,
+experts have such a deep and broad understanding of the domain
+that they can solve routine problems at a glance
+and are able to handle the one-in-a-thousand cases
+that would baffle the merely competent.</p>
+<p>Each of these three groups needs a different kind of documentation.
+A novice needs a tutorial that introduces her to key ideas one by one
+and shows how they fit together.
+A competent practitioner needs reference guides, cookbooks, and Q&amp;A sites;
+these give her solutions close enough to what she needs
+that she can tweak them the rest of the way.
+Experts need this material as well—nobody’s memory is perfect—but
+they may also paradoxically want tutorials.
+The difference between them and novices is that experts want tutorials on how things work
+and why they were designed that way.</p>
+<p>The first thing to decide when writing documentation
+is therefore to decide which of these needs we are trying to meet.
+Tutorials like this one should be long-form prose that contain code samples and diagrams.
+They should use <a href="glossary.html#authentic-task">authentic tasks</a> to motivate ideas,
+i.e.,
+show people things they actually want to do rather than printing the numbers from 1 to 10,
+and should include regular check-ins
+so that learners and instructors alike can tell if they’re making progress.</p>
+<p>Tutorials help novices build a mental model,
+but competent practitioners and experts will be frustrated by their slow pace and low information density.
+They will want single-point solutions to specific problems like
+how to find cells in a spreadsheet that contain a certain string
+or how to configure the web server to load an access control module.
+They can make use of an alphabetical list of the functions in a library,
+but are much happier if they can search by keyword to find what they need;
+one of the signs that someone is no longer a novice is that
+they’re able to compose useful queries and tell if the results are on the right track or not.</p>
+<p>That observation brings us to the notion of a <a href="glossary.html#false-beginner">false beginner</a>,
+which is someone who appears not to know anything,
+but who has enough prior experience in other domains
+to be able to piece things together much more quickly than a genuine novice.
+Someone who is proficient with MATLAB, for example,
+will speed through a tutorial on Python’s numerical libraries
+much more quickly than someone who has never programmed before.</p>
+<p>In an ideal world,
+we would satisfy these needs with a <a href="https://hapgood.us/2016/05/13/choral-explanations/">chorus of explanations</a>,
+some long and detailed,
+others short and to the point.
+In our world, though,
+time and resources are limited,
+so all but the most popular packages must make do with single explanations.
+The rest of this section will therefore look at
+how to create reference guides and FAQs.</p>
+</div>
+<div id="rse-project-infer" class="section level2">
+<h2><span class="header-section-number">10.6</span> What should I document?</h2>
+<p>The answer to the question in this section’s title depends on what stage of development we are in.
+If we are doing <a href="glossary.html#exploratory-programming">exploratory programming</a>,
+a short docstring to remind ourselves of each function’s purpose is good enough.
+(In fact, it’s probably better than what most people do.)
+That one- or two-liner should begin with an active verb and describe either
+how inputs are turned into outputs,
+or what side effects the function has;
+as we discuss below,
+if we need to describe both,
+we should probably rewrite our function.</p>
+<p>An active verb is something like “extract”, “normalize”, or “find”.
+For example,
+these are all good one-line docstrings:</p>
+<ul>
+<li>“Create a list of current ages from a list of birth dates.”</li>
+<li>“Clip signals to lie in [0…1].”</li>
+<li>“Reduce the red component of each pixel.”</li>
+</ul>
+<p>We can tell our one-liners are useful if we can read them aloud in the order the functions are called
+in place of the function’s name and parameters.</p>
+<p>Once we start writing code for other people—including ourselves three months from now—our
+docstrings should describe:</p>
+<ol style="list-style-type: decimal">
+<li>The name and purpose of every public class, function, and constant in our code.</li>
+<li>The name, purpose, and default value (if any) of every parameter to every function.</li>
+<li>Any side effects the function has.</li>
+<li>The type of value returned by every function.</li>
+<li>What exceptions those functions can raise and when.</li>
+</ol>
+<p>The word “public” in the first rule is important.
+We don’t have to write full documentation for helper functions
+that are only used inside our package and aren’t meant to be called by users,
+but these should still have at least a comment explaining their purpose.
+We also don’t have to document unit testing functions:
+as discussed in Chapter <a href="rse-correct.html#rse-correct">14</a>,
+these should have long names that describe what they’re checking
+so that failure reports are easy to scan.</p>
+</div>
+<div id="rse-project-faq" class="section level2">
+<h2><span class="header-section-number">10.7</span> How can I create a useful FAQ?</h2>
+<p>An <a href="glossary.html#faq">FAQ</a> is a list of frequently-asked questions and corresponding answers.
+A good FAQ uses the terms and concepts that people bring to the software
+rather than the vocabulary of its authors;
+putting it another way,
+the questions should be things that people might search for online,
+and the answers should give them enough information to solve their problem.</p>
+<p>Creating and maintaining a FAQ is a lot of work,
+and unless the community is large and active,
+a lot of that effort may turn out to be wasted,
+because it’s hard for the authors or maintainers of a piece of software
+to anticipate what newcomers will be mystified by.
+A better approach is to leverage sites like <a href="https://stackoverflow.com/">Stack Overflow</a>,
+which is where most programmers are going to look for answers anyway:</p>
+<ol style="list-style-type: decimal">
+<li>Post every question that someone actually asks us,
+whether it’s online, by email, or in person.
+Be sure to include the name of the software package in the question
+so that it’s findable.</li>
+<li>Answer the question,
+making sure to mention which version of the software we’re talking about
+(so that people can easily spot and discard stale answers in the future).</li>
+</ol>
+<p>With a bit of work,
+the <a href="https://data.stackexchange.com/">Stack Exchange Data Explorer</a>
+can be used to download questions and answers about our software
+if we want to put them all in an offline guide.
+we can also use <a href="http://www.stackprinter.com/">Stack Printer</a> for this;
+for example, the URL
+<a href="http://www.stackprinter.com/topvoted?service=stackoverflow&amp;tagged=rstudio" class="uri">http://www.stackprinter.com/topvoted?service=stackoverflow&amp;tagged=rstudio</a>
+will bring up a paged view of top-voted questions about RStudio.</p>
+<p><a href="https://stackoverflow.com/">Stack Overflow</a>’s guide to <a href="https://stackoverflow.com/help/how-to-ask">asking a good question</a>
+has been refined over many years,
+and is a good guide for any project:</p>
+<dl>
+<dt>Write the most specific title we can.</dt>
+<dd>“Why does division sometimes give a different result in Python 2.7 and Python 3.5?”
+is much better than, “Help! Math in Python!!”
+</dd>
+<dt>Give context before giving sample code.</dt>
+<dd>A few sentences to explain what are are trying to do and why
+will help people determine if their question is a close match to ours or not.
+</dd>
+<dt>Provide a minimal reprex.</dt>
+<dd>Section <a href="rse-teams.html#rse-teams-bugs">9.4</a> explains the value of a <a href="glossary.html#reprex">reproducible example</a> (reprex),
+and why reprexes should be as short as possible.
+Readers will have a much easier time figuring out if this question and its answers are for them
+if they can see <em>and understand</em> a few lines of code.
+</dd>
+<dt>Tag, tag, tag.</dt>
+<dd>Keywords make everything more findable,
+from scientific papers and left-handed musical instruments
+to solutions for programming problems.
+</dd>
+<dt>Use “I” and question words (how/what/when/where/why).</dt>
+<dd>The section headings in these lessons follow this rule for the same reason that questions in a FAQ should:
+writing this way forces us to think more clearly about
+what someone might actually be thinking when they need help.
+</dd>
+<dt>Keep each item short.</dt>
+<dd>The “minimal manual” approach to instructional design <span class="citation">Carroll (<a href="references.html#ref-Carr2014">2014</a>)</span>
+breaks everything down into single-page steps,
+with half of that page devoted to troubleshooting.
+This may feel like baby steps to the person doing the writing,
+but is often as much as a person searching and reading can handle.
+It also helps writers realize just how much implicit knowledge they are assuming.
+</dd>
+<dt>Allow for a <a href="https://hapgood.us/2016/05/13/choral-explanations/">chorus of explanations</a>.</dt>
+<dd>As discussed earlier,
+users are all different from one another,
+and are therefore best served by a chorus of explanations.
+Do not be afraid of providing multiple explanations to a single question
+that suggest different approaches
+or are written for different prior levels of understanding.
+</dd>
+</dl>
+</div>
+<div id="rse-project-data-vs-code" class="section level2">
+<h2><span class="header-section-number">10.8</span> How does documentation for data differ from documentation for code?</h2>
+<p>Documenting data is different from code
+because there’s rarely an element of time within code documentation:
+we we describe what is there,
+not how it came to be.
+Data,
+on the other hand,
+always comes from somewhere and has (almost always) had something done to it.
+Its documentation must therefore include details about process,
+selection,
+and transformation.</p>
+<p>Often,
+all we need to document data is short action statements to describe the actions taken.
+Depending on the complexity,
+the content description and the process information may be contained in the same statement,
+such as,
+“Contents of gorilla_genome_2020-010-12.bam after run through process.py.”
+(This statement presumes that there is documentation on where these <code>.bam</code> files come from
+and what <code>process.py</code> does is described somewhere. )</p>
+<p>However,
+a file that has recieved extensive manual editing and curation
+should have much more detailed description of what was done.
+Good tools,
+like <a href="http://openrefine.org/">OpenRefine</a>,
+allow us to export a list of all the changes we have made to a file.
+This is extremely detailed process information,
+much like looking at a lenthy series of diffs in version control history,
+but these change lists do not include <em>why</em> these changes were made.
+(Some of this may be in version control commit messages,
+but there may be many changes within a single commit.)
+For example,
+documenting that we changed all values like “[1980?]”, “1980?”, and “[[1980]” to “1980” is not enough:
+the question of “What happened here?” as been answered,
+but now <em>why</em>.
+Both pieces must be present for full understanding.</p>
+</div>
+<div id="rse-project-data-docs" class="section level2">
+<h2><span class="header-section-number">10.9</span> How should I document the data in a project?</h2>
+<p>To answer the question in this section’s title,
+think about the questions we would have playing a text adventure game
+in which we wake up in a room we don’t recognize.
+We would ask things like:
+Where am I?
+What’s around me?
+What can I do here?
+Where can I go?
+We need to know that things exist before we can go investigate them,
+and the same goes for making our way around data.</p>
+<p>This is why documentation starts with a README file and a short abstract for the project:
+they are where most newcomers will start building their expectations around the data.<br />
+At a minimum,
+we need to answer questions about content and time.
+Documentation about content should start
+with what is available and where things have gone.
+Newcomers will generally drill down from:</p>
+<ul>
+<li>Project: what did we do?</li>
+<li>Dataset: what did we make?</li>
+<li>Data files: what’s in this file or that column?</li>
+<li>Datum: where did this value come from?</li>
+</ul>
+<p>Discussions about what should go into documentation about data will often begin with the end game
+and ask authors to report absolutely <em>everything</em> that has happened to the data.
+However,
+the better place to start would be with <em>anything</em>.<br />
+Anything is better than nothing and is a useful starting point:
+improving from something is easier and less daunting than trying to write everything.
+While a project’s documentation will become more complex over time,
+the most important requirement at every stage is sustainability:
+we must design requirements that are still feasible,
+and still collect useful information,
+even during crunch times.</p>
+<p>Multiple styles of material will help different people best (Section <a href="rse-project.html#rse-project-faq">10.7</a>),
+but most projects do not have the resources to do this.
+More details are great to have in documentation,
+but asking for too much risks burnout and no documentation at all.
+The rules to live by when deciding what should go in are:</p>
+<ol style="list-style-type: decimal">
+<li>Documentation should have enough information,</li>
+<li>about the project, methods, and materials</li>
+<li>such that the information is maintainable over time,</li>
+<li>in an accessible format,</li>
+<li>and valuable for those who need it.</li>
+</ol>
+<p>Breaking this down:</p>
+<ul>
+<li><p>“Enough information” means that some information can always be safely omitted.
+For example,
+some methods or computations are best described in published papers;
+unless those papers are locked behind paywalls,
+we can link to them instead of duplicating their content.</p></li>
+<li><p>“About the project, methods, and materials”
+are the elements of most projects that we need to describe.
+Just like a personal introduction should have our name, pronouns, and position,
+we should introduce our data by explaining what the project was for,
+what methods we used in int,
+and what materials we applied those methods to.</p></li>
+<li><p>“Maintainable” reflects the fact that active projects outgrow static documentation.
+Since an out-of-date description can be more misleading than no description at all,
+we should construct documentation in ways that ensure everyone can contribute
+without it being burdensome.</p></li>
+<li><p>“Accessible format” means two things.
+First,
+proprietary formats create barriers to access,
+since some people may not have access to the software needed to read the documents.
+They also shorten those documents’ useful lifespan,
+since manufacturers can change those formats over time.
+If we do use such a format because we have to integrate with particular systems
+or because formatting and image embedding are better,
+we should always make a plain-text copy available as well.</p>
+<p>The other meaning is accessible to all people.
+We should use proper markup so screen readers can interact with the structure of the text,
+provide transcripts for all screencasts or other videos,
+add alt-text descriptions to images,
+and ensure that all text is actually rendered so that it can be selected and interacted with.
+The UK Home Office has published a <a href="https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf">set of posters</a> that summarize accessibility guidelines
+and also serve as a great checklist for ensuring access.</p></li>
+<li><p>Finally,
+“for those who need it” means taking your audience into account
+when prioritizing what to include and at what level of detail.
+For example,
+the documentation for a specialized bioinformatics package could reasonably expect readers to have
+a graduate-level understanding of the topic,
+so documentation aimed at high school students may simply not be worth creating.</p></li>
+</ul>
+<blockquote>
+<p><strong>Your Future Self Will Thank You</strong></p>
+<p>Documentation is often promoted for the good of people reusing data who were not part of creating the data in the first place.
+Prioritizing their needs can be difficult:
+how can we justify spending time for other people
+when our current projects need work fo the good of the people working on them right now?</p>
+<p>Instead of thinking about people who are unknown and unrelated,
+we can think about newcomers to our team
+and the time we will save <em>ourselves</em> in onboarding them.
+We can also think about the time we will save ourselves
+when we come back to this project five months or five years from now.
+Documentation that serves these two groups well
+will almost certainly serve the needs of strangers as well.</p>
+</blockquote>
+</div>
+<div id="rse-project-data-start" class="section level2">
+<h2><span class="header-section-number">10.10</span> How can I get started documenting my data?</h2>
+<p>Writing anything can be difficult,
+and documentation is no different.
+Setting up places for information to be housed both formally and informally is the first step;
+creating a checklist should be the second.</p>
+<p>The data used within an active project is often rapidly changed, added, or removed.
+Maintaining and collecting relevant documentation within this phase of constant change can be difficult.
+One way to tackle this is to keep informal documentation.
+Creating a <a href="glossary.html#parking-lot">parking lot</a> file for each dataset
+provides a place to jot down notes when things happen.
+These documents should be the home for quick notes,
+important links,
+and any other piece of information we aren’t yet sure what to do with.
+This takes off the pressure of trying to write formally and well,
+and avoids the decision fatigue of trying to figure out exactly where everything should go
+while we’re trying to do something else.</p>
+<p>Screenshots can also be a quick way to grab a bunch of metadata at once.
+Whenever we download data from a repository,
+we can take a screenshot of the landing page we downloaded it from and save the URL (or suggested citation) to the notes file.
+Any website where we have to fill in query fields,
+ranges,
+or other information to get a result
+is a perfect candidate for a screenshot.</p>
+<p>A second strategy for dealing with change in active projects is
+to create a to-do list and assign responsibilities,
+either as a file in the project’s repository
+or as a set of tasks in its issue tracking system (Section <a href="rse-teams.html#rse-teams-issues">9.3</a>).
+“Just write documentation” is a large ask of anyone without boundaries or a clear end;
+like any other element of a research project,
+establishing a clear scope of work and responsibilities is essential.</p>
+</div>
+<div id="rse-project-data-first" class="section level2">
+<h2><span class="header-section-number">10.11</span> What data documentation should I create first?</h2>
+<p>The first thing to produce when docmenting data is an inventory of what data is available.
+This inventory collects important informaion for the team during the active collection and analysis process.</p>
+<p>We start with a bulleted outline of our data collection points.
+This is different for every domain,
+but always describes the phases or points within the project that data is collected or produced.
+For example,
+a longitudinal study may collect data from subjects during intake and every three weeks following.</p>
+<p>Using that list,
+we can fill in the data products being collected in each interaction.
+The data points being collected are less important than
+the named instruments, inventories, samples, and so on being collected during each phase.
+For example,
+“participant demographic sheet version April 2019”
+might be all that our team needs.</p>
+<p>Some of this information may already be available in
+the detailed descriptions of data collection in project proposals or human subjects review documentation,
+so the data inventory can start as
+a bulleted list of these data products with extra notes.
+The bullet names can be short,
+but should be meaningful to the team.
+This can serve as a starting point for describing information already collected
+and provide a placeholder for work yet to be completed.</p>
+<p>The following questions should be answered for each data product,
+but can be answered in any order:</p>
+<ul>
+<li>Where are any physical representations of this data stored?
+This is relevant for anything with surveys, samples, specimines, interview sheets, etc.</li>
+<li>Where are any digital representations of this data stored
+and what are their file names?<br />
+</li>
+<li>Are there any caveats to data collection for this piece of data?
+Note the details and timeframe for any changes to data collection methods,
+formatting differences,
+or any other detail that may make this part of the different or surprising in comparison to the others.</li>
+</ul>
+<p>The next task is to think about the possible sections of documentation
+and create a list of relevant sections needed.<br />
+One problem with general guides is the number of possible sections needed across all domains.
+Not every section is relevant or valuable for each project,
+so each team or lab should create its own template for data documentation.
+This should combine the elements commonly used within their domain and required by their institutions and funders.
+Each project may then customize the field further
+and change its customization over time,
+but this way all the documentation will be similar.</p>
+<p>This template should be a list of sections
+with relevant boilerplate text when that makes sense.
+For example,
+a lab may have a standard license,
+contributors’ guide,
+and code of conduct.
+This template should be stored under version control so proposed changes can be discussed
+and changes that are made can be tracked over time.</p>
+</div>
+<div id="rse-project-external" class="section level2">
+<h2><span class="header-section-number">10.12</span> How should I manage data that can’t be stored in version control?</h2>
+<p>Small datasets that don’t contain sensitive information should be stored in version control:
+as a rule of thumb,
+anything you would send as an email attachment is probably small enough to be put into Git,
+while anything that might reveal someone’s identity should not be.
+If data is large or sensitive,
+there should still be something in <code>./data/</code> to show its existence,
+and that “something” should be easy for programs to read.
+One option is a CSV file whose columns are:</p>
+<ul>
+<li>the name of the dataset,</li>
+<li>its URL or other unique identifier,</li>
+<li>the date it was last checked, and</li>
+<li>its size (so that users will have some idea of how much work is involved in processing it).</li>
+</ul>
+<p>Another option is to have one file per dataset,
+so that instead of reading <code>gorilla_genome.bam</code>,
+the program reads <code>gorilla_genome.yml</code> and then uses the <code>url</code> key in that file to find the data it actually wants.
+Whatever you do,
+you should always include a <code>README.md</code> file in <code>./data/</code>
+that documents the <a href="glossary.html#provenance">provenance</a> and organization of the data
+(Section <a href="rse-publish.html#rse-publish-data">15.3</a>).</p>
+</div>
+<div id="rse-project-summary" class="section level2">
+<h2><span class="header-section-number">10.13</span> Summary</h2>
+<p>FIXME: create concept map for project structure</p>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">10.14</span> Exercises</h2>
+<p>The exercises explore the dataset from <span class="citation">Meili (<a href="references.html#ref-Meil2015">2016</a>)</span>
+and try to understand the relationship between the study and the included files.
+Go to the dataset’s page (<a href="http://doi.org/10.3886/E17507V2" class="uri">http://doi.org/10.3886/E17507V2</a>) and download the files.
+You will need to make an ICPSER account and agree to their data agreement before you can download.</p>
+<p>See <span class="citation">Wickes and Stein (<a href="references.html#ref-Wick2016">2016</a>)</span>. FIXME where should this citation go?</p>
+<div id="rse-project-ex-understand-project" class="section level3">
+<h3><span class="header-section-number">10.14.1</span> Understand a project</h3>
+<p>Review the dataset’s main page to get a sense of the study.
+Review the spreadsheet file and the coded response file.
+Answer the following questions:</p>
+<ol style="list-style-type: decimal">
+<li>Who are the participants of this study?</li>
+<li>What types of data was collected and used for analysis?</li>
+<li>Can you find information on the demographics of the interviewees?</li>
+<li>This dataset is clearly in support of an article.
+What information can you find about it, and can you find a link to it?</li>
+</ol>
+</div>
+<div id="rse-project-ex-audience" class="section level3">
+<h3><span class="header-section-number">10.14.2</span> Determining the audience for documentation</h3>
+<p>The first step to creting documentation is to think about the audience over time.
+Not every potential user of the documentation will need it in the short term,
+so starting with the most immediate users provides some strategic planning for time.</p>
+<p>Below is a grid of potential audiences and timeframes.
+These groups are generic and should be adjusted as needed for your project’s domain.
+For example,
+some geology and climate data are meant to be preserved for decades,
+while other projects only have a useful lifespan of a few years.</p>
+<p>For each potential audience group,
+mark each box to indicate if that audience group would be in need of the data and in which timeframes.
+You can repeat marks in each column and row as needed.
+You may also want to use several types of marks to indicate certainty or uncertainty.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Currently</th>
+<th>Within the next 2 years</th>
+<th>2-5 years from now</th>
+<th>5+ years</th>
+<th>Audience</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Just me</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>My project advisor or PI</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Others in my project team</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>My lab or department members</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Researchers in my field</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Researchers outside of my field</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Publication reviewers</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Federal or government agency</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="rse-project-ex-create-doc-template" class="section level3">
+<h3><span class="header-section-number">10.14.3</span> Creating documentation template</h3>
+<p>Below is a list of sections and subsections that are generally useful across many domains.
+Start with this list and edit to remove, add, or edit sections that would be relevant to your team or project.
+You may also wish to print this out and pass this around to your group members to fill out independently
+and have a facilitator gather and synthesize the results.
+A blank section is at the end to encourage you to add your own information.
+Additional notes and other metadata could be added to each section to assign a specific person to write that section,
+collect up the information for it, etc.</p>
+<ul>
+<li>Administrative and personnel details:
+<ul>
+<li>Authors, principle investigators, contributors, etc.,
+with associated institutions, contact information, and other identifiers</li>
+<li>Description of project team</li>
+<li>Associated papers, code, talks, datasets, etc.</li>
+<li>Funders and grant numbers</li>
+</ul></li>
+<li>Data licensing information
+<ul>
+<li>Suggested citation</li>
+<li>Who to contact if there are any questions</li>
+</ul></li>
+<li>Project information:
+<ul>
+<li>Brief description of the dataset and/or abstract, including relevant collection and processing dates</li>
+<li>Collection methods, including dates of collection, data processing, etc.</li>
+<li>Names, model numbers, and calibration information for any instruments used during data collection</li>
+<li>Description of scripts (e.g. R, Python, MATLAB, etc.) and their purpose</li>
+<li>Data processing workflow and stages</li>
+<li>Data cleaning process</li>
+<li>De-identification or other data scrubbing steps that occurred</li>
+</ul></li>
+<li>Data file information (repeat for each file as needed):
+<ul>
+<li>List of files to be included, grouped in meaningful units</li>
+<li>Number of rows, fields, columns, etc.</li>
+<li>Description of folder contents and/or of large groups of similar files</li>
+<li>Explanation of formats and required software to read them</li>
+<li>Languages represented within your data</li>
+<li>Description of the values, units, etc. for each column or field (codebook)</li>
+<li>Description of columns and fields in the data files (data dictionary)</li>
+<li>Other domain specific descriptive information</li>
+</ul></li>
+<li>Other (add sections as desired)</li>
+</ul>
+</div>
+<div id="rse-project-ex-permanent-links" class="section level3">
+<h3><span class="header-section-number">10.14.4</span> Making permanent links</h3>
+<p>The link to the UK Home Office’s <a href="https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf">accessibility guideline posters</a> might change in future.
+Use the [Wayback Machine][wayback-machine] to find a link that is more likely to be usable in the long run.</p>
+</div>
+</div>
+<div id="rse-project-keypoints" class="section level2">
+<h2><span class="header-section-number">10.15</span> Key Points</h2>
+<ul>
+<li>Put source code for compilation in <code>./src/</code>.</li>
+<li>Put runnable code in <code>./bin/</code>.</li>
+<li>Put raw data in <code>./data/</code>.</li>
+<li>Put results in <code>./results/</code>.</li>
+<li>Put documentation and manuscripts in <code>./doc/</code>.</li>
+<li>Use file and directory names that are easy to match and include dates for the level under <code>./data/</code> and <code>./results/</code>.</li>
+<li>Create README, LICENSE, CONDUCT, and CITATION files in the root directory of the project.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="rse-teams.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rse-ci.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/merely-useful/merely-useful.github.io/edit/master/rse-project.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["rse.pdf"],
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
