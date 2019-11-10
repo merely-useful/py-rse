@@ -9,14 +9,17 @@
 [ally-skills]: https://frameshiftconsulting.com/ally-skills-workshop/
 [ally]: glossary.html#ally
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
+[arxiv]: https://arxiv.org/
 [assertr]: https://cran.r-project.org/web/packages/assertr/index.html
 [authentic-task]: glossary.html#authentic-task
+[authorea]: https://authorea.com/
 [auto-completion]: glossary.html#auto-completion
 [automatic-variable-make]: glossary.html#automatic-variable-make
 [bash]: glossary.html#bash
 [beeswarm-plot]: glossary.html#beeswarm-plot
 [bibtex]: http://www.bibtex.org/
 [binary-code]: glossary.html#binary-code
+[biorxiv]: https://www.biorxiv.org/
 [boilerplate]: glossary.html#boilerplate
 [bootswatch]: https://bootswatch.com/3/
 [branch-per-feature]: glossary.html#branch-per-feature-workflow
@@ -41,6 +44,7 @@
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
 [cli]: glossary.html#cli
 [climate-api]: http://data.worldbank.org/developers/climate-data-api
+[cmdline-provenance]: https://cmdline-provenance.readthedocs.io/en/latest/
 [code-coverage]: glossary.html#code-coverage
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [codecov]: https://codecov.io/
@@ -103,6 +107,7 @@
 [exploratory-programming]: glossary.html#exploratory-programming
 [exponent]: glossary.html#exponent
 [f1000-research]: https://f1000research.com/
+[fair-questionnaire]: https://www.ands-nectar-rds.org.au/fair-tool
 [false-beginner]: glossary.html#false-beginner
 [false-negative]: glossary.html#false-negative
 [false-positive]: glossary.html#false-positive
@@ -122,6 +127,8 @@
 [function-make]: glossary.html#function-make
 [gdb]: https://www.gnu.org/software/gdb
 [geek-feminism]: http://geekfeminism.wikia.com/
+[geoscience-data-journal]: https://rmets.onlinelibrary.wiley.com/journal/20496060
+[geoscientific-model-development]: https://www.geoscientific-model-development.net/
 [ggplot2]: https://ggplot2.tidyverse.org/
 [gh-myoctocat]: https://myoctocat.com
 [gh-pages]: https://pages.github.com/
@@ -167,6 +174,7 @@
 [issue-tracking-system]: glossary.html#issue-tracking-system
 [issue]: glossary.html#issue
 [join]: glossary.html#join
+[jors]: https://openresearchsoftware.metajnl.com/
 [joss]: https://joss.theoj.org/
 [json]: glossary.html#json
 [jupyter]: http://jupyter.org/
@@ -212,6 +220,7 @@
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
 [osi-license-list]: http://opensource.org/licenses
+[overleaf]: https://authorea.com/
 [overloading]: glossary.html#overloading
 [package]: glossary.html#package
 [pager]: glossary.html#pager
@@ -284,6 +293,7 @@
 [rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 [rule-make]: glossary.html#rule-make
 [sci-reproducibility]: https://en.wikipedia.org/wiki/Reproducibility
+[scientific-data]: https://www.nature.com/sdata/
 [script]: glossary.html#script
 [select-docs]: https://dplyr.tidyverse.org/reference/select.html#useful-functions
 [sense-vote]: glossary.html#sense-vote
@@ -346,6 +356,7 @@
 [test-success]: glossary.html#test-success
 [testpypi]: https://test.pypi.org
 [tf-idf]: https://en.wikipedia.org/wiki/Tf%E2%80%93idf
+[theoj]: https://joss.theoj.org/
 [three-stickies]: glossary.html#three-stickies
 [ticket]: glossary.html#ticket
 [ticketing-system]: glossary.html#ticketing-system
@@ -386,7 +397,6 @@
 [wildcard]: glossary.html#wildcard
 [wing-ide]: https://wingware.com/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
-[womens-pockets]: https://pudding.cool/2018/08/pockets/
 [working-memory]: glossary.html#working-memory
 [wrap-code]: glossary.html#wrap-code
 [xcode]: https://developer.apple.com/xcode/ide/
