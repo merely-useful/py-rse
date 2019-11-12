@@ -98,14 +98,17 @@ py-html : _book/py/index.html
 rse-html : _book/rse/index.html
 
 _book/r/index.html : ${R_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_r.yml'); warnings()"
 
 _book/py/index.html : ${PY_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f py.Rmd
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
 
 _book/rse/index.html : ${RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f rse.Rmd
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_rse.yml'); warnings()"
 
@@ -129,14 +132,17 @@ py-pdf : _book/py/py.pdf
 rse-pdf : _book/rse/rse.pdf
 
 _book/r/r.pdf : ${R_FILES} ${COMMON_FILES}
+	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_r.yml'); warnings()"
 
 _book/py/py.pdf : ${PY_FILES} ${COMMON_FILES}
+	rm -f py.Rmd
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py.yml'); warnings()"
 
 _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
+	rm -f rse.Rmd
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_rse.yml'); warnings()"
 
