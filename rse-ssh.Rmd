@@ -4,7 +4,18 @@
 source("_common.R")
 ```
 
-Let's take a closer look at what happens when we use the shell
+When the Internet was young,
+people didn't encrypt anything except the most sensitive information when sending it over a network.
+However,
+this meant that villains could steal usernames and passwords.
+The [SSH protocol][ssh-protocol]
+was invented to prevent this (or at least slow it down).
+It uses several sophisticated (and heavily tested) encryption protocols
+to ensure that outsiders can't see what's in the messages
+going back and forth between different computers.
+
+To understand how it works,
+let's take a closer look at what happens when we use the shell
 on a desktop or laptop computer.
 The first step is to log in
 so that the operating system knows who we are and what we're allowed to do.
@@ -14,24 +25,24 @@ and if they match,
 runs a shell for us.
 
 As we type commands,
-the 1's and 0's that represent the characters we're typing are sent from the keyboard to the shell.
-The shell displays those characters on the screen to represent what we type,
-and then,
-if what we typed was a command,
-the shell executes it and displays its output (if any).
-
-What if we want to run some commands on another machine,
-such as the server in the basement that manages our database of experimental results?
-To do this,
-we have to first log in to that machine.
+characters are sent from our keyboard to the shell.
+It displays those characters on the screen to represent what we type,
+and then executes the command and displays its output (if any).
+If we want to run commands on another machine,
+such as the server in the basement that manages our database of experimental results,
+we have to log in to that machine so that our commands will go to it instead of to our laptop.
 We call this a [remote login][remote-login].
 
-In order for us to be able to login, the remote computer must be running 
-a [remote login server][remote-login-server] and we will
-run a client program that can talk to that server.
-The client program passes our login credentials to the remote login server
-and, if we are allowed to login, that server then runs a shell for us on the 
-remote computer.
+## How can I log in to a remote computer? {#rse-ssh-login}
+
+In order for us to be able to login,
+the remote computer must run a [remote login server][remote-login-server]
+and we must run a program that can talk to that server.
+The client program passes our login credentials to the remote login server;
+if we are allowed to login,
+that server then runs a shell for us on the remote computer.
+
+FIXME: diagram of SSH
 
 Once our local client is connected to the remote server,
 everything we type into the client is passed on, by the server, to the shell 
@@ -40,56 +51,31 @@ That remote shell runs those commands on our behalf,
 just as a local shell would,
 then sends back output, via the server, to our client, for our computer to display.
 
-## How did we get here? {#rse-ssh-history}
-
-Back in the day,
-when everyone trusted each other and knew every chip in their computer by its first name,
-people didn't encrypt anything except the most sensitive information when sending it over a network
-and the two programs used for running a shell (usually back then, the Bourne Shell, `sh`) on, or copying
-files to, a remote machine were named `rsh` and `rcp`, respectively. Think (`r`)emote `sh` and `cp`
-
-However, anyone could watch the unencrypted network traffic, which meant that villains could
-steal usernames and passwords,
-and use them for all manner of nefarious purposes.
-
-The [SSH protocol][ssh-protocol]
-was invented to prevent this (or at least slow it down).
-It uses several sophisticated, and heavily tested, encryption protocols
-to ensure that outsiders can't see what's in the messages
-going back and forth between different computers.
-
 The remote login server which accepts connections from client programs
 is known as the [SSH daemon][ssh-daemon], or `sshd`.
-
 The client program we use to login remotely is the [secure shell][secure-shell],
 or `ssh`.
 It has a companion program called `scp`
 that allows us to copy files to or from a remote computer using the same kind of encrypted connection.
-
-## How can I log in to a remote computer? {#rse-ssh-login}
 
 To make a remote login, we issue the command `ssh username@computer` 
 which tries to make a connection to the SSH daemon running on the remote computer we have specified.
 
 After we log in,
 we can use the remote shell to use the remote computer's files and directories.
-
 Typing `exit` or Control-D
 terminates the remote shell, and the local client program, and returns us to our previous shell.
 
 In the example below,
 the remote machine's command prompt is `moon>`
-instead of just `$`.
-To make it clearer which machine is doing what,
-we'll indent the commands sent to the remote machine
-and their output.
+instead of `$` to make it clearer which machine is doing what.
 
 ```shell
 $ pwd
 ```
 
 ```text
-/users/amira
+/Users/amira
 ```
 
 ```shell
@@ -98,31 +84,31 @@ Password: ********
 ```
 
 ```shell
-    moon> hostname
+moon> hostname
 ```
 
 ```text
-    moon
+moon
 ```
 
 ```shell
-    moon> pwd
+moon> pwd
 ```
 
 ```text
-    /Users/amira
+/Users/amira
 ```
 
 ```shell
-    moon> ls -F
+moon> ls -F
 ```
 
 ```text
-    bin/     cheese.txt   dark_side/   rocks.cfg
+bin/     cheese.txt   dark_side/   rocks.cfg
 ```
 
 ```shell
-    moon> exit
+moon> exit
 ```
 
 ```shell
@@ -130,7 +116,7 @@ $ pwd
 ```
 
 ```text
-/users/amira
+/Users/amira
 ```
 
 ## How can I copy files to and from a remote computer? {#rse-ssh-cp}
@@ -326,7 +312,7 @@ Password: ********
 Paste the copied content at the end of `~/.ssh/authorized_keys`. 
 
 ```shell
-    moon> nano ~/.ssh/authorized_keys
+moon> nano ~/.ssh/authorized_keys
 ```
 
 After appending the content,
@@ -334,7 +320,7 @@ log out of the remote machine and try to log in again.
 If we set up the SSH key correctly we won't need to type our password:
 
 ```shell
-    moon> exit
+moon> exit
 ```
 
 ```shell
@@ -367,22 +353,27 @@ Password: ********
 ```
 
 ```text
-    ls: cannot access /Users/amira/.ssh: No such file or directory
+ls: cannot access /Users/amira/.ssh: No such file or directory
 ```
 
-Oh dear! We should create the directory; and check that it's there
-(Note: two commands, seperated by a semicolon)
+Oops:
+we should create the directory and check that it's there:
 
 ```shell
-$ ssh amira@comet "mkdir ~/.ssh; ls -ld ~/.ssh"
+$ ssh amira@comet "mkdir ~/.ssh"
+Password: ********
+```
+
+```shell
+$ ssh amira@comet "ls -ld ~/.ssh"
 Password: ********
 ```
 
 ```text
-    drwxr-xr-x 2 amira amira 512 Jan 01 09:09 /Users/amira/.ssh
+drwxr-xr-x 2 amira amira 512 Jan 01 09:09 /Users/amira/.ssh
 ```
 
-Now we have a dot-SSH directory, into which to place SSH-related
+Now we have a `.ssh` directory, into which to place SSH-related
 files but we can see that the default permissions allow anyone to
 inspect the files within that directory.
 
@@ -390,7 +381,7 @@ For a protocol that is supposed to be secure, this is not considered
 a good thing and so the recommended permissions are read/write/execute
 for the user, and not accessible by others.
 
-Let's alter the permissions on the directory
+Let's alter the permissions on the directory:
 
 ```shell
 $ ssh amira@comet "chmod 700 ~/.ssh; ls -ld ~/.ssh"
@@ -398,10 +389,10 @@ Password: ********
 ```
 
 ```text
-    drwx------ 2 amira amira 512 Jan 01 09:09 /Users/amira/.ssh
+drwx------ 2 amira amira 512 Jan 01 09:09 /Users/amira/.ssh
 ```
 
-That's looks much better.
+That looks much better.
 
 In the above example, it was suggested that we paste the content of
 our public key at the end of `~/.ssh/authorized_keys`, however as
@@ -430,7 +421,7 @@ $ ssh amira@comet "ls -l ~/.ssh"
 ```
 
 ```text
-    -rw-r--r-- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/authorized_keys
+-rw-r--r-- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/authorized_keys
 ```
 
 Whilst the authorized keys file is not considered to be highly sensitive, 
@@ -442,7 +433,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 ```
 
 ```text
-    -rw------- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/authorized_keys
+-rw------- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/authorized_keys
 ```
 
 ```{r, child="./links.md"}
