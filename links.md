@@ -10,6 +10,7 @@
 [api]: glossary.html#api
 [append-mode]: glossary.html#append-mode
 [argparse]: https://docs.python.org/3/library/argparse.html
+[argparse-tutorial]: https://docs.python.org/3/howto/argparse.html
 [arxiv]: https://arxiv.org/
 [assertr]: https://cran.r-project.org/web/packages/assertr/index.html
 [authentic-task]: glossary.html#authentic-task
