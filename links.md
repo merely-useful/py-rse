@@ -179,6 +179,8 @@
 [json]: glossary.html#json
 [jupyter]: http://jupyter.org/
 [jupytext]: https://jupytext.readthedocs.io/en/latest/introduction.html
+[kebab-case]: glossary.html#kebab-case
+[key]: glossary.html#key
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lc]: https://librarycarpentry.org
 [learned-helplessness]: glossary.html#learned-helplessness

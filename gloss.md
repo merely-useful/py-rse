@@ -507,6 +507,9 @@
 **Kebab case**<a id="kebab-case"></a>
 :   FIXME
 
+**Key**<a id="key"></a>
+:   FIXME
+
 **Label**<a id="issue-label"></a> (in issue tracker):
    FIXME
 
