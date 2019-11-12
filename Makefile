@@ -48,7 +48,8 @@ RSE_FILES=\
   rse-objectives.Rmd \
   rse-keypoints.Rmd \
   rse-solutions.Rmd \
-  rse-yaml.Rmd
+  rse-yaml.Rmd \
+  rse-ssh.Rmd
 
 COMMON_FILES=\
   _common.R \
