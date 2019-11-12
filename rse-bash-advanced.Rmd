@@ -718,14 +718,14 @@ $ set
 
 ```text
 COMPUTERNAME=TURING
-HOME=/home/amira
+HOME=/Users/amira
 HOMEDRIVE=C:
 HOSTNAME=TURING
 HOSTTYPE=i686
 NUMBER_OF_PROCESSORS=4
 OS=Windows_NT
 PATH=/Users/amira/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
-PWD=/home/amira
+PWD=/Users/amira
 UID=1000
 USERNAME=amira
 ...
@@ -757,7 +757,8 @@ when we type in a program name without specifying what directory it is in.
 
 For example,
 when we type a command like `analyze`,
-the shell needs to decide whether to run `./analyze` or `/bin/analyze`.
+the shell needs to decide whether to run `./analyze` (in our current directory)
+or `/bin/analyze` (in a system directory).
 The rule it uses is simple:
 the shell checks each directory in the `PATH` variable in turn,
 looking for a program with the requested name in that directory.
@@ -776,17 +777,17 @@ here are the components of `PATH` listed one per line:
 /usr/local/bin
 ```
 
-On our computer,
-there are actually three programs called `analyze`
-in three different directories:
+Suppose that our computer has three programs called `analyze`:
 `/bin/analyze`,
 `/usr/local/bin/analyze`,
-and `/users/amira/analyze`.
+and `/Users/amira/analyze`.
 Since the shell searches the directories in the order they're listed in `PATH`,
 it finds `/bin/analyze` first and runs that.
-Notice that it will *never* find the program `/users/amira/analyze`
-unless we type in the full path to the program,
-since the directory `/users/amira` isn't in `PATH`.
+Since `/Users/amira` is not in our path,
+Bash will *never* find the program `/Users/amira/analyze`
+unless we type the path in explicitly
+(for example,
+as `./analyze` if we are in `/Users/amira`).
 
 Let's show the value of the variable `HOME`:
 
@@ -798,8 +799,8 @@ $ echo HOME
 HOME
 ```
 
-That just prints "HOME", which isn't what we wanted
-(though it is what we actually asked for).
+Whoops: this just prints "HOME", which isn't what we wanted
+(though it is what we asked for).
 Let's try this instead:
 
 ```shell
@@ -807,14 +808,14 @@ $ echo $HOME
 ```
 
 ```text
-/home/amira
+/Users/amira
 ```
 
-The dollar sign tells the shell that we want the value of the variable
+The dollar sign tells the shell that we want the value of the variable named `HOME`
 rather than its name.
 This works just like wildcards:
 the shell does the replacement before running the program we've asked for.
-Thanks to this expansion, what we actually run is `echo /home/amira`,
+Thanks to this expansion, what we actually run is `echo /Users/amira`,
 which displays the right thing.
 
 Creating a variable is easy—we just assign a value to a name using "=",
@@ -844,11 +845,11 @@ If we want to set some variables automatically every time we run a shell,
 we can put commands to do this in a file called `.bashrc` in our home directory.
 (The '.' character at the front prevents `ls` from listing this file
 unless we specifically ask it to using `-a`.
-The "rc" at the end is an abbreviation for "run control",
+The "rc" at the end is an abbreviation for "run commands",
 which meant something really important decades ago,
 and is now just a convention everyone follows without understanding why.)
 For example,
-here are two lines in `/home/amira/.bashrc`:
+here are two lines in `/Users/amira/.bashrc`:
 
 ```text
 export DEPARTMENT="Library Science"
@@ -874,9 +875,24 @@ alias backup=/bin/zback -v --nostir -R 20000 $HOME $BACKUP_DIR
 ```
 
 Aliases can save us a lot of typing, and hence a lot of typing mistakes.
+The name of an alias can be the same as an existing command,
+so we can use them to change the behavior of a familiar command:
+
+```shell
+# Long list format including hidden files
+alias ls='ls -la'
+
+# Print the file paths that were copied/moved
+alias mv='mv -v'
+alias cp='cp -v'
+
+# Print the file paths that were removed
+# and prompt if trying to remove move than three files
+alias rm='rm -Iv'
+```
+
 We can find interesting suggestions for other aliases
-and other bash tricks by searching for "sample bashrc"
-in your favorite search engine.
+by searching online for "sample bashrc".
 
 ## Summary {#rse-bash-advanced-summary}
 
