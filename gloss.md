@@ -507,6 +507,9 @@
 **Kebab case**<a id="kebab-case"></a>
 :   FIXME
 
+**Key**<a id="key"></a>
+:   FIXME
+
 **Label**<a id="issue-label"></a> (in issue tracker):
    FIXME
 
@@ -787,6 +790,9 @@
    FIXME
 
 **Script**<a id="script"></a>
+:   FIXME
+
+**Search path**<a id="search path"></a>
 :   FIXME
 
 **Seed**<a id="prng-seed"></a> (for pseudorandom number generator):
