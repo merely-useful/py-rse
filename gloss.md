@@ -162,25 +162,25 @@
 :   FIXME
 
 **Directory**<a id="directory"></a>
-:   A folder in a filesystem. 
+:   A folder in a filesystem.
 
 **Directory Tree**<a id="directory-tree"></a>
-:   If the nesting relationships between directories in a filesystem 
-    are drawn as arrows from the containing directory to the nested ones, a 
-    tree structure develops. 
+:   If the nesting relationships between directories in a filesystem
+    are drawn as arrows from the containing directory to the nested ones, a
+    tree structure develops.
 
 **Disk**<a id="disk"></a>
-:   Disk refers to disk storage, a physical component of a computer that stores 
-    information on a disk. The most common kind of disk storage is a hard disk 
-    drive, which is a storage drive with a non-removable disk. 
+:   Disk refers to disk storage, a physical component of a computer that stores
+    information on a disk. The most common kind of disk storage is a hard disk
+    drive, which is a storage drive with a non-removable disk.
 
 **Docstring**<a id="docstring"></a>
 :   FIXME
 
 **DRY (Don't Repeat Yourself)**<a id="dry"></a>
 :   The general principle when programming that it's typically better to define
-    something (a function, a constant...) once and refer to it consistently 
-    as a "single source of truth" throughout a piece of software than to 
+    something (a function, a constant...) once and refer to it consistently
+    as a "single source of truth" throughout a piece of software than to
     define copies in multiple places, if only because then you only have to
     make any changes in one place.  This is useful and helpful principle but should
     not be thought of as an involate rule.
@@ -240,8 +240,8 @@
 
 **Filesystem**<a id="filesystem"></a>
 :   Controls how files are stored and retrieved on disk by an operating system.
-    Also used to refer to the disk that is used to store the files or the type 
-    of the filesystem. 
+    Also used to refer to the disk that is used to store the files or the type
+    of the filesystem.
 
 **Fixture**<a id="fixture"></a>
 :   FIXME
@@ -353,16 +353,16 @@
 
 **Memory**<a id="memory"></a>
 :   A physical device on your computer that temporarily stores information
-    for immediate use. 
+    for immediate use.
 
 **Mental model**<a id="mental-model"></a>
 :   A simplified representation of the key elements and relationships of some
     problem domain that is good enough to support problem solving.
 
 **Method**<a id="method"></a>
-:   A function that is specific to an object type, based on qualities 
-    of that type, e.g. a string method like `upper()` which turns characters 
-    in a string to uppercase. 
+:   A function that is specific to an object type, based on qualities
+    of that type, e.g. a string method like `upper()` which turns characters
+    in a string to uppercase.
 
 **MIT License**<a id="mit-license"></a>
 :   FIXME
@@ -380,8 +380,8 @@
     [competent practitioner](#g:competent-practitioner) and [expert](#g:expert).
 
 **Object**<a id="object"></a>
-:   An object is a programming language's way of descrbing and storing values, 
-    usually labeled with a variable name. 
+:   An object is a programming language's way of descrbing and storing values,
+    usually labeled with a variable name.
 
 **Object-oriented programming**<a id="oop"></a>
 :   FIXME
@@ -408,9 +408,6 @@
 :   FIXME
 
 **Pattern rule**<a id="pattern-rule"></a>
-:   FIXME
-
-**Peer action**<a id="peer-action"></a>
 :   FIXME
 
 **Phony target**<a id="phony-target"></a>
@@ -536,9 +533,6 @@
 **Silent failure**<a id="silent-failure"></a>
 :   FIXME
 
-**Situational action**<a id="situational-action"></a>
-:   FIXME
-
 **Snake case**<a id="snake-case"></a>
 :   FIXME
 
@@ -658,7 +652,7 @@
 :   FIXME
 
 **Variable**<a id="python-variable"></a> (in Python)
-:   A symbolic name that reserves memory to store a value. 
+:   A symbolic name that reserves memory to store a value.
 
 **Vector image**<a id="vector-image"></a>
 :   FIXME
