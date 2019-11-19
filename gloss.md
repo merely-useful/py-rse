@@ -279,6 +279,9 @@
 **GNU Public License**<a id="gpl"></a> (GPL)
 :   FIXME
 
+**Governance**<a id="governance"></a>
+:   FIXME
+
 **Hot spot**<a id="hot-spot"></a>
 :   FIXME
 
