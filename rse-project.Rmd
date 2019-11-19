@@ -182,7 +182,7 @@ Figure \@ref(fig:project-noble) below shows this layout for a project called `g
 A few things to notice are:
 
 -   The documentation for the `regulate` script appears in the root of `./doc/`,
-    while the paper for JCMB is stored in a sub-directory,
+    while the paper for JCMB is stored in a subdirectory,
     since it contains several files.
 
 -   The `./src/` directory contains a Makefile to re-build the `regulate` program (Chapter \@ref(rse-automate)).
@@ -190,8 +190,8 @@ A few things to notice are:
     reasoning that since it affects both `./src/` and `./bin/`,
     it belongs above them both rather than in either one.
 
--   There are several sub-directories underneath `./data/` and `./results/`.
-    Each of the sub-directories in `./results/` has a Makefile
+-   There are several subdirectories underneath `./data/` and `./results/`.
+    Each of the subdirectories in `./results/` has a Makefile
     to re-create the contents of that directory.
 
 While the directories in the top level of each project are organized by purpose,
@@ -237,7 +237,7 @@ The key differences are:
 
 Going in the other direction,
 [Cookiecutter Data Science][cookiecutter] describes a more elaborate layout
-with separate sub-directories for models, features, visualizations, and much more.
+with separate subdirectories for models, features, visualizations, and much more.
 All of these share a few key advantages:
 
 -   People can find things easily,
@@ -273,7 +273,7 @@ Saving instructions in files versus executing them immediately may seem like a s
 but historically it led to very different styles of programming.
 Compiled languages usually ran faster than interpreted languages,
 but compilation took time,
-so interpreted languages were better for [exploratory programming][exploratory-programmming].
+so interpreted languages were better for [exploratory programming][exploratory-programming].
 The differences are much smaller these days than they were twenty years ago,
 but we do still tend to use compiled languages for anything that has to interact directly with hardware
 and then [wrap][wrap-code] those libraries for use in interpreted languages.
@@ -350,7 +350,7 @@ We recommend separating these into `./docs/` and `./reports/`:
     has the same problems as putting a compiler's output in the same directory as handwritten scripts.
     In fact,
     it's often worse,
-    since [documentation generators][documentation-generator] often create many sub-directories and support files.
+    since [documentation generators][documentation-generator] often create many subdirectories and support files.
 
 2.  We often create several reports for a single project,
     which complicates file management even further.
@@ -446,7 +446,7 @@ these are all good one-line docstrings:
 We can tell our one-liners are useful if we can read them aloud in the order the functions are called
 in place of the function's name and parameters.
 
-Once we start writing code for other people---including ourselves three months from now---our
+Once we start writing code for other people—including ourselves three months from now—our
 docstrings should describe:
 
 1.  The name and purpose of every public class, function, and constant in our code.
@@ -666,7 +666,8 @@ Breaking this down:
     provide transcripts for all screencasts or other videos,
     add alt-text descriptions to images,
     and ensure that all text is actually rendered so that it can be selected and interacted with.
-    FIXME: link to reference.
+    The UK Home Office has published a [set of posters][ukho-accessibility] that summarize accessibility guidelines
+    and also serve as a great checklist for ensuring access.
 
 -   Finally,
     "for those who need it" means taking your audience into account
@@ -690,6 +691,78 @@ Breaking this down:
 > when we come back to this project five months or five years from now.
 > Documentation that serves these two groups well
 > will almost certainly serve the needs of strangers as well.
+
+These additional rules are taken from [@Good2014,@Mich2015,@Hart2016,@Zook2017]:
+
+-   **Keep raw data raw.**
+    Exactly what constitutes "raw" data isn't always clear:
+    raw data may be the data you downloaded from a repository,
+    or it may come directly from field observations or hardware.
+    Either way,
+    retaining an unchanged version is important for reproducibility,
+    and in case you accidentally overwrite your working copy.
+
+    The analog inputs to a voltmeter probably don't need to be recorded on tape
+    if we have the voltmeter's digitized output.
+    However,
+    our analysis methods and tools can change over time,
+    and even after years of work they can contain bugs.
+    We should therefore keep the original data exactly as we received it
+    so that we can re-do previous analyses or try new ones.
+    This is also a good safeguard if anyone ever questions the integrity of the research:
+    it will be hard to defend ourselves against accusations of fraud
+    if we can't show our work.
+
+-   **Give every part of the data a unique identifier.**
+    To aid reproducibility (and save a lot of confusion in conversation),
+    it should be possible to uniquely identify every part of every dataset.
+    This doesn't mean every cell has to have a unique ID;
+    instead,
+    every datum should have an "address" or location description that can uniquely identify it.
+    For example,
+    a datum may be "in file `ACX-02.csv`, under column `reading_type`, in row 450".
+
+    To achieve this,
+    the dataset itself should have a [DOI][doi] (Section \@ref(rse-publish-identifiers)),
+    and within the dataset,
+    every file should have a meaningful name (Section \@ref(rse-project-data-vs-code)).
+    Going further,
+    every record should have a unique [key][key] within the dataset (Section \@ref(rse-publish-data)):
+    row numbers can change as datasets are sorted,
+    but unique keys that are part of records should always stay in those records.
+
+-   **Have a backup plan.**
+    Every hard drive eventually fails;
+    the hardware needed to read various storage media eventually becomes unavailable,
+    and there is always the risk that bankruptcy, corporate merger, or a court order
+    will shut down the site we've been using to store our data.
+    We should therefore always have a second copy in a different physical and jurisdictional locational.
+    If the primary store is GitHub,
+    copy the data to a secondary online storage provider
+    or onto a USB drive and take it home.
+    If the data contains sensitive information such as personal health records,
+    you must ensure that the storage complies with data privacy regulations
+    and that the data is properly anonymized before it is uploaded to an off-site storage location.
+
+    Before doing any of this, though,
+    ask your department or institution what facilities they provide.
+    Many academic institutions have some form of institutional repository
+    that data can be uploaded to
+    or a unit whose job it is to handle long term data storage requests.
+    Their staff will also be more familiar with data privacy regulations than most researchers.
+
+-   **Test that the backups work.**
+    It's hard to find out how often backups fail—many statistics are inflated
+    by companies selling backup tools—but figures of 15%–25% are often quoted.
+    Restoration failures are particularly common after adding new datasets,
+    changing backup software or procedures,
+    moving to new hardware or new backup locations,
+    or just because it's Tuesday.
+    We should therefore periodically check that backups can actually be restored,
+    and in particular,
+    that they can be restored by someone other than the person who created them
+    (so that if a password is required,
+    someone else knows what it is).
 
 ## How can I get started documenting my data? {#rse-project-data-start}
 
@@ -785,6 +858,30 @@ and code of conduct.
 This template should be stored under version control so proposed changes can be discussed
 and changes that are made can be tracked over time.
 
+## How should I manage data that can't be stored in version control? {#rse-project-external}
+
+Small datasets that don't contain sensitive information should be stored in version control:
+as a rule of thumb,
+anything you would send as an email attachment is probably small enough to be put into Git,
+while anything that might reveal someone's identity should not be.
+If data is large or sensitive,
+there should still be something in `./data/` to show its existence,
+and that "something" should be easy for programs to read.
+One option is a CSV file whose columns are:
+
+-   the name of the dataset,
+-   its URL or other unique identifier,
+-   the date it was last checked, and
+-   its size (so that users will have some idea of how much work is involved in processing it).
+
+Another option is to have one file per dataset,
+so that instead of reading `gorilla_genome.bam`,
+the program reads `gorilla_genome.yml` and then uses the `url` key in that file to find the data it actually wants.
+Whatever you do,
+you should always include a `README.md` file in `./data/`
+that documents the [provenance][provenance] and organization of the data
+(Section \@ref(rse-publish-data)).
+
 ## Summary {#rse-project-summary}
 
 FIXME: create concept map for project structure
@@ -878,29 +975,10 @@ collect up the information for it, etc.
     -   Other domain specific descriptive information
 -   Other (add sections as desired)
 
-## How should I manage data that can't be stored in version control? {#rse-project-external}
+### Making permanent links {#rse-project-ex-permanent-links}
 
-Small datasets that don't contain sensitive information should be stored in version control:
-as a rule of thumb,
-anything you would send as an email attachment is probably small enough to be put into Git,
-while anything that might reveal someone's identity should not be.
-If data is large or sensitive,
-there should still be something in `./data/` to show its existence,
-and that "something" should be easy for programs to read.
-One option is a CSV file whose columns are:
-
--   the name of the dataset,
--   its URL or other unique identifier,
--   the date it was last checked, and
--   its size (so that users will have some idea of how much work is involved in processing it).
-
-Another option is to have one file per dataset,
-so that instead of reading `gorilla_genome.bam`,
-the program reads `gorilla_genome.yml` and then uses the `url` key in that file to find the data it actually wants.
-Whatever you do,
-you should always include a `README.md` file in `./data/`
-that documents the [provenance][provenance] and organization of the data
-(Section \@ref(rse-publish-data)).
+The link to the UK Home Office's [accessibility guideline posters][ukho-accessibility] might change in future.
+Use the [Wayback Machine][wayback-machine] to find a link that is more likely to be usable in the long run.
 
 ## Key Points {#rse-project-keypoints}
 

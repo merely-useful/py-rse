@@ -4,129 +4,119 @@
 source("_common.R")
 ```
 
-## Introduction {#rse-ci-intro}
+[Continuous integration][continuous-integration] (CI) a simple idea:
+merge and test changes to a project automatically and frequently
+so that developers get feedback about problems
+while those changes are still fresh in their minds.
+Automation tools like Make (Chapter \@ref(rse-automate)) can compile software,
+run tests,
+re-do analyses,
+and re-create reports with a single command;
+CI tools run those commands and give users feedback every time
+something changes in the project's repository.
+These tools can also be set up to run tests with several different configurations of the software
+or on several different operating systems,
+so that (for example) if a programmer makes a change on Windows
+that would break something for Mac users or vice versa,
+they find out before their friends' lives are disrupted.
 
-[Continuous integration][continuous-integration] (CI) in software
-development is a simple idea: to frequently merge in ("integrate") additions of or
-modifications to code so that a software project gets developed and tested in
-small, regular increments. The purpose of CI is to catch bugs or problems early
-before they become bigger problems later on. There are automated tools available
-that help with building and testing any change to the code in a repository. What
-the tools do is download the software repository, run and build the software and
-code on the repository, run any tests, and then print out the results of these
-builds and tests. That way, you can check if there are any problems with your
-software and fix any that occur.
+This chapter introduces a CI tool called [Travis CI][travis-ci]
+that integrates well with [GitHub][github].
+If Travis CI has been set up,
+then every time a change is committed to a GitHub repository,
+Travis CI creates a fresh environment,
+checks out a copy of the project,
+and runs whatever commands the project's managers have set up.
+If the project uses a language like C++ or Java,
+those commands usually start by compiling the source code to create a runnable program
+(Figure \@ref(fig:rse-ci-conceptual)).
+If we want to reassure ourselves that our software works,
+we can create unit tests as described in Chapter \@ref(rse-correct)
+and ask Travis CI to run them as well
+so that (for example) we know whether the code on a branch is working
+before we merge it into the master branch (Section \@ref(rse-git-advanced-merge)).
+And if we want to do more,
+we just have to write the commands.
+For example,
+we have Travis CI set up to re-create the PDF and HTML versions of this book
+every time a pull request is merged.
 
-The most widely used CI system is [Travis CI][travis-ci]. It integrates well
-with [Github][github], and will run tests on multiple platforms and with
-multiple versions of tools. At a minimum, Travis will build the software. If
-you want to confirm that your software works as intended, you should create tests
-as detailed in Chapter \@ref(rse-correct). If tests exist, Travis will run them
-and print the results for you to check. Remember, the tests that the CI runs are
-only as good as you've written them.
+> **Virtual Machines**
+>
+> A [virtual machine][virtual-machine] (VM) is a program that pretends to be a computer.
+> This may seem a bit redundant,
+> but VMs are quick to create and start up,
+> and changes made inside the virtual machine are contained within that VM
+> so we can install new packages or run a completely different operating system
+> without affecting the underlying computer.
+> 
+> Every time Travis CI runs,
+> it creates a new virtual machine to ensure that builds and tests run in a completely clean environment:
+> nothing left over from previous attempts to compile, run, or publish will affect the current attempt.
 
-FIXME: Confirm unit test chapter ref.
+## How do I set up continuous integration? {#rse-ci-basic}
 
-So why should you use CI? There are several reasons:
+We have to do five things to set up continuous integration:
 
-1. CI will construct a clean, separate computing environment before building and
-testing your software. That gives you a better idea on whether potential users
-of your software can actually use it. Often your software will build and work on
-*your* computer, but not others' computers because of differences in software
-versions, operating systems, and other potential dependency conflicts. So part of
-good practice for creating software is to confirm that it works at least on a clean
-environment.
-2. CI will help you catch problems or bugs sooner, which should reduce your stress
-and frustration compared to if you have to hunt for a bug later in the software
-development.
-3. CI is particularly useful when working on a project with others, as bugs that arise from someone else's code contribution can be harder for you to resolve. Preventing them from being merged in the first place saves time. By encouraging frequent well-tested merges, CI also reduces the problems that can occur when multiple people wait to integrate their work right before a big milestone and then want to merge in many big changes all at once.
-4. CI can also be extended and customized to be used in other situations outside
-of software projects, like when writing a book or creating a website. Having
-the knowledge and skill for using CI can allow you to apply these tools to
-other areas of work and ultimately reduce more manual and tedious work tasks.
+1.  Create an account with [Travis CI][travis-ci].
+1.  Link our Travis CI account to our GitHub account.
+1.  Tell Travis CI to watch the repository that contains our project.
+1.  Create a `.travis.yml` file in your repository
+    to tell Travis CI what language we are working in
+    and what we want to do.
+1.  Commit that `.travis.yml` file to the repository.
 
-In this lesson we will show you how to set up Travis for your project.
+> **There's More Than One Way to Do It**
+>
+> This process is for general Travis CI usage.
+> If we are working with R projects or packages,
+> we can simplify things considerably using `usethis::use_travis`
+> (Section \@ref(rse-ci-setting-up-with-r)).
 
-## The basics of setting up CI on a repository? {#rse-ci-basic}
+Creating an account with an online service is a familiar process for most of us,
+but linking our Travis CI account to our GitHub account may be new.
+When we do this,
+we are not only telling Travis CI who we are on GitHub:
+we are also telling GitHub that it's OK for Travis CI to get information about us
+via GitHub's [API][api].
+This permission is necessary—without it,
+we would have to enter our password every time Travis CI wanted to run,
+which would hardly count as "automated"—but
+we should always check carefully when authorizing a service like this
+to make sure we are comfortable with what it is planning to do.
 
-The general steps for setting up CI are:
+### Watching a repository
 
-1. Go to the [Travis][travis-ci] website and get Travis to start watching the
-repository.
-1. Create a `.travis.yml` file in your repository.
-1. Add some standard commands to the file, like `language` (e.g. Python or R).
-1. Add and commit the `.travis.yml` file into your Git repository.
-1. Push to the repository to GitHub.
+We tell Travis CI about our repository through its website interface.
+On the left,
+besides the "My Repositories",
+we can click the "+" to add a repository that is already on GitHub
+(Figure \@ref(fig:rse-ci-add-repo)).
+After finding our repository in the list that pops up,
+we flick the switch button so that it is green
+(Figure \@ref(fig:rse-ci-list-repos)).
+If our repository doesn't show up,
+we can re-synchronize the list using the green "Sync account" button on the left sidebar.
+If it still doesn't appear,
+the repository may belong to someone else or be private.
 
-And that is the basic steps involved! Let's go through it in more detail. The very
-first thing to do is create a Travis account by linking your GitHub account.
-Go to [Travis][travis-ci] and create your profile.
-
-### Travis is watching (your repo)
-
-> Note: This process is for general Travis usage. When working with R projects
-or packages, this process is simplified by using the `usethis::use_travis()`
-command, which we wil discuss at the [end of this session](#rse-ci-setting-up-with-r).
-
-After the "step-zero" of setting up your Travis account, the first step to using
-Travis is to tell it about your repository. Go to [Travis-CI][travis-ci] and
-on the left, besides the "My Repositories", click the "+" to add a repository
-that is already on GitHub.
-
-```{r image-add-repo, echo=FALSE, fig.cap="ci-add-repo"}
+```{r rse-ci-add-repo, echo=FALSE, fig.cap="ci-add-repo"}
 knitr::include_graphics("figures/rse-ci/add-repo.png")
 ```
 
-Then, find your repository in the list and flick the switch button on (so it is
-green). You may have to re-sync the list of repositories with GitHub if you
-can't find the repository (green "Sync account" button on the left sidebar).
-
-```{r image-list-repos, echo=FALSE, fig.cap="ci-list-repos"}
+```{r rse-ci-list-repos, echo=FALSE, fig.cap="ci-list-repos"}
 knitr::include_graphics("figures/rse-ci/list-repos.png")
 ```
 
-You've now told Travis to watch the repository for any updated commits and run
-any commands as needed.
+### Configuring a project
 
-### Configure your project for Travis
-
-Next we need to create a file called `.travis.yml` in the root directory of the
-repository. The leading `.` in the name is used by Unix-like systems (Mac OS or
-Linux) to hide the file, but on Windows systems it won't be hidden. This file
-contains [YAML][yaml] key-value settings that Travis will use and
-interpret. A simple template `.travis.yml` configuration file may look like:
-
-```yaml
-# Which programming language to use, e.g. Python
-language: ...
-
-# Python specific. Sets the Python version
-python:
-- ...
-
-# Commands to use to install, such as extra software packages
-install:
-- ...
-
-# Commands to run in order to build or test your software
-script:
-- ...
-```
-
-Let's break it down what each key does:
-
-- `language` tells Travis which programming language you're using.
-- `python` is specific to when `language` is set to `python` and sets the version
-you want to use, e.g. `"3.6"`. You can ask Travis to test our project with
-several different versions by adding more `-` items.
-- `install` tells Travis how to install the software you need for your package.
-For Python packages, the convention is to put a list of packages in a file
-called `requirements.txt` for `pip` to use (Chapter \@ref(rse-package-py)).
-- `script` tells Travis how to actually run the tests. We can put almost
-anything here, provided the code doesn't need human interaction (no question prompts
-for answers).
-
-An example file that has the keys filled out might be something like:
+The next step is to create a file called `.travis.yml`
+in the root directory of the repository.
+(The leading `.` in the name hides the file from casual listings on Mac or Linux,
+but not on Windows.)
+This file contains settings that control Travis CI's operation,
+and is written in a format called [YAML][yaml] (Appendix \@ref(yaml)).
+A simple template `.travis.yml` configuration file looks like this:
 
 ```yaml
 language: python
@@ -142,82 +132,115 @@ script:
 - python src/build.py
 ```
 
-After we've added and committed this file to Git, pushed up to GitHub, and (if
-Travis is watching the GitHub repository) Travis will start. Every time commits
-are pushed to the GitHub repository, Travis will:
+-   `language` tells Travis CI which programming language we are using
+    so that it knows which of its standard [virtual machine][virtual-machine]
+    to use as a starting point for our project.
+-   This example uses Python,
+    so we tell Travis CI which Python version we want under the `python` key.
+    We can ask Travis CI to test our project with several different versions
+    by adding more versions to the list.
+-   `install` tells Travis CI how to install the software we need for our project.
+    For Python projects,
+    we can put a list of packages in a file called `requirements.txt`
+    and then use `pip` to install them (Chapter \@ref(rse-package-py)).
+-   Finally,
+    the entries under the `script` key tell Travis CI what to do.
+    We can put almost anything here provided it doesn't need human interaction
+    (i.e., doesn't ask questions).
+    In this case,
+    our only action is to run `src/build.py`.
 
-1. Create a new Linux image.
-2. Install the desired version of Python.
-3. Install the software described in `requirements.txt`.
-4. Run the commands in the `script` key, in this case to run `python src/build.py`.
-5. Report the results at `https://travis-ci.org/USER/REPO` (USER is your username,
-and REPO is the name of the repository).
+After we have add this file to our repository,
+Travis CI will obey the instructions in this file
+every time a change is pushed to GitHub.
+More specifically,
+it will:
 
-Travis' summary report tells us whether the build passed or failed. It fails when
-it encounters warnings or errors. In the image below, the main thing to look for
-is whether the colour is green and says "passed" (as shown), or if the colours
-are red and the message is "failed" or "error".
+1.  Create a new Linux virtual machine.
+1.  Install the desired version of Python.
+1.  Install the software described in `requirements.txt`.
+1.  Run the commands below the `script` key.
+1.  Report the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
+    where <code><em>user/repo</em></code>
+    identifies the repository.
 
-```{r image-build-overview, echo=FALSE, fig.cap="Travis Build Overview"}
+Travis CI' summary report tells us whether the build passed,
+which is shown in green Figure \@ref(fig:rse-ci-build-overview),
+or whether it produced warnings or errors,
+which are shown in red.
+
+```{r rse-ci-build-overview, echo=FALSE, fig.cap="Travis Build Overview"}
 knitr::include_graphics("figures/rse-ci/build-overview.png")
 ```
 
-The log below this overview contains a ton of information, most of which are
-only relevant when you start needing to debug why and how your software doesn't
-build in a clean, non-local environment (aka. not your own computer). We'll get
-into more detail about interpreting the logs and overviews later in the chapter.
+The log below this overview contains a wealth of information
+that can help us debug when the build fails.
 
-### Display CI build status in README
+## How can I display my project's status on GitHub? {#rse-ci-display-github}
 
-Travis's dashboard is very useful, but it would also be nice to have a short,
-quick display of the Travis build status on our software project's README since
-that is where people first go to look for information on the project. To add
-this status "badge", click the "build icon" as shown in the top right corner of
-Figure \@ref(fig:image-github-icon). This will bring up a dialog box where you can select the item
-"Markdown" in the "Format" menu list. In the "Result" box will be the markdown
-text you can copy and paste into your repository's `README.md` file. It's best to
-paste the text right below the first `#` header. Commit and push to GitHub and
-your project will now show the "badge" for the Travis CI build as shown in
-Figure \@ref(fig:image-github-icon).
+Travis CI's dashboard is very useful,
+but is also convenient to display the status of the build on our project's GitHub home page
+(which most people look at more often).
+To add a status badge,
+click the "build icon" shown in the top right corner of Figure \@ref(fig:image-github-icon)
+to bring up a dialog box.
+Select "Markdown" from the "Format" menu list,
+then copy the Markdown text displayed in the "Result" box
+and paste it into the project's `README.md` file.
+(It's best to paste the text right below the page's title so that it will be instantly visible).
+Once we commit and push thsi change to GitHub,
+our project will now show the badge for its Travis CI status Figure \@ref(fig:image-github-icon).
 
-```{r image-github-icon, echo=FALSE, fig.cap="The Travis Build Badge"}
+```{r rse-ci-github-icon, echo=FALSE, fig.cap="The Travis CI Build Badge"}
 knitr::include_graphics("figures/rse-ci/github-icon.png")
 ```
 
-### Setting up Travis in R {#rse-ci-setting-up-with-r}
+> **How Do Badges Work?**
+>
+> Badges are much simpler than they first appear.
+> When someone visits our project,
+> GitHub sends them the HTML of the project's home page.
+> That page includes a link to an image on Travis CI's site,
+> so our browser sends a request to Travis CI.
+> The URL tells Travis CI's web server what project we're interested in;
+> it then sends back a different image
+> depending on the most recently recorded build status for that project.
 
-In R, setting up and using Travis is greatly simplified by using:
+## How can I set up Travis CI for an R project? {#rse-ci-setting-up-with-r}
+
+The simplest way to set up and use Travis CI with R is to call:
 
 ```r
 usethis::use_travis()
 ```
 
-This command does several things at once. It:
+This command:
 
-- Creates a typical `.travis.yml` configuration file used for R packages.
-- Automatically adds a Travis build badge to your `README.md`.
-- Opens up the Travis CI website to the page of your package so you can activate
-Travis for the repository. Note, this assumes you already have your package on
-GitHub and that you have a Travis account.
+-   Creates a `.travis.yml` configuration file with typical settings for an R package.
+-   Adds a Travis CI build badge to the project's `README.md`.
+-   Opens the Travis CI page for the package so that we can activate Travis CI for the repository.
+    (This assumes the package is already on GitHub and that we have a Travis CI account.)
 
-See the [usethis](https://usethis.r-lib.org/reference/ci.html) webpage for more
-details and help on this function.
+FIXME: add example here of generated YAML file
 
-You've now set up CI for your R or Python software repository! Each new push to
-your GitHub repository will trigger Travis to run the specified commands. You
-can now start using it to find errors or problems and to making your software
-usable to others.
+The [usethis](https://usethis.r-lib.org/reference/ci.html) documentation has more details,
+but it really is this simple.
 
-## Using Travis to test your software {#rse-ci-testing}
+## How can I use Travis CI to test my project? {#rse-ci-testing}
 
-The primary reason to use CI is to run the package's tests (as we covered in
-the [Unit Test] section) and check how those tests perform in a clean environment.
-So getting Travis to run the unit tests in your package is fairly easy. For
-R packages, running tests is built into Travis CI so you don't need to modify
-anything. For Python packages, the `script` key in the `.travis.yml` file needs
-to have `pytest` added, like so:
+The main reason to set up CI is to test the project every time a change is made.
+We still have to write unit tests (Chapter \@ref(rse-correct)),
+but CI makes those tests much more valuable.
 
-FIXME: Reference to unit test chapter.
+For R packages,
+running tests is built into Travis CI so you don't need to modify anything.
+
+FIXME: er, what? does this mean the commands are auto-generated by `usethis`?
+
+FIXME: Include example here of what failing tests in R look like in Travis CI.
+
+For Python packages,
+we need to add `pytest` to the `script` key in the `.travis.yml` file:
 
 ```yaml
 language: python
@@ -229,24 +252,25 @@ script:
 - pytest
 ```
 
-After committing and pushing to your GitHub repository, Travis will now always
-run your tests in it's clean environment. If the tests fail, Travis will update
-the status to "failed" or "error". Then you can go through the Travis log and
-start debugging what went wrong, which can sometimes be a very difficult task
-and is always different depending on the project, tests, and programming language.
-All details about the build are contained in the Travis "Job log", right below
-the build overview. Searching for the problem can sometimes be quite tedious.
-In the final exercise we'll get you to intentionally fail the Travis build to
-see how it looks.
+With this in place,
+the Travis CI log located right below the build overview
+will contain all of the information that our testing command produces when tests fail.
 
-FIXME: Do we want to add more explanation about this? I feel running unit tests are basically the biggest reason to use CI.
+FIXME: Include example here of what failing tests in Python look like in Travis CI.
 
-## Using CI to test coverage {#rse-ci-coverage}
+We can also have Travis CI report the [code coverage][code-coverage] of our tests (Section \@ref(rse-correct-coverage)).
+If we are using R,
+this command will set everything up for us:
 
-We can also add code coverage,
-which is in Section \@ref(rse-correct-coverage),
-to the CI. To add code coverage to your CI,
-add two more lines to your `.travis.yml` file:
+```r
+usethis::use_coverage()
+```
+
+FIXME: explain what this does to the YAML file.
+
+To add code coverage for a Python project,
+we add one line to `.travis.yml` to install the code coverage tool
+and another to run it:
 
 ```yaml
 language: python
@@ -263,54 +287,49 @@ after_success:
 - codecov
 ```
 
-The CI needs to install the code coverage with `pip`.
-We install `codecov` in this case,
-as it is a [service][codecov] like Travis for reporting on coverage.
-To send the code to FIXME: finish this paragraph.
+We use [`codecov`][codecov] rather than the `coverage` tool described in Section \@ref(rse-correct-coverage)
+because it is a service like Travis CI.
 
-In **R**, the process is simple.
-Type out and run this command, which it will set everything up:
+FIXME: fill in this explanation
 
-```r
-usethis::use_coverage()
-```
+## How can I use CI for other purposes? {#rse-ci-deploying}
 
-This function will add everything needed and list out some instructions to follow.
-
-Your package now has code coverage support!
-
-## How can I use CI for non-testing purposes? {#rse-ci-deploying}
-
-This section is meant only as a brief resource and introduction to using CI for
-more than just testing software. For instance, in R if you want to create a
-website for your R package, we can run:
+Continuous integration was invented for testing,
+but it can be used to automate almost anything.
+For example,
+if we want to create a website for an R package,
+we can run:
 
 ```r
 usethis::use_pkgdown()
 usethis::use_pkgdown_travis()
 ```
 
-This sets up the necessary infrastructure to create a website from your package
-documentation and to get Travis to automatically build, create, and deploys your
-package website to be put online. So for R projects, the `.travis.yml` file
-looks something like this after using the above functions:
+to add lines like this to our `.travis.yml` file:
 
 ```yaml
 language: R
 sudo: false
 cache: packages
 
-before_cache: Rscript -e 'remotes::install_cran(\"pkgdown\")
+before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
 deploy:
   provider: script
   script: Rscript -e 'pkgdown::deploy_site_github()'
   skip_cleanup: true
 ```
 
-The `deploy` key is the important one here, as it is the one that tells Travis
-to send the generated website files to be put online (via [GitHub Pages][github-pages]).
+The `deploy` section tells Travis CI to put the generated website files online
+using [GitHub Pages][github-pages].
 
-FIXME: Add information for Python projects
+FIXME: this section needs more detail.
+As it is, readers will know something is possible
+but not how it works or how to debug it when things go wrong.
+At the least,
+please explain what keys like `before_cache` are about
+and provide a diagram showing what files are produced and copied where.
+
+FIXME: Add an example for deployment Python projects.
 
 ## Summary {#rse-ci-summary}
 
@@ -320,14 +339,14 @@ FIXME: create concept map for continuous integration.
 
 FIXME: Get feedback on this and fill it out more later.
 
-1. Setup Travis CI for the package you've been working on (for the course).
-2. Get Travis to run unit tests of your package (not applicable for R packages).
+1. Setup Travis CI for the package you've been working on (for the course).
+2. Get Travis CI to run unit tests of your package (not applicable for R packages).
 3. Write a new unit test in your package that you *know* will fail. Push the changes
 up to GitHub.
-4. Go through the Travis CI log and see what the log says about the failure and
+4. Go through the Travis CI log and see what the log says about the failure and
 how to fix it. Since you made it purposefully fail, you will already know how to
-fix it, but the point is to get comfortable looking through Travis' logs.
-5. Correct the test, push to GitHub, and get Travis to build your package
+fix it, but the point is to get comfortable looking through Travis CI' logs.
+5. Correct the test, push to GitHub, and get Travis CI to build your package
 successfully.
 
 ## Key Points {#rse-ci-keypoints}

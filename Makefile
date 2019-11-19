@@ -1,4 +1,4 @@
-.PHONY : all clean chapters commands crossrefs fixme html links nbspref settings
+.PHONY : all clean chapters commands crossrefs fixme gloss html links nbspref settings tex-packages
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
@@ -47,7 +47,9 @@ RSE_FILES=\
   rse-finale.Rmd \
   rse-objectives.Rmd \
   rse-keypoints.Rmd \
-  rse-solutions.Rmd
+  rse-solutions.Rmd \
+  rse-yaml.Rmd \
+  rse-ssh.Rmd
 
 COMMON_FILES=\
   _common.R \
@@ -97,14 +99,17 @@ py-html : _book/py/index.html
 rse-html : _book/rse/index.html
 
 _book/r/index.html : ${R_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_r.yml'); warnings()"
 
 _book/py/index.html : ${PY_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f py.Rmd
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
 
 _book/rse/index.html : ${RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f rse.Rmd
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_rse.yml'); warnings()"
 
@@ -128,14 +133,17 @@ py-pdf : _book/py/py.pdf
 rse-pdf : _book/rse/rse.pdf
 
 _book/r/r.pdf : ${R_FILES} ${COMMON_FILES}
+	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_r.yml'); warnings()"
 
 _book/py/py.pdf : ${PY_FILES} ${COMMON_FILES}
+	rm -f py.Rmd
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py.yml'); warnings()"
 
 _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
+	rm -f rse.Rmd
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_rse.yml'); warnings()"
 
@@ -160,6 +168,10 @@ crossrefs :
 fixme :
 	@fgrep FIXME ${ALL_FILES}
 
+## gloss        : check that all glossary definitions are defined and used.
+gloss :
+	@bin/gloss.py ./gloss.md ${ALL_FILES}
+
 ## images       : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${ALL_FILES}
@@ -171,6 +183,10 @@ links :
 ## nbspref      : check that all cross-references are prefixed with a non-breaking space.
 nbspref :
 	@bin/nbspref.py ${ALL_FILES}
+
+## tex-packages : install required LaTeX packages.
+tex-packages :
+	-tlmgr install $$(cat ./tex-packages.txt)
 
 ## settings     : echo all variable values.
 settings :

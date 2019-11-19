@@ -22,7 +22,7 @@ but can be used to automate any workflow.
 
 As a running example,
 we will look at the distribution of word frequencies in classic English novels.
-Zipf's Law states that
+[Zipf's Law][zipfs-law] states that
 the second most common word in a body of text appears half as often as the most common,
 the third most common appears a third as often,
 and so on.
@@ -79,7 +79,7 @@ Our starting point is:
 1.  The books are text files in the `data/` directory.
 2.  `bin/countwords.py` reads a text file and creates a CSV file with two columns:
     a word and how many times the word occurs.
-    We can analyze several files at once by [piping][unix-pipe] them into the program
+    We can analyze several files at once by [piping][pipe-unix] them into the program
     using something like `cat data/*.txt | bin/countwords.py`.
     (If you don't know what this means,
     now would be a good time to review the material on the Unix shell
@@ -101,7 +101,7 @@ Make works as follows:
     Make can compare these timestamps to figure out whether files are newer or older than one another.
 
 2.  A user can describe which files depend on each other
-    by writing [rules][make-rule] in a [Makefile][makefile].
+    by writing [rules][rule-make] in a [Makefile][makefile].
     For example,
     one rule could say that `results/moby_dick.csv` depends on `data/moby_dick.txt`,
     while another could say that the plot `results/comparison.png`
@@ -161,13 +161,13 @@ results/moby_dick.csv : data/moby_dick.txt
 
 As in the shell and many other programming languages,
 `#` indicates that the first line is a comment.
-The second and third lines form a [rule][make-rule]:
-the [target][make-target] of the rule is `results/moby_dick.csv`,
-its single [prerequisite][make-prerequisite] is the file `data/moby_dick.txt`,
+The second and third lines form a [rule][rule-make]:
+the [target][target-make] of the rule is `results/moby_dick.csv`,
+its single [prerequisite][prerequisite-make] is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
 
 The target and prerequisite tell Make what depends on what;
-the indented line below them describes the [action][make-action] needed
+the indented line below them describes the [action][action-make] needed
 to update the target if it is out of date.
 The action can be one or more shell commands,
 but each command *must* be indented by a single tab character:
@@ -263,7 +263,7 @@ make: `results/moby_dick.csv' is up to date.
 ```
 
 By default Make only attempts to update the first target it finds in the Makefile,
-which is called the [default target][make-default-target].
+which is called the [default target][default-target-make].
 In this case,
 the first target is `results/moby_dick.csv`,
 which is already up to date.
@@ -284,7 +284,7 @@ If we have to run `make` once for each result
 we're right back where we started.
 However,
 we can add a rule to our Makefile to update all of our results at once.
-The key is to create a [phony target][make-phony-target]
+The key is to create a [phony target][phony-target-make]
 that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
@@ -418,7 +418,7 @@ just as scattering [magic numbers][magic-number] through programs
 makes them harder to understand.
 
 The solution is the same one we use in programs:
-define and use [variables][make-variable].
+define and use [variables][variable-make].
 Let's create names for the word-counting script and the command used to run it:
 
 ```make
@@ -462,7 +462,7 @@ but that clearly wouldn't scale to analyzing hundreds or thousands of files.
 Instead,
 we should write a generic rule that will produce a CSV file for any book.
 To do this,
-we need to understand Make's [automatic variables][make-automatic-variable].
+we need to understand Make's [automatic variables][automatic-variable-make].
 The first step is to use the very cryptic expression `$@` in the rule's action
 to mean "the target of the rule".
 With it,
@@ -524,7 +524,7 @@ so please don't ever create something this cryptic yourself.
 
 ## How can I write a generic rule to update many files? {#rse-automate-pattern}
 
-We can now replace all the rules for generating results files with one [pattern rule][make-pattern-rule]
+We can now replace all the rules for generating results files with one [pattern rule][pattern-rule-make]
 using the [wildcard][wildcard] `%`,
 which matches zero or more characters in a filename.
 Whatever matches `%` in the target also matches in the prerequisites,
@@ -628,7 +628,7 @@ and Make won't realize that we want to generate it.
 
 What we really want is generate the list of results files
 from the list of books in the `data/` directory.
-We can use a [function][make-function] to do this.
+We can use a [function][function-make] to do this.
 The syntax is odd because functions were added to Make long after it was first written,
 but at least they have readable names.
 Let's create a variable `DATA` that holds the names of all of our data files:
