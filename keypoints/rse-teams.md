@@ -1,12 +1,11 @@
--   Create issues for bugs, enhancement requests, and discussions.
--   Add people to issues to show who is responsible for working on what.
--   Add labels to issues to identify their purpose.
--   Use rules for issue state transitions to define a workflow for a project.
--   Create an explicit Code of Conduct for your project modelled on the Contributor Covenant.
--   Be clear about how to report violations of the Code of Conduct and who will handle such reports.
--   People who are not lawyers should not try to write licenses.
--   Every project should include an explicit license to make clear who can do what with the material.
--   People who incorporate GPL'd software into their own software must make their software also open under the GPL license; most other open licenses do not require this.
--   The Creative Commons family of licenses allow people to mix and match requirements and restrictions on attribution, creation of derivative works, further sharing, and commercialization.
 -   Be proactive about welcoming and nurturing community members.
-
+-   Create an explicit Code of Conduct for your project modelled on the Contributor Covenant.
+-   Every project should include an explicit license to make clear who can do what with the material.
+-   Create issues for bugs, enhancement requests, and discussions.
+-   Labels issues submitted to your project to identify their purpose.
+-   Prioritize tasks for your project strategically and group issues into milestones to track their progress.
+-   Include contributing guidelines for a project that specify the workflow and associated expectations for participants.
+-   Decisions about what tasks are most important are a part of project governance.
+-   Communicate and enforce common-sense rules for running meetings to keep the project proceeding smoothly.
+-   Encourage equity among participant input in meetings to support an inclusive culture.
+-   Equip yourself with a strategy to handle conflict of various forms when it arises among participants.
