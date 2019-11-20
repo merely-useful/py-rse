@@ -274,7 +274,7 @@
     a tree structure develops. 
 
 **Directory**<a id="directory"></a>
-:   A folder in a filesystem. 
+:   A folder in a filesystem.
 
 **Disk**<a id="disk"></a>
 :   Disk refers to disk storage, a physical component of a computer that stores  information on a disk.
@@ -364,7 +364,7 @@
 
 **Filesystem**<a id="filesystem"></a>
 :   Controls how files are stored and retrieved on disk by an operating system.
-    Also used to refer to the disk that is used to store the files or the type  of the filesystem. 
+    Also used to refer to the disk that is used to store the files or the type of the filesystem. 
 
 **Filter**<a id="filter"></a>
 :   FIXME
@@ -453,6 +453,9 @@
 **Home directory**<a id="home-directory"></a>
 :   FIXME
 
+**Governance**<a id="governance"></a>
+:   FIXME
+
 **Hot spot**<a id="hot-spot"></a>
 :   FIXME
 
@@ -505,6 +508,9 @@
    FIXME
 
 **Kebab case**<a id="kebab-case"></a>
+:   FIXME
+
+**Key**<a id="key"></a>
 :   FIXME
 
 **Label**<a id="issue-label"></a> (in issue tracker):
@@ -563,9 +569,12 @@
     that is good enough to support problem solving.
 
 **Method**<a id="method"></a>
-:   A function that is specific to an object type,
-    based on qualities  of that type,
-    e.g. a string method like `upper()` which turns characters  in a string to uppercase. 
+:   A function that is specific to an object type, based on qualities
+    of that type, e.g. a string method like `upper()` which turns characters
+    in a string to uppercase.
+
+**MIT License**<a id="mit-license"></a>
+:   FIXME
 
 **Namespace**<a id="namespace"></a>
 :   A way of organizing names of related objects, functions, or variables
@@ -589,7 +598,7 @@
 
 **Object**<a id="object"></a>
 :   An object is a programming language's way of descrbing and storing values,
-    usually labeled with a variable name. 
+    usually labeled with a variable name.
 
 **Object-oriented programming**<a id="oop"></a>
 :   FIXME
@@ -640,12 +649,6 @@
 :   FIXME
 
 **Pattern rule**<a id="pattern-rule"></a>
-:   FIXME
-
-**Pattern rule**<a id="pattern-rule-make"></a>
-:   FIXME
-
-**Peer action**<a id="peer-action"></a>
 :   FIXME
 
 **Phony target**<a id="phony-target"></a>
@@ -789,6 +792,9 @@
 **Script**<a id="script"></a>
 :   FIXME
 
+**Search path**<a id="search path"></a>
+:   FIXME
+
 **Seed**<a id="prng-seed"></a> (for pseudorandom number generator):
    FIXME
 
@@ -823,9 +829,6 @@
 :   FIXME
 
 **Silent failure**<a id="silent-failure"></a>
-:   FIXME
-
-**Situational action**<a id="situational-action"></a>
 :   FIXME
 
 **Snake case**<a id="snake-case"></a>
@@ -986,9 +989,6 @@
 
 **Variable**<a id="python-variable"></a> (in Python):
    A symbolic name that reserves memory to store a value. 
-
-**Variable**<a id="variable"></a>
-:   FIXME
 
 **Variable**<a id="variable-make"></a> (in Make):
    FIXME
