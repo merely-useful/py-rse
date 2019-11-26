@@ -94,6 +94,16 @@ This example could be tweaked so that two slightly different versions of
 `plotcounts.py` are developed instead
 (i.e. two different ways of plotting the word count data).
 
+### Chapter 9: Working in teams
+
+This chapter introduces many of the basic concepts/ideas required for working with other people.
+Now that we have a narrative,
+this chapter can be updated to apply those concepts/ideas to the Zipf's Law project.
+In particular,
+in this chapter we can create a code of conduct and license for the Zipf's Law project,
+as well as create a couple of GitHub issues (with labels).
+One of those issues should be a bug report.
+
 ### Chapter 7: Code style, review and refactor
 
 It's not clear how much of this chapter will ultimately end up in the novice Python book,
@@ -142,7 +152,6 @@ analysis could be published.
 
 ## Outstanding issues
 
-- Where should "Chapter 9: Working in teams" go in the chapter order?
 - In the proposed outline above, the R content is really lacking:
   - We don't define an R version of `countwords.py` anywhere
   - We don't define an R version of `collate.py` anywhere
