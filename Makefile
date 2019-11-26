@@ -9,23 +9,26 @@ R_FILES=\
   _r.yml \
   r-index.Rmd \
   novice-goals.Rmd \
-  r-intro.Rmd \
-  r-getting-started.Rmd \
-  r-practice.Rmd \
-  r-reproducibility.Rmd \
-  r-data-manipulation.Rmd \
-  r-publishing.Rmd \
-  r-objectives.Rmd \
-  r-keypoints.Rmd
+  r/intro.Rmd \
+  r/getting-started.Rmd \
+  r/practice.Rmd \
+  r/reproducibility.Rmd \
+  r/data-manipulation.Rmd \
+  r/publishing.Rmd \
+  r/objectives.Rmd \
+  r/keypoints.Rmd
 
 PY_FILES=\
   _py.yml \
   py-index.Rmd \
   novice-goals.Rmd \
-  py-intro.Rmd \
-  py-development.Rmd \
-  py-objectives.Rmd \
-  py-keypoints.Rmd
+  py/intro.Rmd \
+  py/getting-started.Rmd \
+  py/development.Rmd \
+  py/objectives.Rmd \
+  py/publishing.Rmd \
+  py/keypoints.Rmd \
+  py/version-control.Rmd
 
 RSE_FILES=\
   _rse.yml \
