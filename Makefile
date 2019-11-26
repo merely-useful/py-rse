@@ -9,14 +9,14 @@ R_FILES=\
   _r.yml \
   r-index.Rmd \
   novice-goals.Rmd \
-  r-intro.Rmd \
-  r-getting-started.Rmd \
-  r-practice.Rmd \
-  r-reproducibility.Rmd \
-  r-data-manipulation.Rmd \
-  r-publishing.Rmd \
-  r-objectives.Rmd \
-  r-keypoints.Rmd
+  r/intro.Rmd \
+  r/getting-started.Rmd \
+  r/practice.Rmd \
+  r/reproducibility.Rmd \
+  r/data-manipulation.Rmd \
+  r/publishing.Rmd \
+  r/objectives.Rmd \
+  r/keypoints.Rmd
 
 PY_FILES=\
   _py.yml \
