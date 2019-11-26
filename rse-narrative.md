@@ -1,7 +1,7 @@
 This document considers what changes would need to be made to the current draft of the RSE book (19 Nov 2019) 
 in order to weave a common narrative through all the chapters.
 
-## Proposed changes
+## Proposed narrative
 
 The proposed narrative involves looking at the distribution of word frequencies in classic English novels. 
 [Zipf’s Law](https://en.wikipedia.org/wiki/Zipf%27s_law) states that the second most common word
@@ -9,6 +9,13 @@ in a body of text appears half as often as the most common,
 the third most common appears a third as often, and so on.
 To test it, we are going to look at a bunch of ebooks that are freely available from
 [Project Gutenberg](https://www.gutenberg.org/).
+
+It was decided at the meeting on 26 November 2019 that there will be separate RSE books for Python and R. 
+Both will use the Zipf's Law narrative and Project Gutenberg data files.
+The remainder of this document will consider the Python book only,
+as that's the one we will be completing first.
+
+## Current state of relevant Python code
 
 At the moment, the Zipf's Law narrative is used in the automation chapter.
 The beginning of that chapter says the following:
@@ -35,6 +42,7 @@ In the text that follows,
 I've altered the order of the chapters
 because I think a different order will work better with the new narrative.
 
+## New chapter outline
 
 ### Chapter 1: Introduction
 
@@ -134,28 +142,21 @@ for each word is already known.
 I think this chapter needs to come before the chapter on continuous integration,
 since it's these tests that Travis CI will implement.
 
-### Chapter 13: Python packaging and Chapter 12: R packaging
+### Chapter 13: Python packaging
 
-In the current version of these chapters,
+In the current version of this chapter,
 a few relevant functions relating to the Zipf's Law analysis 
-(but which haven't been introduced in earlier chapters) are added to a Python module (or R equivalent).
+(but which haven't been introduced in earlier chapters) are added to a Python module.
 That module is then packaged so it can be installed by others.
 
-Instead, this chapter could package up all the code developed in the previous chapters
+Instead of introducing new previously unseen Zipf's Law functions,
+this chapter should package up all the code developed in the previous chapters
 as a complete Zipf's Law package.
 
 ### Chapter 15: Publishing
 
 This lesson could consider (hypothetically) where the results, data and code from the Zipf's Law
 analysis could be published.
-
-
-## Outstanding issues
-
-- In the proposed outline above, the R content is really lacking:
-  - We don't define an R version of `countwords.py` anywhere
-  - We don't define an R version of `collate.py` anywhere
-  - There's no R plotting or test fitting
 
 ## Next steps
 
