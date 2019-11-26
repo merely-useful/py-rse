@@ -27,6 +27,28 @@ PY_FILES=\
   py-objectives.Rmd \
   py-keypoints.Rmd
 
+R_RSE_FILES=\
+  _rse.yml \
+  r-rse-index.Rmd \
+  r-rse/bash-basics.Rmd \
+  r-rse/bash-advanced.Rmd \
+  r-rse/git-cmdline.Rmd \
+  r-rse/git-advanced.Rmd \
+  r-rse/style.Rmd \
+  r-rse/automate.Rmd \
+  r-rse/teams.Rmd \
+  r-rse/project.Rmd \
+  r-rse/ci.Rmd \
+  r-rse/package-r.Rmd \
+  r-rse/correct.Rmd \
+  r-rse/publish.Rmd \
+  r-rse/finale.Rmd \
+  r-rse/objectives.Rmd \
+  r-rse/keypoints.Rmd \
+  r-rse/solutions.Rmd \
+  r-rse/yaml.Rmd \
+  r-rse/ssh.Rmd
+
 RSE_FILES=\
   _rse.yml \
   rse-index.Rmd \
@@ -62,7 +84,7 @@ COMMON_FILES=\
   links.md \
   book.bib
 
-ALL_FILES=${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES}
+ALL_FILES=${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES} ${R_RSE_FILES}
 
 #-------------------------------------------------------------------------------
 
@@ -84,6 +106,9 @@ py : _book/py/index.html _book/py/rse.pdf
 ##   rse        : rebuild RSE HTML and PDF.
 rse : _book/rse/index.html _book/rse/rse.pdf
 
+##   r-rse       : rebuild RSE R HTML and PDF.
+rse : _book/r-rse/index.html _book/r-rse/rse.pdf
+
 #-------------------------------------------------------------------------------
 
 ## html         : build all HTML versions.
@@ -98,6 +123,9 @@ py-html : _book/py/index.html
 ##   rse-html   : build RSE HTML.
 rse-html : _book/rse/index.html
 
+##   r-rse-html  : build RSE R HTML.
+r-rse-html : _book/r-rse/index.html
+
 _book/r/index.html : ${R_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
@@ -108,10 +136,15 @@ _book/py/index.html : ${PY_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
 
-_book/rse/index.html : ${RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
+_book/rse/index.html : ${R_RSE_FILES} ${RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f rse.Rmd
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_rse.yml'); warnings()"
+
+_book/r-rse/index.html : ${R_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f r-rse.Rmd
+	cp r-rse-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_r-rse.yml'); warnings()"
 
 ${INDEX_HTML} : ./_index.html
 	mkdir -p _book
@@ -132,6 +165,9 @@ py-pdf : _book/py/py.pdf
 ##   rse-pdf    : build RSE PDF.
 rse-pdf : _book/rse/rse.pdf
 
+##   r-rse-pdf   : build RSE R PDF.
+r-rse-pdf : _book/r-rse/r-rse.pdf
+
 _book/r/r.pdf : ${R_FILES} ${COMMON_FILES}
 	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
@@ -146,6 +182,12 @@ _book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
 	rm -f rse.Rmd
 	cp rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_rse.yml'); warnings()"
+
+_book/r-rse/r-rse.pdf : ${R_RSE_FILES} ${COMMON_FILES}
+	rm -f r-rse.Rmd
+	cp r-rse-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_r-rse.yml'); warnings()"
+
 
 #-------------------------------------------------------------------------------
 
@@ -163,6 +205,7 @@ crossrefs :
 	@bin/crossrefs.py "Novice R" ${R_FILES} ${COMMON_FILES}
 	@bin/crossrefs.py "Novice Python" ${PY_FILES} ${COMMON_FILES}
 	@bin/crossrefs.py "RSE" ${RSE_FILES} ${COMMON_FILES}
+	@bin/crossrefs.py "RSE R" ${R_RSE_FILES} ${COMMON_FILES}
 
 ## fixme        : list all the FIXME markers
 fixme :
@@ -195,5 +238,6 @@ settings :
 	@echo R_FILES: ${R_FILES}
 	@echo PY_FILES: ${PY_FILES}
 	@echo RSE_FILES: ${RSE_FILES}
+	@echo R_RSE_FILES: ${R_RSE_FILES}
 	@echo COMMON_FILES: ${COMMON_FILES}
 	@echo ALL_FILES: ${ALL_FILES}
