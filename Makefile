@@ -1,8 +1,8 @@
 .PHONY : all clean chapters commands crossrefs fixme gloss html links nbspref settings tex-packages
 
 INDEX_HTML=_book/index.html
-ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
-ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/rse/rse.pdf
+ALL_HTML=_book/py/index.html _book/r/index.html _book/py-rse/index.html _book/r-rse/index.html
+ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/py-rse/py-rse.pdf _book/r-rse/r-rse.pdf
 EXTRA=climate-data data src zipfs-law
 
 R_FILES=\
@@ -31,7 +31,7 @@ PY_FILES=\
   py/version-control.Rmd
 
 R_RSE_FILES=\
-  _rse.yml \
+  _r-rse.yml \
   r-rse-index.Rmd \
   r-rse/bash-basics.Rmd \
   r-rse/bash-advanced.Rmd \
@@ -54,7 +54,7 @@ R_RSE_FILES=\
 
 PY_RSE_FILES=\
   _py-rse.yml \
-  py-rse/index.Rmd \
+  py-rse-index.Rmd \
   py-rse/bash-basics.Rmd \
   py-rse/bash-advanced.Rmd \
   py-rse/py-scripting.Rmd \
@@ -65,7 +65,6 @@ PY_RSE_FILES=\
   py-rse/teams.Rmd \
   py-rse/project.Rmd \
   py-rse/ci.Rmd \
-  py-rse/package-r.Rmd \
   py-rse/package-py.Rmd \
   py-rse/correct.Rmd \
   py-rse/publish.Rmd \
@@ -139,7 +138,7 @@ _book/py/index.html : ${PY_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
 
-_book/rse/index.html : ${PY_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
+_book/py-rse/index.html : ${PY_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f py-rse.Rmd
 	cp py-rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py-rse.yml'); warnings()"
@@ -181,7 +180,7 @@ _book/py/py.pdf : ${PY_FILES} ${COMMON_FILES}
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py.yml'); warnings()"
 
-_book/rse/rse.pdf : ${PY_RSE_FILES} ${COMMON_FILES}
+_book/py-rse/py-rse.pdf : ${PY_RSE_FILES} ${COMMON_FILES}
 	rm -f py-rse.Rmd
 	cp py-rse-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py-rse.yml'); warnings()"
@@ -196,7 +195,7 @@ _book/r-rse/r-rse.pdf : ${R_RSE_FILES} ${COMMON_FILES}
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf _book _bookdown_files _main.Rmd *.log index.Rmd r.Rmd py.Rmd rse.Rmd
+	@rm -rf _book _bookdown_files _main.Rmd *.log index.Rmd r.Rmd py.Rmd py-rse.Rmd r-rse.Rmd
 	@find . -name '*~' -exec rm {} \;
 
 ## chapters     : check consistency of chapters.
