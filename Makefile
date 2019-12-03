@@ -1,8 +1,8 @@
 .PHONY : all clean chapters commands crossrefs fixme gloss html links nbspref settings tex-packages
 
 INDEX_HTML=_book/index.html
-ALL_HTML=_book/py/index.html _book/r/index.html _book/rse/index.html
-ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/rse/rse.pdf
+ALL_HTML=_book/py/index.html _book/r/index.html _book/py-rse/index.html _book/r-rse/index.html
+ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/py-rse/py-rse.pdf _book/r-rse/r-rse.pdf
 EXTRA=climate-data data src zipfs-law
 
 R_FILES=\
@@ -31,7 +31,7 @@ PY_FILES=\
   py/version-control.Rmd
 
 R_RSE_FILES=\
-  _rse.yml \
+  _r-rse.yml \
   r-rse-index.Rmd \
   r-rse/bash-basics.Rmd \
   r-rse/bash-advanced.Rmd \
@@ -52,29 +52,28 @@ R_RSE_FILES=\
   r-rse/yaml.Rmd \
   r-rse/ssh.Rmd
 
-RSE_FILES=\
-  _rse.yml \
-  rse-index.Rmd \
-  rse-bash-basics.Rmd \
-  rse-bash-advanced.Rmd \
-  rse-py-scripting.Rmd \
-  rse-git-cmdline.Rmd \
-  rse-git-advanced.Rmd \
-  rse-style.Rmd \
-  rse-automate.Rmd \
-  rse-teams.Rmd \
-  rse-project.Rmd \
-  rse-ci.Rmd \
-  rse-package-r.Rmd \
-  rse-package-py.Rmd \
-  rse-correct.Rmd \
-  rse-publish.Rmd \
-  rse-finale.Rmd \
-  rse-objectives.Rmd \
-  rse-keypoints.Rmd \
-  rse-solutions.Rmd \
-  rse-yaml.Rmd \
-  rse-ssh.Rmd
+PY_RSE_FILES=\
+  _py-rse.yml \
+  py-rse-index.Rmd \
+  py-rse/bash-basics.Rmd \
+  py-rse/bash-advanced.Rmd \
+  py-rse/py-scripting.Rmd \
+  py-rse/git-cmdline.Rmd \
+  py-rse/git-advanced.Rmd \
+  py-rse/style.Rmd \
+  py-rse/automate.Rmd \
+  py-rse/teams.Rmd \
+  py-rse/project.Rmd \
+  py-rse/ci.Rmd \
+  py-rse/package-py.Rmd \
+  py-rse/correct.Rmd \
+  py-rse/publish.Rmd \
+  py-rse/finale.Rmd \
+  py-rse/objectives.Rmd \
+  py-rse/keypoints.Rmd \
+  py-rse/solutions.Rmd \
+  py-rse/yaml.Rmd \
+  py-rse/ssh.Rmd
 
 COMMON_FILES=\
   _common.R \
@@ -87,7 +86,7 @@ COMMON_FILES=\
   links.md \
   book.bib
 
-ALL_FILES=${R_FILES} ${PY_FILES} ${RSE_FILES} ${COMMON_FILES} ${R_RSE_FILES}
+ALL_FILES=${R_FILES} ${PY_FILES} ${PY_RSE_FILES} ${COMMON_FILES} ${R_RSE_FILES}
 
 #-------------------------------------------------------------------------------
 
@@ -106,27 +105,27 @@ r : _book/r/index.html _book/r/rse.pdf
 ##   py         : rebuild novice Python HTML and PDF.
 py : _book/py/index.html _book/py/rse.pdf
 
-##   rse        : rebuild RSE HTML and PDF.
-rse : _book/rse/index.html _book/rse/rse.pdf
+##   py-rse     : rebuild RSE PY HTML and PDF.
+py-rse : _book/py-rse/index.html _book/py-rse/py-rse.pdf
 
-##   r-rse       : rebuild RSE R HTML and PDF.
-rse : _book/r-rse/index.html _book/r-rse/rse.pdf
+##   r-rse      : rebuild RSE R HTML and PDF.
+rse : _book/r-rse/index.html _book/r-rse/r-rse.pdf
 
 #-------------------------------------------------------------------------------
 
-## html         : build all HTML versions.
+## html           : build all HTML versions.
 html : ${ALL_HTML}
 
-##   r-html     : build novice R HTML.
+##   r-html       : build novice R HTML.
 r-html : _book/r/index.html
 
-##   py-html    : build novice Python HTML.
+##   py-html      : build novice Python HTML.
 py-html : _book/py/index.html
 
-##   rse-html   : build RSE HTML.
-rse-html : _book/rse/index.html
+##   py-rse-html  : build RSE PY HTML.
+py-rse-html : _book/py-rse/index.html
 
-##   r-rse-html  : build RSE R HTML.
+##   r-rse-html   : build RSE R HTML.
 r-rse-html : _book/r-rse/index.html
 
 _book/r/index.html : ${R_FILES} ${COMMON_FILES} ${INDEX_HTML}
@@ -139,10 +138,10 @@ _book/py/index.html : ${PY_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
 
-_book/rse/index.html : ${R_RSE_FILES} ${RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
-	rm -f rse.Rmd
-	cp rse-index.Rmd index.Rmd
-	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_rse.yml'); warnings()"
+_book/py-rse/index.html : ${PY_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
+	rm -f py-rse.Rmd
+	cp py-rse-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py-rse.yml'); warnings()"
 
 _book/r-rse/index.html : ${R_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f r-rse.Rmd
@@ -165,10 +164,10 @@ r-pdf : _book/r/r.pdf
 ##   py-pdf     : build novice Python PDF.
 py-pdf : _book/py/py.pdf
 
-##   rse-pdf    : build RSE PDF.
-rse-pdf : _book/rse/rse.pdf
+##   py-rse-pdf : build RSE PY PDF.
+py-rse-pdf : _book/py-rse/py-rse.pdf
 
-##   r-rse-pdf   : build RSE R PDF.
+##   r-rse-pdf  : build RSE R PDF.
 r-rse-pdf : _book/r-rse/r-rse.pdf
 
 _book/r/r.pdf : ${R_FILES} ${COMMON_FILES}
@@ -181,10 +180,10 @@ _book/py/py.pdf : ${PY_FILES} ${COMMON_FILES}
 	cp py-index.Rmd index.Rmd
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py.yml'); warnings()"
 
-_book/rse/rse.pdf : ${RSE_FILES} ${COMMON_FILES}
-	rm -f rse.Rmd
-	cp rse-index.Rmd index.Rmd
-	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_rse.yml'); warnings()"
+_book/py-rse/py-rse.pdf : ${PY_RSE_FILES} ${COMMON_FILES}
+	rm -f py-rse.Rmd
+	cp py-rse-index.Rmd index.Rmd
+	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', config_file='_py-rse.yml'); warnings()"
 
 _book/r-rse/r-rse.pdf : ${R_RSE_FILES} ${COMMON_FILES}
 	rm -f r-rse.Rmd
@@ -196,18 +195,18 @@ _book/r-rse/r-rse.pdf : ${R_RSE_FILES} ${COMMON_FILES}
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf _book _bookdown_files _main.Rmd *.log index.Rmd r.Rmd py.Rmd rse.Rmd
+	@rm -rf _book _bookdown_files _main.Rmd *.log index.Rmd r.Rmd py.Rmd py-rse.Rmd r-rse.Rmd
 	@find . -name '*~' -exec rm {} \;
 
 ## chapters     : check consistency of chapters.
 chapters :
-	@make settings | bin/chapters.py _rse.yml RSE_FILES rse-objectives.Rmd rse-keypoints.Rmd
+	@make settings | bin/chapters.py _py-rse.yml PY_RSE_FILES py-rse/objectives.Rmd py-rse/keypoints.Rmd
 
 ## crossrefs    : check cross-references.
 crossrefs :
 	@bin/crossrefs.py "Novice R" ${R_FILES} ${COMMON_FILES}
 	@bin/crossrefs.py "Novice Python" ${PY_FILES} ${COMMON_FILES}
-	@bin/crossrefs.py "RSE" ${RSE_FILES} ${COMMON_FILES}
+	@bin/crossrefs.py "RSE PY" ${PY_RSE_FILES} ${COMMON_FILES}
 	@bin/crossrefs.py "RSE R" ${R_RSE_FILES} ${COMMON_FILES}
 
 ## fixme        : list all the FIXME markers
@@ -240,7 +239,7 @@ settings :
 	@echo ALL_PDF: ${ALL_PDF}
 	@echo R_FILES: ${R_FILES}
 	@echo PY_FILES: ${PY_FILES}
-	@echo RSE_FILES: ${RSE_FILES}
+	@echo PY_RSE_FILES: ${PY_RSE_FILES}
 	@echo R_RSE_FILES: ${R_RSE_FILES}
 	@echo COMMON_FILES: ${COMMON_FILES}
 	@echo ALL_FILES: ${ALL_FILES}
