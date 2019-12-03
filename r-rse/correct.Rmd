@@ -1,6 +1,6 @@
-# Correctness {#rse-correct}
+# Correctness {#r-rse-correct}
 
-```{r rse-correct-setup, include=FALSE}
+```{r r-rse-correct-setup, include=FALSE}
 source("_common.R")
 ```
 
@@ -11,7 +11,7 @@ but that as in science,
 we can test our expectations against reality to help us decide if we are sure enough.
 This chapter explores ways of doing that in both R and Python.
 
-## How can I test functions manually? {#rse-correct-manual}
+## How can I test functions manually? {#r-rse-correct-manual}
 
 Suppose we have written a function to get the sign of a number.
 In R,
@@ -81,7 +81,7 @@ def test_numSign():
     assert numSign(math.inf) == -1
 ```
 
-## What features do we want a testing framework to have? {#rse-correct-features}
+## What features do we want a testing framework to have? {#r-rse-correct-features}
 
 The individual tests in `test_numSign` are called [unit tests][unit-test]
 because they test the smallest units of our code.
@@ -158,7 +158,7 @@ We will then explore general issues
 such as how we can tell which parts of our code have and haven't been tested
 and what kinds of tests we should write.
 
-## How do I create and run unit tests in Python? {#rse-correct-create-python}
+## How do I create and run unit tests in Python? {#r-rse-correct-create-python}
 
 [`pytest`][pytest] is the most widely used test framework for Python.
 Tests obey three rules:
@@ -183,7 +183,7 @@ we can use the command `pytest path/to/test_file.py`.
 
 We can put our tests wherever we want,
 but most projects put them in a subdirectory of the project's root directory called `tests`.
-If the project uses a [build tool][build-tool] like Make (Chapter \@ref(rse-automate)),
+If the project uses a [build tool][build-tool] like Make (Chapter \@ref(r-rse-automate)),
 it is common to include a target called `test` so that `make test` will re-run all of the tests.
 
 So what do tests look like?
@@ -295,7 +295,7 @@ and another failed (the `F`).
 we claimed on line 13 that the result's type would be `int`
 but it is actually `float`.
 
-## How do I create and run unit tests in R? {#rse-correct-create-r}
+## How do I create and run unit tests in R? {#r-rse-correct-create-r}
 
 The easiest way to start testing in R is via the `usethis` package.
 Let's create a new project in RStudio caller `creater` of type "package"
@@ -319,7 +319,7 @@ The call creates a new directory `tests/testthat/`,
 adds `testthat` to `Suggests` in the `DESCRIPTION` file,
 and creates a file called `tests/testthat.R` that tells R how to run the tests.
 This may seem like a lot,
-but it is all needed to create an R package (Chapter \@ref(rse-package-r)),
+but it is all needed to create an R package (Chapter \@ref(r-rse-package-r)),
 so we might as well do things that way from the start.
 
 The file `tests/testthat.R` contains:
@@ -451,7 +451,7 @@ It is redundant in this case,
 since both of our tests are in the same context,
 but is useful if we have several files full of tests.
 
-## How should I set up fixtures my unit tests? {#rse-correct-fixtures}
+## How should I set up fixtures my unit tests? {#r-rse-correct-fixtures}
 
 Test files all have a similar structure:
 
@@ -518,7 +518,7 @@ Tests should be isolated,
 and having them share data increases the chances that
 one of our tests will modify the data in ways that interfere with other tests.
 
-## How should I check the results of tests? {#rse-correct-check}
+## How should I check the results of tests? {#r-rse-correct-check}
 
 Once we have a result we need to check it.
 The simplest way to do this in Python is the `assert` statement,
@@ -529,9 +529,9 @@ adds them to its summary report,
 and then runs the next test function.
 As a result,
 all of the test functions are run,
-but each function only runs as far as the first failed check (Figure \@ref(fig:rse-correct-failed-test)).
+but each function only runs as far as the first failed check (Figure \@ref(fig:r-rse-correct-failed-test)).
 
-```{r rse-correct-failed-test, echo=FALSE, fig.cap="Test Failure"}
+```{r r-rse-correct-failed-test, echo=FALSE, fig.cap="Test Failure"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
@@ -577,7 +577,7 @@ In contrast to Python,
 R's `testthat` library provides multiple checking functions for different purposes.
 `expect_identical()` compares that actual and expected results are identical down to the last bit.
 `expect_equal()` checks that its arguments are equal within a narrow tolerance;
-as we discuss in Section \@ref(rse-correct-float),
+as we discuss in Section \@ref(r-rse-correct-float),
 this is more useful for most data science problems.
 Others include `expect_length`,
 which checks that a vector has the right length,
@@ -599,7 +599,7 @@ expect_length(result, 3)
 
 but the latter makes our intention clearer.
 
-## Why and how should I test that software fails correctly? {#rse-correct-failure}
+## Why and how should I test that software fails correctly? {#r-rse-correct-failure}
 
 Evil clowns are every programmer's worst nightmare.
 Their second worst is a [silent failure][silent-failure]:
@@ -643,7 +643,7 @@ test_that("text must not be empty", {
 })
 ```
 
-## How can I tell whether my code has been tested or not? {#rse-correct-coverage}
+## How can I tell whether my code has been tested or not? {#r-rse-correct-coverage}
 
 As we write more code or make changes to code we already have,
 we may lose track of which parts we have tested and which we haven't.
@@ -708,12 +708,12 @@ a [code coverage][code-coverage] tool will do this for us.
 In essence,
 a code coverage tool creates a vector of Boolean flags with one entry for each line of code,
 then modifies the code so that the appropriate flag is set to `true` whenever that line is executed
-(Figure \@ref(fig:rse-correct-how-coverage-works)).
+(Figure \@ref(fig:r-rse-correct-how-coverage-works)).
 When the program finishes,
 the tool can show us which lines were touched
 and report summary statistics such as the number or percentage of lines that weren't used.
 
-```{r rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
+```{r r-rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
@@ -763,7 +763,7 @@ This function outputs a list of all R files in the package
 with their corresponding percentage coverage,
 which is a good way to figure out what needs to be done next.
 
-## How much testing is enough? {#rse-correct-enough}
+## How much testing is enough? {#r-rse-correct-enough}
 
 If we are writing software for a safety-critical application such as a medical device,
 we should aim for 100% code coverage,
@@ -818,7 +818,7 @@ Some projects develop [checklists][checklist] to remind programmers what they ou
 These checklists can be a bit daunting for newcomers,
 but they are a great way to pass on hard-earned experience.
 
-## When should I write my tests? {#rse-correct-tdd}
+## When should I write my tests? {#r-rse-correct-tdd}
 
 Many programmers are passionate advocates of a practice called
 [test-driven development][tdd] (TDD).
@@ -896,7 +896,7 @@ for example,
 someone could upgrade a library that one of our libraries depends on,
 which could lead to us getting slightly different answers than we expected.
 
-## Why should I be cautious when using floating-point numbers? {#rse-correct-float}
+## Why should I be cautious when using floating-point numbers? {#r-rse-correct-float}
 
 No matter what the cause,
 we need to understand exactly what we mean by "tolerance" when talking about testing.
@@ -1034,7 +1034,7 @@ In practice,
 just as electrical engineers trust oscilloscope makers,
 data scientists should trust the authors of core libraries to do the best they can.
 
-## How should I write tests that involved floating-point values? {#rse-correct-numeric}
+## How should I write tests that involved floating-point values? {#r-rse-correct-numeric}
 
 The absolute spacing between the values we can represent in Figure \@ref(fig:verify-spacing) is uneven.
 However,
@@ -1124,7 +1124,7 @@ it helps to think of physical experiments:
 an absolute error of 10<sup>-15</sup is one part in a trillion,
 which only a handful of high-precision experiments have ever achieved.
 
-## How can I test plots and other graphical results? {#rse-correct-plots}
+## How can I test plots and other graphical results? {#r-rse-correct-plots}
 
 Testing visualizations is hard:
 any change to the dimension of the plot,
@@ -1160,7 +1160,7 @@ small changes to the library or to plotting parameters can make all of the tests
 by moving elements by a pixel or two.
 Vector-based tests therefore still need to have thresholds on floating-point values.
 
-## What data should I use to test my analyses? {#rse-correct-data}
+## What data should I use to test my analyses? {#r-rse-correct-data}
 
 There aren't any useful general rules for testing the calculations that our pipelines do,
 since those calculations vary from one pipeline to the next,
@@ -1235,11 +1235,11 @@ def test_fit_last_too_large():
     assert not is_zipf(actual)
 ```
 
-## How can I test a program that uses random numbers? {#rse-correct-random}
+## How can I test a program that uses random numbers? {#r-rse-correct-random}
 
 FIXME: explain how to test in the presence of random values
 
-## How can I test a data analysis pipeline in production? {#rse-correct-production}
+## How can I test a data analysis pipeline in production? {#r-rse-correct-production}
 
 An [operational test][operational-test] is one that is kept in place during production
 to tell users if everything is still working as it should.
@@ -1332,7 +1332,7 @@ particularly when the person using the pipeline isn't its original author.
 > [checkr][checkr],
 > and [validate][validate-r].
 
-## How can I infer and check properties of my data? {#rse-correct-infer}
+## How can I infer and check properties of my data? {#r-rse-correct-infer}
 
 Writing tests for the properties of data can be tedious,
 but some of the work can be automated.
@@ -1448,9 +1448,9 @@ Another way to use TDDA is to generate constraints for two datasets and then loo
 in order to see how similar the datasets are to each other.
 This is especially useful if the constraint file is put under version control.
 
-## Summary {#rse-correct-summary}
+## Summary {#r-rse-correct-summary}
 
-```{r rse-correct-concept, echo=FALSE, fig.cap="Correctness Concept Map"}
+```{r r-rse-correct-concept, echo=FALSE, fig.cap="Correctness Concept Map"}
 if (knitr::is_latex_output()) {
   knitr::include_graphics("figures/rse-correct/concept.pdf")
 } else {
@@ -1458,16 +1458,16 @@ if (knitr::is_latex_output()) {
 }
 ```
 
-## Exercises {#rse-correct-exercises}
+## Exercises {#r-rse-correct-exercises}
 
-### Fixing `numSign` {#rse-correct-ex-numsign}
+### Fixing `numSign` {#r-rse-correct-ex-numsign}
 
 1.  Fix the implementation of `numSign` in either R or Python so that all tests will succeed.
 2.  Re-run the tests to confirm that the function is working.
 3.  Extend the function so that it does something sensible when passed a string or an empty list.
     Write functions to check your changes.
 
-### Checking simple calculations {#rse-correct-ex-simple-calc}
+### Checking simple calculations {#r-rse-correct-ex-simple-calc}
 
 Create a new test by running `usethis::use_test("simple-arithmetic")`.
 Copy the code below into the newly created test file and fill in the blanks
@@ -1484,7 +1484,7 @@ test_that("plus and minus give correct outputs", {
 })
 ```
 
-### Explain the purpose of tests {#rse-correct-ex-purpose}
+### Explain the purpose of tests {#r-rse-correct-ex-purpose}
 
 Based on the contents of the tests below,
 replace the blanks with appropriate `context()` and `test_that()` messages.
@@ -1503,7 +1503,7 @@ test_that("___", {
 })
 ```
 
-### Testing `count_words` {#rse-correct-ex-count-words}
+### Testing `count_words` {#r-rse-correct-ex-count-words}
 
 1.  Create a new test file.
 2.  Write unit tests for `count_words` to check the following:
@@ -1512,12 +1512,12 @@ test_that("___", {
     -   Returns 2 when given two words separated by a space.
     -   Returns 2 when given two words separated by a dash `-`.
 
-### Checking for errors {#rse-correct-ex-check-errors}
+### Checking for errors {#r-rse-correct-ex-check-errors}
 
 Add new unit tests for the word-counting function
 to check that it raises errors when it should.
 
-## Key Points {#rse-correct-keypoints}
+## Key Points {#r-rse-correct-keypoints}
 
 ```{r, child="keypoints/rse-correct.md"}
 ```

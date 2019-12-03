@@ -155,7 +155,7 @@ It is assumed that students have completed the novice course.
 
 **Lead author:** Luke Johnston  
 **Status:** First draft complete ([#99](https://github.com/merely-useful/merely-useful.github.io/issues/99))  
-**Source materials:** [rse-ci.Rmd](https://merely-useful.github.io/still-magic/en/integrate.html)
+**Source materials:** [r-rse-ci.Rmd](https://merely-useful.github.io/still-magic/en/integrate.html)
 
 > Topic outline:
 > -   How can I run commands automatically every time a repository is updated?
