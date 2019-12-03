@@ -14,6 +14,7 @@ R_FILES=\
   r-practice.Rmd \
   r-reproducibility.Rmd \
   r-data-manipulation.Rmd \
+  r-development.Rmd \
   r-publishing.Rmd \
   r-objectives.Rmd \
   r-keypoints.Rmd
