@@ -60,13 +60,13 @@ PY_RSE_FILES=\
   py-rse/py-scripting.Rmd \
   py-rse/git-cmdline.Rmd \
   py-rse/git-advanced.Rmd \
+  py-rse/teams.Rmd \
   py-rse/style.Rmd \
   py-rse/automate.Rmd \
-  py-rse/teams.Rmd \
   py-rse/project.Rmd \
+  py-rse/correct.Rmd \
   py-rse/ci.Rmd \
   py-rse/package-py.Rmd \
-  py-rse/correct.Rmd \
   py-rse/publish.Rmd \
   py-rse/finale.Rmd \
   py-rse/objectives.Rmd \

@@ -139,8 +139,9 @@ This chapter introduces testing and could be updated to write tests for the Zipf
 For example, `countwords.py` could be tested using an input text file where the count
 for each word is already known.
 
-I think this chapter needs to come before the chapter on continuous integration,
-since it's these tests that Travis CI will implement.
+## Chapter 11: Continuous Integration
+
+This chapter will use Travis CI to implement the tests developed in the previous chapter.
 
 ### Chapter 13: Python packaging
 
