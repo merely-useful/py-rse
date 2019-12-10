@@ -1,6 +1,7 @@
--   Describe why functions are used and are major components of programming.
--   Create a function that takes both positional arguments and keyword arguments.
+- Describe why functions are important components of any data analysis project
+and of programming in general.
+- Create a function that takes both positional arguments and keyword arguments.
+- Formulate a question that includes a minimal reproducible example when seeking help.
+- Describe why packages are used and why R doesn't include all these packages by default.
+
 -   Use assert to check that a function input parameter is within a certain range of values.
--   Formulate a question with a minimal reproducible example.
--   Describe why there are packages and why not all code is included with the default Python installation.
--   Install and use a package.
