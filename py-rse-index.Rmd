@@ -1,0 +1,182 @@
+---
+title: "Merely Useful: RSE Python"
+author: "Madeleine Bonsma-Fisher, Kate Hertweck, Damien Irving, Luke Johnston, Christina Koch, Sara Mahallati, Brandeis Marshall, Joel Ostblom, Elizabeth Wickes, Charlotte Wickham, and Greg Wilson"
+documentclass: Nemilov
+bibliography: book.bib
+citation-package: none
+link-citations: yes
+github-repo: merely-useful/merely-useful.github.io
+site: bookdown::bookdown_site
+date: "`r Sys.Date()`"
+lot: yes
+lof: yes
+---
+
+# Introduction {#rse-intro}
+
+```{r rse-index-setup, include=FALSE}
+source("_common.R")
+```
+
+> It's still magic even if you know how it's done.
+>
+> — Terry Pratchett
+
+Computers are now as essential for research as telescopes, test tubes, and libraries,
+which means that researchers need need to know how to build, use, and share software.
+However,
+most introductions to programming focus on developing commercial applications,
+not on exploring problems and answering questions.
+This series of books will show you how to do the latter
+both on your own and as part of a team.
+
+The prequels to this book introduce three core skills:
+how to write short programs to clean and analyze data in a reproducible way,
+how to keep track of what you have done,
+and how to share your software and your results with other people.
+But just as some astronomers spend their careers designing telescopes,
+some researchers focus on building software to make their colleagues' lives easier.
+People who do this are called [research software engineers][rse],
+and the aim of this book is to get you ready for this role—to help you go from writing code for your own use
+to creating tools to help your entire field advance.
+All of this material can be freely re-used under the terms of the Creative Commons Attribution License (CC-BY 4.0);
+please see Appendix \@ref(license) for details.
+
+## Who are these lessons for? {#rse-intro-personas}
+
+Amira
+:   completed a master's in library science five years ago
+    and has since worked for a small aid organization.
+    She did some statistics during her degree,
+    and has learned some R and Python by doing data science courses online,
+    but has no formal training in programming.
+    Amira would like to tidy up the scripts, data sets, and reports she has created
+    in order to share them with her colleagues.
+    These lessons will show her how to do this and what "done" looks like.
+
+Jun
+:   completed an [Insight Data Science][insight] fellowship last year after doing a PhD in Geology
+    and now works for a company that does forensic audits.
+    He uses a variety of machine learning and visualization packages,
+    and would now like to turn some of his own work into an open source project.
+    This book will show him how such a project should be organized
+    and how to encourage people to contribute to it.
+
+Sami
+:   became a competent programmer during a bachelor's degree in applied math
+    and was then hired by the university's research computing center.
+    The kinds of applications they are being asked to support
+    have shifted from fluid dynamics to data analysis;
+    this guide will teach them how to build and run data pipelines
+    so that they can pass those skills on to their users.
+
+### Summary
+
+For researchers and data scientists who can write functions to create programs that are several pages long,
+and who want to be more productive and have more confidence in their results,
+this book provides a pragmatic, tools-based introduction to research software engineering.
+Unlike material courses aimed at computer scientists and professional software developers,
+this book uses data analysis as a motivating example
+and assumes that the learner's ultimate goal is to answer questions rather than ship products.
+
+### Prerequisites
+
+Learners must be able to:
+
+-   Write reusable functions to analyze tabular data using [R][r] or [Python][python].
+-   Keep track of their work using [Git][git] and [GitHub][github].
+-   Create reproducible reports using [R Markdown][r-markdown] or [Jupytext][jupytext] (in [JupyterLab Notebooks][jupyter]).
+-   Publish those reports with appropriate metadata such as a [DOI][doi] and [ORCID][orcid].
+
+Learners will need:
+
+-   A personal computer with Internet access.
+-   A [Unix shell][unix-shell] (see Appendix \@ref(install) for how to set this up on Windows).
+-   [Python 3][python] and [Jupyter][jupyter].
+-   [R][r] and [RStudio][rstudio].
+-   A [GitHub][github] account.
+
+If you are using Windows,
+please install [Chocolatey][chocolatey]:
+you can use it to install other programs as you go along.
+
+## What's the big picture? {#rse-intro-big-picture}
+
+To make sense of what follows,
+we must distinguish two key ideas:
+
+-   [Open science][open-science]
+    focuses on making data, methods, and results freely available to all
+    by publishing them under [open licenses][open-license].
+-   [Reproducible research][reproducible-research]
+    means ensuring that anyone with access to data and software can feasibly reproduce results,
+    both to check them and to build on them.
+
+People often conflate these terms,
+but they are distinct:
+
+-   If you share your data and the programs that analyze it,
+    but don't document what steps to take in what order,
+    your work is open but not reproducible.
+-   If you completely automate your analysis,
+    but your data is only available to people in your lab,
+    your work is reproducible but not open.
+
+The third key idea is [sustainability][sustainable-software].
+Software is sustainable if it's easier for people to maintain it and extend it than to replace it.
+However,
+sustainability isn't just a property of the software:
+it also depends on the skills and culture of its users.
+If a software package is being maintained by a couple of post-docs
+who are being paid a fraction of what they could earn in industry
+and have no realistic hope of promotion because their field doesn't value tool building,
+it doesn't matter whether the package is well tested and easy to install:
+sooner or later (probably sooner)
+it will become [abandonware][abandonware].
+
+### Why isn't all of this already normal?
+
+Nobody argues that research should be irreproducible or unsustainable,
+but "not against it" and actively supporting it are very different things.
+Academia doesn't yet know how to reward people for writing useful software,
+so while you may be thanked,
+the effort you put in may not translate into job security or decent pay.
+
+And some people still worry that if they make their data and code generally available,
+someone else will use it and publish a result they have come up with themselves.
+This is almost unheard of in practice,
+but that doesn't stop people using it as a scare tactic.
+Other people are afraid of looking foolish or incompetent by sharing code that might contain bugs.
+This isn't just [impostor syndrome][impostor-syndrome]:
+members of marginalized groups are frequently judged more harshly than others,
+so being wrong in public is much riskier for them.
+
+### Syllabus
+
+This book covers the tools and practices needed to create work that is open, reproducible, and sustainable.
+You can use this book for self-study
+or as the foundation of a one-semester course for graduate students or senior undergraduates.
+By its end,
+you will be able to:
+
+-   Use [branches][branch] to coordinate development of complex software.
+-   Enable users to configure software without modifying it.
+-   Re-run analyses and rebuild packages reproducibly with a single command.
+-   Test your software and know which parts have not yet been tested.
+-   Keep track of what still needs to be done and who's working on it.
+-   Work on remote computers such as computing clusters or the cloud.
+-   Document software so it can be easily used, maintained, and extended.
+-   Create packages that can be installed in standard ways and be used by others.
+-   Work productively in a small team where everyone is welcome.
+
+## Acknowledgments {#rse-intro-ack}
+
+This book owes its existence to
+everyone we met through [the Carpentries][carpentries].
+We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work
+and to everyone who has contributed,
+particularly Jonathan Dursi
+and the authors of [@Nobl2009; @Hadd2010; @Wils2014; @Scop2015; @Tasc2017; @Wils2017; @Brow2018; @Deve2018; @Shol2019; @Wils2019].
+
+```{r, child="./links.md"}
+```

@@ -1,0 +1,1212 @@
+# Advanced Git {#py-rse-git-advanced}
+
+```{r py-rse-git-advanced-setup, include=FALSE}
+source("_common.R")
+```
+
+Now that we are comfortable using Git at the command line,
+we can look at two tools for organizing our development and working with others:
+branching and pull requests.
+[Branches][git-branch] let us work on multiple things simultaneously in a single repository;
+[pull requests][pull-request] (PRs) let us submit our work for review,
+get feedback,
+and make updates.
+Used together,
+they allow us to go through the write-review-revise cycle
+familiar to anyone who has ever written a journal paper
+in hours rather than weeks.
+
+> This lesson is derived in part from one created at
+> [the University of Wisconsin-Madison][uwm-git-lesson].
+> We are grateful to its authors for using an open license
+> so that we could repurpose their work.
+
+## What is a branch and how do I create one? {#py-rse-git-advanced-create-branch}
+
+The Git lessons so far have all used a sequential timeline:
+each change builds on the one before,
+and *only* on the one before.
+However,
+there are times when we want to keep our main work safe from experimental changes.
+To do this, we can use [branches][git-branch] to work on separate tasks in parallel.
+
+We can see what branches a repository using this command:
+
+```shell
+$ git branch
+```
+
+```text
+* master
+```
+
+When we initialize a repository,
+Git automatically creates a branch called [`master`][git-branch-master].
+It is often considered the "official" version of the repository.
+The asterisk '*' indicates that it is currently active,
+i.e.,
+that all changes we make will take place in this branch by default.
+(The active branch is like the [current working directory][current-working-directory] in the shell.)
+
+Suppose that we are working on an analysis
+and don't know whether a [violin plot][violin-plot] or [beeswarm plot][beeswarm-plot]
+will make our results clearer.
+We decide to create a new branch from `master` for each
+and then merge whichever we prefers back to `master` (Figure \@ref(fig:py-rse-git-advanced-creating-branches)).
+
+```{r py-rse-git-advanced-creating-branches, echo=FALSE, fig.cap="Creating Branches"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+After tossing a coin,
+we decide to experiment with violin plots first.
+To create the branch,
+we run:
+
+```shell
+$ git branch violin
+```
+
+We can check that the branch exists by running `git branch` again:
+
+```shell
+$ git branch
+```
+
+```text
+* master
+  violin
+```
+
+Our branch is there,
+but the asterisk `*` shows that we are still in the `master` branch.
+(By analogy,
+creating a new directory doesn't automatically move us into that directory.)
+As a further check,
+let's see what our repository's status is:
+
+```shell
+$ git status
+```
+
+```text
+On branch master
+nothing to commit, working directory clean
+```
+
+To switch to our new branch we can use the `checkout` command that we first saw in Section \@ref(py-rse-git-cmdline-restore):
+
+```shell
+$ git checkout violin
+$ git branch
+```
+
+```text
+  master
+* violin
+```
+
+`git checkout` doesn't just check out a file from a specific commit:
+it can also check out the whole repository,
+i.e.,
+switch it from one saved state to another
+by updating all files in the repository to match the desired state.
+A branch is a human-readable name for one such state.
+We can (and should) choose the name to signal the purpose of the branch,
+just as we choose the names of files and variables to indicate what they are for.
+
+At this point,
+`master` and `violin` are two names for the same repository state (Figure \@ref(fig:py-rse-git-advanced-repo-state)),
+so commands like `ls` and `git log` shows that the files and history haven't changed
+as we switch from `master` to `violin`.
+This will be true until some changes are committed to our new branch.
+
+```{r py-rse-git-advanced-repo-state, echo=FALSE, fig.cap="Repository State"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+Let's make such a change by editing our analysis script,
+adding a lines to create the violin plot,
+and committing our changes:
+
+```shell
+$ nano bin/analysis.sh
+$ git add bin/analysis.sh
+$ git commit -m "Created violin plots"
+```
+
+```text
+[violin 3ff8195] Created violin plots
+ 1 file changed, 1 insertion(+)
+```
+
+If we look at the last couple of commits using `git log`,
+we see our most recent change:
+
+```shell
+$ git log --oneline -n 2
+```
+
+```text
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+```
+
+(We use `--oneline` and `-n 2` to shorten the log display.)
+But let's switch back to the `master` branch:
+
+```shell
+$ git checkout master
+$ git branch
+```
+
+```text
+* master
+  violin
+```
+
+If we look at the log,
+our latest change is not there:
+
+```shell
+$ git log --oneline -n 2
+```
+
+```text
+64b802f (HEAD -> master) Adding overdue .gitignore file
+2fe5f6f Updating analysis script
+```
+
+We have not lost our work:
+it just isn't included in this branch (Figure \@ref(fig:py-rse-git-advanced-not-lost)).
+We can prove this by switching back to the `violin` branch and checking the log again:
+
+```shell
+$ git checkout violin
+$ git log --oneline -n 2
+```
+
+```text
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+```
+
+```{r py-rse-git-advanced-not-lost, echo=FALSE, fig.cap="Work Is Not Lost"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+We can also look inside `bin/analysis.sh` and see our changes.
+If we make another change and commit it,
+that change will also go into the `violin` branch (Figure \@ref(fig:py-rse-git-advanced-change-into-branch)):
+
+```shell
+$ nano bin/analysis.sh
+$ git add .
+$ git commit -m "Adding facets to the violin plot"
+```
+
+```text
+[violin db1d03f] Adding facets to the violin plot
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+```
+
+```{r py-rse-git-advanced-change-into-branch, echo=FALSE, fig.cap="Change Goes Into Branch"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+And if we want to see the differences between two branches,
+we can use `git diff` with the same double-dot `..` syntax we use
+to view differences between two revisions:
+
+```shell
+$ git diff master..violin
+```
+
+```text
+diff --git a/bin/analysis.sh b/bin/analysis.sh
+index 8de12fa..bbe78f7 100644
+--- a/bin/analysis.sh
++++ b/bin/analysis.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+ cat $1 | \
+   species --all | \
+-  plot --default > \
++  plot --violin --facet=species_name > \
+   plots/violin-by-species.png
+```
+
+We can repeat this process to experiment with beeswarm plots.
+Since we don't want to include any of the violin plot work in this branch,
+we make our new branch from `master`.
+To speed things up a bit,
+we use the `-b` option to `git checkout` to create the branch and switch to it
+in a single step:
+
+```shell
+$ git checkout master           # make sure of our starting point
+$ git checkout -b beeswarm      # make branch and switch to it
+$ nano bin/analysis.sh          # make our changes
+$ git add bin/analysis.sh       # add our changes
+$ git commit -m "Beeswarms"     # we really should use a more informative message
+$ git log --oneline -n 2        # show history
+```
+
+```text
+917823d (HEAD -> beeswarm) Beeswarms
+64b802f (master) Adding overdue .gitignore file
+```
+
+The log shows that the changes in the `beeswarm` branch are
+on top of the changes in the `master` branch,
+and do *not* include the changes in the `violin` branch (Figure \@ref(fig:py-rse-git-advanced-where-changes-are)).
+If we're curious,
+we can use `git diff` to show the differences between the two plotting branches:
+
+```shell
+$ git diff beeswarm..violin
+```
+
+```text
+diff --git a/bin/analysis.sh b/bin/analysis.sh
+index 2ebd322..bbe78f7 100644
+--- a/bin/analysis.sh
++++ b/bin/analysis.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+ cat $1 | \
+   species --all | \
+-  plot --beeswarm --jitter=0.1 --facet=species_name > \
+-  plots/beeswarm-by-species.png
++  plot --violin --facet=species_name > \
++  plots/violin-by-species.png
+```
+
+```{r py-rse-git-advanced-where-changes-are, echo=FALSE, fig.cap="Where Changes Are"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+## How do I merge work from separate branches? {#py-rse-git-advanced-merge}
+
+After a bit of experimentation,
+we decide that we prefer violin plots to beeswarm plots.
+We now have three options:
+
+1.  Add our changes to `bin/analysis.sh` once again in the `master` branch.
+2.  Stop working in `master` and start using the `violin` branch for future development.
+3.  [Merge][git-merge] the `violin` and `master` branches.
+
+The first option is tedious and error-prone,
+while the second option will lead to confusion
+and doesn't give us a way to combine changes made in two or more branches.
+The third option the simplest, fastest, and most reliable.
+To start,
+let's make sure we're in the `master` branch:
+
+```shell
+$ git checkout master
+$ git branch
+```
+
+```text
+  beeswarm
+* master
+  violin
+```
+
+We can now merge the changes in `violin` branch into our current branch
+with a single command:
+
+```shell
+$ git merge violin
+```
+
+```text
+Updating 64b802f..db1d03f
+Fast-forward
+ bin/analysis.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+```
+
+Merging doesn't change the source branch `violin` (Figure \@ref(fig:py-rse-git-advanced-merging-doesnt-change)).
+Once the merge is done,
+though,
+all of the changes made in `violin` are also in the history of `master`:
+
+```shell
+$ git log --oneline -n 4
+```
+
+```text
+db1d03f (HEAD -> master, violin) Adding facets to the violin plot
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+2fe5f6f Updating analysis script
+```
+
+```{r py-rse-git-advanced-merging-doesnt-change, echo=FALSE, fig.cap="Merging Doesn't Change Things"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+Note that Git automatically creates a new commit (in this case, `db1d03f`) to represent the merge.
+If we now run `git diff master..violin`,
+Git doesn't print anything
+because there aren't any differences to show.
+
+Now that we have merged all of the changes from `violin` into `master`
+there is no need to keep the `violin` branch,
+so we can delete it:
+
+```shell
+$ git branch -d violin
+```
+
+```text
+Deleted branch violin (was db1d03f).
+```
+
+And since we don't want to keep the changes in the `beeswarm` branch,
+we can delete it as well:
+
+```shell
+$ git branch -d beeswarm
+```
+
+```text
+error: The branch 'beeswarm' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D beeswarm'.
+```
+
+Git refuses to do what we have asked
+because we have *not* merged the changes from `beeswarm` into `master`
+(or any other branch),
+so deleting it actually would erase work.
+If we are sure we want to do this,
+we would have to follow Git's instructions and use the `-D` option.
+We won't do this yet because we can use the changes in the `beeswarm` branch
+to illustrate another key feature of Git:
+handling conflicts.
+
+> **Not Just the Command Line**
+>
+> We have been creating, merging, and deleting branches on the command line,
+> but we can do all of these things using [GitKraken][gitkraken],
+> [the RStudio IDE][rstudio-ide],
+> and other GUIs.
+> The operations stay the same;
+> all that changes is how we tell the computer what we want to do.
+
+## How do I handle conflicting changes? {#py-rse-git-advanced-conflict}
+
+We now have two branches,
+`master` and `beeswarm`,
+in which we have changes the same lines of `bin/analysis.sh` in different ways:
+
+```shell
+$ git diff beeswarm..master
+```
+
+```text
+diff --git a/bin/analysis.sh b/bin/analysis.sh
+index 2ebd322..bbe78f7 100644
+--- a/bin/analysis.sh
++++ b/bin/analysis.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+ cat $1 | \
+   species --all | \
+-  plot --beeswarm --jitter=0.1 --facet=species_name > \
+-  plots/beeswarm-by-species.png
++  plot --violin --facet=species_name > \
++  plots/violin-by-species.png
+```
+
+When we try to merge `beeswarm` into `master`,
+Git doesn't know which of these changes we want to keep.
+This is called a [conflict][git-conflict]:
+
+```shell
+$ git merge beeswarm master
+```
+
+```text
+Auto-merging bin/analysis.sh
+CONFLICT (content): Merge conflict in bin/analysis.sh
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+If we look in `bin/analysis.sh`,
+we see that Git has kept both sets of changes,
+but has marked which came from where:
+
+```shell
+$ cat bin/analysis.sh
+```
+
+```text
+#!/usr/bin/env bash
+cat $1 | \
+  species --all | \
+<<<<<<< HEAD
+  plot --violin --facet=species_name > \
+  plots/violin-by-species.png
+=======
+  plot --beeswarm --jitter=0.1 --facet=species_name > \
+  plots/beeswarm-by-species.png
+>>>>>>> beeswarm
+```
+
+The lines from `<<<<<<< HEAD` to `=======` are what was in `master`,
+while the lines from there to `>>>>>>> beeswarm` show what was in `beeswarm`.
+If there were several conflicting regions in the same file,
+Git would mark each one this way.
+
+We have to decide what to do next:
+keep the `master` changes,
+keep those from `beeswarm`,
+edit this part of the file to combine them,
+or write something new.
+Whatever we do,
+we must remove the `>>>`, `===`, and `<<<` markers.
+Let's combine the two sets of changes to create side-by-side plots:
+
+```shell
+$ nano bin/analysis.sh
+$ cat bin/analysis.sh
+```
+
+```text
+#!/usr/bin/env bash
+cat $1 | \
+  species --all | \
+  plot -n 2 --violin --beeswarm --jitter=0.1 --facet=species_name > \
+  plots/by-species.png
+```
+
+This counts as yet another change to the file:
+
+```shell
+$ git status
+```
+
+```text
+On branch master
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+
+        modified:   bin/analysis.sh
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   bin/analysis.sh
+```
+
+Here,
+Git thinks that there are changes to be committed because of the merge,
+and that `bin/analysis.sh` has been modified again because of our edit.
+Let's add the file and commit the change:
+
+```shell
+$ git add bin/analysis.sh
+$ git commit -m "Merging beeswarm plots"
+```
+
+```text
+[master b0c3fc6] Merging beeswarm plots
+```
+
+The project's history now shows a single sequence of commits,
+with the `beeswarm` changes on top of the earlier `violin` changes:
+
+```shell
+$ git log --oneline
+```
+
+```text
+b0c3fc6 (HEAD -> master) Merging beeswarm plots
+917823d (beeswarm) Beeswarms
+db1d03f Adding facets to the violin plot
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+2fe5f6f Updating analysis script
+c89bf68 Northern data
+dc4adfb Initial commit
+```
+
+If we want to see what really happened,
+we can add the `--graph` option to `git log`:
+
+```shell
+$ git log --oneline --graph
+```
+
+```text
+*   b0c3fc6 (HEAD -> master) Merging beeswarm plots
+|\
+| * 917823d (beeswarm) Beeswarms
+* | db1d03f Adding facets to the violin plot
+* | 3ff8195 Created violin plots
+|/
+* 64b802f Adding overdue .gitignore file
+* 2fe5f6f Updating analysis script
+* c89bf68 Northern data
+* dc4adfb Initial commit
+```
+
+## How should I use branches? {#py-rse-git-advanced-workflow}
+
+People use Git in different ways,
+but all of those ways rely heavily on branches.
+If we are working on our own computer,
+this workflow will help us keep track of what we are doing:
+
+1.  `git checkout master` to make sure we are in the `master` branch.
+
+2.  `git checkout -b name-of-feature` to create a new branch.
+    We *always* create a branch when making changes,
+    since we never know what else might come up.
+    The branch name should be as descriptive as a variable name or filename would be.
+
+3.  Make our changes.
+    If something occurs to us along the way—for example,
+    if we are writing a new function and realize that
+    the documentation for some other function should be updated—we do *not*
+    do that work in this branch just because we happen to be there.
+    Instead,
+    we commit our changes,
+    switch back to `master`,
+    and create a new branch for the other work.
+
+4.  When the new feature is complete,
+    we `git merge master name-of-feature`
+    to get any changes we merged into `master` after creating `name-of-feature`
+    and resolve any conflicts.
+    This is an important step:
+    we want to do the merge and test that everything still works in our feature branch,
+    not in `master`.
+
+5.  Finally,
+    we switch back to `master` and `git merge name-of-feature master`
+    to merge our changes into `master`.
+    We should not have any conflicts,
+    and all of our tests should pass.
+
+Most experienced developers use this [branch-per-feature][branch-per-feature] workflow,
+but what exactly is a "feature"?
+These rules make sense for small projects with or without collaborators:
+
+1.  Anything cosmetic that is only one or two lines long can be done in `master` and committed right away.
+    "Cosmetic" means changes to comments or documentation:
+    nothing that affects how code runs, not even a simple variable renaming.
+
+2.  A pure addition that doesn't change anything else is a feature and goes into a branch.
+    For example,
+    if we run a new analysis and save the results,
+    that should be done on its own branch
+    because it might take several tries to get the analysis to run,
+    and we might interrupt ourselves to fix things that we discover aren't working.
+
+3.  Every change to code that someone might want to undo later in one step gets is a feature.
+    For example,
+    if a new parameter is added to a function,
+    then every call to the function has to be updated.
+    Since neither alteration makes sense without the other,
+    those changes are considered a single feature and should be done in one branch.
+
+The hardest thing about using a branch-per-feature workflow is sticking to it for small changes.
+As the first point in the list above suggests,
+most people are pragmatic about this on small projects;
+on large ones,
+where dozens of people might be committing,
+even the smallest and most innocuous change needs to be in its own branch
+so that it can be reviewed (which we discuss below).
+
+## How can I use someone else's work? {#py-rse-git-advanced-fork}
+
+So far we have used Git to manage individual work,
+but it really comes into its own when we are working with other people.
+We can do this in two ways:
+
+1.  Everyone has read and write access to a single shared repository.
+
+2.  Everyone can read from the project's main repository,
+    but only a few people can commit changes to it.
+    The project's other contributors [fork][git-fork] the main repository to create one that they own,
+    do their work in that,
+    and then submit their changes to the main repository.
+
+The first approach works well for teams of up to half a dozen people
+who are all comfortable using Git,
+but if the project is larger,
+or if contributors are worried that they might make a mess in the `master` branch,
+the second approach is safer.
+
+Git itself doesn't have any notion of a "main repository",
+but [forges][forge] like GitHub, GitLab, and BitBucket all encourage people
+to use Git in ways that effectively create one.
+Suppose,
+for example,
+that Frances Bilas has put her plotting project online
+and that the repository's URL is `https://github.com/francesbilas/plotting`.
+Jean Jennings (another of the original ENIAC programmers) would like to contribute to the project,
+so she goes to that URL and clicks on the "Fork" button in the upper right corner
+(Figure \@ref(fig:py-rse-git-advanced-fork-button)).
+GitHub immediately creates a copy of Frances's repository within Jean's account on GitHub's own servers.
+When the command completes,
+the setup on GitHub now looks like this:
+
+```{r py-rse-git-advanced-fork-button, echo=FALSE, fig.cap="Forking"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+Nothing has happened yet on Jean's own machine:
+the new repository exists only on GitHub.
+When Jean explores its history,
+she sees that it contains all of the changes Frances made.
+
+A copy of a repository is called a [clone][git-clone].
+In order to start working on the project,
+Jean needs to create a clone of *her* repository (not Frances's) on her own computer.
+We will modify Jean's prompt to include her desktop user ID (`jj`)
+and her working directory (initially `~`)
+to make it easier to follow what's happening:
+
+```shell
+jj:~ $ git clone https://github.com/jeanjennings/plotting.git
+```
+
+```text
+Cloning into 'plotting'...
+remote: Enumerating objects: 32, done.
+remote: Counting objects: 100% (32/32), done.
+remote: Compressing objects: 100% (16/16), done.
+remote: Total 32 (delta 5), reused 32 (delta 5), pack-reused 0
+Unpacking objects: 100% (32/32), done.
+```
+
+This command creates a new directory with the same name as the project,
+i.e., `plotting`.
+When Jean goes into this directory and runs `ls` and `git log`,
+she sees that all of the project's files and history are there:
+
+```shell
+jj:~ $ cd plotting
+jj:~/plotting $ ls
+```
+
+```text
+README.md       bin             data
+```
+
+```shell
+jj:~/plotting $ git log --oneline
+```
+
+```text
+b0c3fc6 Merging beeswarm plots
+917823d Beeswarms
+db1d03f Adding facets to the violin plot
+3ff8195 Created violin plots
+64b802f Adding overdue .gitignore file
+2fe5f6f Updating analysis script
+c89bf68 Northern data
+dc4adfb Initial commit
+```
+
+She also sees that Git has automatically created a remote for her repository
+that points back at her repository on GitHub:
+
+```shell
+jj:~/plotting $ git remote -v
+```
+
+```text
+origin  https://github.com/jeanjennings/plotting.git (fetch)
+origin  https://github.com/jeanjennings/plotting.git (push)
+```
+
+Frances's original repository,
+Jean's fork on GitHub,
+and Jean's new clone on her desktop
+are now arranged as shown in Figure \@ref(fig:py-rse-git-advanced-forked-repos).
+Jean can pull changes from her fork and push work back there,
+but she needs to do one more thing before she can get changes from Frances's repository:
+
+```shell
+jj:~/plotting $ git remote add upstream https://github.com/francesbilas/plotting.git
+jj:~/plotting $ git remote -v
+```
+
+```text
+origin      https://github.com/jeanjennings/plotting.git (fetch)
+origin      https://github.com/jeanjennings/plotting.git (push)
+upstream    https://github.com/francesbilas/plotting.git (fetch)
+upstream    https://github.com/francesbilas/plotting.git (push)
+```
+
+```{r py-rse-git-advanced-forked-repos, echo=FALSE, fig.cap="Forked Repositories"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+Jean has called her new remote `upstream` because it points at the repository hers are derived from.
+She could use any name,
+but `upstream` is a nearly universal convention.
+
+With this remote in place,
+Jean is finally set up (Figure \@ref(fig:py-rse-git-advanced-finished-forking)).
+Suppose,
+for example,
+that Frances has modified the project's `README.md` file to add Jean as a contributor.
+(Again, we show Frances's user ID and working directory in her prompt to make it clear who's doing what).
+
+```{r py-rse-git-advanced-finished-forking, echo=FALSE, fig.cap="Finished Forking"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+```shell
+frances:~/plotting $ pwd
+```
+
+```text
+/Users/frances/plotting
+```
+
+```shell
+frances:~/plotting $ nano README.md
+frances:~/plotting $ cat README.md
+```
+
+```text
+# Plotting Species Distribution
+
+Contributors:
+
+-   Frances Bilas
+-   Jean Jennings
+```
+
+Frances commits her changes and pushes them to *her* repository on GitHub:
+
+```shell
+frances:~/plotting $ git commit -a -m "Adding Jean as a contributor"
+```
+
+```text
+[master 766c2cd] Adding Jean as a contributor
+ 1 file changed, 6 insertions(+)
+```
+
+```shell
+frances:~/plotting $ git push origin master
+```
+
+```text
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 340 bytes | 340.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/francesbilas/plotting.git
+   b0c3fc6..766c2cd  master -> master
+```
+
+```{r py-rse-git-advanced-pull-request, echo=FALSE, fig.cap="Pull Request"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+The situation is now as shown in (Figure \@ref(fig:py-rse-git-advanced-pull-request)a),
+with Frances's changes on her desktop and in her GitHub repository
+but not in either of Jean's repositories.
+Since Jean has create a remote that points at Frances's GitHub repository,
+though,
+she can easily pull those changes to her desktop (Figure \@ref(fig:py-rse-git-advanced-pull-request)b):
+
+```shell
+jj:~/plotting $ git pull upstream master
+```
+
+```text
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From https://github.com/francesbilas/plotting
+ * branch            master     -> FETCH_HEAD
+ * [new branch]      master     -> upstream/master
+Updating b0c3fc6..766c2cd
+Fast-forward
+ README.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+```
+
+Pulling from a repository owned by someone else
+is no different than pulling from a repository we own.
+In either case,
+Git merges the changes and asks us to resolve any conflicts that arise.
+The only significant difference is that,
+as with `git push` and `git pull`,
+we have to specify both a remote and a branch:
+in this case,
+`upstream` and `master`.
+
+## What is a pull request and how do I create one? {#py-rse-git-advanced-pull-requests}
+
+Jean can now get Frances's work,
+but how can Frances get Jean's?
+One way would be for Frances to create a remote that pointed at Jean's repository on GitHub
+and then pull in Jean's changes periodically,
+but that would lead to chaos,
+since we could never be sure that everyone's work was in any one place at the same time.
+Instead,
+almost everyone uses [pull requests][pull-request] instead.
+
+Pull requests aren't part of Git itself,
+but a great way to collaborate with others using [forges][forge] like GitHub.
+A pull request is essentially a note saying,
+"Someone would like to merge branch A of repository B into branch X of repository Y".
+The pull request does not contain the changes,
+but instead points at two particular branches.
+If either branch changes,
+the difference displayed is always up to date (Figure \@ref(fig:py-rse-git-advanced-how-pr-works)).
+
+```{r py-rse-git-advanced-how-pr-works, echo=FALSE, fig.cap="How Pull Requests Work"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+A pull request can store more than just the source and destination branches:
+it can also store comments people have made about the proposed merge.
+GitHub and other [forges][forge] allow users to comment on the pull request as a whole,
+or on particular lines,
+and mark comments as out of date
+if the author of the pull request updates the code that the comment is attached to
+(Figure \@ref(fig:py-rse-git-advanced-comment-out-of-date)).
+It is common for complex changes to go through several rounds of review and revision
+before being merged.
+
+```{r py-rse-git-advanced-comment-out-of-date, echo=FALSE, fig.cap="Comment Out of Date"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+To see this in action,
+suppose that Jean wants to add her email address to `README.md` in the plotting project.
+She creates a new branch and switches to it:
+
+```shell
+jj:~/plotting $ git checkout -b adding-email
+```
+
+```text
+Switched to a new branch 'adding-email'
+```
+
+then makes her change and commits it:
+
+```shell
+jj:~/plotting $ nano README.md
+jj:~/plotting $ git commit -a -m "Adding my email address"
+```
+
+```text
+[master b8938eb] Adding my email address
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
+
+```shell
+jj:~/plotting $ git diff -r HEAD~1
+```
+
+```text
+diff --git a/README.md b/README.md
+index a55a9bb..eb24a3f 100644
+--- a/README.md
++++ b/README.md
+@@ -3,4 +3,4 @@
+ Contributors:
+
+ -   Frances Bilas
+--   Jean Jennings
++-   Jean Jennings <jj@eniac.org>
+```
+
+Her changes are in her desktop repository, and *only* in her desktop repository.
+She cannot create a pull request until those changes are on GitHub,
+so she pushes her new branch to her repository on GitHub:
+
+```shell
+jj:~/plotting $ git push origin adding-email
+```
+
+```text
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 307 bytes | 307.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote:
+remote: Create a pull request for 'adding-email' on GitHub by visiting:
+remote:      https://github.com/jeanjennings/plotting/pull/new/adding-email
+remote:
+To https://github.com/jeanjennings/plotting.git
+ * [new branch]      adding-email -> adding-email
+```
+
+When Jean goes to her GitHub repository in the browser,
+GitHub notices that she has just pushed a new branch
+and asks her if she wants to create a pull request:
+
+```{r image-after-jean-pushes, echo=FALSE, fig.cap="After Jean Pushes"}
+knitr::include_graphics("figures/rse-git-advanced/after-jean-pushes.png")
+```
+
+When Jean clicks on the button,
+GitHub displays a page showing the default source and destination of the pull request
+and a pair of editable boxes for the pull request's title and a longer comment:
+
+```{r image-pull-request-a, echo=FALSE, fig.cap="Starting Pull Request"}
+knitr::include_graphics("figures/rse-git-advanced/pull-request-a.png")
+```
+
+If she scrolls down,
+she can see a summary of the changes that will be in the pull request:
+
+```{r image-pull-request-b, echo=FALSE, fig.cap="Summary of Pull Request"}
+knitr::include_graphics("figures/rse-git-advanced/pull-request-b.png")
+```
+
+She fills in the top two boxes:
+
+```{r image-fill-in-pull-request, echo=FALSE, fig.cap="Filling In Pull Request"}
+knitr::include_graphics("figures/rse-git-advanced/fill-in-pull-request.png")
+```
+
+and clicks on "Create Pull Request".
+GitHub does that
+and then displays a page showing the new pull request:
+
+```{r image-new-pull-request, echo=FALSE, fig.cap="New Pull Request"}
+knitr::include_graphics("figures/rse-git-advanced/new-pull-request.png")
+```
+
+Note that this pull request is displayed in Frances's repository rather than Jean's
+since it is Frances's repository that will be affected if the pull request is merged.
+
+Some time later,
+Frances checks her repository and sees that there is a pull request:
+
+```{r image-viewing-new-pull-request, echo=FALSE, fig.cap="Viewing Pull Request"}
+knitr::include_graphics("figures/rse-git-advanced/viewing-new-pull-request.png")
+```
+
+Clicking on the "Pull requests" tab brings up a list of PRs:
+
+```{r image-pr-list, echo=FALSE, fig.cap="Listing Pull Requests"}
+knitr::include_graphics("figures/rse-git-advanced/pr-list.png")
+```
+
+and clicking on the pull link itself displays more information about it:
+
+```{r image-pr-details, echo=FALSE, fig.cap="Pull Request Details"}
+knitr::include_graphics("figures/rse-git-advanced/pr-details.png")
+```
+
+Since there are no conflicts,
+GitHub will allow Frances to merge the PR immediately using the "Merge pull request" button.
+She could also discard or reject it *without* merging using the "Close pull request" button.
+Instead,
+she clicks on the "Files changed" tab to see what Jean has changed:
+
+```{r image-pr-changes, echo=FALSE, fig.cap="Files Changed"}
+knitr::include_graphics("figures/rse-git-advanced/pr-changes.png")
+```
+
+If she moves her mouse over particular lines,
+a white-on-blue cross appears near the numbers to indicate that she can add comments:
+
+```{r image-pr-comment-marker, echo=FALSE, fig.cap="Comment Marker"}
+knitr::include_graphics("figures/rse-git-advanced/pr-comment-marker.png")
+```
+
+She clicks on the marker beside her own name and writes a comment:
+
+```{r image-pr-writing-comment, echo=FALSE, fig.cap="Writing Comment"}
+knitr::include_graphics("figures/rse-git-advanced/pr-writing-comment.png")
+```
+
+She only wants to make one comment rather than write a lengthier multi-comment review,
+so she clicks on "Add single comment".
+GitHub redisplays the page with her comment inserted inline:
+
+```{r image-pr-with-comment, echo=FALSE, fig.cap="Pull Request With Comment"}
+knitr::include_graphics("figures/rse-git-advanced/pr-with-comment.png")
+```
+
+While all of this has been doing on,
+GitHub has been emailing notifications to both Jean and Frances.
+When Jean clicks on the link in hers,
+it takes her to the PR and shows her Frances's comment.
+She changes `README.md`,
+commits,
+and pushes,
+but does *not* create a new pull request or do anything to the existing one.
+As explained above,
+a PR is a note asking that two branches be merged,
+so if either end of the merge changes,
+the PR updates automatically.
+
+Sure enough,
+when Frances looks at the PR again a few moments later she sees this:
+
+```{r image-pr-with-fix, echo=FALSE, fig.cap="Pull Request With Fix"}
+knitr::include_graphics("figures/rse-git-advanced/pr-with-fix.png")
+```
+
+Satisfied,
+she goes back to the "Conversation" tab and clicks on "Merge".
+The icon at the top of the PR's page changes text and color to show that the merge was successful:
+
+```{r image-pr-successful-merge, echo=FALSE, fig.cap="Successful Merge"}
+knitr::include_graphics("figures/rse-git-advanced/pr-successful-merge.png")
+```
+
+To get those changes from GitHub to her desktop repository,
+Frances uses `git pull`:
+
+```shell
+frances:~/plotting $ git pull origin master
+```
+
+```text
+remote: Enumerating objects: 9, done.
+remote: Counting objects: 100% (9/9), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 7 (delta 3), reused 5 (delta 2), pack-reused 0
+Unpacking objects: 100% (7/7), done.
+From https://github.com/francesbilas/plotting
+ * branch            master     -> FETCH_HEAD
+   766c2cd..984b116  master     -> origin/master
+Updating 766c2cd..984b116
+Fast-forward
+ README.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+```
+
+To get the change she just made from her `adding-email` branch into her `master` branch,
+Jean could use `git merge` on the command line.
+It's a little clearer,
+though,
+if she also uses `git pull` from her `upstream` repository (i.e., Frances's repository)
+so that she's sure to get any other changes that Frances may have merged:
+
+```shell
+jj:~/plotting $ git checkout master
+```
+
+```text
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+```
+
+```shell
+jj:~/plotting $ git pull upstream master
+```
+
+```text
+remote: Enumerating objects: 1, done.
+remote: Counting objects: 100% (1/1), done.
+remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (1/1), done.
+From https://github.com/francesbilas/plotting
+ * branch            master     -> FETCH_HEAD
+   766c2cd..984b116  master     -> upstream/master
+Updating 766c2cd..984b116
+Fast-forward
+ README.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+```
+
+All four repositories are now synchronized.
+
+This process may seem overly complicated when it is described step by step,
+but it quickly becomes second nature.
+Everyone involved in the project can work at their own pace,
+picking up others' changes and submitting their own whenever they want.
+More importantly,
+everyone has a chance to review work before it lands in the main repository.
+As we discuss in Section \@ref(py-rse-style-review),
+doing reviews doesn't just prevent errors from creeping in:
+it is also an effective way to spread understanding and skills.
+
+## How can I label a particular version of my project? {#py-rse-git-advanced-tag}
+
+A [tag][tag] is a permanent label on a particular state of the repository.
+Tags are theoretically redundant,
+since the [full identifier][full-identifier-git] identifies that state as well,
+but full identifiers are hard to remember and type,
+and their [shortened versions][short-identifier-git] aren't any more meaningful.
+
+Projects therefore use annotated tags to mark every major event in the project's history.
+These tags are called "annotated" because
+they allow their creators to add explanatory messages
+just like [commit messages][commit-message].
+For example,
+a research project could use `report-date-event` for tag names,
+such as `jse-2018-06-23-response` or `pediatrics-2018-08-15-summary`.
+
+If we want to tag the most recent commit in the current branch
+(i.e., the `HEAD`),
+all we have to do is tell Git what name to give the tag:
+
+```shell
+$ git tag -a -m "It is DONE" thesis-final
+```
+
+(Please don't ever actually tempt fate by calling something `-final`.)
+The `-a` option tells Git that we want to annotate the tag,
+while `-m` tells it that we're providing a message on the command line.
+If we want to see what tags have already been created,
+we can use `git tag` on its own.
+We can also tag an old commit by providing the full identifier after the tag name:
+
+```shell
+$ git tag -a -m "I should have known better" thesis-revisions 8e966b5f0703d347e4f84817f12b48f456a58ae1
+```
+
+Most software projects use [semantic versioning][semantic-versioning] for software releases,
+which produces three-part version numbers `major.minor.patch`:
+
+-   Increment `major` every time there's an incompatible externally-visible change.
+-   Increment `minor` when adding functionality without breaking any existing code.
+-   Increment `patch` for bug fixes that don't add any new features ("now works as previously documented").
+
+Simple projects should only tag the `master` branch
+because every feature or bug fix is merged to `master` when it is finished.
+Larger software projects may create a branch for each released version and do minor or patch updates on that branch,
+but this is outside the scope of this lesson.
+
+## Exercises {#py-rse-git-advanced-exercises}
+
+### Add new country file and make additional PR {#py-rse-git-advanced-ex-additional-pr}
+
+-   Starting in the master branch make a new branch
+-   Copy other country file into a new country
+-   Edit the file to include info on the new country
+-   Add and commit this new file
+-   Push the new changes to GitHub
+
+## Key Points {#py-rse-git-advanced-keypoints}
+
+```{r, child="keypoints/rse-git-advanced.md"}
+```
+
+```{r, child="./links.md"}
+```
+
+
