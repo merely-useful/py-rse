@@ -2,18 +2,17 @@
 
 import sys
 import re
-import csv
 import pdb
 import argparse
 from collections import Counter
 from unidecode import unidecode
 
+import mymodule
+
 
 def count_words(reader):
-    '''
-    Count the occurrence of each word in a string.
-    '''
-
+    """Count the occurrence of each word in a string."""
+    
     raw_text = reader.read()
     raw_text = unidecode(raw_text)
     word_list = re.findall(r"\w[\w']*(?:-\w+)*", raw_text.lower())
@@ -22,29 +21,13 @@ def count_words(reader):
     return word_counts
 
 
-def report_results(writer, results):
-    '''
-    Report results to stream.
-    '''
-    writer = csv.writer(writer)
-    for (key, value) in results:
-        writer.writerow((key, value))
-
-
 def main(args):
-    ''''
-    Run the command line program.
-    '''
+    """Run the command line program."""
 
     with open(args.infile, 'r') as reader:
-        word_counts = count_words(reader)  
-
-    if args.sortby == 'count':
-        word_counts = word_counts.most_common()
-    else:
-        word_counts = sorted(word_counts.items())
-                
-    report_results(sys.stdout, word_counts)
+        word_counts = count_words(reader)
+    word_counts = mymodule.sort_counts(word_counts, args.sortby)    
+    mymodule.report_results(sys.stdout, word_counts)
 
 
 if __name__ == '__main__':
