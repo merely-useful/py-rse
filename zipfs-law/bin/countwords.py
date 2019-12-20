@@ -1,54 +1,28 @@
 #!/usr/bin/env python
 
-'''
-Read one or more text files given as command-line arguments, or standard input
-if no filenames are given, and produce a two-column CSV of words and counts.
-'''
-
-
 import sys
 import re
 import csv
 import pdb
+import argparse
 from collections import Counter
+from unidecode import unidecode
 
 
-PUNC = re.compile(r'",;.')
-WORD = re.compile(r'\b[_\'\(]*(.+?)[_\'\)]*\b')
-
-
-def main(filenames):
+def count_words(reader):
     '''
-    Read standard input or one or more files and report results.
+    Count the occurrence of each word in a string.
     '''
-    results = Counter()
-    if not filenames:
-        process(sys.stdin, results)
-    else:
-        for fn in filenames:
-            with open(fn, 'r') as reader:
-                process(reader, results)
-                
-    sort_method = 'alphabetical'         
-    if sort_method == 'count':
-        results = results.most_common()
-    elif sort_method == 'alphabetical':
-        results = sorted(results.items())
-                
-    report(sys.stdout, results)
+
+    raw_text = reader.read()
+    raw_text = unidecode(raw_text)
+    word_list = re.findall(r"\w[\w']*(?:-\w+)*", raw_text.lower())
+    word_counts = Counter(word_list)
+
+    return word_counts
 
 
-def process(reader, results):
-    '''
-    Extract and count words from stream.
-    '''
-    raw = reader.read()
-    cooked = PUNC.sub('', raw)
-    words = WORD.findall(cooked)
-    results.update(words)
-
-
-def report(writer, results):
+def report_results(writer, results):
     '''
     Report results to stream.
     '''
@@ -57,11 +31,30 @@ def report(writer, results):
         writer.writerow((key, value))
 
 
+def main(args):
+    ''''
+    Run the command line program.
+    '''
+
+    with open(args.infile, 'r') as reader:
+        word_counts = count_words(reader)  
+
+    if args.sortby == 'count':
+        word_counts = word_counts.most_common()
+    else:
+        word_counts = sorted(word_counts.items())
+                
+    report_results(sys.stdout, word_counts)
+
+
 if __name__ == '__main__':
 
-    # add option for sorting alphabetically or by count
-    # add option for removing punctuation from results
+    description = 'Count the occurrence of all words in a text'
+    parser = argparse.ArgumentParser(description=description)
 
+    parser.add_argument('infile', type=str, help='Input file name')
+    parser.add_argument('--sortby', type=str, choices=('count', 'alphabetical'),
+                        default='count', help='Method for sorting results')
 
-    main(sys.argv[1:])
-
+    args = parser.parse_args()
+    main(args)
