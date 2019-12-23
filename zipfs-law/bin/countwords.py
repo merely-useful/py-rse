@@ -5,7 +5,6 @@ import re
 import pdb
 import argparse
 from collections import Counter
-from unidecode import unidecode
 
 import mymodule
 
@@ -13,9 +12,9 @@ import mymodule
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     
-    raw_text = reader.read()
-    raw_text = unidecode(raw_text)
-    word_list = re.findall(r"\w[\w']*(?:-\w+)*", raw_text.lower())
+    text = reader.read()
+    findwords = re.compile("\w+", re.IGNORECASE)
+    word_list = re.findall(findwords, text)
     word_counts = Counter(word_list)
 
     return word_counts
