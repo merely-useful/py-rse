@@ -9,24 +9,23 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 
-def set_plot_params(config_file):
+def set_plot_params(param_file):
     """Set plot parameters."""
     
-    if config_file:
-        with open(config_file, 'r') as reader:
-            config = yaml.load(reader)
+    if param_file:
+        with open(param_file, 'r') as reader:
+            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
     else:
-        config = {}
+        param_dict = {}
 
-    mpl.rcParams['axes.labelsize'] = config['axes.labelsize'] if 'axes.labelsize' in config else 'large'
-    mpl.rcParams['xtick.labelsize'] = config['xtick.labelsize'] if 'xtick.labelsize' in config else 'medium'
-    mpl.rcParams['ytick.labelsize'] = config['ytick.labelsize'] if 'ytick.labelsize' in config else 'medium'
+    for param, value in param_dict.items():
+        mpl.rcParams[param] = value 
             
 
 def main(args):
     """Run the command line program."""
 
-    set_plot_params(args.config_file)
+    set_plot_params(args.params)
     input_csv = args.infile if args.infile else sys.stdin
     df = pd.read_csv(input_csv, header=None, names=('word', 'word frequency'))
     df['rank'] = df['word frequency'].rank(ascending=False)
@@ -48,8 +47,8 @@ if __name__ == '__main__':
                         help='X-axis limits')
     parser.add_argument('--ylim', type=float, nargs=2, default=[0.9, 1e4],
                         help='Y-axis limits')
-    parser.add_argument('--config_file', type=str, default=None,
-                        help='Configuration file name')
+    parser.add_argument('--params', type=str, default=None,
+                        help='Configuration file specifying plot parameters')
 
     args = parser.parse_args()
     main(args)
