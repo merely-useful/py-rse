@@ -50,9 +50,11 @@ Some text will need to be added to this chapter to introduce the narrative.
 In other words, it will say something along the lines of: 
 
 "We want to look at the distribution of word frequencies in classic English novels.
-Zipf’s Law states that the second most common word in a body of text appears half as often as the most common,
+Zipf’s Law states that the second most common word in a body of text
+appears half as often as the most common,
 the third most common appears a third as often, and so on.
-To test it, we are going to look at a bunch of ebooks that are freely available from Project Gutenberg..."
+To test it, we are going to look at a bunch of ebooks
+that are freely available from Project Gutenberg..."
 
 ### Chapter 2: Basics of the unix shell
 
@@ -66,13 +68,14 @@ which extracts a list of years from a climate data file.
 It will need to be replaced with a bash script
 that extracts basic information from the ebook text files in `zipfs-law/data/`.
 
-To be more specific, a new bash script `book_summary.sh` could extract the
-book title, author and release date using the `head` command to select the relevant lines
+To be more specific, a new bash script `zipfs_law/bin/book_summary.sh`
+has been developed to extract the book title, author and release date
+using the `head` and `tail` commands to select the relevant lines
 from an ebook text file. 
-(Some of the original text files will need to be edited very slightly
+(Some of the original text files were edited very slightly
 to ensure that this information is on exactly the same line in each file.)
 Later on in the chapter,
-the content on `grep` could then show how it could have been used to locate the same
+the content on `grep` could show how it could have been used to locate the same
 information in the files 
 (i.e. so the information wouldn't need to be on exactly the same line in each file.)
 
@@ -102,6 +105,37 @@ This example could be tweaked so that two slightly different versions of
 `plotcounts.py` are developed instead
 (i.e. two different ways of plotting the word count data).
 
+(This basic version of `plotcounts.py` should not accept configuration files
+or apply any error handling.
+These additions to the script will happen in subsequent chapters.)
+
+### Chapter 7: Program configuration
+
+This chapter introduces overlay configuration and applies it by
+adding relevant functionality to `plotcounts.py`.
+Specifically, the program will accept a YAML file to configure aspects of [`matplotlib.rcParams`](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html).
+
+Note (from that hyperlink) that there is an rcParams configuration file
+somewhere on your system but by default everything is commented out.
+You can find it by using:
+```
+>>> import matplotlib as mpl
+>>> mpl.matplotlib_fname()
+/Users/damienirving/anaconda/envs/merely/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc
+```
+
+To put this all in context, this chapter talks about the following levels of configuration:
+
+1. A system-wide configuration file for general settings.
+2. A user-specific configuration file for personal preferences. [`matplotlibrc`]
+3. A job-specific file with settings for a specific run. [`plot_params.yml`]
+4. Command-line options to change things that commonly change. [`argparse`]
+
+### Chapter 8: Error handling
+
+This chapter introduces error handling and applies it to one or more of
+`countwords.py`, `collate.py` or `plotwords.py`.
+
 ### Chapter 9: Working in teams
 
 This chapter introduces many of the basic concepts/ideas required for working with other people.
@@ -112,7 +146,7 @@ in this chapter we can create a code of conduct and license for the Zipf's Law p
 as well as create a couple of GitHub issues (with labels).
 One of those issues should be a bug report.
 
-### Chapter 7: Code style, review and refactor
+### Chapter 10: Code style, review and refactor
 
 It's not clear how much of this chapter will ultimately end up in the novice Python book,
 but nonetheless code review will definitely be introduced here.
@@ -120,7 +154,7 @@ The chapter text could be edited such that a draft version of `testfit.py`
 (with deliberate flaws written in)
 is presented and then reviewed/improved.
 
-### Chapter 8: Automating analyses 
+### Chapter 11: Automating analyses 
 
 This chapter can stay pretty much as is.
 The introductory paragraphs about Zipf's Law can be removed 
@@ -128,12 +162,12 @@ The introductory paragraphs about Zipf's Law can be removed
 and the workflows developed in the chapter could be extended to also include
 `plotcounts.py` and `testfit.py`.
 
-### Chapter 10: Project structure
+### Chapter 12: Project structure
 
 Now that we've written all our scripts for the Zipf's Law analysis,
 this chapter should structure it all properly (i.e. with license files and README's etc).
 
-### Chapter 14: Correctness
+### Chapter 13: Correctness
 
 This chapter introduces testing and could be updated to write tests for the Zipf's Law code.
 For example, `countwords.py` could be tested using an input text file where the count
@@ -142,7 +176,7 @@ for each word is already known.
 I think this chapter needs to come before the chapter on continuous integration,
 since it's these tests that Travis CI will implement.
 
-### Chapter 13: Python packaging
+### Chapter 14: Python packaging
 
 In the current version of this chapter,
 a few relevant functions relating to the Zipf's Law analysis 
@@ -157,11 +191,4 @@ as a complete Zipf's Law package.
 
 This lesson could consider (hypothetically) where the results, data and code from the Zipf's Law
 analysis could be published.
-
-## Next steps
-
-Once people are comfortable with the proposed changes,
-we should have a go at writing the final Zipf's Law package
-(i.e. including the four scripts, makefiles for automation, tests, etc)
-so we know what we're aiming for when editing the individual chapters.
  
