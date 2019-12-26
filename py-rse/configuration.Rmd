@@ -1,0 +1,222 @@
+# Program Configuration {#py-rse-configuration}
+
+Command-line options are only one level of configuration.
+Depending on how complex a program is,
+it may also provide:
+
+1.  A system-wide configuration file for general settings.
+2.  A user-specific configuration file for personal preferences.
+3.  A job-specific file with settings for a specific run.
+4.  Command-line options to change things that commonly change.
+
+This is sometimes called [overlay configuration][overlay-configuration]
+because each level overrides the ones above it:
+the user's configuration file overrides the system settings,
+the job configuration overrides the user's defaults,
+and the command-line options overrides that.
+While this is far more complexity than most research software needs (at least initially),
+being able to read a complete set of options from a file is a big boost to reproducibility.
+
+Programmers have invented many formats for configuration files,
+so please do not create your own.
+One possibility is to write the configuration as a Python data structure
+and then load it as if it was a library.
+This is clever,
+but it's hard for tools in other languages to process.
+A second option is the [Windows INI format][ini-format],
+which is laid out like this:
+
+```text
+[section_1]
+key_1=value_1
+key_2=value_2
+
+[section_2]
+key_3=value_3
+key_4=value_4
+```
+
+INI files are simple to read and write,
+but the format is slowly falling out of use in favor of [YAML][yaml]
+(Appendix \@ref(py-rse-yaml)).
+Here's a sample YAML configuration file:
+
+```yaml
+# Standard settings for thesis.
+logfile: "/tmp/log.txt"
+quiet: false
+overwrite: false
+fonts:
+- Verdana
+- Serif
+```
+
+And here's an extension to our script template
+that uses `argparse` and provide
+a default configuration that the user can override:
+
+```python
+import argparse
+import yaml
+
+DEFAULT_CONFIG = {
+    'source': 'DEFAULT',
+    'logfile': '/tmp/log.txt',
+    'quiet': False,
+    'overwrite': False,
+    'fonts': ['Verdana', 'Serif']
+}
+
+def main(args):
+    '''Run the program.'''
+
+    if args.configfile:
+        with open(args.configfile, 'r') as reader:
+            config = yaml.load(reader)
+            config['source'] = args.configfile
+    else:
+        config = DEFAULT_CONFIG
+
+    if args.infile:
+        config['infile'] = args.infile
+
+    if args.outfile:
+        config['outfile'] = args.outfile
+
+    print('Configuration:', config)
+
+
+if __name__ == '__main__':
+
+    description = 'Print options to the screen.'
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument('--configfile', type=str, help='Configuration file name')
+    parser.add_argument('--infile', type=str, help='Input file name')
+    parser.add_argument('--outfile', type=str, help='Output file name')
+
+    args = parser.parse_args()
+    main(args)
+```
+
+```shell
+$ python config_template.py --infile chapter2.txt --configfile thesis.yml 
+```
+
+```text
+Configuration: {'logfile': '/tmp/log.txt',
+                'quiet': False,
+                'overwrite': False,
+                'fonts': ['Verdana', 'Serif'],
+                'source': 'thesis.yml',
+                'infile': 'chapter2.txt'}
+```
+
+YAML allows nested keys and lists,
+but if you need them,
+you're probably doing something wrong [@Xu2015]:
+most users never use most configuration options and find their presence confusing.
+
+## Where should configuration files go? {#py-rse-configuration-loc}
+
+System-wide settings for an application called `app` are often stored in `/etc/app.yml`.
+(Older programs sometimes use a name like `app.rc` for their configuration file,
+where `rc` stands for "resource control".)
+Alternatively,
+some programs will set an environment variable (Section \@ref(py-rse-bash-advanced-vars))
+to the name of the installation directory,
+and then read the system configuration file from there.
+For example,
+if the application's environment variable is `THESIS`,
+we can read configuration from:
+
+```python
+install_dir = os.getenv('THESIS')
+config_file = os.path.join(install_dir, 'config.yml')
+if os.path.isfile(config_file):
+    with open(config_file, 'r') as reader:
+        config = yaml.load(reader)
+```
+
+Similarly,
+we can get personal settings from `$HOME/.thesis.yml`;
+the leading '.' hides the configuration file from `ls`.
+Finally,
+per-job settings can come from `thesis.yml` in the current directory,
+where again "app" is replaced with the name of the program.
+
+## How can I record the configuration that produced particular results? {#py-rse-configuration-log}
+
+We don't need to write any of this when we first create a new tool.
+However,
+experience teaches that little tools grow into big ones.
+As soon as we have more than a couple of configuration parameters,
+or as soon as some of them are usually set to the same value,
+we should start to think about saving our settings in files.
+
+This is particularly important if we want others (including our future self) to be able to reproduce our work.
+Careful record keeping is essential to reproducible science,
+and if we add just a few lines to our program,
+the computer can save the entire configuration for a particular run of a program.
+For example,
+if we have stored our settings in a Python dictionary called `settings` like this:
+
+```python
+settings = {
+    'logfile': '/tmp/thesis.log',
+    'quiet': False,
+    'overwrite': True,
+    'fonts': ['Comic Sans']
+}
+```
+
+we can save that as YAML using this short function:
+
+```python
+def save_config(filename, settings):
+    '''Save configuration settings to a file.'''
+
+    with open(filename, 'w') as writer:
+        yaml.dump(settings, writer)
+
+save_config('thesis.yml', settings)
+```
+
+```shell
+$ cat thesis.yml
+```
+
+```text
+logfile: "/tmp/thesis.log"
+quiet: false
+overwrite: true
+fonts:
+- Comic Sans
+```
+
+This lets us re-create configuration on another machine
+even if it has different default settings.
+The test is whether our program can load a dumped configuration,
+then dump it again and get the same result.
+
+> **Version Everything**
+>
+> We should always include a version number as a field in the dumped configuration
+> (Section \@ref(py-rse-git-advanced-tag)),
+> and our program should print this when given a `--version` option.
+> We need this because how we interpret options will change over time,
+> and if you don't know what the version of the program was,
+> we'll have to guess what options mean.
+
+
+## Exercises {#py-rse-configuration-exercises}
+
+TODO
+
+## Key Points {#py-rse-configuration-keypoints}
+
+```{r, child="keypoints/py-rse-configuration.md"}
+```
+
+```{r, child="./links.md"}
+```
