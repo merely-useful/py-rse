@@ -1,7 +1,7 @@
-This document outlines the changes that need to be made to the RSE Python book  
+This document outlines the changes that need to be made to the RSE Python book
 in order to weave a common narrative through all the chapters.
 
-## Narrative
+## Narrative and code
 
 The narrative involves looking at the distribution of word frequencies in classic English novels. 
 [Zipf’s Law](https://en.wikipedia.org/wiki/Zipf%27s_law) states that the second most common word
@@ -9,6 +9,12 @@ in a body of text appears half as often as the most common,
 the third most common appears a third as often, and so on.
 To test it, we are going to look at a bunch of ebooks that are freely available from
 [Project Gutenberg](https://www.gutenberg.org/).
+
+Three basic scripts are developed as we move through the chapters to achieve this task:
+
+* `zipfs_law/bin/countwords.py`: for counting the words in a text (produces .csv output)
+* `zipfs_law/bin/collate.py`: for collating the word count from more than one text
+* `zipfs_law/bin/plotcounts.py`: for plotting the word count
 
 ## Chapter outline
 
@@ -49,7 +55,11 @@ title and author information could be extracted using `grep`.
 This chapter currently involves a generic script called `script_template.py`,
 which can be configured using command line arguments.
 Instead of developing the generic `script_template.py`,
-this chapter should develop `zipfs_law/bin/countwords.py` instead.
+this chapter needs to be updated so that it develops `zipfs_law/bin/countwords.py` instead.
+This will involve introducing `if __name__ == '__main__':`,
+writing your own modules (`mymodule.py`),
+`argparse` and standard input in Python (`sys.stdin`).
+(The concept of standard input is introduced in the earlier chapter on unix shell basics.)
 
 ### Chapter 5: Git at the command line
 
@@ -66,42 +76,31 @@ and a beeswarm plot on the other.
 The better looking plot is then merged into the master branch.
 This example needs to be changed so that two slightly different versions of 
 `zipfs_law/bin/plotcounts.py` are developed instead.
-The two different ways of plotting the word count data that can be explored are:
 
-1. Word frequency versus 1/rank.
+The two different versions are illustrated in
+`zipfs_law/bin/plotcounts_branch_keep.py` and `zipfs_law/bin/plotcounts_branch_reject.py`
+The explanation for each is as follows:
 
-```
-df = pd.read_csv(input_csv, header=None, names=('word', 'word frequency'))
-df['rank'] = df['word frequency'].rank(ascending=False)
-df['1/rank'] = 1 / df['rank'] 
-df.plot.scatter(x='word frequency', y='1/rank', figsize=[12, 6], grid=True)
-```
-Rationale: Mathematically, Zipfs Law might be written as:
-word frequency is proportional to 1/rank.
+##### `zipfs_law/bin/plotcounts_branch_reject.py`: Word frequency versus 1/rank
+
+Rationale: Mathematically, Zipfs Law might be written as
+"word frequency is proportional to 1/rank."
 
 Advantages: Simple to interpret (because no log axes).
 
 Disadvantage: Tends to visually over-emphasize the very frequent words.
 It's hard to see what is happening for words that appear less than 500 times.
 
-2. A log-log plot showing word frequency versus rank.
-
-```
-df = pd.read_csv(input_csv, header=None, names=('word', 'word frequency'))
-df['rank'] = df['word frequency'].rank(ascending=False)
-df.plot.scatter(x='word frequency', y='rank', loglog=True, figsize=[12, 6], grid=True)
-```
+##### `zipfs_law/bin/plotcounts_branch_keep.py`: log-log plot showing word frequency versus rank
 
 Rationale: Zipfs Law is an example of a power law.
+
 In general, when two variables (x) and (y) are related through a power law [ y = ax^b ],
 taking logarithms of both sides yields a linear relationship: [ \log(y) = \log(a) + b\log(x) ].
 Hence, plotting the variables on a log-log scale should reveal this linear relationship.
 
 This is the option we want to go with.
 
-(This basic version of `plotcounts.py` developed in this chapter
-should not accept configuration files or apply any error handling.
-These additions to the script will happen in subsequent chapters.)
 
 ### Chapter 7: Automating analyses 
 
@@ -109,7 +108,7 @@ This chapter can stay pretty much as is.
 The introductory paragraphs about Zipf's Law can be removed 
 (because they should now appear in the introduction chapter)
 and the workflows developed in the chapter need to be extended to also include
-`plotcounts.py`.
+`plotcounts.py` (as it appears in `zipfs_law/bin/plotcounts_branch_keep.py`).
 
 ### Chapter 8: Program configuration
 
@@ -129,14 +128,18 @@ You can find it by using:
 To put this all in context, this chapter talks about the following levels of configuration:
 
 1. A system-wide configuration file for general settings.
-2. A user-specific configuration file for personal preferences. [`matplotlibrc`]
-3. A job-specific file with settings for a specific run. [`zipfs_law/bin/plot_params.yml`]
-4. Command-line options to change things that commonly change. [`argparse`]
+2. A user-specific configuration file for personal preferences. [e.g. `matplotlibrc`]
+3. A job-specific file with settings for a specific run. [e.g. `zipfs_law/bin/plot_params.yml`]
+4. Command-line options to change things that commonly change. [e.g. `argparse`]
+
+At the end of this chapter the `plotcounts.py` script should look like
+`zipfs_law/bin/plotcounts_config.py`.
 
 ### Chapter 9: Error handling
 
 This chapter introduces error handling and applies it to one or more of
 `countwords.py`, `collate.py` or `plotwords.py`.
+(I haven't yet figured out which of those scripts would be best to add error handling to...)
 
 ### Chapter 10: Working in teams
 
@@ -153,13 +156,17 @@ One of those issues should be a bug report.
 It's not clear how much of this chapter will ultimately end up in the novice Python book,
 but nonetheless code review will definitely be introduced here.
 
-Consistent with [this comment](https://github.com/merely-useful/merely-useful.github.io/issues/288#issuecomment-568631571),
-the one thing we are yet to do is estimate the power law exponent
-so we can add it as a line on our log-log plot. 
+The last bit of development that needs to be done to `plotcounts.py` is to
+estimate the power law exponent so it can be added it as a line on our log-log plot. 
+That needs to be done in this chapter by adding the relevant code to `plotcounts.py`.
+In the first instance the new code should be added with some deliberate flaws written in,
+so that it can then be reviewed and improved
+using the code style, review and refactor principles introduced in the chapter.
 
-Code for estimating the power law exponent and adding a corresponding line to the plot
-could be added to `plotcounts.py` in this chapter with deliberate flaws written in,
-and then reviewed/improved.
+At this stage we are still figuring out the best way to write
+the code for estimating the power law exponent.
+Here's the relevant [ comment](https://github.com/merely-useful/merely-useful.github.io/issues/288#issuecomment-568631571)
+to follow.
 
 ### Chapter 12: Project structure
 
