@@ -57,7 +57,7 @@ which can be configured using command line arguments.
 Instead of developing the generic `script_template.py`,
 this chapter needs to be updated so that it develops `zipfs_law/bin/countwords.py` instead.
 This will involve introducing `if __name__ == '__main__':`,
-writing your own modules (`mymodule.py`),
+writing your own modules (`zipfs_law/bin/mymodule.py`),
 `argparse` and standard input in Python (`sys.stdin`).
 (The concept of standard input is introduced in the earlier chapter on unix shell basics.)
 
@@ -138,7 +138,7 @@ At the end of this chapter the `plotcounts.py` script should look like
 ### Chapter 9: Error handling
 
 This chapter introduces error handling and applies it to one or more of
-`countwords.py`, `collate.py` or `plotwords.py`.
+`countwords.py`, `collate.py` or `plotcounts.py`.
 (I haven't yet figured out which of those scripts would be best to add error handling to...)
 
 ### Chapter 10: Working in teams
