@@ -24,6 +24,7 @@ PY_FILES=\
   novice-goals.Rmd \
   py/intro.Rmd \
   py/getting-started.Rmd \
+  py/data-manipulation.Rmd \
   py/development.Rmd \
   py/objectives.Rmd \
   py/publishing.Rmd \
@@ -76,7 +77,7 @@ PY_RSE_FILES=\
   py-rse/solutions.Rmd \
   py-rse/yaml.Rmd \
   py-rse/ssh.Rmd
-
+  
 COMMON_FILES=\
   _common.R \
   appendix.Rmd \
