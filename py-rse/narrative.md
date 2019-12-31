@@ -165,7 +165,7 @@ using the code style, review and refactor principles introduced in the chapter.
 
 At this stage we are still figuring out the best way to write
 the code for estimating the power law exponent.
-Here's the relevant [ comment](https://github.com/merely-useful/merely-useful.github.io/issues/288#issuecomment-568631571)
+Here's the relevant [issue](https://github.com/merely-useful/merely-useful.github.io/issues/288)
 to follow.
 
 ### Chapter 12: Project structure
