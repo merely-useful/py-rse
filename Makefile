@@ -110,7 +110,7 @@ py : _book/py/index.html _book/py/rse.pdf
 py-rse : _book/py-rse/index.html _book/py-rse/py-rse.pdf
 
 ##   r-rse      : rebuild RSE R HTML and PDF.
-rse : _book/r-rse/index.html _book/r-rse/r-rse.pdf
+r-rse : _book/r-rse/index.html _book/r-rse/r-rse.pdf
 
 #-------------------------------------------------------------------------------
 
