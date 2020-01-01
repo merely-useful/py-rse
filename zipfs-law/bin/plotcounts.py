@@ -12,17 +12,24 @@ from scipy.optimize import minimize_scalar
 
 
 def nlog_likelihood(beta, counts):
-    """Get maximum likelihood estimate (mle) for beta"""
+    """Log-likelihood function."""
     
-    mle = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
     
-    return mle
+    return likelihood
 
 
 def get_power_law_params(word_counts):
     """Get the power law parameters.
     
-    TODO: Explain what alpha and beta are.
+    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
+      beta (Eq. 2) and the maximum likelihood estimation (mle)
+      of beta (Eq. 6).
+      
+    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
+      Large-Scale Analysis of Zipf’s Law in English Texts.
+      PLoS ONE 11(1): e0147073.
+      https://doi.org/10.1371/journal.pone.0147073
     
     """
     
@@ -35,7 +42,7 @@ def get_power_law_params(word_counts):
 
 
 def set_plot_params(param_file):
-    """Set plot parameters."""
+    """Set the matplotlib rc parameters."""
     
     if param_file:
         with open(param_file, 'r') as reader:
@@ -48,12 +55,12 @@ def set_plot_params(param_file):
             
             
 def plot_fit(xlim, max_rank, beta):
-    """Fit a power law curve to the data.
+    """Plot the power law curve that was fitted to the data.
     
     Args:
-      xlim (sequence): x-axis bounds (min, max)(
+      xlim (sequence): x-axis bounds (min, max)
       max_rank (int): maximum word frequency rank
-      beta (float): beta parameter from the power law
+      beta (float): estimated beta parameter for the power law
     
     """
 
@@ -65,7 +72,7 @@ def plot_fit(xlim, max_rank, beta):
 def main(args):
     """Run the command line program."""
 
-    set_plot_params(args.params)
+    set_plot_params(args.rcparams)
     input_csv = args.infile if args.infile else sys.stdin
     df = pd.read_csv(input_csv, header=None, names=('word', 'word frequency'))
     df['rank'] = df['word frequency'].rank(ascending=False)
@@ -86,15 +93,15 @@ if __name__ == '__main__':
     description = 'Plot word counts'
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument('outfile', type=str, help='Output file (.png)')
+    parser.add_argument('outfile', type=str, help='Output image file')
     parser.add_argument('--infile', type=str, default=None,
                         help='Word count csv file')
     parser.add_argument('--xlim', type=float, nargs=2, default=[0.9, 1e4],
                         help='X-axis limits')
     parser.add_argument('--ylim', type=float, nargs=2, default=[0.9, 1e4],
                         help='Y-axis limits')
-    parser.add_argument('--params', type=str, default=None,
-                        help='Configuration file specifying plot parameters')
+    parser.add_argument('--rcparams', type=str, default=None,
+                        help='Configuration file for plot parameters (matplotlib rc parameters)')
 
     args = parser.parse_args()
     main(args)

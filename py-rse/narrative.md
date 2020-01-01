@@ -158,15 +158,33 @@ but nonetheless code review will definitely be introduced here.
 
 The last bit of development that needs to be done to `plotcounts.py` is to
 estimate the power law exponent so it can be added it as a line on our log-log plot. 
-That needs to be done in this chapter by adding the relevant code to `plotcounts.py`.
+That needs to be done in this chapter by adding the relevant code
+(i.e. the `get_power_law_params`, `nlog_likelihood` and `plot_fit` functions) to `plotcounts.py`,
+starting from the version of the script
+at the end of Chapter 8 (`zipfs_law/bin/plotcounts_config.py`).
+
 In the first instance the new code should be added with some deliberate flaws written in,
 so that it can then be reviewed and improved
 using the code style, review and refactor principles introduced in the chapter.
 
-At this stage we are still figuring out the best way to write
-the code for estimating the power law exponent.
-Here's the relevant [issue](https://github.com/merely-useful/merely-useful.github.io/issues/288)
-to follow.
+At the end of this chapter we are finally in a position to verify Zipfs Law.
+In the beginning we introduced the Law as:
+
+"Zipf’s Law states that the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often, and so on."
+
+The alpha value returned by `plotcounts.py` for Moby Dick is 1.1, for instance,
+so the correct statement for that text would be,
+
+"the most frequent word will occur approximately 2<sup>1.1</sup> = 2.14
+times as often as the second most frequent word,
+3<sup>1.1</sup> = 3.35 times as often as the third most frequent word, etc".
+
+which is pretty close.
+
+Here's the [issue](https://github.com/merely-useful/merely-useful.github.io/issues/288)
+where we discuss theory behind the power law stuff in detail.
 
 ### Chapter 12: Project structure
 
