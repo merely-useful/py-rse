@@ -4,9 +4,34 @@ import sys
 import re
 import argparse
 import yaml
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from scipy.optimize import minimize_scalar
+
+
+def nlog_likelihood(beta, counts):
+    """Get maximum likelihood estimate (mle) for beta"""
+    
+    mle = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    
+    return mle
+
+
+def get_power_law_params(word_counts):
+    """Get the power law parameters.
+    
+    TODO: Explain what alpha and beta are.
+    
+    """
+    
+    mle = minimize_scalar(nlog_likelihood, bracket=(1, 4),
+                          args=(word_counts), method='brent')
+    beta = mle.x
+    alpha = 1 / (beta - 1)
+    
+    return alpha, beta
 
 
 def set_plot_params(param_file):
@@ -21,6 +46,21 @@ def set_plot_params(param_file):
     for param, value in param_dict.items():
         mpl.rcParams[param] = value 
             
+            
+def plot_fit(xlim, max_rank, beta):
+    """Fit a power law curve to the data.
+    
+    Args:
+      xlim (sequence): x-axis bounds (min, max)(
+      max_rank (int): maximum word frequency rank
+      beta (float): beta parameter from the power law
+    
+    """
+
+    xvals = np.arange(xlim[0], xlim[-1])
+    yvals = max_rank * (xvals**(-beta + 1))
+    plt.loglog(xvals, yvals, color='grey')
+    
 
 def main(args):
     """Run the command line program."""
@@ -32,6 +72,12 @@ def main(args):
     df.plot.scatter(x='word frequency', y='rank', loglog=True,
                     figsize=[12, 6], grid=True,
                     xlim=args.xlim, ylim=args.ylim)
+
+    alpha, beta = get_power_law_params(df['word frequency'].values)
+    print('alpha:', alpha)
+    print('beta:', beta)
+    plot_fit(args.xlim, df['rank'].values[-1], beta)
+
     plt.savefig(args.outfile)
 
 
