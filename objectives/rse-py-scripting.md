@@ -1,9 +1,0 @@
--   Use the argparse library to manage command-line arguments in a program.
--   Structure Python scripts according to a simple template.
--   Describe the four levels of configuration typically used by robust software.
--   Explain what an overlay configuration is.
--   Explain why nested configuration options are usually not a good idea.
--   Add flat overlay configuration to a small application.
--   Explain the advantages of using a logging library rather than `print` statements in data science pipelines.
--   Describe the intent of the five standard logging levels.
--   Create and configure a simple logger.

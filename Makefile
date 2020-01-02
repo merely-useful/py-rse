@@ -61,9 +61,11 @@ PY_RSE_FILES=\
   py-rse/py-scripting.Rmd \
   py-rse/git-cmdline.Rmd \
   py-rse/git-advanced.Rmd \
+  py-rse/automate.Rmd \
+  py-rse/configuration.Rmd \
+  py-rse/errors.Rmd \
   py-rse/teams.Rmd \
   py-rse/style.Rmd \
-  py-rse/automate.Rmd \
   py-rse/project.Rmd \
   py-rse/correct.Rmd \
   py-rse/ci.Rmd \
@@ -75,7 +77,7 @@ PY_RSE_FILES=\
   py-rse/solutions.Rmd \
   py-rse/yaml.Rmd \
   py-rse/ssh.Rmd
-
+  
 COMMON_FILES=\
   _common.R \
   appendix.Rmd \

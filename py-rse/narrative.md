@@ -1,95 +1,71 @@
-This document considers what changes would need to be made to the current draft of the RSE book (19 Nov 2019) 
+This document outlines the changes that need to be made to the RSE Python book
 in order to weave a common narrative through all the chapters.
 
-## Proposed narrative
+## Narrative and code
 
-The proposed narrative involves looking at the distribution of word frequencies in classic English novels. 
+The narrative involves looking at the distribution of word frequencies in classic English novels. 
 [Zipf’s Law](https://en.wikipedia.org/wiki/Zipf%27s_law) states that the second most common word
 in a body of text appears half as often as the most common,
 the third most common appears a third as often, and so on.
 To test it, we are going to look at a bunch of ebooks that are freely available from
 [Project Gutenberg](https://www.gutenberg.org/).
 
-It was decided at the meeting on 26 November 2019 that there will be separate RSE books for Python and R. 
-Both will use the Zipf's Law narrative and Project Gutenberg data files.
-The remainder of this document will consider the Python book only,
-as that's the one we will be completing first.
+Three basic scripts are developed as we move through the chapters to achieve this task:
 
-## Current state of relevant Python code
+* `zipfs_law/bin/countwords.py`: for counting the words in a text (produces .csv output)
+* `zipfs_law/bin/collate.py`: for collating the word count from more than one text
+* `zipfs_law/bin/plotcounts.py`: for plotting the word count
 
-At the moment, the Zipf's Law narrative is used in the automation chapter.
-The beginning of that chapter says the following:
-
-> Our goals are:
->
-> - Analyze one input file to see how well it conforms to Zipf’s Law
-> - Analyze multiple input files to see how well they conform in aggregate
-> - Plot individual and aggregate word frequency distributions and their expected values
->
-> Our starting point is:
->
-> - The books are text files in the `zipfs-law/data/` directory
-> - `zipfs-law/bin/countwords.py` reads a text file and creates a CSV file with two columns: a word and  how many times the word occurs
-> - `zipfs-law/bin/collate.py` takes one or more of these two-column CSV files as input and sums the counts for all occurrences of each word
-> - `zipfs-law/bin/plotcounts.py` creates a plot that shows word rankings on the X axis and word counts on the Y axis
-> - `zipfs-law/bin/testfit.py` compares actual distributions against theory and give a fitting score
-
-The automation chapter then goes on to use `countwords.py` and `collate.py` in a workflow,
-but `plotcounts.py` and `testfit.py` aren't used and currently don't exist
-(as far as I'm aware).
-
-In the text that follows,
-I've altered the order of the chapters
-because I think a different order will work better with the new narrative.
-
-## New chapter outline
+## Chapter outline
 
 ### Chapter 1: Introduction
 
-Some text will need to be added to this chapter to introduce the narrative.
-In other words, it will say something along the lines of: 
+Some text needs to be added to this chapter to introduce the narrative.
+In other words, it should say something along the lines of: 
 
 "We want to look at the distribution of word frequencies in classic English novels.
-Zipf’s Law states that the second most common word in a body of text appears half as often as the most common,
+Zipf’s Law states that the second most common word in a body of text
+appears half as often as the most common,
 the third most common appears a third as often, and so on.
-To test it, we are going to look at a bunch of ebooks that are freely available from Project Gutenberg..."
+To test it, we are going to look at a bunch of ebooks
+that are freely available from Project Gutenberg..."
 
 ### Chapter 2: Basics of the unix shell
 
-All references to the `climate-data` directory will need to be replaced
+All references to the `climate-data` directory need to be replaced
 with reference to the `zipfs-law/data/` directory.
 
 ### Chapter 3: Going further with the unix shell
 
-The narrative in this chapter currently revolves around a little bash script called `years.sh`,
+The narrative in this chapter currently revolves
+around a little bash script called `years.sh`,
 which extracts a list of years from a climate data file.
-It will need to be replaced with a bash script
-that extracts basic information from the ebook text files in `zipfs-law/data/`.
-
-To be more specific, a new bash script `book_summary.sh` could extract the
-book title, author and release date using the `head` command to select the relevant lines
+It needs to be replaced with the new bash script `zipfs_law/bin/book_summary.sh`,
+which has been developed to extract the book title and author
+by using the `head` and `tail` commands to select relevant lines
 from an ebook text file. 
-(Some of the original text files will need to be edited very slightly
+(Some of the original ebook text files have been edited slightly
 to ensure that this information is on exactly the same line in each file.)
 Later on in the chapter,
-the content on `grep` could then show how it could have been used to locate the same
-information in the files 
-(i.e. so the information wouldn't need to be on exactly the same line in each file.)
+the content on `grep` could be edited to show how the same
+title and author information could be extracted using `grep`.
 
 ### Chapter 4: Command line programs
 
 This chapter currently involves a generic script called `script_template.py`,
-which can be configured using command line arguments or a configuration file.
+which can be configured using command line arguments.
 Instead of developing the generic `script_template.py`,
-this chapter could develop `countwords.py` instead.
-(The current version of `countwords.py` will need to be updated to use argparse
-and other libraries/concepts introduced in that chapter.)
+this chapter needs to be updated so that it develops `zipfs_law/bin/countwords.py` instead.
+This will involve introducing `if __name__ == '__main__':`,
+writing your own modules (`zipfs_law/bin/mymodule.py`),
+`argparse` and standard input in Python (`sys.stdin`).
+(The concept of standard input is introduced in the earlier chapter on unix shell basics.)
 
 ### Chapter 5: Git at the command line
 
 The narrative in this chapter currently involves Frances and her colleague Jean Jennings
 writing a history of the ENIAC project.
-Instead, in this chapter the `collate.py` script could be written from scratch,
+Instead, in this chapter the `zipfs_law/bin/collate.py` script should be written from scratch,
 tracking changes with Git along the way.
 
 ### Chapter 6: Advanced Git
@@ -98,11 +74,74 @@ This chapter introduces the concept of branches.
 In the current draft, a violin plot is created on one branch
 and a beeswarm plot on the other.
 The better looking plot is then merged into the master branch.
-This example could be tweaked so that two slightly different versions of 
-`plotcounts.py` are developed instead
-(i.e. two different ways of plotting the word count data).
+This example needs to be changed so that two slightly different versions of 
+`zipfs_law/bin/plotcounts.py` are developed instead.
 
-### Chapter 9: Working in teams
+The two different versions are illustrated in
+`zipfs_law/bin/plotcounts_branch_keep.py` and `zipfs_law/bin/plotcounts_branch_reject.py`
+The explanation for each is as follows:
+
+##### `zipfs_law/bin/plotcounts_branch_reject.py`: Word frequency versus 1/rank
+
+Rationale: Mathematically, Zipfs Law might be written as
+"word frequency is proportional to 1/rank."
+
+Advantages: Simple to interpret (because no log axes).
+
+Disadvantage: Tends to visually over-emphasize the very frequent words.
+It's hard to see what is happening for words that appear less than 500 times.
+
+##### `zipfs_law/bin/plotcounts_branch_keep.py`: log-log plot showing word frequency versus rank
+
+Rationale: Zipfs Law is an example of a power law.
+
+In general, when two variables (x) and (y) are related through a power law [ y = ax^b ],
+taking logarithms of both sides yields a linear relationship: [ \log(y) = \log(a) + b\log(x) ].
+Hence, plotting the variables on a log-log scale should reveal this linear relationship.
+
+This is the option we want to go with.
+
+
+### Chapter 7: Automating analyses 
+
+This chapter can stay pretty much as is.
+The introductory paragraphs about Zipf's Law can be removed 
+(because they should now appear in the introduction chapter)
+and the workflows developed in the chapter need to be extended to also include
+`plotcounts.py` (as it appears in `zipfs_law/bin/plotcounts_branch_keep.py`).
+
+### Chapter 8: Program configuration
+
+This chapter introduces overlay configuration and applies it by
+adding relevant functionality to `plotcounts.py`.
+Specifically, the program will accept a YAML file to configure aspects of [`matplotlib.rcParams`](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html).
+
+Note (from that hyperlink) that there is an rcParams configuration file
+somewhere on your system, but by default everything is commented out.
+You can find it by using:
+```
+>>> import matplotlib as mpl
+>>> mpl.matplotlib_fname()
+/Users/damienirving/anaconda/envs/merely/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc
+```
+
+To put this all in context, this chapter talks about the following levels of configuration:
+
+1. A system-wide configuration file for general settings.
+2. A user-specific configuration file for personal preferences. [e.g. `matplotlibrc`]
+3. A job-specific file with settings for a specific run. [e.g. `zipfs_law/bin/plot_params.yml`]
+4. Command-line options to change things that commonly change. [e.g. `argparse`]
+
+At the end of this chapter the `plotcounts.py` script should look like
+`zipfs_law/bin/plotcounts_config.py`.
+
+### Chapter 9: Error handling
+
+This chapter introduces error handling and applies it to one or more of
+`countwords.py`, `collate.py` or `plotcounts.py`.
+(I haven't yet figured out which of those scripts would be best to add error handling to...)
+
+### Chapter 10: Working in teams
 
 This chapter introduces many of the basic concepts/ideas required for working with other people.
 Now that we have a narrative,
@@ -112,38 +151,58 @@ in this chapter we can create a code of conduct and license for the Zipf's Law p
 as well as create a couple of GitHub issues (with labels).
 One of those issues should be a bug report.
 
-### Chapter 7: Code style, review and refactor
+### Chapter 11: Code style, review and refactor
 
 It's not clear how much of this chapter will ultimately end up in the novice Python book,
 but nonetheless code review will definitely be introduced here.
-The chapter text could be edited such that a draft version of `testfit.py`
-(with deliberate flaws written in)
-is presented and then reviewed/improved.
 
-### Chapter 8: Automating analyses 
+The last bit of development that needs to be done to `plotcounts.py` is to
+estimate the power law exponent so it can be added it as a line on our log-log plot. 
+That needs to be done in this chapter by adding the relevant code
+(i.e. the `get_power_law_params`, `nlog_likelihood` and `plot_fit` functions) to `plotcounts.py`,
+starting from the version of the script
+at the end of Chapter 8 (`zipfs_law/bin/plotcounts_config.py`).
 
-This chapter can stay pretty much as is.
-The introductory paragraphs about Zipf's Law can be removed 
-(because they should now appear in the introduction chapter)
-and the workflows developed in the chapter could be extended to also include
-`plotcounts.py` and `testfit.py`.
+In the first instance the new code should be added with some deliberate flaws written in,
+so that it can then be reviewed and improved
+using the code style, review and refactor principles introduced in the chapter.
 
-### Chapter 10: Project structure
+At the end of this chapter we are finally in a position to verify Zipfs Law.
+In the beginning we introduced the Law as:
+
+*Zipf’s Law states that the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often, and so on.*
+
+The alpha value returned by `plotcounts.py` for Moby Dick is 1.1, for instance,
+so the correct statement for that text would be,
+
+*the most frequent word will occur approximately 2<sup>1.1</sup> = 2.14
+times as often as the second most frequent word,
+3<sup>1.1</sup> = 3.35 times as often as the third most frequent word, etc*
+
+which is pretty close.
+
+Here's the [issue](https://github.com/merely-useful/merely-useful.github.io/issues/288)
+where we discuss theory behind the power law stuff in detail.
+
+### Chapter 12: Project structure
 
 Now that we've written all our scripts for the Zipf's Law analysis,
 this chapter should structure it all properly (i.e. with license files and README's etc).
 
-### Chapter 14: Correctness
+### Chapter 13: Correctness
 
-This chapter introduces testing and could be updated to write tests for the Zipf's Law code.
+This chapter introduces testing and needs to be updated to write tests for the Zipf's Law code.
 For example, `countwords.py` could be tested using an input text file where the count
 for each word is already known.
 
-## Chapter 11: Continuous Integration
+### Chapter 14: Continuous integration
 
-This chapter will use Travis CI to implement the tests developed in the previous chapter.
+This chapter needs to be updated so the tests developed in the previous chapter
+are implemented using Travis CI.
 
-### Chapter 13: Python packaging
+### Chapter 15: Python packaging
 
 In the current version of this chapter,
 a few relevant functions relating to the Zipf's Law analysis 
@@ -154,15 +213,8 @@ Instead of introducing new previously unseen Zipf's Law functions,
 this chapter should package up all the code developed in the previous chapters
 as a complete Zipf's Law package.
 
-### Chapter 15: Publishing
+### Chapter 16: Publishing
 
-This lesson could consider (hypothetically) where the results, data and code from the Zipf's Law
-analysis could be published.
-
-## Next steps
-
-Once people are comfortable with the proposed changes,
-we should have a go at writing the final Zipf's Law package
-(i.e. including the four scripts, makefiles for automation, tests, etc)
-so we know what we're aiming for when editing the individual chapters.
+This lesson should consider (hypothetically) where the results,
+data and code from the Zipf's Law analysis could be published.
  

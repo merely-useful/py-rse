@@ -1,54 +1,45 @@
 #!/usr/bin/env python
 
-'''
-Read one or more text files given as command-line arguments, or standard input
-if no filenames are given, and produce a two-column CSV of words and counts.
-'''
-
-
 import sys
 import re
-import csv
+import argparse
 from collections import Counter
 
-
-PUNC = re.compile(r'",;.')
-WORD = re.compile(r'\b[_\'\(]*(.+?)[_\'\)]*\b')
+import mymodule
 
 
-def main(filenames):
-    '''
-    Read standard input or one or more files and report results.
-    '''
-    results = Counter()
-    if not filenames:
-        process(sys.stdin, results)
+def count_words(reader):
+    """Count the occurrence of each word in a string."""
+    
+    text = reader.read()
+    findwords = re.compile("\w+", re.IGNORECASE)
+    word_list = re.findall(findwords, text)
+    word_counts = Counter(word_list)
+
+    return word_counts
+
+
+def main(args):
+    """Run the command line program."""
+
+    if args.infile:
+        with open(args.infile, 'r') as reader:
+            word_counts = count_words(reader)
     else:
-        for fn in filenames:
-            with open(fn, 'r') as reader:
-                process(reader, results)
-    report(sys.stdout, results)
-
-
-def process(reader, results):
-    '''
-    Extract and count words from stream.
-    '''
-    raw = reader.read()
-    cooked = PUNC.sub('', raw)
-    words = WORD.findall(cooked)
-    results.update(words)
-
-
-def report(writer, results):
-    '''
-    Report results to stream.
-    '''
-    writer = csv.writer(writer)
-    for (key, value) in results.items():
-        writer.writerow((key, value))
+        word_counts = count_words(sys.stdin)
+    word_counts = mymodule.sort_counts(word_counts, args.sortby)    
+    mymodule.report_results(sys.stdout, word_counts)
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
 
+    description = 'Count the occurrence of all words in a text'
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument('--infile', type=str, default=None,
+                        help='Input file name')
+    parser.add_argument('--sortby', type=str, choices=('count', 'alphabetical'),
+                        default='count', help='Method for sorting results')
+
+    args = parser.parse_args()
+    main(args)
