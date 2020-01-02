@@ -25,7 +25,7 @@ if __name__ == '__main__':
     description = 'Plot word counts'
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument('outfile', type=str, help='Output file (.png)')
+    parser.add_argument('outfile', type=str, help='Output image file')
     parser.add_argument('--infile', type=str, default=None,
                         help='Word count csv file')
     parser.add_argument('--xlim', type=float, nargs=2, default=[0.9, 1e4],

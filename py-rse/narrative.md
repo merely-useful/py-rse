@@ -170,16 +170,16 @@ using the code style, review and refactor principles introduced in the chapter.
 At the end of this chapter we are finally in a position to verify Zipfs Law.
 In the beginning we introduced the Law as:
 
-"Zipf’s Law states that the second most common word in a body of text
+*Zipf’s Law states that the second most common word in a body of text
 appears half as often as the most common,
-the third most common appears a third as often, and so on."
+the third most common appears a third as often, and so on.*
 
 The alpha value returned by `plotcounts.py` for Moby Dick is 1.1, for instance,
 so the correct statement for that text would be,
 
-"the most frequent word will occur approximately 2<sup>1.1</sup> = 2.14
+*the most frequent word will occur approximately 2<sup>1.1</sup> = 2.14
 times as often as the second most frequent word,
-3<sup>1.1</sup> = 3.35 times as often as the third most frequent word, etc".
+3<sup>1.1</sup> = 3.35 times as often as the third most frequent word, etc*
 
 which is pretty close.
 
