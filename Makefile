@@ -134,13 +134,11 @@ r-rse-html : _book/r-rse/index.html
 _book/r/index.html : ${R_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f r.Rmd
 	cp r-index.Rmd index.Rmd
-	gunzip -c data/nyc-dog-licenses.csv.gz > data/nyc-dog-licenses.csv
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_r.yml'); warnings()"
 
 _book/py/index.html : ${PY_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f py.Rmd
 	cp py-index.Rmd index.Rmd
-	gunzip -c data/nyc-dog-licenses.csv.gz > data/nyc-dog-licenses.csv
 	Rscript -e "bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py.yml'); warnings()"
 
 _book/py-rse/index.html : ${PY_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
