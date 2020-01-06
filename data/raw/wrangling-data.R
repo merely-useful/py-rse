@@ -3,10 +3,11 @@ library(tidyverse)
 library(here)
 library(janitor)
 library(jsonlite)
+conflicted::conflict_prefer("filter", "dplyr")
 
 # NYC dog licensing dataset -----------------------------------------------
 
-# write_lines(read_lines(here("data/raw/nyc-dog-licensing.csv")), here("data/raw/nyc-dog-licensing.csv.gz"))
+# write_lines(read_lines(here("data/raw/nyc-dog-licenses.csv")), here("data/raw/nyc-dog-licenses.csv.gz"))
 
 dog_licenses <- read_csv(
   here("data/raw/nyc-dog-licensing.csv.gz"),
