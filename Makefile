@@ -77,7 +77,7 @@ PY_RSE_FILES=\
   py-rse/solutions.Rmd \
   py-rse/yaml.Rmd \
   py-rse/ssh.Rmd
-  
+
 COMMON_FILES=\
   _common.R \
   appendix.Rmd \
