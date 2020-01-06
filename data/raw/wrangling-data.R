@@ -19,8 +19,10 @@ dog_licenses <- read_csv(
   ))
 
 dog_licenses <- dog_licenses %>%
+  mutate(AnimalBirthMonth = lubridate::ymd(AnimalBirthMonth)) %>%
   clean_names(case = "snake") %>%
   rename(neighborhood_tabulation_area = nta,
+         animal_birth_date = animal_birth_month,
          census_tract_2010 = census_tract2010)
 
 write_csv(dog_licenses, here("data/nyc-dog-licenses.csv.gz"))
