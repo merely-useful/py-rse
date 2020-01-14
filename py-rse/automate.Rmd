@@ -85,7 +85,7 @@ let's create a file called `Makefile` in the root of our project:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
-        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 ```
 
 As in the shell and many other programming languages,
@@ -178,11 +178,11 @@ Let's add another rule to it:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
-        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt
-        python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+	python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 When we run `make` it tells us:
@@ -250,7 +250,7 @@ and ours looks like this:
 ```make
 # Remove all generated files.
 clean :
-        rm -f results/*
+	rm -f results/*
 ```
 
 The `-f` flag to `rm` means "force removal":
@@ -310,11 +310,11 @@ we can add the program to the prerequisites for each result:
 
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
-        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
-        python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+	python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 ```shell
@@ -358,11 +358,11 @@ RUN_COUNT=python $(COUNT)
 
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
+	$(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt $(COUNT)
-        $(RUN_COUNT) data/jane_eyre.txt > results/jane_eyre.csv
+	$(RUN_COUNT) data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 Each definition takes the form `NAME=value`.
@@ -400,7 +400,7 @@ we can replace this:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
+	$(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
 ```
 
 with this:
@@ -408,7 +408,7 @@ with this:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) data/moby_dick.txt > $@
+	$(RUN_COUNT) data/moby_dick.txt > $@
 ```
 
 Make defines a value of `$@` separately for each rule,
@@ -424,7 +424,7 @@ with the automatic variable `$^`:
 ```make
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) $^ > $@
+	$(RUN_COUNT) $^ > $@
 ```
 
 However,
@@ -444,7 +444,7 @@ Using it lets us rewrite our rule as:
 ```make
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	$(RUN_COUNT) $< > $@
 ```
 
 `$< > $@` is hard to read, even with practice.
@@ -461,7 +461,7 @@ so the rule:
 
 ```make
 results/%.csv : data/%.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	$(RUN_COUNT) $< > $@
 ```
 
 will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data` directory.
@@ -481,11 +481,11 @@ all : results/moby_dick.csv results/jane_eyre.csv results/time_machine.csv
 
 # Regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	$(RUN_COUNT) $< > $@
 
 # Remove all generated files.
 clean :
-        rm -f results/*
+	rm -f results/*
 ```
 
 To test our shortened Makefile,
@@ -581,8 +581,8 @@ that uses the shell command `echo` to print the names and values of our variable
 
 # Show variables' values.
 settings :
-        echo COUNT: $(COUNT)
-        echo DATA: $(DATA)
+	echo COUNT: $(COUNT)
+	echo DATA: $(DATA)
 ```
 
 Let's run this:
@@ -646,9 +646,9 @@ Let's check our worke by adding another command to the `settings` target:
 
 ```make
 settings :
-        @echo COUNT: $(COUNT)
-        @echo DATA: $(DATA)
-        @echo RESULTS: $(RESULTS)
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 ```
 
 ```shell
@@ -709,11 +709,11 @@ We could create another phony target called `help` that prints a list of availab
 
 # Show help.
 help :
-        @echo "all : regenerate all out-of-date results files."
-        @echo "results/*.csv : regenerate a particular results file."
-        @echo "clean : remove all generated files."
-        @echo "settings : show the values of all variables."
-        @echo "help : show this message."
+	@echo "all : regenerate all out-of-date results files."
+	@echo "results/*.csv : regenerate a particular results file."
+	@echo "clean : remove all generated files."
+	@echo "settings : show the values of all variables."
+	@echo "help : show this message."
 ```
 
 Sooner or later,
@@ -737,21 +737,21 @@ all : $(RESULTS)
 
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	$(RUN_COUNT) $< > $@
 
 ## clean : remove all generated files.
 clean :
-        rm -f results/*.csv
+	rm -f results/*.csv
 
 ## settings : show variables' values.
 settings :
-        @echo COUNT: $(COUNT)
-        @echo DATA: $(DATA)
-        @echo RESULTS: $(RESULTS)
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 
 ## help : show this message.
 help :
-        @grep '^##' ./Makefile
+	@grep '^##' ./Makefile
 ```
 
 Let's test:
