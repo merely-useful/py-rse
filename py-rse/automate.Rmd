@@ -63,7 +63,7 @@ Make works as follows:
 ### Setting Up
 
 This chapter uses a version of Make called [GNU Make][gnu-make].
-It comes with MacOS and Linux,
+It comes with macOS and Linux,
 and you can install it on Windows using [Chocolatey][chocolatey]:
 
 ```shell
@@ -269,10 +269,9 @@ $ make clean
 ```
 
 Make will delete any results files we have.
-This is a lot safer than typing `rm -f results/*` at the command-line,
-because if we mistakenly put a space after the `/`
-and delete all of the files in the project's root directory,
-we'll only make the mistake once.
+This is a lot safer than typing `rm -f results/*` at the command-line each time,
+because if we mistakenly put a space before the `*`
+we would delete all of the files in the project's root directory.
 
 Phony targets are very useful,
 but there is a catch.
@@ -294,7 +293,7 @@ it can't be out of date,
 so no recipes are executed.
 
 We can unconfuse Make by putting this line at the top of Makefile
-to tell it explicitly which targets are phony:
+to explicitly state which targets are phony:
 
 ```make
 .PHONY : all clean
@@ -380,7 +379,7 @@ What *is* required is using parentheses to refer to the variable,
 i.e.,
 to use `$(NAME)` and not `$NAME`.
 For historical reasons,
-Make interprets `$NAME` to be a "variable called `N` followed by the three characers 'AME'",
+Make interprets `$NAME` to be a "variable called `N` followed by the three characters 'AME'",
 If no variable called `N` exists,
 `$NAME` becomes `AME`,
 which is almost certainly not what we want.
@@ -398,7 +397,7 @@ Instead,
 we should write a generic rule that will produce a CSV file for any book.
 To do this,
 we need to understand Make's [automatic variables][automatic-variable-make].
-The first step is to use the very cryptic expression `$@` in the rule's action
+The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 With it,
 we can replace this:
@@ -446,7 +445,7 @@ python bin/countwords.py data/moby_dick.txt bin/countwords.py > results/moby_dic
 ```
 
 Make solves this problem with another automatic variable `$<`,
-which mean "the first prerequisite".
+which mean "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
 ```make
@@ -562,10 +561,13 @@ this only works if the results files already exist:
 if one doesn't,
 its name won't be included in `RESULTS`
 and Make won't realize that we want to generate it.
-
-What we really want is generate the list of results files
+What we really want is to generate the list of results files
 from the list of books in the `data/` directory.
-We can use a [function][function-make] to do this.
+
+We also need to consider that while expansion of `*` happens automatically in rules,
+it does not not normally occur when a variable is set.
+To solve this issue,
+we can use the `wildcard` [function][function-make].
 The syntax is odd because functions were added to Make long after it was first written,
 but at least they have readable names.
 Let's create a variable `DATA` that holds the names of all of our data files:
@@ -637,7 +639,7 @@ does exactly this:
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 ```
 
-The first argument to `patsubst` is the pattern to look,
+The first argument to `patsubst` is the pattern to look for,
 which in this case is a text file in the `data` directory.
 We use `%` to match the [stem][filename-stem] of the file's name,
 which is the part we want to keep.
@@ -650,7 +652,7 @@ Finally,
 the third argument is what to do the substitution in,
 which is our list of books' names.
 
-Let's check our worke by adding another command to the `settings` target:
+Let's check the `RESULTS` variable by adding another command to the `settings` target:
 
 ```make
 settings :
@@ -776,7 +778,7 @@ $ make help
 ## help : show this message.
 ```
 
-With a bit more work we ccan remove the `##` markers,
+With a bit more work we can remove the `##` markers,
 but this is a good start.
 
 ## How can I create entire analysis pipelines? {#py-rse-automate-pipeline}
@@ -864,7 +866,7 @@ if (knitr::is_latex_output()) {
 
 ### Create more readable help {#py-rse-automate-ex-readable-help}
 
--   Modify the command in the `help` action to remove the leading '##' markers from the output.
+-   Modify the command in the `help` recipe to remove the leading '##' markers from the output.
 
 ### The perils of shell wildcards {#py-rse-automate-ex-wildcard-perils}
 
