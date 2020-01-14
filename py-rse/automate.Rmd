@@ -96,13 +96,19 @@ its single [prerequisite][prerequisite-make] is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
 
 The target and prerequisite tell Make what depends on what;
-the indented line below them describes the [action][action-make] needed
+the line below them describes the [recipe][recipe-make] needed
 to update the target if it is out of date.
-The action can be one or more shell commands,
-but each command *must* be indented by a single tab character:
-we can't use spaces or a mix of spaces and tabs.
-In this rule,
-the action is "run `bin/countwords.py` on the raw data file
+The recipe consists of one or more shell commands,
+rather than the specific Makefile syntax present in the rest of the file.
+In order for recipes to be executed as shell commands,
+each command *must* be prefixed by a single tab character.
+Note that spaces cannot be used instead of a tab character here,
+which can be confusing as these are used interchangeably in other languages.
+It can help to remember that the primary purpose of the tab character in a Makefile
+is not to help with readability through indentation,
+but rather to indicate which lines should be executed as shell commands.
+In the rule above,
+the recipe is "run `bin/countwords.py` on the raw data file
 and put the output in a CSV file in the `results` directory".
 
 To test our rule, run this command in the shell:
@@ -117,9 +123,9 @@ In this case,
 one of three things will happen:
 
 1.  If `results/moby_dick.csv` doesn't exist,
-    Make runs the action to create it.
+    Make runs the recipe to create it.
 2.  If `data/moby_dick.txt` is newer than `results/moby_dick.csv`,
-    Make runs the action to update the results.
+    Make runs the recipe to update the results.
 3.  If `results/moby_dick.csv` is newer than its prerequisite,
     Make does nothing.
 
@@ -163,11 +169,11 @@ $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 As a further test:
 
 1.  Delete `results/moby_dick.csv` and run `make` again (case #1);
-    Make runs the action.
+    Make runs the recipe.
 2.  Use `touch data/moby_dick.txt` to update the timestamp on the data file,
     then run `make` (case #2).
     Again,
-    Make runs the action.
+    Make runs the recipe.
 
 ## How can I manage multiple files? {#py-rse-automate-multiple}
 
@@ -222,7 +228,7 @@ all : results/moby_dick.csv results/jane_eyre.csv
 ```
 
 There is no file called `all`,
-and this rule doesn't have any actions of its own,
+and this rule doesn't have any recipes of its own,
 but when we run `make all`,
 it creates a list of the things `all` depends on,
 then brings each of those prerequisites up to date (Figure \@ref(fig:automate-all)).
@@ -233,7 +239,7 @@ knitr::include_graphics("figures/FIXME.png")
 
 As this diagram shows,
 the order in which rules appear in the Makefile
-does not necessarily determine the order in which actions are run.
+does not necessarily determine the order in which recipes are run.
 Make is free to run commands in any order
 so long as nothing is updated before its prerequisites are up to date.
 This is called [declarative programming][declarative-programming]:
@@ -285,7 +291,7 @@ Since there is a directory called `clean`,
 Make thinks the target `clean` in the Makefile refers to this directory.
 Since the rule has no prerequisites,
 it can't be out of date,
-so no actions are executed.
+so no recipes are executed.
 
 We can unconfuse Make by putting this line at the top of Makefile
 to tell it explicitly which targets are phony:
@@ -418,8 +424,9 @@ And yes,
 something like `$TARGET` would have been easier to understand,
 but we're stuck with it now.
 
-The next step is to replace the explicit list of prerequisites in the action
-with the automatic variable `$^`:
+The next step is to replace the explicit list of prerequisites in the recipe
+with the automatic variable `$^`,
+which expands to all prerequisites in the rule:
 
 ```make
 # Regenerate results for "Jane Eyre"
@@ -430,8 +437,9 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 However,
 this doesn't work.
 The rule's prerequisites are the novel and the word-counting program.
-When Make expands the action,
-the resulting command tries to process the program as if it were a data file:
+When Make expands the recipe,
+the resulting command tries to process the program `bin/countwords.py`
+as if it was a data file:
 
 ```shell
 python bin/countwords.py data/moby_dick.txt bin/countwords.py > results/moby_dick.csv
@@ -466,7 +474,7 @@ results/%.csv : data/%.txt $(COUNT)
 
 will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data` directory.
 (Unfortunately,
-`%` cannot be used in rules' actions,
+`%` cannot be used in rules' recipes,
 which is why `$<` and `$@` are needed.)
 With this rule in place, our entire Makefile is reduced to:
 
@@ -808,8 +816,8 @@ Since this target depends on the single-novel results files,
 The rule to regenerate `results/collated.csv` should look familiar by now:
 it tells Make that all of the individual results have to be up-to-date
 and that the final result should be regenerated if the program used to create it has changed.
-One difference between the action in this rule and the actions we've seen before
-is that this action uses `$(RESULTS)` directly instead of an automatic variable.
+One difference between the recipe in this rule and the recipes we've seen before
+is that this recipe uses `$(RESULTS)` directly instead of an automatic variable.
 We have written the rule this way because
 there isn't an automatic variable that means "all but the last prerequisite",
 so there's no way to use automatic variables that wouldn't result in us trying to process our program.
