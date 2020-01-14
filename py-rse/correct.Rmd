@@ -14,23 +14,9 @@ This chapter explores ways of doing that in both R and Python.
 ## How can I test functions manually? {#py-rse-correct-manual}
 
 Suppose we have written a function to get the sign of a number.
-In R,
-this might be:
+In Python this might be:
 
-```{r manual-test-r}
-numSign <- function(x) {
-  if (x > 0) {
-    1
-  } else {
-    -1
-  }
-}
-```
-
-while in Python,
-it might be:
-
-```{python manual-test-py}
+```{python manual-test}
 def numSign(x):
     if x > 0:
         out = 1
@@ -39,10 +25,10 @@ def numSign(x):
     return out
 ```
 
-A simple way to test the function interactively in either language
+A simple way to test the function interactively 
 is to check that it produces the correct value for a few representative cases:
 
-```{r manual-test-r-2}
+```{python manual-test-2}
 numSign(2) == 1
 numSign(0) == 0
 numSign(-4) == -1
@@ -57,22 +43,9 @@ but when we are creating or modifying a larger function,
 we want to be able to re-run our tests with a single command.
 That phrase "with a single command" suggests that we should write a second function
 whose job is to re-run tests for the first.
-In R,
-this might be:
+In Python we could use `assert` to achieve the same effect:
 
-```{r stop-not-r}
-test_numSign <- function() {
-    stopifnot(numSign(0.1) == 1)
-    stopifnot(numSign(0) == 0)
-    stopifnot(numSign(-Inf) == -1)
-}
-```
-
-As its name suggests,
-`stopifnot` stops the program if its argument is not true.
-A Python equivalent could use `assert` to achieve the same effect:
-
-```{python stop-not-python}
+```{python stop-not}
 import math
 
 def test_numSign():
@@ -84,33 +57,19 @@ def test_numSign():
 ## What features do we want a testing framework to have? {#py-rse-correct-features}
 
 The individual tests in `test_numSign` are called [unit tests][unit-test]
-because they test the smallest units of our code.
-Writing functions so that we can easily re-run unit tests is a step in the right direction,
-but our current approach has two flaws.
-First,
-if a test fails,
-none of the tests that come after it run.
-In this case,
-for example,
-we don't know if `numSign` handles `-Inf` correctly or not
-because testing stops when `numSign(0)` gives the wrong answer.
-We would have more information if all of the tests ran every time.
+because they test small "units" or pieces of our code.
+On it's own, this function is fine, but it misses two things:
 
-The second flaw in `test_numSign` is that it doesn't tell us anything if our tests pass.
-A one-line summary saying "3/3 tests passed" would confirm that the tests actually ran,
-while something like "2/3 tests passed"
-followed by a list of the tests that *didn't* so we know where to start investigating
-would be even better.
+1. If one test fails or throws an error, the subsequent tests don't get executed.
+In this case, we don't know if `numSign` handles `-Inf` correctly or not because
+testing stops when `numSign(0)` gives the wrong answer.
+2. If a test fails, it doesn't tell us *how many tests failed* and *what tests did fail*. 
+In this case, the failure only tells us that *something failed* but doesn't say anything else.
 
-> **Too Much Information**
->
-> We *don't* want our testing framework to list all of the tests that pass
-> because if there is too much output,
-> we will soon start ignoring all of it.
-> A testing framework should only demand that we pay attention to details
-> when we actually need to.
+While more information is useful from the unit tests, we don't want an overload of detail.
+We only need to see information on what and why a test failed.
 
-One other requirement for a good set of tests is [isolation][test-isolation].
+Another other requirement for a good set of tests is [isolation][test-isolation].
 Suppose that we have two functions `first` and `second` and we test them in this way:
 
 ```
@@ -125,8 +84,7 @@ we won't know if `second` is working
 because we won't know what its actual input is.
 Using the output of one test as the input of another
 increases the risk of [false positives][false-positive] (tests passing when they should fail)
-and [false negatives][false-negative] (tests failing when they should pass),
-which distract or mislead us.
+and [false negatives][false-negative] (tests failing when they should pass).
 
 Putting these requirements together,
 a single unit test has:
@@ -153,7 +111,7 @@ A [test framework][test-framework] (also called a [test runner][test-runner]) sh
 -   encourage people to isolate tests; and
 -   make it easy to write and update tests (because otherwise people won't do it).
 
-The next two sections will introduce the most popular frameworks for R and Python.
+The next two sections will introduce the most popular framework for Python.
 We will then explore general issues
 such as how we can tell which parts of our code have and haven't been tested
 and what kinds of tests we should write.
@@ -175,20 +133,26 @@ $ pytest
 ```
 
 it searches for all files named `test_*.py` in the current directory and its subdirectories.
-It then imports these files,
-runs the tests they contain,
-and summarizes their results.
-If we only want to run the tests in a particular file,
-we can use the command `pytest path/to/test_file.py`.
+It then runs the tests inside the files and summarizes their results.
+If you only want to run tests in a particular file,
+use the command `pytest path/to/test_file.py`.
 
-We can put our tests wherever we want,
-but most projects put them in a subdirectory of the project's root directory called `tests`.
+Our tests can be saved anywhere in the project directory,
+but most projects put them in a subdirectory called `tests`.
 If the project uses a [build tool][build-tool] like Make (Chapter \@ref(py-rse-automate)),
-it is common to include a target called `test` so that `make test` will re-run all of the tests.
+adding a target called `test` makes it easy to re-run tests by using `make test`.
+So a project structure would look something like:
 
-So what do tests look like?
-To see,
-create a file called `test_add.py` and insert the following code:
+```
+project
+├── ...
+├── tests
+│   └── test_add.py
+└── Makefile
+```
+
+Tests all have a similar structure. Here's an example.
+Create a file called `test_add.py` and insert the following code:
 
 ```python
 def add(x, y):
@@ -206,21 +170,21 @@ def test_add_integer_and_float():
     assert type(result) == int
 ```
 
-The function being tested will *not* normally be in
-the file of tests—test files will normally import those functions instead—but
-we have put `add` here for convenience.
-We don't write comments to explain what each test is doing;
-we give each a long name instead,
-because that's what `pytest` will print if and when the test fails.
-Finally,
-we have shown two styles of testing here:
-one in which the fixture is just the values passed into the function
-and the result is checked immediately,
-and one in which the fixture is constructed step-by-step (the variables `left` and `right`)
-and the function's result is captured in another variable
-so that several checks can be done.
+The function being tested generally is not in the file of the tests. 
+Test files would normally import those functions, 
+but here we have put `add` for convenience and for demonstration.
+We don't use comments to explain what each test is doing,
+instead we give each test a descriptive name.
+That's because `pytest` will print the failed test fails.
+We have shown two styles of testing here:
 
-To run these tests, we use:
+- one where the fixture is the value passed on to the function
+and the result is checked immediately,
+- and, one where the fixture is constructed step-by-step 
+(i.e. the variables `left` and `right`)
+and the function's result set as a variable so multiple checks can be used.
+
+Run these tests by using:
 
 ```shell
 $ pytest test_add.py
@@ -258,11 +222,12 @@ test_add.py:11: NameError
 ```
 
 The two `F`'s in the top line tell us there are two failures.
-The `E` in the report for each test tells us why that test failed,
-and the listing immediately above this line tells us why:
-our function is called `add`,
-but we are using `add_two` in our tests.
-Let's rename the function and re-run our tests:
+The `E` in the `FAILURES` section tells us why that test failed,
+and the output immediately above this line tells us where the code failed.
+In this example, we used the wrong function name. 
+There is no function called `add_two()`, 
+since the function we created is called `add()`.
+Let's fix the name and re-run the tests:
 
 ```text
 ============================= test session starts ==============================
@@ -292,166 +257,10 @@ test_add.py:13: AssertionError
 This time the first line of output tells us that one test passed (the `.`)
 and another failed (the `F`).
 `pytest` then shows where the problem occurred in the failing test:
-we claimed on line 13 that the result's type would be `int`
+we wrote that `result` should be an integer `int`,
 but it is actually `float`.
 
-## How do I create and run unit tests in R? {#py-rse-correct-create-r}
-
-The easiest way to start testing in R is via the `usethis` package.
-Let's create a new project in RStudio caller `creater` of type "package"
-(both because `usethis` is designed to work with packages,
-and because our R projects should always be packages).
-We can then type:
-
-```r
-usethis::use_testthat()
-```
-
-```text
-✔ Setting active project to '/Users/merely/creater'
-✔ Adding 'testthat' to Suggests field in DESCRIPTION
-✔ Creating 'tests/testthat/'
-✔ Writing 'tests/testthat.R'
-● Call `use_test()` to initialize a basic test file and open it for editing.
-```
-
-The call creates a new directory `tests/testthat/`,
-adds `testthat` to `Suggests` in the `DESCRIPTION` file,
-and creates a file called `tests/testthat.R` that tells R how to run the tests.
-This may seem like a lot,
-but it is all needed to create an R package (Chapter \@ref(py-rse-package-r)),
-so we might as well do things that way from the start.
-
-The file `tests/testthat.R` contains:
-
-```r
-library(testthat)
-library(creater)
-
-test_check("creater")
-```
-
-I.e.,
-it loads the `testthat` library and our own package,
-then calls `test_check` to run tests.
-If we try to run our tests using:
-
-```r
-devtools::test()
-```
-
-we get the message:
-
-```text
-No tests: no files in /Users/merely/creater/tests/testthat match '^test.*\.[rR]$'
-```
-
-This is fair,
-since we haven't yet created any tests.
-To do that,
-we run:
-
-```r
-usethis::use_test("mean")
-```
-
-```text
-✔ Increasing 'testthat' version to '>= 2.1.0' in DESCRIPTION
-✔ Writing 'tests/testthat/test-mean.R'
-● Modify 'tests/testthat/test-mean.R'
-```
-
-As the output suggests,
-this command creates a file called `tests/testthat/test-mean.R`.
-We could create this file ourselves if we want;
-either way,
-its name should reflect what we are using it to test,
-such as `test-read-data.R` or `test-annual-analysis.R`.
-Note that we do *not* type the prefix `test-` in the call to `usethis::use_test`;
-`usethis` will insert that automatically.
-
-The newly-created file contains a single test case:
-
-```r
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
-})
-```
-
-We can run this with:
-
-```r
-devtools::test()
-```
-
-```text
-Loading creater
-Testing creater
-✔ |  OK F W S | Context
-✔ |   1       | mean
-
-══ Results ══════════════════════════════════════════════════════════════════════════════════════════════════════
-OK:       1
-Failed:   0
-Warnings: 0
-Skipped:  0
-```
-
-or use the RStudio keyboard shortcut <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> (on Windows)
-or <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> (on Mac),
-which calls the same function.
-Either way,
-R searches below the `tests/testthat` directory to find files whose names start with `test`,
-loads them,
-and runs the tests that it finds.
-The output tells us that one test passed,
-none failed,
-there were no warnings,
-and no tests were skipped.
-
-Let's re-open `tests/testthat/test-mean.R` and replace the test that R wrote for us
-with this code:
-
-```r
-context("Computing the mean")
-
-test_that("the mean of an odd-length vector is correct", {
-    expect_identical(mean(1:3), 2.0)
-})
-
-test_that("the mean of an even-length vector is correct", {
-    expect_identical(mean(1:4), 2.0)
-})
-```
-
-```text
-Loading creater
-Testing creater
-✔ |  OK F W S | Context
-✖ |   1 1     | Computing the mean
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-test-mean.R:8: failure: the mean of an even-length vector is correct
-mean(1:4) not identical to 2.
-1/1 mismatches
-[1] 2.5 - 2 == 0.5
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-══ Results ══════════════════════════════════════════════════════════════════════════════════════════════════════
-OK:       1
-Failed:   1
-Warnings: 0
-Skipped:  0
-```
-
-The little table at the top of the output shows that one test passed and one failed
-in the context titled `"Computing the mean"`.
-The lines below tell us what failed and why,
-and the final section of the report summarizes the results.
-It is redundant in this case,
-since both of our tests are in the same context,
-but is useful if we have several files full of tests.
-
-## How should I set up fixtures my unit tests? {#py-rse-correct-fixtures}
+## How should I set up fixtures in my unit tests? {#py-rse-correct-fixtures}
 
 Test files all have a similar structure:
 
@@ -467,51 +276,13 @@ Each test function also has a stereotypical structure:
 
 Creating a fixture often requires many lines of code,
 so we often write helper functions to do this.
-For example,
-if we are testing functions that work on multiple dataframes in R,
-we might write a function like this:
-
-```r
-create_three_frames <- function() {
-    ones <- tribble(
-        ~odd, ~even,
-           1,     2,
-           3,     4)
-    tens <- tribble(
-        ~odd, ~even,
-          10,    20,
-          30,    40)
-    hundreds <- tribble(
-        ~odd, ~even,
-         100,   200,
-         300,   400)
-    list(ones=ones, tens=tens, hundreds=hundreds)
-}
-```
-
-We could then use the fixture that function produces in many tests.
-Here,
-for example,
-we are using it to test a function called `columnize`:
-
-```r
-test_that("columnize combines columns by name with addition", {
-    fixture <- create_three_frames()
-    result <- columnize(fixture, '+', odd)
-    expect_equal(result$odd, c(111, 333))
-})
-
-test_that("columnize combines columns by name with multiplication", {
-    fixture <- create_three_frames()
-    result <- columnize(fixture, '*', odd)
-    expect_equal(result$odd, c(1000, 9000))
-})
-```
-
 Using helper functions to create fixtures like this
 reduces the [cognitive load][cognitive-load] on whoever has to maintain the tests,
 since they only have to form a [mental model][mental-model] of a few cases
 rather than a new one for each test.
+
+TODO: Include example Python code
+
 Note that we do *not* create the fixture once as a global variable
 and then re-use it in many tests.
 Tests should be isolated,
@@ -521,7 +292,7 @@ one of our tests will modify the data in ways that interfere with other tests.
 ## How should I check the results of tests? {#py-rse-correct-check}
 
 Once we have a result we need to check it.
-The simplest way to do this in Python is the `assert` statement,
+The simplest way to do this is the Python `assert` statement,
 which [raises][raise] an [exception][exception] if a condition is not true.
 This normally causes Python to halt the program,
 but `pytest` catches these exceptions,
@@ -561,48 +332,20 @@ def split_test_zero():
     assert result[0] != 0
 ```
 
-> **Testing in the Real World**
->
-> In practice,
-> most programmers would write `combined_tests` in this case
-> rather than doubling the amount of reading they have to do
-> in order to understand these tests.
-> The purpose of testing is always to draw attention to things that need it;
-> if the second check in `combined_tests` doesn't run because the first one failed
-> then we will have less information than we could,
-> but we will still know the most important thing:
-> our code is broken.
-
-In contrast to Python,
-R's `testthat` library provides multiple checking functions for different purposes.
-`expect_identical()` compares that actual and expected results are identical down to the last bit.
-`expect_equal()` checks that its arguments are equal within a narrow tolerance;
-as we discuss in Section \@ref(py-rse-correct-float),
-this is more useful for most data science problems.
-Others include `expect_length`,
-which checks that a vector has the right length,
-and `expect_match`,
-which checks that a string matches a [regular expression][regular-expression].
-We can always replace these with `expect_true`,
-i.e.,
-use:
-
-```r
-expect_true(length(result == 3))
-```
-
-instead of:
-
-```r
-expect_length(result, 3)
-```
-
-but the latter makes our intention clearer.
+In practice,
+most programmers would write `combined_tests` in the first case
+rather than doubling the amount of reading they have to do
+in order to understand these tests.
+The purpose of testing is always to draw attention to things that need it;
+if the second check in `combined_tests` doesn't run because the first one failed
+then we will have less information than we could,
+but we will still know the most important thing:
+our code is broken.
 
 ## Why and how should I test that software fails correctly? {#py-rse-correct-failure}
 
-Evil clowns are every programmer's worst nightmare.
-Their second worst is a [silent failure][silent-failure]:
+Testing to check for correctness is great when functions fail "loudly",
+but somtimes, there are [silent failures][silent-failure]:
 something that goes wrong but doesn't crash,
 print a warning,
 or otherwise signal that human attention is required.
