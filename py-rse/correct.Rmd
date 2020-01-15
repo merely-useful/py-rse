@@ -351,22 +351,19 @@ print a warning,
 or otherwise signal that human attention is required.
 Testing that our code fails when it should
 is therefore just as important as testing that it runs correctly.
-
-> **We Have the Data**
->
-> The need to test error handling is not just folklore:
-> in their study of failures in data-intensive applications,
-> @Yuan2014 found that,
-> "the majority of catastrophic failures could easily have been prevented
-> by performing simple testing on error handling code—the last line of defense—even without
-> an understanding of the software design."
+The need to test error handling is not just folklore:
+in their study of failures in data-intensive applications,
+@Yuan2014 found that,
+"the majority of catastrophic failures could easily have been prevented
+by performing simple testing on error handling code—the last line of defense—even without
+an understanding of the software design."
 
 In Python,
 we can test for an error using a `with` statement
-and the `pytest.raises` function.
+and the `pytest.raises()` function.
 For example,
-suppose a function called `count_words` is supposed to raise a `ValueError` exception when given an empty string.
-We can test this behavior as follows:
+for a function called `count_words()` is supposed to raise a `ValueError` exception when given an empty string.
+We test this behavior like below:
 
 ```python
 import pytest
@@ -376,25 +373,17 @@ def test_text_must_not_be_empty():
         count_words('')
 ```
 
-In R,
-`testthat` provides specific functions to test for errors or warnings
-called `expect_error()` and `expect_warning()` respectively:
-
-```r
-test_that("text must not be empty", {
-    expect_error(count_words(""))
-})
-```
-
 ## How can I tell whether my code has been tested or not? {#py-rse-correct-coverage}
 
 As we write more code or make changes to code we already have,
 we may lose track of which parts we have tested and which we haven't.
 Even short programs,
-loops or conditionals may make it difficult for us to figure out
+loops or conditionals can make it difficult for us to figure out
 what is actually being executed.
 For example,
 take a few moments to read this function in Python:
+
+TODO: This could be an exercise
 
 ```python
 def first(left, right):
@@ -414,36 +403,6 @@ def second(check, balance):
 print(first(3, 5))
 ```
 
-or its equivalent in R:
-
-```r
-first <- function(left, right) {
-  if (left < right) {
-    tmp <- left
-    left <- right
-    right <- tmp
-  }
-
-  while (left > right) {
-    value <- second(left, right)
-    left <- right
-    right <- as.integer(right / 2)
-  }
-
-  value
-}
-
-second <- function(check, balance) {
-    if (check > 0) {
-        balance
-    } else {
-        0
-    }
-}
-
-c(3, 5, first(3, 5))
-```
-
 The only way to know which parts of these functions are and aren't executed
 is to trace their execution a line at a time.
 The good news is that we don't have to do this ourselves:
@@ -453,8 +412,8 @@ a code coverage tool creates a vector of Boolean flags with one entry for each l
 then modifies the code so that the appropriate flag is set to `true` whenever that line is executed
 (Figure \@ref(fig:py-rse-correct-how-coverage-works)).
 When the program finishes,
-the tool can show us which lines were touched
-and report summary statistics such as the number or percentage of lines that weren't used.
+the tool shows us the lines that were evaluated
+and report summary statistics like the number or percentage of lines that weren't used.
 
 ```{r py-rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
 knitr::include_graphics("figures/FIXME.png")
@@ -486,25 +445,13 @@ demo.py      12      1    92%
 ```
 
 To get a fuller report,
-we run `coverage html`
-and then open `htmlcov/index.html`.
+run `coverage html`
+and open `htmlcov/index.html`.
 Clicking on the name of our file produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
 
 ```{r python-coverage, echo=FALSE, fig.cap="Python Coverage"}
 knitr::include_graphics("figures/rse-correct/python-coverage.png")
 ```
-
-R's `covr` package has several functions for checking coverage.
-For example,
-we can test the coverage of the tests for a package by running:
-
-```r
-covr::package_coverage()
-```
-
-This function outputs a list of all R files in the package
-with their corresponding percentage coverage,
-which is a good way to figure out what needs to be done next.
 
 ## How much testing is enough? {#py-rse-correct-enough}
 
@@ -527,29 +474,28 @@ A function with only two numeric arguments has 2<sup>128</sup> possible inputs.
 Even if we could write the tests,
 how could we be sure we were checking the result of each one correctly?
 
-And testing data analysis pipelines is often harder than testing mainstream software applications,
+Testing data analysis pipelines is often harder than testing mainstream software applications,
 since data analysts often don't know what the right answer is.
 (If we did,
 we would have submitted our report and moved on to the next problem already.)
 The key distinction is the difference between [validation][validation],
 which asks whether the specification is correct,
-while [verification][verification],
+and [verification][verification],
 which asks whether we have met that specification.
 The difference between them is the difference between building the right thing and building something right,
-and the former question is often hard for data scientists to answer.
+and the first is often hard for data scientists to address.
 
 Luckily,
 we can group the test cases for most functions into classes.
 For example,
 it might be possible to test a function that takes numbers as inputs
-as well as we need to
-using only a few cases:
+as well as needing to use only a few cases:
 zero, a positive number, a negative one, and infinity.
 If we want to go further,
 we could check that it fails the right way when given a string or a list.
 Similarly,
 when testing a function that summarizes a table full of data,
-we should probably check that it handles tables with:
+we probably should check that it handles tables with:
 
 -   no rows
 -   only one row
@@ -610,15 +556,15 @@ what we are checking for remains true as the pipeline evolves or is run on other
 This helps reusability—it's amazing how often a one-off analysis
 winds up being used many times—but the real goal is comprehensibility.
 If someone can get our code and data,
-run the former on the latter,
-and get the same result that we did,
+then runs the code on the data,
+and gets the same result that we did,
 then our computation is reproducible,
 but that doesn't mean they can understand it.
 Comments help
 (either in the code or as blocks of prose in a [computational notebook][computational-notebook]),
 but they won't check that assumptions and invariants hold.
 And unlike comments,
-runnable assertions can't fall out of step with what the code is actually doing…
+runnable assertions can't fall out of step with what the code is actually doing.
 
 We also need to distinguish between testing during development
 and testing in production.
@@ -629,23 +575,27 @@ and convincing ourselves that we're getting the right answer in some ad hoc way.
 
 In production,
 on the other hand,
-our goal is to detect cases where behavior deviates significantly from what we previously decided what right.
+our goal is to detect cases where behavior deviates significantly from what we previously decided was right.
 We want this to be automated
-so that our pipeline will ring an alarm bell to tell us something is wrong
+so that our pipeline will inform us that something is wrong,
 even if we're busy working on something else.
 This can happen because real data will never have exactly the same characteristics as the data we used during development.
 We also need these checks because the pipeline's environment can change:
 for example,
-someone could upgrade a library that one of our libraries depends on,
-which could lead to us getting slightly different answers than we expected.
+a library we depend on could get upgraded,
+which could lead to getting slightly different answers than we expected.
 
 ## Why should I be cautious when using floating-point numbers? {#py-rse-correct-float}
+
+TODO: How necessary is the below paragraph? Doesn't feel it fits with the course content (its too detailed).
+TODO: This section could be reduced substantially and merged in with another section. Its too much of a tangent.
 
 No matter what the cause,
 we need to understand exactly what we mean by "tolerance" when talking about testing.
 The explanation that follows is simplified to keep it manageable;
 To learn more,
 please take half an hour to read @Gold1991.
+
 
 Finding a good representation for floating point numbers is hard:
 we cannot represent an infinite number of real values with a finite set of bit patterns,
@@ -779,6 +729,8 @@ data scientists should trust the authors of core libraries to do the best they c
 
 ## How should I write tests that involved floating-point values? {#py-rse-correct-numeric}
 
+TODO: Merge this section with previous section and reduce content of both.
+
 The absolute spacing between the values we can represent in Figure \@ref(fig:verify-spacing) is uneven.
 However,
 the relative spacing between each set of values stays the same:
@@ -832,7 +784,6 @@ Experience shows that these spurious warnings quickly lead developers to stop pa
 
 A much better approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
 which is best expressed as a relative error.
-R's `expect_equal` does this automatically.
 In Python,
 we can use `pytest.approx`,
 which works on lists, sets, arrays, and other collections,
@@ -879,7 +830,7 @@ will similarly cause false positives.
 The simplest solution is therefore to test the data used to produce the image
 rather than the image itself.
 Unless we suspect that the plotting library contains bugs,
-the correct data should alwyas produce the correct plot.
+the correct data should always produce the correct plot.
 
 If we *do* need to test the generated image,
 the only practical approach is to compare it to a saved image that we have visually verified.
@@ -944,9 +895,7 @@ The test function is called `is_zipf`:
 ```python
 from pytest import approx
 
-
 RELATIVE_ERROR = 0.05
-
 
 def is_zipf(hist):
     scaled = [h/hist[0] for h in hist]
@@ -965,12 +914,10 @@ def test_fit_correct():
     print('actual', actual)
     assert is_zipf(actual)
 
-
 def test_fit_first_too_small():
     actual = [round(100 / (1 + i)) for i in range(10)]
     actual[0] /= 2
     assert not is_zipf(actual)
-
 
 def test_fit_last_too_large():
     actual = [round(100 / (1 + i)) for i in range(10)]
@@ -1212,13 +1159,13 @@ if (knitr::is_latex_output()) {
 
 ### Checking simple calculations {#py-rse-correct-ex-simple-calc}
 
-Create a new test by running `usethis::use_test("simple-arithmetic")`.
+Create a new test by ...
 Copy the code below into the newly created test file and fill in the blanks
 so that it runs correctly.
 
-```r
-context("Check simple calculations")
+TODO: Convert to Python code.
 
+```r
 test_that("plus and minus give correct outputs", {
   expect_identical(1 + 2, 3)
   ___(1 - 2, -1)
@@ -1231,6 +1178,8 @@ test_that("plus and minus give correct outputs", {
 
 Based on the contents of the tests below,
 replace the blanks with appropriate `context()` and `test_that()` messages.
+
+TODO: Convert to Python code.
 
 ```r
 context("___")
