@@ -273,6 +273,7 @@
 [raise]: glossary.html#raise
 [raster-image]: glossary.html#raster-image
 [readthedocs]: https://docs.readthedocs.io/en/latest/
+[recipe-make]: https://www.gnu.org/software/make/manual/html_node/Rule-Introduction.html
 [recursion]: glossary.html#recursion
 [redirection]: glossary.html#redirection
 [refactoring]: glossary.html#refactoring
