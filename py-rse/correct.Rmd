@@ -6,15 +6,15 @@ source(here::here("_common.R"))
 
 We all hope the software we write does what we wrote it to do.
 But how can we be sure?
-The short is answer is that we can't,
+The short is answer is that we can't be completely certain,
 but that as in science,
 we can test our expectations against reality to help us decide if we are sure enough.
-This chapter explores ways of doing that in both R and Python.
+This chapter explores ways of doing that.
 
-## How can I test functions manually? {#py-rse-correct-manual}
+## How would I manually test a function? {#py-rse-correct-manual}
 
-Suppose we have written a function to get the sign of a number.
-In Python this might be:
+Testing is about comparing what you "expect" a function outputs with the "actual" output.
+Let's do a simple example to demonstrate by writing out a function that gets the sign of a number.
 
 ```{python manual-test}
 def numSign(x):
@@ -25,8 +25,8 @@ def numSign(x):
     return out
 ```
 
-A simple way to test the function interactively 
-is to check that it produces the correct value for a few representative cases:
+The simplest way to test the function would be to interactively check it produces the correct values.
+Type out these commands to see that we get what we expect.
 
 ```{python manual-test-2}
 numSign(2) == 1
@@ -34,16 +34,17 @@ numSign(0) == 0
 numSign(-4) == -1
 ```
 
-These tests show that it handles (some) positive and negatives value correctly,
-but gives the wrong value for zero
-(whose sign should also be 0).
+These simple tests show that the function handles (some) positive and negatives value correctly,
+but gives the wrong value for zero, which should be 0.
 
-Manual testing is a good place to start,
-but when we are creating or modifying a larger function,
-we want to be able to re-run our tests with a single command.
-That phrase "with a single command" suggests that we should write a second function
-whose job is to re-run tests for the first.
-In Python we could use `assert` to achieve the same effect:
+Manually testing functions is a great place to start,
+but quickly becomes unmanageable as the function or tests get longer or more complicated.
+And if we want to easily re-run multiple tests in one command? 
+Then we need to start considering automated methods of testing.
+The Python `assert` statement can achieve some of what we want.
+
+Let's try it out.
+Type out this new function...
 
 ```{python stop-not}
 import math
@@ -54,23 +55,28 @@ def test_numSign():
     assert numSign(math.inf) == -1
 ```
 
-## What features do we want a testing framework to have? {#py-rse-correct-features}
+Then execute it:
 
-The individual tests in `test_numSign` are called [unit tests][unit-test]
+```{python stop-not-eval, error=TRUE}
+test_numSign()
+```
+
+Do the exercise on fixing `numSign()` so the tests pass.
+
+## What does a testing framework have? {#py-rse-correct-features}
+
+The individual tests in `test_numSign()` are called [unit tests][unit-test]
 because they test small "units" or pieces of our code.
 On it's own, this function is fine, but it misses two things:
 
-1. If one test fails or throws an error, the subsequent tests don't get executed.
+1. If one test fails or throws an error, the subsequent tests don't get executed,
+as we saw from running it.
 In this case, we don't know if `numSign` handles `-Inf` correctly or not because
 testing stops when `numSign(0)` gives the wrong answer.
 2. If a test fails, it doesn't tell us *how many tests failed* and *what tests did fail*. 
-In this case, the failure only tells us that *something failed* but doesn't say anything else.
-
-While more information is useful from the unit tests, we don't want an overload of detail.
-We only need to see information on what and why a test failed.
-
-Another other requirement for a good set of tests is [isolation][test-isolation].
-Suppose that we have two functions `first` and `second` and we test them in this way:
+In this case, the failure only tells us that *something failed* but doesn't say anything else. 
+Another requirement for a good set of tests is [isolation][test-isolation].
+For example, there are two functions `first` and `second` that are tested in this way:
 
 ```
 first_result = first()
@@ -79,20 +85,19 @@ second_result = second(first_result)
 check(second_result)
 ```
 
-If `first` produces a wrong answer,
-we won't know if `second` is working
-because we won't know what its actual input is.
+If `first()` produces a wrong answer,
+we won't know if `second()` is working properly 
+because the `first()` test fails.
 Using the output of one test as the input of another
 increases the risk of [false positives][false-positive] (tests passing when they should fail)
 and [false negatives][false-negative] (tests failing when they should pass).
 
-Putting these requirements together,
-a single unit test has:
+Put together, a single unit test should have:
 
 -   a [fixture][fixture],
     which is the thing being tested (e.g., the number 0 or a list of images);
 -   an [actual result][actual-result],
-    which is what the code produces when given that fixture; and
+    which is what the code produces when given the fixture; and
 -   an [expected result][expected-result]
     that the actual result is compared to.
 
@@ -116,7 +121,7 @@ We will then explore general issues
 such as how we can tell which parts of our code have and haven't been tested
 and what kinds of tests we should write.
 
-## How do I create and run unit tests in Python? {#py-rse-correct-create-python}
+## How do I create and run unit tests? {#py-rse-correct-create-python}
 
 [`pytest`][pytest] is the most widely used test framework for Python.
 Tests obey three rules:
@@ -132,13 +137,13 @@ When we run it with no options:
 $ pytest
 ```
 
-it searches for all files named `test_*.py` in the current directory and its subdirectories.
-It then runs the tests inside the files and summarizes their results.
+it searches for all files in the working directory and subdirectories named `test_*.py`.
+It runs the tests in these files and then summarizes their results.
 If you only want to run tests in a particular file,
 use the command `pytest path/to/test_file.py`.
 
-Our tests can be saved anywhere in the project directory,
-but most projects put them in a subdirectory called `tests`.
+Tests can be saved anywhere in the project directory,
+but usually they are placed in a `tests/` subdirectory.
 If the project uses a [build tool][build-tool] like Make (Chapter \@ref(py-rse-automate)),
 adding a target called `test` makes it easy to re-run tests by using `make test`.
 So a project structure would look something like:
@@ -151,8 +156,9 @@ project
 └── Makefile
 ```
 
-Tests all have a similar structure. Here's an example.
-Create a file called `test_add.py` and insert the following code:
+Tests all have a similar structure. 
+Let's demonstrate it by creating a file called `test_add.py` inside `tests/` 
+and inserting the following code:
 
 ```python
 def add(x, y):
@@ -170,19 +176,19 @@ def test_add_integer_and_float():
     assert type(result) == int
 ```
 
-The function being tested generally is not in the file of the tests. 
-Test files would normally import those functions, 
-but here we have put `add` for convenience and for demonstration.
-We don't use comments to explain what each test is doing,
-instead we give each test a descriptive name.
-That's because `pytest` will print the failed test fails.
-We have shown two styles of testing here:
+Generally we wouldn't include the function being tested in the tests file. 
+Normally you'd import these functions into the test file.
+For the demonstration, we've put the function `add()` in the test file.
+The best practice for writing tests is to use descriptive names for test functions,
+even if the function name will be long.
+That's because `pytest` will print the tests that fail.
+There are two styles of testing presented here:
 
 - one where the fixture is the value passed on to the function
 and the result is checked immediately,
 - and, one where the fixture is constructed step-by-step 
 (i.e. the variables `left` and `right`)
-and the function's result set as a variable so multiple checks can be used.
+and the function's result is set as a variable so multiple checks can be used.
 
 Run these tests by using:
 
@@ -221,13 +227,13 @@ test_add.py:11: NameError
 =========================== 2 failed in 0.10 seconds ===========================
 ```
 
-The two `F`'s in the top line tell us there are two failures.
+The two `F`'s in the top line after `test_add.py` tell us there are two failures.
 The `E` in the `FAILURES` section tells us why that test failed,
 and the output immediately above this line tells us where the code failed.
 In this example, we used the wrong function name. 
 There is no function called `add_two()`, 
 since the function we created is called `add()`.
-Let's fix the name and re-run the tests:
+Fix the name and re-run the tests. We'll get:
 
 ```text
 ============================= test session starts ==============================
@@ -260,7 +266,7 @@ and another failed (the `F`).
 we wrote that `result` should be an integer `int`,
 but it is actually `float`.
 
-## How should I set up fixtures in my unit tests? {#py-rse-correct-fixtures}
+## How should fixtures be set up? {#py-rse-correct-fixtures}
 
 Test files all have a similar structure:
 
@@ -291,24 +297,24 @@ one of our tests will modify the data in ways that interfere with other tests.
 
 ## How should I check the results of tests? {#py-rse-correct-check}
 
-Once we have a result we need to check it.
-The simplest way to do this is the Python `assert` statement,
-which [raises][raise] an [exception][exception] if a condition is not true.
+Using the `assert` statement to test functions is useful as
+it [raises][raise] an [exception][exception] when a condition is not true.
 This normally causes Python to halt the program,
 but `pytest` catches these exceptions,
 adds them to its summary report,
 and then runs the next test function.
-As a result,
-all of the test functions are run,
-but each function only runs as far as the first failed check (Figure \@ref(fig:py-rse-correct-failed-test)).
+Because of this, 
+when all of the test functions are run,
+they only run until the first failed `assert` (Figure \@ref(fig:py-rse-correct-failed-test)).
 
 ```{r py-rse-correct-failed-test, echo=FALSE, fig.cap="Test Failure"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-This is another reason to recycle fixtures and keep test functions short:
-in the example below,
-we can't be sure that the second test is run in `combined_tests`:
+This is one reason to re-use fixtures and keep test functions short.
+Look at the code below. 
+In this example,
+we can't be sure that the second test runs in `combined_tests()`:
 
 ```python
 def combined_tests():
@@ -318,7 +324,7 @@ def combined_tests():
     assert result[0] != 0  # might not run
 ```
 
-but we can be sure that both checks are run in `split_test_len` and `split_test_zero`.
+but we can be sure that both checks run in `split_test_len()` and `split_test_zero()`.
 
 ```python
 def split_test_len():
@@ -332,14 +338,13 @@ def split_test_zero():
     assert result[0] != 0
 ```
 
-In practice,
-most programmers would write `combined_tests` in the first case
-rather than doubling the amount of reading they have to do
-in order to understand these tests.
-The purpose of testing is always to draw attention to things that need it;
-if the second check in `combined_tests` doesn't run because the first one failed
-then we will have less information than we could,
-but we will still know the most important thing:
+But in practice,
+most programmers would write `combined_tests()` in the first case
+because it is simpler and faster to write and read.
+The purpose of testing is to draw attention to things that don't work as expected.
+If the second check in `combined_tests()` doesn't run because the first one failed,
+we may not have all the information that we could,
+but we know one thing:
 our code is broken.
 
 ## Why and how should I test that software fails correctly? {#py-rse-correct-failure}
@@ -1150,9 +1155,9 @@ if (knitr::is_latex_output()) {
 
 ## Exercises {#py-rse-correct-exercises}
 
-### Fixing `numSign` {#py-rse-correct-ex-numsign}
+### Fixing `numSign()` {#py-rse-correct-ex-numsign}
 
-1.  Fix the implementation of `numSign` in either R or Python so that all tests will succeed.
+1.  Fix the implementation of `numSign()` so that all tests will succeed.
 2.  Re-run the tests to confirm that the function is working.
 3.  Extend the function so that it does something sensible when passed a string or an empty list.
     Write functions to check your changes.
