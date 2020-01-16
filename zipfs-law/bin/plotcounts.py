@@ -84,6 +84,8 @@ def main(args):
     alpha, beta = get_power_law_params(df['word frequency'].to_numpy())
     print('alpha:', alpha)
     print('beta:', beta)
+    # Since the ranks are already sorted, we can take the last one instead of
+    # asking Python to find the highest rank.
     plot_fit(args.xlim, df['rank'].to_numpy()[-1], beta)
 
     plt.savefig(args.outfile)

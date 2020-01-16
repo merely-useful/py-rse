@@ -27,6 +27,7 @@ def main(args):
         with open(args.infile, 'r') as reader:
             word_counts = count_words(reader)
     else:
+        # Read from stdin if no input file is given
         word_counts = count_words(sys.stdin)
     word_counts = mymodule.sort_counts(word_counts, args.sortby)
     mymodule.report_results(sys.stdout, word_counts)
