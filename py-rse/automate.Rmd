@@ -830,6 +830,35 @@ We have written the rule this way because
 there isn't an automatic variable that means "all but the last prerequisite",
 so there's no way to use automatic variables that wouldn't result in us trying to process our program.
 
+Likewise,
+we can also add the `plotcounts.py` script to this workflow
+and update the `all` and `settings` rules accordingly.
+Note that there is no `>` needed before the `$@`
+because `plotcounts.py` default is to write to a file
+rather than to `stdout`,
+which is where `countwords.py` and `collate.py` write their output.
+
+```make
+# ...phony targets and previous variable definitions...
+
+PLOT=bin/plotcounts.py
+RUN_PLOT=python $(PLOT)
+
+## all : regenerate all results.
+all : results/collated.pdf
+
+## results/collated.pdf: plot the collated results.
+results/collated.pdf : results/collated.csv
+	$(RUN_PLOT) $^ $@
+
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo COLLATE: $(COLLATE)
+	@echo PLOT: $(PLOT)
+	...
+```
+
 ## Summary {#py-rse-automate-summary}
 
 Make's reliance on shell commands instead of direct calls to functions in Python or R

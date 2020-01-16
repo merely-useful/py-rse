@@ -4,12 +4,18 @@ COUNT=bin/countwords.py
 RUN_COUNT=python $(COUNT)
 COLLATE=bin/collate.py
 RUN_COLLATE=python $(COLLATE)
+PLOT=bin/plotcounts.py
+RUN_PLOT=python $(PLOT)
 
 DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
 ## all : regenerate all results.
-all : results/collated.csv
+all : results/collated.pdf
+
+## results/collated.pdf: plot the collated results.
+results/collated.pdf : results/collated.csv
+	$(RUN_PLOT) $^ $@
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
@@ -28,6 +34,8 @@ clean :
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
+	@echo COLLATE: $(COLLATE)
+	@echo PLOT: $(PLOT)
 	@echo DATA: $(DATA)
 	@echo RESULTS: $(RESULTS)
 
