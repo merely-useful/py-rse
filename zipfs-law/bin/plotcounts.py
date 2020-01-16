@@ -81,10 +81,10 @@ def main(args):
                     figsize=[12, 6], grid=True,
                     xlim=args.xlim, ylim=args.ylim)
 
-    alpha, beta = get_power_law_params(df['word frequency'].values)
+    alpha, beta = get_power_law_params(df['word frequency'].to_numpy())
     print('alpha:', alpha)
     print('beta:', beta)
-    plot_fit(args.xlim, df['rank'].values[-1], beta)
+    plot_fit(args.xlim, df['rank'].to_numpy()[-1], beta)
 
     plt.savefig(args.outfile)
 
