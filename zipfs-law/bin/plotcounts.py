@@ -13,7 +13,6 @@ from scipy.optimize import minimize_scalar
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
-
     likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
 
     return likelihood
@@ -30,9 +29,7 @@ def get_power_law_params(word_counts):
       Large-Scale Analysis of Zipf’s Law in English Texts.
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
-
     """
-
     mle = minimize_scalar(nlog_likelihood, bracket=(1, 4),
                           args=(word_counts), method='brent')
     beta = mle.x
@@ -43,7 +40,6 @@ def get_power_law_params(word_counts):
 
 def set_plot_params(param_file):
     """Set the matplotlib rc parameters."""
-
     if param_file:
         with open(param_file, 'r') as reader:
             param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
@@ -61,9 +57,7 @@ def plot_fit(xlim, max_rank, beta):
       xlim (sequence): x-axis bounds (min, max)
       max_rank (int): maximum word frequency rank
       beta (float): estimated beta parameter for the power law
-
     """
-
     xvals = np.arange(xlim[0], xlim[-1])
     yvals = max_rank * (xvals**(-beta + 1))
     plt.loglog(xvals, yvals, color='grey')
@@ -71,7 +65,6 @@ def plot_fit(xlim, max_rank, beta):
 
 def main(args):
     """Run the command line program."""
-
     set_plot_params(args.rcparams)
     input_csv = args.infile if args.infile else sys.stdin
     df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))

@@ -11,14 +11,12 @@ import mymodule
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
-
     for (word, count) in csv.reader(reader):
         word_counts[word] += int(count)
 
 
 def main(args):
     """Run the command line program."""
-
     word_counts = Counter()
     for fn in args.infiles:
         with open(fn, 'r') as reader:

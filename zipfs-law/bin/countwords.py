@@ -11,7 +11,6 @@ import mymodule
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
-
     text = reader.read()
     findwords = re.compile(r"\w+", re.IGNORECASE)
     word_list = re.findall(findwords, text)
@@ -22,7 +21,6 @@ def count_words(reader):
 
 def main(args):
     """Run the command line program."""
-
     if args.infile:
         with open(args.infile, 'r') as reader:
             word_counts = count_words(reader)
