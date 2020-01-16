@@ -2,7 +2,6 @@
 """Plot word counts."""
 
 import sys
-import re
 import argparse
 import yaml
 import numpy as np
