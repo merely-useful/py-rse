@@ -23,14 +23,12 @@ def main(args):
     for fn in args.infiles:
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
-    word_counts = mymodule.sort_counts(word_counts, args.sortby)    
+    word_counts = mymodule.sort_counts(word_counts, args.sortby)
     mymodule.report_results(sys.stdout, word_counts)
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(description=__doc__)
-
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
     parser.add_argument('--sortby', type=str, choices=('count', 'alphabetical'),
                         default='count', help='Method for sorting results')

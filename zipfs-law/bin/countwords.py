@@ -11,7 +11,7 @@ import mymodule
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
-    
+
     text = reader.read()
     findwords = re.compile("\w+", re.IGNORECASE)
     word_list = re.findall(findwords, text)
@@ -28,14 +28,12 @@ def main(args):
             word_counts = count_words(reader)
     else:
         word_counts = count_words(sys.stdin)
-    word_counts = mymodule.sort_counts(word_counts, args.sortby)    
+    word_counts = mymodule.sort_counts(word_counts, args.sortby)
     mymodule.report_results(sys.stdout, word_counts)
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(description=__doc__)
-
     parser.add_argument('--infile', type=str, default=None,
                         help='Input file name')
     parser.add_argument('--sortby', type=str, choices=('count', 'alphabetical'),
