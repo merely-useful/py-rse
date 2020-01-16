@@ -19,8 +19,11 @@ def nlog_likelihood(beta, counts):
 
 
 def get_power_law_params(word_counts):
-    """Get the power law parameters.
+    """
+    Get the power law parameters.
 
+    References
+    ----------
     Moreno-Sanchez et al (2016) define alpha (Eq. 1),
       beta (Eq. 2) and the maximum likelihood estimation (mle)
       of beta (Eq. 6).
@@ -51,12 +54,17 @@ def set_plot_params(param_file):
 
 
 def plot_fit(xlim, max_rank, beta):
-    """Plot the power law curve that was fitted to the data.
+    """
+    Plot the power law curve that was fitted to the data.
 
-    Args:
-      xlim (sequence): x-axis bounds (min, max)
-      max_rank (int): maximum word frequency rank
-      beta (float): estimated beta parameter for the power law
+    Parameters
+    ----------
+    xlim : array-like
+        Bounds for x-axis (min, max).
+    max_rank : int
+        Maximum word frequency rank.
+    beta : float
+        Estimated beta parameter for the power law.
     """
     xvals = np.arange(xlim[0], xlim[-1])
     yvals = max_rank * (xvals**(-beta + 1))
