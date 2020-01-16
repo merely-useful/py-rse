@@ -13,7 +13,7 @@ def count_words(reader):
     """Count the occurrence of each word in a string."""
 
     text = reader.read()
-    findwords = re.compile("\w+", re.IGNORECASE)
+    findwords = re.compile(r"\w+", re.IGNORECASE)
     word_list = re.findall(findwords, text)
     word_counts = Counter(word_list)
 
