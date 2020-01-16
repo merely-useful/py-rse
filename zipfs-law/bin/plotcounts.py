@@ -74,13 +74,13 @@ def main(args):
 
     set_plot_params(args.rcparams)
     input_csv = args.infile if args.infile else sys.stdin
-    df = pd.read_csv(input_csv, header=None, names=('word', 'word frequency'))
-    df['rank'] = df['word frequency'].rank(ascending=False)
-    df.plot.scatter(x='word frequency', y='rank', loglog=True,
+    df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False)
+    df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                     figsize=[12, 6], grid=True,
                     xlim=args.xlim, ylim=args.ylim)
 
-    alpha, beta = get_power_law_params(df['word frequency'].to_numpy())
+    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
     print('beta:', beta)
     # Since the ranks are already sorted, we can take the last one instead of
