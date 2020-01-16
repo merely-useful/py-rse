@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Plot word counts."""
 
 import sys
 import re
@@ -90,8 +91,7 @@ def main(args):
 
 if __name__ == '__main__':
 
-    description = 'Plot word counts'
-    parser = argparse.ArgumentParser(description=description)
+    parser = argparse.ArgumentParser(description=__doc__)
 
     parser.add_argument('outfile', type=str, help='Output image file')
     parser.add_argument('--infile', type=str, default=None,

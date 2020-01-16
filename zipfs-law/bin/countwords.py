@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Count the occurences of all words in a text and write them to a CSV-file."""
 
 import sys
 import re
@@ -33,8 +34,7 @@ def main(args):
 
 if __name__ == '__main__':
 
-    description = 'Count the occurrence of all words in a text'
-    parser = argparse.ArgumentParser(description=description)
+    parser = argparse.ArgumentParser(description=__doc__)
 
     parser.add_argument('--infile', type=str, default=None,
                         help='Input file name')
