@@ -63,6 +63,8 @@ test_numSign()
 
 Do the exercise on fixing `numSign()` so the tests pass.
 
+TODO: Add reference to exercise.
+
 ## What does a testing framework have? {#py-rse-correct-features}
 
 The individual tests in `test_numSign()` are called [unit tests][unit-test]
@@ -120,6 +122,86 @@ The next two sections will introduce the most popular framework for Python.
 We will then explore general issues
 such as how we can tell which parts of our code have and haven't been tested
 and what kinds of tests we should write.
+
+TODO: Exercise idea is identify the different parts of a unit test (fixture, etc)
+
+## When should I write my tests? {#py-rse-correct-tdd}
+
+Many programmers are passionate advocates of a practice called
+[test-driven development][tdd] (TDD).
+Rather than writing code and then writing tests,
+they write the tests first and then write just enough code to make those tests pass.
+Once the code is working,
+they clean it up (Chapter \@ref(refactor)) and then move on to the next task.
+
+TDD's advocates claim that working this way leads to better code in less time because:
+
+1.  Writing tests clarifies what the code is actually supposed to do.
+
+2.  It eliminates [confirmation bias][confirmation-bias].
+    If someone has just written a function,
+    they are predisposed to want it to be right,
+    so they will bias their tests towards proving that it is correct
+    instead of trying to uncover errors.
+
+3.  Writing tests first ensures that they actually get written.
+
+These arguments are plausible.
+However,
+studies such as @Fucc2016 don't support them:
+in practice,
+writing tests first or last doesn't appear to affect productivity.
+What *does* have an impact is working in small, interleaved increments,
+i.e.,
+writing just a few lines of code and testing it before moving on
+rather than writing several pages of code and then spending hours on testing.
+
+So how do most data scientists figure out if their software is doing the right thing?
+The answer is spot checks:
+each time they produce an intermediate or final result,
+they scan a table, create a chart, or inspect some summary statistics
+to see if everything looks OK.
+Their heuristics are usually easy to state,
+like "there shouldn't be NAs at this point" or "the age range should be reasonable",
+but applying those heuristics to a particular analysis always depends on
+their evolving insight into the data in question.
+
+By analogy with test-driven development,
+we could call this process [checking-driven development][cdd] (CDD).
+Each time we add a step to our pipeline and look at its output,
+we can also add a check of some kind to the pipeline to ensure that
+what we are checking for remains true as the pipeline evolves or is run on other data.
+This helps reusability—it's amazing how often a one-off analysis
+winds up being used many times—but the real goal is comprehensibility.
+If someone can get our code and data,
+then runs the code on the data,
+and gets the same result that we did,
+then our computation is reproducible,
+but that doesn't mean they can understand it.
+Comments help
+(either in the code or as blocks of prose in a [computational notebook][computational-notebook]),
+but they won't check that assumptions and invariants hold.
+And unlike comments,
+runnable assertions can't fall out of step with what the code is actually doing.
+
+We also need to distinguish between testing during development
+and testing in production.
+During development,
+our main concern is whether our answers are (close enough to) what we expect.
+We do this by analyzing small datasets
+and convincing ourselves that we're getting the right answer in some ad hoc way.
+
+In production,
+on the other hand,
+our goal is to detect cases where behavior deviates significantly from what we previously decided was right.
+We want this to be automated
+so that our pipeline will inform us that something is wrong,
+even if we're busy working on something else.
+This can happen because real data will never have exactly the same characteristics as the data we used during development.
+We also need these checks because the pipeline's environment can change:
+for example,
+a library we depend on could get upgraded,
+which could lead to getting slightly different answers than we expected.
 
 ## How do I create and run unit tests? {#py-rse-correct-create-python}
 
@@ -266,6 +348,10 @@ and another failed (the `F`).
 we wrote that `result` should be an integer `int`,
 but it is actually `float`.
 
+TODO: Exercise idea is to create the setup for a unit test for the `countwords.py` function.
+
+TODO: Exercise to add unit testing command to the project Makefile.
+
 ## How should fixtures be set up? {#py-rse-correct-fixtures}
 
 Test files all have a similar structure:
@@ -363,9 +449,7 @@ in their study of failures in data-intensive applications,
 by performing simple testing on error handling code—the last line of defense—even without
 an understanding of the software design."
 
-In Python,
-we can test for an error using a `with` statement
-and the `pytest.raises()` function.
+We test for an error by using a `with` statement and the `pytest.raises()` function.
 For example,
 for a function called `count_words()` is supposed to raise a `ValueError` exception when given an empty string.
 We test this behavior like below:
@@ -378,219 +462,92 @@ def test_text_must_not_be_empty():
         count_words('')
 ```
 
-## How can I tell whether my code has been tested or not? {#py-rse-correct-coverage}
+TODO: Create exercise that tests countwords.py.
 
-As we write more code or make changes to code we already have,
-we may lose track of which parts we have tested and which we haven't.
-Even short programs,
-loops or conditionals can make it difficult for us to figure out
-what is actually being executed.
-For example,
-take a few moments to read this function in Python:
+## How do I write tests that have floating-point values? {#py-rse-correct-numeric}
 
-TODO: This could be an exercise
+Testing floating-point values is tricky because of the way computers represent these values. 
+Different operating systems, hardware, and software have subtle differences in how these values are stored as numbers.
+We'll cover this in more detail in the next section (TODO: add reference),
+but essentially, testing floating-point values requires testing an approximation.
+The [absolute error][absolute-error] in an approximation is the absolute value of
+the difference between the approximation and the actual value.
+The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
+For instance,
+if we are off by 1 in approximating 8+1 and 56+1,
+we have the same absolute error,
+but the relative error is larger in the first case than it is in the second.
+
+Relative error is almost always more important than absolute error when we are testing software.
+It makes little sense to say that we're off by a hundredth
+when the value in question is a billionth.
+[Accuracy][accuracy] is how close our answer is to being right,
+and [precision][precision] is how close repeated measurements are to each other.
+We can be precise without being accurate (systematic bias),
+or accurate without being precise (near the right answer but without many significant digits).
+
+Accuracy is usually more important than precision for human decision making:
+a relative error of 10^-2^ (two decimal places) is good enough for most data science
+because the decision a human being would make won't change if the number changes by 1%.
+
+So, if the function we are testing uses floating point numbers,
+what should we compare its result to?
+If we compared the sum of the first few numbers in `vals` to the "right" answer,
+the answer could be `False` even though we're doing nothing wrong.
+If we compared it to a previously calculated result that we had stored somehow,
+the match would be exact.
+
+No one has a good generic answer to this problem
+because its root cause is that we're using approximations,
+and each approximation has to be judged in context.
+So what can you do to test your programs?
+If you are comparing to a saved result,
+and the result was saved at full precision,
+you could use exact equality,
+because there is no reason for the new number to differ.
+However,
+any change to your code,
+however small,
+could trigger a report of a difference.
+Experience shows that these spurious warnings quickly lead developers to stop paying attention to their tests.
+
+A much better approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
+which is best expressed as a relative error.
+In Python,
+we can use `pytest.approx`,
+which works on lists, sets, arrays, and other collections,
+and can be given either relative or absolute error bounds.
+To show how it works,
+here's an example with an unrealistically tight absolute bound:
 
 ```python
-def first(left, right):
-    if left < right:
-        left, right = right, left
-    while left > right:
-        value = second(left, right)
-        left, right = right, int(right/2)
-    return value
+from pytest import approx
 
-def second(check, balance):
-    if check > 0:
-        return balance
-    else:
-        return 0
-
-print(first(3, 5))
-```
-
-The only way to know which parts of these functions are and aren't executed
-is to trace their execution a line at a time.
-The good news is that we don't have to do this ourselves:
-a [code coverage][code-coverage] tool will do this for us.
-In essence,
-a code coverage tool creates a vector of Boolean flags with one entry for each line of code,
-then modifies the code so that the appropriate flag is set to `true` whenever that line is executed
-(Figure \@ref(fig:py-rse-correct-how-coverage-works)).
-When the program finishes,
-the tool shows us the lines that were evaluated
-and report summary statistics like the number or percentage of lines that weren't used.
-
-```{r py-rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
-Most Python programmers use the `coverage` module as a coverage checking tool.
-When we install it we get a command-line utility that is also called `coverage`.
-If the example program above is in a file called `demo.py`,
-we can check coverage by running:
-
-```shell
-$ coverage run demo_coverage.py
-```
-
-This command doesn't display anything of its own;
-instead,
-it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
-To display that data,
-we run:
-
-```shell
-$ coverage report
+for bound in (1e-15, 1e-16):
+    vals = []
+    for i in range(1, 10):
+        number = 9.0 * 10.0 ** -i
+        vals.append(number)
+        total = sum(vals)
+        expected = 1.0 - (10.0 ** -i)
+        if total != approx(expected, abs=bound):
+            print('{:22.21f} {:2d} {:22.21f} {:22.21f}'.format(bound, i, total, expected))
 ```
 
 ```text
-Name      Stmts   Miss  Cover
------------------------------
-demo.py      12      1    92%
+9.999999999999999790978e-17  6 0.999999000000000082267 0.999998999999999971244
+9.999999999999999790978e-17  8 0.999999990000000060775 0.999999989999999949752
 ```
 
-To get a fuller report,
-run `coverage html`
-and open `htmlcov/index.html`.
-Clicking on the name of our file produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
+This tells us that two tests pass with an absolute error of 10<sup>-15</sup>
+but fail when the bound is 10<sup>-16</sup>,
+both of which are unreasonably tight.
+Again,
+it helps to think of physical experiments:
+an absolute error of 10<sup>-15</sup is one part in a trillion,
+which only a handful of high-precision experiments have ever achieved.
 
-```{r python-coverage, echo=FALSE, fig.cap="Python Coverage"}
-knitr::include_graphics("figures/rse-correct/python-coverage.png")
-```
-
-## How much testing is enough? {#py-rse-correct-enough}
-
-If we are writing software for a safety-critical application such as a medical device,
-we should aim for 100% code coverage,
-i.e.,
-every single line in the application should be tested.
-In fact,
-we should probably go further and aim for 100% [path coverage][path-coverage]
-and ensure that every possible path through the code has been checked.
-
-But most of us don't write software that people's lives depend on,
-so requiring 100% code coverage is like asking for ten decimal places of accuracy
-when checking the voltage of a household electrical outlet.
-We always need to balance the effort required to create tests
-against the likelihood that those tests will uncover useful information.
-
-It's important to understand that no amount of testing can prove a piece of software is completely correct.
-A function with only two numeric arguments has 2<sup>128</sup> possible inputs.
-Even if we could write the tests,
-how could we be sure we were checking the result of each one correctly?
-
-Testing data analysis pipelines is often harder than testing mainstream software applications,
-since data analysts often don't know what the right answer is.
-(If we did,
-we would have submitted our report and moved on to the next problem already.)
-The key distinction is the difference between [validation][validation],
-which asks whether the specification is correct,
-and [verification][verification],
-which asks whether we have met that specification.
-The difference between them is the difference between building the right thing and building something right,
-and the first is often hard for data scientists to address.
-
-Luckily,
-we can group the test cases for most functions into classes.
-For example,
-it might be possible to test a function that takes numbers as inputs
-as well as needing to use only a few cases:
-zero, a positive number, a negative one, and infinity.
-If we want to go further,
-we could check that it fails the right way when given a string or a list.
-Similarly,
-when testing a function that summarizes a table full of data,
-we probably should check that it handles tables with:
-
--   no rows
--   only one row
--   many identical rows
--   rows having keys that are supposed to be unique, but aren't
--   rows that contain nothing but missing values
-
-Some projects develop [checklists][checklist] to remind programmers what they ought to test.
-These checklists can be a bit daunting for newcomers,
-but they are a great way to pass on hard-earned experience.
-
-## When should I write my tests? {#py-rse-correct-tdd}
-
-Many programmers are passionate advocates of a practice called
-[test-driven development][tdd] (TDD).
-Rather than writing code and then writing tests,
-they write the tests first and then write just enough code to make those tests pass.
-Once the code is working,
-they clean it up (Chapter \@ref(refactor)) and then move on to the next task.
-
-TDD's advocates claim that working this way leads to better code in less time because:
-
-1.  Writing tests clarifies what the code is actually supposed to do.
-
-2.  It eliminates [confirmation bias][confirmation-bias].
-    If someone has just written a function,
-    they are predisposed to want it to be right,
-    so they will bias their tests towards proving that it is correct
-    instead of trying to uncover errors.
-
-3.  Writing tests first ensures that they actually get written.
-
-These arguments are plausible.
-However,
-studies such as @Fucc2016 don't support them:
-in practice,
-writing tests first or last doesn't appear to affect productivity.
-What *does* have an impact is working in small, interleaved increments,
-i.e.,
-writing just a few lines of code and testing it before moving on
-rather than writing several pages of code and then spending hours on testing.
-
-So how do most data scientists figure out if their software is doing the right thing?
-The answer is spot checks:
-each time they produce an intermediate or final result,
-they scan a table, create a chart, or inspect some summary statistics
-to see if everything looks OK.
-Their heuristics are usually easy to state,
-like "there shouldn't be NAs at this point" or "the age range should be reasonable",
-but applying those heuristics to a particular analysis always depends on
-their evolving insight into the data in question.
-
-By analogy with test-driven development,
-we could call this process [checking-driven development][cdd] (CDD).
-Each time we add a step to our pipeline and look at its output,
-we can also add a check of some kind to the pipeline to ensure that
-what we are checking for remains true as the pipeline evolves or is run on other data.
-This helps reusability—it's amazing how often a one-off analysis
-winds up being used many times—but the real goal is comprehensibility.
-If someone can get our code and data,
-then runs the code on the data,
-and gets the same result that we did,
-then our computation is reproducible,
-but that doesn't mean they can understand it.
-Comments help
-(either in the code or as blocks of prose in a [computational notebook][computational-notebook]),
-but they won't check that assumptions and invariants hold.
-And unlike comments,
-runnable assertions can't fall out of step with what the code is actually doing.
-
-We also need to distinguish between testing during development
-and testing in production.
-During development,
-our main concern is whether our answers are (close enough to) what we expect.
-We do this by analyzing small datasets
-and convincing ourselves that we're getting the right answer in some ad hoc way.
-
-In production,
-on the other hand,
-our goal is to detect cases where behavior deviates significantly from what we previously decided was right.
-We want this to be automated
-so that our pipeline will inform us that something is wrong,
-even if we're busy working on something else.
-This can happen because real data will never have exactly the same characteristics as the data we used during development.
-We also need these checks because the pipeline's environment can change:
-for example,
-a library we depend on could get upgraded,
-which could lead to getting slightly different answers than we expected.
-
-## Why should I be cautious when using floating-point numbers? {#py-rse-correct-float}
+### Why should I be cautious when using floating-point numbers? {#py-rse-correct-float}
 
 TODO: How necessary is the below paragraph? Doesn't feel it fits with the course content (its too detailed).
 TODO: This section could be reduced substantially and merged in with another section. Its too much of a tangent.
@@ -732,98 +689,10 @@ In practice,
 just as electrical engineers trust oscilloscope makers,
 data scientists should trust the authors of core libraries to do the best they can.
 
-## How should I write tests that involved floating-point values? {#py-rse-correct-numeric}
-
-TODO: Merge this section with previous section and reduce content of both.
-
-The absolute spacing between the values we can represent in Figure \@ref(fig:verify-spacing) is uneven.
-However,
-the relative spacing between each set of values stays the same:
-the first group is separated by 1,
-then the separation becomes 2,
-then 4,
-and then 8.
-This happens because we're multiplying the same fixed set of mantissas by ever-larger exponents,
-and it leads to some useful definitions.
-The [absolute error][absolute-error] in an approximation is the absolute value of
-the difference between the approximation and the actual value.
-The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
-For example,
-it we are off by 1 in approximating 8+1 and 56+1,
-we have the same absolute error,
-but the relative error is larger in the first case than in the second.
-
-Relative error is almost always more important than absolute error when we are testing software
-because it makes little sense to say that we're off by a hundredth
-when the value in question is a billionth.
-[Accuracy][accuracy] is how close our answer is to right,
-and [precision][precision] is how close repeated measurements are to each other.
-We can be precise without being accurate (systematic bias),
-or accurate without being precise (near the right answer but without many significant digits).
-
-Accuracy is usually more important than precision for human decision making:
-a relative error of 10<sup>-2</sup> (two decimal places) is good enough for most data science
-because the decision a human being would make won't change if the number changes by 1%.
-
-We now come to the crux of this lesson:
-if the function we are testing uses floating point numbers,
-what should we compare its result to?
-If we compared the sum of the first few numbers in `vals` to the "right" answer,
-the answer could be `False` even though we're doing nothing wrong.
-If we compared it to a previously calculated result that we had stored somehow,
-the match would be exact.
-
-No one has a good generic answer to this problem
-because its root cause is that we're using approximations,
-and each approximation has to be judged in context.
-So what can you do to test your programs?
-If you are comparing to a saved result,
-and the result was saved at full precision,
-you could use exact equality,
-because there is no reason for the new number to differ.
-However,
-any change to your code,
-however small,
-could trigger a report of a difference.
-Experience shows that these spurious warnings quickly lead developers to stop paying attention to their tests.
-
-A much better approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
-which is best expressed as a relative error.
-In Python,
-we can use `pytest.approx`,
-which works on lists, sets, arrays, and other collections,
-and can be given either relative or absolute error bounds.
-To show how it works,
-here's an example with an unrealistically tight absolute bound:
-
-```python
-from pytest import approx
-
-for bound in (1e-15, 1e-16):
-    vals = []
-    for i in range(1, 10):
-        number = 9.0 * 10.0 ** -i
-        vals.append(number)
-        total = sum(vals)
-        expected = 1.0 - (10.0 ** -i)
-        if total != approx(expected, abs=bound):
-            print('{:22.21f} {:2d} {:22.21f} {:22.21f}'.format(bound, i, total, expected))
-```
-
-```text
-9.999999999999999790978e-17  6 0.999999000000000082267 0.999998999999999971244
-9.999999999999999790978e-17  8 0.999999990000000060775 0.999999989999999949752
-```
-
-This tells us that two tests pass with an absolute error of 10<sup>-15</sup>
-but fail when the bound is 10<sup>-16</sup>,
-both of which are unreasonably tight.
-Again,
-it helps to think of physical experiments:
-an absolute error of 10<sup>-15</sup is one part in a trillion,
-which only a handful of high-precision experiments have ever achieved.
 
 ## How can I test plots and other graphical results? {#py-rse-correct-plots}
+
+TODO: Update this when I know more about how the plot scripts work.
 
 Testing visualizations is hard:
 any change to the dimension of the plot,
@@ -864,38 +733,28 @@ Vector-based tests therefore still need to have thresholds on floating-point val
 There aren't any useful general rules for testing the calculations that our pipelines do,
 since those calculations vary from one pipeline to the next,
 but there *are* some rules about where to get data to test with.
-The first method is [subsampling][subsampling]:
+The first method is random [subsampling][subsampling]:
 choose random subsets of your data,
 analyze it,
 and see how close the output is to what you get with the full dataset.
 If the output doesn't converge as the sample size grows,
 something is probably unstable in either the algorithm or its implementation.
-
-When we are subsampling,
-it's vital that we select a truly random subset of data
-rather than (for example) the first N records or every N'th record.
-If there is any ordering or grouping in our data,
-those techniques can produce samples that are biased,
-which may in turn invalidate some of your tests.
+It's important to randomly subset the data to reduce our risk of potential biases
+inherent in the ordering of the data.
 
 The other approach is to test with [synthetic data][synthetic-data].
-A few lines of code can generate uniform data (i.e., data having the same values for all observations),
+It's possible to generate uniform data (i.e., data having the same values for all observations),
 strongly bimodal data (which is handy for testing clustering algorithms),
-or a pseudorandom sample with a known distribution.
+or a pseudorandom sample with a known distribution with only a few lines of code.
 If we do this,
-we should also give our pipeline data that *doesn't* fit your expected distribution
-and make sure that something, somewhere, complains.
+we should give our pipeline data that *doesn't* fit your expected distribution
+and make sure that our tests let us know about this unexpected distribution.
 Doing this is the data science equivalent of testing the fire alarm every once in a while.
 
-For example,
-we can write a short program to generate data that conforms to Zips' Law and use it to test our analysis.
-Real data will be integers,
-since words only occur or not,
-and distributions will be fractional.
-After a bit of experimentation,
-we will use 5% relative error as our threshold for correctness:
-1% excludes a valid correct case.
-The test function is called `is_zipf`:
+Let's write a short program to generate data that conforms to Zips' Law and then use it to test our analysis.
+Since words either occur or don't,
+the data will be integers and the distributions will be fractional.
+We'll set an arbitrary threshold of 5% relative error to test for correctness.
 
 ```python
 from pytest import approx
@@ -910,8 +769,7 @@ def is_zipf(hist):
     return scaled == approx(perfect, rel=RELATIVE_ERROR)
 ```
 
-Here are three tests that synthesize data and then check it using this function
-with names that suggest their purpose:
+Let's write up some tests to check if the function works on synthetic data:
 
 ```python
 def test_fit_correct():
@@ -930,9 +788,9 @@ def test_fit_last_too_large():
     assert not is_zipf(actual)
 ```
 
-## How can I test a program that uses random numbers? {#py-rse-correct-random}
+Now, try running the tests. Do they pass or fail?
 
-FIXME: explain how to test in the presence of random values
+TODO: Exercise, add a test dataset to the `test/` folder and testing suite.
 
 ## How can I test a data analysis pipeline in production? {#py-rse-correct-production}
 
@@ -953,7 +811,7 @@ Logging while calculating and checking afterward makes it easy to compare values
 and ensures that there's a record of why a problem was reported.
 
 To illustrate these ideas,
-here's a script that reads a document and prints one line per word:
+let's write a script that reads a document and prints one line per word:
 
 ```python
 import sys
@@ -971,7 +829,7 @@ with open('logfile.csv', 'a') as logger:
     logger.write('text_to_words.py,num_words,{}\n'.format(num_words))
 ```
 
-Here's a complementary script that counts how often words appear in its input:
+Then, let's write another script script that counts how often words appear in its input:
 
 ```python
 import sys
@@ -991,8 +849,8 @@ with open('logfile.csv', 'a') as logger:
 ```
 
 Both of these scripts write records to `logfile.csv`.
-When we look at that file after a typical run,
-we see records like this:
+Open up the file and look at the contents.
+You should see something like this:
 
 ```text
 text_to_words.py,num_lines,431
@@ -1001,7 +859,7 @@ word_count.py,num_words,2554
 word_count.py,num_distinct,1167
 ```
 
-We can then use a small program to check that everything went as planned:
+Now, let's write a small program to check that everything went as planned:
 
 ```python
 import sys
@@ -1019,13 +877,6 @@ assert data[('word_count.py', 'num_words')] >= data['word_count.py', 'num_distin
 Tests like these are simple to write
 and catch a surprising number of errors,
 particularly when the person using the pipeline isn't its original author.
-
-> **Validating Pipelines**
->
-> There are several libraries for validating data pipelines in R,
-> including [assertr][assertr],
-> [checkr][checkr],
-> and [validate][validate-r].
 
 ## How can I infer and check properties of my data? {#py-rse-correct-infer}
 
@@ -1142,6 +993,143 @@ Constraints failing: 15
 Another way to use TDDA is to generate constraints for two datasets and then look at differences
 in order to see how similar the datasets are to each other.
 This is especially useful if the constraint file is put under version control.
+
+## How can I tell what code has been tested or not? {#py-rse-correct-coverage}
+
+As we add to or change our code,
+we may lose track of what has and hasn't been tested. 
+Even in short programs,
+loops and conditionals can make it difficult to figure out
+what does or doesn't execute.
+Take a few moments to read this function in Python:
+
+```python
+def first(left, right):
+    if left < right:
+        left, right = right, left
+    while left > right:
+        value = second(left, right)
+        left, right = right, int(right/2)
+    return value
+
+def second(check, balance):
+    if check > 0:
+        return balance
+    else:
+        return 0
+
+print(first(3, 5))
+```
+
+Can you easily tell what and how many lines gets executed?
+While this is a simple example, 
+even manually checking the code is difficult.
+The good news is that there is a tool to do this automatically,
+and it's called [code coverage][code-coverage].
+Essentially,
+a code coverage tool records whether a line of code gets evaluated or not
+(Figure \@ref(fig:py-rse-correct-how-coverage-works)).
+When the code coverage program finishes,
+the tool tells us which lines were evaluated
+and reports some summary statistics like the number or percentage of lines that weren't used.
+
+```{r py-rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+Most Python programmers use the `coverage` module as a coverage checking tool.
+When we install it we get a command-line utility that is also called `coverage`.
+If the example program above is in a file called `demo.py`,
+we can check coverage by running:
+
+```shell
+$ coverage run demo_coverage.py
+```
+
+This command doesn't display anything of its own;
+instead,
+it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
+To display that data,
+we run:
+
+```shell
+$ coverage report
+```
+
+```text
+Name      Stmts   Miss  Cover
+-----------------------------
+demo.py      12      1    92%
+```
+
+To get a more complete report,
+run `coverage html`
+and open `htmlcov/index.html`.
+Clicking on the name of our file produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
+
+```{r python-coverage, echo=FALSE, fig.cap="Python Coverage"}
+knitr::include_graphics("figures/rse-correct/python-coverage.png")
+```
+
+TODO: Exercise. Run the coverage on the project. What does the project report say?
+
+TODO: Add the coverage command to the project Makefile.
+
+### How much test coverage is enough? {#py-rse-correct-enough}
+
+How testing we do of our software depends on the purposes it will be used for.
+If we are writing software for a safety-critical application such as a medical device,
+we should aim for 100% code coverage,
+i.e.,
+every single line in the application should be tested.
+In fact,
+we should probably go further and aim for 100% [path coverage][path-coverage]
+and ensure that every possible path through the code has been checked.
+
+But most of us don't write software that people's lives depend on,
+so requiring 100% code coverage is like asking for ten decimal places of accuracy
+when checking the voltage of a household electrical outlet.
+We always need to balance the effort required to create tests
+against the likelihood that those tests will uncover useful information.
+
+It's important to understand that no amount of testing can prove a piece of software is completely correct.
+A function with only two numeric arguments has 2^128^ possible inputs.
+Even if we could write the tests,
+how could we be sure we were checking the result of each one correctly?
+
+Testing data analysis pipelines is often harder than testing mainstream software applications,
+since data analysts often don't know what the right answer is.
+(If we did,
+we would have submitted our report and moved on to the next problem already.)
+The key distinction is the difference between [validation][validation],
+which asks whether the specification is correct,
+and [verification][verification],
+which asks whether we have met that specification.
+The difference between them is the difference between building the right thing and building something right,
+and the first is often hard for data scientists to address.
+
+Luckily,
+we can group the test cases for most functions into classes.
+For example,
+it might be possible to test a function that takes numbers as inputs
+as well as needing to use only a few cases:
+zero, a positive number, a negative one, and infinity.
+If we want to go further,
+we could check that it fails the right way when given a string or a list.
+Similarly,
+when testing a function that summarizes a table full of data,
+we probably should check that it handles tables with:
+
+-   no rows
+-   only one row
+-   many identical rows
+-   rows having keys that are supposed to be unique, but aren't
+-   rows that contain nothing but missing values
+
+Some projects develop [checklists][checklist] to remind programmers what they ought to test.
+These checklists can be a bit daunting for newcomers,
+but they are a great way to pass on hard-earned experience.
+
 
 ## Summary {#py-rse-correct-summary}
 
