@@ -468,51 +468,36 @@ TODO: Create exercise that tests countwords.py.
 
 Testing floating-point values is tricky because of the way computers represent these values. 
 Different operating systems, hardware, and software have subtle differences in how these values are stored as numbers.
-We'll cover this in more detail in the next section (TODO: add reference),
-but essentially, testing floating-point values requires testing an approximation.
-The [absolute error][absolute-error] in an approximation is the absolute value of
-the difference between the approximation and the actual value.
+So, if we are testing a function that uses floating point numbers,
+what do we compare its result to if computers represent the number differently?
+If we try to test against a value with many decimal places (highly precise),
+the test may fail because floating point values are represented as approximations.
+No one has a good generic answer to this problem
+because its root cause is that we're using approximations,
+and each approximation has to be judged in its own context.
+
+So what can you do to test your programs?
+A generally good approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
+which is best expressed as a relative error.
 The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
-For instance,
+The [absolute error][absolute-error] is the absolute value of
+the difference between the approximation and the actual value.
+So for example,
 if we are off by 1 in approximating 8+1 and 56+1,
 we have the same absolute error,
 but the relative error is larger in the first case than it is in the second.
 
 Relative error is almost always more important than absolute error when we are testing software.
 It makes little sense to say that we're off by a hundredth
-when the value in question is a billionth.
+when the value is a billionth.
 [Accuracy][accuracy] is how close our answer is to being right,
 and [precision][precision] is how close repeated measurements are to each other.
 We can be precise without being accurate (systematic bias),
 or accurate without being precise (near the right answer but without many significant digits).
-
-Accuracy is usually more important than precision for human decision making:
+Accuracy is generally more important than precision for human decision making:
 a relative error of 10^-2^ (two decimal places) is good enough for most data science
 because the decision a human being would make won't change if the number changes by 1%.
 
-So, if the function we are testing uses floating point numbers,
-what should we compare its result to?
-If we compared the sum of the first few numbers in `vals` to the "right" answer,
-the answer could be `False` even though we're doing nothing wrong.
-If we compared it to a previously calculated result that we had stored somehow,
-the match would be exact.
-
-No one has a good generic answer to this problem
-because its root cause is that we're using approximations,
-and each approximation has to be judged in context.
-So what can you do to test your programs?
-If you are comparing to a saved result,
-and the result was saved at full precision,
-you could use exact equality,
-because there is no reason for the new number to differ.
-However,
-any change to your code,
-however small,
-could trigger a report of a difference.
-Experience shows that these spurious warnings quickly lead developers to stop paying attention to their tests.
-
-A much better approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
-which is best expressed as a relative error.
 In Python,
 we can use `pytest.approx`,
 which works on lists, sets, arrays, and other collections,
@@ -520,7 +505,7 @@ and can be given either relative or absolute error bounds.
 To show how it works,
 here's an example with an unrealistically tight absolute bound:
 
-```python
+```{python}
 from pytest import approx
 
 for bound in (1e-15, 1e-16):
@@ -534,165 +519,17 @@ for bound in (1e-15, 1e-16):
             print('{:22.21f} {:2d} {:22.21f} {:22.21f}'.format(bound, i, total, expected))
 ```
 
-```text
-9.999999999999999790978e-17  6 0.999999000000000082267 0.999998999999999971244
-9.999999999999999790978e-17  8 0.999999990000000060775 0.999999989999999949752
-```
-
-This tells us that two tests pass with an absolute error of 10<sup>-15</sup>
-but fail when the bound is 10<sup>-16</sup>,
+This tells us that two tests pass with an absolute error of 10^-15^
+but fail when the bound is 10^-16^,
 both of which are unreasonably tight.
 Again,
 it helps to think of physical experiments:
-an absolute error of 10<sup>-15</sup is one part in a trillion,
+an absolute error of 10^-15^ is one part in a trillion,
 which only a handful of high-precision experiments have ever achieved.
-
-### Why should I be cautious when using floating-point numbers? {#py-rse-correct-float}
-
-TODO: How necessary is the below paragraph? Doesn't feel it fits with the course content (its too detailed).
-TODO: This section could be reduced substantially and merged in with another section. Its too much of a tangent.
-
-No matter what the cause,
-we need to understand exactly what we mean by "tolerance" when talking about testing.
-The explanation that follows is simplified to keep it manageable;
-To learn more,
-please take half an hour to read @Gold1991.
-
-
-Finding a good representation for floating point numbers is hard:
-we cannot represent an infinite number of real values with a finite set of bit patterns,
-and unlike integers,
-no matter what values we *do* represent,
-there will be an infinite number of values between each of them that we can't.
-These days,
-floating point numbers are usually represented using [sign][sign],
-[magnitude][magnitude] (or [mantissa][mantissa]),
-and an [exponent][exponent].
-In a 32-bit number,
-the IEEE 754 standard calls for 1 bit of sign,
-23 bits for the mantissa,
-and 8 bits for the exponent.
-To illustrate the problems with floating point,
-we will use a much simpler 5-bit representation
-with 3 bits for the magnitude and 2 for the exponent.
-We won't worry about fractions or negative numbers,
-since our simple representation will show off the main problems.
-
-The table below shows the possible values we can represent with 5 bits.
-(Real floating point representations shift values left and right to avoid the redundancy shown here,
-but again,
-that doesn't affect our main point.)
-Using subscripts to show the bases of numbers,
-110<sub>2</sub>×2<sup>11<sub>2</sub></sup> in binary
-is 6×2<sup>3</sup> in decimal,
-or 48.
-
-<table>
-  <tr>
-    <th></th>
-    <th colspan="4">Exponent</th>
-  </tr>
-  <tr>
-    <th>Mantissa</th> <th>00</th> <th>01</th> <th>10</th> <th>11</th>
-  </tr>
-  <tr>
-    <th>000</th> <td>0</td> <td>0</td> <td>0</td> <td>0</td>
-  </tr>
-  <tr>
-    <th>001</th> <td>1</td> <td>2</td> <td>4</td> <td>8</td>
-  </tr>
-  <tr>
-    <th>010</th> <td>2</td> <td>4</td> <td>8</td> <td>16</td>
-  </tr>
-  <tr>
-    <th>011</th> <td>3</td> <td>6</td> <td>12</td> <td>24</td>
-  </tr>
-  <tr>
-    <th>100</th> <td>4</td> <td>8</td> <td>16</td> <td>32</td>
-  </tr>
-  <tr>
-    <th>101</th> <td>5</td> <td>10</td> <td>20</td> <td>40</td>
-  </tr>
-  <tr>
-    <th>110</th> <td>6</td> <td>12</td> <td>24</td> <td>48</td>
-  </tr>
-  <tr>
-    <th>111</th> <td>7</td> <td>14</td> <td>28</td> <td>56</td>
-  </tr>
-</table>
-
-```{r verify-spacing, echo=FALSE, fig.cap="Number Spacing"}
-knitr::include_graphics("figures/rse-correct/number-spacing.png")
-```
-
-Figure \@ref(fig:verify-spacing) is a clearer view of some of the values our scheme can represent.
-It shows that a lot of values are missing from this diagram:
-for example,
-it includes 8 and 10 but not 9.
-This is exactly the same problem as writing out ⅓ in decimal:
-we have to round that to 0.3333 or 0.3334.
-
-Since this scheme has no representation for 9,
-8+1 must be stored as either 8 or 10.
-But if 8+1 is 8, what is 8+1+1?
-If we add from the left, 8+1 is 8, plus another 1 is 8 again.
-If we add from the right, 1+1 is 2, and 2+8 is 10,
-so changing the order of operations can make the difference between right and wrong.
-In this case,
-sorting the values and adding from smallest to largest
-gives us the best chance of getting the most accurate answer.
-In other situations,
-like inverting a matrix,
-the rules are more complicated.
-
-To make this more concrete,
-consider the short Python program below.
-It loops over the integers from 1 to 9
-and puts the numbers 0.9, 0.09, 0.009, and so on in `vals`.
-The sums should be 0.9, 0.99, 0.999, and so on, but are they?
-To find out,
-we can calculate the same values by subtracting .1 from 1,
-then subtracting .01 from 1, and so on.
-This should create exactly the same sequence of numbers, but it doesn't.
-
-```{python}
-vals = []
-for i in range(1, 10):
-    number = 9.0 * 10.0 ** -i
-    vals.append(number)
-    total = sum(vals)
-    expected = 1.0 - (10.0 ** -i)
-    diff = total - expected
-    print('{:2d} {:22.21f} {:22.21f}'.format(i, total, total-expected))
-```
-
-As the output shows,
-the very first value contributing to our sum is already slightly off:
-even with 23 bits for a mantissa,
-we cannot exactly represent 0.9 in base 2.
-Doubling the size of the mantissa would reduce the error,
-but we can't ever eliminate it.
-
-The good news is that 9×10<sup>-1</sup> and 1-0.1 are exactly the same:
-the values might not be correct,
-but at least they are consistent.
-However,
-some later values differ,
-and sometimes accumulated error makes the result *more* accurate.
-
-*This has nothing to do with randomness.*
-The process is completely deterministic,
-so the same calculation will produce exactly the same results no matter how many times it is run.
-(If we see someone run the same code on the same data with the same parameters many times and average the results,
-we should ask if they know what they're doing.)
-In practice,
-just as electrical engineers trust oscilloscope makers,
-data scientists should trust the authors of core libraries to do the best they can.
-
 
 ## How can I test plots and other graphical results? {#py-rse-correct-plots}
 
-TODO: Update this when I know more about how the plot scripts work.
+TODO: Update this section when I know more about how the plot scripts work.
 
 Testing visualizations is hard:
 any change to the dimension of the plot,
@@ -883,7 +720,7 @@ particularly when the person using the pipeline isn't its original author.
 Writing tests for the properties of data can be tedious,
 but some of the work can be automated.
 In particular,
-the [TDDA library][tdda-site] for Python can infer test rules from data,
+the Python [TDDA library][tdda-site] for can infer test rules from data,
 such as "`age` should be less than 100",
 "`Date` should be sorted in ascending order",
 or "`StartDate` should be less than or equal to `EndDate`".
