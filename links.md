@@ -251,6 +251,7 @@
 [procedural-programming]: glossary.html#procedural-programming
 [process]: glossary.html#process
 [product-manager]: glossary.html#product-manager
+[project-gutenberg]: https://www.gutenberg.org/
 [prompt]: glossary.html#prompt
 [provenance]: glossary.html#provenance
 [pull-request]: glossary.html#pull-request
