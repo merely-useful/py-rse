@@ -80,7 +80,7 @@ def main(args):
     df['rank'] = df['word_frequency'].rank(ascending=False)
     df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                     figsize=[12, 6], grid=True,
-                    xlim=args.xlim, ylim=args.ylim)
+                    xlim=args.xlim)
 
     alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
@@ -103,8 +103,6 @@ if __name__ == '__main__':
     parser.add_argument('--outfile', type=str, help='Output image file')
     parser.add_argument('--xlim', type=tuple, nargs=2, default=None,
                         help='X-axis limits')
-    parser.add_argument('--ylim', type=float, nargs=2, default=None,
-                        help='Y-axis limits')
     parser.add_argument('--rcparams', type=str, default=None,
                         help='Configuration file for plot parameters (matplotlib rc parameters)')
 
