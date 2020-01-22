@@ -99,9 +99,10 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=str, default=sys.stdin, nargs='?',
-                        help='Word count csv file')
-    parser.add_argument('--outfile', type=str, help='Output image file')
     parser.add_argument('--xlim', type=tuple, nargs=2, default=None,
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, default='results/plotcounts.png',
+                        help='Output image file name')
                         help='X-axis limits')
     parser.add_argument('--rcparams', type=str, default=None,
                         help='Configuration file for plot parameters (matplotlib rc parameters)')
