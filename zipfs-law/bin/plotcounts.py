@@ -53,22 +53,22 @@ def set_plot_params(param_file):
         mpl.rcParams[param] = value
 
 
-def plot_fit(xmin, xmax, max_rank, beta):
+def plot_fit(curve_xmin, curve_xmax, max_rank, beta):
     """
     Plot the power law curve that was fitted to the data.
 
     Parameters
     ----------
-    xmin : float
+    curve_xmin : float
         Minimum x-bound for fitted curve
-    xmax : float
+    curve_xmax : float
         Maximum x-bound for fitted curve
     max_rank : int
         Maximum word frequency rank.
     beta : float
         Estimated beta parameter for the power law.
     """
-    xvals = np.arange(xmin, xmax)
+    xvals = np.arange(curve_xmin, curve_xmax)
     yvals = max_rank * (xvals**(-beta + 1))
     plt.loglog(xvals, yvals, color='grey')
 
@@ -87,12 +87,13 @@ def main(args):
     print('alpha:', alpha)
     print('beta:', beta)
     # Since the ranks are already sorted, we can take the last one instead of
-    # asking Python to find the highest rank.
+    # computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
-    xmin = df['word frequency'].min()
-    xmax = df['word frequency'].max()
-    plot_fit(xmin, xmax, max_rank, beta)
+    # Use the range of the data as the boundaries when drawing the power law curve
+    curve_xmin = df['word_frequency'].min()
+    curve_xmax = df['word_frequency'].max()
 
+    plot_fit(curve_xmin, curve_xmax, max_rank, beta)
     plt.savefig(args.outfile)
 
 
