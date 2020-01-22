@@ -76,8 +76,7 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta):
 def main(args):
     """Run the command line program."""
     set_plot_params(args.rcparams)
-    input_csv = args.infile if args.infile else sys.stdin
-    df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False)
     df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                     figsize=[12, 6], grid=True,
@@ -99,10 +98,10 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('outfile', type=str, help='Output image file')
-    parser.add_argument('--infile', type=str, default=None,
+    parser.add_argument('infile', type=str, default=sys.stdin, nargs='?',
                         help='Word count csv file')
-    parser.add_argument('--xlim', type=float, nargs=2, default=None,
+    parser.add_argument('--outfile', type=str, help='Output image file')
+    parser.add_argument('--xlim', type=tuple, nargs=2, default=None,
                         help='X-axis limits')
     parser.add_argument('--ylim', type=float, nargs=2, default=None,
                         help='Y-axis limits')
