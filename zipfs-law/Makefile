@@ -13,9 +13,9 @@ RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 ## all : regenerate all results.
 all : results/plotcounts.png
 
-	$(RUN_PLOT) $^ $@
 ## results/plotcounts.png: plot the collated results.
 results/plotcounts.png : results/collated.csv
+	$(RUN_PLOT) $^
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
