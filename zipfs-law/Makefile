@@ -15,7 +15,7 @@ all : results/plotcounts.png
 
 ## results/plotcounts.png: plot the collated results.
 results/plotcounts.png : results/collated.csv
-	$(RUN_PLOT) $^
+	$(RUN_PLOT) $^ --outfile $@
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
