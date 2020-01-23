@@ -53,58 +53,58 @@ def set_plot_params(param_file):
         mpl.rcParams[param] = value
 
 
-def plot_fit(xmin, xmax, max_rank, beta):
+def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
     """
     Plot the power law curve that was fitted to the data.
 
     Parameters
     ----------
-    xmin : float
+    curve_xmin : float
         Minimum x-bound for fitted curve
-    xmax : float
+    curve_xmax : float
         Maximum x-bound for fitted curve
     max_rank : int
         Maximum word frequency rank.
     beta : float
         Estimated beta parameter for the power law.
+    ax : matplotlib axes
+        Scatter plot to which the power curve will be added.
     """
-    xvals = np.arange(xmin, xmax)
+    xvals = np.arange(curve_xmin, curve_xmax)
     yvals = max_rank * (xvals**(-beta + 1))
-    plt.loglog(xvals, yvals, color='grey')
+    ax.loglog(xvals, yvals, color='grey')
 
 
 def main(args):
     """Run the command line program."""
     set_plot_params(args.rcparams)
-    input_csv = args.infile if args.infile else sys.stdin
-    df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False)
-    df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                    figsize=[12, 6], grid=True,
-                    xlim=args.xlim, ylim=args.ylim)
+    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
+                         figsize=[12, 6], grid=True, xlim=args.xlim)
 
     alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
     print('beta:', beta)
     # Since the ranks are already sorted, we can take the last one instead of
-    # asking Python to find the highest rank.
+    # computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
-    xmin = df['word frequency'].min()
-    xmax = df['word frequency'].max()
-    plot_fit(xmin, xmax, max_rank, beta)
+    # Use the range of the data as the boundaries when drawing the power law curve
+    curve_xmin = df['word_frequency'].min()
+    curve_xmax = df['word_frequency'].max()
 
-    plt.savefig(args.outfile)
+    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
+    ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('outfile', type=str, help='Output image file')
-    parser.add_argument('--infile', type=str, default=None,
-                        help='Word count csv file')
-    parser.add_argument('--xlim', type=float, nargs=2, default=None,
-                        help='X-axis limits')
-    parser.add_argument('--ylim', type=float, nargs=2, default=None,
-                        help='Y-axis limits')
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+                        help='Output image file name')
+    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+                        default=None, help='X-axis limits')
     parser.add_argument('--rcparams', type=str, default=None,
                         help='Configuration file for plot parameters (matplotlib rc parameters)')
 
