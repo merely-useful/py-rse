@@ -29,7 +29,7 @@ results/%.csv : data/%.txt $(COUNT)
 
 ## clean : remove all generated files.
 clean :
-	rm -f results/*.csv
+	rm $(RESULTS) results/collated.csv results/plotcounts.png
 
 ## settings : show variables' values.
 settings :
