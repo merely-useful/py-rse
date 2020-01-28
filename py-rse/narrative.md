@@ -191,18 +191,7 @@ where we discuss theory behind the power law stuff in detail.
 Now that we've written all our scripts for the Zipf's Law analysis,
 this chapter should structure it all properly (i.e. with license files and README's etc).
 
-### Chapter 13: Correctness
-
-This chapter introduces testing and needs to be updated to write tests for the Zipf's Law code.
-For example, `countwords.py` could be tested using an input text file where the count
-for each word is already known.
-
-### Chapter 14: Continuous integration
-
-This chapter needs to be updated so the tests developed in the previous chapter
-are implemented using Travis CI.
-
-### Chapter 15: Python packaging
+### Chapter 13: Python packaging
 
 In the current version of this chapter,
 a few relevant functions relating to the Zipf's Law analysis 
@@ -212,6 +201,17 @@ That module is then packaged so it can be installed by others.
 Instead of introducing new previously unseen Zipf's Law functions,
 this chapter should package up all the code developed in the previous chapters
 as a complete Zipf's Law package.
+
+### Chapter 14: Correctness
+
+This chapter introduces testing and needs to be updated to write tests for the Zipf's Law code.
+For example, `countwords.py` could be tested using an input text file where the count
+for each word is already known.
+
+### Chapter 15: Continuous integration
+
+This chapter needs to be updated so the tests developed in the previous chapter
+are implemented using Travis CI.
 
 ### Chapter 16: Publishing
 
