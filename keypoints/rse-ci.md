@@ -1,3 +1,3 @@
 -   Continuous integration re-builds and/or re-tests software every time something changes.
--   Use continuous integration to check changes before they are inspected.
+-   Use continuous integration to not only check software but also run other commands for other tasks (e.g. build a website).
 -   Check style as well as correctness.
