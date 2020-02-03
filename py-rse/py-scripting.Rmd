@@ -230,10 +230,10 @@ The [argparse][argparse] library comes with many options
 so we've taken advantage of some for the `infile` option.
 
 We can either pass the name of a file to our new command line script
-and it will count the words:
+and it will count the words.
 
 ```shell
-$ python countwords.py ../data/dracula.txt
+$ python countwords.py ../data/dracula.txt | head -n 10
 ```
 
 ```text
@@ -246,14 +246,23 @@ a,2955
 in,2466
 that,2436
 he,1996
-...
+Traceback (most recent call last):
+  File "countwords.py", line 37, in <module>
+    main(args)
+  File "countwords.py", line 26, in main
+    mymodule.report_results(sys.stdout, word_counts)
+  File "/Users/z3526123/Documents/volunteer/merely-useful.github.io/zipfs-law/bin/mymodule.py", line 17, in report_results
+    writer.writerow((key, value))
+BrokenPipeError: [Errno 32] Broken pipe
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='UTF-8'>
+BrokenPipeError: [Errno 32] Broken pipe
 ```
 
 or it can participate in a pipeline like any other regular command line program
 (this pipeline counts the words in the first 500 lines of the book):
 
 ```shell
-$ head -500 ../data/dracula.txt | python countwords.py
+$ head -500 ../data/dracula.txt | python countwords.py | head -n 10
 ```
 
 ```text
@@ -266,7 +275,22 @@ in,54
 a,49
 was,42
 that,41
+Traceback (most recent call last):
+  File "countwords.py", line 37, in <module>
+    main(args)
+  File "countwords.py", line 26, in main
+    mymodule.report_results(sys.stdout, word_counts)
+  File "/Users/z3526123/Documents/volunteer/merely-useful.github.io/zipfs-law/bin/mymodule.py", line 17, in report_results
+    writer.writerow((key, value))
+BrokenPipeError: [Errno 32] Broken pipe
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='UTF-8'>
+BrokenPipeError: [Errno 32] Broken pipe
 ```
+
+In order to limit the amount of information printed to the ten most frequent words,
+we've attempted to pipe the output to the `head` command.
+That has worked, but it's a bit messy because the script ends by throwing an error.
+We'll fix that a little later on in this chapter.
 
 Ultimately,
 we want to save the word counts to a CSV file for further analysis and plotting:
@@ -288,10 +312,81 @@ $ python countwords.py ../data/emma.txt > emma_words.csv
 Now that we've got word counts for a number of books,
 we may want to collate the word counts.
 Using the same template as before,
-we might write the following script called `collate.py`:
+we can write the following script called `collate.py`:
 
-TODO
+```python
+"""Combine multiple word count CSV-files into a single cumulative count."""
 
+import sys
+import csv
+import argparse
+from collections import Counter
+
+
+def report_results(writer, results):
+    """Report results to stream."""
+    
+    writer = csv.writer(writer)
+    for (key, value) in results:
+        writer.writerow((key, value))
+
+
+def update_counts(reader, word_counts):
+    """Update word counts with data from another reader/file."""
+    for (word, count) in csv.reader(reader):
+        word_counts[word] += int(count)
+
+
+def main(args):
+    """Run the command line program."""
+    word_counts = Counter()
+    for fn in args.infiles:
+        with open(fn, 'r') as reader:
+            update_counts(reader, word_counts)
+    report_results(sys.stdout, word_counts)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
+
+    args = parser.parse_args()
+    main(args)
+```
+
+It will take an arbitrary number of input files generated using `countwords.py`
+and collate the word counts:
+
+```shell
+$ python collate.py dracula_words.csv moby_dick_words.csv emma_words.csv
+```
+
+```text
+the,26450
+and,16686
+of,14793
+to,14554
+a,10664
+I,10144
+in,8637
+that,7173
+it,6171
+was,5891
+he,5029
+his,4944
+```
+
+### Writing your own modules
+
+You might have noticed the duplication between `countwords.py` and `collate.py`.
+Both use the function `report_results`.
+Having the same function in two different scripts is inefficient and error prone.
+For instance,
+we might want to edit `report_results` to fix that error we were getting earlier
+when piping the results to the head command.
+
+
+TODO: Finish me.
 
 
 
