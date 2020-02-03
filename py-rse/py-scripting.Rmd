@@ -68,20 +68,18 @@ The simplest way to explain how `argparse` works is by example,
 so let's create a short Python script called `script_template.py`:
 
 ```python
+"""One-line description of what the script does."""
+
 import argparse
 
-
 def main(args):
-    '''Run the program.'''
+    """Run the program."""
 
     print('Input file:', args.infile)
     print('Output file:', args.outfile)
 
-
 if __name__ == '__main__':
-
-    description = 'Print options to the screen.'
-    parser = argparse.ArgumentParser(description=description)
+    parser = argparse.ArgumentParser(description=__doc__)
 
     parser.add_argument('infile', type=str, help='Input file name')
     parser.add_argument('outfile', type=str, help='Output file name')
@@ -123,7 +121,7 @@ $ python script_template.py -h
 ```text
 usage: script_template.py [-h] infile outfile
 
-Print options to the screen.
+One-line description of what the script does.
 
 positional arguments:
   infile      Input file name
@@ -135,7 +133,167 @@ optional arguments:
 
 As the `--help` hint shows,
 `argparse` can handle [long options][long-option-shell] as well as traditional single-letter options;
-the [online tutorial][argpapy-rse-tutorial] has examples of this and much more.
+the [online tutorial][argparse-rse-tutorial] has examples of this and much more.
+
+
+## A practical example: Zipf's Law analysis {#py-rse-py-scripting-example}
+
+### Counting words
+
+Now that we've got a template for creating Python scripts,
+we can go ahead and apply it to the problem of counting words
+(and ultimately verifying Zipf's Law) in our collection of classic English novels.
+
+To start,
+here's a function that uses the regular expressions (re) library
+to identify all the words in a text file and then a counter function
+from the collections library to tally up the occurrence of each word.
+
+```python
+import re
+from collections import Counter
+
+def count_words(reader):
+    """Count the occurrence of each word in a string."""
+    text = reader.read()
+    findwords = re.compile(r"\w+", re.IGNORECASE)
+    word_list = re.findall(findwords, text)
+    word_counts = Counter(word_list)
+
+    return word_counts
+```
+
+We can then apply that function to the Dracula ebook (for example):
+
+```python
+with open('../zipfs-law/data/dracula.txt', 'r') as reader:
+    word_counts = count_words(reader)
+
+print(word_counts)
+```
+
+```text
+Counter({'the': 7474, 'and': 5803, 'I': 4846, 'to': 4662, 'of': 3707, 'a': 2955, 'in': 2466, 'that': 2436, 'he': 1996, 'was': 1870, 'it': 1808, 'is': 1498, 'for': 1480, 'as': 1476, 'me': 1452, 'not': 1393, 'his': 1384, 'with': 1283, ...
+```
+
+In order to make this function available at the command line,
+we basically just need to insert it into the script template developed earlier.
+Let's call the script `countwords.py`:
+
+```python
+"""Count the occurences of all words in a text and write them to a CSV-file."""
+
+import sys
+import re
+import argparse
+from collections import Counter
+
+
+def report_results(writer, results):
+    """Report results to stream."""
+    
+    writer = csv.writer(writer)
+    for (key, value) in results:
+        writer.writerow((key, value))
+
+
+def count_words(reader):
+    """Count the occurrence of each word in a string."""
+    text = reader.read()
+    findwords = re.compile(r"\w+", re.IGNORECASE)
+    word_list = re.findall(findwords, text)
+    word_counts = Counter(word_list)
+
+    return word_counts
+
+
+def main(args):
+    """Run the command line program."""
+    with args.infile as reader:
+        word_counts = count_words(reader)
+    word_counts = sort_counts(word_counts, args.sortby)
+    report_results(sys.stdout, word_counts)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+
+    args = parser.parse_args()
+    main(args)
+```
+
+
+The [argparse][argparse] library comes with many options
+(more than can be covered in detail here),
+so we've taken advantage of some for the `infile` option.
+
+We can either pass the name of a file to our new command line script
+and it will count the words:
+
+```shell
+$ python countwords.py ../data/dracula.txt
+```
+
+```text
+the,7474
+and,5803
+I,4846
+to,4662
+of,3707
+a,2955
+in,2466
+that,2436
+he,1996
+...
+```
+
+or it can participate in a pipeline like any other regular command line program
+(this pipeline counts the words in the first 500 lines of the book):
+
+```shell
+$ head -500 ../data/dracula.txt | python countwords.py
+```
+
+```text
+the,216
+and,123
+of,114
+I,99
+to,82
+in,54
+a,49
+was,42
+that,41
+```
+
+Ultimately,
+we want to save the word counts to a CSV file for further analysis and plotting:
+
+```shell
+$ python countwords.py ../data/dracula.txt > dracula_words.csv
+```
+
+```shell
+$ python countwords.py ../data/moby_dick.txt > moby_dick_words.csv
+```
+
+```shell
+$ python countwords.py ../data/emma.txt > emma_words.csv
+```
+
+### Collating results
+
+Now that we've got word counts for a number of books,
+we may want to collate the word counts.
+Using the same template as before,
+we might write the following script called `collate.py`:
+
+TODO
+
+
+
 
 ## Summary {#py-rse-py-scripting-summary}
 
