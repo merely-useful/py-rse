@@ -145,9 +145,9 @@ we can go ahead and apply it to the problem of counting words
 (and ultimately verifying Zipf's Law) in our collection of classic English novels.
 
 To start,
-here's a function that uses the regular expressions (re) library
+here's a function that uses the regular expressions (`re`) library
 to identify all the words in a text file and then a counter function
-from the collections library to tally up the occurrence of each word.
+from the `collections` library to tally up the occurrence of each word.
 
 ```python
 import re
@@ -163,7 +163,7 @@ def count_words(reader):
     return word_counts
 ```
 
-We can then apply that function to the Dracula ebook (for example):
+We can apply that function to the Dracula ebook (for example):
 
 ```python
 with open('../zipfs-law/data/dracula.txt', 'r') as reader:
@@ -212,28 +212,36 @@ def main(args):
     with args.infile as reader:
         word_counts = count_words(reader)
     word_counts = sort_counts(word_counts, args.sortby)
-    report_results(sys.stdout, word_counts)
+    report_results(sys.stdout, word_counts, args.n)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
                         default='-', help='Input file name')
-
+    parser.add_argument('-n', type=int, default=None,
+                        help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
 
-
-The [argparse][argparse] library comes with many options
-(more than can be covered in detail here),
-so we've taken advantage of some for the `infile` option.
-
-We can either pass the name of a file to our new command line script
-and it will count the words.
+The [argparse][argparse] library comes with many different options
+for defining the characteristics of command line arguments.
+For the `infile` option defined above,
+the number of expected arguments (`nargs`) is set to `?`.
+This means that one argument (i.e. a file name)
+will be consumed from the command line if possible.
+The program will read that file
+just like the `open('../zipfs-law/data/dracula.txt', 'r')`
+command we saw earlier,
+because the input `type` has been set to `argparse.FileType('r')`.
+The script also defines an optional `-n` flag
+(a `-` or `--` denotes an optional argument)
+to limit the output so that it's easier to view in our terminal window.
+Let's see this in action:
 
 ```shell
-$ python countwords.py ../data/dracula.txt | head -n 10
+$ python countwords.py ../data/dracula.txt -n 10
 ```
 
 ```text
@@ -246,23 +254,19 @@ a,2955
 in,2466
 that,2436
 he,1996
-Traceback (most recent call last):
-  File "countwords.py", line 37, in <module>
-    main(args)
-  File "countwords.py", line 26, in main
-    mymodule.report_results(sys.stdout, word_counts)
-  File "/Users/z3526123/Documents/volunteer/merely-useful.github.io/zipfs-law/bin/mymodule.py", line 17, in report_results
-    writer.writerow((key, value))
-BrokenPipeError: [Errno 32] Broken pipe
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='UTF-8'>
-BrokenPipeError: [Errno 32] Broken pipe
 ```
 
-or it can participate in a pipeline like any other regular command line program
-(this pipeline counts the words in the first 500 lines of the book):
+If we don't provide a file name,
+`nargs='?'` dictates that the `default` value of `-` will be used.
+The `argparse.FileType('r')` argument type understands the pseudo-argument '-' and
+automatically convert this into standard input (`sys.stdin`),
+which means the script can participate in a pipeline like
+many of the other command line program we've met.
+For instance,
+this pipeline counts the words in the first 500 lines of the book:
 
 ```shell
-$ head -500 ../data/dracula.txt | python countwords.py | head -n 10
+$ head -500 ../data/dracula.txt | python countwords.py -n 10
 ```
 
 ```text
@@ -275,22 +279,7 @@ in,54
 a,49
 was,42
 that,41
-Traceback (most recent call last):
-  File "countwords.py", line 37, in <module>
-    main(args)
-  File "countwords.py", line 26, in main
-    mymodule.report_results(sys.stdout, word_counts)
-  File "/Users/z3526123/Documents/volunteer/merely-useful.github.io/zipfs-law/bin/mymodule.py", line 17, in report_results
-    writer.writerow((key, value))
-BrokenPipeError: [Errno 32] Broken pipe
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='UTF-8'>
-BrokenPipeError: [Errno 32] Broken pipe
 ```
-
-In order to limit the amount of information printed to the ten most frequent words,
-we've attempted to pipe the output to the `head` command.
-That has worked, but it's a bit messy because the script ends by throwing an error.
-We'll fix that a little later on in this chapter.
 
 Ultimately,
 we want to save the word counts to a CSV file for further analysis and plotting:
@@ -349,7 +338,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-
+    parser.add_argument('-n', type=int, default=None, help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -358,7 +347,7 @@ It will take an arbitrary number of input files generated using `countwords.py`
 and collate the word counts:
 
 ```shell
-$ python collate.py dracula_words.csv moby_dick_words.csv emma_words.csv
+$ python collate.py dracula_words.csv moby_dick_words.csv emma_words.csv -n 10
 ```
 
 ```text
@@ -378,15 +367,19 @@ his,4944
 
 ### Writing your own modules
 
-You might have noticed the duplication between `countwords.py` and `collate.py`.
-Both use the function `report_results`.
+You might have noticed the duplication between `countwords.py` and `collate.py` --
+both use the function `report_results`.
 Having the same function in two different scripts is inefficient and error prone.
 For instance,
 we might want to edit `report_results` to fix that error we were getting earlier
 when piping the results to the head command.
 
 
-TODO: Finish me.
+TODO: Finish me
+- write module
+- write non-optimal `plotcounts.py`
+- work out alphabetic flag for basic git
+  (need to get rid of numbers) 
 
 
 

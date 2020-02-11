@@ -7,13 +7,15 @@ Functions:
 """
 
 import csv
+import pdb
 
 
-def report_results(writer, results):
+def report_results(writer, results, top_n=None):
     """Report results to stream."""
     
+    limit = top_n if top_n else len(results)
     writer = csv.writer(writer)
-    for (key, value) in results:
+    for (key, value) in results[0:limit]:
         writer.writerow((key, value))
         
 

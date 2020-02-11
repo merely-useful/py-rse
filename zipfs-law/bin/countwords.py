@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-"""Count the occurences of all words in a text and write them to a CSV-file."""
+"""Count the occurences of all words in a text and print them in CSV format"""
 
 import sys
 import re
@@ -24,7 +23,7 @@ def main(args):
     with args.infile as reader:
         word_counts = count_words(reader)
     word_counts = mymodule.sort_counts(word_counts, args.sortby)
-    mymodule.report_results(sys.stdout, word_counts)
+    mymodule.report_results(sys.stdout, word_counts, args.n)
 
 
 if __name__ == '__main__':
@@ -33,6 +32,8 @@ if __name__ == '__main__':
                         default='-', help='Input file name')
     parser.add_argument('--sortby', type=str, choices=('count', 'alphabetical'),
                         default='count', help='Method for sorting results')
+    parser.add_argument('-n', type=int, default=None,
+                        help='Limit output to n most frequent words')
 
     args = parser.parse_args()
     main(args)
