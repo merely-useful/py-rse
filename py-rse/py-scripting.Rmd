@@ -369,19 +369,109 @@ his,4944
 
 You might have noticed the duplication between `countwords.py` and `collate.py` --
 both use the function `report_results`.
-Having the same function in two different scripts is inefficient and error prone.
+Having the same function in numerous different scripts is inefficient and error prone.
 For instance,
-we might want to edit `report_results` to fix that error we were getting earlier
-when piping the results to the head command.
+if we want to make an improvement to `report_results` in the future,
+we have to find every single script that we've copy and pasted it into.
+To avoid this situation,
+let's create a module (i.e. a file with a bunch of Python functions in it)
+called `mymodule.py` for our commonly used functions:
+
+```python
+"""Collection of commonly used functions.
+
+Functions:
+  report_results  -- report results to stream
+
+"""
+
+import csv
+
+def report_results(writer, results, top_n=None):
+    """Report results to stream."""
+    
+    limit = top_n if top_n else len(results)
+    writer = csv.writer(writer)
+    for (key, value) in results[0:limit]:
+        writer.writerow((key, value))
+``` 
+
+We can now import that function into our scripts,
+rather than having to define it anew every time.
+Here's our new `countwords.py` script,
+
+```python
+"""Count the occurences of all words in a text and write them to a CSV-file."""
+
+import sys
+import re
+import argparse
+from collections import Counter
+import mymodule
 
 
-TODO: Finish me
-- write module
-- write non-optimal `plotcounts.py`
-- work out alphabetic flag for basic git
-  (need to get rid of numbers) 
+def count_words(reader):
+    """Count the occurrence of each word in a string."""
+    text = reader.read()
+    findwords = re.compile(r"\w+", re.IGNORECASE)
+    word_list = re.findall(findwords, text)
+    word_counts = Counter(word_list)
+
+    return word_counts
 
 
+def main(args):
+    """Run the command line program."""
+    with args.infile as reader:
+        word_counts = count_words(reader)
+    word_counts = sort_counts(word_counts, args.sortby)
+    mymodule.report_results(sys.stdout, word_counts, args.n)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    parser.add_argument('-n', type=int, default=None,
+                        help='Limit output to n most frequent words')
+    args = parser.parse_args()
+    main(args)
+```
+
+and here's `collate.py`:
+
+```python
+"""Combine multiple word count CSV-files into a single cumulative count."""
+
+import sys
+import csv
+import argparse
+from collections import Counter
+import mymodule
+
+
+def update_counts(reader, word_counts):
+    """Update word counts with data from another reader/file."""
+    for (word, count) in csv.reader(reader):
+        word_counts[word] += int(count)
+
+
+def main(args):
+    """Run the command line program."""
+    word_counts = Counter()
+    for fn in args.infiles:
+        with open(fn, 'r') as reader:
+            update_counts(reader, word_counts)
+    mymodule.report_results(sys.stdout, word_counts)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
+    parser.add_argument('-n', type=int, default=None, help='Limit output to n most frequent words')
+    args = parser.parse_args()
+    main(args)
+```
 
 ## Summary {#py-rse-py-scripting-summary}
 
@@ -389,11 +479,15 @@ In the novice lessons,
 we learned how to reuse (rather than cut and paste)
 code by defining functions.
 In order to use those functions in other python notebooks/scripts,
-we saw that we can save them in a file (called a module) that can be imported.
+we can save them in a file (called a module) that can be imported.
 In this chapter we have seen that we can go one step further
 and run our Python code outside of a Python environment,
 by writing Python scripts that can be executed at the command line.
 
+
+## Mission Critical Exercises {#py-rse-py-scripting-critical-exercises}
+
+TODO
 
 ## Exercises {#py-rse-py-scripting-exercises}
 
