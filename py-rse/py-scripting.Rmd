@@ -485,9 +485,46 @@ and run our Python code outside of a Python environment,
 by writing Python scripts that can be executed at the command line.
 
 
-## Mission Critical Exercises {#py-rse-py-scripting-critical-exercises}
+## Mission Critical Exercise {#py-rse-py-scripting-critical-exercise}
 
-TODO
+The last thing for us to do is to plot the word count distribution.
+
+Recall that [Zipf's law][zipfs-law] states the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often, and so on.
+Mathematically, this might be written as
+"word frequency is proportional to 1/rank."
+
+The following code plots the word frequency against the inverse rank 
+using the popular pandas library:
+
+```python
+import pandas
+import matplotlib.pyplot as plt
+
+input_csv = 'emma_words.csv'
+df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
+df['rank'] = df['word_frequency'].rank(ascending=False)
+df['inverse_rank'] = 1 / df['rank'] 
+df.plot.scatter(x='word_frequency', y='inverse_rank',
+                figsize=[12, 6], grid=True)
+plt.show()
+```
+
+```{r py-rse-py-scripting-repl, echo=FALSE, fig.cap="Word frequency distribution for the book Emma"}
+knitr::include_graphics("figures/py-rse-scripting/emma_words.png")
+```
+
+Using `script_template.py` as a guide,
+take this plotting code and write a new python script called `plotcounts.py`.
+The script should:
+
+a. Use the `type=argparse.FileType('r')`, `nargs='?'` and `default='-'` options
+   for the input file argument (i.e. similar to the `countwords.py` script)
+   so that `plotcounts.py` uses standard input if no csv file is given.
+
+b. Add an optional `--xlim` option so that the user can change the x-axis bounds.
+
 
 ## Exercises {#py-rse-py-scripting-exercises}
 

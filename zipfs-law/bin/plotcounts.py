@@ -1,7 +1,5 @@
-#!/usr/bin/env python
 """Plot word counts."""
 
-import sys
 import argparse
 import yaml
 import numpy as np

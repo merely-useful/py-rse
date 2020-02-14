@@ -55,7 +55,13 @@ title and author information could be extracted using `grep`.
 This chapter currently involves a generic script called `script_template.py`,
 which can be configured using command line arguments.
 Instead of developing the generic `script_template.py`,
-this chapter needs to be updated so that it develops `zipfs_law/bin/countwords.py` instead.
+this chapter needs to be updated so that it develops the
+`zipfs_law/bin/countwords.py`, `zipfs_law/bin/collate.py` and
+`zipfs_law/bin/plotcounts.py` scripts instead.
+(Instead of writing the final version of `plotcounts.py`,
+in this lesson a sub-optimal approach to plotting the data will be implemented
+so that it can be improved upon in subsequent chapters:
+see `plotcounts_rank.py` for details.)
 This will involve introducing `if __name__ == '__main__':`,
 writing your own modules (`zipfs_law/bin/mymodule.py`),
 `argparse` and standard input in Python (`sys.stdin`).
@@ -74,14 +80,15 @@ This chapter introduces the concept of branches.
 In the current draft, a violin plot is created on one branch
 and a beeswarm plot on the other.
 The better looking plot is then merged into the master branch.
-This example needs to be changed so that two slightly different versions of 
-`zipfs_law/bin/plotcounts.py` are developed instead.
+This example needs to be changed so that a new branch is created to try a better way of
+plotting the data in `zipfs_law/bin/plotcounts.py`.
+Specifically, the new branch will implement a log-log plot (see `zipfs_law/bin/plotcounts_log.py`)
+to replace the inferior frequency vs 1/rank plot (see `zipfs_law/bin/plotcounts_rank.py`)
+written in Chapter 4.
 
-The two different versions are illustrated in
-`zipfs_law/bin/plotcounts_branch_keep.py` and `zipfs_law/bin/plotcounts_branch_reject.py`
-The explanation for each is as follows:
+The rationale for the two approaches is outlined below.
 
-##### `zipfs_law/bin/plotcounts_branch_reject.py`: Word frequency versus 1/rank
+##### `zipfs_law/bin/plotcounts_rank.py`: Word frequency versus 1/rank
 
 Rationale: Mathematically, Zipfs Law might be written as
 "word frequency is proportional to 1/rank."
@@ -91,7 +98,7 @@ Advantages: Simple to interpret (because no log axes).
 Disadvantage: Tends to visually over-emphasize the very frequent words.
 It's hard to see what is happening for words that appear less than 500 times.
 
-##### `zipfs_law/bin/plotcounts_branch_keep.py`: log-log plot showing word frequency versus rank
+##### `zipfs_law/bin/plotcounts_log.py`: log-log plot showing word frequency versus rank
 
 Rationale: Zipfs Law is an example of a power law.
 
@@ -108,7 +115,7 @@ This chapter can stay pretty much as is.
 The introductory paragraphs about Zipf's Law can be removed 
 (because they should now appear in the introduction chapter)
 and the workflows developed in the chapter need to be extended to also include
-`plotcounts.py` (as it appears in `zipfs_law/bin/plotcounts_branch_keep.py`).
+`plotcounts.py` (as it appears in `zipfs_law/bin/plotcounts_log.py`).
 
 ### Chapter 8: Program configuration
 
