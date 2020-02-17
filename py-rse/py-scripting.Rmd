@@ -30,8 +30,8 @@ These two lines of code differentiate between
 running a Python file as a standalone program
 and importing it as a module.
 When we import a Python file as a module in another program,
-the `__name__` variable is automatically set to the name of the file:
-for example,
+the `__name__` variable is automatically set to the name of the file.
+For example,
 if we run:
 
 ```python
@@ -69,21 +69,17 @@ so let's create a short Python script called `script_template.py`:
 
 ```python
 """One-line description of what the script does."""
-
 import argparse
 
 def main(args):
     """Run the program."""
-
     print('Input file:', args.infile)
     print('Output file:', args.outfile)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-
     parser.add_argument('infile', type=str, help='Input file name')
     parser.add_argument('outfile', type=str, help='Output file name')
-
     args = parser.parse_args()
     main(args)
 ```
@@ -112,7 +108,7 @@ usage: script_template.py [-h] infile outfile
 script_template.py: error: the following arguments are required: outfile
 ```
 
-and automatically generates help to tell us what we did wrong:
+and automatically generates help information:
 
 ```shell
 $ python script_template.py -h
@@ -133,7 +129,7 @@ optional arguments:
 
 As the `--help` hint shows,
 `argparse` can handle [long options][long-option-shell] as well as traditional single-letter options;
-the [online tutorial][argparse-rse-tutorial] has examples of this and much more.
+the [online tutorial][argparse-tutorial] has examples of this and much more.
 
 
 ## A practical example: Zipf's Law analysis {#py-rse-py-scripting-example}
@@ -159,7 +155,6 @@ def count_words(reader):
     findwords = re.compile(r"\w+", re.IGNORECASE)
     word_list = re.findall(findwords, text)
     word_counts = Counter(word_list)
-
     return word_counts
 ```
 
@@ -168,12 +163,25 @@ We can apply that function to the Dracula ebook (for example):
 ```python
 with open('../zipfs-law/data/dracula.txt', 'r') as reader:
     word_counts = count_words(reader)
-
+word_counts = word_counts.most_common()
 print(word_counts)
 ```
 
 ```text
-Counter({'the': 7474, 'and': 5803, 'I': 4846, 'to': 4662, 'of': 3707, 'a': 2955, 'in': 2466, 'that': 2436, 'he': 1996, 'was': 1870, 'it': 1808, 'is': 1498, 'for': 1480, 'as': 1476, 'me': 1452, 'not': 1393, 'his': 1384, 'with': 1283, ...
+[('the', 7474),
+ ('and', 5803),
+ ('I', 4846),
+ ('to', 4662),
+ ('of', 3707),
+ ('a', 2955),
+ ('in', 2466),
+ ('that', 2436),
+ ('he', 1996),
+ ('was', 1870),
+ ('it', 1808),
+ ('is', 1498),
+ ('for', 1480),
+ ('as', 1476),
 ```
 
 In order to make this function available at the command line,
@@ -182,20 +190,16 @@ Let's call the script `countwords.py`:
 
 ```python
 """Count the occurences of all words in a text and write them to a CSV-file."""
-
 import sys
 import re
 import argparse
 from collections import Counter
 
-
 def report_results(writer, results):
     """Report results to stream."""
-    
     writer = csv.writer(writer)
-    for (key, value) in results:
-        writer.writerow((key, value))
-
+    for (word, count) in results:
+        writer.writerow((word, count))
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
@@ -203,17 +207,14 @@ def count_words(reader):
     findwords = re.compile(r"\w+", re.IGNORECASE)
     word_list = re.findall(findwords, text)
     word_counts = Counter(word_list)
-
     return word_counts
-
 
 def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    word_counts = sort_counts(word_counts, args.sortby)
+    word_counts = word_counts.most_common()
     report_results(sys.stdout, word_counts, args.n)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -236,7 +237,7 @@ just like the `open('../zipfs-law/data/dracula.txt', 'r')`
 command we saw earlier,
 because the input `type` has been set to `argparse.FileType('r')`.
 The script also defines an optional `-n` flag
-(a `-` or `--` denotes an optional argument)
+(`-` or `--` denotes an optional argument)
 to limit the output so that it's easier to view in our terminal window.
 Let's see this in action:
 
@@ -254,13 +255,14 @@ a,2955
 in,2466
 that,2436
 he,1996
+was,1870
 ```
 
 If we don't provide a file name,
 `nargs='?'` dictates that the `default` value of `-` will be used.
 The `argparse.FileType('r')` argument type understands the pseudo-argument '-' and
-automatically convert this into standard input (`sys.stdin`),
-which means the script can participate in a pipeline like
+automatically converts it into standard input (`sys.stdin`).
+This means the script can participate in a pipeline like
 many of the other command line program we've met.
 For instance,
 this pipeline counts the words in the first 500 lines of the book:
@@ -279,6 +281,7 @@ in,54
 a,49
 was,42
 that,41
+it,40
 ```
 
 Ultimately,
@@ -305,26 +308,21 @@ we can write the following script called `collate.py`:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
-
 import sys
 import csv
 import argparse
 from collections import Counter
 
-
 def report_results(writer, results):
     """Report results to stream."""
-    
     writer = csv.writer(writer)
-    for (key, value) in results:
-        writer.writerow((key, value))
-
+    for (word, count) in results:
+        writer.writerow((word, count))
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for (word, count) in csv.reader(reader):
         word_counts[word] += int(count)
-
 
 def main(args):
     """Run the command line program."""
@@ -333,7 +331,6 @@ def main(args):
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
     report_results(sys.stdout, word_counts)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -361,8 +358,6 @@ in,8637
 that,7173
 it,6171
 was,5891
-he,5029
-his,4944
 ```
 
 ### Writing your own modules
@@ -378,22 +373,22 @@ let's create a module (i.e. a file with a bunch of Python functions in it)
 called `mymodule.py` for our commonly used functions:
 
 ```python
-"""Collection of commonly used functions.
-
-Functions:
-  report_results  -- report results to stream
-
 """
+Collection of commonly used functions.
 
+Functions
+---------
+report_results
+    report results to stream
+"""
 import csv
 
 def report_results(writer, results, top_n=None):
     """Report results to stream."""
-    
     limit = top_n if top_n else len(results)
     writer = csv.writer(writer)
-    for (key, value) in results[0:limit]:
-        writer.writerow((key, value))
+    for (word, count) in results[0:limit]:
+        writer.writerow((word, count))
 ``` 
 
 We can now import that function into our scripts,
@@ -402,13 +397,11 @@ Here's our new `countwords.py` script,
 
 ```python
 """Count the occurences of all words in a text and write them to a CSV-file."""
-
 import sys
 import re
 import argparse
 from collections import Counter
 import mymodule
-
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
@@ -416,17 +409,14 @@ def count_words(reader):
     findwords = re.compile(r"\w+", re.IGNORECASE)
     word_list = re.findall(findwords, text)
     word_counts = Counter(word_list)
-
     return word_counts
-
 
 def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    word_counts = sort_counts(word_counts, args.sortby)
+    word_counts = word_counts.most_common()
     mymodule.report_results(sys.stdout, word_counts, args.n)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -449,12 +439,10 @@ import argparse
 from collections import Counter
 import mymodule
 
-
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for (word, count) in csv.reader(reader):
         word_counts[word] += int(count)
-
 
 def main(args):
     """Run the command line program."""
@@ -464,7 +452,6 @@ def main(args):
             update_counts(reader, word_counts)
     mymodule.report_results(sys.stdout, word_counts)
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
@@ -472,18 +459,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     main(args)
 ```
-
-## Summary {#py-rse-py-scripting-summary}
-
-In the novice lessons,
-we learned how to reuse (rather than cut and paste)
-code by defining functions.
-In order to use those functions in other python notebooks/scripts,
-we can save them in a file (called a module) that can be imported.
-In this chapter we have seen that we can go one step further
-and run our Python code outside of a Python environment,
-by writing Python scripts that can be executed at the command line.
-
 
 ## Mission Critical Exercise {#py-rse-py-scripting-critical-exercise}
 
@@ -524,6 +499,18 @@ a. Use the `type=argparse.FileType('r')`, `nargs='?'` and `default='-'` options
    so that `plotcounts.py` uses standard input if no csv file is given.
 
 b. Add an optional `--xlim` option so that the user can change the x-axis bounds.
+
+
+## Summary {#py-rse-py-scripting-summary}
+
+In the novice lessons,
+we learned how to reuse (rather than cut and paste)
+code by defining functions.
+In order to use those functions in other python notebooks/scripts,
+we can save them in a file (called a module) that can be imported.
+In this chapter we have seen that we can go one step further
+and run our Python code outside of a Python environment,
+by writing Python scripts that can be executed at the command line.
 
 
 ## Exercises {#py-rse-py-scripting-exercises}

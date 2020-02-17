@@ -1,9 +1,7 @@
 """Plot word counts."""
-
 import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
-
 
 def main(args):
     """Run the command line program."""
@@ -13,7 +11,6 @@ def main(args):
     df.plot.scatter(x='word_frequency', y='inverse_rank',
                     figsize=[12, 6], grid=True, xlim=args.xlim)
     plt.savefig(args.outfile)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
