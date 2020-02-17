@@ -17,8 +17,7 @@ def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    word_counts = word_counts.most_common()
-    mymodule.report_results(sys.stdout, word_counts, args.n)
+    mymodule.report_results(word_counts, top_n=args.n)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
