@@ -4,7 +4,7 @@
 source("_common.R")
 ```
 
-The first volumes in this series explained how to publish R Markdown and Jupyter Notebook reports online.
+The first volumes in this series explained how to publish R Markdown reports online.
 This lesson therefore looks at what should be included in or alongside reports and how best to do that.
 As before,
 we use the generic term "report" to include research papers,
@@ -289,7 +289,7 @@ and those identifiers should be included in reports.
 
 ## How should I publish my software packages? {#r-rse-publish-software}
 
-Chapters \@ref(r-rse-package-r) and \@ref(r-rse-package-py)
+Chapter \@ref(r-rse-package-r) 
 shows how to document and package software.
 The final step in this process is publication.
 It is common practice to have the code associated with a software package
@@ -306,6 +306,8 @@ the existing repository would be broken).
 Acknowledging this limitation,
 GitHub provides [Zenodo integration][github-zenodo-tutorial]
 for creating a DOI with each new software release.
+
+TODO: Add explanation about CRAN.
 
 > **Software Journals**
 >
@@ -354,27 +356,6 @@ In order to document the software packages that were used,
 the bare minimum requirement is to list the name and version number
 of each software package
 that played a critical role in producing the analysis presented in your report.
-As Section \@ref(r-rse-package-py-package) described,
-you can get these automatically by running:
-
-```shell
-$ pip freeze > requirements.txt
-```
-
-For everything else,
-you should write a script or create a rule in your project's Makefile (Chapter \@ref(r-rse-automate)),
-since the commands used to get version numbers will vary from tool to tool:
-
-```make
-## versions : dump versions of software.
-versions :
-        @echo '# Python packages'
-        @pip freeze
-        @echo '# dezply'
-        @dezply --version
-        @echo '# parajune'
-        @parajune --status | head 1
-```
 
 While such a list means your software environment is now technically reproducible,
 you’ve left it up to the reader to figure out how to get all those software packages
@@ -383,22 +364,8 @@ In some cases it might be easy enough for a reader to install the handful of R p
 but in other cases you might want to save the reader (and your future self)
 the pain of software installation by making use of a tool
 that can automatically install a specified software environment.
-One tool that's widely used for Python is [`conda`][conda].
-A `conda` environment can be exported,
 
-```shell
-$ conda env export -n myenv -f myenv.yml
-```
-
-and made available so that readers can use it to install the same environment on their
-own computer:
-
-```
-$ conda env create -f myenv.yml
-```
-
-Beyond `conda`,
-more complex tools like [Docker][docker]
+Complex tools like [Docker][docker]
 can literally install your entire environment (down to the precise operating system) on a different computer.
 There’s lots of debate
 about the potential and suitability of these tools as a solution to reproducible research,
@@ -412,20 +379,6 @@ Depending on the size or complexity of the scripts you have written,
 and whether you re-use them in multiple projects,
 you may publish script by script
 or create a zip file or tar file that includes everything.
-For example,
-the Makefile fragment below creates `~/archive/meow-2019-02-21.tgz`:
-
-```make
-ARCHIVE=${HOME}/archive
-PROJECT=meow
-TODAY=$(shell date "+%Y-%m-%d")
-SCRIPTS=./Makefile ./bin/*.py ./bin/*.sh
-
-## archive : create an archive of all the scripts used in this run
-archive :
-        @mkdir -p ${ARCHIVE}
-        @tar zcf ${ARCHIVE}/${PROJECT}-${TODAY}.tgz
-```
 
 ### Data processing steps
 
@@ -444,18 +397,6 @@ and then use `grep` or a script to extract information from the logfile (Chapter
 If your workflow involves executing a series of command line programs,
 then you can keep a log/record of the command line entries
 required to produce a given result.
-For example,
-the [cmdline-provenance][cmdline-provenance] Python package generates such records,
-including keeping track of the corresponding version control revision number,
-so you know exactly which version of your command line program was executed.
-More prosaically,
-running:
-
-```shell
-$ history | tail -n 20 > generate-figure-5.txt
-```
-
-is better than nothing.
 
 As before,
 while these bare minimum log files ensure that your workflow is reproducible,

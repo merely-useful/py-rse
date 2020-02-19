@@ -82,17 +82,17 @@ that's an even stronger sign.
 Most projects' repositories contain four files.
 Three of these are so widely used in open source software projects that GitHub provides support for them,
 while the fourth is common in research work.
-All of these files may be plain text or Markdown,
-and may have a `.txt` or `.md` suffix (or no suffix at all),
-but should use the principal names given in upper case
+All of these files should be Markdown,
+and will have a `.md` suffix (or no suffix at all),
+and should use the principal names given in upper case
 since a growing number of tools expect them.
 
--   `README` includes the project's title and a one-paragraph description of its purpose or content.
+-   `README.md` includes the project's title and a one-paragraph description of its purpose or content.
     GitHub displays the content of this file on the project's home page.
 
--   `LICENSE` is the project's license (discussed in Chapter \@ref(r-rse-teams-license)).
+-   `LICENSE` (an expectation from CRAN) and `LICENSE.md` is the project's license (discussed in Chapter \@ref(r-rse-teams-license)).
 
--   `CONDUCT` is its code of conduct (also discussed in Chapter \@ref(r-rse-teams-coc)).
+-   `CODE_OF_CONDUCT.md` is its code of conduct (also discussed in Chapter \@ref(r-rse-teams-coc)).
 
 -   `CITATION` explains how the work should be cited.
     This file should contains a plain text citation that can be copied and pasted into email,
@@ -102,31 +102,23 @@ Other information may be included as sections in these files or put into files o
 
 -   `CONTRIBUTORS`
     lists everyone who has contributed to the project.
-    Software projects often put this information in `README`,
+    Software projects often put this information in `README.md`,
     while research projects make it a section in `CITATION`.
 
--   `CONTRIBUTING`
+-   `CONTRIBUTING.md`
     explains how to contribute,
     i.e.,
     what naming conventions to use for functions,
     what tags to put on issues (Section \@ref(r-rse-git-advanced-tag)),
     or how to install and configure the software needed to start work on the project.
-    These instructions can also be included as a section in `README`;
+    These instructions can also be included as a section in `README.md`;
     wherever they go,
     remember that the easier it is for people to get set up and contribute,
     the more likely they are to do so @Stei2014.
 
--   `GOVERNANCE`
-    explains how the project is run.
-    It is still uncommon for this to be in a file of its own—it is more often included
-    in `README` or `CONTRIBUTING`—but the open source and open science communities have learned the hard way
-    that *not* being explicit about who has a voice in which decisions
-    and how contributors can tell when a decision has been made
-    causes trouble sooner or later.
-
 Even the four core files may seem like a lot,
-but two of these (`LICENSE` and `CONDUCT`) are usually chosen rather than written (Chapter \@ref(r-rse-teams-license))
-and the others (`README` and `CITATION`) can be quite short to start with.
+but two of these (`LICENSE.md` and `CODE_OF_CONDUCT.md`) are usually chosen rather than written (Chapter \@ref(r-rse-teams-license))
+and the others (`README.md` and `CITATION`) can be quite short to start with.
 Having these files helps new contributors orient themselves,
 and also signals that the project is well run.
 
@@ -146,26 +138,9 @@ Each project is put in a separate Git repository,
 and the directories in the root of this repository are organized according to purpose.
 It specifies five top-level directories:
 
--   The `./src/` directory (short for "source") holds source code
-    for programs written in languages like C or C++ that need to be compiled.
-    Many projects don't have this directory
-    because all of their code is written in languages that don't need compilation.
+TODO: Redo for R projects as packages.
 
--   Runnable programs go in `./bin/` (an old Unix abbreviation for "binary", meaning "not text").
-    This includes the compiled and runnable versions of C and C++ programs,
-    and also shell scripts,
-    Python or R programs,
-    and everything else that can be executed.
-
--   Raw data goes in in `./data/` and is never modified after being stored.
-
--   Results are put in `./results/`.
-    This includes cleaned-up data,
-    figures,
-    and everything else that can be rebuilt using what's in `./bin/` and `./data/`.
-    If intermediate results can be re-created quickly and easily,
-    they might not be stored in version control,
-    but anything that is included in a manuscript should be here.
+-   Raw data goes in in `./data-raw/` and is never modified after being stored.
 
 -   Finally,
     documentation and manuscripts go in `./doc/`.
@@ -185,17 +160,10 @@ A few things to notice are:
     while the paper for JCMB is stored in a subdirectory,
     since it contains several files.
 
--   The `./src/` directory contains a Makefile to re-build the `regulate` program (Chapter \@ref(r-rse-automate)).
-    Some projects put the Makefile in the root directory,
-    reasoning that since it affects both `./src/` and `./bin/`,
-    it belongs above them both rather than in either one.
-
--   There are several subdirectories underneath `./data/` and `./results/`.
-    Each of the subdirectories in `./results/` has a Makefile
-    to re-create the contents of that directory.
+-   There are several subdirectories underneath `./data/` ...
 
 While the directories in the top level of each project are organized by purpose,
-the directories within `./data/` and `./results/` are organized chronologically
+the directories within `./data/` .... are organized chronologically
 to make it easy to see when data was gathered and when results were generated.
 These directories all have names in [ISO date format][iso-date-format] like `YYYY-MM-DD`
 to make it easy to sort them chronologically.
@@ -222,7 +190,7 @@ Python's `glob` and R's `Sys.glob` will both take a pattern and return a list of
 ├── LICENSE
 ├── data
 │   └── my_data.csv
-└── analysis
+└── vignette
     └── my_report.Rmd
 ```
 
@@ -230,26 +198,6 @@ The key differences are:
 
 -   The `DESCRIPTION` file in the root directory contains
     the information needed to make the project an R package (Chapter \@ref(r-rse-package-r)).
-
--   Instead of having a separate directory for tidied tata,
-    this layout assumes that all work (including data tidying) is done with [computational notebooks][computational-notebook],
-    so Noble's `bin`, `src`, and `results` directories are combined.
-
-Going in the other direction,
-[Cookiecutter Data Science][cookiecutter] describes a more elaborate layout
-with separate subdirectories for models, features, visualizations, and much more.
-All of these share a few key advantages:
-
--   People can find things easily,
-    and can easily tell where to put new work.
-
--   Programs within the project can find things just as easily
-    (e.g., by using simple filename patterns).
-
--   External tools such as GitHub can [aggregate][aggregate] information
-    so that the project itself is easier to find.
-
--   We don't have to document the structure ourselves.
 
 ## How should I manage a mix of compiled programs and scripts? {#r-rse-project-scripts}
 
@@ -259,7 +207,7 @@ we give the source files to a [compiler][compiler]
 that translates them into instructions a computer can actually execute
 and saves those instructions in files (Figure \@ref(fig:r-rse-project-languages)a).
 Those files full of instructions can then be re-used as often as we want.
-If we are using an [interpreted language][interpreted-language] like R or Python,
+If we are using an [interpreted language][interpreted-language] like R,
 on the other hand,
 we give our source files to an [interpreter][interpeter].
 It also translates the code into instructions,
@@ -278,14 +226,6 @@ The differences are much smaller these days than they were twenty years ago,
 but we do still tend to use compiled languages for anything that has to interact directly with hardware
 and then [wrap][wrap-code] those libraries for use in interpreted languages.
 
-> **Why `bin`?**
->
-> The name `bin` is short for "binary",
-> and comes from the fact that the source files of compiled programs are human-readable text,
-> but files containing the compiler's output are not.
-> Programmers often call files that aren't text "binaries",
-> even though text is itself stored in binary as well.
-
 All of this is preamble to deciding where to put things if a project contains compiled programs.
 Most software engineers put source code in version control
 and recompile it as needed to produce executables:
@@ -298,28 +238,6 @@ and recompile it as needed to produce executables:
     between operating system versions and external dependencies
     than interpreted programs,
     so something compiled on one computer might not work on another anyway.
-
-The authors of this book handle all of this in different ways:
-
-1.  Put the source code for compiled languages in `./src/`,
-    the runnable programs produced from this code in `./bin/`,
-    and programs for interpreted languages in `./scripts/`.
-    This makes version control easy—ignore what's in `./bin/` and save everything else—but
-    means users have to look in two places to run things.
-
-2.  Put the source for compiled programs in `./src/`
-    and both the compiler's output and interpreted programs in `./bin/`.
-    This makes version control a little more complicated,
-    since some of what's in `./bin/` needs to be saved and some doesn't,
-    but means there's only one place to look for runnable programs.
-    (It's also easy to delete the hand-written scripts in `./bin/` by accident
-    when we only meant to delete the compiled programs,
-    but since we have everything under version control,
-    that's not a problem, right?)
-
-3.  Put all source files in `./src/` and the compiler's output in `./bin/`.
-    This is slightly simpler than the first option,
-    but still means users have to look in two places for things they can run.
 
 As always,
 the approach matters less than being consistent
@@ -503,8 +421,6 @@ has been refined over many years,
 and is a good guide for any project:
 
 Write the most specific title we can.
-:   "Why does division sometimes give a different result in Python 2.7 and Python 3.5?"
-    is much better than, "Help! Math in Python!!"
 
 Give context before giving sample code.
 :   A few sentences to explain what are are trying to do and why
@@ -513,6 +429,7 @@ Give context before giving sample code.
 Provide a minimal reprex.
 :   Section \@ref(r-rse-teams-bugs) explains the value of a [reproducible example][reprex] (reprex),
     and why reprexes should be as short as possible.
+    TODO: Discuss reprex package.
     Readers will have a much easier time figuring out if this question and its answers are for them
     if they can see *and understand* a few lines of code.
 
@@ -558,11 +475,7 @@ and transformation.
 Often,
 all we need to document data is short action statements to describe the actions taken.
 Depending on the complexity,
-the content description and the process information may be contained in the same statement,
-such as,
-"Contents of gorilla_genome_2020-010-12.bam after run through process.py."
-(This statement presumes that there is documentation on where these `.bam` files come from
-and what `process.py` does is described somewhere.  )
+the content description and the process information may be contained in the same statement.
 
 However,
 a file that has recieved extensive manual editing and curation
