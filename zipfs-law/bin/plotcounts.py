@@ -1,7 +1,7 @@
 #!/usr/bin/env python
+"""Plot word counts."""
 
 import sys
-import re
 import argparse
 import yaml
 import numpy as np
@@ -13,37 +13,36 @@ from scipy.optimize import minimize_scalar
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
-    
     likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
-    
+
     return likelihood
 
 
 def get_power_law_params(word_counts):
-    """Get the power law parameters.
-    
+    """
+    Get the power law parameters.
+
+    References
+    ----------
     Moreno-Sanchez et al (2016) define alpha (Eq. 1),
       beta (Eq. 2) and the maximum likelihood estimation (mle)
       of beta (Eq. 6).
-      
+
     Moreno-Sanchez I, Font-Clos F, Corral A (2016)
       Large-Scale Analysis of Zipf’s Law in English Texts.
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
-    
     """
-    
     mle = minimize_scalar(nlog_likelihood, bracket=(1, 4),
                           args=(word_counts), method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
-    
+
     return alpha, beta
 
 
 def set_plot_params(param_file):
     """Set the matplotlib rc parameters."""
-    
     if param_file:
         with open(param_file, 'r') as reader:
             param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
@@ -51,55 +50,61 @@ def set_plot_params(param_file):
         param_dict = {}
 
     for param, value in param_dict.items():
-        mpl.rcParams[param] = value 
-            
-            
-def plot_fit(xlim, max_rank, beta):
-    """Plot the power law curve that was fitted to the data.
-    
-    Args:
-      xlim (sequence): x-axis bounds (min, max)
-      max_rank (int): maximum word frequency rank
-      beta (float): estimated beta parameter for the power law
-    
-    """
+        mpl.rcParams[param] = value
 
-    xvals = np.arange(xlim[0], xlim[-1])
+
+def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+    """
+    Plot the power law curve that was fitted to the data.
+
+    Parameters
+    ----------
+    curve_xmin : float
+        Minimum x-bound for fitted curve
+    curve_xmax : float
+        Maximum x-bound for fitted curve
+    max_rank : int
+        Maximum word frequency rank.
+    beta : float
+        Estimated beta parameter for the power law.
+    ax : matplotlib axes
+        Scatter plot to which the power curve will be added.
+    """
+    xvals = np.arange(curve_xmin, curve_xmax)
     yvals = max_rank * (xvals**(-beta + 1))
-    plt.loglog(xvals, yvals, color='grey')
-    
+    ax.loglog(xvals, yvals, color='grey')
+
 
 def main(args):
     """Run the command line program."""
-
     set_plot_params(args.rcparams)
-    input_csv = args.infile if args.infile else sys.stdin
-    df = pd.read_csv(input_csv, header=None, names=('word', 'word frequency'))
-    df['rank'] = df['word frequency'].rank(ascending=False)
-    df.plot.scatter(x='word frequency', y='rank', loglog=True,
-                    figsize=[12, 6], grid=True,
-                    xlim=args.xlim, ylim=args.ylim)
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False)
+    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
+                         figsize=[12, 6], grid=True, xlim=args.xlim)
 
-    alpha, beta = get_power_law_params(df['word frequency'].values)
+    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
     print('beta:', beta)
-    plot_fit(args.xlim, df['rank'].values[-1], beta)
+    # Since the ranks are already sorted, we can take the last one instead of
+    # computing which row has the highest rank
+    max_rank = df['rank'].to_numpy()[-1]
+    # Use the range of the data as the boundaries when drawing the power law curve
+    curve_xmin = df['word_frequency'].min()
+    curve_xmax = df['word_frequency'].max()
 
-    plt.savefig(args.outfile)
+    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
+    ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
-
-    description = 'Plot word counts'
-    parser = argparse.ArgumentParser(description=description)
-
-    parser.add_argument('outfile', type=str, help='Output image file')
-    parser.add_argument('--infile', type=str, default=None,
-                        help='Word count csv file')
-    parser.add_argument('--xlim', type=float, nargs=2, default=[0.9, 1e4],
-                        help='X-axis limits')
-    parser.add_argument('--ylim', type=float, nargs=2, default=[0.9, 1e4],
-                        help='Y-axis limits')
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+                        help='Output image file name')
+    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+                        default=None, help='X-axis limits')
     parser.add_argument('--rcparams', type=str, default=None,
                         help='Configuration file for plot parameters (matplotlib rc parameters)')
 
