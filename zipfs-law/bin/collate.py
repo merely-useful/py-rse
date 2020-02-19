@@ -1,47 +1,35 @@
 #!/usr/bin/env python
-
-'''
-Read one or more CSV files given as command-line arguments, or standard input if
-no filenames are given, and produce a collated two-column CSV of words and
-counts.
-'''
-
+"""Combine multiple word count CSV-files into a single cumulative count."""
 
 import sys
 import csv
+import argparse
 from collections import Counter
 
-
-def main(filenames):
-    '''
-    Read standard input or one or more files and report results.
-    '''
-    results = Counter()
-    if not filenames:
-        process(sys.stdin, results)
-    else:
-        for fn in filenames:
-            with open(fn, 'r') as reader:
-                process(reader, results)
-    report(sys.stdout, results)
+import mymodule
 
 
-def process(reader, results):
-    '''
-    Extract and count words from stream.
-    '''
+def update_counts(reader, word_counts):
+    """Update word counts with data from another reader/file."""
     for (word, count) in csv.reader(reader):
-        results[word] += int(count)
+        word_counts[word] += int(count)
 
 
-def report(writer, results):
-    '''
-    Report results to stream.
-    '''
-    writer = csv.writer(writer)
-    for (key, value) in results.items():
-        writer.writerow((key, value))
+def main(args):
+    """Run the command line program."""
+    word_counts = Counter()
+    for fn in args.infiles:
+        with open(fn, 'r') as reader:
+            update_counts(reader, word_counts)
+    word_counts = mymodule.sort_counts(word_counts, args.sortby)
+    mymodule.report_results(sys.stdout, word_counts)
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
+    parser.add_argument('--sortby', type=str, choices=('count', 'alphabetical'),
+                        default='count', help='Method for sorting results')
+
+    args = parser.parse_args()
+    main(args)

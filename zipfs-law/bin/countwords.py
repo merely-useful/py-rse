@@ -1,54 +1,38 @@
 #!/usr/bin/env python
-
-'''
-Read one or more text files given as command-line arguments, or standard input
-if no filenames are given, and produce a two-column CSV of words and counts.
-'''
-
+"""Count the occurences of all words in a text and write them to a CSV-file."""
 
 import sys
 import re
-import csv
+import argparse
 from collections import Counter
 
-
-PUNC = re.compile(r'",;.')
-WORD = re.compile(r'\b[_\'\(]*(.+?)[_\'\)]*\b')
+import mymodule
 
 
-def main(filenames):
-    '''
-    Read standard input or one or more files and report results.
-    '''
-    results = Counter()
-    if not filenames:
-        process(sys.stdin, results)
-    else:
-        for fn in filenames:
-            with open(fn, 'r') as reader:
-                process(reader, results)
-    report(sys.stdout, results)
+def count_words(reader):
+    """Count the occurrence of each word in a string."""
+    text = reader.read()
+    findwords = re.compile(r"\w+", re.IGNORECASE)
+    word_list = re.findall(findwords, text)
+    word_counts = Counter(word_list)
+
+    return word_counts
 
 
-def process(reader, results):
-    '''
-    Extract and count words from stream.
-    '''
-    raw = reader.read()
-    cooked = PUNC.sub('', raw)
-    words = WORD.findall(cooked)
-    results.update(words)
-
-
-def report(writer, results):
-    '''
-    Report results to stream.
-    '''
-    writer = csv.writer(writer)
-    for (key, value) in results.items():
-        writer.writerow((key, value))
+def main(args):
+    """Run the command line program."""
+    with args.infile as reader:
+        word_counts = count_words(reader)
+    word_counts = mymodule.sort_counts(word_counts, args.sortby)
+    mymodule.report_results(sys.stdout, word_counts)
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    parser.add_argument('--sortby', type=str, choices=('count', 'alphabetical'),
+                        default='count', help='Method for sorting results')
 
+    args = parser.parse_args()
+    main(args)

@@ -1,0 +1,4 @@
+-   Most Python scripts have a similar structure that can be used as a template.
+-   Libraries such as argparse can be used to efficiently handle command line arguments.
+-   Use short command-line parameters to set commonly-changed options.
+-   Allow long command-line parameters to change all other options to facilitate scripting.

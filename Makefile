@@ -24,6 +24,7 @@ PY_FILES=\
   novice-goals.Rmd \
   py/intro.Rmd \
   py/getting-started.Rmd \
+  py/data-manipulation.Rmd \
   py/development.Rmd \
   py/objectives.Rmd \
   py/publishing.Rmd \
@@ -60,13 +61,15 @@ PY_RSE_FILES=\
   py-rse/py-scripting.Rmd \
   py-rse/git-cmdline.Rmd \
   py-rse/git-advanced.Rmd \
-  py-rse/style.Rmd \
   py-rse/automate.Rmd \
+  py-rse/configuration.Rmd \
+  py-rse/errors.Rmd \
   py-rse/teams.Rmd \
+  py-rse/style.Rmd \
   py-rse/project.Rmd \
+  py-rse/correct.Rmd \
   py-rse/ci.Rmd \
   py-rse/package-py.Rmd \
-  py-rse/correct.Rmd \
   py-rse/publish.Rmd \
   py-rse/finale.Rmd \
   py-rse/objectives.Rmd \
@@ -109,7 +112,7 @@ py : _book/py/index.html _book/py/rse.pdf
 py-rse : _book/py-rse/index.html _book/py-rse/py-rse.pdf
 
 ##   r-rse      : rebuild RSE R HTML and PDF.
-rse : _book/r-rse/index.html _book/r-rse/r-rse.pdf
+r-rse : _book/r-rse/index.html _book/r-rse/r-rse.pdf
 
 #-------------------------------------------------------------------------------
 
