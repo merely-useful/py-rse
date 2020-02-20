@@ -863,7 +863,7 @@ This options works the same way with `mv` and `cp`.
 ## How can I run commands on lots of files at once? {#py-rse-bash-basicswildcard}
 
 The `data` directory in our zipfs-law project contains
-the text files for several ebooks from Project Gutenberg:
+the text files for several ebooks from [Project Gutenberg][project-gutenberg]:
 
 ```shell
 $ ls data
@@ -933,7 +933,7 @@ data/jane_eyre.txt              data/treasure_island.txt
 while `data/c*.txt` only matches the four whose names begin with a 'b':
 
 ```shell
-$ ls cleaned/b*.csv
+$ ls data/c*.csv
 ```
 
 ```text
@@ -1341,21 +1341,10 @@ $ wc -l *.txt | sort -n | head -n 3
     4102 life_of_frederick_douglass.txt
 ```
 
-If we want the last line of this,
-we can add a call to the `tail` command:
+If we only want to save the shortest book:
 
 ```shell
-$ wc -l *.txt | sort -n | head -n 3 | tail -n 1
-```
-
-```text
-  4102 life_of_frederick_douglass.txt
-```
-
-and finally save our result:
-
-```shell
-$ wc -l *.txt | sort -n | head -n 3 | tail -n 1 > results.txt
+$ wc -l *.txt | sort -n | head -n 1 > shortest.txt
 ```
 
 In practice,
@@ -1792,7 +1781,7 @@ $ history
 ```text
   551  wc -l *.txt | sort -n
   552  wc -l *.txt | sort -n | head -n 3
-  553  wc -l *.txt | sort -n | head -n 3 | tail -n 1
+  553  wc -l *.txt | sort -n | head -n 1 > shortest.txt
 ```
 
 and then use an exclamation mark `!` followed by a number to repeat one of those commands:
@@ -1858,27 +1847,27 @@ $ for filename in s*.txt; do echo $filename; head -n 19 $filename | tail -n 11; 
 
 ## How can I create new filenames automatically? {#py-rse-bash-basics-autoname}
 
-Suppose we want to create a backup copy of each book whose name starts with m.
+Suppose we want to create a backup copy of each book whose name has the preposition 'of' in it.
 If we don't want to change the files' names,
 we can do this with `cp`:
 
 ```shell
 $ cd ~/zipfs-law
 $ mkdir backup
-$ cp data/m*.txt backup
+$ cp data/*of*.txt backup
 ```
 
 But what if we want the backup files to have the [extension][filename-extension] `.bak` instead of `.txt`?
 `cp` can do this for a single file:
 
 ```shell
-$ cp data/moby_dick.txt backup/moby_dick.txt
+$ cp data/anne_of_green_gables.txt backup/anne_of_green_gables.bak
 ```
 
 but can't do all the files at once:
 
 ```shell
-$ cp data/m*.txt backup/m*.bak
+$ cp data/*of*.txt backup/*of*.bak
 ```
 
 ```text
@@ -1886,11 +1875,12 @@ usage: cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file target_file
        cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file ... target_directory
 ```
 
-`backup/*.bak` doesn't match anything—those files don't yet exist—so
+`backup/*of*.bak` doesn't match anything—those files don't yet exist—so
 what we are actually asking `cp` to do is:
 
 ```shell
-$ cp moby_dick.txt mysterious_affair_at_styles.txt
+$ cp data/anne_of_green_gables.txt   data/life_of_frederick_douglass.txt
+data/count_of_monte_cristo.txt
 ```
 
 This doesn't work because `cp` only understands how to do two things:
@@ -1905,8 +1895,8 @@ Instead,
 let's copy all the files and then rename them:
 
 ```shell
-$ cp data/m*.txt backup
-$ for filename in backup/*.txt
+$ cp data/*of*.txt backup
+$ for filename in backup/*of*.txt
 > do
 >   mv $filename $filename.bak
 > done
@@ -1914,7 +1904,8 @@ $ ls backup
 ```
 
 ```text
-moby_dick.txt.bak  mysterious_affair_at_styles.txt.bak
+anne_of_green_gables.bak   life_of_frederick_douglass.bak
+count_of_monte_cristo.bak
 ```
 
 ## Exercises {#py-rse-bash-basics-exercises}
