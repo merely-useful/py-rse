@@ -19,7 +19,7 @@ but that scaffolding stays more or less the same as programs get larger.
 ## How can I tell if my code is a program or a module? {#py-rse-py-scripting-main}
 
 If we are going to run a Python program from the command line,
-the first thing we should do is add this to the bottom of the file:
+the first thing we should do is add this to the bottom of the file.
 
 ```python
 if __name__ == '__main__':
@@ -32,7 +32,7 @@ and importing it as a module.
 When we import a Python file as a module in another program,
 the `__name__` variable is automatically set to the name of the file.
 For example,
-if we run:
+if we run,
 
 ```python
 import utilities
@@ -84,13 +84,26 @@ if __name__ == '__main__':
     main(args)
 ```
 
-When we run `script_template.py` at the command line like this:
+If we examine the contents of `script_template.py` we can see that if it is run
+as a standalone program at the command line
+(i.e. if `__name__ == '__main__'` is true) then the script goes ahead and uses
+the `argparse` library to create an argument parser.
+In this case the description of the program for the help information is set to `__doc__`,
+which is the character string provided in the very first line of the script. 
+Two command line arguments are then defined:
+an input file name (`infile`) and output file name (`outfile`).
+The script parses the command line to get those arguments using `parse_args()`,
+stores them in an `argparse.Namespace` object called `args`
+and then passes that object to the `main` function.
+The main function then retrieves the arguments from the `argparse.Namespace` object
+by calling `args.infile` and `args.outfile`.
+
+If we go ahead and run `script_template.py` at the command line
+we can see that `argparse` has successfully handled the input arguments:
 
 ```shell
 $ python script_template.py in.csv out.png
 ```
-
-we see that `argparse` handles all the input arguments:
 
 ```text
 Input file: in.csv
@@ -127,10 +140,6 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-As the `--help` hint shows,
-`argparse` can handle [long options][long-option-shell] as well as traditional single-letter options;
-the [online tutorial][argparse-tutorial] has examples of this and much more.
-
 
 ## A practical example: Zipf's Law analysis {#py-rse-py-scripting-example}
 
@@ -142,8 +151,8 @@ we can go ahead and apply it to the problem of counting words
 
 To start,
 here's a function that uses the regular expressions (`re`) library
-to identify all the words in a text file and then a counter function
-from the `collections` library to tally up the occurrence of each word.
+to identify all the words in a text file and a counter function
+from the `collections` library to tally up the occurrences of each word.
 
 ```python
 import re
@@ -163,29 +172,51 @@ We can apply that function to the Dracula ebook (for example):
 ```python
 with open('../zipfs-law/data/dracula.txt', 'r') as reader:
     word_counts = count_words(reader)
-word_counts = word_counts.most_common()
 print(word_counts)
 ```
 
 ```text
-[('the', 7474),
- ('and', 5803),
- ('I', 4846),
- ('to', 4662),
- ('of', 3707),
- ('a', 2955),
- ('in', 2466),
- ('that', 2436),
- ('he', 1996),
- ('was', 1870),
- ('it', 1808),
- ('is', 1498),
- ('for', 1480),
- ('as', 1476),
+Counter({'the': 7474, 'and': 5803, 'I': 4846, 'to': 4662, 'of': 3707, 'a': 2955, 'in': 2466, 'that': 2436, 'he': 1996, 'was': 1870, 'it': 1808, 'is': 1498, 'for': 1480, 'as': 1476, 'me': 1452, ...
 ```
 
-In order to make this function available at the command line,
-we basically just need to insert it into the script template developed earlier.
+If we want the word counts in a more familiar format like CSV,
+we can write a small function that takes our `collections.Counter` object,
+ensures that it orders the words from most to least frequent,
+and then writes it out to [standard output][standard output] in csv format: 
+
+```python
+import csv
+
+def collection_to_csv(collection, ntop=None):
+    """Write out a collection of items and counts in csv format."""
+    collection = collection.most_common()
+    limit = ntop if ntop else len(collection)
+    writer = csv.writer(sys.stdout)
+    writer.writerows(collection[0:limit])
+```
+
+To make the output a little easier to view on our screen,
+we've also added an option to limit the output to the n most frequent words.
+
+```python
+collection_to_csv(word_counts, ntop=10)
+```
+
+```text
+the,7474
+and,5803
+I,4846
+to,4662
+of,3707
+a,2955
+in,2466
+that,2436
+he,1996
+was,1870
+```
+
+To make our `count_words` and `collection_to_csv` functions available at the command line,
+we basically just need to insert them into the script template developed earlier.
 Let's call the script `countwords.py`:
 
 ```python
@@ -193,14 +224,15 @@ Let's call the script `countwords.py`:
 import sys
 import re
 import argparse
+import csv
 from collections import Counter
 
-def report_results(results, top_n=None):
-    """Report results to stream."""
-    results = results.most_common()
-    limit = top_n if top_n else len(results)
+def collection_to_csv(collection, ntop=None):
+    """Write out a collection of items and counts in csv format."""
+    collection = collection.most_common()
+    limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(results[0:limit])
+    writer.writerows(collection[0:limit])
         
 def count_words(reader):
     """Count the occurrence of each word in a string."""
@@ -214,13 +246,13 @@ def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    report_results(word_counts, top_n=args.n)
+    collection_to_csv(word_counts, ntop=args.ntop)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
                         default='-', help='Input file name')
-    parser.add_argument('-n', type=int, default=None,
+    parser.add_argument('-n', '--ntop', type=int, default=None,
                         help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -236,7 +268,7 @@ The program will read that file
 just like the `open('../zipfs-law/data/dracula.txt', 'r')`
 command we saw earlier,
 because the input `type` has been set to `argparse.FileType('r')`.
-The script also defines an optional `-n` flag
+The script also defines an optional `-n` (or `--ntop`) flag
 (`-` or `--` denotes an optional argument)
 to limit the output so that it's easier to view in our terminal window.
 Let's see this in action:
@@ -263,12 +295,12 @@ If we don't provide a file name,
 The `argparse.FileType('r')` argument type understands the pseudo-argument '-' and
 automatically converts it into standard input (`sys.stdin`).
 This means the script can participate in a pipeline like
-many of the other command line program we've met.
+many of the other command line programs we've met.
 For instance,
 this pipeline counts the words in the first 500 lines of the book:
 
 ```shell
-$ head -500 ../data/dracula.txt | python countwords.py -n 10
+$ head -500 ../data/dracula.txt | python countwords.py --ntop 10
 ```
 
 ```text
@@ -299,6 +331,25 @@ $ python countwords.py ../data/moby_dick.txt > moby_dick_words.csv
 $ python countwords.py ../data/emma.txt > emma_words.csv
 ```
 
+> **Positional and optional arguments**
+>
+> In writing the `countwords.py` script we've met two types of command line arguments.
+>
+> *Optional arguments* are defined using a leading `-` or `--` (or both),
+> such that all three of the following definitions are valid:
+> ```python
+> parser.add_argument('-f', type=int, help='foo option')
+> parser.add_argument('--foo', type=int, help='foo option')
+> parser.add_argument('-f', '--foo', type=int, help='foo option')
+> ```
+> The convention is for `-` to precede a "short" single letter option
+> and `--` a "long" multiple letter option.
+> The user can provide optional arguments at the command line in any order they like.
+>
+> *Positional arguments* have no leading dashes and are not optional - the user
+> must provide them at the command line in the order in which they are defined.
+> (The exception being if `nargs='?'`, which we saw earlier.)  
+
 ### Collating results
 
 Now that we've got word counts for a number of books,
@@ -313,12 +364,12 @@ import csv
 import argparse
 from collections import Counter
 
-def report_results(results, top_n=None):
-    """Report results to stream."""
-    results = results.most_common()
-    limit = top_n if top_n else len(results)
+def collection_to_csv(collection, ntop=None):
+    """Write out a collection of items and counts in csv format."""
+    collection = collection.most_common()
+    limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(results[0:limit])
+    writer.writerows(collection[0:limit])
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -331,12 +382,13 @@ def main(args):
     for fn in args.infiles:
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
-    report_results(word_counts, top_n=args.n)
+    collection_to_csv(word_counts, ntop=args.ntop)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', type=int, default=None, help='Limit output to n most frequent words')
+    parser.add_argument('-n', '--ntop', type=int, default=None,
+                        help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -364,10 +416,10 @@ was,5891
 ### Writing your own modules
 
 You might have noticed the duplication between `countwords.py` and `collate.py` --
-both use the function `report_results`.
+both use the function `collection_to_csv`.
 Having the same function in numerous different scripts is inefficient and error prone.
 For instance,
-if we want to make an improvement to `report_results` in the future,
+if we want to make an improvement to `collection_to_csv` in the future,
 we have to find every single script that we've copy and pasted it into.
 To avoid this situation,
 let's create a module (i.e. a file with a bunch of Python functions in it)
@@ -379,30 +431,30 @@ Collection of commonly used functions.
 
 Functions
 ---------
-report_results
-    report results to stream
+collection_to_csv
+    write out a collection of items and counts in csv format
 """
 import sys
 import csv
 
-def report_results(results, top_n=None):
+def collection_to_csv(collection, ntop=None):
     """
-    Report results to stream.
+    Write out a collection of items and counts in csv format.
     
     Parameters
     ----------
-    results : collections.Counter
-        Collection of counts to write to standard output
-    top_n : int
+    collection : collections.Counter
+        Collection of items and counts
+    ntop : int
         Limit output to n most frequent items
     """
-    results = results.most_common()
-    limit = top_n if top_n else len(results)
+    collection = collection.most_common()
+    limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(results[0:limit])
+    writer.writerows(collection[0:limit])
 ``` 
 
-(You'll see we've also taken the time to improve the docstring for `report_results`.)
+(You'll see we've also taken the time to improve the docstring for `collection_to_csv`.)
 
 We can now import that function into our scripts,
 rather than having to define it anew every time.
@@ -428,14 +480,13 @@ def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    word_counts = word_counts.most_common()
-    mymodule.report_results(word_counts, top_n=args.n)
+    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
                         default='-', help='Input file name')
-    parser.add_argument('-n', type=int, default=None,
+    parser.add_argument('-n', '--ntop', type=int, default=None,
                         help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -445,7 +496,6 @@ and here's `collate.py`:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
-
 import sys
 import csv
 import argparse
@@ -463,13 +513,13 @@ def main(args):
     for fn in args.infiles:
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
-    word_counts = word_counts.most_common()
-    mymodule.report_results(word_counts, top_n=args.n)
+    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', type=int, default=None, help='Limit output to n most frequent words')
+    parser.add_argument('-n', '--ntop', type=int, default=None,
+                        help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -513,6 +563,7 @@ a. Use the `type=argparse.FileType('r')`, `nargs='?'` and `default='-'` options
    so that `plotcounts.py` uses standard input if no csv file is given.
 
 b. Add an optional `--xlim` option so that the user can change the x-axis bounds.
+
 
 
 ## Summary {#py-rse-py-scripting-summary}

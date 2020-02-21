@@ -16,11 +16,12 @@ def main(args):
     for fn in args.infiles:
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
-    mymodule.report_results(word_counts, top_n=args.n)
+    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', type=int, default=None, help='Limit output to n most frequent words')
+    parser.add_argument('-n', '--ntop', type=int, default=None,
+                        help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)

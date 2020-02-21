@@ -3,24 +3,24 @@ Collection of commonly used functions.
 
 Functions
 ---------
-report_results
-    report results to stream
+collection_to_csv
+    write out a collection of items and counts in csv format
 """
 import sys
 import csv
 
-def report_results(results, top_n=None):
+def collection_to_csv(collection, ntop=None):
     """
-    Report results to stream.
+    Write out a collection of items and counts in csv format.
     
     Parameters
     ----------
-    results : collections.Counter
-        Collection of counts to write to standard output
-    top_n : int
+    collection : collections.Counter
+        Collection of items and counts
+    ntop : int
         Limit output to n most frequent items
     """
-    results = results.most_common()
-    limit = top_n if top_n else len(results)
+    collection = collection.most_common()
+    limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(results[0:limit])
+    writer.writerows(collection[0:limit])
