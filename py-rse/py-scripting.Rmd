@@ -149,6 +149,10 @@ Now that we've got a template for creating Python scripts,
 we can go ahead and apply it to the problem of counting words
 (and ultimately verifying Zipf's Law) in our collection of classic English novels.
 
+```shell
+$ cd ~/zipfs-law/bin
+```
+
 To start,
 here's a function that uses the regular expressions (`re`) library
 to identify all the words in a text file and a counter function
@@ -170,7 +174,7 @@ def count_words(reader):
 We can apply that function to the Dracula ebook (for example):
 
 ```python
-with open('../zipfs-law/data/dracula.txt', 'r') as reader:
+with open('../data/dracula.txt', 'r') as reader:
     word_counts = count_words(reader)
 print(word_counts)
 ```
@@ -265,7 +269,7 @@ the number of expected arguments (`nargs`) is set to `?`.
 This means that one argument (i.e. a file name)
 will be consumed from the command line if possible.
 The program will read that file
-just like the `open('../zipfs-law/data/dracula.txt', 'r')`
+just like the `open('../data/dracula.txt', 'r')`
 command we saw earlier,
 because the input `type` has been set to `argparse.FileType('r')`.
 The script also defines an optional `-n` (or `--ntop`) flag
@@ -320,15 +324,19 @@ Ultimately,
 we want to save the word counts to a CSV file for further analysis and plotting:
 
 ```shell
-$ python countwords.py ../data/dracula.txt > dracula_words.csv
+$ mkdir ../results
 ```
 
 ```shell
-$ python countwords.py ../data/moby_dick.txt > moby_dick_words.csv
+$ python countwords.py ../data/dracula.txt > ../results/dracula_words.csv
 ```
 
 ```shell
-$ python countwords.py ../data/emma.txt > emma_words.csv
+$ python countwords.py ../data/moby_dick.txt > ../results/moby_dick_words.csv
+```
+
+```shell
+$ python countwords.py ../data/emma.txt > ../results/emma_words.csv
 ```
 
 > **Positional and optional arguments**
@@ -397,7 +405,7 @@ It will take an arbitrary number of input files generated using `countwords.py`
 and collate the word counts:
 
 ```shell
-$ python collate.py dracula_words.csv moby_dick_words.csv emma_words.csv -n 10
+$ python collate.py ../results/dracula.csv ../results/moby_dick.csv ../results/emma.csv -n 10
 ```
 
 ```text
@@ -541,7 +549,7 @@ using the popular pandas library:
 import pandas
 import matplotlib.pyplot as plt
 
-input_csv = 'emma_words.csv'
+input_csv = '../results/emma.csv'
 df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
 df['rank'] = df['word_frequency'].rank(ascending=False)
 df['inverse_rank'] = 1 / df['rank'] 
