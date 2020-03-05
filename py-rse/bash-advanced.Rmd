@@ -21,24 +21,19 @@ For historical reasons,
 a file full of shell commands is usually called a [shell script][shell-script],
 but it is really just another kind of program.
 
-Let's start by going into `climate-data` and creating a new file called `years.sh`
+Let's start by going into `zipfs-law/bin` and creating a new file called `book_summary.sh`
 to hold our shell script:
 
 ```shell
-$ cd ~/climate-data
-$ nano years.sh
+$ cd ~/zipfs-law
+$ nano book_summary.sh
 ```
 
 Insert this line:
 
 ```text
-cut -d , -f 2 cleaned/bellambi_temp.csv
+head -n 19 data/moby_dick.txt | tail -n 11
 ```
-
-This uses the `cut` command to split the CSV file on commas
-and select the second field from each line.
-(The option `-d` stands for [delimiter][delimiter]:
-we can provide any character we want to split lines on colons, spaces, and so on.)
 Note that we do *not* put a dollar sign `$` at the front of the line:
 we have been showing that for interactive commands,
 but in this case we are putting the command in a file rather than running it immediately.
@@ -53,26 +48,30 @@ $ ls
 ```
 
 ```text
-NOTES           backup/         cleaned/        raw/            thesis.pdf      years.sh
-README.md       bin/            docs/           thesis.md       tofu.config
+bin/             data/     makefiles/
+backup/    book_summary.sh  Makefile  prior-work.txt
 ```
 
-and we can check its contents using `cat years.sh`.
+and we can check its contents using `cat book_summary.sh`.
 More importantly,
 we can now ask the shell to run this file:
 
 ```shell
-$ bash years.sh
+$ bash book_summary.sh
 ```
 
 ```text
-Year
-1997
-1997
-...many more lines...
-2019
-2019
-2019
+
+Title: Moby Dick
+       or The Whale
+Author: Herman Melville
+Editor:
+Release Date: December 25, 2008 [EBook #2701]
+Posting Date:
+Last Updated: December 3, 2017
+Language: English
+Character set encoding: UTF-8
+
 ```
 
 Sure enough,
@@ -81,42 +80,35 @@ For example,
 we can count how many lines of output there are by putting our script in a pipeline:
 
 ```shell
-$ bash years.sh | wc -l
+$ bash book_summary.sh | wc -l
 ```
 
 ```text
-    8314
+    11
 ```
 
-What if we want to remove duplicates from the output?
-The command `uniq` will do what we want,
+What if we want to extract the name of the author?
+The command `grep` searches for every line that contains a pattern and prints the matching lines (we will learn more about `grep` later).
 so let's edit our script,
 add it,
 look at our changes,
 and then run the modified script:
 
 ```shell
-$ nano years.sh
-$ cat years.sh
+$ nano book_summary.sh
+$ cat book_summary.sh
 ```
 
 ```text
-cut -d , -f 2 cleaned/bellambi_temp.csv | uniq
+head -n 19 data/moby_dick.txt | tail -n 11 | grep Author
 ```
 
 ```shell
-$ bash years.sh
+$ bash book_summary.sh
 ```
 
 ```text
-Year
-1997
-1998
-1999
-...one line per year...
-2017
-2018
-2019
+Author: Herman Melville
 ```
 
 Once again,
@@ -124,24 +116,24 @@ we can pipe the output of our script into other commands
 just as we would pipe the output from any other program:
 
 ```shell
-$ bash years.sh | wc -l
+$ bash book_summary.sh | wc -w
 ```
 
 ```text
-      24
+      3
 ```
 
 ## How can I make my scripts more versatile? {#py-rse-bash-advanced-params}
 
-Creating a list of distinct years in a single specific data file isn't all that useful.
-What we really want is a way to get the years from any of our files.
-Let's edit `years.sh` again and replace `cleaned/bellambi_temp.csv`
+Getting the name of the author for only one of the books isn't all that useful.
+What we really want is a way to get the name of the author from any of our files.
+Let's edit `book_summary.sh` again and replace `data/moby_dick.txt`
 with a special variable `$1`.
 Once our change is made,
-`years.sh` should contain:
+`book_summary.sh` should contain:
 
 ```text
-cut -d , -f 2 $1 | uniq
+head -n 19 $1 | tail -n 11 | grep Author
 ```
 
 Inside a shell script,
@@ -149,26 +141,30 @@ Inside a shell script,
 We can now run our script like this:
 
 ```shell
-$ bash years.sh cleaned/bellambi_temp.csv
+$ bash book_summary.sh data/moby_dick.txt
 ```
 
 and get exactly the same output as before,
 or give it a different filename:
 
 ```shell
-$ bash years.sh cleaned/andamooka_prec.csv
+$  bash book_summary.sh data/frankenstein.txt
 ```
 
-and get the years from that file instead.
+and get the author name for that book instead.
+
+```text
+Author: Mary Wollstonecraft (Godwin) Shelley
+```
 
 Our little script is now doing something useful,
 but it may take the next person who reads it a moment to figure out exactly what that is.
 We can improve our script by adding [comments][comment] at the top:
 
 ```text
-# Select distinct years from column 2 of climate data file.
-# Usage: bash years.sh /path/to/file.csv
-cut -d , -f 2 $1 | uniq
+# Get author information from a Project Gutenberg eBook.
+# Usage: bash book_summary.sh /path/to/file.txt
+head -n 19 $1 | tail -n 11 | grep Author
 ```
 
 As in R and Python,
@@ -177,70 +173,35 @@ The computer ignores comments,
 but they help people (including our future self) understand and use scripts.
 
 Let's make one more change to our script.
-Instead of always selecting the second column,
-let's have it select whatever column the user specified:
+Instead of always extracting the author name,
+let's have it select whatever information the user specified:
 
 ```text
-# Select distinct years from column 2 of climate data file.
-# Usage: bash years.sh /path/to/file.csv
-cut -d , -f $2 $1 | uniq
+# Get author information from a Project Gutenberg eBook.
+# Usage: bash book_summary.sh /path/to/file.txt
+head -n 19 $1 | tail -n 11 | grep $2
 ```
 
 The change is very small:
-we have replaced the fixed column number `2` with a reference to the special variable `$2`,
+we have replaced the fixed string 'Author' with a reference to the special variable `$2`,
 which is assigned the value of the second command-line argument we give the script when we run it.
-Let's check that it works by asking for column 1,
-which is the weather station ID:
+Let's check that it works by asking for 'Release Date':
 
 ```shell
-$ bash years.sh cleaned/bellambi_prec.csv 1
+$ bash book_summary.sh data/frankenstein.txt Release Date
 ```
 
 ```text
-Station
-68228
+Release Date: June 17, 2008 [EBook #84]
 ```
 
 But we have made a common mistake:
 we have changed the script without changing the comment.
 A description that sends readers in the wrong direction is worse than none at all,
 so we should go back and update it.
-We should probably also change the script's name from `years.sh` to `column.sh`,
+We should probably also change the script's name from `book_summary.sh` to `book_short_summary.sh`,
 since a program's name is the first piece of documentation anyone sees.
 
-And finally,
-we should add one more command to our pipeline.
-If we run the script as-is for column 3,
-which holds months,
-we get this:
-
-```shell
-$ bash years.sh cleaned/bellambi_prec.csv 3
-```
-Month
-1
-2
-...
-11
-12
-1
-2
-...
-8
-9
-10
-```
-
-Duplicate months aren't removed because `uniq` only removes *adjacent* duplicates.
-If we want to get rid of them all,
-we must sort the data so that redundant lines are next to one another.
-Here's our final script:
-
-```text
-# Select distinct values from a column of a climate data file.
-# Usage: bash years.sh /path/to/file.csv column_number
-cut -d , -f $2 $1 | uniq
-```
 
 ## How can I turn interactive work into a script? {#py-rse-bash-advanced-capture}
 
@@ -279,10 +240,10 @@ We can use `head` and `tail` to select lines from a file by position,
 but we also often want to select lines that contain certain values.
 This operation is called [filtering][filter] When we are working with database tables or dataframes,
 and in the shell,
-we usually do it using a command called `grep`.
+we usually do it by the command `grep` that we already used before.
 The name comes from "global regular expression print",
 which was a common sequence of operations in early Unix text editors.
-To show how `grep` works,
+To show more on how `grep` works,
 we will use a file that contains three haikus
 taken from a 1998 competition in *Salon* magazine.
 
@@ -479,15 +440,14 @@ $ grep -i -n -v to haiku.txt
 If we want to search several files at once,
 all we have to do is give `grep` all of their names.
 We will frequently use wildcards to do this,
-so if we want to count how many records in our climate data come from the year 2001,
-we can do this:
+so if we want to count how many lines in our books contain the word pain, we can do this:
 
 ```shell
-$ grep 2001 cleaned/*.csv | wc -l
+$ grep pain data/*.txt | wc -l
 ```
 
 ```text
-    2920
+    646
 ```
 
 Finally,
@@ -495,11 +455,11 @@ the `-r` option (for "recursive") tells `grep` to search all of the files
 in or below a directory:
 
 ```shell
-$ grep -r . FIXME | wc -l
+$ grep -r pain data | wc -l
 ```
 
 ```text
-      28
+      646
 ```
 
 `grep`'s real power comes from the fact that its patterns can include
@@ -536,7 +496,7 @@ the `find` command finds files themselves.
 It also has a lot of options,
 but unlike most Unix commands these are written as full words rather than abbreviations.
 To show how it works,
-we will explore the `docs` directory within `climate-data`:
+we will explore the `docs` directory within `zipfs-law`:
 
 ```shell
 $ cd docs

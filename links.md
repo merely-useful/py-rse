@@ -376,7 +376,7 @@
 [timestamp]: glossary.html#timestamp
 [tinytex]: https://yihui.name/tinytex/
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
-[tldr]: glossary.html#tldr
+[tldr]: https://tldr.sh/
 [tolerance]: glossary.html#tolerance
 [transitive-dependency]: glossary.html#transitive-dependency
 [travis-ci]: https://travis-ci.org/
