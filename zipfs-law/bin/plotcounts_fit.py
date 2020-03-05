@@ -25,7 +25,7 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
-    mle = minimize_scalar(nlog_likelihood, bracket=(1, 4),
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
                           args=(word_counts), method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
