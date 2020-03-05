@@ -2,7 +2,8 @@
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py/index.html _book/r/index.html _book/py-rse/index.html _book/r-rse/index.html
-ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/py-rse/py-rse.pdf _book/r-rse/r-rse.pdf
+#ALL_PDF=_book/py/py.pdf _book/r/r.pdf _book/py-rse/py-rse.pdf _book/r-rse/r-rse.pdf
+ALL_PDF=_book/r/r.pdf _book/py-rse/py-rse.pdf _book/r-rse/r-rse.pdf
 EXTRA=climate-data data src zipfs-law
 
 R_FILES=\
