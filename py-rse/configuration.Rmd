@@ -1,8 +1,8 @@
 # Program Configuration {#py-rse-configuration}
 
-Command-line options are only one level of configuration.
-Depending on how complex a program is,
-it may also provide:
+In previous chapters we've used command-line options to configure our word count scripts. 
+Depending on how complex we'd like to make our program,
+there are actually a number of layers of configuration that we could use:
 
 1.  A system-wide configuration file for general settings.
 2.  A user-specific configuration file for personal preferences.
@@ -51,162 +51,31 @@ fonts:
 - Serif
 ```
 
-And here's an extension to our script template
-that uses `argparse` and provide
-a default configuration that the user can override:
+TODO:
+
+This chapter introduces overlay configuration and applies it by
+adding relevant functionality to `plotcounts.py`.
+Specifically, the program will accept a YAML file to configure aspects of [`matplotlib.rcParams`](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html).
+
+Note (from that hyperlink) that there is an rcParams configuration file
+somewhere on your system, but by default everything is commented out.
+You can find it by using:
 
 ```python
-import argparse
-import yaml
-
-DEFAULT_CONFIG = {
-    'source': 'DEFAULT',
-    'logfile': '/tmp/log.txt',
-    'quiet': False,
-    'overwrite': False,
-    'fonts': ['Verdana', 'Serif']
-}
-
-def main(args):
-    '''Run the program.'''
-
-    if args.configfile:
-        with open(args.configfile, 'r') as reader:
-            config = yaml.load(reader)
-            config['source'] = args.configfile
-    else:
-        config = DEFAULT_CONFIG
-
-    if args.infile:
-        config['infile'] = args.infile
-
-    if args.outfile:
-        config['outfile'] = args.outfile
-
-    print('Configuration:', config)
-
-
-if __name__ == '__main__':
-
-    description = 'Print options to the screen.'
-    parser = argparse.ArgumentParser(description=description)
-
-    parser.add_argument('--configfile', type=str, help='Configuration file name')
-    parser.add_argument('--infile', type=str, help='Input file name')
-    parser.add_argument('--outfile', type=str, help='Output file name')
-
-    args = parser.parse_args()
-    main(args)
+>>> import matplotlib as mpl
+>>> mpl.matplotlib_fname()
+/Users/damienirving/anaconda/envs/merely/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc
 ```
 
-```shell
-$ python config_template.py --infile chapter2.txt --configfile thesis.yml 
-```
+To put this all in context, this chapter talks about the following levels of configuration:
 
-```text
-Configuration: {'logfile': '/tmp/log.txt',
-                'quiet': False,
-                'overwrite': False,
-                'fonts': ['Verdana', 'Serif'],
-                'source': 'thesis.yml',
-                'infile': 'chapter2.txt'}
-```
+1. A system-wide configuration file for general settings.
+2. A user-specific configuration file for personal preferences. [e.g. `matplotlibrc`]
+3. A job-specific file with settings for a specific run. [e.g. `zipfs_law/bin/plot_params.yml`]
+4. Command-line options to change things that commonly change. [e.g. `argparse`]
 
-YAML allows nested keys and lists,
-but if you need them,
-you're probably doing something wrong [@Xu2015]:
-most users never use most configuration options and find their presence confusing.
-
-## Where should configuration files go? {#py-rse-configuration-loc}
-
-System-wide settings for an application called `app` are often stored in `/etc/app.yml`.
-(Older programs sometimes use a name like `app.rc` for their configuration file,
-where `rc` stands for "resource control".)
-Alternatively,
-some programs will set an environment variable (Section \@ref(py-rse-bash-advanced-vars))
-to the name of the installation directory,
-and then read the system configuration file from there.
-For example,
-if the application's environment variable is `THESIS`,
-we can read configuration from:
-
-```python
-install_dir = os.getenv('THESIS')
-config_file = os.path.join(install_dir, 'config.yml')
-if os.path.isfile(config_file):
-    with open(config_file, 'r') as reader:
-        config = yaml.load(reader)
-```
-
-Similarly,
-we can get personal settings from `$HOME/.thesis.yml`;
-the leading '.' hides the configuration file from `ls`.
-Finally,
-per-job settings can come from `thesis.yml` in the current directory,
-where again "app" is replaced with the name of the program.
-
-## How can I record the configuration that produced particular results? {#py-rse-configuration-log}
-
-We don't need to write any of this when we first create a new tool.
-However,
-experience teaches that little tools grow into big ones.
-As soon as we have more than a couple of configuration parameters,
-or as soon as some of them are usually set to the same value,
-we should start to think about saving our settings in files.
-
-This is particularly important if we want others (including our future self) to be able to reproduce our work.
-Careful record keeping is essential to reproducible science,
-and if we add just a few lines to our program,
-the computer can save the entire configuration for a particular run of a program.
-For example,
-if we have stored our settings in a Python dictionary called `settings` like this:
-
-```python
-settings = {
-    'logfile': '/tmp/thesis.log',
-    'quiet': False,
-    'overwrite': True,
-    'fonts': ['Comic Sans']
-}
-```
-
-we can save that as YAML using this short function:
-
-```python
-def save_config(filename, settings):
-    '''Save configuration settings to a file.'''
-
-    with open(filename, 'w') as writer:
-        yaml.dump(settings, writer)
-
-save_config('thesis.yml', settings)
-```
-
-```shell
-$ cat thesis.yml
-```
-
-```text
-logfile: "/tmp/thesis.log"
-quiet: false
-overwrite: true
-fonts:
-- Comic Sans
-```
-
-This lets us re-create configuration on another machine
-even if it has different default settings.
-The test is whether our program can load a dumped configuration,
-then dump it again and get the same result.
-
-> **Version Everything**
->
-> We should always include a version number as a field in the dumped configuration
-> (Section \@ref(py-rse-git-advanced-tag)),
-> and our program should print this when given a `--version` option.
-> We need this because how we interpret options will change over time,
-> and if you don't know what the version of the program was,
-> we'll have to guess what options mean.
+At the end of this chapter the `plotcounts.py` script should look like
+`zipfs_law/bin/plotcounts_config.py`.
 
 
 ## Exercises {#py-rse-configuration-exercises}
