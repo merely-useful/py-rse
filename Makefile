@@ -100,7 +100,7 @@ commands :
 	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g'
 
 ## everything   : rebuild all HTML and PDF.
-everything : ${ALL_HTML} ${ALL_PDF} ${INDEX_HTML}
+everything : ${ALL_HTML} ${INDEX_HTML}
 
 ##   r          : rebuild novice R HTML and PDF.
 r : _book/r/index.html _book/r/rse.pdf
