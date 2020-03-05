@@ -1,36 +1,26 @@
-"""Collection of commonly used functions.
-
-Functions:
-  report_results  -- report results to stream
-  sort_counts     -- sort a word count collection
-
 """
+Collection of commonly used functions.
 
+Functions
+---------
+collection_to_csv
+    write out a collection of items and counts in csv format
+"""
+import sys
 import csv
 
-
-def report_results(writer, results):
-    """Report results to stream."""
-    
-    writer = csv.writer(writer)
-    for (key, value) in results:
-        writer.writerow((key, value))
-        
-
-def sort_counts(word_counts, method):
-    """Sort a word count collection.
-    
-    Args:
-      word_counts (collections.Counter): word counts
-      method (str): sorting method
-    
+def collection_to_csv(collection, ntop=None):
     """
+    Write out a collection of items and counts in csv format.
     
-    assert method in ['count', 'alphabetical'], "Invalid sorting method"
-    
-    if method == 'count':
-        word_counts = word_counts.most_common()
-    else:
-        word_counts = sorted(word_counts.items())
-        
-    return word_counts
+    Parameters
+    ----------
+    collection : collections.Counter
+        Collection of items and counts
+    ntop : int
+        Limit output to n most frequent items
+    """
+    collection = collection.most_common()
+    limit = ntop if ntop else len(collection)
+    writer = csv.writer(sys.stdout)
+    writer.writerows(collection[0:limit])
