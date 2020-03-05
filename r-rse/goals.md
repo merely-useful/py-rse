@@ -1,188 +1,123 @@
-# RSE for R Goals and Narrative
+# Course design components for *RSE in R*
 
-The intermediate course starts with a few (simple)
-pre-prepared scripts/programs for processing/analysing data.
-(Perhaps the scripts written in the novice course?)
-It works through the process of combining those scripts into a workflow for personal use,
-before testing, organising, packaging and publishing the workflow
-(or key programs within it) for wider use.
+## Basic design components
 
-To be more specific, the course is structured as follows:
+These are to develop a compass for developing and structuring the material.
+Many may have a strong focus on "in class" etc, 
+but this is to give a direction on how to write those sections
+(e.g. having the perspective that an instructor will be reading these sections).
 
-1. Learn some fundamentals: unix shell, version control
-2. Combine the scripts into a workflow: configuring software, automating analyses
-3. Test the workflow: testing, continuous integration
-4. Get properly organised: project structure, project management
-5. Release the software to the wider world: packaging, publishing
-
-There is a long list of topics that we haven't included at the bottom of the page.
-We could consider including some of them as bonus/elective lessons.
-
-It is assumed that students have completed the novice course.
-
-
-## The Unix Shell
-
-**Lead author:** Damien Irving  
-**Source materials:**
-[Software Carpentry](http://swcarpentry.github.io/shell-novice/),
-[shell.Rmd](https://merely-useful.github.io/still-magic/en/shell.html)
-
-> Topic outline:
-> -   How do I navigate my filesystem?
->     -   moving about (cd, ls)
->     -   files and directories (ls, cp, mkdir, mv, rm)
->     -   paths (., .., absolute, relative, special) 
-> -   How do I examine and/or edit a text file?
->     -   difference between text and binary files
->     -   running a text editor
->     -   operating on text (cat, wc, head, tail, etc)
->     -   wildcards
->     -   finding things (find, grep, locate)
-> -   How do I combine multiple commands?
->     -   pipes and filters
->     -   redirection to/from files
->     -   loops
-> -   Variables
->     -   define a variable
->     -   use a variable
->     -   what's with all the quotes?
-> -   Shell scripts
->     -   read/write/execute file permissions
->     -   `#!` lines
->     -   using command-line arguments in scripts
->     -   job control (&, control-c)
-> -   Shortcuts
->     -   tab completion
->     -   previous commands (up arrow, control-r)
->     -   history
-> -   Getting help
->     -   --help, man
-> -   Customising your shell experience
->     -   .bashrc
-> -   Bonus material: non-standard commands you might find useful (tree, htop, autojump, fd, etc)
-
-
-## Version control
-
-**Lead author:** Damien Irving  
-**Source materials:**
-[Software Carpentry](http://swcarpentry.github.io/git-novice/),
-[branches.Rmd](https://merely-useful.github.io/still-magic/en/branches.html)
-
-> Topic outline:
-> -   Version control at the command line
->     -   Checking progress: git status, diff, log
->     -   Commit cycle: git add, commit, push, pull
-> -   How do I do multiple things at once?
->     -   branches
->     -   branch naming
->     -   branch management conventions (like feature branches)
-> -   How do I suggest changes to other people's code?
->     -   forking repositories
->     -   creating pull requests
->     -   reviewing pull requests
-
-
-## Automating analyses
-
-TODO: Maybe cover drake instead of Make? Not sure how many R projects use Make, but I haven't seen many.
-
-**Lead author:** Luke Johnston  
-**Source materials:**
-[Software Carpentry](http://swcarpentry.github.io/make-novice/),
-[automate.Rmd](https://merely-useful.github.io/still-magic/en/automate.html)
-
-> Topic outline:
-> -   How do I write a simple Makefile? 
-> -   How can I abbreviate the rules in my Makefiles? 
-> -   How can I write a Makefile to update things when my scripts have changed rather than my input files?
-> -   How can I define rules to operate on similar files? 
->     -   Pattern rules
-> -   How can I eliminate redundancy in my Makefiles?
->     -   Variables
->     -   Functions
-> -   How should I document a Makefile?
-> -   What other tools can I use?
->     -   drake for R
-
-
-## Testing
-
-**Lead author:** Jonathan Dursi  
-**Source materials:**
-[Katy Huff](http://katyhuff.github.io/python-testing/),
-[unit.Rmd](https://merely-useful.github.io/still-magic/en/unit.html),
-[verify.Rmd](https://merely-useful.github.io/still-magic/en/verify.html)
-
-> Topic outline:
-> -   Why should I test my code?
-> -   How do I implement tests/checks at specific points within my code?
->     -   assertions (brief, this is covered in novice course)
->     -   exceptions
-> -   How can I write and manage tests for my software?
->     -   unit tests
->     -   test runners
-> -   What tests should I write for my software?
->     -   edge cases
->     -   fails when it should
->     -   bugs become tests
-> -   How can I tell what I have and haven't tested?
->     -   coverage
-> -   What *isn't* included?
->     -   legal liabilities
+- **Learning outcome/goal**: Ultimately, to be able to create an R package, that:
+    - Passes checks and requirements to (potentially) be submitted to CRAN
+    - Incorporates best practices in package development 
+    (unit testing, continuous integration, version control)
+    - Is designed to involve the community, such as gaining potential contributors
+    (including licensing, code of conduct, contributing guidelines, 
+    well described README)
+    - Has user-friendly (i.e. targetted to a novice to intermediate user)
+    documentation and tutorials on how to use the package (e.g. a nice website)
+    - Is adequately structured to make package management and maintanence easier
+    (e.g. with Issue Templates, Project Boards, Labels, contributing guidelines)
     
+- **Teaching/learning activities**:
+    - In class portion: 
+        - Some lectures for those material that aren't coding heavily
+        (e.g. for lessons to involve community, being a good community member)
+        - Live coding (with instructor)
+        - Exercises that expand on material covered with instructor that 
+        solve a provided problem, with or without scaffolding
+    - Out of class: 
+        - Group work/project creating an R package based on a set of (given?) problems
+        - Formative assessments like coding with immediate feedback on correct/incorrect
+        (via learnr package? Esp with new update to RStudio in version 1.3)
+        - Reading assignments?
+
+- **Assessment and feedback activities**:
+    - Deadlines for milestones to acheive for project, with instructor feedback on progress
+    - Out-of-class formative assessments based on maybe learnr tutorials?
+    - After completing in-class exercises, go over them as class?
+
+- Key resources to use for this:
+  - R packages: usethis, devtools, drake?, pkgdown, testthat, styler, rmarkdown
+  - Online books: [R Packages](https://r-pkgs.org/) 
+  (we differentiate from this amazing book by structuring everything around 
+  this being a course, with exercises, assessments, (group?) projects, 
+  instructions/comments/notes for instructors, etc)
+
+## Chapter outline
+
+Course chapters and content need to be strongly aligned with learning outcome/goal.
+Here is a draft outline to guide development.
+
+- Syllabus
+    - Overview of course
+    - Why to learn it
+    - What makes this course different
+
+- Folder and file structure (RStudio R Projects)
+    - Filepaths, very basics of the shell (in RStudio)
+    - Making use of the fs package for filesystem management
     
-## Continuous integration
+- Setting up an R package
+    - Using devtools, usethis for development
+    - Developing functions
+    - Making and using datasets
 
-**Lead author:** Luke Johnston  
-**Source materials:** [r-rse-ci.Rmd](https://merely-useful.github.io/still-magic/en/integrate.html)
+- Version control: Using Git and GitHub as a sole user (part 1)
+    - Using Git in RStudio (standard add-commmit-history)
+    - Using Git in the Terminal of RStudio (moving in history with checkout,
+    creating branches, adding and updating remotes)
+    - Setting up GitHub for R package (make use of usethis), pushing and pulling
 
-> Topic outline:
-> -   How can I run commands automatically every time a repository is updated?
->     -   continuous integration
->     -   Travis
+- Checking correctness of code
+    - Unit test (with testthat)
+    - Code coverage (with covr)
+    - With devtools
 
+- Build management
+    - With devtools
+    - Maybe with drake?
+    - Pre-push running test, build, and check
+    - Continuous integration using Travis and/or GitHub Actions and AppVeyor 
+    (for Windows building)
 
-## Project structure
+- Developing documentation and tutorials on usage
+    - Vignettes, README (with rmarkdown and usethis)
+    - Function documentation (with roxygen2)
+    - Running spell checks and styling (with spelling and styler)
 
-**Lead author:** Charlotte Wickham  
-**Source materials:** [project.Rmd](https://merely-useful.github.io/still-magic/en/project.html)
+- Involving the community:
+    - Designing your package to be used by or contributed to from the community
+    (refer to Mozilla Science Labs Open Leaders material)
+    - Contributing guidelines 
+    - Being inclusive (code of conduct)
+    - Licensing
 
+- Exposing your package to the world with a website:
+    - Setting up a website (with pkgdown)
+    - Customizing the themes
+    - Getting all resources and material organized
+    - Defining lifecycle of your package and individual functions (with lifecycle)
 
-## Project management
+- Version control: Workflows around using GitHub (part 2)
+    - Make use of R builtin tools like the usethis pull request helpers 
+    (and learning how to make use of this yourself)
 
-**Lead author:** Kate Hertweck  
-**Source materials:**
-[inclusive.Rmd](https://merely-useful.github.io/still-magic/en/teamwork.html), 
-[backlog.Rmd](https://merely-useful.github.io/still-magic/en/backlog.html),
-[teamwork.Rmd](https://merely-useful.github.io/still-magic/en/teamwork.html) 
+- Project management of your package development (either sole or in a team)
+    - Issue tracking
+    - Labeling
+    - Project boards
+    - Milestones
 
-> Topic outline:
-> -   How can **we** keep track of who's doing what and what's still to be done?
->     -   issue tracking
->     -   issue tagging as lightweight workflow
-> -   How can **we** figure out what to build next?
->     -   planning vs. agile
->     -   3x3 prioritization
-> -   How can **we** make decisions?
->     -   how to run a meeting
->     -   project governance
->     -   strategies for handling difficult project members
+- Preparing for package release
+    - Check builds on other systems (with rhub)
+    - Running local CRAN checks
+    - Managing your versions, git tagging
 
-
-## Packaging
-
-**Lead author:** Greg Wilson (R)
-**Source materials:** [package.Rmd](https://merely-useful.github.io/still-magic/en/package.html)
-
-> Topic outline:
-> -   How do I write a package that can be shared on CRAN?
-> -   How do version numbers work?
-> -   How can I put documentation for my package on the web? 
-
-
-## Publishing
-
-**Lead author:** Damien Irving  
-**Source materials:** [publish.Rmd](https://merely-useful.github.io/still-magic/en/publish.html) 
+- Making your R package development to a team-based environment
+    - Making use of GitHub Organizations/Teams
+    - Branch protection, member roles
+    - Decision making
+    - Governance
+    - Issue assignment
+    - Relying on and using code of conduct to build culture and standards
