@@ -1,4 +1,4 @@
-# RSE Goals
+# RSE for R Goals and Narrative
 
 The intermediate course starts with a few (simple)
 pre-prepared scripts/programs for processing/analysing data.
