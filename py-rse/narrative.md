@@ -55,18 +55,33 @@ title and author information could be extracted using `grep`.
 This chapter currently involves a generic script called `script_template.py`,
 which can be configured using command line arguments.
 Instead of developing the generic `script_template.py`,
-this chapter needs to be updated so that it develops `zipfs_law/bin/countwords.py` instead.
-This will involve introducing `if __name__ == '__main__':`,
-writing your own modules (`zipfs_law/bin/mymodule.py`),
-`argparse` and standard input in Python (`sys.stdin`).
-(The concept of standard input is introduced in the earlier chapter on unix shell basics.)
+this chapter needs to be updated so that it develops the
+`zipfs_law/bin/countwords.py`, `zipfs_law/bin/collate.py` and
+`zipfs_law/bin/plotcounts.py` scripts.
+
+Instead of writing the final version of `plotcounts.py`,
+in this lesson a sub-optimal word count vs 1/rank plot will be implemented
+so that it can be improved upon in subsequent chapters:
+see `plotcounts_rank.py` for details.
+The rationale behind this approach to plotting the data is that mathematically,
+Zipfs Law might be written as "word frequency is proportional to 1/rank."
 
 ### Chapter 5: Git at the command line
 
 The narrative in this chapter currently involves Frances and her colleague Jean Jennings
 writing a history of the ENIAC project.
-Instead, in this chapter the `zipfs_law/bin/collate.py` script should be written from scratch,
-tracking changes with Git along the way.
+This narrative needs to be changed so that `plotcounts.py` is updated to draw a log-log plot
+(see `zipfs_law/bin/plotcounts_log.py`)
+to instead of the inferior word count vs 1/rank approach from Chapter 4
+(see `zipfs_law/bin/plotcounts_rank.py`).
+
+The disadvantage of the 1/rank plot is that it tends to visually
+over-emphasize the very frequent words.
+It's therefore hard to see what's happening for words that appear less than 500 times.
+The rationale for switching to a log-log plot is that Zipfs Law is an example of a power law.
+In general, when two variables (x) and (y) are related through a power law [ y = ax^b ],
+taking logarithms of both sides yields a linear relationship: [ \log(y) = \log(a) + b\log(x) ].
+Hence, plotting the variables on a log-log scale should reveal this linear relationship.
 
 ### Chapter 6: Advanced Git
 
@@ -74,33 +89,35 @@ This chapter introduces the concept of branches.
 In the current draft, a violin plot is created on one branch
 and a beeswarm plot on the other.
 The better looking plot is then merged into the master branch.
-This example needs to be changed so that two slightly different versions of 
-`zipfs_law/bin/plotcounts.py` are developed instead.
 
-The two different versions are illustrated in
-`zipfs_law/bin/plotcounts_branch_keep.py` and `zipfs_law/bin/plotcounts_branch_reject.py`
-The explanation for each is as follows:
+This narrative needs to be changed so that a new branch is created
+to work on fitting a curve to the word count data instead.
+Specifically, we need to estimate the power law exponent
+so it can be added it as a line on our log-log plot. 
+This is done by adding relevant code
+(i.e. the `get_power_law_params`, `nlog_likelihood` and `plot_fit` functions) to `plotcounts.py`,
+starting from the version of the script
+at the end of Chapter 5 (`zipfs_law/bin/plotcounts_log.py`).
+The end result is `zipfs_law/bin/plotcounts_fit.py`.
 
-##### `zipfs_law/bin/plotcounts_branch_reject.py`: Word frequency versus 1/rank
+At the end of this chapter we are finally in a position to verify Zipfs Law.
+In the beginning we introduced the Law as:
 
-Rationale: Mathematically, Zipfs Law might be written as
-"word frequency is proportional to 1/rank."
+*Zipf’s Law states that the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often, and so on.*
 
-Advantages: Simple to interpret (because no log axes).
+The alpha value returned by `plotcounts.py` for Moby Dick is 1.1, for instance,
+so the correct statement for that text would be,
 
-Disadvantage: Tends to visually over-emphasize the very frequent words.
-It's hard to see what is happening for words that appear less than 500 times.
+*the most frequent word will occur approximately 2<sup>1.1</sup> = 2.14
+times as often as the second most frequent word,
+3<sup>1.1</sup> = 3.35 times as often as the third most frequent word, etc*
 
-##### `zipfs_law/bin/plotcounts_branch_keep.py`: log-log plot showing word frequency versus rank
+which is pretty close.
 
-Rationale: Zipfs Law is an example of a power law.
-
-In general, when two variables (x) and (y) are related through a power law [ y = ax^b ],
-taking logarithms of both sides yields a linear relationship: [ \log(y) = \log(a) + b\log(x) ].
-Hence, plotting the variables on a log-log scale should reveal this linear relationship.
-
-This is the option we want to go with.
-
+Here's the [issue](https://github.com/merely-useful/merely-useful.github.io/issues/288)
+where we discuss theory behind the power law stuff in detail.
 
 ### Chapter 7: Automating analyses 
 
@@ -108,7 +125,7 @@ This chapter can stay pretty much as is.
 The introductory paragraphs about Zipf's Law can be removed 
 (because they should now appear in the introduction chapter)
 and the workflows developed in the chapter need to be extended to also include
-`plotcounts.py` (as it appears in `zipfs_law/bin/plotcounts_branch_keep.py`).
+`plotcounts.py` (as it appears in `zipfs_law/bin/plotcounts_fit.py`).
 
 ### Chapter 8: Program configuration
 
@@ -156,53 +173,17 @@ One of those issues should be a bug report.
 It's not clear how much of this chapter will ultimately end up in the novice Python book,
 but nonetheless code review will definitely be introduced here.
 
-The last bit of development that needs to be done to `plotcounts.py` is to
-estimate the power law exponent so it can be added it as a line on our log-log plot. 
-That needs to be done in this chapter by adding the relevant code
-(i.e. the `get_power_law_params`, `nlog_likelihood` and `plot_fit` functions) to `plotcounts.py`,
-starting from the version of the script
-at the end of Chapter 8 (`zipfs_law/bin/plotcounts_config.py`).
-
-In the first instance the new code should be added with some deliberate flaws written in,
-so that it can then be reviewed and improved
+This chapter should review the `countwords.py`, `collate.py` and/or `plotcounts.py` scripts
 using the code style, review and refactor principles introduced in the chapter.
-
-At the end of this chapter we are finally in a position to verify Zipfs Law.
-In the beginning we introduced the Law as:
-
-*Zipf’s Law states that the second most common word in a body of text
-appears half as often as the most common,
-the third most common appears a third as often, and so on.*
-
-The alpha value returned by `plotcounts.py` for Moby Dick is 1.1, for instance,
-so the correct statement for that text would be,
-
-*the most frequent word will occur approximately 2<sup>1.1</sup> = 2.14
-times as often as the second most frequent word,
-3<sup>1.1</sup> = 3.35 times as often as the third most frequent word, etc*
-
-which is pretty close.
-
-Here's the [issue](https://github.com/merely-useful/merely-useful.github.io/issues/288)
-where we discuss theory behind the power law stuff in detail.
+One option here would be to remove the `--xlim` option from earlier versions of `plotcounts.py`
+and add it in this chapter (i.e. as part of a review of that script).
 
 ### Chapter 12: Project structure
 
 Now that we've written all our scripts for the Zipf's Law analysis,
 this chapter should structure it all properly (i.e. with license files and README's etc).
 
-### Chapter 13: Correctness
-
-This chapter introduces testing and needs to be updated to write tests for the Zipf's Law code.
-For example, `countwords.py` could be tested using an input text file where the count
-for each word is already known.
-
-### Chapter 14: Continuous integration
-
-This chapter needs to be updated so the tests developed in the previous chapter
-are implemented using Travis CI.
-
-### Chapter 15: Python packaging
+### Chapter 13: Python packaging
 
 In the current version of this chapter,
 a few relevant functions relating to the Zipf's Law analysis 
@@ -212,6 +193,17 @@ That module is then packaged so it can be installed by others.
 Instead of introducing new previously unseen Zipf's Law functions,
 this chapter should package up all the code developed in the previous chapters
 as a complete Zipf's Law package.
+
+### Chapter 14: Correctness
+
+This chapter introduces testing and needs to be updated to write tests for the Zipf's Law code.
+For example, `countwords.py` could be tested using an input text file where the count
+for each word is already known.
+
+### Chapter 15: Continuous integration
+
+This chapter needs to be updated so the tests developed in the previous chapter
+are implemented using Travis CI.
 
 ### Chapter 16: Publishing
 
