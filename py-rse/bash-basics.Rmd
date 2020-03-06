@@ -1804,27 +1804,32 @@ $ for filename in s*.txt; do echo $filename; head -n 19 $filename | tail -n 11; 
 
 ## How can I create new filenames automatically? {#py-rse-bash-basics-autoname}
 
-Suppose we want to create a backup copy of each book whose name has the preposition 'of' in it.
+Suppose we want to create a backup copy of each book whose name ends in "e".
 If we don't want to change the files' names,
 we can do this with `cp`:
 
 ```shell
 $ cd ~/zipfs-law
 $ mkdir backup
-$ cp data/*of*.txt backup
+$ cp data/*e.txt backup
+$ ls backup
+```
+
+```text
+jane_eyre.txt  time_machine.txt
 ```
 
 But what if we want the backup files to have the [extension][filename-extension] `.bak` instead of `.txt`?
 `cp` can do this for a single file:
 
 ```shell
-$ cp data/anne_of_green_gables.txt backup/anne_of_green_gables.bak
+$ cp data/time_machine.txt backup/time_machine.bak
 ```
 
 but can't do all the files at once:
 
 ```shell
-$ cp data/*of*.txt backup/*of*.bak
+$ cp data/*e.txt backup/*e.bak
 ```
 
 ```text
@@ -1832,7 +1837,7 @@ usage: cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file target_file
        cp [-R [-H | -L | -P]] [-fi | -n] [-apvXc] source_file ... target_directory
 ```
 
-`backup/*of*.bak` doesn't match anything—those files don't yet exist—so
+`backup/*e.bak` doesn't match anything—those files don't yet exist—so
 what we are actually asking `cp` to do is:
 
 ```shell
@@ -1852,8 +1857,8 @@ Instead,
 let's copy all the files and then rename them:
 
 ```shell
-$ cp data/*of*.txt backup
-$ for filename in backup/*of*.txt
+$ cp data/*e.txt backup
+$ for filename in backup/*e.txt
 > do
 >   mv $filename $filename.bak
 > done
