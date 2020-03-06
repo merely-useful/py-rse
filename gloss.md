@@ -271,7 +271,7 @@
 
 **Directory Tree**<a id="directory-tree"></a>
 :   If the nesting relationships between directories in a filesystem are drawn as arrows from the containing directory to the nested ones,
-    a tree structure develops. 
+    a tree structure develops.
 
 **Directory**<a id="directory"></a>
 :   A folder in a filesystem.
@@ -279,7 +279,7 @@
 **Disk**<a id="disk"></a>
 :   Disk refers to disk storage, a physical component of a computer that stores  information on a disk.
     The most common kind of disk storage is a hard disk drive,
-    which is a storage drive with a non-removable disk. 
+    which is a storage drive with a non-removable disk.
 
 **Docstring**<a id="docstring"></a>
 :   FIXME
@@ -364,7 +364,7 @@
 
 **Filesystem**<a id="filesystem"></a>
 :   Controls how files are stored and retrieved on disk by an operating system.
-    Also used to refer to the disk that is used to store the files or the type of the filesystem. 
+    Also used to refer to the disk that is used to store the files or the type of the filesystem.
 
 **Filter**<a id="filter"></a>
 :   FIXME
@@ -562,7 +562,7 @@
 :   FIXME
 
 **Memory**<a id="memory"></a>
-:   A physical device on your computer that temporarily stores information for immediate use. 
+:   A physical device on your computer that temporarily stores information for immediate use.
 
 **Mental model**<a id="mental-model"></a>
 :   A simplified representation of the key elements and relationships of some problem domain
@@ -727,7 +727,7 @@
 :   FIXME
 
 **Regular expression**<a id="regular-expression"></a>
-:   FIXME
+:   a sequence of characters that define a pattern that can be used to find matching strings
 
 **Relative error**<a id="relative-error"></a>
 :   FIXME
@@ -988,7 +988,7 @@
 :   FIXME
 
 **Variable**<a id="python-variable"></a> (in Python):
-   A symbolic name that reserves memory to store a value. 
+   A symbolic name that reserves memory to store a value.
 
 **Variable**<a id="variable-make"></a> (in Make):
    FIXME
