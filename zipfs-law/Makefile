@@ -3,7 +3,6 @@
 COUNT=bin/countwords.py
 COLLATE=bin/collate.py
 PLOT=bin/plotcounts.py
-
 DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
@@ -21,7 +20,6 @@ results/collated.csv : $(RESULTS) $(COLLATE)
 
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-	@mkdir -p results
 	python $(COUNT) $< > $@
 
 ## clean : remove all generated files.
@@ -31,10 +29,10 @@ clean :
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
-	@echo COLLATE: $(COLLATE)
-	@echo PLOT: $(PLOT)
 	@echo DATA: $(DATA)
 	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	@echo PLOT: $(PLOT)
 
 ## help : show this message.
 help :

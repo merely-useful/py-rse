@@ -751,7 +751,6 @@ and `grep` (Section \@ref(py-rse-bash-advanced-find)) to pull these lines out o
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
-RUN_COUNT=python $(COUNT)
 DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
@@ -760,7 +759,7 @@ all : $(RESULTS)
 
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-	$(RUN_COUNT) $< > $@
+	python $(COUNT) $< > $@
 
 ## clean : remove all generated files.
 clean :
@@ -807,21 +806,22 @@ we add or change these lines in our Makefile:
 # ...phony targets and previous variable definitions...
 
 COLLATE=bin/collate.py
-RUN_COLLATE=python $(COLLATE)
 
 ## all : regenerate all results.
 all : results/collated.csv
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
-	$(RUN_COLLATE) $(RESULTS) > $@
+	mkdir -p results  # Create dir if it doesn't exist
+	python $(COLLATE) $(RESULTS) > $@
 
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
 	...
-
 ```
 
 The first two lines tell Make about the collation program,
@@ -850,18 +850,19 @@ which is where `countwords.py` and `collate.py` write their output.
 # ...phony targets and previous variable definitions...
 
 PLOT=bin/plotcounts.py
-RUN_PLOT=python $(PLOT)
 
 ## all : regenerate all results.
-all : results/collated.pdf
+all : results/plotcounts.png
 
 ## results/collated.pdf: plot the collated results.
-results/collated.pdf : results/collated.csv
-	$(RUN_PLOT) $^ $@
+results/plotcounts.png : results/collated.csv
+	python $(PLOT) $^ --outfile $@
 
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
 	@echo PLOT: $(PLOT)
 	...
@@ -917,7 +918,7 @@ What is wrong with writing the rule for `results/collated.csv` like this:
 
 ```make
 results/collated.csv : results/*.csv
-	$(RUN_COLLATE) $^ > $@
+	python $(COLLATE) $^ > $@
 ```
 
 Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
