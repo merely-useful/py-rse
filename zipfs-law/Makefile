@@ -12,17 +12,17 @@ all : results/plotcounts.png
 
 ## results/plotcounts.png: plot the collated results.
 results/plotcounts.png : results/collated.csv
-	$(PLOT) $^ --outfile $@
+	python $(PLOT) $^ --outfile $@
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
 	@mkdir -p results
-	$(COLLATE) $(RESULTS) > $@
+	python $(COLLATE) $(RESULTS) > $@
 
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
 	@mkdir -p results
-	$(COUNT) $< > $@
+	python $(COUNT) $< > $@
 
 ## clean : remove all generated files.
 clean :
