@@ -90,20 +90,6 @@ version control (it can be convenient, but then you have to have processes
 in place to make sure that they stay in sync) so we normally add the
 `__pycache__` directory to in `.gitignore`.
 
-### Exercise: Hello, Zipf!
-
-Put a statement
-
-```python
-print("Hello, Zipf!")
-```
-at the end of `zipf.py`.
-
-1. What happens when you start Python interactively and import the
-module with the command `import zipf`?
-2. Python caches modules that have been imported.  What happens if you
-type `import zipf` again?
-
 ## How can I control what is executed during import and what isn't? {#py-rse-package-py-import}
 
 Sometimes it's handy to be able to import code and also run it as a program.
@@ -149,18 +135,6 @@ We can test this by re-running `use.py` as before:
 the usage message doesn't appear,
 which means the main block wasn't executed,
 which is what we want.
-
-### Exercise: What is `__name__` in different contexts?
-
-1. Start an interactive Python interpreter, and run `print(__name__)`.
-What do you get?
-2. Add the statement `print(__name__)` to the end of the file `zipf.py`
-and from the Python interpreter, run `import zipf`.  What is the name
-printed?
-
-### Exercise: Turn `use.py` into a unit test
-
-1. Turn the `use.py` script into a `pytest` unit test; name the file `test_zipf.py`.
 
 ## How do I create a package? {#py-rse-package-py-creating}
 
@@ -216,34 +190,6 @@ Python code, and by convention a Python file with a special
 name, `__init__.py` (this was a requirement before Python 3.3).
 Just as importing a module file executes the code in the module,
 importing a package executes the code in `__init__.py`.
-
-### Exercise: Create a package for our Zipf code.
-
-We're going to create a package for the code we've written
-for the Zipf distribution.  In the long and honourable(?)
-tradition of package names ending in "py", we'll call our
-package zipfpy.
-
-1. Create a `zipfpy` directory and move the file `zipf.py` into that directory.
-2. Create an empty file `zipfpy/__init__.py`.
-3. Modify the test suite so that it runs; functions will now be found in the [namespace][namespace] `zipfpy.zipf` rather than `zipf`.
-4. Run the test suite with `pytest`
-
-### Exercise: "Hello `__init__.py`"
-
-Repeat the "Hello, Zipf!" exercise by temporarily adding the
-line `print("Hello, Init!")` to the `__init__.py`.  Then
-from the directory containing the directory `zipfpy`, start
-a Python interpreter and run:
-
-```python
-import zipfpy
-```
-
-What happens?
-
-When you're done, remove the `print()` line from `__init__.py`.
-
 
 ## Referring to modules within the same package: multiple files
 
@@ -338,120 +284,6 @@ def test_default_tolerance(length=5):
 
 ...
 ```
-
-### Exercise: Factor out the package-wide constant `RELATIVE_ERROR`
-
-It's perfectly valid for an `__init__.py` file to be empty,
-but it is also a very useful place to put definitions that are
-common to the entire package.
-
-Here, both `generate` and `check` use the same default `RELATIVE_ERROR`;
-let's move that into `__init__.py`:
-
-1. Add the line `RELATIVE_ERROR = 0.05` to `__init__.py`;
-2. Now we can remove the line definining `RELATIVE_ERROR` from `check.py`
-and `generate.py`, but;
-3. We still need to import that definition somehow, or else those functions
-won't know what a `RELATIVE_ERROR` is; add the line `from . import RELATIVE_ERROR`
-to each so that it is visible.  When we don't specify a file, it imports the
-definition from `__init__.py` (just as `import zipfpy` will read the `__init__.py`)
-4. Run the test suite with `pytest`
-
-We haven't shortened the code any here—we've replaced a `RELATIVE_ERROR = 0.05`
-with an `from . import RELATIVE_ERROR`—but now the constant is defined in only
-one location so we don't have to worry about editing it in one location and that
-value being out of sync in the other.
-
-### Exercise: Importing from within __init__.py
-
-Since any code that does an `import zipf` will read `__init__.py`, it
-can be convenient to put import statments in `__init__.py` itself, to
-ensure that some key definitions are readily available when the package
-is imported.
-
-We'll try that here:
-
-1. Add the lines `from .generate import *` and `from .check import *` to
-`zipfpy/__init__.py`.
-2. In the test suite, you can now just call `import zipfpy` and refer to,
-_e.g._, `zipfpy.make_zipf(...)` instead of `zipfpy.generate_make_zipf(...)`.
-Make those changes
-3. Run the test suite with `pytest`
-
-Note that it doesn't make sense to import absolutely everything like we
-have here into the `zipfpy` namespace—it kind of defeats the purpose
-of having split up the files—but for a modest number of key definitions
-this can be very convenient for the package users.
-
-4. Undo the changes you made in 1. and 2., and make sure the test suite
-still runs.
-
-## What does it mean to install a Python package? {#py-rse-package-py-install}
-
-By the end of this chapter, you'll have made and published a Python
-package that anyone with an internet connection can install.  You've
-certainly installed Python packages before, such as with `pip install`;
-the `pip` tool is the most common way to install Python packages.
-The command <code>pip install <em>package</em></code>
-checks to see if the package is already installed (or needs to be upgraded);
-if so,
-it downloads the package from [PyPI][pypi] (the Python Package Index),
-unpacks it,
-and installs it.
-
-But what does it mean to install a Python package?
-
-You've seen that when you have a Python module or package in the current
-directory named, say, `zipfpy`, Python will successfully find that module
-and directory when it runs `import zipfpy`.  But clearly having all of the
-Python standard library, all installed packages, and our own code in the
-same directory gets unwieldly quickly - especially if we want to run our
-routines from a directory full of data!
-
-Just as the `PATH` environment in the shell contains a list of directories that
-the shell searches for programs it can execute, in Python a variable `sys.path`
-(in the system-standard `sys` package) contains a list of the directories to
-search.  Create a Python file `showpath.py` containing the following, and
-then run it with `python showpath.py`:
-
-```python
-import sys
-
-for directory in sys.path:
-    print(directory)
-```
-
-If you are using the Anaconda distribution of Python and you run this script
-from your desktop, you will see a list that looks like this:
-
-```
-/Users/pterry/Desktop
-/Users/pterry/anaconda3/lib/python36.zip
-/Users/pterry/anaconda3/lib/python3.6
-/Users/pterry/anaconda3/lib/python3.6/lib-dynload
-/Users/pterry/anaconda3/lib/python3.6/site-packages
-/Users/pterry/anaconda3/lib/python3.6/site-packages/aeosa
-```
-
-the first will be your current directory - a Python environment
-always looks there first - and the rest are system paths for
-the Python installation you are using.
-
-To install a package, then means to copy the contents of the
-package in some form into one of the directories that Python
-will search from.
-
-### Exercise: Find a package in pip list
-
-The `pip list` command will generate a list of Python packages
-installed using pip in the current environment.  Here we'll find
-a package that we've recently installed.
-
-1.  Run `pip list`, and from the list pick something that you've
-installed recently; if you can't think of anything, choose `pytest`.
-2.  Run the `showpath.py` script to show the list of paths the package could be in.
-3.  Search the paths in 2. for files corresponding to the package you choose in 1.;
-`site-packages` is normally a good place to start looking.
 
 ## How can I have only the packages my projects need? {#py-rse-package-py-virtualenv}
 
@@ -588,40 +420,60 @@ using virtual environment names that match the names of your projects
 quickly becomes essential.
 
 
-### Exercises: Examining the virtual environment
+## What does it mean to install a Python package? {#py-rse-package-py-install}
 
-1. If you haven't already, create a `test` virtual environment and activate it.  Your prompt should now start with `(test)`.
-2. Run `pip list`. What packages are installed?
-3. Run the `showpath.py` script from the earlier section, and note that the paths are different from your
-base environment where you looked for packages.  They probably look like `/Users/pterry/envs/test/lib/python-3.7/site-packages`.
-4. Pick a package you know you have installed in your base environment—pick `pytest` if you can't think of one—and
-try to import it in a Python interpreter.  Can it be found?
-5. Deactive the environment and try again.
+By the end of this chapter, you'll have made and published a Python
+package that anyone with an internet connection can install.  You've
+certainly installed Python packages before, such as with `pip install`;
+the `pip` tool is the most common way to install Python packages.
+The command <code>pip install <em>package</em></code>
+checks to see if the package is already installed (or needs to be upgraded);
+if so,
+it downloads the package from [PyPI][pypi] (the Python Package Index),
+unpacks it,
+and installs it.
 
-### Exercises: Installing a package into the virtual environment
+But what does it mean to install a Python package?
 
-1. Re-activate the `test` virtual environment from above, and if necessary,
-re-run the `showpath.py` script.
-2. Let's install a simple package, `click`; it's a commonly used package for
-creating simple command-line tools, but for our purposes it's just a small
-self-contained package.  Run `pip install click`.
-3. Search in the directories output from `showpath.py` for a package named `click`;
-it will be a directory containing an `__init__.py`.
-4. Start a Python interpreter, and run `import click`; it is installed in the environment.
-5. From that same interpretter, run `print(click.path)`; that is the path to the click package.
-It should report the same directory that you found it in.
-6. Exit the Python interpretter
+You've seen that when you have a Python module or package in the current
+directory named, say, `zipfpy`, Python will successfully find that module
+and directory when it runs `import zipfpy`.  But clearly having all of the
+Python standard library, all installed packages, and our own code in the
+same directory gets unwieldly quickly - especially if we want to run our
+routines from a directory full of data!
 
-Now let's just clarify that the environment is different than the directory you
-installed the virtual environment contents in:
+Just as the `PATH` environment in the shell contains a list of directories that
+the shell searches for programs it can execute, in Python a variable `sys.path`
+(in the system-standard `sys` package) contains a list of the directories to
+search.  Create a Python file `showpath.py` containing the following, and
+then run it with `python showpath.py`:
 
-1. Start another terminal, and go to the directory containing the `test` virtual environment contents.
-2. Run the `showpath.py` script - does it show the directories in the base environment or the virtual environment?
-3. Start a Python interpretter, and try `import click`.
-4.
-    a. If you didn't have `click` installed in the base environment, this will fail.
-    b. If you did have `click` installed in the base environment, this will be successful, but the click path will be different: `print(click.__path__)` to verify.
-5. Exit the Python interpreter, and deactivate the `test` environment in the other terminal.
+```python
+import sys
+
+for directory in sys.path:
+    print(directory)
+```
+
+If you are using the Anaconda distribution of Python and you run this script
+from your desktop, you will see a list that looks like this:
+
+```
+/Users/tpratchett/Desktop
+/Users/tpratchett/anaconda3/lib/python36.zip
+/Users/tpratchett/anaconda3/lib/python3.6
+/Users/tpratchett/anaconda3/lib/python3.6/lib-dynload
+/Users/tpratchett/anaconda3/lib/python3.6/site-packages
+/Users/tpratchett/anaconda3/lib/python3.6/site-packages/aeosa
+```
+
+the first will be your current directory - a Python environment
+always looks there first - and the rest are system paths for
+the Python installation you are using.
+
+To install a package, then means to copy the contents of the
+package in some form into one of the directories that Python
+will search from.
 
 ## How can I create an installable Python package? {#py-rse-package-py-package}
 
@@ -1390,18 +1242,6 @@ But first we have a few improvements to make to our setup.py so that
 our package webpage is useful and to make it easier for potential users
 to find, understand, and install our package.
 
-### Exercise: Clean up warning messages
-
--   FIXME: clean up warning messages from `python setup.py sdist`
-
-### Exercise License, longinfo, and classification metadata
-
--   FIXME: add additional metadata to setup.py
-
-### Exercise: Requirements in setup.py
-
--   FIXME: add requirements metadata to setup.py
-
 ## Announcing Work {#py-rse-package-py-announce}
 
 FIXME: <https://medium.com/indeed-engineering/marketing-for-data-science-a-7-step-go-to-market-plan-for-your-next-data-product-60c034c34d55>
@@ -1421,3 +1261,166 @@ if (knitr::is_latex_output()) {
 
 ```{r, child="keypoints/rse-package-py.md"}
 ```
+
+## Exercises
+
+### Exercises: Examining the virtual environment
+
+1. If you haven't already, create a `test` virtual environment and activate it.  Your prompt should now start with `(test)`.
+2. Run `pip list`. What packages are installed?
+3. Run the `showpath.py` script from the earlier section, and note that the paths are different from your
+base environment where you looked for packages.  They probably look like `/Users/pterry/envs/test/lib/python-3.7/site-packages`.
+4. Pick a package you know you have installed in your base environment—pick `pytest` if you can't think of one—and
+try to import it in a Python interpreter.  Can it be found?
+5. Deactivate the environment and try again.
+
+### Exercise: Hello, Zipf!
+
+Put a statement
+
+```python
+print("Hello, Zipf!")
+```
+at the end of `zipf.py`.
+
+1. What happens when you start Python interactively and import the
+module with the command `import zipf`?
+2. Python caches modules that have been imported.  What happens if you
+type `import zipf` again?
+
+### Exercise: What is `__name__` in different contexts?
+
+1. Start an interactive Python interpreter, and run `print(__name__)`.
+What do you get?
+2. Add the statement `print(__name__)` to the end of the file `zipf.py`
+and from the Python interpreter, run `import zipf`.  What is the name
+printed?
+
+### Exercise: Turn `use.py` into a unit test
+
+1. Turn the `use.py` script into a `pytest` unit test; name the file `test_zipf.py`.
+
+### Exercise: Create a package for our Zipf code.
+
+We're going to create a package for the code we've written
+for the Zipf distribution.  In the long and honourable(?)
+tradition of package names ending in "py", we'll call our
+package zipfpy.
+
+1. Create a `zipfpy` directory and move the file `zipf.py` into that directory.
+2. Create an empty file `zipfpy/__init__.py`.
+3. Modify the test suite so that it runs; functions will now be found in the [namespace][namespace] `zipfpy.zipf` rather than `zipf`.
+4. Run the test suite with `pytest`
+
+### Exercise: "Hello `__init__.py`"
+
+Repeat the "Hello, Zipf!" exercise by temporarily adding the
+line `print("Hello, Init!")` to the `__init__.py`.  Then
+from the directory containing the directory `zipfpy`, start
+a Python interpreter and run:
+
+```python
+import zipfpy
+```
+
+What happens?
+
+When you're done, remove the `print()` line from `__init__.py`.
+
+
+### Exercise: Factor out the package-wide constant `RELATIVE_ERROR`
+
+It's perfectly valid for an `__init__.py` file to be empty,
+but it is also a very useful place to put definitions that are
+common to the entire package.
+
+Here, both `generate` and `check` use the same default `RELATIVE_ERROR`;
+let's move that into `__init__.py`:
+
+1. Add the line `RELATIVE_ERROR = 0.05` to `__init__.py`;
+2. Now we can remove the line definining `RELATIVE_ERROR` from `check.py`
+and `generate.py`, but;
+3. We still need to import that definition somehow, or else those functions
+won't know what a `RELATIVE_ERROR` is; add the line `from . import RELATIVE_ERROR`
+to each so that it is visible.  When we don't specify a file, it imports the
+definition from `__init__.py` (just as `import zipfpy` will read the `__init__.py`)
+4. Run the test suite with `pytest`
+
+We haven't shortened the code any here—we've replaced a `RELATIVE_ERROR = 0.05`
+with an `from . import RELATIVE_ERROR`—but now the constant is defined in only
+one location so we don't have to worry about editing it in one location and that
+value being out of sync in the other.
+
+### Exercise: Importing from within __init__.py
+
+Since any code that does an `import zipf` will read `__init__.py`, it
+can be convenient to put import statments in `__init__.py` itself, to
+ensure that some key definitions are readily available when the package
+is imported.
+
+We'll try that here:
+
+1. Add the lines `from .generate import *` and `from .check import *` to
+`zipfpy/__init__.py`.
+2. In the test suite, you can now just call `import zipfpy` and refer to,
+_e.g._, `zipfpy.make_zipf(...)` instead of `zipfpy.generate_make_zipf(...)`.
+Make those changes
+3. Run the test suite with `pytest`
+
+Note that it doesn't make sense to import absolutely everything like we
+have here into the `zipfpy` namespace—it kind of defeats the purpose
+of having split up the files—but for a modest number of key definitions
+this can be very convenient for the package users.
+
+4. Undo the changes you made in 1. and 2., and make sure the test suite
+still runs.
+
+### Exercise: Clean up warning messages
+
+-   FIXME: clean up warning messages from `python setup.py sdist`
+
+### Exercise License, longinfo, and classification metadata
+
+-   FIXME: add additional metadata to setup.py
+
+### Exercise: Requirements in setup.py
+
+-   FIXME: add requirements metadata to setup.py
+
+
+### Exercise: Find a package in pip list
+
+The `pip list` command will generate a list of Python packages
+installed using pip in the current environment.  Here we'll find
+a package that we've recently installed.
+
+1.  Run `pip list`, and from the list pick something that you've
+installed recently; if you can't think of anything, choose `pytest`.
+2.  Run the `showpath.py` script to show the list of paths the package could be in.
+3.  Search the paths in 2. for files corresponding to the package you choose in 1.;
+`site-packages` is normally a good place to start looking.
+
+### Exercises: Installing a package into the virtual environment
+
+1. Re-activate the `test` virtual environment from above, and if necessary,
+re-run the `showpath.py` script.
+2. Let's install a simple package, `click`; it's a commonly used package for
+creating simple command-line tools, but for our purposes it's just a small
+self-contained package.  Run `pip install click`.
+3. Search in the directories output from `showpath.py` for a package named `click`;
+it will be a directory containing an `__init__.py`.
+4. Start a Python interpreter, and run `import click`; it is installed in the environment.
+5. From that same interpretter, run `print(click.path)`; that is the path to the click package.
+It should report the same directory that you found it in.
+6. Exit the Python interpretter
+
+Now let's just clarify that the environment is different than the directory you
+installed the virtual environment contents in:
+
+1. Start another terminal, and go to the directory containing the `test` virtual environment contents.
+2. Run the `showpath.py` script - does it show the directories in the base environment or the virtual environment?
+3. Start a Python interpretter, and try `import click`.
+4.
+    a. If you didn't have `click` installed in the base environment, this will fail.
+    b. If you did have `click` installed in the base environment, this will be successful, but the click path will be different: `print(click.__path__)` to verify.
+5. Exit the Python interpreter, and deactivate the `test` environment in the other terminal.
