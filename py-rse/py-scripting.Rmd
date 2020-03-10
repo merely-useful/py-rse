@@ -71,10 +71,12 @@ so let's create a short Python script called `script_template.py`:
 """One-line description of what the script does."""
 import argparse
 
+
 def main(args):
     """Run the program."""
     print('Input file:', args.infile)
     print('Output file:', args.outfile)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -162,6 +164,7 @@ from the `collections` library to tally up the occurrences of each word.
 import re
 from collections import Counter
 
+
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
@@ -190,6 +193,7 @@ and then writes it out to [standard output][standard output] in csv format:
 
 ```python
 import csv
+
 
 def collection_to_csv(collection, ntop=None):
     """Write out a collection of items and counts in csv format."""
@@ -224,12 +228,13 @@ we basically just need to insert them into the script template developed earlier
 Let's call the script `countwords.py`:
 
 ```python
-"""Count the occurences of all words in a text and write them to a CSV-file."""
+"""Count the occurrences of all words in a text and write them to a CSV-file."""
 import sys
 import re
 import argparse
 import csv
 from collections import Counter
+
 
 def collection_to_csv(collection, ntop=None):
     """Write out a collection of items and counts in csv format."""
@@ -237,7 +242,8 @@ def collection_to_csv(collection, ntop=None):
     limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
     writer.writerows(collection[0:limit])
-        
+
+
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
@@ -246,11 +252,13 @@ def count_words(reader):
     word_counts = Counter(word_list)
     return word_counts
 
+
 def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
     collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -372,6 +380,7 @@ import csv
 import argparse
 from collections import Counter
 
+
 def collection_to_csv(collection, ntop=None):
     """Write out a collection of items and counts in csv format."""
     collection = collection.most_common()
@@ -379,10 +388,12 @@ def collection_to_csv(collection, ntop=None):
     writer = csv.writer(sys.stdout)
     writer.writerows(collection[0:limit])
 
+
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
+
 
 def main(args):
     """Run the command line program."""
@@ -391,6 +402,7 @@ def main(args):
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
     collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
