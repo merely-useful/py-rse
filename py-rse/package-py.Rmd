@@ -252,116 +252,15 @@ using virtual environment names that match the names of your projects
 (and branches, if you're testing different environments on different branches)
 quickly becomes essential.
 
+### How can I install my package? {#py-rse-package-py-install}
 
-## What does it mean to install a Python package? {#py-rse-package-py-install}
-
-By the end of this chapter, you'll have made and published a Python
-package that anyone with an internet connection can install.  You've
-certainly installed Python packages before, such as with `pip install`;
-the `pip` tool is the most common way to install Python packages.
-The command <code>pip install <em>package</em></code>
-checks to see if the package is already installed (or needs to be upgraded);
-if so,
-it downloads the package from [PyPI][pypi] (the Python Package Index),
-unpacks it,
-and installs it.
-
-But what does it mean to install a Python package?
-
-You've seen that when you have a Python module or package in the current
-directory named, say, `zipfpy`, Python will successfully find that module
-and directory when it runs `import zipfpy`.  But clearly having all of the
-Python standard library, all installed packages, and our own code in the
-same directory gets unwieldly quickly - especially if we want to run our
-routines from a directory full of data!
-
-Just as the `PATH` environment in the shell contains a list of directories that
-the shell searches for programs it can execute, in Python a variable `sys.path`
-(in the system-standard `sys` package) contains a list of the directories to
-search.  Create a Python file `showpath.py` containing the following, and
-then run it with `python showpath.py`:
-
-```python
-import sys
-
-for directory in sys.path:
-    print(directory)
-```
-
-If you are using the Anaconda distribution of Python and you run this script
-from your desktop, you will see a list that looks like this:
-
-```
-/Users/tpratchett/Desktop
-/Users/tpratchett/anaconda3/lib/python36.zip
-/Users/tpratchett/anaconda3/lib/python3.6
-/Users/tpratchett/anaconda3/lib/python3.6/lib-dynload
-/Users/tpratchett/anaconda3/lib/python3.6/site-packages
-/Users/tpratchett/anaconda3/lib/python3.6/site-packages/aeosa
-```
-
-the first will be your current directory - a Python environment
-always looks there first - and the rest are system paths for
-the Python installation you are using.
-
-To install a package, then means to copy the contents of the
-package in some form into one of the directories that Python
-will search from.
-
-## How can I create an installable Python package? {#py-rse-package-py-package}
-
-People can always get your package by cloning your repository and copying files from that
-(assuming your repository is accessible,
-which is should be for published research),
-but it's much friendlier to create something they can install
-(and it will be easier for us when it comes to running test suites
-and distributing, too!)
-
-For historical reasons,
-Python has several ways to build an installable package.
-We will show how to use [setuptools][setuptools],
-which is the lowest common denominator;
-[conda][conda] is a modern does-everything solution,
-but the setuptools approach we describe below will
-allow everyone, regardless of what python distribution
-they use, to easily use your package.
-
-To use `setuptools`,
-we must create a file called `setup.py` in the directory *above* the root directory of the package:
-
-```text
-+- setup.py
-+- test_zipfpy.py
-+- zipfpy
-    +- __init__.py
-    +- check.py
-    +- generate.py
-```
-
-The file `setup.py` must have exactly that name,
-and must contain these lines:
-
-```python
-from setuptools import setup
-
-setup(
-    name='zipfpy',
-    version='0.1',
-    author='Greg Wilson',
-    packages=['zipfpy']
-)
-```
-
-This is enough to be able to install the package from the
-local copy source code using standard tools!
-
-Let's create a virtual environment to test the installation:
+Let's proceed to install our package inside this virtual environment
 
 ```text
 $ virtualenv ~/envs/test_zipfpy
 ...
 $ source ~/envs/test_zipfpy/bin/activate
-(test_zipfpy) $ pip install .
+$ pip install .
 Processing /Users/pterry/zipfpy/
 Building wheels for collected packages: zipfpy
   Building wheel for zipfpy (setup.py) ... done
@@ -490,6 +389,61 @@ test_zipf.py ...                                                                
 ```
 
 Success!
+
+## What does it mean to install a Python package? {#py-rse-package-py-install}
+
+We have made made and published a Python
+package that anyone with an internet connection can install.  You've
+certainly installed Python packages before, such as with `pip install`;
+the `pip` tool is the most common way to install Python packages.
+The command <code>pip install <em>package</em></code>
+checks to see if the package is already installed (or needs to be upgraded);
+if so,
+it downloads the package from [PyPI][pypi] (the Python Package Index),
+unpacks it,
+and installs it.
+
+But what does it mean to install a Python package?
+
+You've seen that when you have a Python module or package in the current
+directory named, say, `zipfpy`, Python will successfully find that module
+and directory when it runs `import zipfpy`.  But clearly having all of the
+Python standard library, all installed packages, and our own code in the
+same directory gets unwieldly quickly - especially if we want to run our
+routines from a directory full of data!
+
+Just as the `PATH` environment in the shell contains a list of directories that
+the shell searches for programs it can execute, in Python a variable `sys.path`
+(in the system-standard `sys` package) contains a list of the directories to
+search.  Create a Python file `showpath.py` containing the following, and
+then run it with `python showpath.py`:
+
+```python
+import sys
+
+for directory in sys.path:
+    print(directory)
+```
+
+If you are using the Anaconda distribution of Python and you run this script
+from your desktop, you will see a list that looks like this:
+
+```
+/Users/tpratchett/Desktop
+/Users/tpratchett/anaconda3/lib/python36.zip
+/Users/tpratchett/anaconda3/lib/python3.6
+/Users/tpratchett/anaconda3/lib/python3.6/lib-dynload
+/Users/tpratchett/anaconda3/lib/python3.6/site-packages
+/Users/tpratchett/anaconda3/lib/python3.6/site-packages/aeosa
+```
+
+the first will be your current directory - a Python environment
+always looks there first - and the rest are system paths for
+the Python installation you are using.
+
+To install a package, then means to copy the contents of the
+package in some form into one of the directories that Python
+will search from.
 
 ## How can I distribute command-line scripts in my Python package? {#py-rse-package-py-distrib-scripts}
 
