@@ -2,13 +2,14 @@
 import argparse
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy.optimize import minimize_scalar
+
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
     likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
     return likelihood
+
 
 def get_power_law_params(word_counts):
     """
@@ -31,6 +32,7 @@ def get_power_law_params(word_counts):
     alpha = 1 / (beta - 1)
     return alpha, beta
 
+
 def set_plot_params(param_file):
     """Set the matplotlib rc parameters."""
     if param_file:
@@ -40,6 +42,7 @@ def set_plot_params(param_file):
         param_dict = {}
     for param, value in param_dict.items():
         mpl.rcParams[param] = value
+
 
 def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
     """
@@ -61,6 +64,7 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
     xvals = np.arange(curve_xmin, curve_xmax)
     yvals = max_rank * (xvals**(-beta + 1))
     ax.loglog(xvals, yvals, color='grey')
+
 
 def main(args):
     """Run the command line program."""
