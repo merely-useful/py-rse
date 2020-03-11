@@ -32,50 +32,7 @@ the statements in it are executed as it loads.
 Variables, functions, and items defined in the file are
 then available as `module.name`, where `module` is the
 filename (without the `.py` extension) and `name` is the
-name of the item.
-
-As an example,
-we can put a constant and two functions used in our Zipf's Law study in a file called `zipf.py`:
-
-```python
-from pytest import approx
-
-RELATIVE_ERROR = 0.05
-
-def make_zipf(length):
-    assert length > 0, 'Zipf distribution must have at least one element'
-    result = [1/(1 + i) for i in range(length)]
-    return result
-
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-```
-
-and then use `import zipf`,
-`from zipf import is_zipf`,
-and so on:
-
-```python
-from zipf import make_zipf, is_zipf
-
-generated = make_zipf(5)
-print('generated distribution: {}'.format(generated))
-generated[-1] *= 2
-print('passes test with default tolerance: {}'.format(is_zipf(generated)))
-print('passes test with tolerance of 1.0: {}'.format(is_zipf(generated, rel=1.0)))
-```
-
-Running this program produces the following output:
-
-```text
-generated distribution: [1.0, 0.5, 0.3333333333333333, 0.25, 0.2]
-passes test with default tolerance: False
-passes test with tolerance of 1.0: True
-```
+name of the item. 
 
 It also creates a subdirectory called `__pycache__`
 that holds the compiled versions of the imported files.
@@ -90,205 +47,24 @@ version control (it can be convenient, but then you have to have processes
 in place to make sure that they stay in sync) so we normally add the
 `__pycache__` directory to in `.gitignore`.
 
-## How can I control what is executed during import and what isn't? {#py-rse-package-py-import}
-
-Sometimes it's handy to be able to import code and also run it as a program.
-For example,
-we may have a file full of useful functions for extracting keywords from text
-that we want to be able to use in other programs,
-but also want to be able to run `keywords somefile.txt` to get a listing.
-
-To help us do this,
-Python automatically creates a variable called `__name__` in each module.
-If the module is the main program,
-(e.g. when the script is run from the command line)
-that variable is assigned the string `'__main__'`.
-Otherwise (e.g. when the module is imported into a script), it is assigned the module's name.
-Using this leads to modules like this:
-
-```python
-import sys
-from pytest import approx
-
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-RELATIVE_ERROR = 0.05
-
-def make_zipf(length):
-    ...as before...
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    ...as before...
-
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
-```
-
-Here,
-the code guarded by `if __name__ == '__main__'` isn't executed when the file loaded by something else.
-We can test this by re-running `use.py` as before:
-the usage message doesn't appear,
-which means the main block wasn't executed,
-which is what we want.
-
 ## How do I create a package? {#py-rse-package-py-creating}
 
-Let's say we wanted to add some capabilities to what
-we've built: we want to be able to generate noisy
-Zipf distributions—noise within the same default `RELATIVE_ERROR`—and
-we want to add a Zipf-checker that can handle unsorted inputs:
-
-```python
-...as before...
-
-def make_zipf(length):
-    assert length > 0, 'Zipf distribution must have at least one element'
-    result = [1/(1 + i) for i in range(length)]
-    return result
-
-def make_noisy_zipf(length, rel=RELATIVE_ERROR):
-    data = make_zipf(length)
-    minnoise = 1.0 - rel/2
-    maxnoise = 1.0 + rel/2
-    for i in range(length):
-        data[i] = data[i] * random_uniform(minnoise, maxnoise)
-    return data
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-
-def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
-    sortedhist = sorted(hist)
-    return is_zipf(unsorted, rel)
-
-...as before...
-```
-
-As our package grows,
-we should split its source code into multiple files,
-and this is now starting to look like two broad types of
-related functionality: generating a Zipf distribution, and
-checking against a Zipf distribution.  But they are related;
-and what's more, there are constants that would be common
-across the two pieces - the `RELATIVE_ERROR` constant.
-
-If we want multiple files, but they are related and
+If we want multiple files, but they are related
 and have some common items, that's a good indication that
 we are outgrowing a single-file module and we want a Python
 package.
 
 A package in Python is no more than a directory containing
 Python code, and by convention a Python file with a special
-name, `__init__.py` (this was a requirement before Python 3.3).
+name: `__init__.py` (this was a requirement before Python 3.3).
 Just as importing a module file executes the code in the module,
 importing a package executes the code in `__init__.py`.
-
-## Referring to modules within the same package: multiple files
-
-With that done, we're going to start splitting our module up into smaller components,
-which will each be part of the package.  We'll split our routines up into functions that
-generate Zipf-distributed data and those that test for Zipf-y-ness.  So we'll
-have a `zipf/generate.py`
-
-```python
-from random import uniform
-
-RELATIVE_ERROR = 0.05
-
-def make_zipf(length):
-    ...
-
-
-def make_noisy_zipf(length, rel=RELATIVE_ERROR):
-    ...
-```
-
-and a `zipf/check.py`.  Now here we have another
-change to make; the the `is_zipf` function refers
-to the `generate` routine, which is in another file,
-but within the same module.
-
-In this case of within-package imports, we have to use [`relative imports`][relative-import] to
-refer to other files within the module; this is
-a little bit like using relative paths vs absolute
-paths in the shell, right down to `.` referring
-to the current directory.  We could use:
-
-```python
-from . import generate
-
-...
-x = generate.make_zipf(...)
-```
-
-or
-
-```python
-from .generate import make_zipf
-
-...
-x = make_zipf(...)
-```
-
-either would work.  Let's use the second to write `zipf/check.py`:
-
-```python
-import sys
-from pytest import approx
-from .generate import make_zipf
-
-
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-RELATIVE_ERROR = 0.05
-
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-
-
-def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
-    ...
-
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
-```
-
-Now we just need to update our tests; outside of the package,
-we refer to `zipfpy.generate` and `zipfpy.check` as we did
-before with `zipfpy.zipf`:
-
-```python
-import zipfpy.generate
-import zipfpy.check
-
-def test_default_tolerance(length=5):
-    generated = zipf.generate.make_zipf(length)
-    assert zipf.check.is_zipf(generated)
-
-...
-```
 
 ## How can I have only the packages my projects need? {#py-rse-package-py-virtualenv}
 
 It can be convenient to have several different Python environments that
-you can switch between.  One reason is that you're probably working on
+you can switch between.
+One reason is that you're probably working on
 multiple projects at any given time, each with different requirements
 for Python packages, and you want to keep them straight.
 
