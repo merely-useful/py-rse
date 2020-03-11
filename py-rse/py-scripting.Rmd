@@ -299,7 +299,7 @@ and call the functions from within the `main` function.
 Let's call the script `countwords.py`:
 
 ```python
-"""Count the occurrences of all words in a text and write them to a CSV-file."""
+"""Count the occurrences of all words in a text and output them in CSV format."""
 import sys
 import re
 import argparse
@@ -536,7 +536,7 @@ import csv
 def collection_to_csv(collection, ntop=None):
     """
     Write out a collection of items and counts in csv format.
-    
+
     Parameters
     ----------
     collection : collections.Counter
@@ -548,21 +548,24 @@ def collection_to_csv(collection, ntop=None):
     limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
     writer.writerows(collection[0:limit])
-``` 
+```
 
 (You'll see we've also taken the time to improve the docstring for `collection_to_csv`.)
 
 We can now import that function into our scripts,
 rather than having to define it anew every time.
+We either import the entire module with `import mymodule`
+or just the function of interest with `from mymodule import collection_to_csv`.
 Here's our new `countwords.py` script,
 
 ```python
-"""Count the occurences of all words in a text and write them to a CSV-file."""
+"""Count the occurrences of all words in a text and write them to a CSV-file."""
 import sys
 import re
 import argparse
 from collections import Counter
 import mymodule
+
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
@@ -572,11 +575,13 @@ def count_words(reader):
     word_counts = Counter(word_list)
     return word_counts
 
+
 def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -588,7 +593,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-and here's `collate.py`:
+and here's the updated `collate.py`:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
@@ -598,10 +603,12 @@ import argparse
 from collections import Counter
 import mymodule
 
+
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
+
 
 def main(args):
     """Run the command line program."""
@@ -610,6 +617,7 @@ def main(args):
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -630,17 +638,18 @@ the third most common appears a third as often, and so on.
 Mathematically, this might be written as
 "word frequency is proportional to 1/rank."
 
-The following code plots the word frequency against the inverse rank 
+The following code plots the word frequency against the inverse rank
 using the popular pandas library:
 
 ```python
 import pandas
 import matplotlib.pyplot as plt
 
+
 input_csv = '../results/emma.csv'
 df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
 df['rank'] = df['word_frequency'].rank(ascending=False)
-df['inverse_rank'] = 1 / df['rank'] 
+df['inverse_rank'] = 1 / df['rank']
 df.plot.scatter(x='word_frequency', y='inverse_rank',
                 figsize=[12, 6], grid=True)
 plt.show()
