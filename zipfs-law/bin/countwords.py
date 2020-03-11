@@ -1,9 +1,9 @@
-"""Count the occurences of all words in a text and write them to a CSV-file."""
-import sys
+"""Count the occurrences of all words in a text and output them in CSV format."""
 import re
 import argparse
 from collections import Counter
 import mymodule
+
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
@@ -13,11 +13,13 @@ def count_words(reader):
     word_counts = Counter(word_list)
     return word_counts
 
+
 def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
