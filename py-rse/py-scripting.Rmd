@@ -18,41 +18,79 @@ but that scaffolding stays more or less the same as programs get larger.
 
 ## How can I tell if my code is a program or a module? {#py-rse-py-scripting-main}
 
-If we are going to run a Python program from the command line,
-the first thing we should do is add this to the bottom of the file.
+If we are going to create a Python program that can run from the command line,
+the first thing we should do is to add the following to the bottom of the file.
 
 ```python
 if __name__ == '__main__':
-    main()
 ```
 
-These two lines of code differentiate between
+This line differentiates between
 running a Python file as a standalone program
 and importing it as a module.
 When we import a Python file as a module in another program,
 the `__name__` variable is automatically set to the name of the file.
-For example,
-if we run,
-
-```python
-import utilities
-```
-
-then for the code inside `utilities.py`,
-`__name__` is `utilities`.
 When we run a Python file as a standalone program,
 on the other hand,
 `__name__` is always set to the special string `"__main__"`.
+To illustrate this,
+let's create the file `print_name.py`
+that prints the value of the `__name__` variable:
+
+```python
+print(__name__)
+```
+
+When we run this file directly,
+it will print `__main__`:
+
+```shell
+$ python print_name.py
+```
+
+But if we import `print_name.py` from another file
+or from the Python interpreter,
+it will print the name of the file,
+i.e. `print_name`.
+
+```shell
+$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import print_name
+print_name
+```
+
 This means that we can separate the two cases above
 by checking the value of the variable `__name__`.
 If that tells us that the file is running as a standalone program,
 we can then handle command-line options, print help, or whatever else is appropriate.
-Conventionally,
-we define this functionality inside a function called `main`,
-but we can call it whatever we want.
-(We can also put this code directly under the `if` statement,
+We could put the main program code directly under the `if` statement,
 but that's generally considered bad practice,
-since it makes testing harder.)
+since it makes testing harder.
+Instead,
+we define this functionality inside a function conventionally called `main`,
+but we can call it whatever we want.
+So instead of writing out code like this:
+
+```python
+if __name__ == "__main__":
+    # code goes here
+```
+
+We write it like this
+
+```python
+def main():
+    # code goes here
+
+
+if __name__ == "__main__":
+    main()
+```
+
+
 
 ## How can I handle command-line options? {#py-rse-py-scripting-options}
 
