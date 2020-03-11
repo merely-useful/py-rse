@@ -427,69 +427,12 @@ will search from.
 Our package now works and can be installed in Python environments.
 
 One downside of our packaging is that we've now buried the useful command-line
-script that is now currently sits in `zipfpy/check.py`; we used to be able to
-run that script as `python zipf.py 100 50 33` to test if a set of counts approximately
-matched a zipf distribution:
-
-```python
-import sys
-...
-
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-
-...
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
-```
-
-The `setuptools` package allows us to install not only the Python
+scripts that we used to count and plot word counts,
+so that we can no longer access them from the terminal directly.
+Fortunately,
+the `setuptools` package allows us to install not only the Python
 package itself, but also associated scripts that it places with
-other executable files.  So let's split that command line utility
-out into its own tool, `bin/check_zipf.py`:
-
-```python
-#!/usr/bin/env python
-import sys
-import zipfpy.check
-
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = zipfpy.check.is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
-```
-
-That means that the `zipfpy/check.py` file now contains only
-the routines `is_zipf()` and `is_unsorted_zipf()`:
-
-```python
-from pytest import approx
-from .generate import make_zipf
-from . import RELATIVE_ERROR
-
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-
-
-def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
-    sortedhist = sorted(hist)
-    return is_zipf(sortedhist)
-```
+other executable files.
 
 Now we make sure that setuptools knows about this script and
 will install it:
