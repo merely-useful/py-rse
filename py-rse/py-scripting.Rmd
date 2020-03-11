@@ -294,7 +294,8 @@ was,1870
 ```
 
 To make our `count_words` and `collection_to_csv` functions available at the command line,
-we basically just need to insert them into the script template developed earlier.
+we need to insert them into the script template developed earlier
+and call the functions from within the `main` function.
 Let's call the script `countwords.py`:
 
 ```python
@@ -340,18 +341,18 @@ if __name__ == '__main__':
     main(args)
 ```
 
-The [argparse][argparse] library comes with many different options
-for defining the characteristics of command line arguments.
-For the `infile` option defined above,
-the number of expected arguments (`nargs`) is set to `?`.
-This means that one argument (i.e. a file name)
-will be consumed from the command line if possible.
-The program will read that file
-just like the `open('../data/dracula.txt', 'r')`
-command we saw earlier,
-because the input `type` has been set to `argparse.FileType('r')`.
-The script also defines an optional `-n` (or `--ntop`) flag
-(`-` or `--` denotes an optional argument)
+In addition to pasting the two new functions and updating our `main` function,
+we have changed the argparse options for the `'infile'` arguments.
+Setting `type=argparse.FileType('r')`
+instructs argparse to read a file and pass on its contents as a file object
+(just like `open`),
+instead of just passing the file path as a string.
+This is why we no longer need to use `open` inside the main function.
+Together with `nargs='?'`,
+this will allow us to effectively use our script in a pipeline,
+as we will see later.
+
+We have also replaced the `'outfile'` argument with an optional `-n` (or `--ntop`) flag
 to limit the output so that it's easier to view in our terminal window.
 Let's see this in action:
 
@@ -372,10 +373,14 @@ he,1996
 was,1870
 ```
 
+For the `infile` option,
+the number of expected arguments (`nargs`) is set to `?`.
+This means that one argument (i.e. a file name)
+will be consumed from the command line *if possible*.
 If we don't provide a file name,
 `nargs='?'` dictates that the `default` value of `-` will be used.
-The `argparse.FileType('r')` argument type understands the pseudo-argument '-' and
-automatically converts it into standard input (`sys.stdin`).
+The `argparse.FileType('r')` argument type understands the pseudo-argument '-'
+to mean standard input and reads from `sys.stdin`.
 This means the script can participate in a pipeline like
 many of the other command line programs we've met.
 For instance,
@@ -399,7 +404,8 @@ it,40
 ```
 
 Ultimately,
-we want to save the word counts to a CSV file for further analysis and plotting:
+we want to save the word counts to a CSV file for further analysis and plotting,
+which we can do via redirection using `>`:
 
 ```shell
 $ mkdir ../results
@@ -433,8 +439,8 @@ $ python countwords.py ../data/jane_eyre.txt > ../results/jane_eyre_words.csv
 > The user can provide optional arguments at the command line in any order they like.
 >
 > *Positional arguments* have no leading dashes and are not optional - the user
-> must provide them at the command line in the order in which they are defined.
-> (The exception being if `nargs='?'`, which we saw earlier.)  
+> must provide them at the command line in the order in which they are defined
+> (the exception being if `nargs='?'`, which we saw earlier).
 
 ### Collating results
 
