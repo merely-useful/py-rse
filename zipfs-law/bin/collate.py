@@ -14,8 +14,8 @@ def update_counts(reader, word_counts):
 def main(args):
     """Run the command line program."""
     word_counts = Counter()
-    for fn in args.infiles:
-        with open(fn, 'r') as reader:
+    for file_name in args.infiles:
+        with open(file_name, 'r') as reader:
             update_counts(reader, word_counts)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
 
