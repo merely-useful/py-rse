@@ -480,38 +480,40 @@ without editing the program's source code.
 We would probably wind up with code like this:
 
 ```python
-DEBUG_LEVEL = 2 # or some other number
+LOG_LEVEL = 2  # Or some other number
 
 def complex_function():
     # ...lots of complicated code...
-    if (DEBUG_LEVEL > 0):
+    if (LOG_LEVEL > 0):
         print('Everything seems to be going well')
     # ...more complicated code...
-    if (DEBUG_LEVEL > 1):
+    if (LOG_LEVEL > 1):
         print('Current alpha value {}'.format(alpha))
 ```
 
 Here,
-`DEBUG_LEVEL` acts as a threshold:
+`LOG_LEVEL` acts as a threshold:
 any debugging output at a lower level isn't printed.
 
 Logging frameworks combine the `if` and the `print` statements,
-and define standard names for the levels.
-In order of increasing severity, the levels are:
+and define standard names for the logging levels.
+In order of decreasing severity, the levels are:
 
--   `DEBUG`: very detailed information used for localizing errors.
--   `INFO`: confirmation that things are working as expected.
--   `WARNING`: something unexpected happened, but the program will keep going.
--   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
 -   `CRITICAL`: potential loss of data, security breach, etc.
+-   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
+-   `WARNING`: something unexpected happened, but the program will keep going.
+-   `INFO`: confirmation that things are working as expected.
+-   `DEBUG`: very detailed information used for localizing errors.
 
 Each of these has a corresponding function:
 we can use `logging.debug`, `logging.info`, etc. to write messages at these levels.
 By default,
 only `WARNING` and above are displayed;
-messages appear on [standard error][standard-error] so that the flow of data in pipes isn't affected.
+messages appear on [standard error][standard-error]
+so that the flow of data in pipes isn't affected.
 The source of the message appears as well:
-by default, the source is called "root" for reasons that will become clear later.
+by default,
+the source is called "root" for reasons that will become clear later.
 Thus,
 if we run the small program shown below,
 only the warning message appears:
@@ -529,15 +531,16 @@ WARNING:root:This is a warning.
 
 We can configure logging to send messages to a file instead of to standard error
 using `logging.basicConfig`.
-(This has to be done before we make any logging calls:
-it's not retroactive.)
+This has to be done before we make any logging calls,
+it's not retroactive.
 We can use the same function to set the logging level:
 everything at or above the specified level is displayed.
 
 ```python
 import logging
 
-logging.basicConfig(level=logging.DEBUG, filename='everything.log')
+
+logging.basicConfig(level=logging.DEBUG, filename='logging.log')
 
 logging.debug('This is for debugging.')
 logging.info('This is just for information.')
@@ -569,21 +572,36 @@ There may also be a corresponding flag `-q` or `--quiet` that changes the level 
 and a flag `-l` or `--logfile` that specifies a log file name
 (with standard error being the default for message output).
 
-> **`tail -f`**
->
-> A handy trick during development is to configure logging to send messages to a file,
-> and then open another terminal window and run <code>tail -f <em>filename</em></code>
-> to display changes to that file as information is appended.
-> Doing this gives you a record of the log output
-> while allowing you to monitor your program's progress interactively.
+The default configuration in the logging modules uses a single handler,
+by default one that prints the logging messages,
+and if we specify a filename it switches to one that writes the messages to file.
+To log messages to a file while also printing them,
+you can specify to use two handlers simultaneously in the logging configuration:
+
+```python
+import logging
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    handlers=[
+        logging.FileHandler("logging.log"),
+        logging.StreamHandler()])
+
+logging.debug('This is for debugging.')
+```
+
+The string `'This is for debugging'` message is both printed to stderr
+and appended to `logging.log`.
 
 Libraries like `logging` can send messages to many destinations:
-[rotating files][rotating-file] so that the system always has messages from the last few hours
-but doesn't fill up the disk,
-for example,
-or a centralized logging server of some kind that collates logs from many different systems.
+e.g. a centralized logging server that collates logs from many different systems.
+Another good practice is [rotating files][rotating-file]
+so that the system always has messages from the last few hours
+but doesn't fill up the disk.
 We don't need any of these when we start,
-but the data engineers and system administrators who eventually have to install and maintain your programs
+but the data engineers and system administrators
+who eventually have to install and maintain your programs
 will be very grateful that you used `logging`,
 because then they can set it up the way they want with very little work.
 
