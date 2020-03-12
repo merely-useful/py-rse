@@ -162,78 +162,125 @@ to catch and report all errors.
 
 ## What exceptions should I raise and catch? {#py-rse-errors-where}
 
-Broadly speaking there are two approaches to error handling:
-"look before your leap"
-and
-"it's easier to ask for forgiveness than permission".
-When using the first,
-we check if an operation will be allowed before trying it:
+Now that we have learned about error handling,
+we can go ahead and add it to our zipf's law code.
+First,
+you will notice that there is already some error handling built in,
+e.g. if you try to read a file that does not exist,
+the error handling inside the `open` function throws a `FileNotFoundError`:
 
-```python
-LOG_DIR = "/tmp/mylogdir"
-
-def write_message(filename, message):
-    if os.path.isdir(LOG_DIR):
-        path = os.path.join(LOG_DIR, filename)
-        with open(path, 'a') as writer:
-            writer.write(message)
-    else:
-        print('No log directory {}'.format(LOG_DIR), file=sys.stderr)
+```shell
+python bin/collate.py results/no-file
 ```
 
-With the second,
-we try the operation and catch the exception if one is raised:
+```text
+Traceback (most recent call last):
+  File "bin/collate.py", line 27, in <module>
+    main(args)
+  File "bin/collate.py", line 17, in main
+    with open(file_name, 'r') as reader:
+FileNotFoundError: [Errno 2] No such file or directory: 'results/none.csv'
+```
+
+But what happens if we are trying to read an file that exists,
+but was not created by `countwords.py`?
+
+
+```shell
+$ python bin/collate.py Makefile
+```
+
+```text
+Traceback (most recent call last):
+  File "bin/collate.py", line 27, in <module>
+    main(args)
+  File "bin/collate.py", line 18, in main
+    update_counts(reader, word_counts)
+  File "bin/collate.py", line 10, in update_counts
+    for word, count in csv.reader(reader):
+ValueError: not enough values to unpack (expected 2, got 1)
+```
+
+This error is not that easy to understand.
+It would be useful if our programmed check that the input files were CSV-files,
+and if not,
+raised an error with a useful explanation to what went wrong.
+We could achieve this by wrapping the open statement in a `try/except` clause:
 
 ```python
-LOG_DIR = "/tmp/mylogdir"
-
-def write_message(filename, message):
+for file_name in args.infiles:
     try:
-        path = os.path.join(LOG_DIR, filename)
-        with open(path, 'a') as writer:
-            writer.write(message)
-    except OSError as error:
-        print('Unable to write log message to {}: {}'.format(path, error))
-```{: title="logging/ask_permission_not_forgiveness.py"}
-
-The first approach doesn't actually need exception handlers,
-except it does:
-programmers can never anticipate all of the things that can go wrong in the real world,
-so there should always be an `except` somewhere.
-Since that's the case,
-most programmers prefer the second approach.
-
-When we are raising exceptions ourselves,
-we should make the information as specific as possible.
-For example,
-suppose a program contains this:
-
-```python
-if (val is not None) and (min_val < val < max_val) and (val % 2 == 0) and (val >= prev_val):
-    # OK branch
-else:
-    raise ValueError('Bad value: {}'.format(val))
+        with open(file_name, 'r') as reader:
+            update_counts(reader, word_counts)
+    except ValueError as e:
+        print(f'{file_name} is not a CSV-file.')
+        print(f'ValueError: {e}')
 ```
 
-Knowing what value caused the error is helpful,
-but the message in the exception doesn't tell us why it was bad.
-Was it not between `min_val` and `max_val`?
-Was it less than `prev_val`?
-Whoever has to debug the problem will want to know,
-but breaking the test up into cases makes the code harder to read:
+```shell
+$ python bin/collate.py Makefile
+```
+
+```text
+Makefile is not a CSV-file.
+ValueError: not enough values to unpack (expected 2, got 1)
+```
+
+This is definitely more informative than before!
+However,
+an issue with this approach is that all `ValueErrors`
+that are raised when trying to open a file
+will result in this error message,
+including those potentially raised when actually using a CSV-file as input.
+
+A more precise approach in this case would be to throw an exception specifically
+if a file other than a CSV-file is passed as input:
 
 ```python
-if val is None:
-    raise ValueError('Value {} is None'.format(val))
-elif (val <= min_val) or (max_val <= val):
-    raise ValueError('Value {} is out of range ({}, {})'.format(val, min_val, max_val))
-elif val % 2 != 0:
-    raise ValueError('Value {} is odd'.format(val))
-elif val < prev_val:
-    raise ValueError('Value {} is not less than previous value {}'.format(val, prev_val))
-else:
-    # OK branch
+for file_name in args.infiles:
+    if file_name[-4:] != '.csv':
+        raise OSError(f'{file_name} is not a CSV-file.')
+    with open(file_name, 'r') as reader:
+        update_counts(reader, word_counts)
 ```
+
+```shell
+$ python bin/collate.py Makefile                                                                          1 ↵
+```
+
+```text
+Traceback (most recent call last):
+  File "bin/collate.py", line 29, in <module>
+    main(args)
+  File "bin/collate.py", line 18, in main
+    raise OSError(f'{file_name} is not a valid CSV-file of word counts.')
+OSError: Makefile is not a CSV-file.
+```
+
+Note that this is not perfect,
+ideally we should check the content of the file
+and confirm that the format is that of the output files from `countwords.py`,
+instead of relying on the file extension.
+This could involve checking that there are two columns separated by a comma,
+that the first column contains strings,
+and that the second is numerical.
+But for the purpose of demonstration,
+our sample code above works fine.
+
+The `if/raise` approach is commonly referred to as "look before your leap",
+while the `try/except` approach above is called
+"it's easier to ask for forgiveness than permission".
+
+The first approach is more precise,
+but has the shortcoming that programmers never can anticipate all of the things
+that can go wrong when running a program,
+so there should always be an `except` somewhere
+to deal with unexpected cases.
+In our code,
+this is often dealt with in an informative way
+by the exceptions in the built-in Python functions,
+such as that which was displayed by open
+when we tried reading non-existing file.
 
 Generally speaking,
 we should distinguish between [internal errors][internal-error],
