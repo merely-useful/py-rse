@@ -447,6 +447,9 @@
 **HTTP status code**<a id="http-status-code"></a>
 :   FIXME
 
+**Heaps' Law**<a id="heaps-law"></a>
+: An empirical law in linguistics that suggests the number of distinct words in a document can be modeled as a power law function of the document length.
+
 **Hitchhiker**<a id="hitchhiker"></a>
 :   FIXME
 
