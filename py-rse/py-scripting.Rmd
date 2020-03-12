@@ -449,6 +449,8 @@ $ python countwords.py ../data/jane_eyre.txt > ../results/jane_eyre.csv
 
 Now that we've got word counts for a number of books,
 we may want to collate the word counts.
+This can be done using a loop that adds up the counts of a word
+from the each of the csv-files created from `countwords.py`.
 Using the same template as before,
 we can write the following script called `collate.py`:
 
@@ -492,8 +494,20 @@ if __name__ == '__main__':
     main(args)
 ```
 
-It will take an arbitrary number of input files generated using `countwords.py`
-and collate the word counts:
+The loop in the `main` function iterates over each filename in `infiles`,
+opens the CSV-file,
+and runs the `update_counts` function with the file object as one of the parameters.
+This function iterates through all the words in each of the CSV-files
+and adds up the counts with the `+=` operator.
+
+You will notice that we have not used `type=argparse.FileType('r')` here.
+This is to show how the syntax would look when we use filenames with `open` instead,
+and because we are not interested in passing standard input directly to the `collate.py` script.
+Passing the filename rather than its content
+is also useful when you are intending to e.g. move or copy the file.
+
+The `collate.py` script will take an arbitrary number of input files
+generated using `countwords.py` and collate the word counts:
 
 ```shell
 $ python collate.py ../results/dracula.csv ../results/moby_dick.csv ../results/jane_eyre.csv -n 10
