@@ -160,6 +160,7 @@
 [gpl]: glossary.html#gpl
 [gui]: glossary.html#gui
 [gutenberg]: https://www.gutenberg.org/
+[heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
 [hitchhiker]: glossary.html#hitchhiker
 [home-directory]: glossary.html#home-directory
 [huff-testing]: https://github.com/katyhuff/python-testing
