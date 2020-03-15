@@ -27,7 +27,8 @@ Make works as follows:
 
 1.  Every time the [operating system][operating-system] creates, reads, or changes a file,
     it updates a [timestamp][timestamp] on the file to show when the operation took place.
-    Make can compare these timestamps to figure out whether files are newer or older than one another.
+    Make can compare these timestamps
+    to figure out whether files are newer or older than one another.
 
 2.  A user can describe which files depend on each other
     by writing [rules][rule-make] in a [Makefile][makefile].
@@ -69,13 +70,6 @@ and you can install it on Windows using [Chocolatey][chocolatey]:
 ```shell
 $ choco install make
 ```
-
-### Acknowledgements
-
-This chapter is based on the [Software Carpentry lesson on Make][swc-make]
-maintained by [Gerard Capes][capes-gerard]
-and on [Jonathan Dursi][dursi-jonathan]'s
-[introduction to pattern rules][dursi-pattern-rules].
 
 ## How can I update a single file using Make? {#py-rse-automate-single-file}
 
@@ -468,7 +462,7 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 
 `$< > $@` can be hard to read,
 but is a situationally useful syntax,
-so it is good to be aware of.
+which is good to be aware of.
 
 ## How can I write a generic rule to update many files? {#py-rse-automate-pattern}
 
@@ -526,8 +520,12 @@ $ make  # Same as `make all` since "all" is the first target in the Makefile
 ```
 
 ```text
-python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+python bin/countwords.py data/frankenstein.txt > results/frankenstein.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+python bin/countwords.py data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
+python bin/countwords.py data/sherlock_holmes.txt > results/sherlock_holmes.csv
 python bin/countwords.py data/time_machine.txt > results/time_machine.csv
 ```
 
@@ -536,6 +534,7 @@ since Make will take the target filename we give on the command line
 and see if a pattern rule matches it:
 
 ```shell
+$ # The touch command updates a file's timestamp
 $ touch data/jane_eyre.txt
 $ make results/jane_eyre.csv
 ```
@@ -617,8 +616,8 @@ $ make settings
 ```text
 echo COUNT: bin/countwords.py
 COUNT: bin/countwords.py
-echo DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
-DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+echo DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
+DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
 ```
 
 The output appears twice
@@ -629,8 +628,8 @@ which makes the output easier to read:
 
 ```make
 settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
 ```
 
 ```shell
@@ -639,7 +638,8 @@ $ make settings
 
 ```text
 COUNT: bin/countwords.py
-DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
+
 ```
 
 We now have the names of our input files,
@@ -680,8 +680,8 @@ $ make settings
 
 ```text
 COUNT: bin/countwords.py
-DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
-RESULTS: results/common_sense.csv results/jane_eyre.csv results/life_of_frederick_douglass.csv results/moby_dick.csv results/sense_and_sensibility.csv results/time_machine.csv
+DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
+RESULTS: results/dracula.csv results/frankenstein.csv results/jane_eyre.csv results/moby_dick.csv results/sense_and_sensibility.csv results/sherlock_holmes.csv results/time_machine.csv
 ```
 
 Excellent:
@@ -702,11 +702,12 @@ $ make  # Same as `make all` since "all" is the first target in the Makefile
 ```
 
 ```text
-python bin/countwords.py data/common_sense.txt > results/common_sense.csv
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+python bin/countwords.py data/frankenstein.txt > results/frankenstein.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
-python bin/countwords.py data/life_of_frederick_douglass.txt > results/life_of_frederick_douglass.csv
 python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 python bin/countwords.py data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
+python bin/countwords.py data/sherlock_holmes.txt > results/sherlock_holmes.csv
 python bin/countwords.py data/time_machine.txt > results/time_machine.csv
 ```
 
@@ -740,7 +741,6 @@ help :
 ```
 
 Sooner or later,
-though,
 we will add a target or rule and forget to update this list.
 A better approach is to format some comments in a special way
 and then extract and display those comments when asked to.
@@ -751,7 +751,6 @@ and `grep` (Section \@ref(py-rse-bash-advanced-find)) to pull these lines out o
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
-RUN_COUNT=python $(COUNT)
 DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
@@ -760,7 +759,7 @@ all : $(RESULTS)
 
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-	$(RUN_COUNT) $< > $@
+	python $(COUNT) $< > $@
 
 ## clean : remove all generated files.
 clean :
@@ -799,12 +798,7 @@ but this is a good start.
 To finish our example,
 we will automatically generate a collated list of word frequencies.
 The target is a file called `results/collated.csv`
-that depends on the results generated by `countwords.py` (Figure \@ref(fig:automate-pipelines)).
-
-```{r automate-pipelines, echo=FALSE, fig.cap="Creating Pipelines"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
+that depends on the results generated by `countwords.py`.
 To create it,
 we add or change these lines in our Makefile:
 
@@ -812,21 +806,22 @@ we add or change these lines in our Makefile:
 # ...phony targets and previous variable definitions...
 
 COLLATE=bin/collate.py
-RUN_COLLATE=python $(COLLATE)
 
 ## all : regenerate all results.
 all : results/collated.csv
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
-	$(RUN_COLLATE) $(RESULTS) > $@
+	mkdir -p results  # Create dir if it doesn't exist
+	python $(COLLATE) $(RESULTS) > $@
 
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
 	...
-
 ```
 
 The first two lines tell Make about the collation program,
@@ -855,21 +850,39 @@ which is where `countwords.py` and `collate.py` write their output.
 # ...phony targets and previous variable definitions...
 
 PLOT=bin/plotcounts.py
-RUN_PLOT=python $(PLOT)
 
 ## all : regenerate all results.
-all : results/collated.pdf
+all : results/plotcounts.png
 
 ## results/collated.pdf: plot the collated results.
-results/collated.pdf : results/collated.csv
-	$(RUN_PLOT) $^ $@
+results/plotcounts.png : results/collated.csv
+	python $(PLOT) $^ --outfile $@
 
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
 	@echo PLOT: $(PLOT)
 	...
+```
+
+Finally,
+we can update the `clean` target
+to only remove files created by the Makefile.
+It is a good habit to only remove files that are automatically regenerated,
+rather than using the asterisk to remove all files,
+since you might manually place files in the results directory
+and forget that these will be cleaned up when you run `make clean`
+with `rm -f results/*.csv` as the recipe.
+
+```make
+# ...phony targets and previous variable definitions...
+
+## clean : remove all generated files.
+clean :
+	rm $(RESULTS) results/collated.csv results/plotcounts.png
 ```
 
 ## Summary {#py-rse-automate-summary}
@@ -922,10 +935,18 @@ What is wrong with writing the rule for `results/collated.csv` like this:
 
 ```make
 results/collated.csv : results/*.csv
-	$(RUN_COLLATE) $^ > $@
+	python $(COLLATE) $^ > $@
 ```
 
 Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
 
 ```{r, child="./links.md"}
 ```
+
+### Acknowledgements
+
+This chapter is based on the [Software Carpentry lesson on Make][swc-make]
+maintained by [Gerard Capes][capes-gerard]
+and on [Jonathan Dursi][dursi-jonathan]'s
+[introduction to pattern rules][dursi-pattern-rules].
+
