@@ -11,10 +11,7 @@ which allows us to access all of Git's features.
 This lesson describes how the basic cycle of add, commit, push, and pull works at the command line.
 
 To illustrate with the Zipf's Law project, 
-we will start by putting our work up to this point in git.  
-Then, to illustrate the version control cycle, 
-we'll edit our, `plotcounts.py` script to produce a more useful plot.
-
+we will start by putting our work up to this point in git.
 The `zipfs-law/` project directory, should currently look like this:
 ```
 ├── bin
@@ -34,6 +31,39 @@ The `zipfs-law/` project directory, should currently look like this:
     └── moby_dick.csv
 ```
 
+The code in `bin/plotcounts.py` 
+is the solution to the mission critical exercise at the end of the last chapter. 
+Since there are different possible solutions, 
+here is the code we have in `bin/plotcounts.py`, 
+so you can follow along with the changes we make in this chapter:
+```python
+"""Plot word counts."""
+import argparse
+import pandas as pd
+
+
+def main(args):
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False)
+    df['inverse_rank'] = 1 / df['rank']
+    ax = df.plot.scatter(x='word_frequency', y='inverse_rank',
+                         figsize=[12, 6], grid=True)
+    ax.figure.savefig(args.outfile)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+                        help='Output image file name')
+    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+                        default=None, help='X-axis limits')
+    args = parser.parse_args()
+    main(args)
+```
+To illustrate the version control cycle we'll be making some edits
+to this code to produce a more informative plot.
 
 ## How can I set up Git for command-line use? {#py-rse-git-cmdline-setup}
 
