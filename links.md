@@ -86,6 +86,7 @@
 [declarative-programming]: glossary.html#declarative-programming
 [default-target-make]: glossary.html#default-target-make
 [delimiter]: glossary.html#delimiter
+[desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
 [design-pattern]: glossary.html#design-pattern
 [destructuring]: glossary.html#destructuring
 [dictionary]: glossary.html#dictionary
