@@ -20,77 +20,6 @@ and run our analysis programs automatically.
 These tools were invented to help programmers rebuild complex software,
 but can be used to automate any workflow.
 
-As a running example,
-we will look at the distribution of word frequencies in classic English novels.
-[Zipf's Law][zipfs-law] states that
-the second most common word in a body of text appears half as often as the most common,
-the third most common appears a third as often,
-and so on.
-To test it,
-we will use these works from [Project Gutenberg][gutenberg]:
-
-| Book                            | Length (words) |
-| ------------------------------- | -------------: |
-| anne_of_green_gables.txt        |         105642 |
-| common_sense.txt                |          24999 |
-| count_of_monte_cristo.txt       |         464226 |
-| dracula.txt                     |         164424 |
-| emma.txt                        |         160458 |
-| ethan_frome.txt                 |          37732 |
-| frankenstein.txt                |          78098 |
-| jane_eyre.txt                   |         188455 |
-| life_of_frederick_douglass.txt  |          43789 |
-| moby_dick.txt                   |         215830 |
-| mysterious_affair_at_styles.txt |          59604 |
-| pride_and_prejudice.txt         |         124974 |
-| sense_and_sensibility.txt       |         121590 |
-| sherlock_holmes.txt             |         107533 |
-| time_machine.txt                |          35524 |
-| treasure_island.txt             |          71616 |
-
-The most common words in this [corpus][corpus] appear this many times:
-
-| Word | Count |
-| ---- | ----: |
-| the  | 97278 |
-| and  | 59385 |
-| to   | 56028 |
-| of   | 55190 |
-| I    | 45680 |
-| a    | 40483 |
-| in   | 30030 |
-| was  | 24512 |
-| that | 24386 |
-| you  | 22123 |
-| it   | 21420 |
-
-The frequencies don't match Zipf's predictions exactly—for example,
-we would expect about 48,600 occurrences of "and"—but
-there certainly seems to be a decay curve of some kind.
-
-Our goals are:
-
-1.  Analyze one input file to see how well it conforms to Zipf's Law.
-2.  Analyze multiple input files to see how well they conform in aggregate.
-3.  Plot individual and aggregate word frequency distributions and their expected values.
-
-Our starting point is:
-
-1.  The books are text files in the `data/` directory.
-2.  `bin/countwords.py` reads a text file and creates a CSV file with two columns:
-    a word and how many times the word occurs.
-    We can analyze several files at once by [piping][pipe-unix] them into the program
-    using something like `cat data/*.txt | bin/countwords.py`.
-    (If you don't know what this means,
-    now would be a good time to review the material on the Unix shell
-    in Chapters \@ref(py-rse-bash-basics) and \@ref(py-rse-bash-advanced)).
-3.  `bin/collate.py` takes one or more of these two-column CSV files as input
-    and sums the counts for all occurrences of each word.
-4.  `bin/plotcounts.py` creates a plot that shows word rankings on the X axis
-    and word counts on the Y axis.
-5.  `bin/testfit.py` compares actual distributions against theory
-    and give a fitting score.
-
 We will use a program called [Make][make] to automate our analysis
 so that every time we add a new book to our data,
 we can create new plots and update our fits with a single command.
@@ -98,7 +27,8 @@ Make works as follows:
 
 1.  Every time the [operating system][operating-system] creates, reads, or changes a file,
     it updates a [timestamp][timestamp] on the file to show when the operation took place.
-    Make can compare these timestamps to figure out whether files are newer or older than one another.
+    Make can compare these timestamps
+    to figure out whether files are newer or older than one another.
 
 2.  A user can describe which files depend on each other
     by writing [rules][rule-make] in a [Makefile][makefile].
@@ -134,19 +64,12 @@ Make works as follows:
 ### Setting Up
 
 This chapter uses a version of Make called [GNU Make][gnu-make].
-It comes with MacOS and Linux,
+It comes with macOS and Linux,
 and you can install it on Windows using [Chocolatey][chocolatey]:
 
 ```shell
 $ choco install make
 ```
-
-### Acknowledgements
-
-This chapter is based on the [Software Carpentry lesson on Make][swc-make]
-maintained by [Gerard Capes][capes-gerard]
-and on [Jonathan Dursi][dursi-jonathan]'s
-[introduction to pattern rules][dursi-pattern-rules].
 
 ## How can I update a single file using Make? {#py-rse-automate-single-file}
 
@@ -156,7 +79,7 @@ let's create a file called `Makefile` in the root of our project:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
-        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 ```
 
 As in the shell and many other programming languages,
@@ -167,13 +90,19 @@ its single [prerequisite][prerequisite-make] is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
 
 The target and prerequisite tell Make what depends on what;
-the indented line below them describes the [action][action-make] needed
+the line below them describes the [recipe][recipe-make] needed
 to update the target if it is out of date.
-The action can be one or more shell commands,
-but each command *must* be indented by a single tab character:
-we can't use spaces or a mix of spaces and tabs.
-In this rule,
-the action is "run `bin/countwords.py` on the raw data file
+The recipe consists of one or more shell commands,
+rather than the specific Makefile syntax present in the rest of the file.
+In order for recipes to be executed as shell commands,
+each command *must* be prefixed by a single tab character.
+Note that spaces cannot be used instead of a tab character here,
+which can be confusing as these are used interchangeably in other languages.
+It can help to remember that the primary purpose of the tab character in a Makefile
+is not to help with readability through indentation,
+but rather to indicate which lines should be executed as shell commands.
+In the rule above,
+the recipe is "run `bin/countwords.py` on the raw data file
 and put the output in a CSV file in the `results` directory".
 
 To test our rule, run this command in the shell:
@@ -182,15 +111,22 @@ To test our rule, run this command in the shell:
 $ make
 ```
 
-Make automatically looks for a file called `Makefile`
-and follows the rules it contains.
-In this case,
+Make automatically looks for a file called `Makefile`,
+follows the rules it contains,
+and prints the lines that were executed.
+In this case a single line is printed:
+
+```text
+python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+```
+
+When Make follows the rules in our Makefile,
 one of three things will happen:
 
 1.  If `results/moby_dick.csv` doesn't exist,
-    Make runs the action to create it.
+    Make runs the recipe to create it.
 2.  If `data/moby_dick.txt` is newer than `results/moby_dick.csv`,
-    Make runs the action to update the results.
+    Make runs the recipe to update the results.
 3.  If `results/moby_dick.csv` is newer than its prerequisite,
     Make does nothing.
 
@@ -234,11 +170,11 @@ $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 As a further test:
 
 1.  Delete `results/moby_dick.csv` and run `make` again (case #1);
-    Make runs the action.
+    Make runs the recipe.
 2.  Use `touch data/moby_dick.txt` to update the timestamp on the data file,
     then run `make` (case #2).
     Again,
-    Make runs the action.
+    Make runs the recipe.
 
 ## How can I manage multiple files? {#py-rse-automate-multiple}
 
@@ -249,11 +185,11 @@ Let's add another rule to it:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
-        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt
-        python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+	python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 When we run `make` it tells us:
@@ -293,18 +229,18 @@ all : results/moby_dick.csv results/jane_eyre.csv
 ```
 
 There is no file called `all`,
-and this rule doesn't have any actions of its own,
+and this rule doesn't have any recipes of its own,
 but when we run `make all`,
 it creates a list of the things `all` depends on,
 then brings each of those prerequisites up to date (Figure \@ref(fig:automate-all)).
 
 ```{r automate-all, echo=FALSE, fig.cap="Making Everything"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/rse-automate/make-dependency-graph.png")
 ```
 
 As this diagram shows,
 the order in which rules appear in the Makefile
-does not necessarily determine the order in which actions are run.
+does not necessarily determine the order in which recipes are run.
 Make is free to run commands in any order
 so long as nothing is updated before its prerequisites are up to date.
 This is called [declarative programming][declarative-programming]:
@@ -321,7 +257,7 @@ and ours looks like this:
 ```make
 # Remove all generated files.
 clean :
-        rm -f results/*
+	rm -f results/*
 ```
 
 The `-f` flag to `rm` means "force removal":
@@ -334,10 +270,9 @@ $ make clean
 ```
 
 Make will delete any results files we have.
-This is a lot safer than typing `rm -f results/*` at the command-line,
-because if we mistakenly put a space after the `/`
-and delete all of the files in the project's root directory,
-we'll only make the mistake once.
+This is a lot safer than typing `rm -f results/*` at the command-line each time,
+because if we mistakenly put a space before the `*`
+we would delete all of the files in the project's root directory.
 
 Phony targets are very useful,
 but there is a catch.
@@ -356,10 +291,10 @@ Since there is a directory called `clean`,
 Make thinks the target `clean` in the Makefile refers to this directory.
 Since the rule has no prerequisites,
 it can't be out of date,
-so no actions are executed.
+so no recipes are executed.
 
 We can unconfuse Make by putting this line at the top of Makefile
-to tell it explicitly which targets are phony:
+to explicitly state which targets are phony:
 
 ```make
 .PHONY : all clean
@@ -381,16 +316,21 @@ we can add the program to the prerequisites for each result:
 
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
-        python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+	python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
-        python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+	python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
+
+To run both of these rules,
+we can type `make all`.
+Since we have put the `all` target first in our make file,
+it is the default target and will be run when we type just `make`.
 
 ```shell
 $ touch bin/countwords.py
-$ make all
+$ make
 ```
 
 ```text
@@ -429,11 +369,11 @@ RUN_COUNT=python $(COUNT)
 
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
+	$(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt $(COUNT)
-        $(RUN_COUNT) data/jane_eyre.txt > results/jane_eyre.csv
+	$(RUN_COUNT) data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 Each definition takes the form `NAME=value`.
@@ -445,7 +385,7 @@ What *is* required is using parentheses to refer to the variable,
 i.e.,
 to use `$(NAME)` and not `$NAME`.
 For historical reasons,
-Make interprets `$NAME` to be a "variable called `N` followed by the three characers 'AME'",
+Make interprets `$NAME` to be a "variable called `N` followed by the three characters 'AME'",
 If no variable called `N` exists,
 `$NAME` becomes `AME`,
 which is almost certainly not what we want.
@@ -463,7 +403,7 @@ Instead,
 we should write a generic rule that will produce a CSV file for any book.
 To do this,
 we need to understand Make's [automatic variables][automatic-variable-make].
-The first step is to use the very cryptic expression `$@` in the rule's action
+The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 With it,
 we can replace this:
@@ -471,7 +411,7 @@ we can replace this:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
+	$(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
 ```
 
 with this:
@@ -479,7 +419,7 @@ with this:
 ```make
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) data/moby_dick.txt > $@
+	$(RUN_COUNT) data/moby_dick.txt > $@
 ```
 
 Make defines a value of `$@` separately for each rule,
@@ -489,38 +429,40 @@ And yes,
 something like `$TARGET` would have been easier to understand,
 but we're stuck with it now.
 
-The next step is to replace the explicit list of prerequisites in the action
-with the automatic variable `$^`:
+The next step is to replace the explicit list of prerequisites in the recipe
+with the automatic variable `$^`,
+which expands to all prerequisites in the rule:
 
 ```make
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) $^ > $@
+	$(RUN_COUNT) $^ > $@
 ```
 
 However,
 this doesn't work.
 The rule's prerequisites are the novel and the word-counting program.
-When Make expands the action,
-the resulting command tries to process the program as if it were a data file:
+When Make expands the recipe,
+the resulting command tries to process the program `bin/countwords.py`
+as if it was a data file:
 
 ```shell
 python bin/countwords.py data/moby_dick.txt bin/countwords.py > results/moby_dick.csv
 ```
 
 Make solves this problem with another automatic variable `$<`,
-which mean "the first prerequisite".
+which mean "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
 ```make
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	$(RUN_COUNT) $< > $@
 ```
 
-`$< > $@` is hard to read, even with practice.
-Using an editor with [syntax highlighting][syntax-highlighting] (Chapter \@ref(tools)) only helps a little,
-so please don't ever create something this cryptic yourself.
+`$< > $@` can be hard to read,
+but is a situationally useful syntax,
+which is good to be aware of.
 
 ## How can I write a generic rule to update many files? {#py-rse-automate-pattern}
 
@@ -532,12 +474,12 @@ so the rule:
 
 ```make
 results/%.csv : data/%.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	$(RUN_COUNT) $< > $@
 ```
 
 will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data` directory.
 (Unfortunately,
-`%` cannot be used in rules' actions,
+`%` cannot be used in rules' recipes,
 which is why `$<` and `$@` are needed.)
 With this rule in place, our entire Makefile is reduced to:
 
@@ -552,11 +494,12 @@ all : results/moby_dick.csv results/jane_eyre.csv results/time_machine.csv
 
 # Regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	$(RUN_COUNT) $< > $@
 
 # Remove all generated files.
+
 clean :
-        rm -f results/*
+	rm -f results/*
 ```
 
 To test our shortened Makefile,
@@ -573,12 +516,16 @@ rm -f results/*
 and then recreate them:
 
 ```shell
-$ make all
+$ make  # Same as `make all` since "all" is the first target in the Makefile
 ```
 
 ```text
-python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+python bin/countwords.py data/frankenstein.txt > results/frankenstein.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
+python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
+python bin/countwords.py data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
+python bin/countwords.py data/sherlock_holmes.txt > results/sherlock_holmes.csv
 python bin/countwords.py data/time_machine.txt > results/time_machine.csv
 ```
 
@@ -587,6 +534,7 @@ since Make will take the target filename we give on the command line
 and see if a pattern rule matches it:
 
 ```shell
+$ # The touch command updates a file's timestamp
 $ touch data/jane_eyre.txt
 $ make results/jane_eyre.csv
 ```
@@ -625,10 +573,13 @@ this only works if the results files already exist:
 if one doesn't,
 its name won't be included in `RESULTS`
 and Make won't realize that we want to generate it.
-
-What we really want is generate the list of results files
+What we really want is to generate the list of results files
 from the list of books in the `data/` directory.
-We can use a [function][function-make] to do this.
+
+We also need to consider that while expansion of `*` happens automatically in rules,
+it does not not normally occur when a variable is set.
+To solve this issue,
+we can use the `wildcard` [function][function-make].
 The syntax is odd because functions were added to Make long after it was first written,
 but at least they have readable names.
 Let's create a variable `DATA` that holds the names of all of our data files:
@@ -652,8 +603,8 @@ that uses the shell command `echo` to print the names and values of our variable
 
 # Show variables' values.
 settings :
-        echo COUNT: $(COUNT)
-        echo DATA: $(DATA)
+	echo COUNT: $(COUNT)
+	echo DATA: $(DATA)
 ```
 
 Let's run this:
@@ -665,8 +616,8 @@ $ make settings
 ```text
 echo COUNT: bin/countwords.py
 COUNT: bin/countwords.py
-echo DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
-DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+echo DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
+DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
 ```
 
 The output appears twice
@@ -677,8 +628,8 @@ which makes the output easier to read:
 
 ```make
 settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
 ```
 
 ```shell
@@ -687,7 +638,8 @@ $ make settings
 
 ```text
 COUNT: bin/countwords.py
-DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
+DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
+
 ```
 
 We now have the names of our input files,
@@ -700,7 +652,7 @@ does exactly this:
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 ```
 
-The first argument to `patsubst` is the pattern to look,
+The first argument to `patsubst` is the pattern to look for,
 which in this case is a text file in the `data` directory.
 We use `%` to match the [stem][filename-stem] of the file's name,
 which is the part we want to keep.
@@ -713,13 +665,13 @@ Finally,
 the third argument is what to do the substitution in,
 which is our list of books' names.
 
-Let's check our worke by adding another command to the `settings` target:
+Let's check the `RESULTS` variable by adding another command to the `settings` target:
 
 ```make
 settings :
-        @echo COUNT: $(COUNT)
-        @echo DATA: $(DATA)
-        @echo RESULTS: $(RESULTS)
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 ```
 
 ```shell
@@ -728,8 +680,8 @@ $ make settings
 
 ```text
 COUNT: bin/countwords.py
-DATA: data/common_sense.txt data/jane_eyre.txt data/life_of_frederick_douglass.txt data/moby_dick.txt data/sense_and_sensibility.txt data/time_machine.txt
-RESULTS: results/common_sense.csv results/jane_eyre.csv results/life_of_frederick_douglass.csv results/moby_dick.csv results/sense_and_sensibility.csv results/time_machine.csv
+DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
+RESULTS: results/dracula.csv results/frankenstein.csv results/jane_eyre.csv results/moby_dick.csv results/sense_and_sensibility.csv results/sherlock_holmes.csv results/time_machine.csv
 ```
 
 Excellent:
@@ -746,15 +698,16 @@ rm -f results/*.csv
 ```
 
 ```shell
-$ make all
+$ make  # Same as `make all` since "all" is the first target in the Makefile
 ```
 
 ```text
-python bin/countwords.py data/common_sense.txt > results/common_sense.csv
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+python bin/countwords.py data/frankenstein.txt > results/frankenstein.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
-python bin/countwords.py data/life_of_frederick_douglass.txt > results/life_of_frederick_douglass.csv
 python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 python bin/countwords.py data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
+python bin/countwords.py data/sherlock_holmes.txt > results/sherlock_holmes.csv
 python bin/countwords.py data/time_machine.txt > results/time_machine.csv
 ```
 
@@ -780,15 +733,14 @@ We could create another phony target called `help` that prints a list of availab
 
 # Show help.
 help :
-        @echo "all : regenerate all out-of-date results files."
-        @echo "results/*.csv : regenerate a particular results file."
-        @echo "clean : remove all generated files."
-        @echo "settings : show the values of all variables."
-        @echo "help : show this message."
+	@echo "all : regenerate all out-of-date results files."
+	@echo "results/*.csv : regenerate a particular results file."
+	@echo "clean : remove all generated files."
+	@echo "settings : show the values of all variables."
+	@echo "help : show this message."
 ```
 
 Sooner or later,
-though,
 we will add a target or rule and forget to update this list.
 A better approach is to format some comments in a special way
 and then extract and display those comments when asked to.
@@ -799,7 +751,6 @@ and `grep` (Section \@ref(py-rse-bash-advanced-find)) to pull these lines out o
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
-RUN_COUNT=python $(COUNT)
 DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
@@ -808,21 +759,21 @@ all : $(RESULTS)
 
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-        $(RUN_COUNT) $< > $@
+	python $(COUNT) $< > $@
 
 ## clean : remove all generated files.
 clean :
-        rm -f results/*.csv
+	rm -f results/*.csv
 
 ## settings : show variables' values.
 settings :
-        @echo COUNT: $(COUNT)
-        @echo DATA: $(DATA)
-        @echo RESULTS: $(RESULTS)
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
 
 ## help : show this message.
 help :
-        @grep '^##' ./Makefile
+	@grep '^##' ./Makefile
 ```
 
 Let's test:
@@ -839,7 +790,7 @@ $ make help
 ## help : show this message.
 ```
 
-With a bit more work we ccan remove the `##` markers,
+With a bit more work we can remove the `##` markers,
 but this is a good start.
 
 ## How can I create entire analysis pipelines? {#py-rse-automate-pipeline}
@@ -847,12 +798,7 @@ but this is a good start.
 To finish our example,
 we will automatically generate a collated list of word frequencies.
 The target is a file called `results/collated.csv`
-that depends on the results generated by `countwords.py` (Figure \@ref(fig:automate-pipelines)).
-
-```{r automate-pipelines, echo=FALSE, fig.cap="Creating Pipelines"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
+that depends on the results generated by `countwords.py`.
 To create it,
 we add or change these lines in our Makefile:
 
@@ -860,15 +806,22 @@ we add or change these lines in our Makefile:
 # ...phony targets and previous variable definitions...
 
 COLLATE=bin/collate.py
-RUN_COLLATE=python $(COLLATE)
 
 ## all : regenerate all results.
 all : results/collated.csv
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
-	$(RUN_COLLATE) $(RESULTS) > $@
+	mkdir -p results  # Create dir if it doesn't exist
+	python $(COLLATE) $(RESULTS) > $@
 
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	...
 ```
 
 The first two lines tell Make about the collation program,
@@ -879,11 +832,58 @@ Since this target depends on the single-novel results files,
 The rule to regenerate `results/collated.csv` should look familiar by now:
 it tells Make that all of the individual results have to be up-to-date
 and that the final result should be regenerated if the program used to create it has changed.
-One difference between the action in this rule and the actions we've seen before
-is that this action uses `$(RESULTS)` directly instead of an automatic variable.
+One difference between the recipe in this rule and the recipes we've seen before
+is that this recipe uses `$(RESULTS)` directly instead of an automatic variable.
 We have written the rule this way because
 there isn't an automatic variable that means "all but the last prerequisite",
 so there's no way to use automatic variables that wouldn't result in us trying to process our program.
+
+Likewise,
+we can also add the `plotcounts.py` script to this workflow
+and update the `all` and `settings` rules accordingly.
+Note that there is no `>` needed before the `$@`
+because `plotcounts.py` default is to write to a file
+rather than to `stdout`,
+which is where `countwords.py` and `collate.py` write their output.
+
+```make
+# ...phony targets and previous variable definitions...
+
+PLOT=bin/plotcounts.py
+
+## all : regenerate all results.
+all : results/plotcounts.png
+
+## results/collated.pdf: plot the collated results.
+results/plotcounts.png : results/collated.csv
+	python $(PLOT) $^ --outfile $@
+
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	@echo PLOT: $(PLOT)
+	...
+```
+
+Finally,
+we can update the `clean` target
+to only remove files created by the Makefile.
+It is a good habit to only remove files that are automatically regenerated,
+rather than using the asterisk to remove all files,
+since you might manually place files in the results directory
+and forget that these will be cleaned up when you run `make clean`
+with `rm -f results/*.csv` as the recipe.
+
+```make
+# ...phony targets and previous variable definitions...
+
+## clean : remove all generated files.
+clean :
+	rm $(RESULTS) results/collated.csv results/plotcounts.png
+```
 
 ## Summary {#py-rse-automate-summary}
 
@@ -927,7 +927,7 @@ if (knitr::is_latex_output()) {
 
 ### Create more readable help {#py-rse-automate-ex-readable-help}
 
--   Modify the command in the `help` action to remove the leading '##' markers from the output.
+-   Modify the command in the `help` recipe to remove the leading '##' markers from the output.
 
 ### The perils of shell wildcards {#py-rse-automate-ex-wildcard-perils}
 
@@ -935,10 +935,18 @@ What is wrong with writing the rule for `results/collated.csv` like this:
 
 ```make
 results/collated.csv : results/*.csv
-	$(RUN_COLLATE) $^ > $@
+	python $(COLLATE) $^ > $@
 ```
 
 Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
 
 ```{r, child="./links.md"}
 ```
+
+### Acknowledgements
+
+This chapter is based on the [Software Carpentry lesson on Make][swc-make]
+maintained by [Gerard Capes][capes-gerard]
+and on [Jonathan Dursi][dursi-jonathan]'s
+[introduction to pattern rules][dursi-pattern-rules].
+
