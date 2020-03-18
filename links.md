@@ -86,6 +86,7 @@
 [declarative-programming]: glossary.html#declarative-programming
 [default-target-make]: glossary.html#default-target-make
 [delimiter]: glossary.html#delimiter
+[desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
 [design-pattern]: glossary.html#design-pattern
 [destructuring]: glossary.html#destructuring
 [dictionary]: glossary.html#dictionary
@@ -160,6 +161,7 @@
 [gpl]: glossary.html#gpl
 [gui]: glossary.html#gui
 [gutenberg]: https://www.gutenberg.org/
+[heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
 [hitchhiker]: glossary.html#hitchhiker
 [home-directory]: glossary.html#home-directory
 [huff-testing]: https://github.com/katyhuff/python-testing
