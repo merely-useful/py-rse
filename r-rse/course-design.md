@@ -60,8 +60,18 @@ Here is a draft outline to guide development.
     
 - Setting up an R package
     - Using devtools, usethis for development
+        - e.g. `use_devtools()` and `use_usethis()`.
     - Developing functions
     - Making and using datasets
+
+- Function development in a package environment
+    - Dependency management
+    - Function documentation (with roxygen2), part 1
+        - To use `@examples` to help with creating function
+
+- (Idea) Additional features to make use of
+    - RStudio addins, snippets, rmarkdown templates, templates
+    - rstudioapi?
 
 - Version control: Using Git and GitHub as a sole user (part 1)
     - Using Git in RStudio (standard add-commmit-history)
@@ -83,7 +93,8 @@ Here is a draft outline to guide development.
 
 - Developing documentation and tutorials on usage
     - Vignettes, README (with rmarkdown and usethis)
-    - Function documentation (with roxygen2)
+    - Function documentation (with roxygen2), part 2
+    - learnr tutorials via `use_tutorials()`?
     - Running spell checks and styling (with spelling and styler)
 
 - Involving the community:
@@ -92,6 +103,7 @@ Here is a draft outline to guide development.
     - Contributing guidelines 
     - Being inclusive (code of conduct)
     - Licensing
+    - NEWS file
 
 - Exposing your package to the world with a website:
     - Setting up a website (with pkgdown)
