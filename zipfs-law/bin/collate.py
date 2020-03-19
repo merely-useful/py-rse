@@ -1,22 +1,24 @@
 """Combine multiple word count CSV-files into a single cumulative count."""
-import sys
 import csv
 import argparse
 from collections import Counter
 import mymodule
+
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
+
 def main(args):
     """Run the command line program."""
     word_counts = Counter()
-    for fn in args.infiles:
-        with open(fn, 'r') as reader:
+    for file_name in args.infiles:
+        with open(file_name, 'r') as reader:
             update_counts(reader, word_counts)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
