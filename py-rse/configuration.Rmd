@@ -1,7 +1,7 @@
 # Program Configuration {#py-rse-configuration}
 
 In previous chapters we've used command-line options to configure our word count scripts. 
-Depending on how complex we'd like to make our program,
+Depending on how complex we'd like to make our programs,
 there are actually a number of layers of configuration that we could use:
 
 1.  A system-wide configuration file for general settings.
@@ -16,6 +16,8 @@ the job configuration overrides the user's defaults,
 and the command-line options overrides that.
 While this is far more complexity than most research software needs (at least initially),
 being able to read a complete set of options from a file is a big boost to reproducibility.
+
+## Configuration file formats
 
 Programmers have invented many formats for configuration files,
 so please do not create your own.
@@ -51,31 +53,132 @@ fonts:
 - Serif
 ```
 
-TODO:
+## Configuring plot labels
 
-This chapter introduces overlay configuration and applies it by
-adding relevant functionality to `plotcounts.py`.
-Specifically, the program will accept a YAML file to configure aspects of [`matplotlib.rcParams`](https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html).
+To see overlay configuration in action,
+let's consider one of the most common tasks in data science -
+changing the size of the labels on a plot.
+The size of the labels on our Jane Eyre word count plot
+is fine for viewing on our screen,
+but they'll need to be bigger
+if we want to include the figure in a powerpoint presentation or report.
 
-Note (from that hyperlink) that there is an rcParams configuration file
-somewhere on your system, but by default everything is commented out.
-You can find it by using:
+TODO: Include Jane Eyre figure
+
+In order to configure the label sizes,
+we could use a number of the options described above:
+-  Edit a user-specific YAML file known as the `matplotlibrc` file
+-  Create a job-specific YAML file that the `plotcounts.py` script can parse
+-  Add some new command-line options to `plotcounts.py` 
+
+Let's consider these options one at a time.
+
+### Edit the matplotlibrc file
+
+Our first option would be to edit the user-specific matplotlib runtime configuration file
+(a.k.a. the `matpllotlibrc` file).
+When we import matplotlib,
+it locates this YAML file in order to set the default characteristics
+(i.e. colors, sizes and formats) of the various aspects of the plot. 
+We can find its location on our system by running the following command:
 
 ```python
->>> import matplotlib as mpl
->>> mpl.matplotlib_fname()
-/Users/damienirving/anaconda/envs/merely/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc
+import matplotlib as mpl
+
+mpl.matplotlib_fname()
 ```
 
-To put this all in context, this chapter talks about the following levels of configuration:
+```text
+/Users/amira/opt/anaconda3/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc
+```
 
-1. A system-wide configuration file for general settings.
-2. A user-specific configuration file for personal preferences. [e.g. `matplotlibrc`]
-3. A job-specific file with settings for a specific run. [e.g. `zipfs_law/bin/plot_params.yml`]
-4. Command-line options to change things that commonly change. [e.g. `argparse`]
+We can see from opening this file that the default size of the x and y axis labels
+and also the tick labels is medium:
 
-At the end of this chapter the `plotcounts.py` script should look like
-`zipfs_law/bin/plotcounts_config.py`.
+```python
+#axes.labelsize      : medium  ## fontsize of the x any y labels
+#xtick.labelsize      : medium ## fontsize of the tick labels
+#ytick.labelsize      : medium ## fontsize of the tick labels
+```
+
+We can uncomment those lines, change the sizes,
+
+```python
+axes.labelsize      : x-large  ## fontsize of the x any y labels
+xtick.labelsize      : large ## fontsize of the tick labels
+ytick.labelsize      : large ## fontsize of the tick labels
+```
+and then re-generate the Jane Eyre plot with bigger labels:
+
+```python
+$ python plotcounts.py jane_eyre.csv --outfile jane_eyre.png
+```
+
+TODO: Include Jane Eyre plot with bigger labels
+
+This approach has done the job,
+but labels will now be this large for any plot that we generate in the future,
+regardless of whether that plot relates to word counts or not.
+If we don't want to lock ourselves into these bigger default values,
+we should try a different approach.
+
+### New command line options
+
+A second option would be to add some more command line arguments to `plotcounts.py`.
+This would involve defining new optional inputs using argparse,
+
+```python
+mpl_sizes = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large']
+parser.add_argument('--labelsize', type=str, default='x-large', choices=mpl_sizes,
+                    help='fontsize of the x any y labels')
+parser.add_argument('--xticksize', type=str, default='large', choices=mpl_sizes,
+                    help='fontsize of the x tick labels')
+parser.add_argument('--yticksize', type=str, default='large', choices=mpl_sizes,
+                    help='fontsize of the y tick labels')
+```
+
+and then adding a few lines after the `ax` variable is defined:
+
+```python
+ax.xaxis.label.set_fontsize(args.labelsize)
+ax.yaxis.label.set_fontsize(args.labelsize)
+ax.xaxis.set_tick_params(labelsize=args.xticksize)
+ax.yaxis.set_tick_params(labelsize=args.yticksize)
+```
+
+Alternatively, 
+
+mpl.rcParams[param]
+
+(This must be done before the plot is generated)
+
+
+### Job-specific YAML file
+
+Can either pass the YAML file to the script 
+
+```python
+def set_plot_params(param_file):
+    """Set the matplotlib rc parameters."""
+    if param_file:
+        with open(param_file, 'r') as reader:
+            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+    else:
+        param_dict = {}
+    for param, value in param_dict.items():
+        mpl.rcParams[param] = value
+```
+
+Or create a custom style following
+https://matplotlib.org/3.1.1/tutorials/introductory/customizing.html
+and then just call it:
+
+```python
+plt.style.use('presentation')
+```
+
+Since we are going to be packing this (and thus can't put it in the users matplotlib directory)
+the former approach is better.
 
 
 ## Exercises {#py-rse-configuration-exercises}
