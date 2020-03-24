@@ -4,15 +4,18 @@
 source(here::here("_common.R"))
 ```
 
-The first volumes in this series explained how to publish R Markdown and Jupyter Notebook reports online.
-This lesson therefore looks at what should be included in or alongside reports and how best to do that.
-As before,
-we use the generic term "report" to include research papers,
+Throughout this book we've produced interesting analysis
+on topics including dog licenses in New York City
+and word counts in classic English novels.
+This final chapter considers how one might go about
+publishing a formal report on the sort of data analysis we've conducted.
+We use the generic term "report" to include research papers,
 summaries for clients,
 and everything else that is shorter than a book
 and aimed at people other than its creators or contributors.
 
-Modern publishing involves much more than simply producing a report.
+The first and most important point to make
+is that modern publishing involves much more than simply producing a written report.
 It involves providing readers with the data underpinning the report,
 as well as any code written in analysing the data:
 
@@ -24,25 +27,20 @@ as well as any code written in analysing the data:
 >
 > — Jonathan Buckheit and David Donoho, paraphrasing Jon Claerbout, in @Buck1995
 
-As the quote suggests,
-modern publishing involves much more than simply producing a report.
-It involves providing readers with the data underpinning the report,
-as well as any code written in analysing the data.
+Depending on the analysis performed,
+the "complete set of instructions" relating to software and code
+may range from scripts or notebooks written solely for the purpose of the report
+(e.g. our earlier analysis of dog licenses),
+to packages that are developed and released for use by a wider audience
+(e.g. our Zipf's Law package).
 
-These days,
-the "complete set of instructions" is primarily software,
-which may range from scripts or notebooks written solely for the purpose of the report
-to packages that are developed and released for use by a wider audience.
 While some reports, datasets, software packages and/or analysis scripts
 can't be published without violating personal or commercial confidentiality,
 every researcher's default should be to make all these components
 of their work as widely available as possible.
-That means publishing it under an open license (Section \@ref(py-rse-teams-software-license))
+That means publishing it under an open license (Section \@ref(py-rse-teams-license))
 so that people who aren't in academia can find and access it.
 
-> **What Is Metadata?**
->
-> FIXME: explain what metadata is and why people should care.
 
 ## How are reports and authors identified? {#py-rse-publish-identifiers}
 
@@ -93,7 +91,8 @@ so that they can be easily accessed by others.
 The first step in publishing the data associated with a report
 is to determine what (if anything) needs to be published.
 If the report involved the analysis of a publicly available dataset
-that is maintained and documented by a third party (e.g. open government data),
+that is maintained and documented by a third party
+(e.g. open government data like the NYC Dog Licensing Dataset),
 then it's likely that no data publishing is required.
 The report simply needs to document where to access the data
 and what version was analyzed,
@@ -112,7 +111,7 @@ and/or represents a derived quantity with high re-use potential.
 For example,
 it would be worthwhile to publish
 an estimate of the global average surface temperature derived from
-a large database of weather observations,
+a large database of weather observations (and researchers have),
 because a simple metric of global warming could be useful in many subsequent studies.
 
 If a report involves a new dataset,
@@ -289,8 +288,8 @@ and those identifiers should be included in reports.
 
 ## How should I publish my software packages? {#py-rse-publish-software}
 
-Chapters \@ref(py-rse-package-r) and \@ref(py-rse-package-py)
-shows how to document and package software.
+In Chapter \@ref(py-rse-package-py) we documented and packaged
+our Zipf's Law software.
 The final step in this process is publication.
 It is common practice to have the code associated with a software package
 openly available on a hosting service
@@ -320,12 +319,12 @@ for creating a DOI with each new software release.
 > [Journal of Open Research Software][jors] and
 > the [Journal of Open Source Software][theoj].
 
-## How should I publish my other software? {#py-rse-publish-scripts}
+## How should I publish my scripts? {#py-rse-publish-scripts}
 
-The final component that needs to be published is the analysis scripts.
+The final component that needs to be published is the analysis scripts (or notebooks).
 Unlike analysis software that has been packaged and released for use by a wider audience,
-analysis scripts are simply written to create the figures and tables presented in a given report.
-These scripts typically make use of packages written by the wider community (such as `matplotlib` and `ggplot`)
+analysis scripts are simply written to create the figures and tables presented in the report.
+These scripts typically make use of packages written by the wider community (such as `matplotlib`)
 as well discipline-specific packages written by colleagues or co-authors.
 
 Given that analysis scripts will typically leverage
@@ -379,7 +378,7 @@ versions :
 While such a list means your software environment is now technically reproducible,
 you’ve left it up to the reader to figure out how to get all those software packages
 and libraries installed and playing together nicely.
-In some cases it might be easy enough for a reader to install the handful of R packages you used,
+In some cases it might be easy enough for a reader to install the handful of packages you used,
 but in other cases you might want to save the reader (and your future self)
 the pain of software installation by making use of a tool
 that can automatically install a specified software environment.
@@ -387,14 +386,14 @@ One tool that's widely used for Python is [`conda`][conda].
 A `conda` environment can be exported,
 
 ```shell
-$ conda env export -n myenv -f myenv.yml
+$ conda env export > environment.yml
 ```
 
 and made available so that readers can use it to install the same environment on their
 own computer:
 
 ```
-$ conda env create -f myenv.yml
+$ conda env create -f environment.yml
 ```
 
 Beyond `conda`,
@@ -431,16 +430,13 @@ archive :
 
 A software description and analysis scripts on their own are not much use to a reader;
 they also need to know how those scripts was actually executed.
-This means including the configuration files (Chapter \@ref(configure)),
-and/or command-line parameters used to generate each key result.
-
 The way in which this information is collected and archived
 depends on how your workflow is constructed.
-If all of a program's parameters are in a configuration file (Chapter \@ref(configure)),
+If all of a program's parameters are in a configuration file (Chapter \@ref(py-rse-configuration)),
 then that file can be archived.
 Alternatively, you might need to have your program print out its configuration parameters
-and then use `grep` or a script to extract information from the logfile (Chapter \@ref(logging)).
-
+and then use `grep` or a script to extract information from the logfile
+(Section \@ref(py-rse-errors-logging)).
 If your workflow involves executing a series of command line programs,
 then you can keep a log/record of the command line entries
 required to produce a given result.
@@ -458,9 +454,11 @@ $ history | tail -n 20 > generate-figure-5.txt
 is better than nothing.
 
 As before,
-while these bare minimum log files ensure that your workflow is reproducible,
+while these outputs from a configuration file, logfile and/or command line history
+ensure that your workflow is reproducible,
 they may not be particularly comprehensible.
-Manually recreating workflows from them might be a tedious and time consuming process,
+In other words,
+manually recreating workflows from these outputs might be a tedious and time consuming process,
 even for just moderately complex analyses.
 To make things a little easier for the reader (and your future self),
 it’s a good idea to include a README file in your code library
