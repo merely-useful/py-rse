@@ -137,6 +137,7 @@
 [ggplot2]: https://ggplot2.tidyverse.org/
 [gh-myoctocat]: https://myoctocat.com
 [gh-pages]: https://pages.github.com/
+[gistemp]: https://data.giss.nasa.gov/gistemp/
 [git-branch]: glossary.html#git-branch
 [git-clone]: glossary.html#git-clone
 [git-conflict]: glossary.html#git-conflict
