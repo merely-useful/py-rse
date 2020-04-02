@@ -22,6 +22,7 @@
 [bibtex]: http://www.bibtex.org/
 [binary-code]: glossary.html#binary-code
 [biorxiv]: https://www.biorxiv.org/
+[bitbucket]: https://bitbucket.org/
 [boilerplate]: glossary.html#boilerplate
 [bootswatch]: https://bootswatch.com/3/
 [branch-per-feature]: glossary.html#branch-per-feature-workflow
@@ -136,6 +137,7 @@
 [ggplot2]: https://ggplot2.tidyverse.org/
 [gh-myoctocat]: https://myoctocat.com
 [gh-pages]: https://pages.github.com/
+[gistemp]: https://data.giss.nasa.gov/gistemp/
 [git-branch]: glossary.html#git-branch
 [git-clone]: glossary.html#git-clone
 [git-conflict]: glossary.html#git-conflict
@@ -151,8 +153,8 @@
 [github-pages]: https://pages.github.com/
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [github]: http://github.com
-[github]: http://github.com
 [gitkraken]: https://www.gitkraken.com/
+[gitlab]: https://gitlab.com/
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [gnu-make]: http://www.gnu.org/software/make/
 [gnu-man-coreutils]: http://www.gnu.org/software/coreutils/manual/coreutils.html
