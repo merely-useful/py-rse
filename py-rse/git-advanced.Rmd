@@ -4,6 +4,27 @@
 source(here::here("_common.R"))
 ```
 
+> The `zipfs-law/` project directory currently looks as follows:
+>
+> ```text
+> ├── bin
+> │   ├── book_summary.sh
+> │   ├── countwords.py
+> │   ├── collate.py
+> │   ├── plotcounts.py
+> │   └── mymodule.py
+> ├── data
+> │   ├── dracula.txt 
+> │   ├── frankenstein.txt
+> │   └── ...
+> └── results
+>     ├── dracula.csv
+>     ├── dracula.png
+>     ├── jane_eyre.csv
+>     ├── jane_eyre.png
+>     └── moby_dick.csv
+> ```
+
 Now that we are comfortable using Git at the command line,
 we can look at two tools for organizing our development and working with others:
 branching and pull requests.
@@ -21,7 +42,7 @@ in hours rather than weeks.
 > We are grateful to its authors for using an open license
 > so that we could repurpose their work.
 
-## What is a branch and how do I create one? {#py-rse-git-advanced-create-branch}
+## What is branching and when is it useful? {#py-rse-git-advanced-branch-what}
 
 The Git lessons so far have all used a sequential timeline:
 each change builds on the one before,
@@ -30,7 +51,7 @@ However,
 there are times when we want to keep our main work safe from experimental changes.
 To do this, we can use [branches][git-branch] to work on separate tasks in parallel.
 
-We can see what branches a repository using this command:
+We can see what branches have been created in a given repository using this command:
 
 ```shell
 $ git branch
@@ -41,30 +62,69 @@ $ git branch
 ```
 
 When we initialize a repository,
-Git automatically creates a branch called [`master`][git-branch-master].
+Git automatically creates a branch called `master`.
 It is often considered the "official" version of the repository.
 The asterisk '*' indicates that it is currently active,
 i.e.,
 that all changes we make will take place in this branch by default.
 (The active branch is like the [current working directory][current-working-directory] in the shell.)
 
-Suppose that we are working on an analysis
-and don't know whether a [violin plot][violin-plot] or [beeswarm plot][beeswarm-plot]
-will make our results clearer.
-We decide to create a new branch from `master` for each
-and then merge whichever we prefers back to `master` (Figure \@ref(fig:py-rse-git-advanced-creating-branches)).
+In the previous chapter,
+we foreshadowed some experimental changes that we could try and make to `plotcounts.py`.
 
-```{r py-rse-git-advanced-creating-branches, echo=FALSE, fig.cap="Creating Branches"}
-knitr::include_graphics("figures/FIXME.png")
+```python
+"""Plot word counts."""
+import argparse
+import pandas as pd
+
+
+def main(args):
+    """Run the command line program."""
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False)
+    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
+                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    ax.figure.savefig(args.outfile)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+                        help='Output image file name')
+    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+                        default=None, help='X-axis limits')
+    args = parser.parse_args()
+    main(args)
 ```
 
-After tossing a coin,
-we decide to experiment with violin plots first.
-To create the branch,
+In particular,
+we used `plotcounts.py` to display the word counts for Dracula on a log-log plot.
+
+```{r py-rse-git-advanced-loglog-plot, echo=FALSE, fig.cap="Rank versus word frequency, on log-log axes, for Dracula"}
+knitr::include_graphics("figures/py-rse-git-cmdline/plot-loglog.png")
+```
+
+We noted that the relationship between word count and rank looks linear
+(on a log-log scale) to the naked eye,
+but to assist in that interpretation it might be helpful
+to fit a curve to the data.
+Fitting such a curve will require more than just a trivial change to the script,
+so to keep our working version of `plotcounts.py`
+separated from our attempts to fit a curve,
+we can create a new development branch.
+Once we've successfully added the curve fitting code to `plotcounts.py`,
+we can decide if we want to merge/incorporate those changes back into the `master` branch.
+
+
+## How do we create a new branch? {#py-rse-git-advanced-branch-how}
+
+To create our new branch (which we'll call `fit`),
 we run:
 
 ```shell
-$ git branch violin
+$ git branch fit
 ```
 
 We can check that the branch exists by running `git branch` again:
@@ -75,7 +135,7 @@ $ git branch
 
 ```text
 * master
-  violin
+  fit
 ```
 
 Our branch is there,
@@ -97,13 +157,13 @@ nothing to commit, working directory clean
 To switch to our new branch we can use the `checkout` command that we first saw in Section \@ref(py-rse-git-cmdline-restore):
 
 ```shell
-$ git checkout violin
+$ git checkout fit
 $ git branch
 ```
 
 ```text
   master
-* violin
+* fit
 ```
 
 `git checkout` doesn't just check out a file from a specific commit:
@@ -116,17 +176,129 @@ We can (and should) choose the name to signal the purpose of the branch,
 just as we choose the names of files and variables to indicate what they are for.
 
 At this point,
-`master` and `violin` are two names for the same repository state (Figure \@ref(fig:py-rse-git-advanced-repo-state)),
+`master` and `fit` are two names for the same repository state (Figure \@ref(fig:py-rse-git-advanced-repo-state)),
 so commands like `ls` and `git log` shows that the files and history haven't changed
-as we switch from `master` to `violin`.
+as we switch from `master` to `fit`.
 This will be true until some changes are committed to our new branch.
 
 ```{r py-rse-git-advanced-repo-state, echo=FALSE, fig.cap="Repository State"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-Let's make such a change by editing our analysis script,
-adding a lines to create the violin plot,
+### Fitting a curve to the word count data and verifying Zipf's Law
+
+#### The math behind Zipf's Law
+
+Before we commit any changes to our new branch,
+we need to figure out how to fit a line to the word count data.
+The reason our data points form an approximate straight line on a log-log plot
+relates back to the defintion of Zipf's Law,
+which says,
+
+> "The second most common word in a body of text
+> appears half as often as the most common,
+> the third most common appears a third as often, and so on."
+
+In other words,
+word frequency (\(f\)) is proportional to the inverse rank (\(r\)), \[
+f \propto \frac{1}{r^\alpha}
+\]
+with a value of \(\alpha\) close to one.
+The reason \(\alpha\) must be close to one for Zipf's Law to hold
+becomes clear if we include it in a modified version of the earlier definition:
+
+> "The most frequent word will occur approximately \(2^\alpha\) times
+> as often as the second most frequent word,
+> \(3^\alpha\) times as often as the third most frequent word, and so on."
+
+This mathematical expression for Zipf's Law is an example of a power law.
+In general, when two variables \(x\), and \(y\)
+are related through a power law, \[
+y = ax^b
+\]
+
+taking logarithms of both sides yields a linear relationship: \[
+\log(y) = \log(a) + b\log(x)
+\]
+
+Hence, plotting the variables on a log-log scale reveals this
+linear relationship.
+
+#### Estimating alpha
+
+In order to determine the best method for estimating \(\alpha\) and fitting a line to our data,
+we turn to a scientific paper on Zipf’s Law in english texts [@Moreno2016].
+The mathematics in the paper is a little heavy,
+but the authors essentially suggest using a method called maximum likelihood estimation. 
+This involves defining a so-called negative log likelihood function,
+whose variables include the word count data and a \(\beta\) parameter.
+As we'll see below,
+this \(\beta\) parameter is related to the \(\alpha\) parameter in our definition of Zipf's Law
+as well as the \(b\) parameter in the general form of a power law.
+This means we can use it to verify Zipf's Law *and* plot our fitted curve. 
+Expressed as a python function, the likelihood function reads as follows:
+
+```python
+import numpy as np
+
+def nlog_likelihood(beta, counts):
+    """Log-likelihood function."""
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    return likelihood
+``` 
+
+Obtaining an estimate of the \(\beta\) (and \(\alpha\)) parameter then becomes
+a mathematical optimization problem,
+for which we can use the `scipy.optimize` library.
+Following @Moreno2016,
+we use Brent's method with \(1 < \beta \leq 4\).
+
+```python
+from scipy.optimize import minimize_scalar
+
+def get_power_law_params(word_counts):
+    """Get the power law parameters."""
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
+                          args=(word_counts), method='brent')
+    beta = mle.x
+    alpha = 1 / (beta - 1)
+    return alpha, beta
+```
+
+We can then plot the fitted curve on the plot axes (`ax`)
+defined in the `plotcounts.py` script,
+
+```python
+def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+    """
+    Plot the power law curve that was fitted to the data.
+
+    Parameters
+    ----------
+    curve_xmin : float
+        Minimum x-bound for fitted curve
+    curve_xmax : float
+        Maximum x-bound for fitted curve
+    max_rank : int
+        Maximum word frequency rank.
+    beta : float
+        Estimated beta parameter for the power law.
+    ax : matplotlib axes
+        Scatter plot to which the power curve will be added.
+    """
+    xvals = np.arange(curve_xmin, curve_xmax)
+    yvals = max_rank * (xvals**(-beta + 1))
+    ax.loglog(xvals, yvals, color='grey')
+```
+
+where the maximum word frequency rank corresponds to \(a\)
+in the general form of a power law and \(-\beta + 1\)
+corresponds to \(b\).
+
+
+FIXME: From here on down still needs updating.
+
+
 and committing our changes:
 
 ```shell
