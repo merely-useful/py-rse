@@ -3,14 +3,15 @@ import argparse
 import yaml
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 from scipy.optimize import minimize_scalar
+
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
     likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
     return likelihood
+
 
 def get_power_law_params(word_counts):
     """
@@ -27,11 +28,12 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
-    mle = minimize_scalar(nlog_likelihood, bracket=(1, 4),
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
                           args=(word_counts), method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha, beta
+
 
 def set_plot_params(param_file):
     """Set the matplotlib rc parameters."""
@@ -42,6 +44,7 @@ def set_plot_params(param_file):
         param_dict = {}
     for param, value in param_dict.items():
         mpl.rcParams[param] = value
+
 
 def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
     """
@@ -64,6 +67,7 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
     yvals = max_rank * (xvals**(-beta + 1))
     ax.loglog(xvals, yvals, color='grey')
 
+
 def main(args):
     """Run the command line program."""
     set_plot_params(args.rcparams)
@@ -84,6 +88,7 @@ def main(args):
 
     plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
     ax.figure.savefig(args.outfile)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

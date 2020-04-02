@@ -9,10 +9,11 @@ collection_to_csv
 import sys
 import csv
 
+
 def collection_to_csv(collection, ntop=None):
     """
     Write out a collection of items and counts in csv format.
-    
+
     Parameters
     ----------
     collection : collections.Counter

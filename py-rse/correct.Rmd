@@ -1,37 +1,25 @@
 # Correctness {#py-rse-correct}
 
+TODO: Add Git commits for exercises throughout
+
 ```{r py-rse-correct-setup, include=FALSE}
 source(here::here("_common.R"))
 ```
 
 We all hope the software we write does what we wrote it to do.
 But how can we be sure?
-The short is answer is that we can't,
+The short is answer is that we can't be completely certain,
 but that as in science,
 we can test our expectations against reality to help us decide if we are sure enough.
-This chapter explores ways of doing that in both R and Python.
+This chapter explores ways of doing that.
 
-## How can I test functions manually? {#py-rse-correct-manual}
+## How would I manually test a function? {#py-rse-correct-manual}
 
-Suppose we have written a function to get the sign of a number.
-In R,
-this might be:
+Testing is about comparing what you "expect" a function outputs with the "actual" output.
+Let's do a simple example to demonstrate by writing out a function that gets the sign of a number.
 
-```{r manual-test-r}
-numSign <- function(x) {
-  if (x > 0) {
-    1
-  } else {
-    -1
-  }
-}
-```
-
-while in Python,
-it might be:
-
-```{python manual-test-py}
-def numSign(x):
+```{python manual-test}
+def num_sign(x):
     if x > 0:
         out = 1
     else:
@@ -39,79 +27,58 @@ def numSign(x):
     return out
 ```
 
-A simple way to test the function interactively in either language
-is to check that it produces the correct value for a few representative cases:
+The simplest way to test the function would be to interactively check it produces the correct values.
+Type out these commands to see that we get what we expect.
 
-```{r manual-test-r-2}
-numSign(2) == 1
-numSign(0) == 0
-numSign(-4) == -1
+```{python manual-test-2}
+num_sign(2) == 1
+num_sign(0) == 0
+num_sign(-4) == -1
 ```
 
-These tests show that it handles (some) positive and negatives value correctly,
-but gives the wrong value for zero
-(whose sign should also be 0).
+These simple tests show that the function handles (some) positive and negatives value correctly,
+but gives the wrong value for zero, which should be 0.
 
-Manual testing is a good place to start,
-but when we are creating or modifying a larger function,
-we want to be able to re-run our tests with a single command.
-That phrase "with a single command" suggests that we should write a second function
-whose job is to re-run tests for the first.
-In R,
-this might be:
+Manually testing functions is a great place to start,
+but quickly becomes unmanageable as the function or tests get longer or more complicated.
+And if we want to easily re-run multiple tests in one command? 
+Then we need to start considering automated methods of testing.
+The Python `assert` statement can achieve some of what we want.
 
-```{r stop-not-r}
-test_numSign <- function() {
-    stopifnot(numSign(0.1) == 1)
-    stopifnot(numSign(0) == 0)
-    stopifnot(numSign(-Inf) == -1)
-}
-```
+Let's try it out.
+Type out this new function...
 
-As its name suggests,
-`stopifnot` stops the program if its argument is not true.
-A Python equivalent could use `assert` to achieve the same effect:
-
-```{python stop-not-python}
+```{python stop-not}
 import math
 
-def test_numSign():
-    assert numSign(0.1) == 1
-    assert numSign(0) == 0
-    assert numSign(math.inf) == -1
+def test_num_sign():
+    assert num_sign(0.1) == 1
+    assert num_sign(0) == 0
+    assert num_sign(math.inf) == -1
 ```
 
-## What features do we want a testing framework to have? {#py-rse-correct-features}
+Then execute it:
 
-The individual tests in `test_numSign` are called [unit tests][unit-test]
-because they test the smallest units of our code.
-Writing functions so that we can easily re-run unit tests is a step in the right direction,
-but our current approach has two flaws.
-First,
-if a test fails,
-none of the tests that come after it run.
-In this case,
-for example,
-we don't know if `numSign` handles `-Inf` correctly or not
-because testing stops when `numSign(0)` gives the wrong answer.
-We would have more information if all of the tests ran every time.
+```{python stop-not-eval, error=TRUE}
+test_num_sign()
+```
 
-The second flaw in `test_numSign` is that it doesn't tell us anything if our tests pass.
-A one-line summary saying "3/3 tests passed" would confirm that the tests actually ran,
-while something like "2/3 tests passed"
-followed by a list of the tests that *didn't* so we know where to start investigating
-would be even better.
+Do exercise \@ref(py-rse-correct-ex-numsign) on fixing `num_sign()` so the tests pass.
 
-> **Too Much Information**
->
-> We *don't* want our testing framework to list all of the tests that pass
-> because if there is too much output,
-> we will soon start ignoring all of it.
-> A testing framework should only demand that we pay attention to details
-> when we actually need to.
+## What does a testing framework have? {#py-rse-correct-features}
 
-One other requirement for a good set of tests is [isolation][test-isolation].
-Suppose that we have two functions `first` and `second` and we test them in this way:
+The individual tests in `test_num_sign()` are called [unit tests][unit-test]
+because they test small "units" or pieces of our code.
+On it's own, this function is fine, but it misses two things:
+
+1. If one test fails or throws an error, the subsequent tests don't get executed,
+as we saw from running it.
+In this case, we don't know if `num_sign()` handles `-Inf` correctly or not because
+testing stops when `num_sign(0)` gives the wrong answer.
+2. If a test fails, it doesn't tell us *how many tests failed* and *what tests did fail*. 
+In this case, the failure only tells us that *something failed* but doesn't say anything else. 
+Another requirement for a good set of tests is [isolation][test-isolation].
+For example, there are two functions `first` and `second` that are tested in this way:
 
 ```
 first_result = first()
@@ -120,21 +87,19 @@ second_result = second(first_result)
 check(second_result)
 ```
 
-If `first` produces a wrong answer,
-we won't know if `second` is working
-because we won't know what its actual input is.
+If `first()` produces a wrong answer,
+we won't know if `second()` is working properly 
+because the `first()` test fails.
 Using the output of one test as the input of another
 increases the risk of [false positives][false-positive] (tests passing when they should fail)
-and [false negatives][false-negative] (tests failing when they should pass),
-which distract or mislead us.
+and [false negatives][false-negative] (tests failing when they should pass).
 
-Putting these requirements together,
-a single unit test has:
+Put together, a single unit test should have:
 
 -   a [fixture][fixture],
     which is the thing being tested (e.g., the number 0 or a list of images);
 -   an [actual result][actual-result],
-    which is what the code produces when given that fixture; and
+    which is what the code produces when given the fixture; and
 -   an [expected result][expected-result]
     that the actual result is compared to.
 
@@ -153,670 +118,12 @@ A [test framework][test-framework] (also called a [test runner][test-runner]) sh
 -   encourage people to isolate tests; and
 -   make it easy to write and update tests (because otherwise people won't do it).
 
-The next two sections will introduce the most popular frameworks for R and Python.
+The next two sections will introduce the most popular framework for Python.
 We will then explore general issues
 such as how we can tell which parts of our code have and haven't been tested
 and what kinds of tests we should write.
 
-## How do I create and run unit tests in Python? {#py-rse-correct-create-python}
-
-[`pytest`][pytest] is the most widely used test framework for Python.
-Tests obey three rules:
-
-1.  All tests are put in files whose names begin with `test_`.
-2.  Each test is a function whose name also begins with `test_`.
-3.  These functions use `assert` to check results.
-
-The `pytest` library comes with a command-line tool that is also called `pytest`.
-When we run it with no options:
-
-```shell
-$ pytest
-```
-
-it searches for all files named `test_*.py` in the current directory and its subdirectories.
-It then imports these files,
-runs the tests they contain,
-and summarizes their results.
-If we only want to run the tests in a particular file,
-we can use the command `pytest path/to/test_file.py`.
-
-We can put our tests wherever we want,
-but most projects put them in a subdirectory of the project's root directory called `tests`.
-If the project uses a [build tool][build-tool] like Make (Chapter \@ref(py-rse-automate)),
-it is common to include a target called `test` so that `make test` will re-run all of the tests.
-
-So what do tests look like?
-To see,
-create a file called `test_add.py` and insert the following code:
-
-```python
-def add(x, y):
-    val = x + y
-    return val
-
-def test_add_two_small_integers_2():
-    assert add_two(1, 2) == 3
-
-def test_add_integer_and_float():
-    left = 1
-    right = 2.0
-    result = add_two(left, right)
-    assert result == 3
-    assert type(result) == int
-```
-
-The function being tested will *not* normally be in
-the file of tests—test files will normally import those functions instead—but
-we have put `add` here for convenience.
-We don't write comments to explain what each test is doing;
-we give each a long name instead,
-because that's what `pytest` will print if and when the test fails.
-Finally,
-we have shown two styles of testing here:
-one in which the fixture is just the values passed into the function
-and the result is checked immediately,
-and one in which the fixture is constructed step-by-step (the variables `left` and `right`)
-and the function's result is captured in another variable
-so that several checks can be done.
-
-To run these tests, we use:
-
-```shell
-$ pytest test_add.py
-```
-
-The output is:
-
-```text
-============================= test session starts ==============================
-platform darwin -- Python 3.7.3, pytest-5.0.1, py-1.8.0, pluggy-0.12.0
-rootdir: /Users/merely/tests
-plugins: openfiles-0.3.2, arraydiff-0.3, doctestplus-0.3.0, remotedata-0.3.1
-collected 2 items
-
-test_add.py FF                                                          [100%]
-
-=================================== FAILURES ===================================
-________________________ test_add_two_small_integers_2 _________________________
-
-    def test_add_two_small_integers_2():
->       assert add_two(1, 2) == 3
-E       NameError: name 'add_two' is not defined
-
-test_add.py:6: NameError
-__________________________ test_add_integer_and_float __________________________
-
-    def test_add_integer_and_float():
-        left = 1
-        right = 2.0
->       result = add_two(left, right)
-E       NameError: name 'add_two' is not defined
-
-test_add.py:11: NameError
-=========================== 2 failed in 0.10 seconds ===========================
-```
-
-The two `F`'s in the top line tell us there are two failures.
-The `E` in the report for each test tells us why that test failed,
-and the listing immediately above this line tells us why:
-our function is called `add`,
-but we are using `add_two` in our tests.
-Let's rename the function and re-run our tests:
-
-```text
-============================= test session starts ==============================
-platform darwin -- Python 3.7.3, pytest-5.0.1, py-1.8.0, pluggy-0.12.0
-rootdir: /Users/merely/tests
-plugins: openfiles-0.3.2, arraydiff-0.3, doctestplus-0.3.0, remotedata-0.3.1
-collected 2 items
-
-test_add.py .F                                                           [100%]
-
-=================================== FAILURES ===================================
-__________________________ test_add_integer_and_float __________________________
-
-    def test_add_integer_and_float():
-        left = 1
-        right = 2.0
-        result = add_two(left, right)
-        assert result == 3
->       assert type(result) == int
-E       AssertionError: assert <class 'float'> == int
-E        +  where <class 'float'> = type(3.0)
-
-test_add.py:13: AssertionError
-====================== 1 failed, 1 passed in 0.05 seconds ======================
-```
-
-This time the first line of output tells us that one test passed (the `.`)
-and another failed (the `F`).
-`pytest` then shows where the problem occurred in the failing test:
-we claimed on line 13 that the result's type would be `int`
-but it is actually `float`.
-
-## How do I create and run unit tests in R? {#py-rse-correct-create-r}
-
-The easiest way to start testing in R is via the `usethis` package.
-Let's create a new project in RStudio caller `creater` of type "package"
-(both because `usethis` is designed to work with packages,
-and because our R projects should always be packages).
-We can then type:
-
-```r
-usethis::use_testthat()
-```
-
-```text
-✔ Setting active project to '/Users/merely/creater'
-✔ Adding 'testthat' to Suggests field in DESCRIPTION
-✔ Creating 'tests/testthat/'
-✔ Writing 'tests/testthat.R'
-● Call `use_test()` to initialize a basic test file and open it for editing.
-```
-
-The call creates a new directory `tests/testthat/`,
-adds `testthat` to `Suggests` in the `DESCRIPTION` file,
-and creates a file called `tests/testthat.R` that tells R how to run the tests.
-This may seem like a lot,
-but it is all needed to create an R package (Chapter \@ref(py-rse-package-r)),
-so we might as well do things that way from the start.
-
-The file `tests/testthat.R` contains:
-
-```r
-library(testthat)
-library(creater)
-
-test_check("creater")
-```
-
-I.e.,
-it loads the `testthat` library and our own package,
-then calls `test_check` to run tests.
-If we try to run our tests using:
-
-```r
-devtools::test()
-```
-
-we get the message:
-
-```text
-No tests: no files in /Users/merely/creater/tests/testthat match '^test.*\.[rR]$'
-```
-
-This is fair,
-since we haven't yet created any tests.
-To do that,
-we run:
-
-```r
-usethis::use_test("mean")
-```
-
-```text
-✔ Increasing 'testthat' version to '>= 2.1.0' in DESCRIPTION
-✔ Writing 'tests/testthat/test-mean.R'
-● Modify 'tests/testthat/test-mean.R'
-```
-
-As the output suggests,
-this command creates a file called `tests/testthat/test-mean.R`.
-We could create this file ourselves if we want;
-either way,
-its name should reflect what we are using it to test,
-such as `test-read-data.R` or `test-annual-analysis.R`.
-Note that we do *not* type the prefix `test-` in the call to `usethis::use_test`;
-`usethis` will insert that automatically.
-
-The newly-created file contains a single test case:
-
-```r
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
-})
-```
-
-We can run this with:
-
-```r
-devtools::test()
-```
-
-```text
-Loading creater
-Testing creater
-✔ |  OK F W S | Context
-✔ |   1       | mean
-
-══ Results ══════════════════════════════════════════════════════════════════════════════════════════════════════
-OK:       1
-Failed:   0
-Warnings: 0
-Skipped:  0
-```
-
-or use the RStudio keyboard shortcut <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> (on Windows)
-or <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> (on Mac),
-which calls the same function.
-Either way,
-R searches below the `tests/testthat` directory to find files whose names start with `test`,
-loads them,
-and runs the tests that it finds.
-The output tells us that one test passed,
-none failed,
-there were no warnings,
-and no tests were skipped.
-
-Let's re-open `tests/testthat/test-mean.R` and replace the test that R wrote for us
-with this code:
-
-```r
-context("Computing the mean")
-
-test_that("the mean of an odd-length vector is correct", {
-    expect_identical(mean(1:3), 2.0)
-})
-
-test_that("the mean of an even-length vector is correct", {
-    expect_identical(mean(1:4), 2.0)
-})
-```
-
-```text
-Loading creater
-Testing creater
-✔ |  OK F W S | Context
-✖ |   1 1     | Computing the mean
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-test-mean.R:8: failure: the mean of an even-length vector is correct
-mean(1:4) not identical to 2.
-1/1 mismatches
-[1] 2.5 - 2 == 0.5
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-══ Results ══════════════════════════════════════════════════════════════════════════════════════════════════════
-OK:       1
-Failed:   1
-Warnings: 0
-Skipped:  0
-```
-
-The little table at the top of the output shows that one test passed and one failed
-in the context titled `"Computing the mean"`.
-The lines below tell us what failed and why,
-and the final section of the report summarizes the results.
-It is redundant in this case,
-since both of our tests are in the same context,
-but is useful if we have several files full of tests.
-
-## How should I set up fixtures my unit tests? {#py-rse-correct-fixtures}
-
-Test files all have a similar structure:
-
-1.  Load the software to be tested
-    (since it normally won't be in the same file as the tests).
-2.  Write one short function to test each feature of the software.
-
-Each test function also has a stereotypical structure:
-
-1.  Create the fixture.
-2.  Run the test.
-3.  Check the result.
-
-Creating a fixture often requires many lines of code,
-so we often write helper functions to do this.
-For example,
-if we are testing functions that work on multiple dataframes in R,
-we might write a function like this:
-
-```r
-create_three_frames <- function() {
-    ones <- tribble(
-        ~odd, ~even,
-           1,     2,
-           3,     4)
-    tens <- tribble(
-        ~odd, ~even,
-          10,    20,
-          30,    40)
-    hundreds <- tribble(
-        ~odd, ~even,
-         100,   200,
-         300,   400)
-    list(ones=ones, tens=tens, hundreds=hundreds)
-}
-```
-
-We could then use the fixture that function produces in many tests.
-Here,
-for example,
-we are using it to test a function called `columnize`:
-
-```r
-test_that("columnize combines columns by name with addition", {
-    fixture <- create_three_frames()
-    result <- columnize(fixture, '+', odd)
-    expect_equal(result$odd, c(111, 333))
-})
-
-test_that("columnize combines columns by name with multiplication", {
-    fixture <- create_three_frames()
-    result <- columnize(fixture, '*', odd)
-    expect_equal(result$odd, c(1000, 9000))
-})
-```
-
-Using helper functions to create fixtures like this
-reduces the [cognitive load][cognitive-load] on whoever has to maintain the tests,
-since they only have to form a [mental model][mental-model] of a few cases
-rather than a new one for each test.
-Note that we do *not* create the fixture once as a global variable
-and then re-use it in many tests.
-Tests should be isolated,
-and having them share data increases the chances that
-one of our tests will modify the data in ways that interfere with other tests.
-
-## How should I check the results of tests? {#py-rse-correct-check}
-
-Once we have a result we need to check it.
-The simplest way to do this in Python is the `assert` statement,
-which [raises][raise] an [exception][exception] if a condition is not true.
-This normally causes Python to halt the program,
-but `pytest` catches these exceptions,
-adds them to its summary report,
-and then runs the next test function.
-As a result,
-all of the test functions are run,
-but each function only runs as far as the first failed check (Figure \@ref(fig:py-rse-correct-failed-test)).
-
-```{r py-rse-correct-failed-test, echo=FALSE, fig.cap="Test Failure"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
-This is another reason to recycle fixtures and keep test functions short:
-in the example below,
-we can't be sure that the second test is run in `combined_tests`:
-
-```python
-def combined_tests():
-    fixture = make_fixture()
-    result = function(fixture)
-    assert len(result) > 2
-    assert result[0] != 0  # might not run
-```
-
-but we can be sure that both checks are run in `split_test_len` and `split_test_zero`.
-
-```python
-def split_test_len():
-    fixture = make_fixture()
-    result = function(fixture)
-    assert len(result) > 2
-
-def split_test_zero():
-    fixture = make_fixture()
-    result = function(fixture)
-    assert result[0] != 0
-```
-
-> **Testing in the Real World**
->
-> In practice,
-> most programmers would write `combined_tests` in this case
-> rather than doubling the amount of reading they have to do
-> in order to understand these tests.
-> The purpose of testing is always to draw attention to things that need it;
-> if the second check in `combined_tests` doesn't run because the first one failed
-> then we will have less information than we could,
-> but we will still know the most important thing:
-> our code is broken.
-
-In contrast to Python,
-R's `testthat` library provides multiple checking functions for different purposes.
-`expect_identical()` compares that actual and expected results are identical down to the last bit.
-`expect_equal()` checks that its arguments are equal within a narrow tolerance;
-as we discuss in Section \@ref(py-rse-correct-float),
-this is more useful for most data science problems.
-Others include `expect_length`,
-which checks that a vector has the right length,
-and `expect_match`,
-which checks that a string matches a [regular expression][regular-expression].
-We can always replace these with `expect_true`,
-i.e.,
-use:
-
-```r
-expect_true(length(result == 3))
-```
-
-instead of:
-
-```r
-expect_length(result, 3)
-```
-
-but the latter makes our intention clearer.
-
-## Why and how should I test that software fails correctly? {#py-rse-correct-failure}
-
-Evil clowns are every programmer's worst nightmare.
-Their second worst is a [silent failure][silent-failure]:
-something that goes wrong but doesn't crash,
-print a warning,
-or otherwise signal that human attention is required.
-Testing that our code fails when it should
-is therefore just as important as testing that it runs correctly.
-
-> **We Have the Data**
->
-> The need to test error handling is not just folklore:
-> in their study of failures in data-intensive applications,
-> @Yuan2014 found that,
-> "the majority of catastrophic failures could easily have been prevented
-> by performing simple testing on error handling code—the last line of defense—even without
-> an understanding of the software design."
-
-In Python,
-we can test for an error using a `with` statement
-and the `pytest.raises` function.
-For example,
-suppose a function called `count_words` is supposed to raise a `ValueError` exception when given an empty string.
-We can test this behavior as follows:
-
-```python
-import pytest
-
-def test_text_must_not_be_empty():
-    with pytest.raises(ValueError):
-        count_words('')
-```
-
-In R,
-`testthat` provides specific functions to test for errors or warnings
-called `expect_error()` and `expect_warning()` respectively:
-
-```r
-test_that("text must not be empty", {
-    expect_error(count_words(""))
-})
-```
-
-## How can I tell whether my code has been tested or not? {#py-rse-correct-coverage}
-
-As we write more code or make changes to code we already have,
-we may lose track of which parts we have tested and which we haven't.
-Even short programs,
-loops or conditionals may make it difficult for us to figure out
-what is actually being executed.
-For example,
-take a few moments to read this function in Python:
-
-```python
-def first(left, right):
-    if left < right:
-        left, right = right, left
-    while left > right:
-        value = second(left, right)
-        left, right = right, int(right/2)
-    return value
-
-def second(check, balance):
-    if check > 0:
-        return balance
-    else:
-        return 0
-
-print(first(3, 5))
-```
-
-or its equivalent in R:
-
-```r
-first <- function(left, right) {
-  if (left < right) {
-    tmp <- left
-    left <- right
-    right <- tmp
-  }
-
-  while (left > right) {
-    value <- second(left, right)
-    left <- right
-    right <- as.integer(right / 2)
-  }
-
-  value
-}
-
-second <- function(check, balance) {
-    if (check > 0) {
-        balance
-    } else {
-        0
-    }
-}
-
-c(3, 5, first(3, 5))
-```
-
-The only way to know which parts of these functions are and aren't executed
-is to trace their execution a line at a time.
-The good news is that we don't have to do this ourselves:
-a [code coverage][code-coverage] tool will do this for us.
-In essence,
-a code coverage tool creates a vector of Boolean flags with one entry for each line of code,
-then modifies the code so that the appropriate flag is set to `true` whenever that line is executed
-(Figure \@ref(fig:py-rse-correct-how-coverage-works)).
-When the program finishes,
-the tool can show us which lines were touched
-and report summary statistics such as the number or percentage of lines that weren't used.
-
-```{r py-rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
-Most Python programmers use the `coverage` module as a coverage checking tool.
-When we install it we get a command-line utility that is also called `coverage`.
-If the example program above is in a file called `demo.py`,
-we can check coverage by running:
-
-```shell
-$ coverage run demo_coverage.py
-```
-
-This command doesn't display anything of its own;
-instead,
-it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
-To display that data,
-we run:
-
-```shell
-$ coverage report
-```
-
-```text
-Name      Stmts   Miss  Cover
------------------------------
-demo.py      12      1    92%
-```
-
-To get a fuller report,
-we run `coverage html`
-and then open `htmlcov/index.html`.
-Clicking on the name of our file produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
-
-```{r python-coverage, echo=FALSE, fig.cap="Python Coverage"}
-knitr::include_graphics("figures/rse-correct/python-coverage.png")
-```
-
-R's `covr` package has several functions for checking coverage.
-For example,
-we can test the coverage of the tests for a package by running:
-
-```r
-covr::package_coverage()
-```
-
-This function outputs a list of all R files in the package
-with their corresponding percentage coverage,
-which is a good way to figure out what needs to be done next.
-
-## How much testing is enough? {#py-rse-correct-enough}
-
-If we are writing software for a safety-critical application such as a medical device,
-we should aim for 100% code coverage,
-i.e.,
-every single line in the application should be tested.
-In fact,
-we should probably go further and aim for 100% [path coverage][path-coverage]
-and ensure that every possible path through the code has been checked.
-
-But most of us don't write software that people's lives depend on,
-so requiring 100% code coverage is like asking for ten decimal places of accuracy
-when checking the voltage of a household electrical outlet.
-We always need to balance the effort required to create tests
-against the likelihood that those tests will uncover useful information.
-
-It's important to understand that no amount of testing can prove a piece of software is completely correct.
-A function with only two numeric arguments has 2<sup>128</sup> possible inputs.
-Even if we could write the tests,
-how could we be sure we were checking the result of each one correctly?
-
-And testing data analysis pipelines is often harder than testing mainstream software applications,
-since data analysts often don't know what the right answer is.
-(If we did,
-we would have submitted our report and moved on to the next problem already.)
-The key distinction is the difference between [validation][validation],
-which asks whether the specification is correct,
-while [verification][verification],
-which asks whether we have met that specification.
-The difference between them is the difference between building the right thing and building something right,
-and the former question is often hard for data scientists to answer.
-
-Luckily,
-we can group the test cases for most functions into classes.
-For example,
-it might be possible to test a function that takes numbers as inputs
-as well as we need to
-using only a few cases:
-zero, a positive number, a negative one, and infinity.
-If we want to go further,
-we could check that it fails the right way when given a string or a list.
-Similarly,
-when testing a function that summarizes a table full of data,
-we should probably check that it handles tables with:
-
--   no rows
--   only one row
--   many identical rows
--   rows having keys that are supposed to be unique, but aren't
--   rows that contain nothing but missing values
-
-Some projects develop [checklists][checklist] to remind programmers what they ought to test.
-These checklists can be a bit daunting for newcomers,
-but they are a great way to pass on hard-earned experience.
+TODO: Exercise idea is identify the different parts of a unit test (fixture, etc)
 
 ## When should I write my tests? {#py-rse-correct-tdd}
 
@@ -867,15 +174,15 @@ what we are checking for remains true as the pipeline evolves or is run on other
 This helps reusability—it's amazing how often a one-off analysis
 winds up being used many times—but the real goal is comprehensibility.
 If someone can get our code and data,
-run the former on the latter,
-and get the same result that we did,
+then runs the code on the data,
+and gets the same result that we did,
 then our computation is reproducible,
 but that doesn't mean they can understand it.
 Comments help
 (either in the code or as blocks of prose in a [computational notebook][computational-notebook]),
 but they won't check that assumptions and invariants hold.
 And unlike comments,
-runnable assertions can't fall out of step with what the code is actually doing…
+runnable assertions can't fall out of step with what the code is actually doing.
 
 We also need to distinguish between testing during development
 and testing in production.
@@ -886,210 +193,321 @@ and convincing ourselves that we're getting the right answer in some ad hoc way.
 
 In production,
 on the other hand,
-our goal is to detect cases where behavior deviates significantly from what we previously decided what right.
+our goal is to detect cases where behavior deviates significantly from what we previously decided was right.
 We want this to be automated
-so that our pipeline will ring an alarm bell to tell us something is wrong
+so that our pipeline will inform us that something is wrong,
 even if we're busy working on something else.
 This can happen because real data will never have exactly the same characteristics as the data we used during development.
 We also need these checks because the pipeline's environment can change:
 for example,
-someone could upgrade a library that one of our libraries depends on,
-which could lead to us getting slightly different answers than we expected.
+a library we depend on could get upgraded,
+which could lead to getting slightly different answers than we expected.
 
-## Why should I be cautious when using floating-point numbers? {#py-rse-correct-float}
+## How do I create and run unit tests? {#py-rse-correct-create-python}
 
-No matter what the cause,
-we need to understand exactly what we mean by "tolerance" when talking about testing.
-The explanation that follows is simplified to keep it manageable;
-To learn more,
-please take half an hour to read @Gold1991.
+[`pytest`][pytest] is the most widely used test framework for Python.
+Tests obey three rules:
 
-Finding a good representation for floating point numbers is hard:
-we cannot represent an infinite number of real values with a finite set of bit patterns,
-and unlike integers,
-no matter what values we *do* represent,
-there will be an infinite number of values between each of them that we can't.
-These days,
-floating point numbers are usually represented using [sign][sign],
-[magnitude][magnitude] (or [mantissa][mantissa]),
-and an [exponent][exponent].
-In a 32-bit number,
-the IEEE 754 standard calls for 1 bit of sign,
-23 bits for the mantissa,
-and 8 bits for the exponent.
-To illustrate the problems with floating point,
-we will use a much simpler 5-bit representation
-with 3 bits for the magnitude and 2 for the exponent.
-We won't worry about fractions or negative numbers,
-since our simple representation will show off the main problems.
+1.  All tests are put in files whose names begin with `test_`.
+2.  Each test is a function whose name also begins with `test_`.
+3.  These functions use `assert` to check results.
 
-The table below shows the possible values we can represent with 5 bits.
-(Real floating point representations shift values left and right to avoid the redundancy shown here,
-but again,
-that doesn't affect our main point.)
-Using subscripts to show the bases of numbers,
-110<sub>2</sub>×2<sup>11<sub>2</sub></sup> in binary
-is 6×2<sup>3</sup> in decimal,
-or 48.
+The `pytest` library comes with a command-line tool that is also called `pytest`.
+When we run it with no options:
 
-<table>
-  <tr>
-    <th></th>
-    <th colspan="4">Exponent</th>
-  </tr>
-  <tr>
-    <th>Mantissa</th> <th>00</th> <th>01</th> <th>10</th> <th>11</th>
-  </tr>
-  <tr>
-    <th>000</th> <td>0</td> <td>0</td> <td>0</td> <td>0</td>
-  </tr>
-  <tr>
-    <th>001</th> <td>1</td> <td>2</td> <td>4</td> <td>8</td>
-  </tr>
-  <tr>
-    <th>010</th> <td>2</td> <td>4</td> <td>8</td> <td>16</td>
-  </tr>
-  <tr>
-    <th>011</th> <td>3</td> <td>6</td> <td>12</td> <td>24</td>
-  </tr>
-  <tr>
-    <th>100</th> <td>4</td> <td>8</td> <td>16</td> <td>32</td>
-  </tr>
-  <tr>
-    <th>101</th> <td>5</td> <td>10</td> <td>20</td> <td>40</td>
-  </tr>
-  <tr>
-    <th>110</th> <td>6</td> <td>12</td> <td>24</td> <td>48</td>
-  </tr>
-  <tr>
-    <th>111</th> <td>7</td> <td>14</td> <td>28</td> <td>56</td>
-  </tr>
-</table>
-
-```{r verify-spacing, echo=FALSE, fig.cap="Number Spacing"}
-knitr::include_graphics("figures/rse-correct/number-spacing.png")
+```shell
+$ pytest
 ```
 
-Figure \@ref(fig:verify-spacing) is a clearer view of some of the values our scheme can represent.
-It shows that a lot of values are missing from this diagram:
-for example,
-it includes 8 and 10 but not 9.
-This is exactly the same problem as writing out ⅓ in decimal:
-we have to round that to 0.3333 or 0.3334.
+it searches for all files in the working directory and subdirectories named `test_*.py`.
+It runs the tests in these files and then summarizes their results.
+If you only want to run tests in a particular file,
+use the command `pytest path/to/test_file.py`.
 
-Since this scheme has no representation for 9,
-8+1 must be stored as either 8 or 10.
-But if 8+1 is 8, what is 8+1+1?
-If we add from the left, 8+1 is 8, plus another 1 is 8 again.
-If we add from the right, 1+1 is 2, and 2+8 is 10,
-so changing the order of operations can make the difference between right and wrong.
-In this case,
-sorting the values and adding from smallest to largest
-gives us the best chance of getting the most accurate answer.
-In other situations,
-like inverting a matrix,
-the rules are more complicated.
+Tests can be saved anywhere in the project directory,
+but usually they are placed in a `tests/` subdirectory.
+If the project uses a [build tool][build-tool] like Make (Chapter \@ref(py-rse-automate)),
+adding a target called `test` makes it easy to re-run tests by using `make test`.
+So a project structure would look something like:
 
-To make this more concrete,
-consider the short Python program below.
-It loops over the integers from 1 to 9
-and puts the numbers 0.9, 0.09, 0.009, and so on in `vals`.
-The sums should be 0.9, 0.99, 0.999, and so on, but are they?
-To find out,
-we can calculate the same values by subtracting .1 from 1,
-then subtracting .01 from 1, and so on.
-This should create exactly the same sequence of numbers, but it doesn't.
-
-```{python}
-vals = []
-for i in range(1, 10):
-    number = 9.0 * 10.0 ** -i
-    vals.append(number)
-    total = sum(vals)
-    expected = 1.0 - (10.0 ** -i)
-    diff = total - expected
-    print('{:2d} {:22.21f} {:22.21f}'.format(i, total, total-expected))
+```
+project
+├── ...
+├── tests
+│   └── test_add.py
+└── Makefile
 ```
 
-As the output shows,
-the very first value contributing to our sum is already slightly off:
-even with 23 bits for a mantissa,
-we cannot exactly represent 0.9 in base 2.
-Doubling the size of the mantissa would reduce the error,
-but we can't ever eliminate it.
+Tests all have a similar structure. 
+Let's demonstrate it by creating a file called `test_add.py` inside `tests/` 
+and inserting the following code:
 
-The good news is that 9×10<sup>-1</sup> and 1-0.1 are exactly the same:
-the values might not be correct,
-but at least they are consistent.
-However,
-some later values differ,
-and sometimes accumulated error makes the result *more* accurate.
+```python
+def add(x, y):
+    val = x + y
+    return val
 
-*This has nothing to do with randomness.*
-The process is completely deterministic,
-so the same calculation will produce exactly the same results no matter how many times it is run.
-(If we see someone run the same code on the same data with the same parameters many times and average the results,
-we should ask if they know what they're doing.)
-In practice,
-just as electrical engineers trust oscilloscope makers,
-data scientists should trust the authors of core libraries to do the best they can.
+def test_add_two_small_integers_2():
+    assert add_two(1, 2) == 3
 
-## How should I write tests that involved floating-point values? {#py-rse-correct-numeric}
+def test_add_integer_and_float():
+    left = 1
+    right = 2.0
+    result = add_two(left, right)
+    assert result == 3
+    assert type(result) == int
+```
 
-The absolute spacing between the values we can represent in Figure \@ref(fig:verify-spacing) is uneven.
-However,
-the relative spacing between each set of values stays the same:
-the first group is separated by 1,
-then the separation becomes 2,
-then 4,
-and then 8.
-This happens because we're multiplying the same fixed set of mantissas by ever-larger exponents,
-and it leads to some useful definitions.
-The [absolute error][absolute-error] in an approximation is the absolute value of
-the difference between the approximation and the actual value.
-The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
+Generally we wouldn't include the function being tested in the tests file. 
+Normally you'd import these functions into the test file.
+For the demonstration, we've put the function `add()` in the test file.
+The best practice for writing tests is to use descriptive names for test functions,
+even if the function name will be long.
+That's because `pytest` will print the names of the functions that fail testing.
+There are two styles of testing presented here:
+
+- one where the fixture is the value passed on to the function
+and the result is checked immediately,
+- and, one where the fixture is constructed step-by-step 
+(i.e. the variables `left` and `right`)
+and the function's result is set as a variable so multiple checks can be used.
+
+Run these tests by using:
+
+```shell
+$ pytest test_add.py
+```
+
+The output is:
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.3, pytest-5.0.1, py-1.8.0, pluggy-0.12.0
+rootdir: /Users/merely/tests
+plugins: openfiles-0.3.2, arraydiff-0.3, doctestplus-0.3.0, remotedata-0.3.1
+collected 2 items
+
+test_add.py FF                                                          [100%]
+
+=================================== FAILURES ===================================
+________________________ test_add_two_small_integers_2 _________________________
+
+    def test_add_two_small_integers_2():
+>       assert add_two(1, 2) == 3
+E       NameError: name 'add_two' is not defined
+
+test_add.py:6: NameError
+__________________________ test_add_integer_and_float __________________________
+
+    def test_add_integer_and_float():
+        left = 1
+        right = 2.0
+>       result = add_two(left, right)
+E       NameError: name 'add_two' is not defined
+
+test_add.py:11: NameError
+=========================== 2 failed in 0.10 seconds ===========================
+```
+
+The two `F`'s in the top line after `test_add.py` tell us there are two failures.
+The `E` in the `FAILURES` section tells us why that test failed,
+and the output immediately above this line tells us where the code failed.
+In this example, we used the wrong function name. 
+There is no function called `add_two()`, 
+since the function we created is called `add()`.
+Fix the name and re-run the tests. We'll get:
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.3, pytest-5.0.1, py-1.8.0, pluggy-0.12.0
+rootdir: /Users/merely/tests
+plugins: openfiles-0.3.2, arraydiff-0.3, doctestplus-0.3.0, remotedata-0.3.1
+collected 2 items
+
+test_add.py .F                                                           [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_add_integer_and_float __________________________
+
+    def test_add_integer_and_float():
+        left = 1
+        right = 2.0
+        result = add_two(left, right)
+        assert result == 3
+>       assert type(result) == int
+E       AssertionError: assert <class 'float'> == int
+E        +  where <class 'float'> = type(3.0)
+
+test_add.py:13: AssertionError
+====================== 1 failed, 1 passed in 0.05 seconds ======================
+```
+
+This time the first line of output tells us that one test passed (the `.`)
+and another failed (the `F`).
+`pytest` then shows where the problem occurred in the failing test:
+we wrote that `result` should be an integer `int`,
+but it is actually `float`.
+
+Complete exercises \@ref(py-rse-correct-ex-purpose), 
+\@ref(py-rse-correct-ex-create-countwords-test)
+and \@ref(py-rse-correct-ex-pytest-makefile).
+
+## How should fixtures be set up? {#py-rse-correct-fixtures}
+
+Test files all have a similar structure:
+
+1.  Load the software to be tested
+    (since it normally won't be in the same file as the tests).
+2.  Write one short function to test each feature of the software.
+
+Each test function also has a stereotypical structure:
+
+1.  Create the fixture.
+2.  Run the test.
+3.  Check the result.
+
+Creating a fixture often requires many lines of code,
+so we often write helper functions to do this.
+Using helper functions to create fixtures like this
+reduces the [cognitive load][cognitive-load] on whoever has to maintain the tests,
+since they only have to form a [mental model][mental-model] of a few cases
+rather than a new one for each test. 
+Below is an example structure of how a Python helper function may look like:
+
+TODO: Include example Python code of a helper function for fixtures.
+
+```python
+import ... # Load software/functions to test
+
+def test_NAME():
+    value = ... # Fixture
+    assert function_to_test(value, 2) == expected # Test assertion
+```
+
+Note that we do *not* create the fixture once as a global variable
+and then re-use it in many tests.
+Tests should be isolated,
+and having them share data increases the chances that
+one of our tests will modify the data in ways that interfere with other tests.
+
+## How should I check the results of tests? {#py-rse-correct-check}
+
+Using the `assert` statement to test functions is useful as
+it [raises][raise] an [exception][exception] when a condition is not true.
+This normally causes Python to halt the program,
+but `pytest` catches these exceptions,
+adds them to its summary report,
+and then runs the next test function.
+Because of this, 
+when all of the test functions are run,
+they only run until the first failed `assert` (Figure \@ref(fig:py-rse-correct-failed-test)).
+
+```{r py-rse-correct-failed-test, echo=FALSE, fig.cap="Test Failure"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+This is one reason to re-use fixtures and keep test functions short.
+Look at the code below. 
+In this example,
+we can't be sure that the second test runs in `combined_tests()`:
+
+```python
+def combined_tests():
+    fixture = make_fixture()
+    result = function(fixture)
+    assert len(result) > 2
+    assert result[0] != 0  # might not run
+```
+
+but we can be sure that both checks run in `split_test_len()` and `split_test_zero()`.
+
+```python
+def split_test_len():
+    fixture = make_fixture()
+    result = function(fixture)
+    assert len(result) > 2
+
+def split_test_zero():
+    fixture = make_fixture()
+    result = function(fixture)
+    assert result[0] != 0
+```
+
+But in practice,
+most programmers would write `combined_tests()` in the first case
+because it is simpler and faster to write and read.
+The purpose of testing is to draw attention to things that don't work as expected.
+If the second check in `combined_tests()` doesn't run because the first one failed,
+we may not have all the information that we could,
+but we know one thing:
+our code is broken.
+
+## Why and how should I test that software fails correctly? {#py-rse-correct-failure}
+
+Testing to check for correctness is great when functions fail "loudly",
+but somtimes, there are [silent failures][silent-failure]:
+something that goes wrong but doesn't crash,
+print a warning,
+or otherwise signal that human attention is required.
+Testing that our code fails when it should
+is therefore just as important as testing that it runs correctly.
+The need to test error handling is not just folklore:
+in their study of failures in data-intensive applications,
+@Yuan2014 found that,
+"the majority of catastrophic failures could easily have been prevented
+by performing simple testing on error handling code—the last line of defense—even without
+an understanding of the software design."
+
+We test for an error by using a `with` statement and the `pytest.raises()` function.
 For example,
-it we are off by 1 in approximating 8+1 and 56+1,
-we have the same absolute error,
-but the relative error is larger in the first case than in the second.
+for a function called `count_words()` is supposed to raise a `ValueError` exception when given an empty string.
+We test this behavior like below:
 
-Relative error is almost always more important than absolute error when we are testing software
-because it makes little sense to say that we're off by a hundredth
-when the value in question is a billionth.
-[Accuracy][accuracy] is how close our answer is to right,
+```python
+import pytest
+
+def test_text_must_not_be_empty():
+    with pytest.raises(ValueError):
+        count_words('')
+```
+
+Add some more unit tests for `count_words()` by completing exercises \@ref(py-rse-correct-ex-count-words)
+and \@ref(py-rse-correct-ex-check-errors).
+
+## How do I write tests that have floating-point values? {#py-rse-correct-numeric}
+
+Testing floating-point values is tricky because of the way computers represent these values. 
+Different operating systems, hardware, and software have subtle differences in how these values are stored as numbers.
+So, if we are testing a function that uses floating point numbers,
+what do we compare its result to if computers represent the number differently?
+If we try to test against a value with many decimal places (highly precise),
+the test may fail because floating point values are represented as approximations.
+No one has a good generic answer to this problem
+because its root cause is that we're using approximations,
+and each approximation has to be judged in its own context.
+
+So what can you do to test your programs?
+A generally good approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
+which is best expressed as a relative error.
+The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
+The [absolute error][absolute-error] is the absolute value of
+the difference between the approximation and the actual value.
+So for example,
+if we are off by 1 in approximating 8+1 and 56+1,
+we have the same absolute error,
+but the relative error is larger in the first case than it is in the second.
+
+Relative error is almost always more important than absolute error when we are testing software.
+It makes little sense to say that we're off by a hundredth
+when the value is a billionth.
+[Accuracy][accuracy] is how close our answer is to being right,
 and [precision][precision] is how close repeated measurements are to each other.
 We can be precise without being accurate (systematic bias),
 or accurate without being precise (near the right answer but without many significant digits).
-
-Accuracy is usually more important than precision for human decision making:
-a relative error of 10<sup>-2</sup> (two decimal places) is good enough for most data science
+Accuracy is generally more important than precision for human decision making:
+a relative error of 10^-2^ (two decimal places) is good enough for most data science
 because the decision a human being would make won't change if the number changes by 1%.
 
-We now come to the crux of this lesson:
-if the function we are testing uses floating point numbers,
-what should we compare its result to?
-If we compared the sum of the first few numbers in `vals` to the "right" answer,
-the answer could be `False` even though we're doing nothing wrong.
-If we compared it to a previously calculated result that we had stored somehow,
-the match would be exact.
-
-No one has a good generic answer to this problem
-because its root cause is that we're using approximations,
-and each approximation has to be judged in context.
-So what can you do to test your programs?
-If you are comparing to a saved result,
-and the result was saved at full precision,
-you could use exact equality,
-because there is no reason for the new number to differ.
-However,
-any change to your code,
-however small,
-could trigger a report of a difference.
-Experience shows that these spurious warnings quickly lead developers to stop paying attention to their tests.
-
-A much better approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
-which is best expressed as a relative error.
-R's `expect_equal` does this automatically.
 In Python,
 we can use `pytest.approx`,
 which works on lists, sets, arrays, and other collections,
@@ -1097,7 +515,7 @@ and can be given either relative or absolute error bounds.
 To show how it works,
 here's an example with an unrealistically tight absolute bound:
 
-```python
+```{python}
 from pytest import approx
 
 for bound in (1e-15, 1e-16):
@@ -1111,20 +529,17 @@ for bound in (1e-15, 1e-16):
             print('{:22.21f} {:2d} {:22.21f} {:22.21f}'.format(bound, i, total, expected))
 ```
 
-```text
-9.999999999999999790978e-17  6 0.999999000000000082267 0.999998999999999971244
-9.999999999999999790978e-17  8 0.999999990000000060775 0.999999989999999949752
-```
-
-This tells us that two tests pass with an absolute error of 10<sup>-15</sup>
-but fail when the bound is 10<sup>-16</sup>,
+This tells us that two tests pass with an absolute error of 10^-15^
+but fail when the bound is 10^-16^,
 both of which are unreasonably tight.
 Again,
 it helps to think of physical experiments:
-an absolute error of 10<sup>-15</sup is one part in a trillion,
+an absolute error of 10^-15^ is one part in a trillion,
 which only a handful of high-precision experiments have ever achieved.
 
 ## How can I test plots and other graphical results? {#py-rse-correct-plots}
+
+TODO: Update this section when I know more about how the plot scripts work.
 
 Testing visualizations is hard:
 any change to the dimension of the plot,
@@ -1136,7 +551,7 @@ will similarly cause false positives.
 The simplest solution is therefore to test the data used to produce the image
 rather than the image itself.
 Unless we suspect that the plotting library contains bugs,
-the correct data should alwyas produce the correct plot.
+the correct data should always produce the correct plot.
 
 If we *do* need to test the generated image,
 the only practical approach is to compare it to a saved image that we have visually verified.
@@ -1165,45 +580,33 @@ Vector-based tests therefore still need to have thresholds on floating-point val
 There aren't any useful general rules for testing the calculations that our pipelines do,
 since those calculations vary from one pipeline to the next,
 but there *are* some rules about where to get data to test with.
-The first method is [subsampling][subsampling]:
+The first method is random [subsampling][subsampling]:
 choose random subsets of your data,
 analyze it,
 and see how close the output is to what you get with the full dataset.
 If the output doesn't converge as the sample size grows,
 something is probably unstable in either the algorithm or its implementation.
-
-When we are subsampling,
-it's vital that we select a truly random subset of data
-rather than (for example) the first N records or every N'th record.
-If there is any ordering or grouping in our data,
-those techniques can produce samples that are biased,
-which may in turn invalidate some of your tests.
+It's important to randomly subset the data to reduce our risk of potential biases
+inherent in the ordering of the data.
 
 The other approach is to test with [synthetic data][synthetic-data].
-A few lines of code can generate uniform data (i.e., data having the same values for all observations),
+It's possible to generate uniform data (i.e., data having the same values for all observations),
 strongly bimodal data (which is handy for testing clustering algorithms),
-or a pseudorandom sample with a known distribution.
+or a pseudorandom sample with a known distribution with only a few lines of code.
 If we do this,
-we should also give our pipeline data that *doesn't* fit your expected distribution
-and make sure that something, somewhere, complains.
+we should give our pipeline data that *doesn't* fit your expected distribution
+and make sure that our tests let us know about this unexpected distribution.
 Doing this is the data science equivalent of testing the fire alarm every once in a while.
 
-For example,
-we can write a short program to generate data that conforms to Zips' Law and use it to test our analysis.
-Real data will be integers,
-since words only occur or not,
-and distributions will be fractional.
-After a bit of experimentation,
-we will use 5% relative error as our threshold for correctness:
-1% excludes a valid correct case.
-The test function is called `is_zipf`:
+Let's write a short program to generate data that conforms to Zips' Law and then use it to test our analysis.
+Since words either occur or don't,
+the data will be integers and the distributions will be fractional.
+We'll set an arbitrary threshold of 5% relative error to test for correctness.
 
 ```python
 from pytest import approx
 
-
 RELATIVE_ERROR = 0.05
-
 
 def is_zipf(hist):
     scaled = [h/hist[0] for h in hist]
@@ -1213,8 +616,7 @@ def is_zipf(hist):
     return scaled == approx(perfect, rel=RELATIVE_ERROR)
 ```
 
-Here are three tests that synthesize data and then check it using this function
-with names that suggest their purpose:
+Let's write up some tests to check if the function works on synthetic data:
 
 ```python
 def test_fit_correct():
@@ -1222,12 +624,10 @@ def test_fit_correct():
     print('actual', actual)
     assert is_zipf(actual)
 
-
 def test_fit_first_too_small():
     actual = [round(100 / (1 + i)) for i in range(10)]
     actual[0] /= 2
     assert not is_zipf(actual)
-
 
 def test_fit_last_too_large():
     actual = [round(100 / (1 + i)) for i in range(10)]
@@ -1235,9 +635,8 @@ def test_fit_last_too_large():
     assert not is_zipf(actual)
 ```
 
-## How can I test a program that uses random numbers? {#py-rse-correct-random}
-
-FIXME: explain how to test in the presence of random values
+Now, try running the tests. Do they pass or fail? 
+Complete exercise \@ref(py-rse-correct-ex-test-dataset)
 
 ## How can I test a data analysis pipeline in production? {#py-rse-correct-production}
 
@@ -1258,7 +657,7 @@ Logging while calculating and checking afterward makes it easy to compare values
 and ensures that there's a record of why a problem was reported.
 
 To illustrate these ideas,
-here's a script that reads a document and prints one line per word:
+let's write a script that reads a document and prints one line per word:
 
 ```python
 import sys
@@ -1276,7 +675,7 @@ with open('logfile.csv', 'a') as logger:
     logger.write('text_to_words.py,num_words,{}\n'.format(num_words))
 ```
 
-Here's a complementary script that counts how often words appear in its input:
+Then, let's write another script script that counts how often words appear in its input:
 
 ```python
 import sys
@@ -1296,8 +695,8 @@ with open('logfile.csv', 'a') as logger:
 ```
 
 Both of these scripts write records to `logfile.csv`.
-When we look at that file after a typical run,
-we see records like this:
+Open up the file and look at the contents.
+You should see something like this:
 
 ```text
 text_to_words.py,num_lines,431
@@ -1306,7 +705,7 @@ word_count.py,num_words,2554
 word_count.py,num_distinct,1167
 ```
 
-We can then use a small program to check that everything went as planned:
+Now, let's write a small program to check that everything went as planned:
 
 ```python
 import sys
@@ -1325,19 +724,12 @@ Tests like these are simple to write
 and catch a surprising number of errors,
 particularly when the person using the pipeline isn't its original author.
 
-> **Validating Pipelines**
->
-> There are several libraries for validating data pipelines in R,
-> including [assertr][assertr],
-> [checkr][checkr],
-> and [validate][validate-r].
-
 ## How can I infer and check properties of my data? {#py-rse-correct-infer}
 
 Writing tests for the properties of data can be tedious,
 but some of the work can be automated.
 In particular,
-the [TDDA library][tdda-site] for Python can infer test rules from data,
+the Python [TDDA library][tdda-site] for can infer test rules from data,
 such as "`age` should be less than 100",
 "`Date` should be sorted in ascending order",
 or "`StartDate` should be less than or equal to `EndDate`".
@@ -1448,6 +840,140 @@ Another way to use TDDA is to generate constraints for two datasets and then loo
 in order to see how similar the datasets are to each other.
 This is especially useful if the constraint file is put under version control.
 
+## How can I tell what code has been tested or not? {#py-rse-correct-coverage}
+
+As we add to or change our code,
+we may lose track of what has and hasn't been tested. 
+Even in short programs,
+loops and conditionals can make it difficult to figure out
+what does or doesn't execute.
+Take a few moments to read this function in Python:
+
+```python
+def first(left, right):
+    if left < right:
+        left, right = right, left
+    while left > right:
+        value = second(left, right)
+        left, right = right, int(right/2)
+    return value
+
+def second(check, balance):
+    if check > 0:
+        return balance
+    else:
+        return 0
+
+print(first(3, 5))
+```
+
+Can you easily tell what and how many lines gets executed?
+While this is a simple example, 
+even manually checking the code is difficult.
+The good news is that there is a tool to do this automatically,
+and it's called [code coverage][code-coverage].
+Essentially,
+a code coverage tool records whether a line of code gets evaluated or not
+(Figure \@ref(fig:py-rse-correct-how-coverage-works)).
+When the code coverage program finishes,
+the tool tells us which lines were evaluated
+and reports some summary statistics like the number or percentage of lines that weren't used.
+
+```{r py-rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
+knitr::include_graphics("figures/FIXME.png")
+```
+
+Most Python programmers use the `coverage` module as a coverage checking tool.
+When we install it we get a command-line utility that is also called `coverage`.
+If the example program above is in a file called `demo.py`,
+we can check coverage by running:
+
+```shell
+$ coverage run demo.py
+```
+
+This command doesn't display anything of its own;
+instead,
+it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
+To display that data,
+we run:
+
+```shell
+$ coverage report
+```
+
+```text
+Name      Stmts   Miss  Cover
+-----------------------------
+demo.py      12      1    92%
+```
+
+To get a more complete report,
+run `coverage html`
+and open `htmlcov/index.html`.
+Clicking on the name of our file produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
+
+```{r python-coverage, echo=FALSE, fig.cap="Python Coverage"}
+knitr::include_graphics("figures/rse-correct/python-coverage.png")
+```
+
+Complete exercise \@ref(py-rse-correct-ex-coverage).
+
+### How much test coverage is enough? {#py-rse-correct-enough}
+
+How testing we do of our software depends on the purposes it will be used for.
+If we are writing software for a safety-critical application such as a medical device,
+we should aim for 100% code coverage,
+i.e.,
+every single line in the application should be tested.
+In fact,
+we should probably go further and aim for 100% [path coverage][path-coverage]
+and ensure that every possible path through the code has been checked.
+
+But most of us don't write software that people's lives depend on,
+so requiring 100% code coverage is like asking for ten decimal places of accuracy
+when checking the voltage of a household electrical outlet.
+We always need to balance the effort required to create tests
+against the likelihood that those tests will uncover useful information.
+
+It's important to understand that no amount of testing can prove a piece of software is completely correct.
+A function with only two numeric arguments has 2^128^ possible inputs.
+Even if we could write the tests,
+how could we be sure we were checking the result of each one correctly?
+
+Testing data analysis pipelines is often harder than testing mainstream software applications,
+since data analysts often don't know what the right answer is.
+(If we did,
+we would have submitted our report and moved on to the next problem already.)
+The key distinction is the difference between [validation][validation],
+which asks whether the specification is correct,
+and [verification][verification],
+which asks whether we have met that specification.
+The difference between them is the difference between building the right thing and building something right,
+and the first is often hard for data scientists to address.
+
+Luckily,
+we can group the test cases for most functions into classes.
+For example,
+it might be possible to test a function that takes numbers as inputs
+as well as needing to use only a few cases:
+zero, a positive number, a negative one, and infinity.
+If we want to go further,
+we could check that it fails the right way when given a string or a list.
+Similarly,
+when testing a function that summarizes a table full of data,
+we probably should check that it handles tables with:
+
+-   no rows
+-   only one row
+-   many identical rows
+-   rows having keys that are supposed to be unique, but aren't
+-   rows that contain nothing but missing values
+
+Some projects develop [checklists][checklist] to remind programmers what they ought to test.
+These checklists can be a bit daunting for newcomers,
+but they are a great way to pass on hard-earned experience.
+
 ## Summary {#py-rse-correct-summary}
 
 ```{r py-rse-correct-concept, echo=FALSE, fig.cap="Correctness Concept Map"}
@@ -1460,62 +986,83 @@ if (knitr::is_latex_output()) {
 
 ## Exercises {#py-rse-correct-exercises}
 
-### Fixing `numSign` {#py-rse-correct-ex-numsign}
+### Fixing `num_sign()` {#py-rse-correct-ex-numsign}
 
-1.  Fix the implementation of `numSign` in either R or Python so that all tests will succeed.
+1.  Fix the implementation of `num_sign()` so that all tests will succeed.
 2.  Re-run the tests to confirm that the function is working.
 3.  Extend the function so that it does something sensible when passed a string or an empty list.
     Write functions to check your changes.
 
-### Checking simple calculations {#py-rse-correct-ex-simple-calc}
-
-Create a new test by running `usethis::use_test("simple-arithmetic")`.
-Copy the code below into the newly created test file and fill in the blanks
-so that it runs correctly.
-
-```r
-context("Check simple calculations")
-
-test_that("plus and minus give correct outputs", {
-  expect_identical(1 + 2, 3)
-  ___(1 - 2, -1)
-  expect_identical(1 + NA, __)
-  expect_identical(___ - ___, NA)
-})
-```
-
 ### Explain the purpose of tests {#py-rse-correct-ex-purpose}
 
-Based on the contents of the tests below,
-replace the blanks with appropriate `context()` and `test_that()` messages.
+1. Based on the contents of the tests below,
+try to write an informative and descriptive test name.
 
-```r
-context("___")
+TODO: Convert to Python code.
 
-test_that("___", {
-  expect_identical(sum(c(1, 2)), 3)
-  expect_identical(sum(c(NA, 2)), NA)
-})
+```python
+def add(x, y):
+    val = x + y
+    return val
 
-test_that("___", {
-  expect_identical(mean(c(1, 2)), 1.5)
-  expect_identical(mean(c(NA, 2)), NA)
-})
+def test____()
+    assert add_two(1, 2) == 3
 ```
 
-### Testing `count_words` {#py-rse-correct-ex-count-words}
+### Create a first, simple unit test for `countwords.py` {#py-rse-correct-ex-create-countwords-test}
 
-1.  Create a new test file.
-2.  Write unit tests for `count_words` to check the following:
+1. If not create, create a `tests/` directory in the Zipf's Law project.
+2. Create a `test_countwords.py` file for the `countwords.py` script in the `tests/` directory.
+TODO: This needs to be fixed so it fits the testing framework (i.e. how do you test a script?)
+3. Add a simple test in the file to check that it can count at least one word.
+4. Run `pytest` in the project directory. Does it work? What is the output?
+
+### Include the Python testing command in the project Makefile {#py-rse-correct-ex-pytest-makefile}
+
+1. Open up the project Makefile and create a new recipe for `pytest` to run the unit tests.
+The new recipe should be called `test`.
+2. Run `make test` in the project directory and see how it works. 
+If it doesn't work, fix it until it gives the testing output.
+
+### Add more tests for `count_words()` {#py-rse-correct-ex-count-words}
+
+TODO: This currently doesn't fit with how countwords.py is structured.. it is a script, how to test it as a function?
+
+1. In the `tests/test_countwords.py` file, add some additional unit tests for `count_words()` that checks the following:
     -   Returns zero when given an empty string.
     -   Returns `NA` when given `NA`.
     -   Returns 2 when given two words separated by a space.
     -   Returns 2 when given two words separated by a dash `-`.
+1. Run `make test` to run the new tests. What does the output give you?
 
-### Checking for errors {#py-rse-correct-ex-check-errors}
+### Checking that errors occur for `count_words()` {#py-rse-correct-ex-check-errors}
 
-Add new unit tests for the word-counting function
+1. Add new unit tests for the word-counting function
 to check that it raises errors when it should.
+1. Run `make test` to run these new tests.
+
+### Generate a dataset of text to test on {#py-rse-correct-ex-test-dataset}
+
+1. Create a new test file called `test_textdata.py` in the `tests/` directory.
+1. Write code to generate random text and words.
+Use the below code as a template:
+1. Run `make test` to check if this new test works.
+
+TODO: Add a template that they can base off of? Some with more Python experience deal with this.
+
+```python
+def random_words():
+    ...
+```
+
+### Check coverage of project and add to Makefile {#py-rse-correct-ex-coverage}
+
+1. Run coverage using this command `coverage run countwords.py BOOKTEXT` and 
+then run `coverage report`. 
+What does the report say?
+1. Add the coverage command as a recipe in the Makefile.
+Call the recipe `coverage`.
+1. Run `make coverage` to check that it works.
 
 ## Key Points {#py-rse-correct-keypoints}
 
