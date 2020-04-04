@@ -422,19 +422,16 @@ That last suggestion deserves a little elaboration.
 Most people write error messages directly in their code:
 
 ```python
-try:
-    # ...do something complicated...
-except OSError as e:
-    print('Unable to find or read file {}'.format(filename))
-    sys.exit(1)
+if file_name[-4:] != '.csv':
+    raise OSError(f'{file_name} must end in `.csv`.')
 ```
 
 A better approach for large projects is to put all of the error messages in a catalog:
 
 ```python
 ERROR_MESSAGES = {
-    'cannot_read_file' : 'Unable to find or read file {}',
-    'config_corrupted' : 'Configuration file {} corrupted',
+    'cannot_read_file' : f'{file_name} must end in `.csv`.',
+    'config_corrupted' : f'Configuration file {config_name} corrupted',
     # ...more error messages...
 }
 ```
@@ -445,11 +442,8 @@ and then only use messages from that catalog:
 from error_messages import ERROR_MESSAGES
 
 
-try:
-    # ...do something complicated...
-except OSError as e:
-    print(ERROR_MESSAGES['cannot_read_file'].format(filename))
-    sys.exit(1)
+if file_name[-4:] != '.csv':
+    raise OSError(ERROR_MESSAGES['cannot_read_file'])
 ```
 
 Doing this makes it much easier to ensure that messages are consistent.
@@ -458,13 +452,13 @@ It also makes it much easier to give messages in the user's preferred language:
 ```python
 ERROR_MESSAGES = {
     'en' : {
-        'cannot_read_file' : 'Unable to find or read file {}',
-        'config_corrupted' : 'Configuration file {} corrupted',
+        'cannot_read_file' : f'{file_name} must end in `.csv`.',
+        'config_corrupted' : f'Configuration file {config_name} corrupted',
         # ...more error messages in English...
     },
     'fr' : {
-        'cannot_read_file' : "Impossible d'acceder au fichier {}",
-        'config_corrupted' : 'Fichier de configuration {} corrompu',
+        'cannot_read_file' : f'{file_name} doit se terminer par `.csv`',
+        'config_corrupted' : f'Fichier de configuration {config_name} corrompu',
         # ...more error messages in French...
     }
     # ...other languages...
