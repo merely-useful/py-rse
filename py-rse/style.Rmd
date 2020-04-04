@@ -4,207 +4,255 @@
 source(here::here("_common.R"))
 ```
 
-To paraphrase @Dobz1973,
+Nothing in biology makes sense except in light of evolution @Dobz1973.
+Similarly,
 nothing in software development makes sense except in light of human psychology.
 This is particularly true when we look at programming style.
 Computers don't need to understand programs in order to execute them,
-but people do in order to create them, maintain them, and fix them.
-The more clearly those programs are laid out,
-the easier it is to find things and make sense of them.
-This lesson therefore describes some widely-used rules of Python programming style,
-and some features of the language that you can use to make your programs more flexible and more readable.
+but people do if they are to create, debug, and extend them.
+This lesson therefore presents guidelines for good Python programming style
+and introduces some language features that can make programs more flexible and more readable.
 
-The biggest benefit of having a second person work on a programming project
-is therefore not getting twice as much code written,
-but having code reviewed.
-Study after study over more than 40 years has shown that code review is the most effective way to find bugs in software
-@Faga1976,@Faga1986,@Cohe2010@Bacc2013.
-Despite this,
-it still isn't common in research software development,
-in part because it isn't part of the culture @Sega2005,
-but also because code review is mostly useful
-when the reviewers understand the problem domain well enough to comment on algorithms and design choices
-rather than indentation and variable naming,
-and the number of people who can do that for a research project is typically very small—sometimes
-as small as one @Petr2014.
-
-This lesson will look at the mechanics of code review
-and present some short examples of the kinds of things reviewers should look for.
-
-## How should I review someone else's code? {#py-rse-style-review}
-
-How you review is just as important as what you look for:
-being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
-or avoid having you review their work.
-Equally,
-being defensive when someone offers suggestions politely and sincerely is very human,
-but can stunt your development as a programmer.
-
-Lots of people have written guidelines for doing reviews,
-which are also useful when reviewing written work @Quen2018,@Sank2018.
-A few key points are:
-
-Work in small increments.
-:   As @Cohe2010 and others have found,
-    code review is most effective when done in short bursts.
-    That means that change requests should also be short:
-    anything that's more than a couple of screens long
-    should be broken into smaller pieces.
-
-Look for algorithmic problems first.
-:   Code review isn't just (or even primarily) about style:
-    its real purpose is to find bugs before they can affect anyone.
-    The first pass over any change should therefore look for algorithmic problems.
-    Are the calculations right?
-    Are any rare cases going to be missed?
-    Are errors being caught and handled Chapter \@ref(logging)?
-
-Use a rubric.
-:   Linters are great,
-    but can't decide when someone should have used a lookup table instead of conditionals.
-    A list of things to check for can make review faster and more comprehensible,
-    especially when you can copy-and-paste or drag-and-drop specific comments
-    onto specific lines
-    (something that GitHub unfortunately doesn't yet support).
-
-Ask for clarification.
-:   If you don't understand something,
-    or don't understand why the author did it,
-    ask.
-    (And when the author explains it,
-    think about suggesting that the explanation ought to be documented somewhere.)
-
-Offer alternatives.
-:   Telling authors that something is wrong is helpful;
-    telling them what they might do instead is more so.
-
-Don't be sarcastic or disparaging.
-:   "Did you maybe think about *testing* this garbage?"
-    is a Code of Conduct violation in any well-run project.
-
-Don't present opinions as facts.
-:   "Nobody uses X any more" might be true.
-    If it is,
-    the person making the claim ought to be able to point at download statistics
-    or a Google Trends search;
-    if they can't,
-    they should say,
-    "I don't think anybody uses X any more" and explain why they think that.
-
-Don't feign surprise or pass judgment.
-:   "Gosh, didn't you know [some obscure fact]?" isn't helpful;
-    neither is, "Geez, why don't you [some clever trick] here?"
-
-Don't overwhelm people with details.
-:   If someone has used the letter `x` as a variable name in several places,
-    and they shouldn't have,
-    comment on the first two or three and simply put a check beside the others—the reader
-    won't need the comment repeated.
-
-Don't ask people to do extra work.
-:   Nobody enjoys fixing bugs and style violations.
-    Asking them to add a few features while they're at it is rude.
-
-Don't let people break these rules just because they're frequent contributors or in positions of power.
-:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
-    If you let people be rude to one another,
-    *that* is your culture.
-
-Be specific in replies to reviewers.
-:   If someone has suggested a better variable name,
-    you can probably simply fix it.
-    If someone has suggested a major overhaul to an algorithm,
-    you should reply to their comment to point at the commit that includes the fix.
-
-Thank your reviewers.
-:   If someone has taken the time to read your code carefully,
-    thank them for doing it.
-
-## What are the standard rules of good style for Python programs? {#py-rse-style-pep8}
+## What is good style for Python programs? {#py-rse-style-pep8}
 
 The single most important rule of style is to be consistent,
-both internally and with other programs.
+both internally and with other programs @Kern1999.
 Python's standard style is called [PEP-8][pep-8];
-the term "PEP" is short for "Python Enhancement Proposal",
-and PEP-8 has become the most widely used standard for Python coding.
+the acronym "PEP" is short for "Python Enhancement Proposal",
+and PEP-8 lays out the rules that Python's own libraries use.
 Some of its rules are listed below,
 along with others borrowed from "[Code Smells and Feels][code-smells-and-feels]":
 
-FIXME: add before-and-after examples for each of these.
+### Spacing
 
-FIXME: move this to the novice material.
+**Always indent code blocks using 4 spaces, and use spaces instead of tabs.**
 
-### Always indent code blocks using 4 spaces, and use spaces instead of tabs.
+Python doesn't actually require consistent indentation
+so long as each block is indented the same amount,
+which means that this is legal:
 
-### Do not put spaces inside parentheses
+```python
+def transpose(original):
+  result = Matrix(original.numRow, original.numCol)
+  for row in range(original.numRow):
+              for col in range(original.numCol):
+               result[row, col] = original[col, row]
+  return result
+```
 
-I.e., don't write <code>(&nbsp;1+2&nbsp;)</code>.
+However,
+"legal" doesn't mean "readable".
+That same code is easier for the eye to follow
+when nested blocks step in the same amount each time:
+
+```python
+def transpose(original):
+    result = Matrix(original.numRow, original.numCol)
+    for row in range(original.numRow):
+        for col in range(original.numCol):
+            result[row, col] = original[col, row]
+    return result
+```
+
+The use of 4 spaces is a compromise between 2
+(which we find perfectly readable, but some people find too crowded)
+and 8
+(which most people agree uses up too much horizontal space).
+As for the use of spaces rather than tabs,
+the original reason was that the most common interpretation of tabs
+by the editors of the 1980s was 8 spaces,
+which again was more than most people felt necessary.
+Today,
+almost all editors will auto-indent or auto-complete when the tab key is pressed,
+but the legacy of those times lives on.
+
+**Do not put spaces inside parentheses.**
+
+Don't write <code>(&nbsp;1+2&nbsp;)</code>.
 This applies to function calls as well:
-do not write <code>max(&nbsp;a,&nbsp;b&nbsp;)</code>.
+write `max(a, b)` rather than <code>max(&nbsp;a,&nbsp;b&nbsp;)</code>.
 
-### Always use spaces around comparisons like `>` and `<=`.
+**Always use spaces around comparisons like `>` and `<=`.**
 
-Use your own judgment for spacing around common arithmetic operators like `+` and `/`.
+Python automatically interprets `a+b<c+d` as `(a+b)<(c+d)`,
+but that's a lot of punctuation crowded together;
+using spaces around comparison operators makes it easier to see
+what's being compared to what.
+However,
+you should use your own judgment for spacing around arithmetic operators like `+` and `/`.
+For example,
+`a+b+c` is perfectly readable,
+but
 
-### Use `ALL_CAPS_WITH_UNDERSCORES` for constants (also called global variables).
+```python
+substrate[i, j] + overlay[i, j]
+```
 
-### Use `lower_case_with_underscores` for the names of functions and variables.
+is probably easier for the eye to follow
+than the spaceless:
 
-This naming convention is called [snake case][snake-case] or [pothole case][pothole-case].
-You should only use [`CamelCase`][camel-case] for classes,
+```python
+substrate[i, j]+overlay[i, j]
+```
+
+**Put two blank links between each function definition.**
+
+This helps the eye see where one ends and the next begins,
+though the fact that functions always start in the first column helps as well.
+
+### Naming
+
+**Use `ALL_CAPS_WITH_UNDERSCORES` for global variables.**
+
+This convention is inherited from C,
+which was used to write the first version of Python.
+In that language,
+it was used to indicate a constant whose value couldn't be modified;
+Python doesn't enforce that rule,
+but `SHOUTING_AT_PROGRAMMERS` helps remind them that
+some things shouldn't be messed with.
+
+**Use `lower_case_with_underscores` for the names of functions and variables.**
+
+Research on naming conventions has produced mixed results @Bink2012,@Scha2018,
+but Python has (mostly) settled on underscored names for most things.
+This naming convention is called [snake case][snake-case] or [pothole case][pothole-case];
+you should only use [`CamelCase`][camel-case] for classes,
 which are outside the scope of this lesson.
 
-### Put two blank links between each function definition.
-
-This helps them stand out.
-
-### Avoid abbreviations in function and variable names.
+**Avoid abbreviations in function and variable names.**
 
 They can be ambiguous,
 and can be be hard for non-native speakers to understand.
 This rule doesn't necessarily you will have to do more typing:
 a good programming editor will [auto-complete][auto-completion] names for you.
 
-### Use short names for short-lived local variables but longer names for things with wider scope.
+**Use short names for short-lived local variables and longer names for things with wider scope.**
 
-Loop indices @Beni2017 can be `i` and `j` (provided the loop is only a few lines long).
+Using `i` and `j` for loop indices is perfectly readable
+provided the loop is only a few lines long @Beni2017.
 Anything that is used at a greater distance
 or whose purpose isn't immediately clear
 (such as a function) should have a longer name.
 
-### Put everything in a file in order.
+**Keep functions short.**
+
+No function should be more than a page long
+or have more than four levels of indentation because of nested loops and conditionals.
+Anything longer or more deeply nested is hard for readers to fit into [working memory][working-memory];
+if you need to break these limits,
+break the function into smaller functions instead.
+
+**Do not comment and uncomment sections of code to change behavior.**
+
+If you need to do something in some runs of the program and not do it in others,
+use an `if` statement to enable or disable that block of code.
+It's more reliable—you're far less likely to accidentally comment out one too many lines—and
+you may find that you want to leave those conditional sections in the finished program
+for logging purposes (Section \@ref(py-rse-errors-logging)).
+If you are sure you don't need the code,
+take it out completely:
+you can always get it back from version control
+(Section \@ref(py-rse-git-cmdline-ex-recover)).
+
+**Handle special cases at the start of the function.**
+
+This helps readers mentally get them out of the way
+and focus on the "normal" case.
+For example, this:
+
+```python
+def positive_sum(values):
+    if values == []:
+        result = None
+    else:
+        result = 0
+        for v in values:
+            if v > 0:
+                result += v
+    return result
+```
+
+should instead be written:
+
+```python
+def positive_sum(values):
+    if values == []:
+        return None
+
+    result = 0
+    for v in values:
+        if v > 0:
+            result += v
+    return result
+```
+
+This removes one level of nesting,
+and makes it clear what the special case is and how it's being handled.
+
+## In what order should functions be defined? {#py-rse-style-order}
 
 The order of items in each file should be:
 
 -   The [shebang][shebang] line (because it has to come first to work).
--   The file's documentation string (Chapter \@ref(style)).
+-   The file's documentation string (Section \@ref(py-rse-package-py-document)).
 -   All of the `import` statements, one per line.
--   Constant definitions.
+-   Global variable definitions
+    (especially things that would be constants in languages that support them).
 -   Function definitions.
 -   If the file can be run as a program,
     the `if __name__ == '__main__'` statement discussed in
     Section \@ref(py-rse-package-py-import).
 
-### Do not comment and uncomment sections of code to change behavior.
+That much is clear,
+but programmers disagree (strongly) on whether high-level functions should come first or last,
+i.e.,
+whether `main` should be the first function in the file or the last one.
 
-If you need to do something in some runs of the program and not do it in others,
-use an `if` statement to enable or disable that block of code.
-It's much more reliable—you're far less likely to accidentally comment out one too many lines—and
-you may find that you want to leave those conditional sections in the finished program
-for logging purposes (Chapter \@ref(logging)).
+We prefer the former approach,
+i.e.,
+putting high-level functions at the top of the file.
+The reason is that when people encounter code for the first time,
+they usually scan it from top to bottom.
+The first function they read should therefore help them understand
+what the rest of the file contains and where to look for it.
+Three common patterns that people use for this are:
 
-### Keep functions short.
+1.  Figure out what the user has asked it to do (Chapter \@ref(py-rse-configuration)).
+2.  Read all input data.
+3.  Process it.
+4.  Write output.
 
-Nothing should be more than a page long
-or have more than three levels of indentation because of nested loops and conditionals.
-Anything longer or more deeply nested will be hard for readers to fit into [working memory][working-memory];
-when you find yourself needing to break these limits,
-extract a function.
+or:
 
-### Handle special cases at the start of the function.
+1.  Figure out what the user has asked for.
+2.  For each input file:
+    1.  Read.
+    2.  Process.
+    3.  Write file-specific output (if any).
+3.  Write summary output (if any).
 
-This helps readers mentally get them out of the way
-and focus on the "normal" case.
+or:
+
+1.  Figure out what the user has asked for.
+2.  Repeatedly:
+    1.  Wait for user input.
+    2.  Do what the user has asked.
+3.  Exit when a "stop" command of some sort is received.
+
+Each step in each of the outlines above usually becomes a function.
+Those functions depend on others,
+some of which are written to break code into comprehensible chunks and are then called just once,
+others of which are utilities that may be called many times from many different places.
+We put all of the single-use functions in the first half of the file
+in the order in which they are likely to be called,
+and then put all of the multi-use utility functions in the bottom of the file in alphabetical order.
+If any of those utility functions are used by other scripts or programs,
+they should go in a file of their own.
+In fact,
+this is a good practice even if they're only used by one program,
+since it signals even more clearly which functions are specific to this program
+and which are likely to be reused elsewhere.
 
 ## How can I check that code follows style guidelines? {#py-rse-style-check}
 
@@ -338,65 +386,115 @@ if __name__ == '__main__':
     print('number', n)
 ```
 
+## How should I review someone else's code? {#py-rse-style-review}
+
+The biggest benefit of having a second person work on a programming project
+is therefore not getting twice as much code written,
+but having code reviewed.
+Study after study over more than 40 years has shown that code review is the most effective way to find bugs in software
+@Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
+Despite this,
+it still isn't common in research software development,
+in part because it isn't part of the culture @Sega2005,
+but also because code review is mostly useful
+when the reviewers understand the problem domain well enough to comment on algorithms and design choices
+rather than indentation and variable naming,
+and the number of people who can do that for a research project is typically very small—sometimes
+as small as one @Petr2014.
+
+This lesson will look at the mechanics of code review
+and present some short examples of the kinds of things reviewers should look for.
+
+How you review is just as important as what you look for:
+being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
+or avoid having you review their work.
+Equally,
+being defensive when someone offers suggestions politely and sincerely is very human,
+but can stunt your development as a programmer.
+
+Lots of people have written guidelines for doing reviews,
+which are also useful when reviewing written work @Quen2018,@Sank2018.
+A few key points are:
+
+Work in small increments.
+:   As @Cohe2010 and others have found,
+    code review is most effective when done in short bursts.
+    That means that change requests should also be short:
+    anything that's more than a couple of screens long
+    should be broken into smaller pieces.
+
+Look for algorithmic problems first.
+:   Code review isn't just (or even primarily) about style:
+    its real purpose is to find bugs before they can affect anyone.
+    The first pass over any change should therefore look for algorithmic problems.
+    Are the calculations right?
+    Are any rare cases going to be missed?
+    Are errors being caught and handled Chapter \@ref(logging)?
+
+Use a rubric.
+:   Linters are great,
+    but can't decide when someone should have used a lookup table instead of conditionals.
+    A list of things to check for can make review faster and more comprehensible,
+    especially when you can copy-and-paste or drag-and-drop specific comments
+    onto specific lines
+    (something that GitHub unfortunately doesn't yet support).
+
+Ask for clarification.
+:   If you don't understand something,
+    or don't understand why the author did it,
+    ask.
+    (And when the author explains it,
+    think about suggesting that the explanation ought to be documented somewhere.)
+
+Offer alternatives.
+:   Telling authors that something is wrong is helpful;
+    telling them what they might do instead is more so.
+
+Don't be sarcastic or disparaging.
+:   "Did you maybe think about *testing* this garbage?"
+    is a Code of Conduct violation in any well-run project.
+
+Don't present opinions as facts.
+:   "Nobody uses X any more" might be true.
+    If it is,
+    the person making the claim ought to be able to point at download statistics
+    or a Google Trends search;
+    if they can't,
+    they should say,
+    "I don't think anybody uses X any more" and explain why they think that.
+
+Don't feign surprise or pass judgment.
+:   "Gosh, didn't you know [some obscure fact]?" isn't helpful;
+    neither is, "Geez, why don't you [some clever trick] here?"
+
+Don't overwhelm people with details.
+:   If someone has used the letter `x` as a variable name in several places,
+    and they shouldn't have,
+    comment on the first two or three and simply put a check beside the others—the reader
+    won't need the comment repeated.
+
+Don't ask people to do extra work.
+:   Nobody enjoys fixing bugs and style violations.
+    Asking them to add a few features while they're at it is rude.
+
+Don't let people break these rules just because they're frequent contributors or in positions of power.
+:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
+    If you let people be rude to one another,
+    *that* is your culture.
+
+Be specific in replies to reviewers.
+:   If someone has suggested a better variable name,
+    you can probably simply fix it.
+    If someone has suggested a major overhaul to an algorithm,
+    you should reply to their comment to point at the commit that includes the fix.
+
+Thank your reviewers.
+:   If someone has taken the time to read your code carefully,
+    thank them for doing it.
+
 ## How should I collaborate with people when doing code reviews? {#py-rse-style-how}
 
 FIXME: how to review on GitHub.
-
-## In what order should functions be defined? {#py-rse-style-order}
-
-When encountering code for the first time,
-most people scan it from top to bottom.
-If that code is a program or script,
-rather than a library,
-its main function should be put first,
-and should probably be called `main`.
-
-After reading that function,
-someone should have a good idea of what the program does in what order.
-Three common patterns that people might match against are:
-
-1.  Figure out what the user has asked it to do (Chapter \@ref(configure)).
-2.  Read all input data.
-3.  Process it.
-4.  Write output.
-
-or:
-
-1.  Figure out what the user has asked for.
-2.  For each input file:
-    1.  Read.
-    2.  Process.
-    3.  Write file-specific output (if any).
-3.  Write summary output (if any).
-
-or:
-
-1.  Figure out what the user has asked for.
-2.  Repeatedly:
-    1.  Wait for user input.
-    2.  Do what the user has asked.
-3.  Exit when a "stop" command of some sort is received.
-
-Each step in each of the outlines above usually becomes a function.
-Those functions depend on others,
-some of which are written to break code into comprehensible chunks and are then called just once,
-others of which are utilities that may be called many times from many different places.
-
-FIXME: figure
-
-Different people order these differently;
-our preferred order is:
-
-1.  Put all of the single-use functions in the first half of the file
-    in the order in which they are likely to be called.
-2.  Put all of the multi-use utility functions in the bottom of the file in alphabetical order.
-
-If any of those utility functions are used by other scripts or programs,
-they should go in a file of their own.
-In fact,
-this is a good practice even if they're only used by one program,
-since it signals even more clearly which functions are in the "structural" layer
-and which are in the "utility" layer.
 
 ## How can I specify default values for functions' parameters? {#py-rse-style-defaults}
 
