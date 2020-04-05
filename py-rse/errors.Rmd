@@ -500,24 +500,30 @@ without editing the program's source code.
 We would probably wind up with code like this:
 
 ```python
-LOG_LEVEL = 2  # Or some other number
-
-def complex_function():
-    # ...lots of complicated code...
-    if (LOG_LEVEL > 0):
-        print('Everything seems to be going well')
-    # ...more complicated code...
-    if (LOG_LEVEL > 1):
-        print('Current alpha value {}'.format(alpha))
+if LOG_LEVEL > 0:
+    print('Processing files...')
+for file_name in args.infiles:
+    if LOG_LEVEL > 1:
+        print(f'Reading in {file_name}...')
+    if file_name[-4:] != '.csv':
+        raise OSError(f'{file_name} is not a CSV-file.')
+    with open(file_name, 'r') as reader:
+        if LOG_LEVEL > 1:
+            print(f'Computing word counts...')
+        update_counts(reader, word_counts)
 ```
 
 Here,
 `LOG_LEVEL` acts as a threshold:
 any debugging output at a lower level isn't printed.
+So the first log message will always be printed,
+but the other two only in case the user has requested more details
+with a higher value to `LOG_LEVEL`.
 
 Logging frameworks combine the `if` and the `print` statements,
 and define standard names for the logging levels.
-In order of decreasing severity, the levels are:
+In order of decreasing severity,
+the levels are:
 
 -   `CRITICAL`: potential loss of data, security breach, etc.
 -   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
@@ -549,7 +555,24 @@ logging.info('This is just for information.')
 WARNING:root:This is a warning.
 ```
 
-We can configure logging to send messages to a file instead of to standard error
+Rewriting the `collate.py` example above using the logging module
+yields code that is less cluttered:
+
+```python
+import logging
+
+
+logging.info('Processing files...')
+for file_name in args.infiles:
+    logging.debug('Reading in {file_name}...')
+    if file_name[-4:] != '.csv':
+        raise OSError(f'{file_name} is not a CSV-file.')
+    with open(file_name, 'r') as reader:
+        logging.debug('Computing word counts...')
+        update_counts(reader, word_counts)
+```
+
+We can also configure logging to send messages to a file instead of to standard error
 using `logging.basicConfig`.
 This has to be done before we make any logging calls,
 it's not retroactive.
