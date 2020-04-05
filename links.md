@@ -123,6 +123,7 @@
 [filename-stem]: glossary.html#filename-stem
 [filesystem]: glossary.html#filesystem
 [filter]: glossary.html#filter
+[find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
 [fixture]: glossary.html#fixture
 [flag-variable]: glossary.html#flag-variable
 [folder]: glossary.html#folder
