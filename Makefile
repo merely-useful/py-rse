@@ -198,7 +198,8 @@ _book/r-rse/r-rse.pdf : ${R_RSE_FILES} ${COMMON_FILES}
 
 ## clean        : clean up generated files.
 clean :
-	@rm -rf _book _bookdown_files _main.Rmd *.log index.Rmd r.Rmd py.Rmd py-rse.Rmd r-rse.Rmd
+	@rm -rf _book _bookdown_files _main.Rmd index.Rmd r.Rmd py.Rmd py-rse.Rmd r-rse.Rmd
+	@rm -f *.aux *.lof *.log *.lot *.out *.toc
 	@find . -name '*~' -exec rm {} \;
 
 ## chapters     : check consistency of chapters.
