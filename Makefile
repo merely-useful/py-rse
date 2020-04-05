@@ -87,7 +87,8 @@ COMMON_FILES=\
   gloss.md \
   references.Rmd \
   links.md \
-  book.bib
+  book.bib \
+  preamble.tex
 
 ALL_FILES=${R_FILES} ${PY_FILES} ${PY_RSE_FILES} ${COMMON_FILES} ${R_RSE_FILES}
 
