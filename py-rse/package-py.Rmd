@@ -149,7 +149,8 @@ knitr::include_graphics("figures/FIXME.png")
 
 We can create and manage virtual environments using `conda`,
 the same tool we used to install packages earlier.
-We can create a new virtual environment called `test` by running:
+We can create a new virtual environment called `zipfs-law` with the `conda create` command
+and specify the environment name with the `-n` or `--name` flag:
 
 ```shell
 $ conda create -n zipfs-law
@@ -243,76 +244,67 @@ From now on,
 everything we do will be in this environment,
 but we will simply type `$` from now on for brevity.
 
-## How can I install my package? {#py-rse-package-py-install}
-
-Let's proceed to install our package inside this virtual environment
+Let's change to the `zipfs_law` directory containing our `setup.py` file
+and install our package.
 
 ```text
-$ virtualenv ~/envs/test_zipfpy
-...
-$ source ~/envs/test_zipfpy/bin/activate
+$ cd zipfs_law
 $ pip install .
-Processing /Users/pterry/zipfpy/
-Building wheels for collected packages: zipfpy
-  Building wheel for zipfpy (setup.py) ... done
-  Stored in directory: /private/var/folders/44/[etc]
-Successfully built zipfpy
-Installing collected packages: zipfpy
-Successfully installed zipfpy-0.1
 ```
-
-Success!  If you take a look in `test_zipfpy/lib/python3.7/site-packages/`, you will
-now see the package with all the other site packages.
-
-Since a project may depend on many packages,
-developers frequently put a list of those dependencies in a file called `requirements.txt`.
-`pip install -r requirements.txt` will then install the dependencies listed in that file.
-(The file can be called anything,
-but everyone uses `requirements.txt`,
-so you should too.)
-This file can just list package names,
-or it can specify exact versions, minimum versions, etc.:
 
 ```text
-request
-scipy==1.1.0
-tdda>=1.0
+Processing /home/amira/proj/merely-useful.github.io/zipfs-law/bin/zipfs_law
+Building wheels for collected packages: zipfs-law
+  Building wheel for zipfs-law (setup.py) ... done
+  Created wheel for zipfs-law: filename=zipfs_law-0.1-py3-none-any.whl size=4574 sha256=b7d645f1d07775714855a83d0cc62911c8502eb917fcb3fe2d9fe46206c84656
+  Stored in directory: /tmp/pip-ephem-wheel-cache-19cuetii/wheels/a8/a6/0e/8b2a5cbf87d4a33551e65bc911bfdee49a4c117b0c5c834a47
+Successfully built zipfs-law
+Installing collected packages: zipfs-law
+Successfully installed zipfs-law-0.1
 ```
 
-If you want to create a file like this,
-`pip freeze` will print the exact versions of all installed packages.
-`pip freeze` provides the same output as `pip list`, but in less human-reader-friendly
-way and a more easily parsed by computer program format.
+Success!
+If you take a look in `~/anaconda3/envs/zipfs-law/lib/python3.8/site-packages/`,
+you will now see the `zipfs_law` package with all the other site packages.
+However,
+if you try to run the package at this stage,
+you will see that it complains that some of the packages we use,
+such as pandas,
+are not installed.
+We could install these manually,
+but it is preferred to automate this process
+by listing all the required packages as dependencies of our package
+using the `install_requires` parameter in `setup.py`:
 
-So let's install the dependency, ensure that it works, and then create the
-`requirements.txt` file:
 
-```text
-(test_zipfpy) $ pip uninstall zipfpy
-(test_zipfpy) $ pip install pytest
-Collecting pytest
-...[stuff omitted]...
-Installing collected packages: py, zipp, importlib-metadata, pluggy, wcwidth, pyparsing, six, packaging, attrs, more-itertools, atomicwrites, pytest
-Successfully installed atomicwrites-1.3.0 attrs-19.1.0 importlib-metadata-0.18 more-itertools-7.0.0 packaging-19.0 pluggy-0.12.0 py-1.8.0 pyparsing-2.4.0 pytest-4.6.3 six-1.12.0 wcwidth-0.1.7 zipp-0.5.1
-(test_zipfpy) $ pip freeze > requirements.txt
-(test_zipfpy) $ cat requirements.txt
-atomicwrites==1.3.0
-attrs==19.1.0
-importlib-metadata==0.18
-more-itertools==7.0.0
-packaging==19.0
-pluggy==0.12.0
-py==1.8.0
-pyparsing==2.4.0
-pytest==4.6.3
-six==1.12.0
-wcwidth==0.1.7
-zipp==0.5.1
+```
+from setuptools import setup
+
+
+setup(
+    name='zipfs_law',
+    version='0.1',
+    author='Your Name',
+    packages=['zipfs_law'],
+    install_requires=[
+        'matplotlib',
+        'pandas',
+        'scipy',
+        'pyyaml']  # Note the diff name from the import
+)
 ```
 
-(Note that the version numbers, current at the time of writing, will change).
+We don't have to list `numpy` explicitly
+since it will be installed as a dependency for `pandas` and `scipy`.
+It is good practice to specify limits for the version numbers of the dependencies.For example,
+if we have only tested our package on pandas version 1.0.1,
+we could put `pandas==1.0.1` or `pandas>=1.0.1` instead of just `pandas` 
+in the list argument passed to the `install_requires` parameter.
+Now we can install our package and all its dependencies in a single command:
 
-Now we should be able to import `zipfpy.check`:
+```shell
+$ pip install .
+```
 
 ```text
 (test_zipfpy) $ pip install .
