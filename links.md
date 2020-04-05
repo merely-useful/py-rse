@@ -102,6 +102,7 @@
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [embedded-documentation]: glossary.html#embedded-documentation
 [eniac]: glossary.html#eniac
+[entry-points]: https://setuptools.readthedocs.io/en/latest/pkg_resources.html?highlight=namespace#entry-points
 [environment]: glossary.html#environment
 [error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co
 [exception]: glossary.html#exception
