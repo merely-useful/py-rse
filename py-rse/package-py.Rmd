@@ -352,58 +352,99 @@ from zipfs_law import mymodule
 mymodule.collection_to_csv(...)
 ```
 
-One downside of our packaging is that we've now buried the useful command-line
+However,
+one downside of our packaging is that the useful command-line
 scripts that we used to count and plot word counts,
-so that we can no longer access them from the terminal directly.
+are no longer accessible directly from the terminal.
 Fortunately,
-the `setuptools` package allows us to install not only the Python
-package itself, but also associated scripts that it places with
-other executable files.
-
-Now we make sure that setuptools knows about this script and
-will install it:
+the `setuptools` package allows us to install not only the Python package itself,
+but also associated scripts that it places with other executable files.
+We can make sure that `setuptools` will install the scripts
+by using the `entry_points` parameter:
 
 ```python
 from setuptools import setup
 
 
 setup(
-    name='zipfpy',
+    name='zipfs_law',
     version='0.1',
-    author='Greg Wilson',
-    packages=['zipfpy'],
-    entry_points = {
+    author='Amira Khan',
+    packages=['zipfs_law'],
+    install_requires=[
+        'matplotlib',
+        'pandas',
+        'scipy',
+        'pyyaml'],
+    entry_points={
         'console_scripts': [
-            'check_zipf = bin/check_zipf.py',
-        ],
-    }
-)
+            'countwords = zipfs_law.countwords:main',
+            'collate = zipfs_law.collate:main',
+            'plotcounts = zipfs_law.plotcounts:main']})
 ```
 
-Now we we'll install the updated package in a virtual environment:
+The right side of the `=` operator is the path to the script,
+and the left side is the name we want to use to call the script.
+Let's remove our currently installed version of `zipfs_law`
+and install it again with the updated setup file.
+
+
+```shell
+$ pip uninstall zipfs_law
+```
 
 ```text
-coredump-2:08 pterry$ virtualenv test_script
-..
-Installing setuptools, pip, wheel...
-done.
-$ source test_script/bin/activate
-(test_script) $ pip install -r requirements.txt
-...
-Installing collected packages: atomicwrites, attrs, zipp, importlib-metadata, more-itertools, six, pyparsing, packaging, pluggy, py, wcwidth, pytest
-pip Successfully installed atomicwrites-1.3.0 attrs-19.1.0 importlib-metadata-0.18 more-itertools-7.0.0 packaging-19.0 pluggy-0.12.0 py-1.8.0 pyparsing-2.4.0 pytest-4.6.3 six-1.12.0 wcwidth-0.1.7 zipp-0.5.1
-ins
-(test_script) $ pip install .
-...
-Building wheels for collected packages: zipfpy
-  Building wheel for zipfpy (setup.py) ... done
-  Stored in directory: /private/var/folders/44/k2tfp8d12h7ggxc0xz8phfmr0000gn/T/pip-ephem-wheel-cache-0z_4yd1b/wheels/1c/84/f1/3dedca5ae7f979ead1ca046473b4a1f13552e873ccf1c1d958
-Successfully built zipfpy
-Installing collected packages: zipfpy
-Successfully installed zipfpy-0.1
+Found existing installation: zipfs-law 0.1
+Uninstalling zipfs-law-0.1:
+  Would remove:
+    /home/amira/.local/lib/python3.8/site-packages/zipfs-law.egg-link
+Proceed (y/n)? y
+  Successfully uninstalled zipfs-law-0.1
+```
 
-(test_script) $ check_zipf.py 100 50 33 25
-True: [100, 50, 33, 25]
+```shell
+$ pip install -e .
+```
+
+```text
+Defaulting to user installation because normal site-packages is not writeable
+Obtaining file:///home/amira/zipfs_law
+Requirement already satisfied: matplotlib in /usr/lib/python3.8/site-packages (from zipfs-law==0.1) (3.2.1)
+Requirement already satisfied: pandas in /home/amira/.local/lib/python3.8/site-packages (from zipfs-law==0.1) (1.0.3)
+Requirement already satisfied: scipy in /usr/lib/python3.8/site-packages (from zipfs-law==0.1) (1.4.1)
+Requirement already satisfied: pyyaml in /usr/lib/python3.8/site-packages (from zipfs-law==0.1) (5.3.1)
+Requirement already satisfied: cycler>=0.10 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs-law==0.1) (0.10.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs-law==0.1) (1.1.0)
+Requirement already satisfied: numpy>=1.11 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs-law==0.1) (1.18.2)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs-law==0.1) (2.4.6)
+Requirement already satisfied: python-dateutil>=2.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs-law==0.1) (2.8.1)
+Requirement already satisfied: pytz>=2017.2 in /usr/lib/python3.8/site-packages (from pandas->zipfs-law==0.1) (2019.3)
+Requirement already satisfied: six in /usr/lib/python3.8/site-packages (from cycler>=0.10->matplotlib->zipfs-law==0.1) (1.14.0)
+Requirement already satisfied: setuptools in /usr/lib/python3.8/site-packages (from kiwisolver>=1.0.1->matplotlib->zipfs-law==0.1) (46.1.3)
+Installing collected packages: zipfs-law
+  Running setup.py develop for zipfs-law
+Successfully installed zipfs-law
+```
+
+The output looks slightly different this time
+because pip did not need to go online to fetch the repositories,
+since there was a local cached version from the previous install.
+
+Now we can use our commands directly from the terminal
+without writing the full path to the file
+and without prefixing it with `python`.
+
+```shell
+countwords ../data/dracula.csv
+```
+
+```text
+the,7474
+and,5803
+I,4846
+to,4662
+of,3707
+...
 ```
 
 ## How should I document my package for others? {#py-rse-package-py-document}
