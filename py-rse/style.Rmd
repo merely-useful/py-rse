@@ -193,7 +193,7 @@ def positive_sum(values):
 This removes one level of nesting,
 and makes it clear what the special case is and how it's being handled.
 
-## In what order should functions be defined? {#py-rse-style-order}
+## Where should things appear in a source code file? {#py-rse-style-order}
 
 The order of items in each file should be:
 
@@ -349,384 +349,10 @@ n = count(lines)
 print('number', n)
 ```
 
-## How should I review code? {#py-rse-style-review}
+## How can I improve code systematically? {#py-rse-style-refactor}
 
 Now that our little program gets a clean bill of health from `pycodestyle`,
-it's worth having a human being look it over.
-Here are things that should still be changed:
-
--   The commented-out `print` statements should either be removed
-    or turned into logging statements (Section \@ref(py-rse-errors-logging)).
-
--   The variables `ln`, `i`, and `j` should be given clearer names.
-
--   The outer loop in `count` loops over the indices of the line list
-    rather than over the lines.
-    It should do the latter
-    (which will allow us to get rid of the variable `i`).
-
--   Rather than counting how often a word occurs in the list of stop words with `stops.count`,
-    we can turn the stop words into a set and use `in` to check words.
-    This will be more readable *and* more efficient.
-
--   There's no reason to store the result of `line.split` in a temporary variable:
-    the inner loop of `count` can use it directly.
-
--   Since the set of stop words is a global variable,
-    it should be written in upper case.
-
--   We should use `+=` to increment the counter `n`.
-
--   Rather than reading the input into a list of lines and then looping over that,
-    we can give `count` a stream and have it process the lines one by one.
-
--   Since we might want to use `count` in other programs some day,
-    we should put the two lines at the bottom that handle input into a conditional
-    so that they aren't executed when this script is imported.
-
-After making all these changes,
-our program looks like this:
-
-```python
-import sys
-
-
-STOPS = {'a', 'A', 'the', 'The', 'and'}
-
-
-def count(reader):
-    n = 0
-    for line in reader:
-        for word in line.split():
-            if word in STOPS:
-                n += 1
-    return n
-
-
-if __name__ == '__main__':
-    n = count(sys.stdin)
-    print('number', n)
-```
-
-Reading code in order to find bugs and suggest improvements like these
-is called [code review][code-review].
-Study after study over more than 40 years has shown that code review is the most effective way to find bugs in software
-@Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
-It is also a great way to transfer knowledge between programmers:
-reading someone else's code critically will give you lots of ideas about what you could do better,
-and highlight things that you should probably stop doing as well.
-
-Despite this,
-code review still isn't common in research software development.
-This is partly a chicken-and-egg problem---people don't do it
-because other people don't do it @Sega2005.
-It is also more difficult to do in specialized scientific fields:
-in order for review to be useful,
-reviewers need to understand the problem domain well enough to comment on algorithms and design choices
-rather than indentation and variable naming,
-and the number of people who can do that for a research project is often very small @Petr2014.
-
-How you review is just as important as what you look for:
-being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
-or avoid having you review their work.
-Equally,
-being defensive when someone offers suggestions politely and sincerely is very human,
-but can stunt your development as a programmer.
-
-Lots of people have written guidelines for doing reviews that avoid these traps @Quen2018,@Sank2018.
-A few key points are:
-
-Work in small increments.
-:   As @Cohe2010 and others have found,
-    code review is most effective when done in short bursts.
-    That means that change requests should also be short:
-    anything that's more than a couple of screens long
-    should be broken into smaller pieces.
-
-Look for algorithmic problems first.
-:   Code review isn't just (or even primarily) about style:
-    its real purpose is to find bugs before they can affect anyone.
-    The first pass over any change should therefore look for algorithmic problems.
-    Are the calculations right?
-    Are any rare cases going to be missed?
-    Are errors being caught and handled Chapter \@ref(logging)?
-
-Use a checklist.
-:   Linters are great,
-    but can't decide when someone should have used a lookup table instead of conditionals.
-    A list of things to check for can make review faster and more comprehensible,
-    especially when you can copy-and-paste or drag-and-drop specific comments
-    onto specific lines
-    (something that GitHub unfortunately doesn't yet support).
-
-Ask for clarification.
-:   If you don't understand something,
-    or don't understand why the author did it,
-    ask.
-    (And when the author explains it,
-    think about suggesting that the explanation ought to be documented somewhere.)
-
-Offer alternatives.
-:   Telling authors that something is wrong is helpful;
-    telling them what they might do instead is more so.
-
-Don't be sarcastic or disparaging.
-:   "Did you maybe think about *testing* this garbage?"
-    is a Code of Conduct violation in any well-run project.
-
-Don't present opinions as facts.
-:   "Nobody uses X any more" might be true.
-    If it is,
-    the person making the claim ought to be able to point at download statistics
-    or a Google Trends search;
-    if they can't,
-    they should say,
-    "I don't think we use X any more" and explain why they think that.
-
-Don't feign surprise or pass judgment.
-:   "Gosh, didn't you know [some obscure fact]?" isn't helpful;
-    neither is, "Geez, why don't you [some clever trick] here?"
-
-Don't overwhelm people with details.
-:   If someone has used the letter `x` as a variable name in several places,
-    and they shouldn't have,
-    comment on the first two or three and simply put a check beside the others—the reader
-    won't need the comment repeated.
-
-Don't try to sneak in feature requests.
-:   Nobody enjoys fixing bugs and style violations.
-    Asking them to add entirely new functionality while they're at it is rude.
-
-Be specific in replies to reviewers.
-:   If someone has suggested a better variable name,
-    you can probably simply fix it.
-    If someone has suggested a major overhaul to an algorithm,
-    you should reply to their comment to point at the commit that includes the fix.
-
-Thank your reviewers.
-:   If someone has taken the time to read your code carefully,
-    thank them for doing it.
-
-Don't let people break these rules just because they're frequent contributors or in positions of power.
-:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
-    The main figures in a project should be *more* respectful than everyone else
-    in order to show what standards everyone else is expected to meet.
-
-## How can I do code reviews on GitHub? {#py-rse-style-how}
-
-FIXME: how to review on GitHub.
-
-## How can I specify default values for functions' parameters? {#py-rse-style-defaults}
-
-[Working memory][working-memory] can only hold a few items at once:
-initial estimates in the 1950s put the number at 7 plus or minus 2 @Mill1956,
-and more recent estimates put it as low as 4 or 5.
-If your function requires two dozen parameters,
-the odds are very good that users will frequently forget them
-or put them in the wrong order.
-One solution is to bundle parameters together so that (for example)
-people pass three `point` objects instead of nine separate `x`, `y`, and `z` values.
-
-A second approach (which can be combined with the previous one)
-is to specify default values for some of the parameters.
-Doing this gives users control over everything
-while also allowing them to ignore details;
-it also codifies what you consider "normal" for the function.
-
-For example,
-suppose we are comparing images to see if they are the same or different.
-We can specify two kinds of tolerance:
-how large a difference in color value to notice,
-and how many differences above that threshold to tolerate
-(as a percentage of the total number of pixels).
-By default,
-any color difference is considered significant,
-and only 1% of pixels are allowed to differ:
-
-```python
-def image_diff(left, right, per_pixel=0, fraction=0.01):
-    # ...implementation...
-```
-
-When this function is called using `image_diff(old, new)`,
-those default values apply.
-However,
-it can also be called like this:
-
--   `image_diff(old, new, per_pixel=2)`
-    allows pixels to differ slightly without those differences being significant.
--   `image_diff(old, new, fraction=0.05)` allows more pixels to differ.
--   `image_diff(old, new, per_pixel=1, fraction=0.005)`
-    raises the per-pixel threshold but decrease number of allowed differences.
-
-Default parameter values make code easier to understand and use,
-but there is a subtle trap.
-When Python executes a function definition like this:
-
-```python
-def collect(new_value, accumulator=set()):
-    accumulator.add(new_value)
-    return accumulator
-```
-
-it calls `set()` to create a new empty set,
-and then uses that set as the default value for `accumulator` every time the function is called.
-It does *not* call `set()` anew for each call,
-so all calls using the default will share the same set:
-
-```python
->>> collect('first')
-{'first'}
->>> collect('second')
-{'first', 'second'}
-```
-
-A common way to avoid this is to pass `None` to the function
-to signal that the user didn't provide a value:
-
-```python
-def collect(new_value, accumulator=None):
-    if accumulator is None:
-        accumulator = set()
-    accumulator.add(new_value)
-    return accumulator
-```
-
-## How can I write functions to handle a variable number of arguments? {#py-rse-style-varargs}
-
-We can often make programs simpler by writing functions that take a variable number of arguments,
-just like `print` and `max`.
-One way to to require user to stuff those arguments into a list,
-e.g.,
-to write `find_limits([a, b, c, d])`.
-However,
-Python can do this for us.
-If we declare a single argument whose name starts with a single `*`,
-Python will put all "extra" arguments into a [tuple][tuple]
-and pass that as the argument.
-By convention,
-this argument is called `args`:
-
-```python
-def find_limits(*args):
-    print(args)
-
-find_limits(1, 3, 5, 2, 4)
-```
-
-```text
-(1, 3, 5, 2, 4)
-```
-
-This catch-all parameter can be used with regular parameters,
-but must come last in the parameter list to avoid ambiguity:
-
-```python
-def select_outside(low, high, *values):
-    result = []
-    for v in values:
-        if (v < low) or (v > high):
-            result.add(v)
-    return result
-
-print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
-```
-
-```text
-[-0.2, -0.5, 1.7]
-```
-
-An equivalent special form exists for named arguments:
-the catch-all variable is conventionally called `kwargs`
-(for "keyword arguments")
-and its name is prefixed with `**` (i.e., two asterisks instead of one).
-When this is used,
-the function is given a [dictionary][dictionary] of names and values
-rather than a list:
-
-```python
-def set_options(tag, **kwargs):
-    result = '<{}'.format(tag)
-    for key in kwargs:
-        result += ' {}="{}"'.format(key, kwargs[key])
-    result += '/>'
-    return result
-
-print(set_options('h1', color='blue'))
-print(set_options('p', align='center', size='150%'))
-```
-
-```text
-<h1 color="blue"/>
-<p align="center" size="150%"/>
-```
-
-Notice that the names of parameters are not quoted:
-the call is `color='blue'` and not `'color'='blue'`.
-
-## How can I pass an unknown number of parameters? {#py-rse-style-starargs}
-
-We can use the inverse of `*args` and `**kwargs` to match a list of values to arguments.
-In this case,
-we put the `*` in front of a list and `**` in front of a dictionary when *calling* the function,
-rather than in front of the parameter when *defining* it:
-
-```python
-def trim_value(data, low, high):
-    print(data, "with", low, "and", high)
-
-parameters = ['some matrix', 'lower bound']
-named_parameters = {'high': 'upper bound'}
-trim_value(*parameters, **named_parameters)
-```
-
-```text
-some matrix with lower bound and upper bound
-```
-
-## How can I get values out of structured data more easily? {#py-rse-style-destructure}
-
-Modern programming languages have lots of other tools to make life more convenient for programmers.
-One that's particularly useful is [destructuring][destructuring]:
-
-```python
-[first, [second, third]] = [1, [2, 3]]
-print(first)
-print(second)
-print(third)
-```
-
-```text
-1
-2
-3
-```
-
-As this example shows,
-if the variables on the left are arranged in the same way as the values on the right,
-Python will automatically unpack the values and assign them correctly.
-This is particularly useful when looping over lists of structured values:
-
-```python
-people = [
-    [['Kay', 'McNulty'], 'mcnulty@eniac.org'],
-    [['Betty', 'Jennings'], 'jennings@eniac.org'],
-    [['Marlyn', 'Wescoff'], 'mwescoff@eniac.org']
-]
-for [[first, last], email] in people:
-    print('{} {} <{}>'.format(first, last, email))
-```
-
-```text
-Kay McNulty <mcnulty@eniac.org>
-Betty Jennings <jennings@eniac.org>
-Marlyn Wescoff <mwescoff@eniac.org>
-```
-
-## What should I look for when reviewing code? {#py-rse-style-refactor}
-
-The best way to answer the question in this section's title is
-to describe some of the things people should change in their software.
+it's worth having a human being look it over and suggest ipmrovements.
 [Refactoring][refactoring] means changing the structure of code without changing what it does,
 like refactoring an equation to simplify it.
 It is just as much a part of programming as writing code in the first place:
@@ -735,15 +361,12 @@ and needs or insights can change over time.
 
 Most discussions of refactoring focus on [object-oriented programming][oop],
 but many patterns can and should be used to clean up [procedural][procedural-programming] code.
-This lesson describes and motivates some of the most useful patterns;
-These rules are examples of [design patterns][design-pattern]:
-general solutions to commonly occurring problems in software design.
-Knowing them and their names will help you create better software,
+Knowing a few of these patterns will help you create better software,
 and also make it easier for you to communicate with your peers.
 
-### Do not repeat values
+### Do not repeat values.
 
-Our first and simplest refactoring is called "replace value with name".
+The first and simplest refactoring is called "replace value with name".
 It tells us to replace magic numbers with names,
 i.e., to define constants.
 This can seem ridiculous in simple cases
@@ -777,7 +400,7 @@ SECONDS_PER_DAY = 24 * 60 * 60
 seconds_elapsed = num_days * SECONDS_PER_DAY
 ```
 
-### Do not repeat calculations in loops
+### Do not repeat calculations in loops.
 
 It's inefficient to calculate the same value over and over again.
 It also makes code less readable:
@@ -804,7 +427,7 @@ for sample in signals:
     output.append(sample * scaling)
 ```
 
-### Replace tests with flags to clarify repeated tests
+### Replace tests with flags to clarify repeated tests.
 
 Novice programmers frequently write conditional tests like this:
 
@@ -863,7 +486,7 @@ and the test then needs to change from `>` to `>=`,
 we're more likely to get the refactored version right the first time,
 since the test only appears in one place and its result is given a name.
 
-### Use in-place operators to avoid duplicating expression
+## Use in-place operators to avoid duplicating expression.
 
 An [in-place operator][in-place-operator],
 sometimes called an [update operator][update-operator],
@@ -918,7 +541,7 @@ for least_factor in all_factors:
     samples[least_factor] *= bayesian_scaling
 ```
 
-### Handle special cases first
+### Handle special cases first.
 
 A [short circuit test][short-circuit-test] is a quick check to handle a special case,
 such as checking the length of a list of values
@@ -1001,7 +624,7 @@ However,
 this puts the default last instead of first,
 which is less clear.
 
-### Use functions to make code more comprehensible
+### Use functions to make code more comprehensible.
 
 Functions were created so that programmers could write common operations and re-use them
 in order to reduce the amount of code that needed to be compiled.
@@ -1042,12 +665,12 @@ Finally,
 it's often helpful to keep using the original variable names as parameter names during refactoring
 to reduce typing.
 
-### Combine operations in functions
+### Combine operations in functions.
 
 "Combine functions" is the opposite of "extract function".
 If operations are always done together,
 it can sometimes be be more efficient to do them together,
-and *might* be easier to understand.
+and might be easier to understand.
 However,
 combining functions often reduces their reusability and readability;
 one sign that functions shouldn't have been combined is
@@ -1091,9 +714,9 @@ which means it might work differently than separate calls to the two original fu
 Issues like this are why experienced developers write unit tests (Chapter \@ref(py-rse-correct))
 *before* starting to refactor.
 
-### Replace code with data
+### Replace code with data.
 
-It is sometimes easier to understand and maintain lookup tables than complicated conditionals,
+It is easier to understand and maintain lookup tables than complicated conditionals,
 so the "create lookup table" refactoring tells us to turn the latter into the former:
 
 ```python
@@ -1154,6 +777,448 @@ The expressions used to update `num_vowels` and `num_consonants` make use of the
 which the function `int` converts to either 1 or 0.
 We will explore ways of making this code more readable in the exercises.
 
+## How should I review code? {#py-rse-style-review}
+
+At the end of Section \@ref(py-rse-style-check),
+our stop-word program looked like this:
+
+```python
+import sys
+
+
+stops = ['a', 'A', 'the', 'The', 'and']
+
+
+def count(ln):
+    n = 0
+    for i in range(len(ln)):
+        line = ln[i]
+        stuff = line.split()
+        for word in stuff:
+            # print(word)
+            j = stops.count(word)
+            if j > 0:
+                n = n + 1
+    return n
+
+
+lines = sys.stdin.readlines()
+# print('number of lines', len(lines))
+n = count(lines)
+print('number', n)
+```
+
+Based on our coding guidelines
+and the discussion of refactoring in the previous section,
+these things should be changed:
+
+-   The commented-out `print` statements should either be removed
+    or turned into logging statements (Section \@ref(py-rse-errors-logging)).
+
+-   The variables `ln`, `i`, and `j` should be given clearer names.
+
+-   The outer loop in `count` loops over the indices of the line list
+    rather than over the lines.
+    It should do the latter
+    (which will allow us to get rid of the variable `i`).
+
+-   Rather than counting how often a word occurs in the list of stop words with `stops.count`,
+    we can turn the stop words into a set and use `in` to check words.
+    This will be more readable *and* more efficient.
+
+-   There's no reason to store the result of `line.split` in a temporary variable:
+    the inner loop of `count` can use it directly.
+
+-   Since the set of stop words is a global variable,
+    it should be written in upper case.
+
+-   We should use `+=` to increment the counter `n`.
+
+-   Rather than reading the input into a list of lines and then looping over that,
+    we can give `count` a stream and have it process the lines one by one.
+
+-   Since we might want to use `count` in other programs some day,
+    we should put the two lines at the bottom that handle input into a conditional
+    so that they aren't executed when this script is imported.
+
+After making all these changes,
+our program looks like this:
+
+```python
+import sys
+
+
+STOPS = {'a', 'A', 'the', 'The', 'and'}
+
+
+def count(reader):
+    n = 0
+    for line in reader:
+        for word in line.split():
+            if word in STOPS:
+                n += 1
+    return n
+
+
+if __name__ == '__main__':
+    n = count(sys.stdin)
+    print('number', n)
+```
+
+Reading code in order to find bugs and suggest improvements like these
+is called [code review][code-review].
+Study after study over more than 40 years has shown that code review is the most effective way to find bugs in software
+@Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
+It is also a great way to transfer knowledge between programmers:
+reading someone else's code critically will give you lots of ideas about what you could do better,
+and highlight things that you should probably stop doing as well.
+
+Despite this,
+code review still isn't common in research software development.
+This is partly a chicken-and-egg problem---people don't do it
+because other people don't do it @Sega2005.
+It is also more difficult to do in specialized scientific fields:
+in order for review to be useful,
+reviewers need to understand the problem domain well enough to comment on algorithms and design choices
+rather than indentation and variable naming,
+and the number of people who can do that for a research project is often very small @Petr2014.
+
+Section \@ref(py-rse-git-advanced-pull-requests) explained how to create and merge pull requests.
+*How* you review these is just as important as *what* you look for:
+being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
+or avoid having you review their work.
+Equally,
+being defensive when someone offers suggestions politely and sincerely is very human,
+but can stunt your development as a programmer.
+Lots of people have written guidelines for doing reviews that avoid these traps @Quen2018,@Sank2018.
+A few key points are:
+
+Work in small increments.
+:   As @Cohe2010 and others have found,
+    code review is most effective when done in short bursts.
+    That means that change requests should also be short:
+    anything that's more than a couple of screens long
+    should be broken into smaller pieces.
+
+Look for algorithmic problems first.
+:   Code review isn't just (or even primarily) about style:
+    its real purpose is to find bugs before they can affect anyone.
+    The first pass over any change should therefore look for algorithmic problems.
+    Are the calculations right?
+    Are any rare cases going to be missed?
+    Are errors being caught and handled Chapter \@ref(py-rse-errors-logging)?
+
+Use a checklist.
+:   Linters are great,
+    but can't decide when someone should have used a lookup table instead of conditionals.
+    A list of things to check for can make review faster and more comprehensible,
+    especially when you can copy-and-paste or drag-and-drop specific comments
+    onto specific lines
+    (something that GitHub unfortunately doesn't yet support).
+
+Ask for clarification.
+:   If you don't understand something,
+    or don't understand why the author did it,
+    ask.
+    (And when the author explains it,
+    think about suggesting that the explanation ought to be documented somewhere.)
+
+Offer alternatives.
+:   Telling authors that something is wrong is helpful;
+    telling them what they might do instead is more so.
+
+Don't be sarcastic or disparaging.
+:   "Did you maybe think about *testing* this garbage?"
+    is a Code of Conduct violation in any well-run project.
+
+Don't present opinions as facts.
+:   "Nobody uses X any more" might be true.
+    If it is,
+    the person making the claim ought to be able to point at download statistics
+    or a Google Trends search;
+    if they can't,
+    they should say,
+    "I don't think we use X any more" and explain why they think that.
+
+Don't feign surprise or pass judgment.
+:   "Gosh, didn't you know [some obscure fact]?" isn't helpful;
+    neither is, "Geez, why don't you [some clever trick] here?"
+
+Don't overwhelm people with details.
+:   If someone has used the letter `x` as a variable name in several places,
+    and they shouldn't have,
+    comment on the first two or three and simply put a check beside the others—the reader
+    won't need the comment repeated.
+
+Don't try to sneak in feature requests.
+:   Nobody enjoys fixing bugs and style violations.
+    Asking them to add entirely new functionality while they're at it is rude.
+
+Be specific in replies to reviewers.
+:   If someone has suggested a better variable name,
+    you can probably simply fix it.
+    If someone has suggested a major overhaul to an algorithm,
+    you should reply to their comment to point at the commit that includes the fix.
+
+Thank your reviewers.
+:   If someone has taken the time to read your code carefully,
+    thank them for doing it.
+
+Don't let people break these rules just because they're frequent contributors or in positions of power.
+:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
+    The main figures in a project should be *more* respectful than everyone else
+    in order to show what standards everyone else is expected to meet.
+
+## What features of Python can make code more readable? {#py-rse-style-features}
+
+[Working memory][working-memory] can only hold a few items at once:
+initial estimates in the 1950s put the number at 7 plus or minus 2 @Mill1956,
+and more recent estimates put it as low as 4 or 5.
+High-level languages from FORTRAN to Python
+are essentially a way to reduce the number of things programmers have to think about at once
+so that they can fit what the computer is doing into this limited space.
+The sections below describe some of these features;
+as you become more comfortable with Python you will find and use others.
+
+But beware:
+the things that make programs more compact and comprehensible for experienced programmers
+can make them less comprehensible for novices.
+For example,
+suppose we want to create this matrix as a list of lists:
+
+```python
+[[0, 1, 2, 3, 4],
+ [1, 2, 3, 4, 5],
+ [2, 3, 4, 5, 6],
+ [3, 4, 5, 6, 7],
+ [4, 5, 6, 7, 8]]
+```
+
+One way is to use loops:
+
+```python
+matrix = []
+for i in range(5):
+    row = []
+    for j in range(5):
+        row.append(i+j)
+    matrix.append(row)
+```
+
+Another is to use a nested [list comprehension][list-comprehension]:
+
+```python
+[[i+j for j in range(5)] for i in range(5)]
+```
+
+An experienced programmer will recognize what the latter is doing
+and (probably) be able to understand it at a glance;
+the rest of us are probably better off writing the more verbose solution.
+
+### Provide default values for parameters.
+
+If your function requires two dozen parameters,
+the odds are very good that users will frequently forget them
+or put them in the wrong order.
+One solution is to bundle parameters together so that (for example)
+people pass three `point` objects instead of nine separate `x`, `y`, and `z` values.
+
+A second approach (which can be combined with the previous one)
+is to specify default values for some of the parameters.
+Doing this gives users control over everything
+while also allowing them to ignore details;
+it also codifies what you consider "normal" for the function.
+
+For example,
+suppose we are comparing images to see if they are the same or different.
+We can specify two kinds of tolerance:
+how large a difference in color value to notice,
+and how many differences above that threshold to tolerate
+(as a percentage of the total number of pixels).
+By default,
+any color difference is considered significant,
+and only 1% of pixels are allowed to differ:
+
+```python
+def image_diff(left, right, per_pixel=0, fraction=0.01):
+    # ...implementation...
+```
+
+When this function is called using `image_diff(old, new)`,
+those default values apply.
+However,
+it can also be called like this:
+
+-   `image_diff(old, new, per_pixel=2)`
+    allows pixels to differ slightly without those differences being significant.
+-   `image_diff(old, new, fraction=0.05)` allows more pixels to differ.
+-   `image_diff(old, new, per_pixel=1, fraction=0.005)`
+    raises the per-pixel threshold but decrease number of allowed differences.
+
+Default parameter values make code easier to understand and use,
+but there is a subtle trap.
+When Python executes a function definition like this:
+
+```python
+def collect(new_value, accumulator=set()):
+    accumulator.add(new_value)
+    return accumulator
+```
+
+it calls `set()` to create a new empty set,
+and then uses that set as the default value for `accumulator` every time the function is called.
+It does *not* call `set()` once for each call,
+so all calls using the default will share the same set:
+
+```python
+>>> collect('first')
+{'first'}
+>>> collect('second')
+{'first', 'second'}
+```
+
+A common way to avoid this is to pass `None` to the function
+to signal that the user didn't provide a value:
+
+```python
+def collect(new_value, accumulator=None):
+    if accumulator is None:
+        accumulator = set()
+    accumulator.add(new_value)
+    return accumulator
+```
+
+### Handle a variable number of arguments.
+
+We can often make programs simpler by writing functions that take a variable number of arguments,
+just like `print` and `max`.
+One way to to require user to stuff those arguments into a list,
+e.g.,
+to write `find_limits([a, b, c, d])`.
+However,
+Python can do this for us.
+If we declare a single argument whose name starts with a single `*`,
+Python will put all "extra" arguments into a [tuple][tuple]
+and pass that as the argument.
+By convention,
+this argument is called `args`:
+
+```python
+def find_limits(*args):
+    print(args)
+
+find_limits(1, 3, 5, 2, 4)
+```
+
+```text
+(1, 3, 5, 2, 4)
+```
+
+This catch-all parameter can be used with regular parameters,
+but must come last in the parameter list to avoid ambiguity:
+
+```python
+def select_outside(low, high, *values):
+    result = []
+    for v in values:
+        if (v < low) or (v > high):
+            result.add(v)
+    return result
+
+print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
+```
+
+```text
+[-0.2, -0.5, 1.7]
+```
+
+An equivalent special form exists for named arguments:
+the catch-all variable is conventionally called `kwargs`
+(for "keyword arguments")
+and its name is prefixed with `**` (i.e., two asterisks instead of one).
+When this is used,
+the function is given a [dictionary][dictionary] of names and values
+rather than a list:
+
+```python
+def set_options(tag, **kwargs):
+    result = '<{}'.format(tag)
+    for key in kwargs:
+        result += ' {}="{}"'.format(key, kwargs[key])
+    result += '/>'
+    return result
+
+print(set_options('h1', color='blue'))
+print(set_options('p', align='center', size='150%'))
+```
+
+```text
+<h1 color="blue"/>
+<p align="center" size="150%"/>
+```
+
+Notice that the names of parameters are not quoted:
+the call is `color='blue'` and not `'color'='blue'`.
+
+### Pass a variable number of arguments.
+
+We can use the inverse of `*args` and `**kwargs` to match a list of values to arguments.
+In this case,
+we put the `*` in front of a list and `**` in front of a dictionary when *calling* the function,
+rather than in front of the parameter when *defining* it:
+
+```python
+def trim_value(data, low, high):
+    print(data, "with", low, "and", high)
+
+parameters = ['some matrix', 'lower bound']
+named_parameters = {'high': 'upper bound'}
+trim_value(*parameters, **named_parameters)
+```
+
+```text
+some matrix with lower bound and upper bound
+```
+
+### Use destructuring to assign multiple values at once.
+
+Modern programming languages have lots of other tools to make life more convenient for programmers.
+One that's particularly useful is [destructuring][destructuring]:
+
+```python
+[first, [second, third]] = [1, [2, 3]]
+print(first)
+print(second)
+print(third)
+```
+
+```text
+1
+2
+3
+```
+
+As this example shows,
+if the variables on the left are arranged in the same way as the values on the right,
+Python will automatically unpack the values and assign them correctly.
+This is particularly useful when looping over lists of structured values:
+
+```python
+people = [
+    [['Kay', 'McNulty'], 'mcnulty@eniac.org'],
+    [['Betty', 'Jennings'], 'jennings@eniac.org'],
+    [['Marlyn', 'Wescoff'], 'mwescoff@eniac.org']
+]
+for [[first, last], email] in people:
+    print('{} {} <{}>'.format(first, last, email))
+```
+
+```text
+Kay McNulty <mcnulty@eniac.org>
+Betty Jennings <jennings@eniac.org>
+Marlyn Wescoff <mwescoff@eniac.org>
+```
+
 ## Summary {#py-rse-style-summary}
 
 George Orwell laid out [six rules for good writing][orwells-rules],
@@ -1164,8 +1229,6 @@ hobgoblin of little minds][pep-8-hobgoblin].
 There will always be cases where your code will be easier to understand
 if you *don't* do the things described in this lesson,
 but there are probably fewer of them than you think.
-
-FIXME: create concept map for style and review.
 
 ## Exercises {#py-rse-style-exercises}
 
