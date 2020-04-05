@@ -259,16 +259,17 @@ and which are likely to be reused elsewhere.
 
 ## How can I check that code follows style guidelines? {#py-rse-style-check}
 
-Checking that code conforms to guidelines like the ones above can be time consuming,
-but luckily it doesn't have to be done by hand.
-Most languages have tools that will check code style rules and report violations.
-These are often called [linters][linter],
+Checking that code conforms to guidelines like PEP-8 would be time consuming
+if it had to be done manually,
+but luckily it doesn't.
+Most languages have tools that will check style rules;
+these are often called [linters][linter],
 after an early tool called `[lint][lint]` that found lint (or fluff) in C code.
-Python has a tool that used to be called `pep8`
-and is now called `pycodestyle`
-that will do this.
-For example,
-this program is supposed to count the number of stop words in a document:
+
+Python's linter used to be called `pep8` and is now called `pycodestyle`.
+To see how it works,
+let's look at this program,
+which is supposed to count the number of [stop words][stop-word] in a document:
 
 ```python
 stops = ['a', 'A', 'the', 'The', 'and']
@@ -293,13 +294,13 @@ n = count(lines)
 print('number', n)
 ```
 
-When we run this command:
+When we run:
 
 ```shell
-$ pycodestyle count_stops.py
+pycodestyle count_stops.py
 ```
 
-it prints this report:
+it prints:
 
 ```text
 src/style/count_stops_before.py:3:1: E302 expected 2 blank lines, found 1
@@ -310,7 +311,17 @@ src/style/count_stops_before.py:15:1: E305 expected 2 blank lines after class or
 src/style/count_stops_before.py:15:1: E402 module level import not at top of file
 ```
 
-Fixing these issues gives us this:
+which tells us that:
+
+-   We should use two blank lines before the function definition on line 3
+    and after it on line 15.
+-   Using `== True` or `== False` is redundant
+    (because `x == True` is the same as `x`
+    and `x == False` is the same as `not x`).
+-   Line 12 uses tabs instead of just spaces.
+-   The `import` on line 15 should be at the top of the file.
+
+Fixing these issues gives us:
 
 ```python
 import sys
@@ -338,35 +349,43 @@ n = count(lines)
 print('number', n)
 ```
 
-This program gets a clean bill of health,
-so it's worth looking at in more detail.
-Here are things that should be changed:
+## How should I review code? {#py-rse-style-review}
+
+Now that our little program gets a clean bill of health from `pycodestyle`,
+it's worth having a human being look it over.
+Here are things that should still be changed:
 
 -   The commented-out `print` statements should either be removed
-    or turned into proper logging statements (Section \@ref(py-rse-errors-logging)).
+    or turned into logging statements (Section \@ref(py-rse-errors-logging)).
+
 -   The variables `ln`, `i`, and `j` should be given clearer names.
+
 -   The outer loop in `count` loops over the indices of the line list
     rather than over the lines.
     It should do the latter
     (which will allow us to get rid of the variable `i`).
+
+-   Rather than counting how often a word occurs in the list of stop words with `stops.count`,
+    we can turn the stop words into a set and use `in` to check words.
+    This will be more readable *and* more efficient.
+
 -   There's no reason to store the result of `line.split` in a temporary variable:
     the inner loop of `count` can use it directly.
--   Rather than counting how often a word occurs in the list of stop words
-    and then adding 1 to `n`,
-    we can create a set of stop words and use a simple membership test.
-    This will be more readable *and* more efficient.
+
 -   Since the set of stop words is a global variable,
     it should be written in upper case.
+
 -   We should use `+=` to increment the counter `n`.
+
 -   Rather than reading the input into a list of lines and then looping over that,
     we can give `count` a stream and have it process the lines one by one.
+
 -   Since we might want to use `count` in other programs some day,
-    we should put the two lines at the bottom that handle input
-    into a conditional
+    we should put the two lines at the bottom that handle input into a conditional
     so that they aren't executed when this script is imported.
 
 After making all these changes,
-our little program looks like this:
+our program looks like this:
 
 ```python
 import sys
@@ -389,24 +408,23 @@ if __name__ == '__main__':
     print('number', n)
 ```
 
-## How should I review someone else's code? {#py-rse-style-review}
-
-The biggest benefit of having a second person work on a programming project
-is therefore not getting twice as much code written,
-but having code reviewed.
+Reading code in order to find bugs and suggest improvements like these
+is called [code review][code-review].
 Study after study over more than 40 years has shown that code review is the most effective way to find bugs in software
 @Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
-Despite this,
-it still isn't common in research software development,
-in part because it isn't part of the culture @Sega2005,
-but also because code review is mostly useful
-when the reviewers understand the problem domain well enough to comment on algorithms and design choices
-rather than indentation and variable naming,
-and the number of people who can do that for a research project is typically very small—sometimes
-as small as one @Petr2014.
+It is also a great way to transfer knowledge between programmers:
+reading someone else's code critically will give you lots of ideas about what you could do better,
+and highlight things that you should probably stop doing as well.
 
-This lesson will look at the mechanics of code review
-and present some short examples of the kinds of things reviewers should look for.
+Despite this,
+code review still isn't common in research software development.
+This is partly a chicken-and-egg problem---people don't do it
+because other people don't do it @Sega2005.
+It is also more difficult to do in specialized scientific fields:
+in order for review to be useful,
+reviewers need to understand the problem domain well enough to comment on algorithms and design choices
+rather than indentation and variable naming,
+and the number of people who can do that for a research project is often very small @Petr2014.
 
 How you review is just as important as what you look for:
 being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
@@ -415,8 +433,7 @@ Equally,
 being defensive when someone offers suggestions politely and sincerely is very human,
 but can stunt your development as a programmer.
 
-Lots of people have written guidelines for doing reviews,
-which are also useful when reviewing written work @Quen2018,@Sank2018.
+Lots of people have written guidelines for doing reviews that avoid these traps @Quen2018,@Sank2018.
 A few key points are:
 
 Work in small increments.
@@ -434,7 +451,7 @@ Look for algorithmic problems first.
     Are any rare cases going to be missed?
     Are errors being caught and handled Chapter \@ref(logging)?
 
-Use a rubric.
+Use a checklist.
 :   Linters are great,
     but can't decide when someone should have used a lookup table instead of conditionals.
     A list of things to check for can make review faster and more comprehensible,
@@ -464,7 +481,7 @@ Don't present opinions as facts.
     or a Google Trends search;
     if they can't,
     they should say,
-    "I don't think anybody uses X any more" and explain why they think that.
+    "I don't think we use X any more" and explain why they think that.
 
 Don't feign surprise or pass judgment.
 :   "Gosh, didn't you know [some obscure fact]?" isn't helpful;
@@ -476,14 +493,9 @@ Don't overwhelm people with details.
     comment on the first two or three and simply put a check beside the others—the reader
     won't need the comment repeated.
 
-Don't ask people to do extra work.
+Don't try to sneak in feature requests.
 :   Nobody enjoys fixing bugs and style violations.
-    Asking them to add a few features while they're at it is rude.
-
-Don't let people break these rules just because they're frequent contributors or in positions of power.
-:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
-    If you let people be rude to one another,
-    *that* is your culture.
+    Asking them to add entirely new functionality while they're at it is rude.
 
 Be specific in replies to reviewers.
 :   If someone has suggested a better variable name,
@@ -495,7 +507,12 @@ Thank your reviewers.
 :   If someone has taken the time to read your code carefully,
     thank them for doing it.
 
-## How should I collaborate with people when doing code reviews? {#py-rse-style-how}
+Don't let people break these rules just because they're frequent contributors or in positions of power.
+:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
+    The main figures in a project should be *more* respectful than everyone else
+    in order to show what standards everyone else is expected to meet.
+
+## How can I do code reviews on GitHub? {#py-rse-style-how}
 
 FIXME: how to review on GitHub.
 
