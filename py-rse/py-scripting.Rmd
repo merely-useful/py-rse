@@ -18,41 +18,93 @@ but that scaffolding stays more or less the same as programs get larger.
 
 ## How can I tell if my code is a program or a module? {#py-rse-py-scripting-main}
 
-If we are going to run a Python program from the command line,
-the first thing we should do is add this to the bottom of the file.
+If we are going to create a Python program that can run from the command line,
+the first thing we should do is to add the following to the bottom of the file.
 
 ```python
 if __name__ == '__main__':
-    main()
 ```
 
-These two lines of code differentiate between
+This line differentiates between
 running a Python file as a standalone program
 and importing it as a module.
 When we import a Python file as a module in another program,
 the `__name__` variable is automatically set to the name of the file.
-For example,
-if we run,
-
-```python
-import utilities
-```
-
-then for the code inside `utilities.py`,
-`__name__` is `utilities`.
 When we run a Python file as a standalone program,
 on the other hand,
 `__name__` is always set to the special string `"__main__"`.
+To illustrate this,
+let's create the file `print_name.py`
+that prints the value of the `__name__` variable:
+
+```python
+print(__name__)
+```
+
+When we run this file directly,
+it will print `__main__`:
+
+```shell
+$ python print_name.py
+```
+
+```text
+__main__
+```
+
+But if we import `print_name.py` from another file
+or from the Python interpreter,
+it will print the name of the file,
+i.e. `print_name`.
+
+```shell
+$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import print_name
+print_name
+```
+
 This means that we can separate the two cases above
 by checking the value of the variable `__name__`.
 If that tells us that the file is running as a standalone program,
 we can then handle command-line options, print help, or whatever else is appropriate.
-Conventionally,
-we define this functionality inside a function called `main`,
-but we can call it whatever we want.
-(We can also put this code directly under the `if` statement,
+We could put the main program code directly under the `if` statement,
 but that's generally considered bad practice,
-since it makes testing harder.)
+since it makes testing harder.
+Instead,
+we define this functionality inside a function conventionally called `main`,
+but we can call it whatever we want.
+So instead of writing out code like this:
+
+```python
+if __name__ == "__main__":
+    # code goes here
+```
+
+We write it like this
+
+```python
+def main():
+    # code goes here
+
+
+if __name__ == "__main__":
+    main()
+```
+
+
+> **Quickly running short Python statements**
+>
+> We don't need to open the interactive interpreter to run Python statements.
+> Instead,
+> we could invoke Python with the command flag and the quoted statement:
+>
+>```
+>$ python -c "import print_name"
+>print_name
+>```
 
 ## How can I handle command-line options? {#py-rse-py-scripting-options}
 
@@ -71,10 +123,12 @@ so let's create a short Python script called `script_template.py`:
 """One-line description of what the script does."""
 import argparse
 
+
 def main(args):
     """Run the program."""
     print('Input file:', args.infile)
     print('Output file:', args.outfile)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -89,12 +143,13 @@ as a standalone program at the command line
 (i.e. if `__name__ == '__main__'` is true) then the script goes ahead and uses
 the `argparse` library to create an argument parser.
 In this case the description of the program for the help information is set to `__doc__`,
-which is the character string provided in the very first line of the script. 
+which is the character string provided in the very first line of the script.
 Two command line arguments are then defined:
 an input file name (`infile`) and output file name (`outfile`).
 The script parses the command line to get those arguments using `parse_args()`,
-stores them in an `argparse.Namespace` object called `args`
-and then passes that object to the `main` function.
+stores them in an `argparse.Namespace` object,
+which we assign to the variable `args`
+and pass on to the `main` function.
 The main function then retrieves the arguments from the `argparse.Namespace` object
 by calling `args.infile` and `args.outfile`.
 
@@ -162,6 +217,7 @@ from the `collections` library to tally up the occurrences of each word.
 import re
 from collections import Counter
 
+
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
@@ -170,6 +226,12 @@ def count_words(reader):
     word_counts = Counter(word_list)
     return word_counts
 ```
+
+`\w+` means to match all characters that commonly occur inside words,
+such as letters, numbers, and underscores.
+Spaces and punctuation are not matched,
+so most strings will be split at these characters,
+effectively separating the text into individual words.
 
 We can apply that function to the Dracula ebook (for example):
 
@@ -183,14 +245,32 @@ print(word_counts)
 Counter({'the': 7474, 'and': 5803, 'I': 4846, 'to': 4662, 'of': 3707, 'a': 2955, 'in': 2466, 'that': 2436, 'he': 1996, 'was': 1870, 'it': 1808, 'is': 1498, 'for': 1480, 'as': 1476, 'me': 1452, ...
 ```
 
+The `open` function takes a file path as a string,
+and reads in that file in a format familiar to Python.
+This format is commonly referred to as a `file object` or `stream`,
+and allows Python to effectively operate on the content of the file.
+
 If we want the word counts in a more familiar format like CSV,
 we can write a small function that takes our `collections.Counter` object,
 ensures that it orders the words from most to least frequent,
-and then writes it out to [standard output][standard output] in csv format: 
+and then writes it out to [standard output][standard output] in csv format:
 
 ```python
 import csv
 
+
+def collection_to_csv(collection, ntop=None):
+    """Write out a collection of items and counts in csv format."""
+    collection = collection.most_common()
+    writer = csv.writer(sys.stdout)
+    writer.writerows(collection)
+```
+
+Running this would output all the words in the book together with their count.
+To make the output a little easier to view on our screen,
+we can add an option to limit the output to the n most frequent words.
+
+```python
 def collection_to_csv(collection, ntop=None):
     """Write out a collection of items and counts in csv format."""
     collection = collection.most_common()
@@ -198,9 +278,6 @@ def collection_to_csv(collection, ntop=None):
     writer = csv.writer(sys.stdout)
     writer.writerows(collection[0:limit])
 ```
-
-To make the output a little easier to view on our screen,
-we've also added an option to limit the output to the n most frequent words.
 
 ```python
 collection_to_csv(word_counts, ntop=10)
@@ -220,16 +297,18 @@ was,1870
 ```
 
 To make our `count_words` and `collection_to_csv` functions available at the command line,
-we basically just need to insert them into the script template developed earlier.
+we need to insert them into the script template developed earlier
+and call the functions from within the `main` function.
 Let's call the script `countwords.py`:
 
 ```python
-"""Count the occurences of all words in a text and write them to a CSV-file."""
+"""Count the occurrences of all words in a text and output them in CSV format."""
 import sys
 import re
 import argparse
 import csv
 from collections import Counter
+
 
 def collection_to_csv(collection, ntop=None):
     """Write out a collection of items and counts in csv format."""
@@ -237,7 +316,8 @@ def collection_to_csv(collection, ntop=None):
     limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
     writer.writerows(collection[0:limit])
-        
+
+
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
@@ -246,11 +326,13 @@ def count_words(reader):
     word_counts = Counter(word_list)
     return word_counts
 
+
 def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
     collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -262,18 +344,18 @@ if __name__ == '__main__':
     main(args)
 ```
 
-The [argparse][argparse] library comes with many different options
-for defining the characteristics of command line arguments.
-For the `infile` option defined above,
-the number of expected arguments (`nargs`) is set to `?`.
-This means that one argument (i.e. a file name)
-will be consumed from the command line if possible.
-The program will read that file
-just like the `open('../data/dracula.txt', 'r')`
-command we saw earlier,
-because the input `type` has been set to `argparse.FileType('r')`.
-The script also defines an optional `-n` (or `--ntop`) flag
-(`-` or `--` denotes an optional argument)
+In addition to pasting the two new functions and updating our `main` function,
+we have changed the argparse options for the `'infile'` arguments.
+Setting `type=argparse.FileType('r')`
+instructs argparse to read a file and pass on its contents as a file object
+(just like `open`),
+instead of just passing the file path as a string.
+This is why we no longer need to use `open` inside the main function.
+Together with `nargs='?'`,
+this will allow us to effectively use our script in a pipeline,
+as we will see later.
+
+We have also replaced the `'outfile'` argument with an optional `-n` (or `--ntop`) flag
 to limit the output so that it's easier to view in our terminal window.
 Let's see this in action:
 
@@ -294,10 +376,14 @@ he,1996
 was,1870
 ```
 
+For the `infile` option,
+the number of expected arguments (`nargs`) is set to `?`.
+This means that one argument (i.e. a file name)
+will be consumed from the command line *if possible*.
 If we don't provide a file name,
 `nargs='?'` dictates that the `default` value of `-` will be used.
-The `argparse.FileType('r')` argument type understands the pseudo-argument '-' and
-automatically converts it into standard input (`sys.stdin`).
+The `argparse.FileType('r')` argument type understands the pseudo-argument '-'
+to mean standard input and reads from `sys.stdin`.
 This means the script can participate in a pipeline like
 many of the other command line programs we've met.
 For instance,
@@ -321,22 +407,23 @@ it,40
 ```
 
 Ultimately,
-we want to save the word counts to a CSV file for further analysis and plotting:
+we want to save the word counts to a CSV file for further analysis and plotting,
+which we can do via redirection using `>`:
 
 ```shell
 $ mkdir ../results
 ```
 
 ```shell
-$ python countwords.py ../data/dracula.txt > ../results/dracula_words.csv
+$ python countwords.py ../data/dracula.txt > ../results/dracula.csv
 ```
 
 ```shell
-$ python countwords.py ../data/moby_dick.txt > ../results/moby_dick_words.csv
+$ python countwords.py ../data/moby_dick.txt > ../results/moby_dick.csv
 ```
 
 ```shell
-$ python countwords.py ../data/emma.txt > ../results/emma_words.csv
+$ python countwords.py ../data/jane_eyre.txt > ../results/jane_eyre.csv
 ```
 
 > **Positional and optional arguments**
@@ -355,13 +442,15 @@ $ python countwords.py ../data/emma.txt > ../results/emma_words.csv
 > The user can provide optional arguments at the command line in any order they like.
 >
 > *Positional arguments* have no leading dashes and are not optional - the user
-> must provide them at the command line in the order in which they are defined.
-> (The exception being if `nargs='?'`, which we saw earlier.)  
+> must provide them at the command line in the order in which they are defined
+> (the exception being if `nargs='?'`, which we saw earlier).
 
 ### Collating results
 
 Now that we've got word counts for a number of books,
 we may want to collate the word counts.
+This can be done using a loop that adds up the counts of a word
+from the each of the csv-files created from `countwords.py`.
 Using the same template as before,
 we can write the following script called `collate.py`:
 
@@ -372,6 +461,7 @@ import csv
 import argparse
 from collections import Counter
 
+
 def collection_to_csv(collection, ntop=None):
     """Write out a collection of items and counts in csv format."""
     collection = collection.most_common()
@@ -379,18 +469,21 @@ def collection_to_csv(collection, ntop=None):
     writer = csv.writer(sys.stdout)
     writer.writerows(collection[0:limit])
 
+
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
+
 def main(args):
     """Run the command line program."""
     word_counts = Counter()
-    for fn in args.infiles:
-        with open(fn, 'r') as reader:
+    for file_name in args.infiles:
+        with open(file_name, 'r') as reader:
             update_counts(reader, word_counts)
     collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -401,11 +494,23 @@ if __name__ == '__main__':
     main(args)
 ```
 
-It will take an arbitrary number of input files generated using `countwords.py`
-and collate the word counts:
+The loop in the `main` function iterates over each filename in `infiles`,
+opens the CSV-file,
+and runs the `update_counts` function with the file object as one of the parameters.
+This function iterates through all the words in each of the CSV-files
+and adds up the counts with the `+=` operator.
+
+You will notice that we have not used `type=argparse.FileType('r')` here.
+This is to show how the syntax would look when we use filenames with `open` instead,
+and because we are not interested in passing standard input directly to the `collate.py` script.
+Passing the filename rather than its content
+is also useful when you are intending to e.g. move or copy the file.
+
+The `collate.py` script will take an arbitrary number of input files
+generated using `countwords.py` and collate the word counts:
 
 ```shell
-$ python collate.py ../results/dracula.csv ../results/moby_dick.csv ../results/emma.csv -n 10
+$ python collate.py ../results/dracula.csv ../results/moby_dick.csv ../results/jane_eyre.csv -n 10
 ```
 
 ```text
@@ -448,7 +553,7 @@ import csv
 def collection_to_csv(collection, ntop=None):
     """
     Write out a collection of items and counts in csv format.
-    
+
     Parameters
     ----------
     collection : collections.Counter
@@ -460,21 +565,23 @@ def collection_to_csv(collection, ntop=None):
     limit = ntop if ntop else len(collection)
     writer = csv.writer(sys.stdout)
     writer.writerows(collection[0:limit])
-``` 
+```
 
 (You'll see we've also taken the time to improve the docstring for `collection_to_csv`.)
 
 We can now import that function into our scripts,
 rather than having to define it anew every time.
+We either import the entire module with `import mymodule`
+or just the function of interest with `from mymodule import collection_to_csv`.
 Here's our new `countwords.py` script,
 
 ```python
-"""Count the occurences of all words in a text and write them to a CSV-file."""
-import sys
+"""Count the occurrences of all words in a text and write them to a CSV-file."""
 import re
 import argparse
 from collections import Counter
 import mymodule
+
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
@@ -484,11 +591,13 @@ def count_words(reader):
     word_counts = Counter(word_list)
     return word_counts
 
+
 def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -500,20 +609,21 @@ if __name__ == '__main__':
     main(args)
 ```
 
-and here's `collate.py`:
+and here's the updated `collate.py`:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
-import sys
 import csv
 import argparse
 from collections import Counter
 import mymodule
 
+
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
+
 
 def main(args):
     """Run the command line program."""
@@ -522,6 +632,7 @@ def main(args):
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -542,24 +653,23 @@ the third most common appears a third as often, and so on.
 Mathematically, this might be written as
 "word frequency is proportional to 1/rank."
 
-The following code plots the word frequency against the inverse rank 
+The following code plots the word frequency against the inverse rank
 using the popular pandas library:
 
 ```python
-import pandas
-import matplotlib.pyplot as plt
+import pandas as pd
 
-input_csv = '../results/emma.csv'
+
+input_csv = '../results/jane_eyre.csv'
 df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
 df['rank'] = df['word_frequency'].rank(ascending=False)
-df['inverse_rank'] = 1 / df['rank'] 
+df['inverse_rank'] = 1 / df['rank']
 df.plot.scatter(x='word_frequency', y='inverse_rank',
                 figsize=[12, 6], grid=True)
-plt.show()
 ```
 
-```{r py-rse-py-scripting-repl, echo=FALSE, fig.cap="Word frequency distribution for the book Emma"}
-knitr::include_graphics("figures/py-rse-scripting/emma.png")
+```{r py-rse-py-scripting-repl, echo=FALSE, fig.cap="Word frequency distribution for the book Jane Eyre"}
+knitr::include_graphics("figures/py-rse-scripting/jane_eyre.png")
 ```
 
 Using `script_template.py` as a guide,
@@ -576,10 +686,10 @@ b. Include an optional `--outfile` argument for the name of the output image fil
 b. Include an optional `--xlim` argument so that the user can change the x-axis bounds.
 
 Once you've written `plotcounts.py`,
-generate a plot of the word counts for *Emma*:
+generate a plot of the word counts for *Jane Eyre*:
 
 ```shell
-$ python plotcounts.py ../results/emma.csv --outfile ../results/emma.png
+$ python plotcounts.py ../results/jane_eyre.csv --outfile ../results/jane_eyre.png
 ```
 
 

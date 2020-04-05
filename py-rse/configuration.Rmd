@@ -1,8 +1,8 @@
 # Program Configuration {#py-rse-configuration}
 
-Command-line options are only one level of configuration.
-Depending on how complex a program is,
-it may also provide:
+In previous chapters we've used command-line options to configure our word count scripts. 
+Depending on how complex we'd like to make our programs,
+there are actually a number of layers of configuration that we could use:
 
 1.  A system-wide configuration file for general settings.
 2.  A user-specific configuration file for personal preferences.
@@ -16,6 +16,8 @@ the job configuration overrides the user's defaults,
 and the command-line options overrides that.
 While this is far more complexity than most research software needs (at least initially),
 being able to read a complete set of options from a file is a big boost to reproducibility.
+
+## Configuration file formats {#py-rse-configuration-formats}
 
 Programmers have invented many formats for configuration files,
 so please do not create your own.
@@ -51,162 +53,363 @@ fonts:
 - Serif
 ```
 
-And here's an extension to our script template
-that uses `argparse` and provide
-a default configuration that the user can override:
+## Matplotlib configuration {#py-rse-configuration-matplotlib}
+
+To see overlay configuration in action,
+let's consider one of the most common tasks in data science --
+changing the size of the labels on a plot.
+The size of the labels on our Jane Eyre plot
+is fine for viewing on our screen,
+but they'll need to be bigger
+if we want to include the figure in a powerpoint presentation or report.
+
+```{r py-rse-configuration-jane-eyre-default, echo=FALSE, fig.cap="Word frequency distribution for the book Jane Eyre with default label sizes."}
+knitr::include_graphics("figures/py-rse-configuration/jane_eyre_default.png")
+```
+
+In order to configure the label sizes,
+we could use any of the overlay options described above:
+
+-  Edit the system-wide matplotlib configuration YAML file known as the `matplotlibrc` file
+-  Create a user-specific matplotlib style sheet (which also uses the YAML format) 
+-  Create a job-specific YAML file that the `plotcounts.py` script can parse
+-  Add some new command-line options to `plotcounts.py` 
+
+Let's consider these options one at a time.
+
+### Edit the matplotlibrc file
+
+Our first option would be to edit the system-wide matplotlib runtime configuration file
+(a.k.a. the `matplotlibrc` file).
+When we import matplotlib,
+it locates this YAML file in order to set the default characteristics
+of the plot (i.e. colors, sizes, etc). 
+We can find its location on our system by running the following command:
 
 ```python
+import matplotlib as mpl
+mpl.matplotlib_fname()
+```
+
+```text
+/Users/amira/opt/anaconda3/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc
+```
+
+In this case the file is located in Amira's Anaconda (`anaconda3`) directory.
+All the different Python packages installed along with Anaconda
+live in a `python3.7/site-packages` directory, including matplotlib.
+We can see from opening the `matplotlibrc` file that it lists all the default settings as comments.
+The default size of the x and y axis labels and also the tick labels is medium:
+
+```yaml
+#axes.labelsize       : medium  ## fontsize of the x any y labels
+#xtick.labelsize      : medium  ## fontsize of the tick labels
+#ytick.labelsize      : medium  ## fontsize of the tick labels
+```
+
+We could uncomment those lines, change the sizes,
+
+```yaml
+axes.labelsize       : x-large  ## fontsize of the x any y labels
+xtick.labelsize      : large    ## fontsize of the tick labels
+ytick.labelsize      : large    ## fontsize of the tick labels
+```
+and then re-generate the Jane Eyre plot with bigger labels:
+
+```python
+$ python plotcounts.py jane_eyre.csv --outfile jane_eyre.png
+```
+
+```{r py-rse-configuration-jane-eyre-big-labels, echo=FALSE, fig.cap="Word frequency distribution for the book Jane Eyre with larger label sizes."}
+knitr::include_graphics("figures/py-rse-configuration/jane_eyre_big_labels.png")
+```
+
+While we've successfully edited the plot,
+there are a couple of issues with this solution.
+The first is that because the `matplotlibrc` file sets the system-wide defaults,
+we've locked ourselves into default big labels for any/all plotting we do in future,
+which may not be desirable.
+Secondly, we ultimately want to package up our Zipf's Law code and make it available
+to other people to use.
+We don't have access to their `matplotlibrc` file,
+it's not a solution that can be scaled up to multiple users.
+
+
+### Create a matplotlib style sheet
+
+Instead of directly editing the `matplotlibrc` file to change
+the default plot characteristics,
+there are a number of pre-defined styles provided by Matplotlib:
+
+```python
+import matplotlib.pyplot as plt
+print(plt.style.available)
+```
+
+```text
+['seaborn-dark', 'seaborn-darkgrid', 'seaborn-ticks', 'fivethirtyeight', 'seaborn-whitegrid', 'classic', '_classic_test', 'fast', 'seaborn-talk', 'seaborn-dark-palette', 'seaborn-bright', 'seaborn-pastel', 'grayscale', 'seaborn-notebook', 'ggplot', 'seaborn-colorblind', 'seaborn-muted', 'seaborn', 'Solarize_Light2', 'seaborn-paper', 'bmh', 'tableau-colorblind10', 'seaborn-white', 'dark_background', 'seaborn-poster', 'seaborn-deep']
+```
+
+If we wanted to make sure our plots are accessible to people with color vision challenges,
+for instance, we could choose that style at the beginning of our script:
+
+```python
+plt.style.use('tableau-colorblind10')
+```
+
+Following this approach, in order to make the labels bigger on our Jane Eyre plot
+we could create our own custom matplotlib style sheet.
+The convention is to store custom style sheets in a new `stylelib` sub-directory
+in the matplotlib configuration directory.
+That directory can be located by running the following command:
+
+```python
+mpl.get_configdir()
+```
+
+```text
+/Users/amira/.matplotlib
+```
+
+Once we've created the new sub-directory,
+
+```shell
+$ mkdir /Users/amira/.matplotlib/stylelib
+```
+
+we could put a new file in there called
+`/Users/amira/.matplotlib/stylelib/big-labels.mplstyle`
+that follows the same YAML format as the `matplotlibrc` file:
+
+```python
+axes.labelsize   : x-large  ## fontsize of the x any y labels
+xtick.labelsize  : large    ## fontsize of the tick labels
+ytick.labelsize  : large    ## fontsize of the tick labels
+```
+
+To use this new style,
+we would just need to add one line to the `plotcounts.py` script:
+
+```python
+plt.style.use('big-labels')
+```
+
+Using a custom style sheet fixes one of the problems we identified
+with editing `matplotlibrc` directly: the system-wide defaults are unchanged.
+However, because this solution is user-specific
+(i.e. each user has their own `stylelib` directory),
+it doesn't fix the issue of scaling up to multiple users.
+It's a great way to achieve a consistent look across your personal data visualization projects,
+but we need another solution for code we want to package for wider use.
+
+
+### New command line options
+
+One option that would scale to multiple users is additional command line arguments.
+This would involve editing `plotcounts.py` to define new optional inputs:
+
+```python
+mpl_sizes = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large']
+parser.add_argument('--labelsize', type=str, default='x-large', choices=mpl_sizes,
+                    help='fontsize of the x any y labels')
+parser.add_argument('--xticksize', type=str, default='large', choices=mpl_sizes,
+                    help='fontsize of the x tick labels')
+parser.add_argument('--yticksize', type=str, default='large', choices=mpl_sizes,
+                    help='fontsize of the y tick labels')
+```
+
+We could then add a few lines after the `ax` variable is defined in `plotcounts.py`
+to update the label sizes according to the user input,
+
+```python
+ax.xaxis.label.set_fontsize(args.labelsize)
+ax.yaxis.label.set_fontsize(args.labelsize)
+ax.xaxis.set_tick_params(labelsize=args.xticksize)
+ax.yaxis.set_tick_params(labelsize=args.yticksize)
+```
+
+or we could dynamically change the default runtime configuration settings
+before the plot is created,
+which are stored in a dictionary-like variable called `matplotlib.rcParams`: 
+
+```python
+mpl.rcParams['axes.labelsize'] = args.labelsize
+mpl.rcParams['xtick.labelsize'] = args.xticksize
+mpl.rcParams['ytick.labelsize'] = args.yticksize
+```
+
+Adding extra command line arguments is a reasonable solution
+if we only want to edit a small number of plot characteristics,
+but the number of new arguments could quickly get out of hand
+if we wanted to tweak other aspects of the plot
+(we saw in the `matplotlibrc` file that there are hundreds of parameters we could change). 
+For this particular example (i.e. matplotlib configuration),
+we ideally want a solution that can easily scale up to handling many parameters. 
+
+### Job-specific YAML file
+
+The final option -- and the one that we'll adopt for `plotcounts.py` --
+is to pass a single YAML file to `plotcounts.py` containing the matplotlib parameters
+that we want to change.
+In other words,
+we can take the YAML file we discussed earlier (let's call it `rcparams.yml`),
+
+```python
+axes.labelsize   : x-large  ## fontsize of the x any y labels
+xtick.labelsize  : large    ## fontsize of the tick labels
+ytick.labelsize  : large    ## fontsize of the tick labels
+```
+
+and instead of placing it in the `/Users/amira/.matplotlib/stylelib/` directory
+in order to create a new user-specific style sheet,
+we can pass it directly to the `plotcounts.py` script
+by defining a single new command line argument:
+
+```python
+parser.add_argument('--rcparams', type=str, default=None,
+                    help='YAML file containing new matplotlib runtime configuration parameters')
+```
+
+We can use the YAML library in Python to read the file,
+
+```python
+with open('rcparams.yml', 'r') as reader:
+    rcparam_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+print(rcparam_dict)
+```
+
+```text
+{'axes.labelsize': 'x-large',
+ 'xtick.labelsize': 'large',
+ 'ytick.labelsize': 'large'}
+```
+
+and then iterate over each item in the resulting dictionary to update `mpl.rcparams`:
+
+```python
+for param, value in param_dict.items():
+    mpl.rcParams[param] = value
+```
+
+Applying this solution to `plotcounts.py` results in the following complete script:
+
+```python
+"""Plot word counts."""
 import argparse
 import yaml
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+from scipy.optimize import minimize_scalar
 
-DEFAULT_CONFIG = {
-    'source': 'DEFAULT',
-    'logfile': '/tmp/log.txt',
-    'quiet': False,
-    'overwrite': False,
-    'fonts': ['Verdana', 'Serif']
-}
+
+def nlog_likelihood(beta, counts):
+    """Log-likelihood function."""
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    return likelihood
+
+
+def get_power_law_params(word_counts):
+    """
+    Get the power law parameters.
+
+    References
+    ----------
+    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
+      beta (Eq. 2) and the maximum likelihood estimation (mle)
+      of beta (Eq. 6).
+
+    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
+      Large-Scale Analysis of Zipf’s Law in English Texts.
+      PLoS ONE 11(1): e0147073.
+      https://doi.org/10.1371/journal.pone.0147073
+    """
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
+                          args=(word_counts), method='brent')
+    beta = mle.x
+    alpha = 1 / (beta - 1)
+    return alpha, beta
+
+
+def set_plot_params(param_file):
+    """Set the matplotlib rc parameters."""
+    if param_file:
+        with open(param_file, 'r') as reader:
+            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+    else:
+        param_dict = {}
+    for param, value in param_dict.items():
+        mpl.rcParams[param] = value
+
+
+def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+    """
+    Plot the power law curve that was fitted to the data.
+
+    Parameters
+    ----------
+    curve_xmin : float
+        Minimum x-bound for fitted curve
+    curve_xmax : float
+        Maximum x-bound for fitted curve
+    max_rank : int
+        Maximum word frequency rank.
+    beta : float
+        Estimated beta parameter for the power law.
+    ax : matplotlib axes
+        Scatter plot to which the power curve will be added.
+    """
+    xvals = np.arange(curve_xmin, curve_xmax)
+    yvals = max_rank * (xvals**(-beta + 1))
+    ax.loglog(xvals, yvals, color='grey')
+
 
 def main(args):
-    '''Run the program.'''
+    """Run the command line program."""
+    set_plot_params(args.rcparams)
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False)
+    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
+                         figsize=[12, 6], grid=True, xlim=args.xlim)
 
-    if args.configfile:
-        with open(args.configfile, 'r') as reader:
-            config = yaml.load(reader)
-            config['source'] = args.configfile
-    else:
-        config = DEFAULT_CONFIG
+    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
+    print('alpha:', alpha)
+    print('beta:', beta)
+    # Since the ranks are already sorted, we can take the last one instead of
+    # computing which row has the highest rank
+    max_rank = df['rank'].to_numpy()[-1]
+    # Use the range of the data as the boundaries when drawing the power law curve
+    curve_xmin = df['word_frequency'].min()
+    curve_xmax = df['word_frequency'].max()
 
-    if args.infile:
-        config['infile'] = args.infile
-
-    if args.outfile:
-        config['outfile'] = args.outfile
-
-    print('Configuration:', config)
+    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
+    ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
-
-    description = 'Print options to the screen.'
-    parser = argparse.ArgumentParser(description=description)
-
-    parser.add_argument('--configfile', type=str, help='Configuration file name')
-    parser.add_argument('--infile', type=str, help='Input file name')
-    parser.add_argument('--outfile', type=str, help='Output file name')
-
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+                        help='Output image file name')
+    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+                        default=None, help='X-axis limits')
+    parser.add_argument('--rcparams', type=str, default=None,
+                        help='YAML file containing new matplotlib runtime configuration parameters')
     args = parser.parse_args()
     main(args)
 ```
 
-```shell
-$ python config_template.py --infile chapter2.txt --configfile thesis.yml 
-```
+## Summary {#py-rse-configuration-summary}
 
-```text
-Configuration: {'logfile': '/tmp/log.txt',
-                'quiet': False,
-                'overwrite': False,
-                'fonts': ['Verdana', 'Serif'],
-                'source': 'thesis.yml',
-                'infile': 'chapter2.txt'}
-```
-
-YAML allows nested keys and lists,
-but if you need them,
-you're probably doing something wrong [@Xu2015]:
-most users never use most configuration options and find their presence confusing.
-
-## Where should configuration files go? {#py-rse-configuration-loc}
-
-System-wide settings for an application called `app` are often stored in `/etc/app.yml`.
-(Older programs sometimes use a name like `app.rc` for their configuration file,
-where `rc` stands for "resource control".)
-Alternatively,
-some programs will set an environment variable (Section \@ref(py-rse-bash-advanced-vars))
-to the name of the installation directory,
-and then read the system configuration file from there.
-For example,
-if the application's environment variable is `THESIS`,
-we can read configuration from:
-
-```python
-install_dir = os.getenv('THESIS')
-config_file = os.path.join(install_dir, 'config.yml')
-if os.path.isfile(config_file):
-    with open(config_file, 'r') as reader:
-        config = yaml.load(reader)
-```
-
-Similarly,
-we can get personal settings from `$HOME/.thesis.yml`;
-the leading '.' hides the configuration file from `ls`.
-Finally,
-per-job settings can come from `thesis.yml` in the current directory,
-where again "app" is replaced with the name of the program.
-
-## How can I record the configuration that produced particular results? {#py-rse-configuration-log}
-
-We don't need to write any of this when we first create a new tool.
-However,
-experience teaches that little tools grow into big ones.
-As soon as we have more than a couple of configuration parameters,
-or as soon as some of them are usually set to the same value,
-we should start to think about saving our settings in files.
-
-This is particularly important if we want others (including our future self) to be able to reproduce our work.
-Careful record keeping is essential to reproducible science,
-and if we add just a few lines to our program,
-the computer can save the entire configuration for a particular run of a program.
-For example,
-if we have stored our settings in a Python dictionary called `settings` like this:
-
-```python
-settings = {
-    'logfile': '/tmp/thesis.log',
-    'quiet': False,
-    'overwrite': True,
-    'fonts': ['Comic Sans']
-}
-```
-
-we can save that as YAML using this short function:
-
-```python
-def save_config(filename, settings):
-    '''Save configuration settings to a file.'''
-
-    with open(filename, 'w') as writer:
-        yaml.dump(settings, writer)
-
-save_config('thesis.yml', settings)
-```
-
-```shell
-$ cat thesis.yml
-```
-
-```text
-logfile: "/tmp/thesis.log"
-quiet: false
-overwrite: true
-fonts:
-- Comic Sans
-```
-
-This lets us re-create configuration on another machine
-even if it has different default settings.
-The test is whether our program can load a dumped configuration,
-then dump it again and get the same result.
-
-> **Version Everything**
->
-> We should always include a version number as a field in the dumped configuration
-> (Section \@ref(py-rse-git-advanced-tag)),
-> and our program should print this when given a `--version` option.
-> We need this because how we interpret options will change over time,
-> and if you don't know what the version of the program was,
-> we'll have to guess what options mean.
+Tweaking the default matplotlib settings is a great example of the different
+configuration options you can use in your programming.
+Adding command line options to your scripts is a natural starting point
+(and will be all the complexity you'll need in many cases),
+but system-wide and user-specific configuration can be a great option for standardising
+settings across your all or selected aspects of your personal work,
+while job-specific configuration can be a good option if you're looking to scale up
+to multiple users and/or a large number of configuration options. 
 
 
 ## Exercises {#py-rse-configuration-exercises}
