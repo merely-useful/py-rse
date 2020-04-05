@@ -102,7 +102,7 @@ if __name__ == '__main__':
 In particular,
 we used `plotcounts.py` to display the word counts for Dracula on a log-log plot.
 
-```{r py-rse-git-advanced-loglog-plot, echo=FALSE, fig.cap="Rank versus word frequency, on log-log axes, for Dracula"}
+```{r py-rse-git-advanced-dracula, echo=FALSE, fig.cap="Word frequency distribution for the book Dracula"}
 knitr::include_graphics("figures/py-rse-git-cmdline/plot-loglog.png")
 ```
 
@@ -185,7 +185,7 @@ This will be true until some changes are committed to our new branch.
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-### Fitting a curve to the word count data and verifying Zipf's Law
+### Fitting a curve and verifying Zipf's Law
 
 #### The math behind Zipf's Law
 
@@ -247,7 +247,7 @@ def nlog_likelihood(beta, counts):
     return likelihood
 ``` 
 
-Obtaining an estimate of the \(\beta\) (and \(\alpha\)) parameter then becomes
+Obtaining an estimate of the \(\beta\) (and thus \(\alpha\)) parameter then becomes
 a mathematical optimization problem,
 for which we can use the `scipy.optimize` library.
 Following @Moreno2016,
@@ -296,19 +296,135 @@ in the general form of a power law and \(-\beta + 1\)
 corresponds to \(b\).
 
 
-FIXME: From here on down still needs updating.
+#### Verifying Zipf's Law
+
+Now that we've defined the functions required to fit a curve to our word count plots,
+we can go ahead and update `plotcounts.py` accordingly.
+
+```python
+"""Plot word counts."""
+import argparse
+import numpy as np
+import pandas as pd
+from scipy.optimize import minimize_scalar
 
 
-and committing our changes:
+def nlog_likelihood(beta, counts):
+    """Log-likelihood function."""
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    return likelihood
+
+
+def get_power_law_params(word_counts):
+    """Get the power law parameters."""
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
+                          args=(word_counts), method='brent')
+    beta = mle.x
+    alpha = 1 / (beta - 1)
+    return alpha, beta
+
+
+def set_plot_params(param_file):
+    """Set the matplotlib rc parameters."""
+    if param_file:
+        with open(param_file, 'r') as reader:
+            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+    else:
+        param_dict = {}
+    for param, value in param_dict.items():
+        mpl.rcParams[param] = value
+
+
+def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+    """
+    Plot the power law curve that was fitted to the data.
+
+    Parameters
+    ----------
+    curve_xmin : float
+        Minimum x-bound for fitted curve
+    curve_xmax : float
+        Maximum x-bound for fitted curve
+    max_rank : int
+        Maximum word frequency rank.
+    beta : float
+        Estimated beta parameter for the power law.
+    ax : matplotlib axes
+        Scatter plot to which the power curve will be added.
+    """
+    xvals = np.arange(curve_xmin, curve_xmax)
+    yvals = max_rank * (xvals**(-beta + 1))
+    ax.loglog(xvals, yvals, color='grey')
+
+
+def main(args):
+    """Run the command line program."""
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False)
+    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
+                         figsize=[12, 6], grid=True, xlim=args.xlim)
+
+    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
+    print('alpha:', alpha)
+    # Since the ranks are already sorted, we can take the last one instead of
+    # computing which row has the highest rank
+    max_rank = df['rank'].to_numpy()[-1]
+    # Use the range of the data as the boundaries when drawing the power law curve
+    curve_xmin = df['word_frequency'].min()
+    curve_xmax = df['word_frequency'].max()
+
+    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
+    ax.figure.savefig(args.outfile)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+                        help='Output image file name')
+    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+                        default=None, help='X-axis limits')
+    args = parser.parse_args()
+    main(args)
+```
+
+We can then run the script to obtain the \(\alpha\) value for Dracula
+and a new plot with a line fitted.
 
 ```shell
-$ nano bin/analysis.sh
-$ git add bin/analysis.sh
-$ git commit -m "Created violin plots"
+python plotcounts.py ../results/dracula.csv --outfile ../results/dracula.png
 ```
 
 ```text
-[violin 3ff8195] Created violin plots
+alpha: 1.1620041050803658
+```
+
+So according to our fit,
+the most frequent word will occur approximately \(2^{1.16}=2.2\) times
+as often as the second most frequent word,
+\(3^{1.16}=3.6\) times as often as the third most frequent word, and so on.
+Here's the corresponding plot:
+
+```shell
+$ display ../results/dracula.png
+```
+
+```{r py-rse-git-advanced-dracula-fit, echo=FALSE, fig.cap="Word frequency distribution for the book Dracula"}
+knitr::include_graphics("figures/rse-git-advanced/dracula_fit.png")
+```
+
+The script appears to be working as we'd like,
+so we can go ahead and commit our changes to the `fit` development branch:
+
+```shell
+$ git add plotcounts.py
+$ git commit -m "Added fit to word count data"
+```
+
+FIXME
+```text
+[fit 3ff8195] Added fit to word count data
  1 file changed, 1 insertion(+)
 ```
 
@@ -320,8 +436,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-3ff8195 Created violin plots
-64b802f Adding overdue .gitignore file
+3ff8195 Added fit to word count data
+d77bc5c Update dracula plot
 ```
 
 (We use `--oneline` and `-n 2` to shorten the log display.)
@@ -334,7 +450,7 @@ $ git branch
 
 ```text
 * master
-  violin
+  fit
 ```
 
 If we look at the log,
@@ -345,40 +461,65 @@ $ git log --oneline -n 2
 ```
 
 ```text
-64b802f (HEAD -> master) Adding overdue .gitignore file
-2fe5f6f Updating analysis script
+d77bc5c Update dracula plot 
+b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 We have not lost our work:
 it just isn't included in this branch (Figure \@ref(fig:py-rse-git-advanced-not-lost)).
-We can prove this by switching back to the `violin` branch and checking the log again:
+We can prove this by switching back to the `fit` branch and checking the log again:
 
 ```shell
-$ git checkout violin
+$ git checkout fit
 $ git log --oneline -n 2
 ```
 
 ```text
-3ff8195 Created violin plots
-64b802f Adding overdue .gitignore file
+3ff8195 Added fit to word count data
+d77bc5c Update dracula plot
 ```
 
 ```{r py-rse-git-advanced-not-lost, echo=FALSE, fig.cap="Work Is Not Lost"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-We can also look inside `bin/analysis.sh` and see our changes.
+We can also look inside `plotcounts.py` and see our changes.
 If we make another change and commit it,
-that change will also go into the `violin` branch (Figure \@ref(fig:py-rse-git-advanced-change-into-branch)):
+that change will also go into the `fit` branch (Figure \@ref(fig:py-rse-git-advanced-change-into-branch)).
+For instance,
+we could add some additional information to one of our docstrings
+to make it clear what equations were used in estimating \(\alpha\).
+
+```python
+def get_power_law_params(word_counts):
+    """
+    Get the power law parameters.
+
+    References
+    ----------
+    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
+      beta (Eq. 2) and the maximum likelihood estimation (mle)
+      of beta (Eq. 6).
+
+    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
+      Large-Scale Analysis of Zipf’s Law in English Texts.
+      PLoS ONE 11(1): e0147073.
+      https://doi.org/10.1371/journal.pone.0147073
+    """
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
+                          args=(word_counts), method='brent')
+    beta = mle.x
+    alpha = 1 / (beta - 1)
+    return alpha, beta
+```
 
 ```shell
-$ nano bin/analysis.sh
-$ git add .
-$ git commit -m "Adding facets to the violin plot"
+$ git add plotcounts.py
+$ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```
 
 ```text
-[violin db1d03f] Adding facets to the violin plot
+[fit db1d03f] Adding Moreno-Sanchez et al (2016) reference
  1 file changed, 4 insertions(+), 2 deletions(-)
 ```
 
@@ -391,9 +532,10 @@ we can use `git diff` with the same double-dot `..` syntax we use
 to view differences between two revisions:
 
 ```shell
-$ git diff master..violin
+$ git diff master..fit
 ```
 
+FIXME
 ```text
 diff --git a/bin/analysis.sh b/bin/analysis.sh
 index 8de12fa..bbe78f7 100644
@@ -408,65 +550,14 @@ index 8de12fa..bbe78f7 100644
    plots/violin-by-species.png
 ```
 
-We can repeat this process to experiment with beeswarm plots.
-Since we don't want to include any of the violin plot work in this branch,
-we make our new branch from `master`.
-To speed things up a bit,
-we use the `-b` option to `git checkout` to create the branch and switch to it
-in a single step:
-
-```shell
-$ git checkout master           # make sure of our starting point
-$ git checkout -b beeswarm      # make branch and switch to it
-$ nano bin/analysis.sh          # make our changes
-$ git add bin/analysis.sh       # add our changes
-$ git commit -m "Beeswarms"     # we really should use a more informative message
-$ git log --oneline -n 2        # show history
-```
-
-```text
-917823d (HEAD -> beeswarm) Beeswarms
-64b802f (master) Adding overdue .gitignore file
-```
-
-The log shows that the changes in the `beeswarm` branch are
-on top of the changes in the `master` branch,
-and do *not* include the changes in the `violin` branch (Figure \@ref(fig:py-rse-git-advanced-where-changes-are)).
-If we're curious,
-we can use `git diff` to show the differences between the two plotting branches:
-
-```shell
-$ git diff beeswarm..violin
-```
-
-```text
-diff --git a/bin/analysis.sh b/bin/analysis.sh
-index 2ebd322..bbe78f7 100644
---- a/bin/analysis.sh
-+++ b/bin/analysis.sh
-@@ -1,5 +1,5 @@
- #!/usr/bin/env bash
- cat $1 | \
-   species --all | \
--  plot --beeswarm --jitter=0.1 --facet=species_name > \
--  plots/beeswarm-by-species.png
-+  plot --violin --facet=species_name > \
-+  plots/violin-by-species.png
-```
-
-```{r py-rse-git-advanced-where-changes-are, echo=FALSE, fig.cap="Where Changes Are"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
 ## How do I merge work from separate branches? {#py-rse-git-advanced-merge}
 
-After a bit of experimentation,
-we decide that we prefer violin plots to beeswarm plots.
-We now have three options:
+Now that we're happy with the new curve fitting functionality,
+we now have three options:
 
-1.  Add our changes to `bin/analysis.sh` once again in the `master` branch.
-2.  Stop working in `master` and start using the `violin` branch for future development.
-3.  [Merge][git-merge] the `violin` and `master` branches.
+1.  Add our changes to `plotcounts.py` once again in the `master` branch.
+2.  Stop working in `master` and start using the `fit` branch for future development.
+3.  [Merge][git-merge] the `fit` and `master` branches.
 
 The first option is tedious and error-prone,
 while the second option will lead to confusion
@@ -481,39 +572,40 @@ $ git branch
 ```
 
 ```text
-  beeswarm
 * master
-  violin
+  fit
 ```
 
-We can now merge the changes in `violin` branch into our current branch
+We can now merge the changes in `fit` branch into our current branch
 with a single command:
 
 ```shell
-$ git merge violin
+$ git merge fit
 ```
 
+FIXME
 ```text
 Updating 64b802f..db1d03f
 Fast-forward
- bin/analysis.sh | 5 ++++-
+ plotcounts.py | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 ```
 
-Merging doesn't change the source branch `violin` (Figure \@ref(fig:py-rse-git-advanced-merging-doesnt-change)).
+Merging doesn't change the source branch `fit` (Figure \@ref(fig:py-rse-git-advanced-merging-doesnt-change)).
 Once the merge is done,
 though,
-all of the changes made in `violin` are also in the history of `master`:
+all of the changes made in `fit` are also in the history of `master`:
 
 ```shell
 $ git log --oneline -n 4
 ```
 
+FIXME
 ```text
-db1d03f (HEAD -> master, violin) Adding facets to the violin plot
-3ff8195 Created violin plots
-64b802f Adding overdue .gitignore file
-2fe5f6f Updating analysis script
+db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
+3ff8195 Added fit to word count data
+d77bc5c Update dracula plot 
+b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 ```{r py-rse-git-advanced-merging-doesnt-change, echo=FALSE, fig.cap="Merging Doesn't Change Things"}
@@ -521,43 +613,21 @@ knitr::include_graphics("figures/FIXME.png")
 ```
 
 Note that Git automatically creates a new commit (in this case, `db1d03f`) to represent the merge.
-If we now run `git diff master..violin`,
+If we now run `git diff master..fit`,
 Git doesn't print anything
 because there aren't any differences to show.
 
-Now that we have merged all of the changes from `violin` into `master`
-there is no need to keep the `violin` branch,
+Now that we have merged all of the changes from `fit` into `master`
+there is no need to keep the `fit` branch,
 so we can delete it:
 
 ```shell
-$ git branch -d violin
+$ git branch -d fit
 ```
 
 ```text
-Deleted branch violin (was db1d03f).
+Deleted branch fit (was db1d03f).
 ```
-
-And since we don't want to keep the changes in the `beeswarm` branch,
-we can delete it as well:
-
-```shell
-$ git branch -d beeswarm
-```
-
-```text
-error: The branch 'beeswarm' is not fully merged.
-If you are sure you want to delete it, run 'git branch -D beeswarm'.
-```
-
-Git refuses to do what we have asked
-because we have *not* merged the changes from `beeswarm` into `master`
-(or any other branch),
-so deleting it actually would erase work.
-If we are sure we want to do this,
-we would have to follow Git's instructions and use the `-D` option.
-We won't do this yet because we can use the changes in the `beeswarm` branch
-to illustrate another key feature of Git:
-handling conflicts.
 
 > **Not Just the Command Line**
 >
@@ -569,6 +639,8 @@ handling conflicts.
 > all that changes is how we tell the computer what we want to do.
 
 ## How do I handle conflicting changes? {#py-rse-git-advanced-conflict}
+
+FIXME: Write a new conflict example
 
 We now have two branches,
 `master` and `beeswarm`,
@@ -822,12 +894,11 @@ but [forges][forge] like GitHub, GitLab, and BitBucket all encourage people
 to use Git in ways that effectively create one.
 Suppose,
 for example,
-that Frances Bilas has put her plotting project online
-and that the repository's URL is `https://github.com/francesbilas/plotting`.
-Jean Jennings (another of the original ENIAC programmers) would like to contribute to the project,
-so she goes to that URL and clicks on the "Fork" button in the upper right corner
+that Sami wants to contribute to the Zipf's Law code that
+Amira is hosting on GitHub at `https://github.com/amira/zipfs-law`.
+Sami can go to that URL and click on the "Fork" button in the upper right corner
 (Figure \@ref(fig:py-rse-git-advanced-fork-button)).
-GitHub immediately creates a copy of Frances's repository within Jean's account on GitHub's own servers.
+GitHub immediately creates a copy of Amira's repository within Sami's account on GitHub's own servers.
 When the command completes,
 the setup on GitHub now looks like this:
 
@@ -835,24 +906,25 @@ the setup on GitHub now looks like this:
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-Nothing has happened yet on Jean's own machine:
+Nothing has happened yet on Sami's own machine:
 the new repository exists only on GitHub.
-When Jean explores its history,
-she sees that it contains all of the changes Frances made.
+When Sami explores its history,
+she sees that it contains all of the changes Amira made.
 
 A copy of a repository is called a [clone][git-clone].
 In order to start working on the project,
-Jean needs to create a clone of *her* repository (not Frances's) on her own computer.
-We will modify Jean's prompt to include her desktop user ID (`jj`)
+Sami needs to create a clone of *her* repository (not Amira's) on her own computer.
+We will modify Sami's prompt to include her desktop user ID (`sami`)
 and her working directory (initially `~`)
 to make it easier to follow what's happening:
 
 ```shell
-jj:~ $ git clone https://github.com/jeanjennings/plotting.git
+sami:~ $ git clone https://github.com/sami/zipfs-law.git
 ```
 
+FIXME
 ```text
-Cloning into 'plotting'...
+Cloning into 'zipfs-law'...
 remote: Enumerating objects: 32, done.
 remote: Counting objects: 100% (32/32), done.
 remote: Compressing objects: 100% (16/16), done.
@@ -861,23 +933,25 @@ Unpacking objects: 100% (32/32), done.
 ```
 
 This command creates a new directory with the same name as the project,
-i.e., `plotting`.
-When Jean goes into this directory and runs `ls` and `git log`,
+i.e., `zipfs-law`.
+When Sami goes into this directory and runs `ls` and `git log`,
 she sees that all of the project's files and history are there:
 
 ```shell
-jj:~ $ cd plotting
-jj:~/plotting $ ls
+sami:~ $ cd zipfs-law
+sami:~/zipfs-law $ ls
 ```
 
+FIXME
 ```text
 README.md       bin             data
 ```
 
 ```shell
-jj:~/plotting $ git log --oneline
+jj:~/zipfs-law $ git log --oneline
 ```
 
+FIXME
 ```text
 b0c3fc6 Merging beeswarm plots
 917823d Beeswarms
@@ -893,87 +967,87 @@ She also sees that Git has automatically created a remote for her repository
 that points back at her repository on GitHub:
 
 ```shell
-jj:~/plotting $ git remote -v
+jj:~/zipfs-law $ git remote -v
 ```
 
 ```text
-origin  https://github.com/jeanjennings/plotting.git (fetch)
-origin  https://github.com/jeanjennings/plotting.git (push)
+origin  https://github.com/sami/zipfs-law.git (fetch)
+origin  https://github.com/sami/zipfs-law.git (push)
 ```
 
-Frances's original repository,
-Jean's fork on GitHub,
-and Jean's new clone on her desktop
+Amira's original repository,
+Sami's fork on GitHub,
+and Sami's new clone on her desktop
 are now arranged as shown in Figure \@ref(fig:py-rse-git-advanced-forked-repos).
-Jean can pull changes from her fork and push work back there,
-but she needs to do one more thing before she can get changes from Frances's repository:
+Sami can pull changes from her fork and push work back there,
+but she needs to do one more thing before she can get changes from Amira's repository:
 
 ```shell
-jj:~/plotting $ git remote add upstream https://github.com/francesbilas/plotting.git
-jj:~/plotting $ git remote -v
+sami:~/zipfs-law $ git remote add upstream https://github.com/amira/zipfs-law.git
+sami:~/zipfs-law $ git remote -v
 ```
 
 ```text
-origin      https://github.com/jeanjennings/plotting.git (fetch)
-origin      https://github.com/jeanjennings/plotting.git (push)
-upstream    https://github.com/francesbilas/plotting.git (fetch)
-upstream    https://github.com/francesbilas/plotting.git (push)
+origin      https://github.com/sami/zipfs-law.git (fetch)
+origin      https://github.com/sami/zipfs-law.git (push)
+upstream    https://github.com/amira/zipfs-law.git (fetch)
+upstream    https://github.com/amira/zipfs-law.git (push)
 ```
 
 ```{r py-rse-git-advanced-forked-repos, echo=FALSE, fig.cap="Forked Repositories"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-Jean has called her new remote `upstream` because it points at the repository hers are derived from.
+Sami has called her new remote `upstream` because it points at the repository hers are derived from.
 She could use any name,
 but `upstream` is a nearly universal convention.
 
 With this remote in place,
-Jean is finally set up (Figure \@ref(fig:py-rse-git-advanced-finished-forking)).
+Sami is finally set up (Figure \@ref(fig:py-rse-git-advanced-finished-forking)).
 Suppose,
 for example,
-that Frances has modified the project's `README.md` file to add Jean as a contributor.
-(Again, we show Frances's user ID and working directory in her prompt to make it clear who's doing what).
+that Amira has modified the project's `README.md` file to add Sami as a contributor.
+(Again, we show Amira's user ID and working directory in her prompt to make it clear who's doing what).
 
 ```{r py-rse-git-advanced-finished-forking, echo=FALSE, fig.cap="Finished Forking"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
 ```shell
-frances:~/plotting $ pwd
+amira:~/zipfs-law $ pwd
 ```
 
 ```text
-/Users/frances/plotting
+/Users/amira/zipfs-law
 ```
 
 ```shell
-frances:~/plotting $ nano README.md
-frances:~/plotting $ cat README.md
+amira:~/zipfs-law $ nano README.md
+amira:~/zipfs-law $ cat README.md
 ```
 
 ```text
-# Plotting Species Distribution
+# Zipf's Law analysis
 
 Contributors:
 
--   Frances Bilas
--   Jean Jennings
+-   Amira Khan
+-   Sami FIXME
 ```
 
-Frances commits her changes and pushes them to *her* repository on GitHub:
+Amira commits her changes and pushes them to *her* repository on GitHub:
 
 ```shell
-frances:~/plotting $ git commit -a -m "Adding Jean as a contributor"
+amira:~/zipfs-law $ git commit -a -m "Adding Sami as a contributor"
 ```
 
 ```text
-[master 766c2cd] Adding Jean as a contributor
+[master 766c2cd] Adding Sami as a contributor
  1 file changed, 6 insertions(+)
 ```
 
 ```shell
-frances:~/plotting $ git push origin master
+amira:~/zipfs-law $ git push origin master
 ```
 
 ```text
@@ -983,7 +1057,7 @@ Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 340 bytes | 340.00 KiB/s, done.
 Total 3 (delta 1), reused 0 (delta 0)
 remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/francesbilas/plotting.git
+To https://github.com/amira/zipfs-law.git
    b0c3fc6..766c2cd  master -> master
 ```
 
@@ -992,14 +1066,14 @@ knitr::include_graphics("figures/FIXME.png")
 ```
 
 The situation is now as shown in (Figure \@ref(fig:py-rse-git-advanced-pull-request)a),
-with Frances's changes on her desktop and in her GitHub repository
-but not in either of Jean's repositories.
-Since Jean has create a remote that points at Frances's GitHub repository,
+with Amira's changes on her desktop and in her GitHub repository
+but not in either of Sami's repositories.
+Since Sami has created a remote that points at Amira's GitHub repository,
 though,
 she can easily pull those changes to her desktop (Figure \@ref(fig:py-rse-git-advanced-pull-request)b):
 
 ```shell
-jj:~/plotting $ git pull upstream master
+sami:~/zipfs-law $ git pull upstream master
 ```
 
 ```text
@@ -1008,7 +1082,7 @@ remote: Counting objects: 100% (5/5), done.
 remote: Compressing objects: 100% (2/2), done.
 remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
 Unpacking objects: 100% (3/3), done.
-From https://github.com/francesbilas/plotting
+From https://github.com/amira/zipfs-law
  * branch            master     -> FETCH_HEAD
  * [new branch]      master     -> upstream/master
 Updating b0c3fc6..766c2cd
@@ -1029,10 +1103,10 @@ in this case,
 
 ## What is a pull request and how do I create one? {#py-rse-git-advanced-pull-requests}
 
-Jean can now get Frances's work,
-but how can Frances get Jean's?
-One way would be for Frances to create a remote that pointed at Jean's repository on GitHub
-and then pull in Jean's changes periodically,
+Sami can now get Amira's work,
+but how can Amira get Sami's?
+One way would be for Amira to create a remote that pointed at Sami's repository on GitHub
+and then pull in Sami's changes periodically,
 but that would lead to chaos,
 since we could never be sure that everyone's work was in any one place at the same time.
 Instead,
@@ -1066,11 +1140,11 @@ knitr::include_graphics("figures/FIXME.png")
 ```
 
 To see this in action,
-suppose that Jean wants to add her email address to `README.md` in the plotting project.
+suppose that Sami wants to add her email address to `README.md` in the plotting project.
 She creates a new branch and switches to it:
 
 ```shell
-jj:~/plotting $ git checkout -b adding-email
+sami:~/zipfs-law $ git checkout -b adding-email
 ```
 
 ```text
@@ -1080,8 +1154,8 @@ Switched to a new branch 'adding-email'
 then makes her change and commits it:
 
 ```shell
-jj:~/plotting $ nano README.md
-jj:~/plotting $ git commit -a -m "Adding my email address"
+sami:~/zipfs-law $ nano README.md
+sami:~/zipfs-law $ git commit -a -m "Adding my email address"
 ```
 
 ```text
@@ -1090,7 +1164,7 @@ jj:~/plotting $ git commit -a -m "Adding my email address"
 ```
 
 ```shell
-jj:~/plotting $ git diff -r HEAD~1
+sami:~/zipfs-law $ git diff -r HEAD~1
 ```
 
 ```text
@@ -1101,9 +1175,9 @@ index a55a9bb..eb24a3f 100644
 @@ -3,4 +3,4 @@
  Contributors:
 
- -   Frances Bilas
---   Jean Jennings
-+-   Jean Jennings <jj@eniac.org>
+ -   Amira Khan
+--   Sami FIXME
++-   Sami FIXME <sami@zipfs.org>
 ```
 
 Her changes are in her desktop repository, and *only* in her desktop repository.
@@ -1111,7 +1185,7 @@ She cannot create a pull request until those changes are on GitHub,
 so she pushes her new branch to her repository on GitHub:
 
 ```shell
-jj:~/plotting $ git push origin adding-email
+sami:~/zipfs-law $ git push origin adding-email
 ```
 
 ```text
@@ -1123,13 +1197,13 @@ Total 3 (delta 2), reused 0 (delta 0)
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 remote:
 remote: Create a pull request for 'adding-email' on GitHub by visiting:
-remote:      https://github.com/jeanjennings/plotting/pull/new/adding-email
+remote:      https://github.com/sami/zipfs-law/pull/new/adding-email
 remote:
-To https://github.com/jeanjennings/plotting.git
+To https://github.com/sami/zipfs-law.git
  * [new branch]      adding-email -> adding-email
 ```
 
-When Jean goes to her GitHub repository in the browser,
+When Sami goes to her GitHub repository in the browser,
 GitHub notices that she has just pushed a new branch
 and asks her if she wants to create a pull request:
 
@@ -1137,7 +1211,7 @@ and asks her if she wants to create a pull request:
 knitr::include_graphics("figures/rse-git-advanced/after-jean-pushes.png")
 ```
 
-When Jean clicks on the button,
+When Sami clicks on the button,
 GitHub displays a page showing the default source and destination of the pull request
 and a pair of editable boxes for the pull request's title and a longer comment:
 
@@ -1166,11 +1240,11 @@ and then displays a page showing the new pull request:
 knitr::include_graphics("figures/rse-git-advanced/new-pull-request.png")
 ```
 
-Note that this pull request is displayed in Frances's repository rather than Jean's
-since it is Frances's repository that will be affected if the pull request is merged.
+Note that this pull request is displayed in Amira's repository rather than Sami's
+since it is Amira's repository that will be affected if the pull request is merged.
 
 Some time later,
-Frances checks her repository and sees that there is a pull request:
+Amira checks her repository and sees that there is a pull request:
 
 ```{r image-viewing-new-pull-request, echo=FALSE, fig.cap="Viewing Pull Request"}
 knitr::include_graphics("figures/rse-git-advanced/viewing-new-pull-request.png")
@@ -1189,10 +1263,10 @@ knitr::include_graphics("figures/rse-git-advanced/pr-details.png")
 ```
 
 Since there are no conflicts,
-GitHub will allow Frances to merge the PR immediately using the "Merge pull request" button.
+GitHub will allow Amira to merge the PR immediately using the "Merge pull request" button.
 She could also discard or reject it *without* merging using the "Close pull request" button.
 Instead,
-she clicks on the "Files changed" tab to see what Jean has changed:
+she clicks on the "Files changed" tab to see what Sami has changed:
 
 ```{r image-pr-changes, echo=FALSE, fig.cap="Files Changed"}
 knitr::include_graphics("figures/rse-git-advanced/pr-changes.png")
@@ -1220,9 +1294,9 @@ knitr::include_graphics("figures/rse-git-advanced/pr-with-comment.png")
 ```
 
 While all of this has been doing on,
-GitHub has been emailing notifications to both Jean and Frances.
-When Jean clicks on the link in hers,
-it takes her to the PR and shows her Frances's comment.
+GitHub has been emailing notifications to both Sami and Amira.
+When Sami clicks on the link in hers,
+it takes her to the PR and shows her Sami's comment.
 She changes `README.md`,
 commits,
 and pushes,
@@ -1233,7 +1307,7 @@ so if either end of the merge changes,
 the PR updates automatically.
 
 Sure enough,
-when Frances looks at the PR again a few moments later she sees this:
+when Amira looks at the PR again a few moments later she sees this:
 
 ```{r image-pr-with-fix, echo=FALSE, fig.cap="Pull Request With Fix"}
 knitr::include_graphics("figures/rse-git-advanced/pr-with-fix.png")
@@ -1248,10 +1322,10 @@ knitr::include_graphics("figures/rse-git-advanced/pr-successful-merge.png")
 ```
 
 To get those changes from GitHub to her desktop repository,
-Frances uses `git pull`:
+Amira uses `git pull`:
 
 ```shell
-frances:~/plotting $ git pull origin master
+amira:~/zipfs-law $ git pull origin master
 ```
 
 ```text
@@ -1260,7 +1334,7 @@ remote: Counting objects: 100% (9/9), done.
 remote: Compressing objects: 100% (5/5), done.
 remote: Total 7 (delta 3), reused 5 (delta 2), pack-reused 0
 Unpacking objects: 100% (7/7), done.
-From https://github.com/francesbilas/plotting
+From https://github.com/amira/zipfs-law
  * branch            master     -> FETCH_HEAD
    766c2cd..984b116  master     -> origin/master
 Updating 766c2cd..984b116
@@ -1270,14 +1344,14 @@ Fast-forward
 ```
 
 To get the change she just made from her `adding-email` branch into her `master` branch,
-Jean could use `git merge` on the command line.
+Sami could use `git merge` on the command line.
 It's a little clearer,
 though,
-if she also uses `git pull` from her `upstream` repository (i.e., Frances's repository)
-so that she's sure to get any other changes that Frances may have merged:
+if she also uses `git pull` from her `upstream` repository (i.e., Amira's repository)
+so that she's sure to get any other changes that Amira may have merged:
 
 ```shell
-jj:~/plotting $ git checkout master
+sami:~/zipfs-law $ git checkout master
 ```
 
 ```text
@@ -1287,7 +1361,7 @@ Your branch is ahead of 'origin/master' by 1 commit.
 ```
 
 ```shell
-jj:~/plotting $ git pull upstream master
+sami:~/zipfs-law $ git pull upstream master
 ```
 
 ```text
@@ -1295,7 +1369,7 @@ remote: Enumerating objects: 1, done.
 remote: Counting objects: 100% (1/1), done.
 remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
 Unpacking objects: 100% (1/1), done.
-From https://github.com/francesbilas/plotting
+From https://github.com/amira/zipfs-law
  * branch            master     -> FETCH_HEAD
    766c2cd..984b116  master     -> upstream/master
 Updating 766c2cd..984b116
