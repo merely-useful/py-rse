@@ -110,10 +110,10 @@ we could `cd` to the same directory that contains `setup.py`
 and type `pip install .`
 (where `.` references the current directory).
 However,
-it is considered good practice to create a separate, virtual Python environment
-when installing our own packages,
-since this will allow us to test how your package installs in a clean Python environment,
-rather that the current state of your primary Python environment.
+it is considered good practice to first create a separate, virtual Python environment
+before installing our own packages.
+This will allow us to test how our package installs in a clean Python environment,
+rather that the current state of our primary Python environment.
 
 ## How can I create a virtual Python environment? {#py-rse-package-py-virtualenv}
 
@@ -147,110 +147,101 @@ without affecting the main installation (Figure \@ref(fig:py-rse-package-py-vir
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-We can create and manage virtual environments using a tool called `virtualenv`.
-To install it,
-run `pip install virtualenv`.
-Once we have done that,
-we can create a new virtual environment called `test` by running:
+We can create and manage virtual environments using `conda`,
+the same tool we used to install packages earlier.
+We can create a new virtual environment called `test` by running:
 
 ```shell
-$ virtualenv test
-```
-```text
-Using base prefix '/Users/pterry/anaconda3'
-New python executable in /Users/pterry/test/bin/python
-Installing setuptools, pip, wheel...
-done.
+$ conda create -n zipfs-law
 ```
 
-`virtualenv` creates a new directory called `test`,
+```text
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /home/amira/anaconda3/envs/zipfs-law
+
+
+
+Proceed ([y]/n)? y
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+#
+# To activate this environment, use
+#
+#     $ conda activate zipfs-law
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+```
+
+`conda` creates a new directory called `zipfs-law`,
 which contains subdirectories called `bin`, `lib`, and so on—everything
 needed for a minimal Python installation.
 Crucially,
-`test/bin/python` checks for packages in `test/lib` *before* checking the system-wide install.
+`zipfs-law/bin/python` checks for packages in these directories instead of checking the system-wide install.
 
 We can switch to the `test` environment by running:
 
 ```shell
-$ source test/bin/activate
+$ conda activate zipfs-law
 ```
 
-`source` is a Unix shell command meaning "run all the commands from a file in this currently-active shell".
-We use it because typing `test/bin/activate` on its own would run those commands in a sub-shell,
-which would have no effect on the shell we're in.
 Once we have done this,
 we're running the Python interpreter in `test/bin`:
 
 ```shell
-$ which python
-```
-```text
-/Users/pterry/test/bin/python
+(zipfs-law)$ which python
 ```
 
-We can now install packages to our heart's delight.
-Everything we install will go under `test`,
-and won't affect the underlying Python installation.
-When we're done,
-we can switch back to the default environment with `deactivate`.
-(We don't need to `source` this.)
-
-Many developers create a directory called `~/envs`
-(i.e., a directory called `envs` directly below their home directory)
-to store their virtual environments:
-
-```shell
-$ cd ~
-$ mkdir envs
-$ which python
-```
 ```text
-/Users/pterry/anaconda3/bin/python
-```
-```shell
-$ virtualenv envs/test
-```
-```text
-Using base prefix '/Users/pterry/anaconda3'
-New python executable in /Users/pterry/envs/test/bin/python
-Installing setuptools, pip, wheel...done.
-```
-```shell
-$ which python
-```
-```text
-/Users/pterry/anaconda3/bin/python
-```
-```shell
-$ source envs/test/bin/activate
-```
-```text
-(test)
-```
-```shell
-$ which python
-```
-```text
-/Users/pterry/envs/test/bin/python
-(test)
-```
-```shell
-$ deactivate
-```
-```shell
-$ which python
-```
-```text
-/Users/pterry/anaconda3/bin/python
+/home/amira/anaconda3/envs/zipfs-law/bin/python
 ```
 
-Notice how every command now displays `(test)` when that virtual environment is active.
+Notice how every command now displays `(zipfs-law)` when that virtual environment is active.
 Between Git branches and virtual environments,
 it can be very easy to lose track of what exactly you're working on and with.
 Having prompts like this can make it a little less confusing;
 using virtual environment names that match the names of your projects
 (and branches, if you're testing different environments on different branches)
 quickly becomes essential.
+
+We can now install packages to our heart's delight.
+Everything we install will go under `zipfs-law`,
+and won't affect the underlying Python installation.
+When we're done,
+we can switch back to the default environment with `conda deactivate`.
+
+```shell
+(zipfs-law)$ conda deactivate
+
+```
+```shell
+$ which python
+```
+
+```text
+/usr/bin/python
+```
+
+## How can I install my package? {#py-rse-package-py-install}
+
+Let's proceed to install our package inside this virtual environment.
+First we need to activate it again:
+
+```shell
+$ conda activate zipfs-law
+```
+
+Now the prompt should have changed to `(zipfs-law)$` again.
+From now on,
+everything we do will be in this environment,
+but we will simply type `$` from now on for brevity.
 
 ## How can I install my package? {#py-rse-package-py-install}
 
