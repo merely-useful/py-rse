@@ -1,5 +1,5 @@
 -   Explain what continuous integration is, how it works, and why it's useful.
--   Configure continuous integration for small R and Python software projects.
+-   Configure continuous integration for small Python software projects.
 -   Examine and explain output of continuous integration builds.
 -   Add additional settings to the continuous integration configuration.
 -   Introduce other uses of continuous integration.

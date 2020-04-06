@@ -4,41 +4,40 @@
 source(here::here("_common.R"))
 ```
 
-[Continuous integration][continuous-integration] (CI) a simple idea:
-merge and test changes to a project automatically and frequently
-so that developers get feedback about problems
-while those changes are still fresh in their minds.
+[Continuous integration][continuous-integration] (CI) is a relatively simple idea:
+run checks and tests automatically whenever changes have been made to a project.
+This tells developers immediately if their changes have caused problems,
+that way its easier to fix the problem by seeing what was changed.
 Automation tools like Make (Chapter \@ref(py-rse-automate)) can compile software,
-run tests,
-re-do analyses,
+run tests, re-do analyses,
 and re-create reports with a single command;
-CI tools run those commands and give users feedback every time
+CI tools can run those commands and give users feedback every time
 something changes in the project's repository.
 These tools can also be set up to run tests with several different configurations of the software
 or on several different operating systems,
-so that (for example) if a programmer makes a change on Windows
-that would break something for Mac users or vice versa,
-they find out before their friends' lives are disrupted.
+so that if (for example) a programmer makes a change on Windows 
+and it then breaks only for Mac users or vice versa,
+they can find out before releasing the software to others.
 
 This chapter introduces a CI tool called [Travis CI][travis-ci]
 that integrates well with [GitHub][github].
 If Travis CI has been set up,
 then every time a change is committed to a GitHub repository,
 Travis CI creates a fresh environment,
-checks out a copy of the project,
+make a fresh clone of the repository
+(which is described in Chapter \@ref(py-rse-git-advanced-fork)),
 and runs whatever commands the project's managers have set up.
 If the project uses a language like C++ or Java,
-those commands usually start by compiling the source code to create a runnable program.
-If we want to reassure ourselves that our software works,
-we can create unit tests as described in Chapter \@ref(py-rse-correct)
-and ask Travis CI to run them as well
-so that (for example) we know whether the code on a branch is working
-before we merge it into the master branch (Section \@ref(py-rse-git-advanced-merge)).
-And if we want to do more,
-we just have to write the commands.
+those commands usually start by compiling the source code to create a runnable program
+(Figure \@ref(fig:py-rse-ci-conceptual)).
+By combining what we covered in Chapter \@ref(py-rse-correct) on unit testing
+and in Section \@ref(py-rse-git-advanced-merge) on using branches,
+we can use Travis CI to run tests on the branches to check if everything runs correctly
+before merging into the master branch.
+We can also use other commands with Travis CI.
 For example,
-we have Travis CI set up to re-create the PDF and HTML versions of this book
-every time a pull request is merged.
+Travis CI re-creates the PDF and HTML versions of this book
+every time a pull request is merged from contributors.
 
 > **Virtual Machines**
 >
@@ -53,51 +52,37 @@ every time a pull request is merged.
 > it creates a new virtual machine to ensure that builds and tests run in a completely clean environment:
 > nothing left over from previous attempts to compile, run, or publish will affect the current attempt.
 
-## How do I set up continuous integration? {#py-rse-ci-basic}
+## Setting up continuous integration {#py-rse-ci-basic}
 
-We have to do five things to set up continuous integration:
+### Creating a Travis account to watch a repository
 
-1.  Create an account with [Travis CI][travis-ci].
-1.  Link our Travis CI account to our GitHub account.
-1.  Tell Travis CI to watch the repository that contains our project.
-1.  Create a `.travis.yml` file in your repository
-    to tell Travis CI what language we are working in
-    and what we want to do.
-1.  Commit that `.travis.yml` file to the repository.
+To set up CI for your project, you first must:
 
-> **There's More Than One Way to Do It**
->
-> This process is for general Travis CI usage.
-> If we are working with R projects or packages,
-> we can simplify things considerably using `usethis::use_travis`
-> (Section \@ref(py-rse-ci-setting-up-with-r)).
+1.  Create an account on [Travis CI][travis-ci].
+1.  Link your Travis CI account to your GitHub account.
+1.  Tell Travis CI to watch the repository that contains your project.
 
-Creating an account with an online service is a familiar process for most of us,
-but linking our Travis CI account to our GitHub account may be new.
-When we do this,
-we are not only telling Travis CI who we are on GitHub:
-we are also telling GitHub that it's OK for Travis CI to get information about us
-via GitHub's [API][api].
-This permission is necessary—without it,
-we would have to enter our password every time Travis CI wanted to run,
-which would hardly count as "automated"—but
-we should always check carefully when authorizing a service like this
-to make sure we are comfortable with what it is planning to do.
+Creating an account with an online service may likely be a familiar process,
+but linking your Travis CI account to your GitHub account may be something new.
+Linking Travis to GitHub allows Travis to access all your GitHub repositories
+in order to build and run the project.
+Be careful when giving services access to your repository
+and only trust well-established and -used services like Travis to have access.
 
-### Watching a repository
-
-We tell Travis CI about our repository through its website interface.
+Go through the process of creating an account. 
+Then, tell Travis CI which repository you want it to watch.
 On the left,
 besides the "My Repositories",
-we can click the "+" to add a repository that is already on GitHub
-(Figure \@ref(fig:py-rse-ci-add-repo)).
-After finding our repository in the list that pops up,
-we flick the switch button so that it is green
+click the "+" to add a GitHub repository,
+as in Figure \@ref(fig:py-rse-ci-add-repo).
+Add the repository we have been using throughout the course.
+After finding the repository in the list that pops up,
+flick the switch button so that it turns green
 (Figure \@ref(fig:py-rse-ci-list-repos)).
-If our repository doesn't show up,
-we can re-synchronize the list using the green "Sync account" button on the left sidebar.
+If the repository doesn't show up,
+re-synchronize the list using the green "Sync account" button on the left sidebar.
 If it still doesn't appear,
-the repository may belong to someone else or be private.
+the repository likely belongs to someone else or is private.
 
 ```{r py-rse-ci-add-repo, echo=FALSE, fig.cap="ci-add-repo"}
 knitr::include_graphics("figures/rse-ci/add-repo.png")
@@ -107,66 +92,57 @@ knitr::include_graphics("figures/rse-ci/add-repo.png")
 knitr::include_graphics("figures/rse-ci/list-repos.png")
 ```
 
-### Configuring a project
+### Configuring a project for Travis
 
-The next step is to create a file called `.travis.yml`
-in the root directory of the repository.
+In order for Travis to know what to do with the project repository,
+a file called `.travis.yml` must be present inside the repository.
+So, let's create this file.
+
+Make the `.travis.yml` file in the root directory of the repository.
 (The leading `.` in the name hides the file from casual listings on Mac or Linux,
 but not on Windows.)
-This file contains settings that control Travis CI's operation,
+This file controls Travis CI's operation,
 and is written in a format called [YAML][yaml] (Appendix \@ref(py-rse-yaml)).
-A simple template `.travis.yml` configuration file looks like this:
+
+Now that we have a `.travis.yml` file, open it and add the following line:
+
+```yaml
+language: python
+```
+
+The `language` key tells Travis CI which programming language[^travis-languages] to use
+so that it knows which of its standard [virtual machines][virtual-machine] to use
+as a starting point for the project. 
+
+[^travis-languages]: Other [languages available][travis-lang] are listed in the Travis documentation.
+
+Next, let's add a line telling Travis which version of Python to use with the `python` key:
 
 ```yaml
 language: python
 
 python:
 - "3.6"
-
-install:
-- pip install -r requirements.txt
-
-script:
-# if an example build.py file was in the src folder
-- python src/build.py
 ```
 
--   `language` tells Travis CI which programming language we are using
-    so that it knows which of its standard [virtual machine][virtual-machine]
-    to use as a starting point for our project.
--   This example uses Python,
-    so we tell Travis CI which Python version we want under the `python` key.
-    We can ask Travis CI to test our project with several different versions
-    by adding more versions to the list.
--   `install` tells Travis CI how to install the software we need for our project.
-    For Python projects,
-    we can put a list of packages in a file called `requirements.txt`
-    and then use `pip` to install them (Chapter \@ref(py-rse-package-py)).
--   Finally,
-    the entries under the `script` key tell Travis CI what to do.
-    We can put almost anything here provided it doesn't need human interaction
-    (i.e., doesn't ask questions).
-    In this case,
-    our only action is to run `src/build.py`.
+Here we're telling Travis to use Python 3.6. 
+If your project requires checking on multiple versions, 
+adding another version to check is as simple as adding another line:
 
-After we have add this file to our repository,
-Travis CI will obey the instructions in this file
-every time a change is pushed to GitHub.
-More specifically,
-it will:
+```yaml
+python:
+- "3.6"
+- "2.7"
+```
 
-1.  Create a new Linux virtual machine.
-1.  Install the desired version of Python.
-1.  Install the software described in `requirements.txt`.
-1.  Run the commands below the `script` key.
-1.  Report the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
-    where <code><em>user/repo</em></code>
-    identifies the repository.
+Now both 2.7 and 3.6 will be used on the project. Let's stick with 3.6.
+Before continuing, complete Exercise \@ref(py-rse-ci-ex-push-yml).
 
-Travis CI' summary report tells us whether the build passed,
-which is shown in green Figure \@ref(fig:py-rse-ci-build-overview),
+After completing the exercise, 
+you'll have seen that Travis CI reports a summary on whether the build passed,
+shown in green as in Figure \@ref(fig:py-rse-ci-build-overview),
 or whether it produced warnings or errors,
-which are shown in red.
+shown in red.
 
 ```{r py-rse-ci-build-overview, echo=FALSE, fig.cap="Travis Build Overview"}
 knitr::include_graphics("figures/rse-ci/build-overview.png")
@@ -174,101 +150,89 @@ knitr::include_graphics("figures/rse-ci/build-overview.png")
 
 The log below this overview contains a wealth of information
 that can help us debug when the build fails.
+We'll make use of this log after adding some build commands.
 
-## How can I display my project's status on GitHub? {#py-rse-ci-display-github}
+### Adding Travis CI build commands
 
-Travis CI's dashboard is very useful,
-but is also convenient to display the status of the build on our project's GitHub home page
-(which most people look at more often).
-To add a status badge,
-click the "build icon" shown in the top right corner of Figure \@ref(fig:py-rse-ci-github-icon)
-to bring up a dialog box.
-Select "Markdown" from the "Format" menu list,
-then copy the Markdown text displayed in the "Result" box
-and paste it into the project's `README.md` file.
-(It's best to paste the text right below the page's title so that it will be instantly visible).
-Once we commit and push thsi change to GitHub,
-our project will now show the badge for its Travis CI status.
-
-```{r py-rse-ci-github-icon, echo=FALSE, fig.cap="The Travis CI Build Badge"}
-knitr::include_graphics("figures/rse-ci/github-icon.png")
-```
-
-> **How Do Badges Work?**
->
-> Badges are much simpler than they first appear.
-> When someone visits our project,
-> GitHub sends them the HTML of the project's home page.
-> That page includes a link to an image on Travis CI's site,
-> so our browser sends a request to Travis CI.
-> The URL tells Travis CI's web server what project we're interested in;
-> it then sends back a different image
-> depending on the most recently recorded build status for that project.
-
-## How can I set up Travis CI for an R project? {#py-rse-ci-setting-up-with-r}
-
-The simplest way to set up and use Travis CI with R is to call:
-
-```r
-usethis::use_travis()
-```
-
-This command:
-
--   Creates a `.travis.yml` configuration file with typical settings for an R package.
--   Adds a Travis CI build badge to the project's `README.md`.
--   Opens the Travis CI page for the package so that we can activate Travis CI for the repository.
-    (This assumes the package is already on GitHub and that we have a Travis CI account.)
-
-FIXME: add example here of generated YAML file
-
-The [usethis](https://usethis.r-lib.org/reference/ci.html) documentation has more details,
-but it really is this simple.
-
-## How can I use Travis CI to test my project? {#py-rse-ci-testing}
-
-The main reason to set up CI is to test the project every time a change is made.
-We still have to write unit tests (Chapter \@ref(py-rse-correct)),
-but CI makes those tests much more valuable.
-
-For R packages,
-running tests is built into Travis CI so you don't need to modify anything.
-
-FIXME: er, what? does this mean the commands are auto-generated by `usethis`?
-
-FIXME: Include example here of what failing tests in R look like in Travis CI.
-
-For Python packages,
-we need to add `pytest` to the `script` key in the `.travis.yml` file:
+After having added the `.travis.yml` file to the repository,
+any changes pushed to the GitHub repo will trigger Travis to run its commands.
+You may have noticed that Travis didn't really do anything to the code in your project repository.
+That's because we haven't yet told Travis to do anything.
+Given that we've created some unit tests from Chapter \@ref(py-rse-correct),
+let's get Travis to run those tests on its build system.
+In the `.travis.yml` file, add a new line and write out:
 
 ```yaml
 language: python
+
 python:
 - "3.6"
-install:
-- pip install -r requirements.txt
+
 script:
 - pytest
 ```
 
-With this in place,
-the Travis CI log located right below the build overview
-will contain all of the information that our testing command produces when tests fail.
+Here we've added a key called `script`
+that tells Travis to run the following list of commands,
+in this case, only `pytest`.
+We can put almost anything here as long as it doesn't need human interaction
+(i.e., doesn't ask questions).
+
+Getting CI to run the project tests is the main reason to use CI,
+so that any change made can be tested for correctness.
+And because Travis runs in a "clean" (new and empty) environment 
+(aka, not your own computer),
+it can also find problems that don't show up when you test on your own computer.
+
+Before continuing, complete Exercise \@ref(py-rse-ci-ex-add-pytest).
+
+After completing the exercise,
+you'll have seen the Travis CI log that is found below the build overview.
+The log will contain information on what our test command produces,
+whether the test succeeded or failed.
 
 FIXME: Include example here of what failing tests in Python look like in Travis CI.
 
-We can also have Travis CI report the [code coverage][code-coverage] of our tests (Section \@ref(py-rse-correct-coverage)).
-If we are using R,
-this command will set everything up for us:
+The project will have failed because of a simple reason:
+we use other packages in our Zipf's Law project and Travis doesn't know about them.
+So we need to add an additional line to the `.travis.yml` file:
 
-```r
-usethis::use_coverage()
+```yaml
+language: python
+
+python:
+- "3.6"
+
+install:
+- pip install -r requirements.txt
+
+script:
+- pytest
 ```
 
-FIXME: explain what this does to the YAML file.
+The `install` key tells Travis CI how to install the software we need for our project.
+For Python projects,
+the list of packages the project depends on is listed in a file called `requirements.txt`.
+By using `pip`, these packages are then installed in the Travis environment.
+Complete Exercise \@ref(py-rse-ci-ex-requirements) before continuing.
 
-To add code coverage for a Python project,
-we add one line to `.travis.yml` to install the code coverage tool
+To summarize what Travis has done up until this point, it:
+
+1.  Creates a new Linux virtual machine.
+1.  Installs the desired version of Python.
+1.  Installs the software described in `requirements.txt`.
+1.  Runs the commands below the `script` key.
+1.  Reports the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
+    where <code><em>user/repo</em></code>
+    identifies the repository.
+
+## Reporting the code coverage using Travis CI
+
+We can also have Travis CI report the [code coverage][code-coverage] of our tests,
+as was covered in Section \@ref(py-rse-correct-coverage).
+
+To add code coverage for a Python package,
+we add another line to `.travis.yml` to install the code coverage tool
 and another to run it:
 
 ```yaml
@@ -286,47 +250,39 @@ after_success:
 - codecov
 ```
 
-We use [`codecov`][codecov] rather than the `coverage` tool described in Section \@ref(py-rse-correct-coverage)
-because it is a service like Travis CI.
+We use the Travis key `after_success` so that the coverage tool runs after
+the build occurs.
+While in Section \@ref(py-rse-correct-coverage) we used the `coverage` tool, 
+within Travis we need to use the[`codecov`][codecov] tool instead.
 
-FIXME: fill in this explanation
+Go to Exercise \@ref(py-rse-ci-ex-coverage) and complete it to add it to the
+Zipf's project.
+
+## Display the Travis status on your README {#py-rse-ci-display-github}
+
+Travis CI's dashboard is very useful,
+but is also convenient to display the status of the build on our project's GitHub home page
+(which most people look at more often).
+To add a "status badge" 
+(which is an icon that links to the Travis build) to your repo to show Travis' status,
+click the "build icon" shown in the top right corner of Figure \@ref(fig:image-github-icon)
+to bring up a dialog box.
+Select "Markdown" from the "Format" menu list,
+then copy the Markdown text displayed in the "Result" box
+and paste it into the project's `README.md` file.
+(It's best to paste the text right below the page's title so that it will be instantly visible).
+Complete Exercise \@ref(py-rse-ci-ex-badge) to add the badge to your README file.
+When you've added it,
+your project will now show the badge for its Travis CI status as shown in Figure \@ref(fig:py-rse-ci-github-icon).
+
+```{r py-rse-ci-github-icon, echo=FALSE, fig.cap="The Travis CI Build Badge"}
+knitr::include_graphics("figures/rse-ci/github-icon.png")
+```
 
 ## How can I use CI for other purposes? {#py-rse-ci-deploying}
 
 Continuous integration was invented for testing,
 but it can be used to automate almost anything.
-For example,
-if we want to create a website for an R package,
-we can run:
-
-```r
-usethis::use_pkgdown()
-usethis::use_pkgdown_travis()
-```
-
-to add lines like this to our `.travis.yml` file:
-
-```yaml
-language: R
-sudo: false
-cache: packages
-
-before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
-deploy:
-  provider: script
-  script: Rscript -e 'pkgdown::deploy_site_github()'
-  skip_cleanup: true
-```
-
-The `deploy` section tells Travis CI to put the generated website files online
-using [GitHub Pages][github-pages].
-
-FIXME: this section needs more detail.
-As it is, readers will know something is possible
-but not how it works or how to debug it when things go wrong.
-At the least,
-please explain what keys like `before_cache` are about
-and provide a diagram showing what files are produced and copied where.
 
 FIXME: Add an example for deployment Python projects.
 
@@ -336,17 +292,60 @@ FIXME: create concept map for continuous integration.
 
 ## Exercises {#py-rse-ci-exercises}
 
-FIXME: Get feedback on this and fill it out more later.
+### Commit and push the Travis YAML file {#py-rse-ci-ex-push-yml}
 
-1. Setup Travis CI for the package you've been working on (for the course).
-2. Get Travis CI to run unit tests of your package (not applicable for R packages).
-3. Write a new unit test in your package that you *know* will fail. Push the changes
-up to GitHub.
-4. Go through the Travis CI log and see what the log says about the failure and
-how to fix it. Since you made it purposefully fail, you will already know how to
-fix it, but the point is to get comfortable looking through Travis CI' logs.
-5. Correct the test, push to GitHub, and get Travis CI to build your package
-successfully.
+1. Commit the newly created and edited `.travis.yml` file.
+1. Push the changes up to GitHub.
+1. Go to the Travis CI page of the GitHub repository. 
+1. Once Travis has finished building the project, 
+notice the icons and messages that Travis provides. 
+What do they show or say?
+
+### Get Travis to run your tests {#py-rse-ci-ex-add-pytest}
+
+After adding the `pytest` command to the `.travis.yml` file, do:
+
+1. Commit the changes.
+2. Push the changes to GitHub.
+3. Go to the Travis CI project page.
+4. Check the log of the build (below the Overview). What does it say?
+
+### Fill in the requirements file {#py-rse-ci-ex-requirements}
+
+In the `requirements.txt` file, each dependency package must be on its own line, 
+like so:
+
+```
+package1
+package2
+```
+
+1. Create the file `requirements.txt` in the root directory of the project.
+1. Open the file and add the following packages to the `requirements.txt`:
+sys, csv, argparse, collections, csv, yaml, re, numpy, pandas, matplotlib, scipy. 
+These are all the packages imported into the functions you've created so far.
+Remember, each package must be on its own line.
+1. Commit the `requirements.txt` file and push to GitHub.
+1. Go to the Travis build page and see what it does. 
+Does it pass now? What does the log say?
+
+### Commit and push added code coverage {#py-rse-ci-ex-coverage}
+
+1. Add the `codecov` command to the `after_success` key in the `.travis.yml`
+file in the Zipf's project.
+1. Add, commit, and push the changes to GitHub.
+1. Go to the Travis build page and read the log. What is your coverage?
+
+FIXME: I've never used codecov page. Do you have to go to Travis to see the code coverage?
+
+### Put the Travis README badge on your GitHub repo {#py-rse-ci-ex-badge}
+
+Copy and paste the badge from the Travis build page into your `README.md` file.
+Then:
+
+1. Commit the changes and push to GitHub.
+2. Go to your GitHub project page and check that the badge renders.
+3. Click the badge. Where does it take you?
 
 ## Key Points {#py-rse-ci-keypoints}
 
