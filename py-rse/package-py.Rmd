@@ -522,6 +522,115 @@ and the rest are system paths for
 the Python installation you are using.
 This might differ slightly on different systems.
 
+
+## How can I distribute software packages that I have created? {#py-rse-package-py-distribute}
+
+With our package working, testable, installable, and documented,
+we should distribute it so anyone can just `pip install zipfs_law`
+and start running!
+
+To create a package that can be installed by `pip`
+we first need to create a source distribution
+(an `sdist` in Python packaging jargon)
+using setuptools:
+
+```shell
+python setyp.py sdist
+```
+
+```text
+running sdist
+running egg_info
+writing zipfs_law.egg-info/PKG-INFO
+writing dependency_links to zipfs_law.egg-info/dependency_links.txt
+writing entry points to zipfs_law.egg-info/entry_points.txt
+writing requirements to zipfs_law.egg-info/requires.txt
+writing top-level names to zipfs_law.egg-info/top_level.txt
+package init file 'zipfs_law/__init__.py' not found (or not a regular file)
+reading manifest file 'zipfs_law.egg-info/SOURCES.txt'
+writing manifest file 'zipfs_law.egg-info/SOURCES.txt'
+running check
+warning: check: missing required meta-data: url
+
+warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
+
+creating zipfs_law-0.1
+creating zipfs_law-0.1/zipfs_law
+creating zipfs_law-0.1/zipfs_law.egg-info
+copying files to zipfs_law-0.1...
+copying README.md -> zipfs_law-0.1
+copying setup.py -> zipfs_law-0.1
+copying zipfs_law/collate.py -> zipfs_law-0.1/zipfs_law
+copying zipfs_law/countwords.py -> zipfs_law-0.1/zipfs_law
+copying zipfs_law/mymodule.py -> zipfs_law-0.1/zipfs_law
+copying zipfs_law/plotcounts.py -> zipfs_law-0.1/zipfs_law
+copying zipfs_law.egg-info/PKG-INFO -> zipfs_law-0.1/zipfs_law.egg-info
+copying zipfs_law.egg-info/SOURCES.txt -> zipfs_law-0.1/zipfs_law.egg-info
+copying zipfs_law.egg-info/dependency_links.txt -> zipfs_law-0.1/zipfs_law.egg-info
+copying zipfs_law.egg-info/entry_points.txt -> zipfs_law-0.1/zipfs_law.egg-info
+copying zipfs_law.egg-info/requires.txt -> zipfs_law-0.1/zipfs_law.egg-info
+copying zipfs_law.egg-info/top_level.txt -> zipfs_law-0.1/zipfs_law.egg-info
+Writing zipfs_law-0.1/setup.cfg
+creating dist
+Creating tar archive
+removing 'zipfs_law-0.1' (and everything under it)
+```
+
+These distribution files can now be distributed via `pypi`,
+the standard Python repository for Python packages.
+There is a `testpypi` repository that lets us test putting packages on pypi 
+without having them appear on the standard repository;
+let's start with that.
+Go to [`https://test.pypi.org`](https://test.pypi.org),
+create an account,
+and confirm your email.
+
+The preferred tool for uploading packages to PyPI is called [`twine`](https://twine.readthedocs.io/en/latest/);
+we will install that package:
+
+```shell
+$ pip install twine
+```
+and now we can upload our distributions from the `dist/` folder:
+
+```shell
+$ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+Enter your username: amirakhan
+Enter your passowrd: *********
+Uploading distributions to https://test.pypi.org/legacy/
+Uploading zipfs_law-0.1.tar.gz
+100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
+
+View at:
+https://test.pypi.org/project/zipfs-law/0.1/
+```
+
+The `--repository-url` allows us to specify the test PyPI repository, and we
+have now uploaded both types of distribution, allowing users with different
+environments to use the wheel distribution if their systems allow it, or
+the source distribution otherwise.
+
+We can now test this with a virtual environment and installing with pip:
+
+```shell
+$ conda create -n zipfs-law-test
+$ conda activate zipfs-law-test
+$ pip install --index-url https://test.pypi.org/simple zipfs_law
+```
+
+Success!  Once we are happy with how our package appears in testpypi
+(including its [project page](https://test.pypi.org/project/zipfpy/)),
+we can go through the same process to put it on the main pypi repository.
+But first we have a few improvements to make to our setup.py so that
+our package webpage is useful and to make it easier for potential users
+to find, understand, and install our package.
+
+> If you are building larger projects,
+> it is beneficial to not only distribute a source distribution
+> but also a binary one since this will be faster for users to install.
+> Binary distributions can be build with `python setup.py bdist`.
+> They are platform specific and often referred to as [wheels][wheels].
+
 ## How should I document my package for others? {#py-rse-package-py-document}
 
 As we get our package ready for sharing with others, we should
@@ -837,221 +946,6 @@ you would be able to add that badge and link by adding the following line to you
 Note the syntax for adding an image to a reST file; `.. image::` followed by the link
 to the image, and additional, optional fields on indented lines, such as `:target:` for
 a link to follow when the image is clicked, and `:alt:` for alternate text for the image.
-
-## How can I distribute software packages that I have created? {#py-rse-package-py-distribute}
-
-With our package working, testable, installable, and documented,
-we should distribute it so anyone can just `pip install pterry_zipfpy`
-and start running!
-
-`pip` installs packages either from a source distribution (an `sdist` in
-Python packaging jargon) or a binary distribution called a wheel (`bdist_wheel`).
-We can use setuptools to generate both of these:
-
-```shell
-$ python setup.py sdist bdist_wheels
-```
-```text
-running sdist
-running egg_info
-creating zipfpy.egg-info
-writing zipfpy.egg-info/PKG-INFO
-writing dependency_links to zipfpy.egg-info/dependency_links.txt
-...
-warning: check: missing required meta-data: url
-warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
-
-creating zipfpy-0.1
-creating zipfpy-0.1/bin
-creating zipfpy-0.1/zipfpy
-...
-creating dist
-Creating tar archive
-removing 'zipfpy-0.1' (and everything under it)
-
-running bdist_wheel
-running build
-running build_py
-creating build
-creating build/lib
-creating build/lib/zipfpy
-...
-adding 'zipfpy/__init__.py'
-adding 'zipfpy/check.py'
-adding 'zipfpy/generate.py'
-adding 'zipfpy-0.1.data/scripts/check_zipf.py'
-adding 'zipfpy-0.1.dist-info/top_level.txt'
-adding 'zipfpy-0.1.dist-info/WHEEL'
-adding 'zipfpy-0.1.dist-info/METADATA'
-adding 'zipfpy-0.1.dist-info/RECORD'
-removing build/bdist.macosx-10.7-x86_64/wheel
-```
-
-We will look at how to clean up the warnings about `url`, and `author_email` in the exercises, as
-well as considering other package metadata we should add for our package.
-
-`python setup.py sdist` creates a compressed file `dist/zipf-0.1.tar.gz` that contains the following:
-
-```shell
-$ tar ztvf dist/zipf-0.1.tar.gz
-```
-```text
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/
--rw-r--r--  0 pterry staff     182 Jul 23 16:30 zipfpy-0.1/PKG-INFO
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/bin/
--rwxr-xr-x  0 pterry staff     467 Jul 23 16:24 zipfpy-0.1/bin/check_zipf.py
--rw-r--r--  0 pterry staff     792 Jul 23 16:24 zipfpy-0.1/README.md
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/
--rw-r--r--  0 pterry staff     182 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/PKG-INFO
--rw-r--r--  0 pterry staff     210 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/SOURCES.txt
--rw-r--r--  0 pterry staff       7 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/top_level.txt
--rw-r--r--  0 pterry staff       1 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/dependency_links.txt
--rw-r--r--  0 pterry staff     162 Jul 23 16:24 zipfpy-0.1/setup.py
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/zipfpy/
--rw-r--r--  0 pterry staff    1978 Jul 23 16:24 zipfpy-0.1/zipfpy/check.py
--rw-r--r--  0 pterry staff    2022 Jul 23 16:24 zipfpy-0.1/zipfpy/generate.py
--rw-r--r--  0 pterry staff     318 Jul 23 16:24 zipfpy-0.1/zipfpy/__init__.py
--rw-r--r--  0 pterry staff      38 Jul 23 16:30 zipfpy-0.1/setup.cfg
-```
-
-The source files `__init__.py` and `generate.py` are in there,
-along with the odds and ends that `pip` will need to install this package properly when the time comes.
-
-Also present in `dist` is a file `zipfpy-0.1-py3-none-any.whl`, the "wheel" file;
-running `file dist/zipfpy-0.1-py3-none-any.whl` will show it to be a zip file.  We
-can list its contents and see the same source files and some metadata:
-
-```shell
-$ unzip -l dist/zipfpy-0.1-py3-none-any.whl
-```
-```text
-Archive:  dist/zipfpy-0.1-py3-none-any.whl
-  Length      Date    Time    Name
----------  ---------- -----   ----
-      318  07-23-2019 20:24   zipfpy/__init__.py
-     1978  07-23-2019 20:24   zipfpy/check.py
-     2022  07-23-2019 20:24   zipfpy/generate.py
-      454  07-23-2019 20:30   zipfpy-0.1.data/scripts/check_zipf.py
-        7  07-23-2019 20:30   zipfpy-0.1.dist-info/top_level.txt
-       92  07-23-2019 20:30   zipfpy-0.1.dist-info/WHEEL
-      172  07-23-2019 20:30   zipfpy-0.1.dist-info/METADATA
-      606  07-23-2019 20:30   zipfpy-0.1.dist-info/RECORD
----------                     -------
-     5649                     8 files
-```
-
-These distribution files can now be distributed via `pypi`, the standard Python
-repository for Python packages.
-
-There is a `testpypi` repository that lets us test putting packages
-on pypi without having them appear on the standard repository; let's
-start with that.  Go to [`https://test.pypi.org`](https://test.pypi.org),
-create an account, and confirm your email.
-
-The preferred tool for uploading packages to the PyPI family of repositories
-is called [`twine`](https://twine.readthedocs.io/en/latest/); we will
-install that package:
-
-```shell
-$ pip install twine
-```
-and now we can upload our distributions:
-
-```shell
-$ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-Enter your username: pterry
-Enter your passowrd: *********
-Uploading zipfpy-0.1-py3-none-any.whl
-...
-Uploading zipfpy-0.1.tar.gz
-...
-```
-
-The `--repository-url` allows us to specify the test PyPI repository, and we
-have now uploaded both types of distribution, allowing users with different
-environments to use the wheel distribution if their systems allow it, or
-the source distribution otherwise.
-
-We can now test this with a virtual environment and installing with pip:
-
-```shell
-$ virtualenv ~/envs/testpypi
-Using base prefix '/usr/local/Cellar/python/3.7.2_2/Frameworks/Python.framework/Versions/3.7'
-New python executable in /Users/pterry/envs/testpypi/bin/python3.7
-Also creating executable in /Users/pterry/envs/testpypi/bin/python
-sourInstalling setuptools, pip, wheel...
-$ source ~/envs/testpypi/bin/activate
-(testpypi) $ pip install --index-url https://test.pypi.org/simple/ zipfpy
-Looking in indexes: https://test.pypi.org/simple/
-Collecting zipfpy
-  Using cached https://test-files.pythonhosted.org/packages/f8/ac/d152eed95bff7567954becef22b8fe0f2aae15008fbeb346c69f75b9d2a0/zipfpy-0.1-py3-none-any.whl
-Installing collected packages: zipfpy
-Successfully installed zipfpy-0.1
-(testpypi) $
-```
-
-Success!  Once we are happy with how our package appears in testpypi
-(including its [project page](https://test.pypi.org/project/zipfpy/)),
-we can go through the same process to put it on the main pypi repository.
-But first we have a few improvements to make to our setup.py so that
-our package webpage is useful and to make it easier for potential users
-to find, understand, and install our package.
-
-## What does it mean to install a Python package? {#py-rse-package-py-install}
-
-We have made and published a Python
-package that anyone with an internet connection can install.
-But what actually happens when you install a Python package?
-
-You've seen that when you have a Python module or package in the current
-directory named, say, `zipfpy`, Python will successfully find that module
-and directory when it runs `import zipfpy`.  Having all of the
-Python standard library, all installed packages, and our own code in the
-same directory gets unwieldly quickly - especially if we want to run our
-routines from a directory full of data!
-
-Instead of putting all these Python files in the current directory,
-they are located in certain directories elsewhere on your file system,
-where Python knows to search for them.
-Just as the `PATH` environment in the shell contains a list of directories
-that the shell searches for programs it can execute,
-the Python variable `sys.path` contains a list of the directories to search.
-We can see the which directories Python looks in,
-by opening the Python interpreter and typing the following.
-
-```python
-import sys
-
-sys.path
-```
-
-If you are using the Anaconda distribution of Python
-and you run this script from your desktop,
-the `sys.path` list will contain the following items
-(this might differ slightly on different systems):
-
-```
-['',
-'/Users/tpratchett/anaconda3/lib/python36.zip',
-'/Users/tpratchett/anaconda3/lib/python3.6',
-'/Users/tpratchett/anaconda3/lib/python3.6/lib-dynload',
-'/Users/tpratchett/anaconda3/lib/python3.6/site-packages']
-```
-
-The first will be your current directory - a Python environment
-always looks there first -
-and the rest are system paths for
-the Python installation you are using.
-
-Installing a package means that the contents of the package are copied
-into one of the directories that Python will search in.
-Most commonly when installing packages,
-they will be copied into the `site-packages` directory.
-This means that you can "install" packages
-by manually copying source code into the right places
-but it's much more efficient and safer
-to use a tool specifically made for this purpose,
-such as pip.
 
 ## Announcing Work {#py-rse-package-py-announce}
 
