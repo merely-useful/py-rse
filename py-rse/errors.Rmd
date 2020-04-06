@@ -9,8 +9,7 @@ Most modern programming languages use [exceptions][exception] for error handling
 As the name suggests,
 an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
-The code below shows a very simple example that tests different denominators and 
-reports attempts to divide by zero:
+The code below shows a very simple example that reports attempts to divide by zero:
 
 ```python
 for denom in [-5, 0, 5]:
@@ -18,12 +17,12 @@ for denom in [-5, 0, 5]:
         result = 1/denom
         print('1/{} == {}'.format(denom, result))
     except:
-        print('Cannot divide by {}'.format(denom))
+        print('{} has no reciprocal'.format(denom))
 ```
 
 ```text
 1/-5 == -0.2
-Cannot divide by 0
+0 has no reciprocal
 1/5 == 0.2
 ```
 
@@ -36,10 +35,12 @@ This is why the `print` statement inside the `try` doesn't run when `denom` is 0
 as soon as Python tries to calculate `1/denom`,
 it skips directly to the error message.
 
-We often want to know exactly what went wrong,
+FIXME: diagram of exception handling control flow
+
+We often want to know what exactly went wrong,
 so Python and other languages store information about the error
-in an object called an exception.
-We can [catch][catch] an exception and inspect it as follows:
+in an object (also called an exception).
+We can [catch][catch] this object and inspect it as follows:
 
 ```python
 for denom in [-5, 0, 5]:
@@ -154,7 +155,7 @@ except ArithmeticError as error:
 Error trying to sum reciprocals: division by zero
 ```
 
-This least to the rule "throw low, catch high":
+This leasd to the rule "throw low, catch high":
 write most of your code without exception handlers,
 since there's nothing useful you can do in the middle of a small utility function,
 but put a few handlers in the main body of your program
@@ -162,125 +163,78 @@ to catch and report all errors.
 
 ## What exceptions should I raise and catch? {#py-rse-errors-where}
 
-Now that we have learned about error handling,
-we can go ahead and add it to our zipf's law code.
-First,
-you will notice that there is already some error handling built in,
-e.g. if you try to read a file that does not exist,
-the error handling inside the `open` function throws a `FileNotFoundError`:
-
-```shell
-python bin/collate.py results/no-file
-```
-
-```text
-Traceback (most recent call last):
-  File "bin/collate.py", line 27, in <module>
-    main(args)
-  File "bin/collate.py", line 17, in main
-    with open(file_name, 'r') as reader:
-FileNotFoundError: [Errno 2] No such file or directory: 'results/none.csv'
-```
-
-But what happens if we are trying to read an file that exists,
-but was not created by `countwords.py`?
-
-
-```shell
-$ python bin/collate.py Makefile
-```
-
-```text
-Traceback (most recent call last):
-  File "bin/collate.py", line 27, in <module>
-    main(args)
-  File "bin/collate.py", line 18, in main
-    update_counts(reader, word_counts)
-  File "bin/collate.py", line 10, in update_counts
-    for word, count in csv.reader(reader):
-ValueError: not enough values to unpack (expected 2, got 1)
-```
-
-This error is not that easy to understand.
-It would be useful if our programmed check that the input files were CSV-files,
-and if not,
-raised an error with a useful explanation to what went wrong.
-We could achieve this by wrapping the open statement in a `try/except` clause:
-
-```python
-for file_name in args.infiles:
-    try:
-        with open(file_name, 'r') as reader:
-            update_counts(reader, word_counts)
-    except ValueError as e:
-        print(f'{file_name} is not a CSV-file.')
-        print(f'ValueError: {e}')
-```
-
-```shell
-$ python bin/collate.py Makefile
-```
-
-```text
-Makefile is not a CSV-file.
-ValueError: not enough values to unpack (expected 2, got 1)
-```
-
-This is definitely more informative than before!
-However,
-an issue with this approach is that all `ValueErrors`
-that are raised when trying to open a file
-will result in this error message,
-including those potentially raised when actually using a CSV-file as input.
-
-A more precise approach in this case would be to throw an exception specifically
-if a file other than a CSV-file is passed as input:
-
-```python
-for file_name in args.infiles:
-    if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV-file.')
-    with open(file_name, 'r') as reader:
-        update_counts(reader, word_counts)
-```
-
-```shell
-$ python bin/collate.py Makefile                                                                          1 ↵
-```
-
-```text
-Traceback (most recent call last):
-  File "bin/collate.py", line 29, in <module>
-    main(args)
-  File "bin/collate.py", line 18, in main
-    raise OSError(f'{file_name} is not a valid CSV-file of word counts.')
-OSError: Makefile is not a CSV-file.
-```
-
-Note that this is not perfect,
-ideally we should check the content of the file
-and confirm that the format is that of the output files from `countwords.py`,
-instead of relying on the file extension.
-This could involve checking that there are two columns separated by a comma,
-that the first column contains strings,
-and that the second is numerical.
-But for the purpose of demonstration,
-our sample code above works fine.
-
-The `if/raise` approach is commonly referred to as "look before your leap",
-while the `try/except` approach above is called
+Broadly speaking there are two approaches to error handling:
+"look before your leap"
+and
 "it's easier to ask for forgiveness than permission".
+When using the first,
+we check if an operation will be allowed before trying it:
 
-The first approach is more precise,
-but has the shortcoming that programmers never can anticipate all of the things
-that can go wrong when running a program,
-so there should always be an `except` somewhere
-to deal with unexpected cases.
-In our code,
-this is often dealt with in an informative way
-by the exceptions in the built-in Python functions,
-such as that which was displayed by open
-when we tried reading non-existing file.
+```python
+LOG_DIR = "/tmp/mylogdir"
+
+def write_message(filename, message):
+    if os.path.isdir(LOG_DIR):
+        path = os.path.join(LOG_DIR, filename)
+        with open(path, 'a') as writer:
+            writer.write(message)
+    else:
+        print('No log directory {}'.format(LOG_DIR), file=sys.stderr)
+```
+
+With the second,
+we try the operation and catch the exception if one is raised:
+
+```python
+LOG_DIR = "/tmp/mylogdir"
+
+def write_message(filename, message):
+    try:
+        path = os.path.join(LOG_DIR, filename)
+        with open(path, 'a') as writer:
+            writer.write(message)
+    except OSError as error:
+        print('Unable to write log message to {}: {}'.format(path, error))
+```{: title="logging/ask_permission_not_forgiveness.py"}
+
+The first approach doesn't actually need exception handlers,
+except it does:
+programmers can never anticipate all of the things that can go wrong in the real world,
+so there should always be an `except` somewhere.
+Since that's the case,
+most programmers prefer the second approach.
+
+When we are raising exceptions ourselves,
+we should make the information as specific as possible.
+For example,
+suppose a program contains this:
+
+```python
+if (val is not None) and (min_val < val < max_val) and (val % 2 == 0) and (val >= prev_val):
+    # OK branch
+else:
+    raise ValueError('Bad value: {}'.format(val))
+```
+
+Knowing what value caused the error is helpful,
+but the message in the exception doesn't tell us why it was bad.
+Was it not between `min_val` and `max_val`?
+Was it less than `prev_val`?
+Whoever has to debug the problem will want to know,
+but breaking the test up into cases makes the code harder to read:
+
+```python
+if val is None:
+    raise ValueError('Value {} is None'.format(val))
+elif (val <= min_val) or (max_val <= val):
+    raise ValueError('Value {} is out of range ({}, {})'.format(val, min_val, max_val))
+elif val % 2 != 0:
+    raise ValueError('Value {} is odd'.format(val))
+elif val < prev_val:
+    raise ValueError('Value {} is not less than previous value {}'.format(val, prev_val))
+else:
+    # OK branch
+```
 
 Generally speaking,
 we should distinguish between [internal errors][internal-error],
@@ -420,7 +374,6 @@ and then only use messages from that catalog:
 ```python
 from error_messages import ERROR_MESSAGES
 
-
 try:
     # ...do something complicated...
 except OSError as e:
@@ -439,7 +392,7 @@ ERROR_MESSAGES = {
         # ...more error messages in English...
     },
     'fr' : {
-        'cannot_read_file' : "Impossible d'acceder au fichier {}",
+        'cannot_read_file' : 'Impossible d'acceder au fichier {}',
         'config_corrupted' : 'Fichier de configuration {} corrompu',
         # ...more error messages in French...
     }
@@ -481,47 +434,44 @@ without editing the program's source code.
 We would probably wind up with code like this:
 
 ```python
-LOG_LEVEL = 2  # Or some other number
+DEBUG_LEVEL = 2 # or some other number
 
 def complex_function():
     # ...lots of complicated code...
-    if (LOG_LEVEL > 0):
+    if (DEBUG_LEVEL > 0):
         print('Everything seems to be going well')
     # ...more complicated code...
-    if (LOG_LEVEL > 1):
+    if (DEBUG_LEVEL > 1):
         print('Current alpha value {}'.format(alpha))
 ```
 
 Here,
-`LOG_LEVEL` acts as a threshold:
+`DEBUG_LEVEL` acts as a threshold:
 any debugging output at a lower level isn't printed.
 
 Logging frameworks combine the `if` and the `print` statements,
-and define standard names for the logging levels.
-In order of decreasing severity, the levels are:
+and define standard names for the levels.
+In order of increasing severity, the levels are:
 
--   `CRITICAL`: potential loss of data, security breach, etc.
--   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
--   `WARNING`: something unexpected happened, but the program will keep going.
--   `INFO`: confirmation that things are working as expected.
 -   `DEBUG`: very detailed information used for localizing errors.
+-   `INFO`: confirmation that things are working as expected.
+-   `WARNING`: something unexpected happened, but the program will keep going.
+-   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
+-   `CRITICAL`: potential loss of data, security breach, etc.
 
 Each of these has a corresponding function:
 we can use `logging.debug`, `logging.info`, etc. to write messages at these levels.
 By default,
 only `WARNING` and above are displayed;
-messages appear on [standard error][standard-error]
-so that the flow of data in pipes isn't affected.
+messages appear on [standard error][standard-error] so that the flow of data in pipes isn't affected.
 The source of the message appears as well:
-by default,
-the source is called "root" for reasons that will become clear later.
+by default, the source is called "root" for reasons that will become clear later.
 Thus,
 if we run the small program shown below,
 only the warning message appears:
 
 ```python
 import logging
-
 
 logging.warning('This is a warning.')
 logging.info('This is just for information.')
@@ -533,16 +483,15 @@ WARNING:root:This is a warning.
 
 We can configure logging to send messages to a file instead of to standard error
 using `logging.basicConfig`.
-This has to be done before we make any logging calls,
-it's not retroactive.
+(This has to be done before we make any logging calls:
+it's not retroactive.)
 We can use the same function to set the logging level:
 everything at or above the specified level is displayed.
 
 ```python
 import logging
 
-
-logging.basicConfig(level=logging.DEBUG, filename='logging.log')
+logging.basicConfig(level=logging.DEBUG, filename='everything.log')
 
 logging.debug('This is for debugging.')
 logging.info('This is just for information.')
@@ -574,36 +523,21 @@ There may also be a corresponding flag `-q` or `--quiet` that changes the level 
 and a flag `-l` or `--logfile` that specifies a log file name
 (with standard error being the default for message output).
 
-The default configuration in the logging modules uses a single handler,
-by default one that prints the logging messages,
-and if we specify a filename it switches to one that writes the messages to file.
-To log messages to a file while also printing them,
-you can specify to use two handlers simultaneously in the logging configuration:
-
-```python
-import logging
-
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    handlers=[
-        logging.FileHandler("logging.log"),
-        logging.StreamHandler()])
-
-logging.debug('This is for debugging.')
-```
-
-The string `'This is for debugging'` message is both printed to stderr
-and appended to `logging.log`.
+> **`tail -f`**
+>
+> A handy trick during development is to configure logging to send messages to a file,
+> and then open another terminal window and run <code>tail -f <em>filename</em></code>
+> to display changes to that file as information is appended.
+> Doing this gives you a record of the log output
+> while allowing you to monitor your program's progress interactively.
 
 Libraries like `logging` can send messages to many destinations:
-e.g. a centralized logging server that collates logs from many different systems.
-Another good practice is [rotating files][rotating-file]
-so that the system always has messages from the last few hours
-but doesn't fill up the disk.
+[rotating files][rotating-file] so that the system always has messages from the last few hours
+but doesn't fill up the disk,
+for example,
+or a centralized logging server of some kind that collates logs from many different systems.
 We don't need any of these when we start,
-but the data engineers and system administrators
-who eventually have to install and maintain your programs
+but the data engineers and system administrators who eventually have to install and maintain your programs
 will be very grateful that you used `logging`,
 because then they can set it up the way they want with very little work.
 
@@ -627,6 +561,8 @@ because then they can set it up the way they want with very little work.
 > (since we need to be able to save and restore configurations as JSON
 > as well as in whatever format we normally use),
 > so on balance we recommend option 3.
+
+
 
 ## Exercises {#py-rse-errors-exercises}
 
