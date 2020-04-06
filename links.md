@@ -411,6 +411,7 @@
 [virtual-machine]: glossary.html#virtual-machine
 [vs-code]: https://code.visualstudio.com/
 [wayback-machine]: http://web.archive.org/
+[wheels]: https://packaging.python.org/guides/distributing-packages-using-setuptools/#wheels
 [wickham-packages]: http://r-pkgs.had.co.nz/
 [wiki-rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
