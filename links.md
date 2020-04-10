@@ -69,6 +69,7 @@
 [compiler]: glossary.html#compiler
 [computational-notebook]: glossary.html#computational-notebook
 [conda]: https://conda.io/
+[conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
 [conditional-expression]: glossary.html#conditional-expression
 [confirmation-bias]: glossary.html#confirmation-bias
 [continuation-prompt]: glossary.html#continuation-prompt
@@ -249,6 +250,7 @@
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [phony-target-make]: glossary.html#phony-target-make
+[pip-and-conda]: https://www.anaconda.com/understanding-conda-and-pip/
 [pipe-unix]: glossary.html#pipe-unix
 [pothole-case]: glossary.html#pothole-case
 [precision]: glossary.html#precision
