@@ -27,7 +27,7 @@ coupled with installation instructions for the computer.
 Python packages can come from various sources.
 Many that you will use are part of the standard distribution,
 but packages can be created by anyone
-and there are thousands of that can be downloaded and installed from online repositories.
+and there are thousands that can be downloaded and installed from online repositories.
 Note that you will sometimes hear packages referred to as "modules".
 These two words are often used interchangeably.
 Technically,
@@ -59,14 +59,14 @@ zipfs_law
 ```
 
 It may initially be confusing to have two folders with the same name,
-but it makes things easier to setup your project for installation
+but it makes it easier to setup your project for installation
 and it is the convention used by most Python projects.
 Alternative directory structures are possible,
 but in this chapter we're focusing on the approach we believe is the most beneficial to learn.
 
 > You will often see Python packages containing a file with a special name: `__init__.py`.
 > This was a requirement before Python 3.3,
-> but is now only needed execute code upon package import.
+> but is now only needed to execute code upon package import.
 > Just as importing a module file executes the code in the module,
 > importing a package executes the code in `__init__.py`.
 
@@ -139,7 +139,7 @@ rather that the current state of our primary Python environment.
 > This was straightforward for our package since we only have a single package directory.
 > For more complex projects,
 > it is good to know about the `find_packages()`[find-packages] function from `setuptools`,
-> which automatically can find all packages by recursively searching the current directory.
+> which can automatically find all packages by recursively searching the current directory.
 
 ## How can I create a virtual Python environment? {#py-rse-package-py-virtualenv}
 
@@ -151,16 +151,16 @@ each with different requirements
 for Python packages,
 and you want to keep them straight.
 
-Another reason concerns us a bit more immediately.  We want to make sure
-that other people can successfully install and use our package.  That
-means:
+Another reason concerns us a bit more immediately.
+We want to make sure that other people can successfully install and use our package.
+That means:
 
-* We want to be able to easily test install and uninstall our package, without affecting
-the entire Python environment; and
-* We want to avoid having to answer problems people have with your package with
-something more helpful than "I don't know, it works for me", by making sure we
-can install and run our package in a completely empty environment, so we can tell
-that we're not accidentally relying on some other package being installed.
+- We want to be able to easily test install and uninstall our package,
+  without affecting the entire Python environment.
+- We want to answer problems people have with our package with something more helpful than
+  "I don't know, it works for me".
+  By installing and running our package in a completely empty environment,
+  we can ensure that we're not accidentally relying on other packages being installed.
 
 A very handy answer to both of those needs is a [virtual environment][virtual-environment].
 A virtual environment is a layer on top of an existing Python installation.
@@ -207,20 +207,21 @@ Executing transaction: done
 #     $ conda deactivate
 ```
 
-`conda` creates a new directory called `zipfs-law`,
-which contains subdirectories called `bin`, `lib`, and so on—everything
+`conda` creates the directory `~/anaconda3/envs/zipfs-law`,
+which contains subdirectories called `bin`, `lib`, and so on — everything
 needed for a minimal Python installation.
 Crucially,
-`zipfs-law/bin/python` checks for packages in these directories instead of checking the system-wide install.
+`~/anaconda3/envs/zipfs-law/bin/python` checks for packages in these directories
+instead of checking the system-wide install.
 
-We can switch to the `test` environment by running:
+We can switch to the `zipfs-law` environment by running:
 
 ```shell
 $ conda activate zipfs-law
 ```
 
 Once we have done this,
-we're running the Python interpreter in `test/bin`:
+we're running the Python interpreter in `zipfs-law/bin`:
 
 ```shell
 (zipfs-law)$ which python
@@ -306,8 +307,7 @@ but it is preferred to automate this process
 by listing all the required packages as dependencies of our package
 using the `install_requires` parameter in `setup.py`:
 
-
-```
+```python
 from setuptools import setup
 
 
@@ -465,7 +465,7 @@ without writing the full path to the file
 and without prefixing it with `python`.
 
 ```shell
-countwords ../data/dracula.csv
+countwords ../data/dracula.csv -n 5
 ```
 
 ```text
@@ -474,7 +474,6 @@ and,5803
 I,4846
 to,4662
 of,3707
-...
 ```
 
 ## What does it mean to install a Python package? {#py-rse-package-py-install}
@@ -483,7 +482,7 @@ Now that we have created and installed our very first Python package,
 let's explore what actually happens during the installation of a package.
 
 In essence,
-Installing a package means that the contents of the package are copied
+installing a package means that the contents of the package are copied
 into one of the directories that Python will search in.
 This means that you can "install" packages
 by manually copying source code into the right places
@@ -576,16 +575,16 @@ Creating tar archive
 removing 'zipfs_law-0.1' (and everything under it)
 ```
 
-These distribution files can now be distributed via `pypi`,
+These distribution files can now be distributed via PyPi,
 the standard Python repository for Python packages.
-There is a `testpypi` repository that lets us test putting packages on pypi 
+There is a TestPyPi repository that lets us test putting packages on PyPi 
 without having them appear on the standard repository;
 let's start with that.
-Go to [`https://test.pypi.org`](https://test.pypi.org),
+Go to [test.pypi.org](https://test.pypi.org),
 create an account,
 and confirm your email.
 
-The preferred tool for uploading packages to PyPI is called [`twine`](https://twine.readthedocs.io/en/latest/);
+The preferred tool for uploading packages to PyPI is called [twine][twine];
 we will install that package:
 
 ```shell
@@ -605,7 +604,7 @@ View at:
 https://test.pypi.org/project/zipfs-law/0.1/
 ```
 
-The `--repository-url` allows us to specify the test PyPI repository, and we
+The `--repository-url` allows us to specify the TestPyPI repository, and we
 have now uploaded both types of distribution, allowing users with different
 environments to use the wheel distribution if their systems allow it, or
 the source distribution otherwise.
@@ -615,13 +614,38 @@ We can now test this with a virtual environment and installing with pip:
 ```shell
 $ conda create -n zipfs-law-test
 $ conda activate zipfs-law-test
-$ pip install --index-url https://test.pypi.org/simple zipfs_law
+(zipfs-law-test)$ pip install --index-url https://test.pypi.org/simple zipfs_law
 ```
 
-Success!  Once we are happy with how our package appears in testpypi
-(including its [project page](https://test.pypi.org/project/zipfpy/)),
-we can go through the same process to put it on the main pypi repository.
-But first we have a few improvements to make to our setup.py so that
+```text
+Looking in indexes: https://test.pypi.org/simple
+Collecting zipfs_law
+  Downloading https://test-files.pythonhosted.org/packages/aa/fb/352af20b6f4bb13c3f06e7c2f1e1b7ec8a11e771533d5ad05407d48059a9/zipfs_law-0.1.tar.gz (3.1 kB)
+Requirement already satisfied: matplotlib in /usr/lib/python3.8/site-packages (from zipfs_law) (3.2.1)
+Requirement already satisfied: pandas in ./.local/lib/python3.8/site-packages (from zipfs_law) (1.0.3)
+Requirement already satisfied: scipy in /usr/lib/python3.8/site-packages (from zipfs_law) (1.4.1)
+Requirement already satisfied: pyyaml in /usr/lib/python3.8/site-packages (from zipfs_law) (5.3.1)
+Requirement already satisfied: cycler>=0.10 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs_law) (0.10.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs_law) (1.1.0)
+Requirement already satisfied: numpy>=1.11 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs_law) (1.18.2)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs_law) (2.4.7)
+Requirement already satisfied: python-dateutil>=2.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipfs_law) (2.8.1)
+Requirement already satisfied: pytz>=2017.2 in /usr/lib/python3.8/site-packages (from pandas->zipfs_law) (2019.3)
+Requirement already satisfied: six in /usr/lib/python3.8/site-packages (from cycler>=0.10->matplotlib->zipfs_law) (1.14.0)
+Requirement already satisfied: setuptools in /usr/lib/python3.8/site-packages (from kiwisolver>=1.0.1->matplotlib->zipfs_law) (46.1.3)
+Installing collected packages: zipfs-law
+    Running setup.py install for zipfs-law ... done
+Successfully installed zipfs-law-0.1
+```
+
+Success,
+You can see that `pip` took advantage of the fact that some packages already existing on our system,
+and didn't download these again.
+Once we are happy with how our package appears in TestPyPi
+(including its [project page](https://test.pypi.org/project/zipfs-law/)),
+we can go through the same process to put it on the main PyPi repository
+at [pypi.org](https://pypi.org/).
+But first we have a few improvements to make to our `setup.py` so that
 our package webpage is useful and to make it easier for potential users
 to find, understand, and install our package.
 
@@ -635,10 +659,10 @@ to find, understand, and install our package.
 
 Writing good documentation does not have to be time-consuming
 and involve learning new tools.
-Here we will mention the bare necessities for making a great documentation
+Here we will mention the bare necessities for creating great documentation
 and then highlight extensions that are useful for more complex projects.
 
-Documentations starts with writing clear explanatory docstrings for each function and module,
+Documentation starts with writing clear explanatory docstrings for each function and module,
 which we have already done.
 This is one of the most important steps,
 since it means that others can understand what each function is meant to do,
@@ -651,7 +675,7 @@ We can include these elements in the README.md.
 An example of a good README.md file for our project would be
 
 
-``````markdown
+````markdown
 # zipfs_law
 
 The `zipfs_law` package tallies the occurrences of words in text files
@@ -706,8 +730,7 @@ The output file would look something like
 
 Additional information on each function can be found in their docstrings and appending the `-h` flag,
 e.g. `countwords -h`.
-
-``````
+````
 
 For simple packages,
 carefully written docstrings and READMEs
