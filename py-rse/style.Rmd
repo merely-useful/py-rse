@@ -10,8 +10,12 @@ nothing in software development makes sense except in light of human psychology.
 This is particularly true when we look at programming style.
 Computers don't need to understand programs in order to execute them,
 but people do if they are to create, debug, and extend them.
-This lesson therefore presents guidelines for good Python programming style
-and introduces some language features that can make programs more flexible and more readable.
+
+In the preceding chapters we wrote code to analyze word counts in classic novels.
+In this chapter we will step back
+and discuss some of the style choices we made in that code and why.
+We present guidelines for good Python programming style
+and introduce some language features that can make programs more flexible and more readable.
 
 ## What is good style for Python programs? {#py-rse-style-pep8}
 
@@ -40,13 +44,7 @@ def transpose(original):
   return result
 ```
 
-Look for algorithmic problems first.
-:   Code review isn't just (or even primarily) about style:
-    its real purpose is to find bugs before they can affect anyone.
-    The first pass over any change should therefore look for algorithmic problems.
-    Are the calculations right?
-    Are any rare cases going to be missed?
-    Are errors being caught and handled (Section \@ref(py-rse-errors-logging))?
+but is much more readable when rewritten as:
 
 ```python
 def transpose(original):
@@ -66,14 +64,17 @@ the original reason was that the most common interpretation of tabs
 by the editors of the 1980s was 8 spaces,
 which again was more than most people felt necessary.
 Today,
-almost all editors will auto-indent or auto-complete when the tab key is pressed,
-but the legacy of those times lives on.
+almost all editors will auto-indent or auto-complete when the tab key is pressed
+(or insert spaces, if configured to do so),
+but the legacy of those ancient times lives on.
 
 **Do not put spaces inside parentheses.**
 
-Don't write <code>(&nbsp;1+2&nbsp;)</code>.
+Don't write <code>( 1+2 )</code>.
 This applies to function calls as well:
-write `max(a, b)` rather than <code>max(&nbsp;a,&nbsp;b&nbsp;)</code>.
+write `max(a, b)` rather than <code>max( a, b )</code>.
+(We will see a related rule when we discussed default parameter values
+in Section \@ref(py-rse-style-features).)
 
 **Always use spaces around comparisons like `>` and `<=`.**
 
@@ -127,7 +128,7 @@ which are outside the scope of this lesson.
 
 They can be ambiguous,
 and can be be hard for non-native speakers to understand.
-This rule doesn't necessarily you will have to do more typing:
+This rule doesn't necessarily mean you will have to do more typing:
 a good programming editor will [auto-complete][auto-completion] names for you.
 
 **Use short names for short-lived local variables and longer names for things with wider scope.**
@@ -140,7 +141,7 @@ or whose purpose isn't immediately clear
 
 **Keep functions short.**
 
-No function should be more than a page long
+No function should be longer than a printed page (about 80 lines)
 or have more than four levels of indentation because of nested loops and conditionals.
 Anything longer or more deeply nested is hard for readers to fit into [working memory][working-memory];
 if you need to break these limits,
@@ -205,21 +206,16 @@ The order of items in each file should be:
 -   Function definitions.
 -   If the file can be run as a program,
     the `if __name__ == '__main__'` statement discussed in
-    Section \@ref(py-rse-package-py-import).
+    Section \@ref(py-rse-py-scripting-main).
 
 That much is clear,
 but programmers disagree (strongly) on whether high-level functions should come first or last,
 i.e.,
 whether `main` should be the first function in the file or the last one.
-
-We prefer the former approach,
-i.e.,
-putting high-level functions at the top of the file.
-The reason is that when people encounter code for the first time,
-they usually scan it from top to bottom.
-The first function they read should therefore help them understand
-what the rest of the file contains and where to look for it.
-Three common patterns that people use for this are:
+Our scripts put it last,
+so that it is immediately before the check on `__name__`.
+Wherever it goes,
+`main` tends to follow one of three patterns:
 
 1.  Figure out what the user has asked it to do (Chapter \@ref(py-rse-configuration)).
 2.  Read all input data.
@@ -579,6 +575,15 @@ def rescale_by_average(values, factors, weights):
         values[i] = v / a
 ```
 
+
+> **Return consistently**
+>
+> PEP-8 says, "Be consistent in `return` statements,"
+> and goes on to say that either all `return` statements in a function should return a value,
+> or none of them should.
+> If a function contains any explicit `return` statements at all,
+> it should end with one as well.
+
 A related refactoring pattern is called "default and override".
 To use it,
 find cases where a value is set conditionally;
@@ -876,8 +881,10 @@ and highlight things that you should probably stop doing as well.
 Despite this,
 code review still isn't common in research software development.
 This is partly a chicken-and-egg problem---people don't do it
-because other people don't do it @Sega2005.
-It is also more difficult to do in specialized scientific fields:
+because other people don't do it @Sega2005,
+and other people don't do it because software development does not have the same social status
+as theorem proving or benchwork.
+Code review is also more difficult to do in specialized scientific fields:
 in order for review to be useful,
 reviewers need to understand the problem domain well enough to comment on algorithms and design choices
 rather than indentation and variable naming,
@@ -890,8 +897,9 @@ or avoid having you review their work.
 Equally,
 being defensive when someone offers suggestions politely and sincerely is very human,
 but can stunt your development as a programmer.
+
 Lots of people have written guidelines for doing reviews that avoid these traps @Quen2018,@Sank2018.
-A few key points are:
+A few common points are:
 
 Work in small increments.
 :   As @Cohe2010 and others have found,
@@ -907,6 +915,7 @@ Look for algorithmic problems first.
     Are the calculations right?
     Are any rare cases going to be missed?
     Are errors being caught and handled Chapter \@ref(py-rse-errors-logging)?
+    Using a consistent style helps reviewers focus on these issues.
 
 Use a checklist.
 :   Linters are great,
@@ -954,6 +963,8 @@ Don't try to sneak in feature requests.
 :   Nobody enjoys fixing bugs and style violations.
     Asking them to add entirely new functionality while they're at it is rude.
 
+How you respond to reviews is just as important:
+
 Be specific in replies to reviewers.
 :   If someone has suggested a better variable name,
     you can probably simply fix it.
@@ -963,6 +974,8 @@ Be specific in replies to reviewers.
 Thank your reviewers.
 :   If someone has taken the time to read your code carefully,
     thank them for doing it.
+
+And finally:
 
 Don't let people break these rules just because they're frequent contributors or in positions of power.
 :   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
@@ -1054,6 +1067,11 @@ it can also be called like this:
 -   `image_diff(old, new, fraction=0.05)` allows more pixels to differ.
 -   `image_diff(old, new, per_pixel=1, fraction=0.005)`
     raises the per-pixel threshold but decrease number of allowed differences.
+
+Note that there are no spaces around the `=`
+when defining a default parameter value.
+This is consistent with PEP-8's rules about spacing in function definitions and calls
+(Section \@ref(py-rse-style-pep8)).
 
 Default parameter values make code easier to understand and use,
 but there is a subtle trap.
