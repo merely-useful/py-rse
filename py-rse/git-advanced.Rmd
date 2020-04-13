@@ -44,12 +44,12 @@ in hours rather than weeks.
 
 ## What is branching and when is it useful? {#py-rse-git-advanced-branch-what}
 
-The Git lessons so far have all used a sequential timeline:
+So far our Git lessons have all used a sequential timeline:
 each change builds on the one before,
 and *only* on the one before.
 However,
 there are times when we want to keep our main work safe from experimental changes.
-To do this, we can use [branches][git-branch] to work on separate tasks in parallel.
+To do this, we can use branches to work on separate tasks in parallel.
 
 We can see what branches have been created in a given repository using this command:
 
@@ -64,7 +64,7 @@ $ git branch
 When we initialize a repository,
 Git automatically creates a branch called `master`.
 It is often considered the "official" version of the repository.
-The asterisk '*' indicates that it is currently active,
+The asterisk `*` indicates that it is currently active,
 i.e.,
 that all changes we make will take place in this branch by default.
 (The active branch is like the [current working directory][current-working-directory] in the shell.)
@@ -187,9 +187,6 @@ so commands like `ls` and `git log` shows that the files and history haven't cha
 as we switch from `master` to `fit`.
 This will be true until some changes are committed to our new branch.
 
-```{r py-rse-git-advanced-repo-state, echo=FALSE, fig.cap="Repository State"}
-knitr::include_graphics("figures/FIXME.png")
-```
 
 ### Fitting a curve and verifying Zipf's Law
 
@@ -218,7 +215,7 @@ becomes clear if we include it in a modified version of the earlier definition:
 > \(3^\alpha\) times as often as the third most frequent word, and so on."
 
 This mathematical expression for Zipf's Law is an example of a power law.
-In general, when two variables \(x\), and \(y\)
+In general, when two variables \(x\) and \(y\)
 are related through a power law, \[
 y = ax^b
 \]
@@ -470,8 +467,7 @@ d77bc5c Update dracula plot
 b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
-We have not lost our work:
-it just isn't included in this branch (Figure \@ref(fig:py-rse-git-advanced-not-lost)).
+We have not lost our work: it just isn't included in this branch.
 We can prove this by switching back to the `fit` branch and checking the log again:
 
 ```shell
@@ -484,13 +480,9 @@ $ git log --oneline -n 2
 d77bc5c Update dracula plot
 ```
 
-```{r py-rse-git-advanced-not-lost, echo=FALSE, fig.cap="Work Is Not Lost"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
 We can also look inside `plotcounts.py` and see our changes.
 If we make another change and commit it,
-that change will also go into the `fit` branch (Figure \@ref(fig:py-rse-git-advanced-change-into-branch)).
+that change will also go into the `fit` branch.
 For instance,
 we could add some additional information to one of our docstrings
 to make it clear what equations were used in estimating \(\alpha\).
@@ -526,10 +518,6 @@ $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```text
 [fit db1d03f] Adding Moreno-Sanchez et al (2016) reference
  1 file changed, 14 insertions(+), 1 deletion(-)
-```
-
-```{r py-rse-git-advanced-change-into-branch, echo=FALSE, fig.cap="Change Goes Into Branch"}
-knitr::include_graphics("figures/FIXME.png")
 ```
 
 And if we want to see the differences between two branches,
@@ -673,7 +661,7 @@ Fast-forward
  1 file changed, 74 insertions(+)
 ```
 
-Merging doesn't change the source branch `fit` (Figure \@ref(fig:py-rse-git-advanced-merging-doesnt-change)).
+Merging doesn't change the source branch `fit`.
 Once the merge is done,
 though,
 all of the changes made in `fit` are also in the history of `master`:
@@ -687,10 +675,6 @@ db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
 3ff8195 Added fit to word count data
 d77bc5c Update dracula plot 
 b5176bf Edit to plot frequency against rank on log-log axes
-```
-
-```{r py-rse-git-advanced-merging-doesnt-change, echo=FALSE, fig.cap="Merging Doesn't Change Things"}
-knitr::include_graphics("figures/FIXME.png")
 ```
 
 Note that Git automatically creates a new commit (in this case, `db1d03f`) to represent the merge.
@@ -845,11 +829,9 @@ index fd3de28..cf317ea 100644
 -These Zipf's Law scripts tally the occurrences of words in text files
 -and plot each word's rank versus its frequency,
 -together with a line for the theoretical distribution for Zipf's Law.
-\ No newline at end of file
 +## Contributors
 +
 +- Amira Khan <amira@zipfs.org>
-\ No newline at end of file
 ```
 
 When we try to merge `docs` into `master`,
@@ -865,7 +847,7 @@ CONFLICT (content): Merge conflict in README.md
 Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-If we look in `README.md,
+If we look in `README.md`,
 we see that Git has kept both sets of changes,
 but has marked which came from where:
 
@@ -917,7 +899,7 @@ together with a line for the theoretical distribution for Zipf's Law.
 - Amira Khan <amira@zipfs.org>
 ```
 
-Let's add the file and commit the change:
+We can now add the file and commit the change:
 
 ```shell
 $ git add README.md
@@ -929,7 +911,7 @@ $ git commit -m "Merging README additions"
 ```
 
 The project's history now shows a single sequence of commits,
-with the `b` changes on top of the earlier `violin` changes:
+with the `master` changes on top of the earlier `docs` changes:
 
 ```shell
 $ git log --oneline
@@ -958,10 +940,21 @@ $ git log --oneline --graph
 * b07c14a Initial commit of README file
 ```
 
+Now that we're done,
+we can delete the `docs` branch:
+
+```shell
+$ git branch -d docs
+```
+
+```text
+Deleted branch docs (was 4ffeaa4).
+```
+
 ## How should I use branches? {#py-rse-git-advanced-workflow}
 
-People use Git in different ways,
-but all of those ways rely heavily on branches.
+Now that we're familiar with the core concepts and commands for branching,
+we need to consider how best to incorporate them into our regular coding practice.
 If we are working on our own computer,
 this workflow will help us keep track of what we are doing:
 
@@ -1011,7 +1004,7 @@ These rules make sense for small projects with or without collaborators:
     because it might take several tries to get the analysis to run,
     and we might interrupt ourselves to fix things that we discover aren't working.
 
-3.  Every change to code that someone might want to undo later in one step gets is a feature.
+3.  Every change to code that someone might want to undo later in one step is a feature.
     For example,
     if a new parameter is added to a function,
     then every call to the function has to be updated.
@@ -1052,7 +1045,7 @@ to use Git in ways that effectively create one.
 Suppose,
 for example,
 that Sami wants to contribute to the Zipf's Law code that
-Amira is hosting on GitHub at `https://github.com/amira/zipfs-law`.
+Amira is hosting on GitHub at `https://github.com/amira-khan/zipfs-law`.
 Sami can go to that URL and click on the "Fork" button in the upper right corner
 (Figure \@ref(fig:py-rse-git-advanced-fork-button)).
 GitHub immediately creates a copy of Amira's repository within Sami's account on GitHub's own servers.
@@ -1079,7 +1072,6 @@ to make it easier to follow what's happening:
 sami:~ $ git clone https://github.com/sami/zipfs-law.git
 ```
 
-FIXME
 ```text
 Cloning into 'zipfs-law'...
 remote: Enumerating objects: 32, done.
@@ -1099,26 +1091,19 @@ sami:~ $ cd zipfs-law
 sami:~/zipfs-law $ ls
 ```
 
-FIXME
 ```text
-README.md       bin             data
+README.md       bin             data             results
 ```
 
 ```shell
-jj:~/zipfs-law $ git log --oneline
+jj:~/zipfs-law $ git log --oneline -n 4
 ```
 
-FIXME
 ```text
-b0c3fc6 Merging beeswarm plots
-917823d Beeswarms
-db1d03f Adding facets to the violin plot
-3ff8195 Created violin plots
-64b802f Adding overdue .gitignore file
-2fe5f6f Updating analysis script
-c89bf68 Northern data
-dc4adfb Initial commit
-```
+4ffeaa4 (HEAD -> master) Merging README additions
+a102c83 Added contributors list
+a41a6ea (docs) Added repository overview
+b07c14a Initial commit of README file```
 
 She also sees that Git has automatically created a remote for her repository
 that points back at her repository on GitHub:
@@ -1132,27 +1117,19 @@ origin  https://github.com/sami/zipfs-law.git (fetch)
 origin  https://github.com/sami/zipfs-law.git (push)
 ```
 
-Amira's original repository,
-Sami's fork on GitHub,
-and Sami's new clone on her desktop
-are now arranged as shown in Figure \@ref(fig:py-rse-git-advanced-forked-repos).
 Sami can pull changes from her fork and push work back there,
 but she needs to do one more thing before she can get changes from Amira's repository:
 
 ```shell
-sami:~/zipfs-law $ git remote add upstream https://github.com/amira/zipfs-law.git
+sami:~/zipfs-law $ git remote add upstream https://github.com/amira-khan/zipfs-law.git
 sami:~/zipfs-law $ git remote -v
 ```
 
 ```text
 origin      https://github.com/sami/zipfs-law.git (fetch)
 origin      https://github.com/sami/zipfs-law.git (push)
-upstream    https://github.com/amira/zipfs-law.git (fetch)
-upstream    https://github.com/amira/zipfs-law.git (push)
-```
-
-```{r py-rse-git-advanced-forked-repos, echo=FALSE, fig.cap="Forked Repositories"}
-knitr::include_graphics("figures/FIXME.png")
+upstream    https://github.com/amira-khan/zipfs-law.git (fetch)
+upstream    https://github.com/amira-khan/zipfs-law.git (push)
 ```
 
 Sami has called her new remote `upstream` because it points at the repository hers are derived from.
@@ -1160,15 +1137,12 @@ She could use any name,
 but `upstream` is a nearly universal convention.
 
 With this remote in place,
-Sami is finally set up (Figure \@ref(fig:py-rse-git-advanced-finished-forking)).
+Sami is finally set up.
 Suppose,
 for example,
 that Amira has modified the project's `README.md` file to add Sami as a contributor.
 (Again, we show Amira's user ID and working directory in her prompt to make it clear who's doing what).
 
-```{r py-rse-git-advanced-finished-forking, echo=FALSE, fig.cap="Finished Forking"}
-knitr::include_graphics("figures/FIXME.png")
-```
 
 ```shell
 amira:~/zipfs-law $ pwd
@@ -1195,7 +1169,7 @@ Contributors:
 Amira commits her changes and pushes them to *her* repository on GitHub:
 
 ```shell
-amira:~/zipfs-law $ git commit -a -m "Adding Sami as a contributor"
+amira:~/zipfs-law $ git commit -m "Adding Sami as a contributor"
 ```
 
 ```text
@@ -1214,20 +1188,15 @@ Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 340 bytes | 340.00 KiB/s, done.
 Total 3 (delta 1), reused 0 (delta 0)
 remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/amira/zipfs-law.git
+To https://github.com/amira-khan/zipfs-law.git
    b0c3fc6..766c2cd  master -> master
 ```
 
-```{r py-rse-git-advanced-pull-request, echo=FALSE, fig.cap="Pull Request"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
-The situation is now as shown in (Figure \@ref(fig:py-rse-git-advanced-pull-request)a),
-with Amira's changes on her desktop and in her GitHub repository
+Amira's changes are now on her desktop and in her GitHub repository
 but not in either of Sami's repositories.
 Since Sami has created a remote that points at Amira's GitHub repository,
 though,
-she can easily pull those changes to her desktop (Figure \@ref(fig:py-rse-git-advanced-pull-request)b):
+she can easily pull those changes to her desktop:
 
 ```shell
 sami:~/zipfs-law $ git pull upstream master
@@ -1239,7 +1208,7 @@ remote: Counting objects: 100% (5/5), done.
 remote: Compressing objects: 100% (2/2), done.
 remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
 Unpacking objects: 100% (3/3), done.
-From https://github.com/amira/zipfs-law
+From https://github.com/amira-khan/zipfs-law
  * branch            master     -> FETCH_HEAD
  * [new branch]      master     -> upstream/master
 Updating b0c3fc6..766c2cd
@@ -1276,25 +1245,16 @@ A pull request is essentially a note saying,
 The pull request does not contain the changes,
 but instead points at two particular branches.
 If either branch changes,
-the difference displayed is always up to date (Figure \@ref(fig:py-rse-git-advanced-how-pr-works)).
-
-```{r py-rse-git-advanced-how-pr-works, echo=FALSE, fig.cap="How Pull Requests Work"}
-knitr::include_graphics("figures/FIXME.png")
-```
+the difference displayed is always up to date.
 
 A pull request can store more than just the source and destination branches:
 it can also store comments people have made about the proposed merge.
 GitHub and other [forges][forge] allow users to comment on the pull request as a whole,
 or on particular lines,
 and mark comments as out of date
-if the author of the pull request updates the code that the comment is attached to
-(Figure \@ref(fig:py-rse-git-advanced-comment-out-of-date)).
+if the author of the pull request updates the code that the comment is attached to.
 It is common for complex changes to go through several rounds of review and revision
 before being merged.
-
-```{r py-rse-git-advanced-comment-out-of-date, echo=FALSE, fig.cap="Comment Out of Date"}
-knitr::include_graphics("figures/FIXME.png")
-```
 
 To see this in action,
 suppose that Sami wants to add her email address to `README.md` in the plotting project.
@@ -1333,8 +1293,8 @@ index a55a9bb..eb24a3f 100644
  Contributors:
 
  -   Amira Khan
---   Sami FIXME
-+-   Sami FIXME <sami@zipfs.org>
+--   Sami SURNAME
++-   Sami SURNAME <sami@zipfs.org>
 ```
 
 Her changes are in her desktop repository, and *only* in her desktop repository.
@@ -1491,7 +1451,7 @@ remote: Counting objects: 100% (9/9), done.
 remote: Compressing objects: 100% (5/5), done.
 remote: Total 7 (delta 3), reused 5 (delta 2), pack-reused 0
 Unpacking objects: 100% (7/7), done.
-From https://github.com/amira/zipfs-law
+From https://github.com/amira-khan/zipfs-law
  * branch            master     -> FETCH_HEAD
    766c2cd..984b116  master     -> origin/master
 Updating 766c2cd..984b116
@@ -1526,7 +1486,7 @@ remote: Enumerating objects: 1, done.
 remote: Counting objects: 100% (1/1), done.
 remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
 Unpacking objects: 100% (1/1), done.
-From https://github.com/amira/zipfs-law
+From https://github.com/amira-khan/zipfs-law
  * branch            master     -> FETCH_HEAD
    766c2cd..984b116  master     -> upstream/master
 Updating 766c2cd..984b116
