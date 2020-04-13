@@ -72,6 +72,10 @@ that all changes we make will take place in this branch by default.
 In the previous chapter,
 we foreshadowed some experimental changes that we could try and make to `plotcounts.py`.
 
+```shell
+$ cat plotcounts.py
+```
+
 ```python
 """Plot word counts."""
 import argparse
@@ -154,7 +158,8 @@ On branch master
 nothing to commit, working directory clean
 ```
 
-To switch to our new branch we can use the `checkout` command that we first saw in Section \@ref(py-rse-git-cmdline-restore):
+To switch to our new branch we can use the `checkout` command that we first saw
+in Section \@ref(py-rse-git-cmdline-restore):
 
 ```shell
 $ git checkout fit
@@ -176,7 +181,8 @@ We can (and should) choose the name to signal the purpose of the branch,
 just as we choose the names of files and variables to indicate what they are for.
 
 At this point,
-`master` and `fit` are two names for the same repository state (Figure \@ref(fig:py-rse-git-advanced-repo-state)),
+`master` and `fit` are two names for the same repository state
+(Figure \@ref(fig:py-rse-git-advanced-repo-state)),
 so commands like `ls` and `git log` shows that the files and history haven't changed
 as we switch from `master` to `fit`.
 This will be true until some changes are committed to our new branch.
@@ -299,7 +305,7 @@ corresponds to \(b\).
 #### Verifying Zipf's Law
 
 Now that we've defined the functions required to fit a curve to our word count plots,
-we can go ahead and update `plotcounts.py` accordingly.
+we can go ahead and update `plotcounts.py` accordingly:
 
 ```python
 """Plot word counts."""
@@ -422,10 +428,9 @@ $ git add plotcounts.py
 $ git commit -m "Added fit to word count data"
 ```
 
-FIXME
 ```text
 [fit 3ff8195] Added fit to word count data
- 1 file changed, 1 insertion(+)
+ 1 file changed, 61 insertions(+)
 ```
 
 If we look at the last couple of commits using `git log`,
@@ -520,7 +525,7 @@ $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 
 ```text
 [fit db1d03f] Adding Moreno-Sanchez et al (2016) reference
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 ```
 
 ```{r py-rse-git-advanced-change-into-branch, echo=FALSE, fig.cap="Change Goes Into Branch"}
@@ -535,19 +540,97 @@ to view differences between two revisions:
 $ git diff master..fit
 ```
 
-FIXME
 ```text
-diff --git a/bin/analysis.sh b/bin/analysis.sh
-index 8de12fa..bbe78f7 100644
---- a/bin/analysis.sh
-+++ b/bin/analysis.sh
-@@ -1,5 +1,5 @@
- #!/usr/bin/env bash
- cat $1 | \
-   species --all | \
--  plot --default > \
-+  plot --violin --facet=species_name > \
-   plots/violin-by-species.png
+diff --git a/plotcounts.py b/plotcounts.py
+index 4501eaf..d57fd63 100644
+--- a/plotcounts.py
++++ b/plotcounts.py
+@@ -1,6 +1,69 @@
+ """Plot word counts."""
+ import argparse
++import numpy as np
+ import pandas as pd
++from scipy.optimize import minimize_scalar
++
++
++def nlog_likelihood(beta, counts):
++    """Log-likelihood function."""
++    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
++    return likelihood
++
++
++def get_power_law_params(word_counts):
++    """
++    Get the power law parameters.
++
++    References
++    ----------
++    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
++      beta (Eq. 2) and the maximum likelihood estimation (mle)
++      of beta (Eq. 6).
++
++    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
++      Large-Scale Analysis of Zipf’s Law in English Texts.
++      PLoS ONE 11(1): e0147073.
++      https://doi.org/10.1371/journal.pone.0147073
++    """
++    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
++                          args=(word_counts), method='brent')
++    beta = mle.x
++    alpha = 1 / (beta - 1)
++    return alpha, beta
++
++
++def set_plot_params(param_file):
++    """Set the matplotlib rc parameters."""
++    if param_file:
++        with open(param_file, 'r') as reader:
++            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
++    else:
++        param_dict = {}
++    for param, value in param_dict.items():
++        mpl.rcParams[param] = value
++
++
++def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
++    """
++    Plot the power law curve that was fitted to the data.
++
++    Parameters
++    ----------
++    curve_xmin : float
++        Minimum x-bound for fitted curve
++    curve_xmax : float
++        Maximum x-bound for fitted curve
++    max_rank : int
++        Maximum word frequency rank.
++    beta : float
++        Estimated beta parameter for the power law.
++    ax : matplotlib axes
++        Scatter plot to which the power curve will be added.
++    """
++    xvals = np.arange(curve_xmin, curve_xmax)
++    yvals = max_rank * (xvals**(-beta + 1))
++    ax.loglog(xvals, yvals, color='grey')
+ 
+ 
+ def main(args):
+@@ -9,6 +72,17 @@ def main(args):
+     df['rank'] = df['word_frequency'].rank(ascending=False)
+     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
+                          figsize=[12, 6], grid=True, xlim=args.xlim)
++
++    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
++    print('alpha:', alpha)
++    # Since the ranks are already sorted, we can take the last one instead of
++    # computing which row has the highest rank
++    max_rank = df['rank'].to_numpy()[-1]
++    # Use the range of the data as the boundaries when drawing the power law curve
++    curve_xmin = df['word_frequency'].min()
++    curve_xmax = df['word_frequency'].max()
++
++    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
+     ax.figure.savefig(args.outfile)
 ```
 
 ## How do I merge work from separate branches? {#py-rse-git-advanced-merge}
@@ -583,12 +666,11 @@ with a single command:
 $ git merge fit
 ```
 
-FIXME
 ```text
-Updating 64b802f..db1d03f
+Updating d77bc5c..db1d03f
 Fast-forward
- plotcounts.py | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ plotcounts.py | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 ```
 
 Merging doesn't change the source branch `fit` (Figure \@ref(fig:py-rse-git-advanced-merging-doesnt-change)).
@@ -600,7 +682,6 @@ all of the changes made in `fit` are also in the history of `master`:
 $ git log --oneline -n 4
 ```
 
-FIXME
 ```text
 db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
 3ff8195 Added fit to word count data
