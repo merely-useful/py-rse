@@ -640,145 +640,225 @@ Deleted branch fit (was db1d03f).
 
 ## How do I handle conflicting changes? {#py-rse-git-advanced-conflict}
 
-FIXME: Write a new conflict example
+Merging the `fit` branch into the `master` branch went smoothly because
+there were no conflicts between the two branches.
+A [conflict][git-conflict] arises when two separate branches
+have made edits to the same line in a file,
+or when a file has been deleted in one branch but edited in the other.
+
+To see how to handle a conflict,
+let's add a README file to the `master` branch.
+To start, that file will just have a header and no other content.
+
+```shell
+$ cat README.md
+```
+
+```text
+# Zipf's Law
+```
+
+```shell
+$ git add README.md
+$ git commit -m "Initial commit of README file"
+```
+
+```text
+[master b07c14a] Initial commit of README file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+```
+
+Now let's create a new development branch called `docs`,
+to work on improving the documentation for our code.
+
+```shell
+$ git checkout -b docs
+```
+
+```text
+Switched to a new branch 'docs'
+```
+
+By using `checkout -b` we have created and switched to the new branch in one line.
+
+```shell
+$ git branch
+```
+
+```text
+* docs
+  master
+```
+
+On this new branch,
+let's add some information to the README file:
+
+```text
+# Zipf's Law
+
+These Zipf's Law scripts tally the occurrences of words in text files
+and plot each word's rank versus its frequency,
+together with a line for the theoretical distribution for Zipf's Law.
+```
+
+```
+$ git add README.md
+$ git commit -m "Added repository overview"
+```
+
+```text
+[docs a41a6ea] Added repository overview
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+```
+
+In order to create a conflict,
+let's switch back to the `master` branch.
+
+The changes we made in the `docs` branch are now gone,
+
+```shell
+$ cat README.md
+```
+
+```text
+# Zipf's Law
+```
+
+so let's go ahead and add some information about the contributors to our work:
+
+```text
+# Zipf's Law
+
+## Contributors
+
+- Amira Khan <amira@zipfs.org>
+```
+
+```
+$ git add README.md
+$ git commit -m "Added contributor list"
+```
+
+```text
+[master a102c83] Added contributor list
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+```
 
 We now have two branches,
-`master` and `beeswarm`,
-in which we have changes the same lines of `bin/analysis.sh` in different ways:
+`master` and `docs`,
+in which we have changed the same lines of `README.md` in different ways:
 
 ```shell
-$ git diff beeswarm..master
+$ git diff docs..master
 ```
 
 ```text
-diff --git a/bin/analysis.sh b/bin/analysis.sh
-index 2ebd322..bbe78f7 100644
---- a/bin/analysis.sh
-+++ b/bin/analysis.sh
+diff --git a/README.md b/README.md
+index fd3de28..cf317ea 100644
+--- a/README.md
++++ b/README.md
 @@ -1,5 +1,5 @@
- #!/usr/bin/env bash
- cat $1 | \
-   species --all | \
--  plot --beeswarm --jitter=0.1 --facet=species_name > \
--  plots/beeswarm-by-species.png
-+  plot --violin --facet=species_name > \
-+  plots/violin-by-species.png
+ # Zipf's Law
+ 
+-These Zipf's Law scripts tally the occurrences of words in text files
+-and plot each word's rank versus its frequency,
+-together with a line for the theoretical distribution for Zipf's Law.
+\ No newline at end of file
++## Contributors
++
++- Amira Khan <amira@zipfs.org>
+\ No newline at end of file
 ```
 
-When we try to merge `beeswarm` into `master`,
+When we try to merge `docs` into `master`,
 Git doesn't know which of these changes we want to keep.
-This is called a [conflict][git-conflict]:
 
 ```shell
-$ git merge beeswarm master
+$ git merge docs master
 ```
 
 ```text
-Auto-merging bin/analysis.sh
-CONFLICT (content): Merge conflict in bin/analysis.sh
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
 Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-If we look in `bin/analysis.sh`,
+If we look in `README.md,
 we see that Git has kept both sets of changes,
 but has marked which came from where:
 
 ```shell
-$ cat bin/analysis.sh
+$ cat README.md
 ```
 
 ```text
-#!/usr/bin/env bash
-cat $1 | \
-  species --all | \
+# Zipf's Law
+
 <<<<<<< HEAD
-  plot --violin --facet=species_name > \
-  plots/violin-by-species.png
+## Contributors
+
+- Amira Khan <amira@zipfs.org>
 =======
-  plot --beeswarm --jitter=0.1 --facet=species_name > \
-  plots/beeswarm-by-species.png
->>>>>>> beeswarm
+These Zipf's Law scripts tally the occurrences of words in text files
+and plot each word's rank versus its frequency,
+together with a line for the theoretical distribution for Zipf's Law.
+>>>>>>> docs
 ```
 
 The lines from `<<<<<<< HEAD` to `=======` are what was in `master`,
-while the lines from there to `>>>>>>> beeswarm` show what was in `beeswarm`.
+while the lines from there to `>>>>>>> docs` show what was in `docs`.
 If there were several conflicting regions in the same file,
 Git would mark each one this way.
 
 We have to decide what to do next:
 keep the `master` changes,
-keep those from `beeswarm`,
+keep those from `docs`,
 edit this part of the file to combine them,
 or write something new.
 Whatever we do,
 we must remove the `>>>`, `===`, and `<<<` markers.
-Let's combine the two sets of changes to create side-by-side plots:
+Let's combine the two sets of changes:
 
 ```shell
-$ nano bin/analysis.sh
-$ cat bin/analysis.sh
+$ cat README.md
 ```
 
 ```text
-#!/usr/bin/env bash
-cat $1 | \
-  species --all | \
-  plot -n 2 --violin --beeswarm --jitter=0.1 --facet=species_name > \
-  plots/by-species.png
+# Zipf's Law
+
+These Zipf's Law scripts tally the occurrences of words in text files
+and plot each word's rank versus its frequency,
+together with a line for the theoretical distribution for Zipf's Law.
+
+## Contributors
+
+- Amira Khan <amira@zipfs.org>
 ```
 
-This counts as yet another change to the file:
-
-```shell
-$ git status
-```
-
-```text
-On branch master
-All conflicts fixed but you are still merging.
-  (use "git commit" to conclude merge)
-
-Changes to be committed:
-
-        modified:   bin/analysis.sh
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-        modified:   bin/analysis.sh
-```
-
-Here,
-Git thinks that there are changes to be committed because of the merge,
-and that `bin/analysis.sh` has been modified again because of our edit.
 Let's add the file and commit the change:
 
 ```shell
-$ git add bin/analysis.sh
-$ git commit -m "Merging beeswarm plots"
+$ git add README.md
+$ git commit -m "Merging README additions"
 ```
 
 ```text
-[master b0c3fc6] Merging beeswarm plots
+[master 4ffeaa4] Merging README additions
 ```
 
 The project's history now shows a single sequence of commits,
-with the `beeswarm` changes on top of the earlier `violin` changes:
+with the `b` changes on top of the earlier `violin` changes:
 
 ```shell
 $ git log --oneline
 ```
 
 ```text
-b0c3fc6 (HEAD -> master) Merging beeswarm plots
-917823d (beeswarm) Beeswarms
-db1d03f Adding facets to the violin plot
-3ff8195 Created violin plots
-64b802f Adding overdue .gitignore file
-2fe5f6f Updating analysis script
-c89bf68 Northern data
-dc4adfb Initial commit
+4ffeaa4 (HEAD -> master) Merging README additions
+a102c83 Added contributors list
+a41a6ea (docs) Added repository overview
+b07c14a Initial commit of README file
 ```
 
 If we want to see what really happened,
@@ -789,16 +869,12 @@ $ git log --oneline --graph
 ```
 
 ```text
-*   b0c3fc6 (HEAD -> master) Merging beeswarm plots
-|\
-| * 917823d (beeswarm) Beeswarms
-* | db1d03f Adding facets to the violin plot
-* | 3ff8195 Created violin plots
-|/
-* 64b802f Adding overdue .gitignore file
-* 2fe5f6f Updating analysis script
-* c89bf68 Northern data
-* dc4adfb Initial commit
+*   4ffeaa4 (HEAD -> master) Merging README additions
+|\  
+| * a41a6ea (docs) Added repository overview
+* | a102c83 Added contributors list
+|/  
+* b07c14a Initial commit of README file
 ```
 
 ## How should I use branches? {#py-rse-git-advanced-workflow}
@@ -1032,7 +1108,7 @@ amira:~/zipfs-law $ cat README.md
 Contributors:
 
 -   Amira Khan
--   Sami FIXME
+-   Sami SURNAME
 ```
 
 Amira commits her changes and pushes them to *her* repository on GitHub:
