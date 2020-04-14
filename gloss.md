@@ -921,6 +921,9 @@
 **Technical debt**<a id="technical-debt"></a>
 :   FIXME
 
+**Ternary expression**<a id="ternary-expression"></a>
+:   FIXME
+
 **Test coverage**<a id="test-coverage"></a>
 :   FIXME
 
