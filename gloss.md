@@ -129,6 +129,9 @@
 **Code coverage**<a id="code-coverage"></a>
 :   FIXME
 
+**Code review**<a id="code-review"></a>
+:   FIXME
+
 **Cognitive load**<a id="cognitive-load"></a>
 :   FIXME
 
@@ -861,6 +864,9 @@
 **Standard output**<a id="stdout"></a>
 :   FIXME
 
+**Stop word**<a id="stop-word"></a>
+:   FIXME
+
 **Streaming data**<a id="streaming-data"></a>
 :   FIXME
 
@@ -913,6 +919,9 @@
    FIXME
 
 **Technical debt**<a id="technical-debt"></a>
+:   FIXME
+
+**Ternary expression**<a id="ternary-expression"></a>
 :   FIXME
 
 **Test coverage**<a id="test-coverage"></a>
