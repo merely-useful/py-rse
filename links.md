@@ -69,6 +69,7 @@
 [compiler]: glossary.html#compiler
 [computational-notebook]: glossary.html#computational-notebook
 [conda]: https://conda.io/
+[conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
 [conditional-expression]: glossary.html#conditional-expression
 [confirmation-bias]: glossary.html#confirmation-bias
 [continuation-prompt]: glossary.html#continuation-prompt
@@ -102,6 +103,7 @@
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [embedded-documentation]: glossary.html#embedded-documentation
 [eniac]: glossary.html#eniac
+[entry-points]: https://setuptools.readthedocs.io/en/latest/pkg_resources.html?highlight=namespace#entry-points
 [environment]: glossary.html#environment
 [error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co
 [exception]: glossary.html#exception
@@ -122,6 +124,7 @@
 [filename-stem]: glossary.html#filename-stem
 [filesystem]: glossary.html#filesystem
 [filter]: glossary.html#filter
+[find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
 [fixture]: glossary.html#fixture
 [flag-variable]: glossary.html#flag-variable
 [folder]: glossary.html#folder
@@ -247,6 +250,7 @@
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [phony-target-make]: glossary.html#phony-target-make
+[pip-and-conda]: https://www.anaconda.com/understanding-conda-and-pip/
 [pipe-unix]: glossary.html#pipe-unix
 [pothole-case]: glossary.html#pothole-case
 [precision]: glossary.html#precision
@@ -384,9 +388,11 @@
 [tolerance]: glossary.html#tolerance
 [transitive-dependency]: glossary.html#transitive-dependency
 [travis-ci]: https://travis-ci.org/
+[travis-lang]: https://docs.travis-ci.com/user/language-specific/
 [triage]: glossary.html#triage
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [tuple]: glossary.html#tuple
+[twine]: https://twine.readthedocs.io/en/latest/
 [tyranny-structurelessness]: http://www.jofreeman.com/joreen/tyranny.htm
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [unit-test]: glossary.html#unit-test
@@ -409,6 +415,7 @@
 [virtual-machine]: glossary.html#virtual-machine
 [vs-code]: https://code.visualstudio.com/
 [wayback-machine]: http://web.archive.org/
+[wheels]: https://packaging.python.org/guides/distributing-packages-using-setuptools/#wheels
 [wickham-packages]: http://r-pkgs.had.co.nz/
 [wiki-rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
