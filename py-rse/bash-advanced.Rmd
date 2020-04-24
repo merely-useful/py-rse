@@ -34,6 +34,7 @@ Insert this line:
 ```text
 head -n 19 data/moby_dick.txt | tail -n 11
 ```
+
 Note that we do *not* put a dollar sign `$` at the front of the line:
 we have been showing that for interactive commands,
 but in this case we are putting the command in a file rather than running it immediately.
@@ -52,7 +53,7 @@ bin/             data/     makefiles/
 backup/    book_summary.sh  Makefile  prior-work.txt
 ```
 
-and we can check its contents using `cat book_summary.sh`.
+We can view the contents of the file using `cat book_summary.sh`.
 More importantly,
 we can now ask the shell to run this file:
 
@@ -88,20 +89,22 @@ $ bash book_summary.sh | wc -l
 ```
 
 What if we want to extract the name of the author?
-The command `grep` searches for every line that contains a pattern and prints the matching lines (we will learn more about `grep` later).
-so let's edit our script,
-add it,
-look at our changes,
-and then run the modified script:
+
+We'll need to modify our script:
 
 ```shell
 $ nano book_summary.sh
-$ cat book_summary.sh
 ```
+
+The command `grep` searches for every line that contains a pattern and prints the matching lines.
+We'll learn more about `grep` in Section /@ref(py-rse-bash-advanced-grep),
+but for now we can edit the script to add a search for the word "Author":
 
 ```text
 head -n 19 data/moby_dick.txt | tail -n 11 | grep Author
 ```
+
+Let's finally run the modified script:
 
 ```shell
 $ bash book_summary.sh
@@ -157,7 +160,7 @@ and get the author name for that book instead.
 Author: Mary Wollstonecraft (Godwin) Shelley
 ```
 
-Our little script is now doing something useful,
+Our small script is now doing something useful,
 but it may take the next person who reads it a moment to figure out exactly what that is.
 We can improve our script by adding [comments][comment] at the top:
 
@@ -177,7 +180,7 @@ Instead of always extracting the author name,
 let's have it select whatever information the user specified:
 
 ```text
-# Get author information from a Project Gutenberg eBook.
+# Get desired information from a Project Gutenberg eBook.
 # Usage: bash book_summary.sh /path/to/file.txt
 head -n 19 $1 | tail -n 11 | grep $2
 ```
@@ -185,6 +188,14 @@ head -n 19 $1 | tail -n 11 | grep $2
 The change is very small:
 we have replaced the fixed string 'Author' with a reference to the special variable `$2`,
 which is assigned the value of the second command-line argument we give the script when we run it.
+
+> **Updates to comments are important, too!**
+>
+> As you update the code in your script,
+> don't forget to update the comments that describe the code.
+> A description that sends readers in the wrong direction is worse than none at all,
+> so do your best to avoid this common oversight.
+
 Let's check that it works by asking for 'Release Date':
 
 ```shell
@@ -194,14 +205,6 @@ $ bash book_summary.sh data/frankenstein.txt Release Date
 ```text
 Release Date: June 17, 2008 [EBook #84]
 ```
-
-But we have made a common mistake:
-we have changed the script without changing the comment.
-A description that sends readers in the wrong direction is worse than none at all,
-so we should go back and update it.
-We should probably also change the script's name from `book_summary.sh` to `book_short_summary.sh`,
-since a program's name is the first piece of documentation anyone sees.
-
 
 ## How can I turn interactive work into a script? {#py-rse-bash-advanced-capture}
 
