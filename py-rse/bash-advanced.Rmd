@@ -58,6 +58,7 @@ Insert this line:
 ```text
 head -n 19 data/moby_dick.txt | tail -n 11
 ```
+
 Note that we do *not* put a dollar sign `$` at the front of the line:
 we have been showing that for interactive commands,
 but in this case we are putting the command in a file rather than running it immediately.
@@ -75,7 +76,7 @@ $ ls
 book_summary.sh	  data/
 ```
 
-and we can check its contents using `cat book_summary.sh`.
+We can view the contents of the file using `cat book_summary.sh`.
 More importantly,
 we can now ask the shell to run this file:
 
@@ -111,20 +112,22 @@ $ bash book_summary.sh | wc -l
 ```
 
 What if we want to extract the name of the author?
-The command `grep` searches for every line that contains a pattern and prints the matching lines (we will learn more about `grep` later).
-so let's edit our script,
-add it,
-look at our changes,
-and then run the modified script:
+
+We'll need to modify our script:
 
 ```shell
 $ nano book_summary.sh
-$ cat book_summary.sh
 ```
+
+The command `grep` searches for every line that contains a pattern and prints the matching lines.
+We'll learn more about `grep` in Section /@ref(py-rse-bash-advanced-grep),
+but for now we can edit the script to add a search for the word "Author":
 
 ```text
 head -n 19 data/moby_dick.txt | tail -n 11 | grep Author
 ```
+
+Let's finally run the modified script:
 
 ```shell
 $ bash book_summary.sh
@@ -180,7 +183,7 @@ and get the author name for that book instead.
 Author: Mary Wollstonecraft (Godwin) Shelley
 ```
 
-Our little script is now doing something useful,
+Our small script is now doing something useful,
 but it may take the next person who reads it a moment to figure out exactly what that is.
 We can improve our script by adding [comments][comment] at the top:
 
@@ -200,7 +203,7 @@ Instead of always extracting the author name,
 let's have it select whatever information the user specified:
 
 ```text
-# Get author information from a Project Gutenberg eBook.
+# Get desired information from a Project Gutenberg eBook.
 # Usage: bash book_summary.sh /path/to/file.txt
 head -n 19 $1 | tail -n 11 | grep $2
 ```
@@ -208,6 +211,14 @@ head -n 19 $1 | tail -n 11 | grep $2
 The change is very small:
 we have replaced the fixed string 'Author' with a reference to the special variable `$2`,
 which is assigned the value of the second command-line argument we give the script when we run it.
+
+> **Updates to comments are important, too!**
+>
+> As you update the code in your script,
+> don't forget to update the comments that describe the code.
+> A description that sends readers in the wrong direction is worse than none at all,
+> so do your best to avoid this common oversight.
+
 Let's check that it works by asking for 'Release Date':
 
 ```shell
@@ -218,46 +229,39 @@ $ bash book_summary.sh data/frankenstein.txt Release Date
 Release Date: June 17, 2008 [EBook #84]
 ```
 
-But we have made a common mistake:
-we have changed the script without changing the comment.
-A description that sends readers in the wrong direction is worse than none at all,
-so we should go back and update it.
-We should probably also change the script's name from `book_summary.sh` to `book_short_summary.sh`,
-since a program's name is the first piece of documentation anyone sees.
-
-
 ## How can I turn interactive work into a script? {#py-rse-bash-advanced-capture}
 
 Suppose we have just run a series of commands that did something useful,
-such as creating a plot for a paper.
+such as summarizing all books in a given directory.
 Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
 we can run this:
 
 ```shell
-$ history 6 > make-figure-3.sh
+$ history 5 > summarize_all_books.sh
 ```
 
-to put the most recent five commands in `make-figure-3.sh`.
+to put the most recent five commands in `summarize_all_books.sh`.
 
 ```text
-297 bash stats.sh cleaned/*_temp.csv > temperature_stats.csv
-298 bash trim-outliers.sh temperature_stats.csv > plot_data.txt
-299 date
-300 ygraph --format scatter --color bw --borders none plot_data.txt figure-3.png
-301 rm temperature_stats.csv plot_data.txt
-302 history 6 > make-figure-3.sh
+297 for x in data/*.txt; do echo $x; bash book_summary.sh $x Author; done > authors.txt
+298 for x in data/*.txt; do echo $x; bash book_summary.sh $x Release Data; done > releases.txt
+299 ls
+300 mkdir summaries
+301 mv authors.txt releases.txt summaries
+302 history 5 > summarize_all_books.sh
 ```
 
 It only takes a few moments in an editor to remove the serial numbers
-and delete the use of `date`
-(which prints the current time and date)
+and delete extraneous line (`ls` and the last line)
 to create a script that accurately captures what we actually did.
 This is how we usually develop shell scripts:
 run commands interactively a few times to make sure they are doing the right thing,
 then save our recent history to a file and turn that into a reusable script.
 
 ## How can I find things in a file? {#py-rse-bash-advanced-grep}
+
+FIXME: update from haikus
 
 We can use `head` and `tail` to select lines from a file by position,
 but we also often want to select lines that contain certain values.
@@ -522,6 +526,7 @@ but unlike most Unix commands these are written as full words rather than abbrev
 To show how it works,
 we will explore the `docs` directory within `zipfs-law`:
 
+FIXME: update to data/
 
 ```shell
 $ cd docs
