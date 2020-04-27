@@ -229,14 +229,15 @@ linear relationship.  To be specific, if Zipf's Law holds,
 thinking about rank as explained by frequency, we have \[
 r = cf^{\frac{-1}{\alpha}}
 \]
+where \(c\) is a constant of proportionality.
 The linear relationship between the log word frequency and 
 log rank is then \[
-\log(r) = C - \frac{1}{\alpha}\log(f)
+\log(r) = \log(c) - \frac{1}{\alpha}\log(f)
 \]
 This suggests that on our log-log plot 
 the points should fall on a straight line 
 with a slope of \(- \tfrac{1}{\alpha}\) 
-and intercept \(C\) (we'll see later that \(C\) is completely defined once we know \(\alpha\)).
+and intercept \(\log(c)\) (we'll see later that \(c\) is completely defined).
 Our goal is to estimate the value of \(\alpha\).
 
 #### Estimating alpha
@@ -245,13 +246,16 @@ In order to determine the best method for estimating \(\alpha\) and fitting a li
 we turn to a scientific paper on Zipf’s Law in english texts [@Moreno2016].
 The mathematics in the paper is a little heavy,
 but the authors essentially suggest using a method called maximum likelihood estimation. 
-The likelihood is the probability of our observed data, 
+The likelihood function is the probability of our observed data, 
 viewed as a function of the parameters in the statistical model that we assume generated it. 
 In maximum likelihood estimation, we estimate the parameters in the model 
 by choosing them to maximize this likelihood, although
 computationally, it is often easier to minimize the negative log likelihood function.
 @Moreno2016 define the likelihood using a parameter, \(\beta\), 
-that we will see below is directly related to the \(\alpha\) parameter in our definition of Zipf's Law.
+which is directly related to the \(\alpha\) parameter in our definition of Zipf's Law,
+through \(\alpha = \tfrac{1}{\beta-1}\).
+Under their model, the value of $c$ is the total number of unique words, or 
+equivalently the largest value of the rank.
 Expressed as a python function, 
 the negative log likelihood function reads as follows:
 
@@ -308,8 +312,8 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
     ax.loglog(xvals, yvals, color='grey')
 ```
 
-where the maximum word frequency rank corresponds to intercept
-in our linear form, and \(-\beta + 1\) the slope.
+where the maximum word frequency rank corresponds to \(c\), 
+and \(-\beta + 1\) the exponent in the power law.
 
 
 #### Verifying Zipf's Law
