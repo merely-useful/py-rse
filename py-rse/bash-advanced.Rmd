@@ -26,6 +26,7 @@ which should contain the following files:
     └── time_machine.txt
 
 > **Extra files?**
+>
 > If you worked through all of the exercises in the previous chapter,
 > you may have additional files present,
 > but we won't be using them for the rest of the book.
@@ -235,13 +236,12 @@ Suppose we have just run a series of commands that did something useful,
 such as summarizing all books in a given directory.
 Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
-we can run this:
+we can run the following command to save the six most recent commands in `summarize_all_books.sh`:
 
 ```shell
 $ history 5 > summarize_all_books.sh
+$ cat summarize_all_books.sh
 ```
-
-to put the most recent five commands in `summarize_all_books.sh`.
 
 ```text
 297 for x in data/*.txt; do echo $x; bash book_summary.sh $x Author; done > authors.txt
@@ -249,19 +249,19 @@ to put the most recent five commands in `summarize_all_books.sh`.
 299 ls
 300 mkdir summaries
 301 mv authors.txt releases.txt summaries
-302 history 5 > summarize_all_books.sh
+302 history 6 > summarize_all_books.sh
 ```
 
-It only takes a few moments in an editor to remove the serial numbers
-and delete extraneous line (`ls` and the last line)
-to create a script that accurately captures what we actually did.
+Open the file in an editor,
+remove the serial numbers at the start of each line,
+and delete the extraneous lines (`ls` and the last line),
+and you've created a script that accurately and efficiently captures what we actually did.
+
 This is how we usually develop shell scripts:
 run commands interactively a few times to make sure they are doing the right thing,
 then save our recent history to a file and turn that into a reusable script.
 
 ## How can I find things in a file? {#py-rse-bash-advanced-grep}
-
-FIXME: update from haikus
 
 We can use `head` and `tail` to select lines from a file by position,
 but we also often want to select lines that contain certain values.
@@ -271,104 +271,118 @@ we usually do it by the command `grep` that we already used before.
 The name comes from "global regular expression print",
 which was a common sequence of operations in early Unix text editors.
 To show more on how `grep` works,
-we will use a file that contains three haikus
-taken from a 1998 competition in *Salon* magazine.
+we will use our sleuthing skills to explore `data/sherlock_holmes.txt`.
+
+Let's find lines that contain the word "Sherlock".
+Since we're searching the entire text of a book,
+we'll pipe to `head` so that only the first few lines are shown
+(`-n 5` means the first five results will be printed):
 
 ```shell
-$ cat haiku.txt
+$ grep Sherlock data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
-The Tao that is seen
-Is not the true Tao, until
-You bring fresh toner.
-
-With searching comes loss
-and the presence of absence:
-"My Thesis" not found.
-
-Yesterday it worked
-Today it is not working
-Software is like that.
+Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
+Title: The Adventures of Sherlock Holmes
+To Sherlock Holmes she is always THE woman. I have seldom heard
+as I had pictured it from Sherlock Holmes' succinct description,
+"Good-night, Mister Sherlock Holmes."
 ```
 
-> **Forever, or Five Years**
->
-> We haven't linked to the original haikus because they don't appear to be on *Salon*'s site any longer.
-> As [Jeff Rothenberg said][rothenberg-quote],
-> "Digital information lasts forever—or five years, whichever comes first."
-> Luckily, popular content often [has backups][rothenberg-backup].
-
-Let's find lines that contain the word "not":
-
-```shell
-$ grep not haiku.txt
-```
-
-```text
-Is not the true Tao, until
-"My Thesis" not found
-Today it is not working
-```
-
-Here, `not` is our (very simple) pattern.
+Here, `Sherlock` is our (very simple) pattern.
 `grep` searches the file line by line
 and shows those lines that contain matches.
-Let's search for the pattern `The`:
+
+A search for `grep sherlock`
+would yield no results, but also no error:
+as with other Unix commands,
+grep searches are case-sensitive.
+If we wanted to make the search case-insensitive,
+we could add the option `-i`:
 
 ```shell
-$ grep The haiku.txt
+$ grep -i sherlock data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
-The Tao that is seen
-"My Thesis" not found.
+Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
+Title: The Adventures of Sherlock Holmes
+*** START OF THIS PROJECT GUTENBERG EBOOK THE ADVENTURES OF SHERLOCK HOLMES ***
+THE ADVENTURES OF SHERLOCK HOLMES
+To Sherlock Holmes she is always THE woman. I have seldom heard
 ```
 
-Two lines match,
-but in one of them,
-our pattern is part of a larger word `Thesis`.
-To restrict matching to lines containing `The` on its own,
-we can give `grep` with the `-w` option:
+Note that these results are not quite identical to our previous search,
+due to the presence of "SHERLOCK" near the top of the text file.
+
+Next, let's search for the pattern `on`:
 
 ```shell
-$ grep -w The haiku.txt
+$ grep on data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
-The Tao that is seen
+Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
+This eBook is for the use of anyone anywhere at no cost and with
+almost no restrictions whatsoever.  You may copy it, give it away or
+with this eBook or online at www.gutenberg.net
+Author: Arthur Conan Doyle
+```
+
+In each of these five results,
+our pattern ("on") is part of a larger word,
+such as "Conan".
+To restrict matching to lines containing `on` on its own,
+we can give `grep` the `-w` option:
+
+```shell
+$ grep -w on data/sherlock_holmes.txt
+```
+
+```text
+One night--it was on the twentieth of March, 1888--I was
+put on seven and a half pounds since I saw you."
+that I had a country walk on Thursday and came home in a dreadful
+"It is simplicity itself," said he; "my eyes tell me that on the
+on the right side of his top-hat to show where he has secreted
 ```
 
 What if we want to search for a phrase rather than a single word?
 
 ```shell
-$ grep is not haiku.txt
+$ grep on the data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
-grep: not: No such file or directory
-haiku.txt:The Tao that is seen
-haiku.txt:"My Thesis" not found.
-haiku.txt:Today it is not working
-haiku.txt:Software is like that.
+grep: the: No such file or directory
+data/sherlock_holmes.txt:﻿Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
+data/sherlock_holmes.txt:This eBook is for the use of anyone anywhere at no cost and with
+data/sherlock_holmes.txt:almost no restrictions whatsoever.  You may copy it, give it away or
+data/sherlock_holmes.txt:with this eBook or online at www.gutenberg.net
+data/sherlock_holmes.txt:Author: Arthur Conan Doyle
 ```
 
 In this case,
-`grep` uses `is` as the pattern
-and tries to find it in the files `not` and `haiku.txt`.
-It then tells us that the file `not` cannot be found,
-but prints `haiku.txt` as a prefix to each other line of output
+`grep` uses `on` as the pattern
+and tries to find it in the files `the` and `data/sherlock_holmes.txt`.
+It then tells us that the file `the` cannot be found,
+but prints `data/sherlock_holmes.txt` as a prefix to each other line of output
 to tell us which file those lines came from.
 
 If we want to give `grep` both words as a single argument,
 we must wrap them in quotation marks:
 
 ```shell
-$ grep "is not" haiku.txt
+$ grep "on the" data/sherlock_holmes.txt
 ```
 
 ```text
-Today it is not working
+One night--it was on the twentieth of March, 1888--I was
+drug-created dreams and was hot upon the scent of some new
+"It is simplicity itself," said he; "my eyes tell me that on the
+on the right side of his top-hat to show where he has secreted
+pink-tinted note-paper which had been lying open upon the table.
 ```
 
 > **Quoting**
@@ -384,7 +398,23 @@ Today it is not working
 > if there's any chance at all that the variable's value will contain spaces,
 > it's safest to quote it.
 
-`grep` has many options—so many,
+One of the most useful options for `grep` is `-n`,
+which numbers the lines that match the search:
+
+```shell
+$ grep -n "on the" data/sherlock_holmes.txt
+```
+
+```text
+105:One night--it was on the twentieth of March, 1888--I was
+118:drug-created dreams and was hot upon the scent of some new
+155:"It is simplicity itself," said he; "my eyes tell me that on the
+165:on the right side of his top-hat to show where he has secreted
+198:pink-tinted note-paper which had been lying open upon the table.
+```
+
+`grep` has many options—-
+so many,
 in fact,
 that almost every letter of the alphabet means something to it:
 
@@ -406,75 +436,40 @@ SYNOPSIS
 ...more...
 ```
 
-One of the most useful options is `-n`,
-which numbers the lines that match:
-
-```shell
-$ grep -n it haiku.txt
-```
-
-```text
-5:With searching comes loss
-9:Yesterday it worked
-10:Today it is not working
-```
-
-Another is `-i`,
-which does case-insensitive matching:
-
 We can combine options (i.e. flags) as we do with other Unix commands.
-For example, let's find the lines that contain the word "the". We can combine
-the option `-w` to find the lines that contain the word "the" and `-n` to number the lines that match:
+For example,
+we can combine two options we've covered previously with a new option,
+`-v`,
+which inverts the match—-
+i.e., prints lines that *don't* match the pattern:
 
 ```shell
-$ grep -i to haiku.txt
+$ grep -i -n -v the data/sherlock_holmes.txt
 ```
 
 ```text
-You bring fresh toner.
-Today it is not working
-```
-
-We can combine options as with other commands:
-
-```shell
-$ grep -i -n haiku.txt
-```
-
-```text
-3:You bring fresh toner.
-10:Today it is not working
-```
-
-We can also invert the match—i.e., print lines that *don't* match the pattern—using `-v`:
-
-```shell
-$ grep -i -n -v to haiku.txt
-```
-
-```text
-1:The Tao that is seen
-2:Is not the true Tao, until
-4:
-5:With searching comes loss
-6:and the presence of absence:
-7:"My Thesis" not found.
+2:
+4:almost no restrictions whatsoever.  You may copy it, give it away or
+6:with this eBook or online at www.gutenberg.net
+7:
 8:
-9:Yesterday it worked
-11:Software is like that.
 ```
+
+As we learned in Chapter \@ref(py-rse-bash-basics),
+we can also condense this search as `grep -inv`.
 
 If we want to search several files at once,
 all we have to do is give `grep` all of their names.
-We will frequently use wildcards to do this,
-so if we want to count how many lines in our books contain the word pain, we can do this:
+In these cases,
+we can use wildcards,
+such as to count how many lines in all of the books contain "pain":
 
 ```shell
 $ grep pain data/*.txt | wc -l
 ```
 
 ```text
-    646
+    334
 ```
 
 Finally,
@@ -486,27 +481,32 @@ $ grep -r pain data | wc -l
 ```
 
 ```text
-      646
+      334
 ```
 
-`grep`'s real power comes from the fact that its patterns can include
-a powerful kind of wildcards called [regular expressions][regular-expression].
+`grep` becomes even more powerful through the use of [regular expressions][regular-expression],
+which are specialized sets of letters, numbers, and symbols
+that allow searches for specific patterns.
 For example,
 this command finds lines that start with the letter 'T':
 
 ```shell
-$ grep -E "^T" haiku.txt
+$ grep -E "^T" data/sherlock_holmes.txt
 ```
 
 ```text
-The Tao that is seen
-Today it is not working
+This eBook is for the use of anyone anywhere at no cost and with
+Title: The Adventures of Sherlock Holmes
+THE ADVENTURES OF SHERLOCK HOLMES
+To Sherlock Holmes she is always THE woman. I have seldom heard
+The distinction is clear. For example, you have frequently seen
 ```
 
-The `-E` option tells `grep` to interpret the pattern as a regular expression
-rather than taking it literally.
-The quotes prevent the shell from treating any special characters in the pattern as wildcards,
-and the `^` in front of the `T` means, "Only match at the start of the line."
+The `-E` option tells `grep` to interpret the pattern as a regular expression,
+rather than searching for the specific term provided.
+The quotation marks prevent the shell from treating any special characters in the pattern as wildcards,
+and the `^` means that a line only matches if it begins with the search term--
+in this case, `T`.
 
 Many tools support regular expressions:
 we can use them in programming languages,
@@ -524,35 +524,24 @@ the `find` command finds files themselves.
 It also has a lot of options,
 but unlike most Unix commands these are written as full words rather than abbreviations.
 To show how it works,
-we will explore the `docs` directory within `zipfs-law`:
+we will use the entire contents of our `zipfs-law` directory,
+including files we created earlier in this chapter:
 
+├── book_summary.sh
+├── data
+│   ├── README.md
+│   ├── dracula.txt
+│   ├── frankenstein.txt
+│   ├── jane_eyre.txt
+│   ├── moby_dick.txt
+│   ├── sense_and_sensibility.txt
+│   ├── sherlock_holmes.txt
+│   └── time_machine.txt
+├── summaries
+│   ├── authors.txt
+│   └── releases.txt
+└── summarize_all_books.sh
 
-```shell
-$ cd docs
-$ tree .
-```
-
-```text
-.
-├── bibliography.bib
-├── chapter-1
-│   └── index.html
-├── chapter-2
-│   └── index.html
-├── chapter-3
-│   └── index.html
-├── figures
-│   ├── figure-1.png
-│   ├── figure-2.png
-│   ├── figure-3.png
-│   └── figure-4.png
-└── index.html
-
-4 directories, 9 files
-```
-
-This directory contains `index.html`, `bibliography.bib`, and four subdirectories:
-three for chapters and one for figures.
 For our first command,
 let's run `find .` to find and list everything in this directory.
 (As always,
@@ -565,19 +554,20 @@ $ find .
 
 ```text
 .
-./index.html
-./chapter-1
-./chapter-1/index.html
-./figures
-./figures/figure-4.png
-./figures/figure-1.png
-./figures/figure-3.png
-./figures/figure-2.png
-./chapter-3
-./chapter-3/index.html
-./chapter-2
-./chapter-2/index.html
-./bibliography.bib
+./summarize_all_books.sh
+./book_summary.sh
+./summaries
+./summaries/releases.txt
+./summaries/authors.txt
+./data
+./data/moby_dick.txt
+./data/sense_and_sensibility.txt
+./data/sherlock_holmes.txt
+./data/time_machine.txt
+./data/frankenstein.txt
+./data/README.md
+./data/dracula.txt
+./data/jane_eyre.txt
 ```
 
 If we only want to find directories,
@@ -589,10 +579,8 @@ $ find . -type d
 
 ```text
 .
-./chapter-1
-./figures
-./chapter-3
-./chapter-2
+./summaries
+./data
 ```
 
 If we change `-type d` to `-type f`
@@ -603,45 +591,58 @@ $ find . -type f
 ```
 
 ```text
-./index.html
-./chapter-1/index.html
-./figures/figure-4.png
-./figures/figure-1.png
-./figures/figure-3.png
-./figures/figure-2.png
-./chapter-3/index.html
-./chapter-2/index.html
-./bibliography.bib
+./summarize_all_books.sh
+./book_summary.sh
+./summaries/releases.txt
+./summaries/authors.txt
+./data/moby_dick.txt
+./data/sense_and_sensibility.txt
+./data/sherlock_holmes.txt
+./data/time_machine.txt
+./data/frankenstein.txt
+./data/README.md
+./data/dracula.txt
+./data/jane_eyre.txt
 ```
 
 Now let's try matching by name:
 
 ```shell
-$ find . -name "*.png"
+$ find . -name "*.txt"
 ```
 
 ```text
-./figures/figure-4.png
-./figures/figure-1.png
-./figures/figure-3.png
-./figures/figure-2.png
+./summaries/releases.txt
+./summaries/authors.txt
+./data/moby_dick.txt
+./data/sense_and_sensibility.txt
+./data/sherlock_holmes.txt
+./data/time_machine.txt
+./data/frankenstein.txt
+./data/dracula.txt
+./data/jane_eyre.txt
 ```
 
-As we said earlier,
+As stated earlier,
 the command line's power lies in combining tools.
 We have seen how to do that with pipes;
 let's use another technique to see how large our HTML files are:
 
 ```shell
-$ wc -l $(find . -name "*.html")
+$ wc -l $(find . -name "*.txt")
 ```
 
 ```text
-      16 ./index.html
-      14 ./chapter-1/index.html
-      15 ./chapter-3/index.html
-      11 ./chapter-2/index.html
-      56 total
+14 ./summaries/releases.txt
+14 ./summaries/authors.txt
+22331 ./data/moby_dick.txt
+13028 ./data/sense_and_sensibility.txt
+13053 ./data/sherlock_holmes.txt
+3582 ./data/time_machine.txt
+7832 ./data/frankenstein.txt
+15975 ./data/dracula.txt
+21054 ./data/jane_eyre.txt
+96883 total
 ```
 
 When the shell executes this command,
@@ -651,45 +652,60 @@ Since the output of `find` is the paths of four HTML files,
 the shell constructs the command:
 
 ```shell
-$ wc -l ./index.html ./chapter-1/index.html ./chapter-2/index.html ./chapter-3/index.html
+$ wc -l ./summaries/releases.txt ./summaries/authors.txt ./data/moby_dick.txt ./data/sense_and_sensibility.txt ./data/sherlock_holmes.txt ./data/time_machine.txt ./data/frankenstein.txt ./data/dracula.txt ./data/jane_eyre.txt
 ```
 
-which is what we wanted.
-It is exactly like expanding the wildcard in `*.html`,
+This results in the output as seen above.
+It is exactly like expanding the wildcard in `*.txt`,
 but more flexible.
 
 We will often use `find` and `grep` together.
 The first finds files whose names match a pattern,
 while the second looks for lines inside those files that match another pattern.
 For example,
-we can look for the titles of all our HTML files:
+we can look for Authors in all our text files:
 
 ```shell
-$ grep "<title>" $(find . -name "*.html")
+$ grep "Author:" $(find . -name "*.txt")
 ```
 
 ```text
-./index.html:    <title>Climate Change in the Australian Subcontinent</title>
-./chapter-1/index.html:    <title>Climate Change in the Australian Subcontinent: Introduction</title>
-./chapter-3/index.html:    <title>Climate Change in the Australian Subcontinent: Methods</title>
-./chapter-2/index.html:    <title>Climate Change in the Australian Subcontinent: Background</title>
+./summaries/authors.txt:Author: Bram Stoker
+./summaries/authors.txt:Author: Mary Wollstonecraft (Godwin) Shelley
+./summaries/authors.txt:Author: Charlotte Bronte
+./summaries/authors.txt:Author: Herman Melville
+./summaries/authors.txt:Author: Jane Austen
+./summaries/authors.txt:Author: Arthur Conan Doyle
+./summaries/authors.txt:Author: H. G. Wells
+./data/moby_dick.txt:Author: Herman Melville
+./data/sense_and_sensibility.txt:Author: Jane Austen
+./data/sherlock_holmes.txt:Author: Arthur Conan Doyle
+./data/time_machine.txt:Author: H. G. Wells
+./data/frankenstein.txt:Author: Mary Wollstonecraft (Godwin) Shelley
+./data/dracula.txt:Author: Bram Stoker
+./data/jane_eyre.txt:Author: Charlotte Bronte
 ```
 
 We can also use `$()` expansion to create a list of filenames to use in a loop:
 
 ```shell
-$ for page in $(find . -name "*.html")
+$ for file in $(find . -name "*.txt")
 > do
-> cp $page $page.bak
+> cp $file $file.bak
 > done
 $ find . -name "*.bak"
 ```
 
 ```text
-./chapter-1/index.html.bak
-./index.html.bak
-./chapter-3/index.html.bak
-./chapter-2/index.html.bak
+./summaries/releases.txt.bak
+./summaries/authors.txt.bak
+./data/frankenstein.txt.bak
+./data/sense_and_sensibility.txt.bak
+./data/dracula.txt.bak
+./data/time_machine.txt.bak
+./data/moby_dick.txt.bak
+./data/jane_eyre.txt.bak
+./data/sherlock_holmes.txt.bak
 ```
 
 ## How can I change the shell's settings? {#py-rse-bash-advanced-vars}
@@ -877,13 +893,31 @@ alias ls='ls -la'
 alias mv='mv -v'
 alias cp='cp -v'
 
-# Print the file paths that were removed
-# and prompt if trying to remove move than three files
-alias rm='rm -Iv'
+# Request confirmation to remove a file and
+# print the file path that is removed
+alias rm='rm -iv'
 ```
 
 We can find interesting suggestions for other aliases
 by searching online for "sample bashrc".
+
+Demonstrating concepts in this chapter has resulted
+in a number of extraneous files that we won't use anymore.
+We can use these files to explore how our aliases work in practice,
+while cleaning up our project in preparation for our next chapter.
+
+```shell
+$ for file in $(find . -name "*.bak")
+> do
+> rm $file
+> done
+$ mkdir bin
+$ mv book_summary.sh bin
+$ rm -r summaries
+```
+
+We'll talk more about organizing files associated with projects in Chapter \@ref(py-rse-project),
+but will continue setting up our files in an appropriate directory structure until then.
 
 ## Summary {#py-rse-bash-advanced-summary}
 
@@ -968,6 +1002,8 @@ echo $@.pdb
 
 ### Using `grep` {#py-rse-bash-advanced-ex-using-grep}
 
+FIXME: update to
+
 Which command would result in the following output:
 
 ```text
@@ -1019,18 +1055,17 @@ and `man cut` to select more than one field in a line.
 
 An example of such a file is provided in `data-shell/data/animal-counts/animals.txt`
 
-### Counting names {#py-rse-bash-advanced-ex-little-women}
+### Counting names {#py-rse-bash-advanced-ex-sense_sensibility}
 
-FIXME: update to a novel for which we still have data?
-
-You and your friend, having just finished reading *Little Women* by
-Louisa May Alcott, are in an argument.  Of the four sisters in the
-book, Jo, Meg, Beth, and Amy, your friend thinks that Jo was the
-most mentioned.  You, however, are certain it was Amy.  Luckily, you
-have a file `LittleWomen.txt` containing the full text of the novel
-(`data-shell/writing/data/LittleWomen.txt`).
+You and your friend,
+having just finished reading *Sense and Sensibility* by
+Jane Austen, are in an argument.  
+Your friend thinks that the elder of the two Dashwood sisters,
+Harriet, was mentioned more frequently in the book.
+You, however, are certain it was the younger sister, Marianne.  
+Luckily, you have a file `sense_and_sensibility.txt` containing the full text of the novel.
 Using a `for` loop, how would you tabulate the number of times each
-of the four sisters is mentioned?
+of the sisters is mentioned?
 
 Hint: one solution might employ
 the commands `grep` and `wc` and a `|`, while another might utilize
@@ -1076,10 +1111,12 @@ Hint 2: The value for `-mtime` will need to be negative—why?
 
 ### Combining options {#py-rse-bash-advanced-ex-combining-options}
 
-In most command line tools,
-multiple options can be combined with a single `-` and no spaces between the options:
-`ls -F -a` is equivalent to `ls -Fa`.
-FIXME: finish this exercise
+We've discussed how options can be combined into a single unit
+(for example,
+`ls -F -a` is equivalent to `ls -Fa`).
+Thinking about the commands we've learned in this chapter,
+under what circumstances could you imagine it would be
+*not* possible or advisable to combine options?
 
 ### Other wildcards {#py-rse-bash-advanced-ex-other-wildcards}
 
