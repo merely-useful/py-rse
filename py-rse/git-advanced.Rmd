@@ -85,7 +85,7 @@ import pandas as pd
 def main(args):
     """Run the command line program."""
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False)
+    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                          figsize=[12, 6], grid=True, xlim=args.xlim)
     ax.figure.savefig(args.outfile)
@@ -229,14 +229,15 @@ linear relationship.  To be specific, if Zipf's Law holds,
 thinking about rank as explained by frequency, we have \[
 r = cf^{\frac{-1}{\alpha}}
 \]
+where \(c\) is a constant of proportionality.
 The linear relationship between the log word frequency and 
 log rank is then \[
-\log(r) = C - \frac{1}{\alpha}\log(f)
+\log(r) = \log(c) - \frac{1}{\alpha}\log(f)
 \]
 This suggests that on our log-log plot 
 the points should fall on a straight line 
 with a slope of \(- \tfrac{1}{\alpha}\) 
-and intercept \(C\) (we'll see later that \(C\) is completely defined once we know \(\alpha\)).
+and intercept \(\log(c)\) (we'll see later that \(c\) is completely defined).
 Our goal is to estimate the value of \(\alpha\).
 
 #### Estimating alpha
@@ -245,13 +246,16 @@ In order to determine the best method for estimating \(\alpha\) and fitting a li
 we turn to a scientific paper on Zipf’s Law in english texts [@Moreno2016].
 The mathematics in the paper is a little heavy,
 but the authors essentially suggest using a method called maximum likelihood estimation. 
-The likelihood is the probability of our observed data, 
+The likelihood function is the probability of our observed data, 
 viewed as a function of the parameters in the statistical model that we assume generated it. 
 In maximum likelihood estimation, we estimate the parameters in the model 
 by choosing them to maximize this likelihood, although
 computationally, it is often easier to minimize the negative log likelihood function.
 @Moreno2016 define the likelihood using a parameter, \(\beta\), 
-that we will see below is directly related to the \(\alpha\) parameter in our definition of Zipf's Law.
+which is directly related to the \(\alpha\) parameter in our definition of Zipf's Law,
+through \(\alpha = \tfrac{1}{\beta-1}\).
+Under their model, the value of $c$ is the total number of unique words, or 
+equivalently the largest value of the rank.
 Expressed as a python function, 
 the negative log likelihood function reads as follows:
 
@@ -279,14 +283,14 @@ def get_power_law_params(word_counts):
                           args=(word_counts), method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
-    return alpha, beta
+    return alpha
 ```
 
 We can then plot the fitted curve on the plot axes (`ax`)
 defined in the `plotcounts.py` script,
 
 ```python
-def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     """
     Plot the power law curve that was fitted to the data.
 
@@ -298,18 +302,18 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
         Maximum x-bound for fitted curve
     max_rank : int
         Maximum word frequency rank.
-    beta : float
-        Estimated beta parameter for the power law.
+    alpha : float
+        Estimated alpha parameter for the power law.
     ax : matplotlib axes
         Scatter plot to which the power curve will be added.
     """
     xvals = np.arange(curve_xmin, curve_xmax)
-    yvals = max_rank * (xvals**(-beta + 1))
+    yvals = max_rank * (xvals**(-1 / alpha))
     ax.loglog(xvals, yvals, color='grey')
 ```
 
-where the maximum word frequency rank corresponds to intercept
-in our linear form, and \(-\beta + 1\) the slope.
+where the maximum word frequency rank corresponds to \(c\), 
+and \(-1 / \alpha\) the exponent in the power law.
 
 
 #### Verifying Zipf's Law
@@ -337,7 +341,7 @@ def get_power_law_params(word_counts):
                           args=(word_counts), method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
-    return alpha, beta
+    return alpha
 
 
 def set_plot_params(param_file):
@@ -363,24 +367,24 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
         Maximum x-bound for fitted curve
     max_rank : int
         Maximum word frequency rank.
-    beta : float
-        Estimated beta parameter for the power law.
+    alpha : float
+        Estimated alpha parameter for the power law.
     ax : matplotlib axes
         Scatter plot to which the power curve will be added.
     """
     xvals = np.arange(curve_xmin, curve_xmax)
-    yvals = max_rank * (xvals**(-beta + 1))
+    yvals = max_rank * (xvals**(-1 / alpha))
     ax.loglog(xvals, yvals, color='grey')
 
 
 def main(args):
     """Run the command line program."""
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False)
+    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                          figsize=[12, 6], grid=True, xlim=args.xlim)
 
-    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
+    alpha = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
     # Since the ranks are already sorted, we can take the last one instead of
     # computing which row has the highest rank
@@ -389,7 +393,7 @@ def main(args):
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
-    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
+    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
     ax.figure.savefig(args.outfile)
 
 
@@ -520,7 +524,7 @@ def get_power_law_params(word_counts):
                           args=(word_counts), method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
-    return alpha, beta
+    return alpha
 ```
 
 ```shell
@@ -579,7 +583,7 @@ index 4501eaf..d57fd63 100644
 +                          args=(word_counts), method='brent')
 +    beta = mle.x
 +    alpha = 1 / (beta - 1)
-+    return alpha, beta
++    return alpha
 +
 +
 +def set_plot_params(param_file):
@@ -593,7 +597,7 @@ index 4501eaf..d57fd63 100644
 +        mpl.rcParams[param] = value
 +
 +
-+def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
++def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
 +    """
 +    Plot the power law curve that was fitted to the data.
 +
@@ -605,23 +609,23 @@ index 4501eaf..d57fd63 100644
 +        Maximum x-bound for fitted curve
 +    max_rank : int
 +        Maximum word frequency rank.
-+    beta : float
-+        Estimated beta parameter for the power law.
++    alpha : float
++        Estimated alpha parameter for the power law.
 +    ax : matplotlib axes
 +        Scatter plot to which the power curve will be added.
 +    """
 +    xvals = np.arange(curve_xmin, curve_xmax)
-+    yvals = max_rank * (xvals**(-beta + 1))
++    yvals = max_rank * (xvals**(-1 / alpha))
 +    ax.loglog(xvals, yvals, color='grey')
  
  
  def main(args):
 @@ -9,6 +72,17 @@ def main(args):
-     df['rank'] = df['word_frequency'].rank(ascending=False)
+     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
      ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                           figsize=[12, 6], grid=True, xlim=args.xlim)
 +
-+    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
++    alpha = get_power_law_params(df['word_frequency'].to_numpy())
 +    print('alpha:', alpha)
 +    # Since the ranks are already sorted, we can take the last one instead of
 +    # computing which row has the highest rank
@@ -630,7 +634,7 @@ index 4501eaf..d57fd63 100644
 +    curve_xmin = df['word_frequency'].min()
 +    curve_xmax = df['word_frequency'].max()
 +
-+    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
++    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
      ax.figure.savefig(args.outfile)
 ```
 
