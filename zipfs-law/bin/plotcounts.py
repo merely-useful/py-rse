@@ -32,7 +32,7 @@ def get_power_law_params(word_counts):
                           args=(word_counts), method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
-    return alpha, beta
+    return alpha
 
 
 def set_plot_params(param_file):
@@ -46,7 +46,7 @@ def set_plot_params(param_file):
         mpl.rcParams[param] = value
 
 
-def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     """
     Plot the power law curve that was fitted to the data.
 
@@ -64,7 +64,7 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
         Scatter plot to which the power curve will be added.
     """
     xvals = np.arange(curve_xmin, curve_xmax)
-    yvals = max_rank * (xvals**(-beta + 1))
+    yvals = max_rank * (xvals**(-1 / alpha))
     ax.loglog(xvals, yvals, color='grey')
 
 
@@ -72,13 +72,12 @@ def main(args):
     """Run the command line program."""
     set_plot_params(args.rcparams)
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False)
+    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                          figsize=[12, 6], grid=True, xlim=args.xlim)
 
     alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
-    print('beta:', beta)
     # Since the ranks are already sorted, we can take the last one instead of
     # computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
@@ -86,7 +85,7 @@ def main(args):
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
-    plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax)
+    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
     ax.figure.savefig(args.outfile)
 
 
