@@ -58,8 +58,8 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
         Maximum x-bound for fitted curve
     max_rank : int
         Maximum word frequency rank.
-    beta : float
-        Estimated beta parameter for the power law.
+    alpha : float
+        Estimated alpha parameter for the power law.
     ax : matplotlib axes
         Scatter plot to which the power curve will be added.
     """
