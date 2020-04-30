@@ -214,6 +214,7 @@
 [mertz-documentation]: https://realpython.com/documenting-python-code/
 [mit-license]: glossary.html#mit-license
 [model-coc]: http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[mutate-useful]: https://dplyr.tidyverse.org/reference/mutate.html#useful-functions-available-in-calculations-of-variables
 [namespace]: glossary.html#namespace
 [nano]: glossary.html#nano
 [ngo]: glossary.html#ngo
@@ -221,6 +222,7 @@
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
 [novice]: glossary.html#novice
 [numpy-docstring]: https://numpydoc.readthedocs.io/en/latest/format.html
+[nyc-opendata-dogs]: https://data.cityofnewyork.us/Health/NYC-Dog-Licensing-Dataset/nu7n-tubp
 [object]: glossary.html#object
 [oop]: glossary.html#oop
 [open-license]: glossary.html#open-license
@@ -352,6 +354,7 @@
 [subcommand]: glossary.html#subcommand
 [subdirectory]: glossary.html#subdirectory
 [subsampling]: glossary.html#subsampling
+[summarise-useful]: https://dplyr.tidyverse.org/reference/summarise#useful-functions
 [sustainable-software]: glossary.html#sustainable-software
 [svg]: glossary.html#svg
 [swc-git]: https://swcarpentry.github.io/git-novice/
