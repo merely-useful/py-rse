@@ -64,7 +64,7 @@ in this lesson a sub-optimal word count vs 1/rank plot will be implemented
 so that it can be improved upon in subsequent chapters:
 see `plotcounts_rank.py` for details.
 The rationale behind this approach to plotting the data is that mathematically,
-Zipfs Law might be written as "word frequency is proportional to 1/rank."
+Zipf's Law might be written as "word frequency is proportional to 1/rank."
 
 ### Chapter 5: Git at the command line
 
@@ -78,7 +78,7 @@ to instead of the inferior word count vs 1/rank approach from Chapter 4
 The disadvantage of the 1/rank plot is that it tends to visually
 over-emphasize the very frequent words.
 It's therefore hard to see what's happening for words that appear less than 500 times.
-The rationale for switching to a log-log plot is that Zipfs Law is an example of a power law.
+The rationale for switching to a log-log plot is that Zipf's Law is an example of a power law.
 In general, when two variables (x) and (y) are related through a power law [ y = ax^b ],
 taking logarithms of both sides yields a linear relationship: [ \log(y) = \log(a) + b\log(x) ].
 Hence, plotting the variables on a log-log scale should reveal this linear relationship.
