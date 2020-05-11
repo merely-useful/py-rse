@@ -23,6 +23,8 @@ and put things in the right place right from the start.
 This lesson therefore describes a widely-used template
 for organizing small and medium-sized data analysis projects @Nobl2009.
 
+We'll be referencing the current files in the project directory:
+
 ```text
 ├── CONDUCT.md
 ├── LICENSE.md
@@ -45,6 +47,9 @@ for organizing small and medium-sized data analysis projects @Nobl2009.
     └── ...
 ```
 
+We'll discuss the rationale for why our project is set up this way,
+as well as other approaches that may assist in your development of other projects.
+
 > **Version First**
 >
 > This chapter assumes that a project's history and development is managed with Git,
@@ -55,7 +60,15 @@ for organizing small and medium-sized data analysis projects @Nobl2009.
 
 ## What is a project? {#py-rse-project-thinking}
 
-The first decision we have to make is what exactly constitutes a "project" @Wils2017.
+In our example for this book,
+our project includes the code,
+data, and documentation associated with our Zipf's Law project,
+contained within `zipfs-law/`.
+We've modeled an appropriate organizational structure as the analysis developed,
+so we don't need to reorganize much now.
+
+In cases where you haven't been told what is included in the project,
+the first decision we have to make is what exactly constitutes a "project" @Wils2017.
 Some examples are:
 
 -   A dataset that is being used by several research projects.
@@ -99,8 +112,6 @@ that "something" probably deserves its own repository.
 And if the list of people changes slowly over time but the meetings continue,
 that's an even stronger sign.
 
-FIXME: In our case, a project describes the code, data, and documentation associated with our Zipf's Law project, and is contained within a single directory.
-
 ## What files should every project contain? {#py-rse-project-boilerplate}
 
 Most projects' repositories contain four files.
@@ -112,7 +123,8 @@ but should use the principal names given in upper case
 since a growing number of tools expect them.
 
 -   `README` includes the project's title and a one-paragraph description of its purpose or content.
-    GitHub displays the content of this file on the project's home page.
+    GitHub displays the content of the README file
+    in the project's root directory on the project's home page.
 
 -   `LICENSE` is the project's license (Section \@ref(py-rse-teams-license)).
 
@@ -141,7 +153,7 @@ Other information may be included as sections in these files or put into files o
     the more likely they are to do so @Stei2014.
 
 -   `GOVERNANCE`
-    explains how the project is run.
+    explains how the project is run (Section \@ref(py-rse-teams-martha)).
     It is still uncommon for this to be in a file of its own—it is more often included
     in `README` or `CONTRIBUTING`—but the open source and open science communities have learned the hard way
     that *not* being explicit about who has a voice in which decisions
@@ -149,7 +161,7 @@ Other information may be included as sections in these files or put into files o
     causes trouble sooner or later.
     FIXME connect with material in teams
 
-Even the four core files may seem like a lot,
+Including four core files may seem like a lot,
 but two of these (`LICENSE` and `CONDUCT`) are usually chosen rather than written (Section \@ref(py-rse-teams-license))
 and the others (`README` and `CITATION`) can be quite short to start with.
 Having these files helps new contributors orient themselves,
@@ -163,7 +175,18 @@ Once someone knows that a project is using the MIT License (Section \@ref(py-rs
 and the Contributor Covenant (Section \@ref(py-rse-teams-coc)),
 they don't need to read the files to know what's there.
 
-FIXME: boilerplate materials created in teams chapter
+Of the four standard files generally present in most projects,
+we have three already present in our Zipf's Law project.
+`README.md` was created as a part of Chapter \@ref(py-rse-git-cmdline)
+`CONDUCT.md` and `LICENSE.md` were both created in Chapter \@ref(py-rse-teams).
+At this point in our project development,
+it doesn't make sense to create separate files for the other standard files.
+However, you may choose to include subheadings in the main directory's `README.md`
+with information about contributing to the project
+Eventually,
+you may also include governance processes,
+citation details,
+and contributors.
 
 ## How should I structure the rest of my project? {#py-rse-project-organize}
 
@@ -173,29 +196,29 @@ Each project is put in a separate Git repository,
 and the directories in the root of this repository are organized according to purpose.
 It specifies five top-level directories:
 
--   The `./src/` directory (short for "source") holds source code
+-   The `src/` directory (short for "source") holds source code
     for programs written in languages like C or C++ that need to be compiled.
     Many projects don't have this directory
     because all of their code is written in languages that don't need compilation.
 
--   Runnable programs go in `./bin/` (an old Unix abbreviation for "binary", meaning "not text").
+-   Runnable programs go in `bin/` (an old Unix abbreviation for "binary", meaning "not text").
     This includes the compiled and runnable versions of C and C++ programs,
     and also shell scripts,
     Python or R programs,
     and everything else that can be executed.
 
--   Raw data goes in in `./data/` and is never modified after being stored.
+-   Raw data goes in in `data/` and is never modified after being stored.
 
--   Results are put in `./results/`.
+-   Results are put in `results/`.
     This includes cleaned-up data,
     figures,
-    and everything else that can be rebuilt using what's in `./bin/` and `./data/`.
+    and everything else that can be rebuilt using what's in `bin/` and `data/`.
     If intermediate results can be re-created quickly and easily,
     they might not be stored in version control,
     but anything that is included in a manuscript should be here.
 
 -   Finally,
-    documentation and manuscripts go in `./doc/`.
+    documentation and manuscripts go in `doc/`.
 
 ```{r project-noble, echo=FALSE, fig.cap="Project Layout"}
 if (knitr::is_latex_output()) {
@@ -205,26 +228,24 @@ if (knitr::is_latex_output()) {
 }
 ```
 
-FIXME: add popout note about writing/reorganizing scripts that discusses adjustments to paths being referenced in those scripts
-
 Figure \@ref(fig:project-noble) below shows this layout for a project called `g-trans`.
-A few things to notice are:
+Differences between this structure and that described above include:
 
--   The documentation for the `regulate` script appears in the root of `./doc/`,
+-   The documentation for the `regulate` script appears in the root of `doc/`,
     while the paper for JCMB is stored in a subdirectory,
     since it contains several files.
 
--   The `./src/` directory contains a Makefile to re-build the `regulate` program (Chapter \@ref(py-rse-automate)).
+-   The `src/` directory contains a Makefile to re-build the `regulate` program (Chapter \@ref(py-rse-automate)).
     Some projects put the Makefile in the root directory,
-    reasoning that since it affects both `./src/` and `./bin/`,
+    reasoning that since it affects both `src/` and `bin/`,
     it belongs above them both rather than in either one.
 
--   There are several subdirectories underneath `./data/` and `./results/`.
-    Each of the subdirectories in `./results/` has a Makefile
+-   There are several subdirectories underneath `data/` and `results/`.
+    Each of the subdirectories in `results/` has a Makefile
     to re-create the contents of that directory.
 
 While the directories in the top level of each project are organized by purpose,
-the directories within `./data/` and `./results/` are organized chronologically
+the directories within `data/` and `results/` are organized chronologically
 to make it easy to see when data was gathered and when results were generated.
 These directories all have names in [ISO date format][iso-date-format] like `YYYY-MM-DD`
 to make it easy to sort them chronologically.
@@ -255,7 +276,7 @@ Python's `glob` and R's `Sys.glob` will both take a pattern and return a list of
     └── my_report.Rmd
 ```
 
-The key differences are:
+The key differences between this structure and previous structures discussed are:
 
 -   The `DESCRIPTION` file in the root directory contains
     the information needed to make the project an R package.
@@ -265,7 +286,7 @@ The key differences are:
     this layout assumes that all work (including data tidying) is done with [computational notebooks][computational-notebook],
     so Noble's `bin`, `src`, and `results` directories are combined.
 
-Going in the other direction,
+FIXME (make this better) Going in the other direction,
 [Cookiecutter Data Science][cookiecutter] describes a more elaborate layout
 with separate subdirectories for models, features, visualizations, and much more.
 All of these share a few key advantages:
@@ -281,7 +302,15 @@ All of these share a few key advantages:
 
 -   We don't have to document the structure ourselves.
 
-FIXME: relate to Zipfs law structure and organization
+With this understanding of different approaches to file organization in projects,
+the structure and filenames for our Zipfs Law project should be clear.
+Add information to the main directory's `README.md` describing the contents of `bin/`,
+`data/`, and `results/`.
+
+> **Reorganizing Files**
+> Think about your project organization sooner rather than later.
+> If you decide on a different directory structure later,
+> be aware of how locations of data and scripts are referenced in paths in other scripts.
 
 ## How should I manage a mix of compiled programs and scripts? {#py-rse-project-scripts}
 
@@ -331,25 +360,26 @@ and recompile it as needed to produce executables:
     than interpreted programs,
     so something compiled on one computer might not work on another anyway.
 
-The authors of this book handle all of this in different ways:
+In practice,
+software developers handle all of this in different ways:
 
-1.  Put the source code for compiled languages in `./src/`,
-    the runnable programs produced from this code in `./bin/`,
-    and programs for interpreted languages in `./scripts/`.
-    This makes version control easy—ignore what's in `./bin/` and save everything else—but
+1.  Put the source code for compiled languages in `src/`,
+    the runnable programs produced from this code in `bin/`,
+    and programs for interpreted languages in `scripts/`.
+    This makes version control easy—ignore what's in `bin/` and save everything else—but
     means users have to look in two places to run things.
 
-2.  Put the source for compiled programs in `./src/`
-    and both the compiler's output and interpreted programs in `./bin/`.
+2.  Put the source for compiled programs in `src/`
+    and both the compiler's output and interpreted programs in `bin/`.
     This makes version control a little more complicated,
-    since some of what's in `./bin/` needs to be saved and some doesn't,
+    since some of what's in `bin/` needs to be saved and some doesn't,
     but means there's only one place to look for runnable programs.
-    (It's also easy to delete the hand-written scripts in `./bin/` by accident
+    (It's also easy to delete the hand-written scripts in `bin/` by accident
     when we only meant to delete the compiled programs,
     but since we have everything under version control,
     that's not a problem, right?)
 
-3.  Put all source files in `./src/` and the compiler's output in `./bin/`.
+3.  Put all source files in `src/` and the compiler's output in `bin/`.
     This is slightly simpler than the first option,
     but still means users have to look in two places for things they can run.
 
@@ -357,7 +387,10 @@ As always,
 the approach matters less than being consistent
 and including a note in `CONTRIBUTING` or elsewhere to document the decision.
 
-FIXME: does this connect to zipfs law?
+In our Zipfs Law project,
+we don't have source files,
+so both shell (`*.sh`) and Python (`*.py`)
+files are included in `src/`.
 
 ## How should I document the software in a project? {#py-rse-project-software-docs}
 
@@ -375,8 +408,8 @@ This lesson will explore who we should write documentation for,
 what we should write for them,
 and where it should go.
 
-Noble's layout places documentation and manuscripts in `./docs/`.
-We recommend separating these into `./docs/` and `./reports/`:
+Noble's layout places documentation and manuscripts in `docs/`.
+We recommend separating these into `docs/` and `reports/`:
 
 1.  Most projects generate the documentation for their software directly from the source code
     (Section \@ref(py-rse-package-py-document)).
@@ -453,7 +486,7 @@ others short and to the point.
 In our world, though,
 time and resources are limited,
 so all but the most popular packages must make do with single explanations.
-The rest of this section will therefore look at
+The rest of this chapter will therefore look at
 how to create reference guides and FAQs.
 
 ## What should I document? {#py-rse-project-infer}
@@ -498,11 +531,15 @@ as discussed in Chapter \@ref(py-rse-correct),
 these should have long names that describe what they're checking
 so that failure reports are easy to scan.
 
-FIXME: relate to existing functions?
+We've included docstring for each function created so far.
+Review this documentation and determine whether the information is sufficient for continued development of the project.
 
 ## How can I create a useful FAQ? {#py-rse-project-faq}
 
-An [FAQ][faq] is a list of frequently-asked questions and corresponding answers.
+As projects grow,
+documentation within functions alone may be unsufficient for users to apply code to their own problems.
+One strategy to assist other people with understanding a project is with an [FAQ][faq]:
+a list of frequently-asked questions and corresponding answers.
 A good FAQ uses the terms and concepts that people bring to the software
 rather than the vocabulary of its authors;
 putting it another way,
@@ -577,8 +614,6 @@ Allow for a [chorus of explanations][caulfield-chorus].
     Do not be afraid of providing multiple explanations to a single question
     that suggest different approaches
     or are written for different prior levels of understanding.
-
-FIXME: zipfs law doc
 
 ## How does documentation for data differ from documentation for code? {#py-rse-project-data-vs-code}
 
@@ -840,7 +875,7 @@ establishing a clear scope of work and responsibilities is essential.
 ## What data documentation should I create first? {#py-rse-project-data-first}
 
 The first thing to produce when docmenting data is an inventory of what data is available.
-This inventory collects important informaion for the team during the active collection and analysis process.  
+This inventory collects important information for the team during the active collection and analysis process.  
 
 We start with a bulleted outline of our data collection points.
 This is different for every domain,
@@ -869,7 +904,7 @@ The following questions should be answered for each data product,
 but can be answered in any order:
 
 -   Where are any physical representations of this data stored?
-    This is relevant for anything with surveys, samples, specimines, interview sheets, etc.
+    This is relevant for anything with surveys, samples, specimens, interview sheets, etc.
 -   Where are any digital representations of this data stored
     and what are their file names?  
 -   Are there any caveats to data collection for this piece of data?
@@ -896,7 +931,9 @@ and code of conduct.
 This template should be stored under version control so proposed changes can be discussed
 and changes that are made can be tracked over time.
 
-FIXME: relate to data in project directory?
+Our Zipf's Law data came from an external source,
+so a `README` was included in `data/`.
+Take a look at this information and evaluate whether the content is sufficient for the scope of the project.
 
 ## How should I manage data that can't be stored in version control? {#py-rse-project-external}
 
@@ -905,7 +942,7 @@ as a rule of thumb,
 anything you would send as an email attachment is probably small enough to be put into Git,
 while anything that might reveal someone's identity should not be.
 If data is large or sensitive,
-there should still be something in `./data/` to show its existence,
+there should still be something in `data/` to show its existence,
 and that "something" should be easy for programs to read.
 One option is a CSV file whose columns are:
 
@@ -914,11 +951,11 @@ One option is a CSV file whose columns are:
 -   the date it was last checked, and
 -   its size (so that users will have some idea of how much work is involved in processing it).
 
-Another option is to have one file per dataset,
+FIXME: move this up Another option is to have one file per dataset,
 so that instead of reading `gorilla_genome.bam`,
 the program reads `gorilla_genome.yml` and then uses the `url` key in that file to find the data it actually wants.
 Whatever you do,
-you should always include a `README.md` file in `./data/`
+you should always include a `README.md` file in `data/`
 that documents the [provenance][provenance] and organization of the data
 (Section \@ref(py-rse-publish-data)).
 
@@ -928,12 +965,10 @@ FIXME: summarize project structure chapter
 
 ## Exercises {#py-rse-project-exercises}
 
-The exercises explore the dataset from @Meil2015
-and try to understand the relationship between the study and the included files.
+The exercises are modified from @Wick2016 and explore the dataset from @Meil2015.
+They try to understand the relationship between the study and the included files.
 Go to the dataset's page (http://doi.org/10.3886/E17507V2) and download the files.
 You will need to make an ICPSER account and agree to their data agreement before you can download.
-
-See @Wick2016. FIXME where should this citation go?
 
 ### Understand a project {#py-rse-project-ex-understand-project}
 
