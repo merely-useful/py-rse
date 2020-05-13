@@ -17,6 +17,39 @@ and the command-line options overrides that.
 While this is far more complexity than most research software needs (at least initially),
 being able to read a complete set of options from a file is a big boost to reproducibility.
 
+Your Zipf's Law project should now include:
+
+```text
+├── Makefile
+├── README.md
+├── bin
+│   ├── book_summary.sh
+│   ├── collate.py
+│   ├── countwords.py
+│   ├── mymodule.py
+│   └── plotcounts.py
+├── data
+│   ├── README.md
+│   ├── dracula.txt
+│   └── ...
+└── results
+    ├── dracula.csv
+    ├── dracula.png
+    └── ...
+```
+
+In this chapter,
+we'll explore approaches for configuring our project,
+and apply one approach to our Zipf's Law project.
+
+> **Take care when apply settings outside your project!**
+>
+> This chapter discusses approaches that modify files outside of your Zipf's Law project.
+> These examples are included to illustrate the concepts.
+> We do not recommend making these changes to files outside the project,
+> or if you do choose to alter these files,
+> remember to change them back to default later.
+
 ## Configuration file formats {#py-rse-configuration-formats}
 
 Programmers have invented many formats for configuration files,
@@ -258,17 +291,18 @@ xtick.labelsize  : large    ## fontsize of the tick labels
 ytick.labelsize  : large    ## fontsize of the tick labels
 ```
 
-and instead of placing it in the `/Users/amira/.matplotlib/stylelib/` directory
-in order to create a new user-specific style sheet,
-we can pass it directly to the `plotcounts.py` script
-by defining a single new command line argument:
+Because this file is located in our project directory,
+instead of creating a user-specific style sheet through `/Users/amira/.matplotlib/stylelib/`,
+we can pass it directly to the script
+by defining a single new command line argument in `plotcounts.py` :
 
 ```python
 parser.add_argument('--rcparams', type=str, default=None,
                     help='YAML file containing new matplotlib runtime configuration parameters')
 ```
 
-We can use the YAML library in Python to read the file,
+In the same script,
+we can use the YAML library in Python to read the file:
 
 ```python
 with open('rcparams.yml', 'r') as reader:

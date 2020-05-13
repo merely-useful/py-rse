@@ -98,6 +98,6 @@ if __name__ == '__main__':
     parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     parser.add_argument('--rcparams', type=str, default=None,
-                        help='Configuration file for plot parameters (matplotlib rc parameters)')
+                        help='YAML file containing new matplotlib runtime configuration parameters')
     args = parser.parse_args()
     main(args)
