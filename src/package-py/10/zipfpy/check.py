@@ -1,6 +1,6 @@
 """
 The check module contains routines for testing whether a list of counts
-represents data that follows Zipf's law.
+represents data that follows Zipf's Law.
 """
 from pytest import approx
 from .generate import make_zipf
