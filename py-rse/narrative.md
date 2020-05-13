@@ -3,7 +3,7 @@ in order to weave a common narrative through all the chapters.
 
 ## Narrative and code
 
-The narrative involves looking at the distribution of word frequencies in classic English novels. 
+The narrative involves looking at the distribution of word frequencies in classic English novels.
 [Zipf’s Law](https://en.wikipedia.org/wiki/Zipf%27s_law) states that the second most common word
 in a body of text appears half as often as the most common,
 the third most common appears a third as often, and so on.
@@ -21,7 +21,7 @@ Three basic scripts are developed as we move through the chapters to achieve thi
 ### Chapter 1: Introduction
 
 Some text needs to be added to this chapter to introduce the narrative.
-In other words, it should say something along the lines of: 
+In other words, it should say something along the lines of:
 
 "We want to look at the distribution of word frequencies in classic English novels.
 Zipf’s Law states that the second most common word in a body of text
@@ -33,7 +33,7 @@ that are freely available from Project Gutenberg..."
 ### Chapter 2: Basics of the unix shell
 
 All references to the `climate-data` directory need to be replaced
-with reference to the `zipfs-law/data/` directory.
+with reference to the `zipfs_law/data/` directory.
 
 ### Chapter 3: Going further with the unix shell
 
@@ -43,7 +43,7 @@ which extracts a list of years from a climate data file.
 It needs to be replaced with the new bash script `zipfs_law/bin/book_summary.sh`,
 which has been developed to extract the book title and author
 by using the `head` and `tail` commands to select relevant lines
-from an ebook text file. 
+from an ebook text file.
 (Some of the original ebook text files have been edited slightly
 to ensure that this information is on exactly the same line in each file.)
 Later on in the chapter,
@@ -93,7 +93,7 @@ The better looking plot is then merged into the master branch.
 This narrative needs to be changed so that a new branch is created
 to work on fitting a curve to the word count data instead.
 Specifically, we need to estimate the power law exponent
-so it can be added it as a line on our log-log plot. 
+so it can be added it as a line on our log-log plot.
 This is done by adding relevant code
 (i.e. the `get_power_law_params`, `nlog_likelihood` and `plot_fit` functions) to `plotcounts.py`,
 starting from the version of the script
@@ -119,10 +119,10 @@ which is pretty close.
 Here's the [issue](https://github.com/merely-useful/merely-useful.github.io/issues/288)
 where we discuss theory behind the power law stuff in detail.
 
-### Chapter 7: Automating analyses 
+### Chapter 7: Automating analyses
 
 This chapter can stay pretty much as is.
-The introductory paragraphs about Zipf's Law can be removed 
+The introductory paragraphs about Zipf's Law can be removed
 (because they should now appear in the introduction chapter)
 and the workflows developed in the chapter need to be extended to also include
 `plotcounts.py` (as it appears in `zipfs_law/bin/plotcounts_fit.py`).
@@ -186,7 +186,7 @@ this chapter should structure it all properly (i.e. with license files and READM
 ### Chapter 13: Python packaging
 
 In the current version of this chapter,
-a few relevant functions relating to the Zipf's Law analysis 
+a few relevant functions relating to the Zipf's Law analysis
 (but which haven't been introduced in earlier chapters) are added to a Python module.
 That module is then packaged so it can be installed by others.
 
@@ -209,4 +209,3 @@ are implemented using Travis CI.
 
 This lesson should consider (hypothetically) where the results,
 data and code from the Zipf's Law analysis could be published.
- 
