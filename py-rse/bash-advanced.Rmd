@@ -935,12 +935,16 @@ can work with any other.
 
 ## Exercises {#py-rse-bash-advanced-exercises}
 
+Many of the exercises below have been adapted from Software Carpentry's lesson
+[The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+
+As with the previous chapter,
+extra files and directories created during these exercises may need to be removed from your Zipf's Law project.
+We include an overview of the status of the project at the start of the next chapter.
+
 ### Variables in shell scripts {#py-rse-bash-advanced-ex-script-variables}
 
-FIXME: uses same data from previous chapter,
-update as per decision there
-
-In the `molecules` directory, imagine you have a shell script called `script.sh` containing the
+Imagine you have a shell script called `script.sh` containing the
 following commands:
 
 ```shell
@@ -948,19 +952,19 @@ head -n $2 $1
 tail -n $3 $1
 ```
 
-While you are in the `molecules` directory, you type the following command:
+With this script in your `data` directory, you type the following command:
 
 ```shell
-bash script.sh '*.pdb' 1 1
+bash script.sh '*.txt' 1 1
 ```
 
 Which of the following outputs would you expect to see?
 
-1. All of the lines between the first and the last lines of each file ending in `.pdb`
-    in the `molecules` directory
-2. The first and the last line of each file ending in `.pdb` in the `molecules` directory
-3. The first and the last line of each file in the `molecules` directory
-4. An error because of the quotes around `*.pdb`
+1. All of the lines between the first and the last lines of each file ending in `.txt`
+    in the `data` directory
+2. The first and the last line of each file ending in `.txt` in the `data` directory
+3. The first and the last line of each file in the `data` directory
+4. An error because of the quotes around `*.txt`
 
 ### Find the longest file with a given extension {#py-rse-bash-advanced-ex-longest-with-extension}
 
@@ -970,19 +974,18 @@ out the name of the file with the most lines in that directory
 with that extension. For example:
 
 ```shell
-$ bash longest.sh /tmp/data pdb
+$ bash longest.sh data/ txt
 ```
 
-would print the name of the `.pdb` file in `/tmp/data` that has
+would print the name of the `.txt` file in `data` that has
 the most lines.
 
 ### Script reading comprehension {#py-rse-bash-advanced-ex-reading-scripts}
 
-For this question, consider the `data-shell/molecules` directory once again.
-This contains a number of `.pdb` files in addition to any other files you
-may have created.
+For this question, consider your `data` directory once again.
+
 Explain what each of the following three scripts would do when run as
-`bash script1.sh *.pdb`, `bash script2.sh *.pdb`, and `bash script3.sh *.pdb` respectively.
+`bash script1.sh *.txt`, `bash script2.sh *.txt`, and `bash script3.sh *.txt` respectively.
 
 ```shell
 # Script 1
@@ -999,63 +1002,41 @@ for filename in $1 $2 $3
 
 ```shell
 # Script 3
-echo $@.pdb
+echo $@.txt
 ```
 
 ### Using `grep` {#py-rse-bash-advanced-ex-using-grep}
 
-FIXME: update to
-
-Which command would result in the following output:
-
-```text
-and the presence of absence:
-```
-
-1. `grep "of" haiku.txt`
-2. `grep -E "of" haiku.txt`
-3. `grep -w "of" haiku.txt`
-4. `grep -i "of" haiku.txt`
-
-### Tracking a species {#py-rse-bash-advanced-ex-tracking-species}
-
-Leah has several hundred
-data files saved in one directory, each of which is formatted like this:
+Assume the following text from The Adventures of Sherlock Holmes
+is contained within a file called `excerpt.txt`:
 
 ```text
-2013-11-05,deer,5
-2013-11-05,rabbit,22
-2013-11-05,raccoon,7
-2013-11-06,rabbit,19
-2013-11-06,deer,2
+To Sherlock Holmes she is always THE woman. I have seldom heard
+him mention her under any other name. In his eyes she eclipses
+and predominates the whole of her sex. It was not that he felt
+any emotion akin to love for Irene Adler.
 ```
 
-She wants to write a shell script that takes a species as the first command-line argument
-and a directory as the second argument. The script should return one file called `species.txt`
-containing a list of dates and the number of that species seen on each date.
-For example using the data shown above, `rabbit.txt` would contain:
+Which of the following commands would provide the following output:
 
 ```text
-2013-11-05,22
-2013-11-06,19
+and predominates the whole of her sex. It was not that he felt
 ```
 
-Put these commands and pipes in the right order to achieve this:
+1. `grep "he" excerpt.txt`
+2. `grep -E "he" excerpt.txt`
+3. `grep -w "he" excerpt.txt`
+4. `grep -i "he" excerpt.txt`
 
-```shell
-cut -d : -f 2
->
-|
-grep -w $1 -r $2
-|
-$1.txt
-cut -d , -f 1,3
-```
+### Tracking publication years {#py-rse-bash-advanced-ex-tracking-species}
 
-Hint: use `man grep` to look for how to grep text recursively in a directory
-and `man cut` to select more than one field in a line.
+In the previous chapter's exercises,
+you examined a command that extracted the publication year from a list of book titles (\@ref(py-rse-bash-basics-ex-pipe-construction)).
 
-An example of such a file is provided in `data-shell/data/animal-counts/animals.txt`
+Write a shell script called `year.sh` that takes any number of
+filenames as command-line arguments,
+and uses a variation of that command to print a list
+of the unique publication years appearing in each of those files separately.
 
 ### Counting names {#py-rse-bash-advanced-ex-sense_sensibility}
 
@@ -1078,17 +1059,13 @@ yielding the correct result, elegance, readability, and speed.
 
 ### Matching and subtracting {#py-rse-bash-advanced-ex-match-subtract}
 
-The `-v` option to `grep` inverts pattern matching, so that only lines
-which do *not* match the pattern are printed. Given that, which of
-the following commands will find all files in `/data` whose names
-end in `s.txt` (e.g., `animals.txt` or `planets.txt`), but do
-*not* contain the word `net`?
-Once you have thought about your answer, you can test the commands in the `data-shell`
-directory.
+Assume your working directory is the root directory of your Zipf's Law project.
+Which of the following commands will find all files in `data` whose names end in `e.txt`,
+but do *not* contain the word `machine`?
 
-1.  `find data -name '*s.txt' | grep -v net`
-2.  `find data -name *s.txt | grep -v net`
-3.  `grep -v "temp" $(find data -name '*s.txt')`
+1.  `find data -name '*e.txt' | grep -v machine`
+2.  `find data -name *e.txt | grep -v machine`
+3.  `grep -v "machine" $(find data -name '*e.txt')`
 4.  None of the above.
 
 ### `find` pipeline reading comprehension {#py-rse-bash-advanced-ex-reading-find}
@@ -1110,19 +1087,6 @@ that are owned by the user `ahmed` and were modified in the last 24 hours.
 Hint 1: you will need to use three tests: `-type`, `-mtime`, and `-user`.
 
 Hint 2: The value for `-mtime` will need to be negative—why?
-
-### Combining options {#py-rse-bash-advanced-ex-combining-options}
-
-We've discussed how options can be combined into a single unit
-(for example,
-`ls -F -a` is equivalent to `ls -Fa`).
-Thinking about the commands we've learned in this chapter,
-under what circumstances could you imagine it would be
-*not* possible or advisable to combine options?
-
-### Other wildcards {#py-rse-bash-advanced-ex-other-wildcards}
-
-FIXME: exercise to introduce ? and other wildcards.
 
 ## Key Points {#py-rse-bash-advanced-keypoints}
 
