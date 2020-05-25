@@ -5,7 +5,6 @@ from collections import Counter
 import plotcounts
 import countwords
 
-
 def test_alpha():
     """Test the calculation of the alpha parameter.
     
@@ -22,9 +21,8 @@ def test_alpha():
     max_freq = 600
     word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
     actual_alpha = plotcounts.get_power_law_params(word_counts)
-    expected_aplha = pytest.approx(1.0, abs=0.01)
+    expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
-
 
 def test_word_count():
     """Test the counting of words.
@@ -36,7 +34,7 @@ def test_word_count():
                         'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
                         'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
     expected_result = Counter(risk_poem_counts)
-    with open('risk_anais_nin.txt', 'r') as reader:
+    with open('../data/risk.txt', 'r') as reader:
         actual_result = countwords.count_words(reader)
     assert actual_result == expected_result
     
