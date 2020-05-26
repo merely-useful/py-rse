@@ -116,8 +116,12 @@ A single unit test will typically have:
 -   an [expected result][expected-result]
     that the actual result is compared to.
 
-In order to write a unit test for the `count_words` function,
-an appropriate fixture would be a body of text for which we know the frequency of each word.
+In defining/creating an appropriate test fixture,
+a common approach is to use a subset or smaller version of the data
+that the function will typically process.
+For instance, in order to write a unit test for the `count_words` function,
+an appropriate fixture would be a small body of text
+for which we know the frequency of each word.
 The poem Risk by Anais Nin is a good choice,
 
 ```shell
@@ -135,7 +139,7 @@ it took
 to blossom.
 ```
 
-because it's short and we can count the words by hand in order to create
+because it's so short that we can count the words by hand in order to create
 an expected result variable:
 
 ```python
@@ -149,7 +153,7 @@ expected_result = Counter(risk_poem_counts)
 ```
 
 We can generate the actual result by calling the `word_counts` function,
-and then use an assertion to check that the actual and expect results
+and then use an assertion to check that the actual and expected results
 are the same:
 
 ```python
@@ -215,7 +219,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/z3526123/Documents/volunteer/merely-useful.github.io/zipfs-law/bin
+rootdir: /Users/amira/bin
 collected 1 item                                                               
 
 test_zipfs.py .                                                          [100%]
@@ -234,7 +238,7 @@ and a constant \(c\) of proportionality,\[
 r = cf^{\frac{-1}{\alpha}}
 \]
 and noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
-Setting \(\alpha\) to one and re-arranging the power law gives,\[
+Setting \(\alpha\) to one and re-arranging the power law gives the expression,\[
 c = f/r
 \], which we can use to generate synthetic word counts data 
 (i.e. our test fixture) with a constant of proportionality
@@ -248,8 +252,8 @@ max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1)) 
 ```
 
-The `np.floor` function rounds down to the nearest whole number,
-because you can't have fractional word counts.
+(The `np.floor` function rounds down to the nearest whole number,
+because you can't have fractional word counts.)
 
 Passing this test fixture to the `get_power_law_params` function from our
 `plotcounts.py` script,
@@ -328,7 +332,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/z3526123/Documents/volunteer/merely-useful.github.io/zipfs-law/bin
+rootdir: /Users/amira/bin
 collected 2 items                                                              
 
 test_zipfs.py F.                                                         [100%]
@@ -452,7 +456,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/z3526123/Documents/volunteer/merely-useful.github.io/zipfs-law/bin
+rootdir: /Users/amira/bin
 collected 2 items                                                              
 
 test_zipfs.py ..                                                         [100%]
@@ -460,98 +464,272 @@ test_zipfs.py ..                                                         [100%]
 ============================== 2 passed in 0.69s ===============================
 ```
 
-## Regression testing
+## Integration testing {#py-rse-correct-integration}
+
+We've seen in previous chapters that our Zipf's Law analysis is a two-step process.
+The first involves counting the words in a text
+and the second involves estimating the \(\alpha\) parameter from the word count.
+Our unit tests `test_word_count` and `test_alpha` have checked that those two
+individual components work in isolation, but do they work correctly together?
+Checking that multiple units work correctly together is called *integration testing*.
+
+The structure of integration tests is very similar to that of unit tests.
+There is an expected result, which is compared against the observed value.
+However, the work involved in creating the expected result or setting up the code to run
+can be considerably more complicated and more involved. 
+For example,
+in the case of our Zipf's Law software an appropriate integration test fixture
+might be a text file full of words that have a known alpha value. 
+In order to create this text fixture,
+we'll need a way of generating random words.
+Fortunately, a Python library exits to do just that.
+We can install it (and the `pypandoc` library it depends on) at the command line
+using the Python Package Installer (pip): 
+
+```shell
+$ pip install pypandoc
+$ pip install randomwordgenerator
+```
+
+Borrowing from the word count distribution we created for `test_alpha`,
+we can then create a text file full of random words that correspond to an alpha value
+of approximately 1.0.
+
+```python
+import numpy as np
+from randomwordgenerator import randomwordgenerator
+
+max_freq = 600
+word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+random_words = randomwordgenerator.generate_random_words(n=max_freq)
+fout = open('../data/random_words.txt', 'w')
+for index in range(max_freq):
+    word_sequence = f"{random_words[index]} " * int(word_counts[index])
+    fout.write(word_sequence + '\n')
+fout.close()
+```
+
+The following integration test can then be added to `test_zipfs.py`,
+
+```python
+def test_integration():
+    """Test the full word count to alpha parameter workflow."""    
+
+    with open('../data/random_words.txt', 'r') as reader:
+        word_counts_dict = countwords.count_words(reader)
+    word_counts_array = np.array(list(word_counts_dict.values()))
+    actual_alpha = plotcounts.get_power_law_params(word_counts_array)
+    expected_alpha = pytest.approx(1.0, abs=0.01)
+    assert actual_alpha == expected_alpha
+```
+
+and we can re-run `pytest` to see whether the integration test passes.
+
+```shell
+$ pytest
+```
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira/bin
+collected 3 items                                                                                         
+
+test_zipfs.py ...                                                        [100%]
+
+=============================== 3 passed in 0.48s ==============================
+```
 
 
+## Regression testing {#py-rse-correct-regression}
+
+So far we've tested two simplified texts --
+a short poem and a collection of random words -- but not a "real"  text.
+The problem with testing a large text is that we don't know the expected result 
+(e.g. it's not practical to sit and count the words in Dracula by hand).
+For this kind of situation we can consider *regression testing*.
+Rather than assuming that the test author knows what the expected result should be,
+regression tests look to the past for the expected behavior.
+The expected result is taken as what was previously computed for the same inputs.
+In this way regression tests are great for letting developers know when and how a code base has changed,
+but not great for letting anyone know why the change occurred.
+The change between what a code produces now and what it computed before is called a regression.
+
+In Chapter X we calculated an \(\alpha\) value of 1.1620041050803658 for Dracula.
+We can use this expected result to add a regression test to `test_zipfs.py`:
+
+```python
+def test_regression():
+    """Regression test for Dracula."""    
+
+    with open('../data/dracula.txt', 'r') as reader:
+        word_counts_dict = countwords.count_words(reader)
+    word_counts_array = np.array(list(word_counts_dict.values()))
+    actual_alpha = plotcounts.get_power_law_params(word_counts_array)
+    expected_alpha = pytest.approx(1.162, abs=0.001)
+    assert actual_alpha == expected_alpha
+```
+
+```shell
+$ pytest
+```
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira/bin
+collected 4 items                                                                                
+
+test_zipfs.py ....                                                       [100%]
+
+============================== 4 passed in 0.56s ===============================
+```
+
+## Test coverage {#py-rse-correct-coverage}
+
+In defining tests for counting words and calculating the alpha parameter,
+it's likely that we have now tested (or "covered") all critical lines of our code.
+To be sure,
+we can use a tool to check the coverage of our tests.
+Most Python programmers use the `coverage` library:
+
+```shell
+$ pip install coverage
+```
+
+Using the command-line utility that comes with the install,
+we can then run `pytest` under coverage:
+
+```shell
+$ coverage run -m pytest
+```
+
+```text
+====================================== test session starts =======================================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira/bin
+collected 4 items                                                                                
+
+test_zipfs.py ....                                                                         [100%]
+
+======================================= 4 passed in 0.72s ========================================
+```
+
+This coverage command hasn't displayed any information of its own;
+instead,
+it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
+To display that data,
+we run:
+
+```shell
+$ coverage report -m
+```
+
+```text
+Name            Stmts   Miss  Cover   Missing
+---------------------------------------------
+countwords.py      20      8    60%   19-21, 25-31
+mymodule.py         7      4    43%   24-27
+plotcounts.py      46     27    41%   41-47, 67-69, 74-90, 94-104
+test_zipfs.py      32      0   100%
+---------------------------------------------
+TOTAL             105     39    63%
+```
+
+From this coverage summary,
+we can see that not every single line of `countwords.py` or `plotcounts.py`
+was executed when we ran the tests (only 60% and 41% of the lines we run, respectively).
+This would seem to make sense, because much of the code in those scripts
+is devoted to handling command line arguments or file input/output,
+rather than the word counting and parameter estimation functionality 
+that our unit, integration and regression tests focused on.
+To make sure that's the case,
+we can get a more complete report by running `coverage html` at the command line
+and opening `htmlcov/index.html`.
+Clicking on the name of our `countwords.py` script, for instance,
+produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
+
+```{r python-coverage, echo=FALSE, fig.cap="Coverage report"}
+knitr::include_graphics("figures/rse-correct/python-coverage.png")
+```
+
+This output confirms that all lines relating to word counting were tested,
+but not any of the lines related to the handling of command line arguments or
+file input and output. 
+
+### How much test coverage is enough? {#py-rse-correct-enough}
+
+How much we test our software depends on the purposes it will be used for.
+If we are writing software for a safety-critical application such as a medical device,
+we should aim for 100% code coverage,
+i.e.,
+every single line in the application should be tested.
+In fact,
+we should probably go further and aim for 100% [path coverage][path-coverage]
+and ensure that every possible path through the code has been checked.
+
+But most of us don't write software that people's lives depend on,
+so requiring 100% code coverage is like asking for ten decimal places of accuracy
+when checking the voltage of a household electrical outlet.
+We always need to balance the effort required to create tests
+against the likelihood that those tests will uncover useful information.
+
+It's also important to understand that no amount of testing
+can prove a piece of software is completely correct.
+A function with only two numeric arguments has 2^128^ possible inputs.
+Even if we could write the tests,
+how could we be sure we were checking the result of each one correctly?
+
+Testing data analysis pipelines is often harder than testing mainstream software applications,
+since data analysts often don't know what the right answer is.
+(If we did,
+we would have submitted our report and moved on to the next problem already.)
+The key distinction is the difference between [validation][validation],
+which asks whether the specification is correct,
+and [verification][verification],
+which asks whether we have met that specification.
+The difference between them is the difference between
+building the right thing and building something right,
+and the first is often hard for data scientists to address.
+
+Luckily,
+we can group the test cases for most functions into classes.
+For example,
+it might be possible to test a function that takes numbers as inputs
+as well as needing to use only a few cases:
+zero, a positive number, a negative one, and infinity.
+If we want to go further,
+we could check that it fails the right way when given a string or a list.
+Similarly,
+when testing a function that summarizes a table full of data,
+we probably should check that it handles tables with:
+
+-   no rows
+-   only one row
+-   many identical rows
+-   rows having keys that are supposed to be unique, but aren't
+-   rows that contain nothing but missing values
+
+Some projects develop [checklists][checklist] to remind programmers what they ought to test.
+These checklists can be a bit daunting for newcomers,
+but they are a great way to pass on hard-earned experience.
 
 
+## Other considerations when testing {#py-rse-correct-other}
 
-
-
-
+TODO:
+- When should I write my tests?
+- Plots and graphical results
+- What data should I use? (subsampling, synthetic)
+- Checking that things fail correctly (i.e. with the correct error message)
 
 
 
 
 ## Exercises {#py-rse-correct-exercises}
 
-### Fixing `num_sign()` {#py-rse-correct-ex-numsign}
+TODO
 
-1.  Fix the implementation of `num_sign()` so that all tests will succeed.
-2.  Re-run the tests to confirm that the function is working.
-3.  Extend the function so that it does something sensible when passed a string or an empty list.
-    Write functions to check your changes.
-
-### Explain the purpose of tests {#py-rse-correct-ex-purpose}
-
-1. Based on the contents of the tests below,
-try to write an informative and descriptive test name.
-
-TODO: Convert to Python code.
-
-```python
-def add(x, y):
-    val = x + y
-    return val
-
-def test____()
-    assert add_two(1, 2) == 3
-```
-
-### Create a first, simple unit test for `countwords.py` {#py-rse-correct-ex-create-countwords-test}
-
-1. If not create, create a `tests/` directory in the Zipf's Law project.
-2. Create a `test_countwords.py` file for the `countwords.py` script in the `tests/` directory.
-TODO: This needs to be fixed so it fits the testing framework (i.e. how do you test a script?)
-3. Add a simple test in the file to check that it can count at least one word.
-4. Run `pytest` in the project directory. Does it work? What is the output?
-
-### Include the Python testing command in the project Makefile {#py-rse-correct-ex-pytest-makefile}
-
-1. Open up the project Makefile and create a new recipe for `pytest` to run the unit tests.
-The new recipe should be called `test`.
-2. Run `make test` in the project directory and see how it works.
-If it doesn't work, fix it until it gives the testing output.
-
-### Add more tests for `count_words()` {#py-rse-correct-ex-count-words}
-
-TODO: This currently doesn't fit with how countwords.py is structured.. it is a script, how to test it as a function?
-
-1. In the `tests/test_countwords.py` file, add some additional unit tests for `count_words()` that checks the following:
-    -   Returns zero when given an empty string.
-    -   Returns `NA` when given `NA`.
-    -   Returns 2 when given two words separated by a space.
-    -   Returns 2 when given two words separated by a dash `-`.
-1. Run `make test` to run the new tests. What does the output give you?
-
-### Checking that errors occur for `count_words()` {#py-rse-correct-ex-check-errors}
-
-1. Add new unit tests for the word-counting function
-to check that it raises errors when it should.
-1. Run `make test` to run these new tests.
-
-### Generate a dataset of text to test on {#py-rse-correct-ex-test-dataset}
-
-1. Create a new test file called `test_textdata.py` in the `tests/` directory.
-1. Write code to generate random text and words.
-Use the below code as a template:
-1. Run `make test` to check if this new test works.
-
-TODO: Add a template that they can base off of? Some with more Python experience deal with this.
-
-```python
-def random_words():
-    ...
-```
-
-### Check coverage of project and add to Makefile {#py-rse-correct-ex-coverage}
-
-1. Run coverage using this command `coverage run countwords.py BOOKTEXT` and
-then run `coverage report`.
-What does the report say?
-1. Add the coverage command as a recipe in the Makefile.
-Call the recipe `coverage`.
-1. Run `make coverage` to check that it works.
 
 ## Key Points {#py-rse-correct-keypoints}
 
