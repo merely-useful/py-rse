@@ -76,7 +76,7 @@ def main(args):
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                          figsize=[12, 6], grid=True, xlim=args.xlim)
 
-    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
+    alpha = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
     # Since the ranks are already sorted, we can take the last one instead of
     # computing which row has the highest rank
