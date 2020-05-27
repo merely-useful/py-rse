@@ -332,6 +332,9 @@
 **Exponent**<a id="exponent"></a>
 :   FIXME
 
+**Export a variable**<a id="export-variable"></a>
+:   FIXME
+
 **External error**<a id="external-error"></a>
 :   FIXME
 
