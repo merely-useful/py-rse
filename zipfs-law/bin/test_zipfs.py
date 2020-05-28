@@ -1,10 +1,8 @@
 import pytest
 import numpy as np
 from collections import Counter
-
 import plotcounts
 import countwords
-import pdb
 
 def test_alpha():
     """Test the calculation of the alpha parameter.
@@ -42,7 +40,7 @@ def test_word_count():
 def test_integration():
     """Test the full word count to alpha parameter workflow."""    
 
-    with open('random_words.txt', 'r') as reader:
+    with open('../data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     word_counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)
