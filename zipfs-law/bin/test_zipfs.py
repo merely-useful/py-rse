@@ -33,14 +33,14 @@ def test_word_count():
                         'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
                         'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
     expected_result = Counter(risk_poem_counts)
-    with open('../data/risk.txt', 'r') as reader:
+    with open('data/risk.txt', 'r') as reader:
         actual_result = countwords.count_words(reader)
     assert actual_result == expected_result
 
 def test_integration():
     """Test the full word count to alpha parameter workflow."""    
 
-    with open('../data/random_words.txt', 'r') as reader:
+    with open('data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     word_counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)
@@ -50,7 +50,7 @@ def test_integration():
 def test_regression():
     """Regression test for Dracula."""    
 
-    with open('../data/dracula.txt', 'r') as reader:
+    with open('data/dracula.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     word_counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)

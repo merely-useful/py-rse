@@ -125,7 +125,7 @@ for which we know the frequency of each word.
 The poem Risk by Anais Nin is a good choice,
 
 ```shell
-$ cat ../data/risk.txt
+$ cat data/risk.txt
 ```
 
 ```text
@@ -159,7 +159,7 @@ are the same:
 ```python
 import countwords
 
-with open('../data/risk.txt', 'r') as reader:
+with open('data/risk.txt', 'r') as reader:
     actual_result = countwords.count_words(reader)
 assert actual_result == expected_result
 ```
@@ -219,7 +219,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/amira/bin
+rootdir: /Users/amira
 collected 1 item                                                               
 
 test_zipfs.py .                                                          [100%]
@@ -318,7 +318,7 @@ def test_word_count():
                         'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
                         'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
     expected_result = Counter(risk_poem_counts)
-    with open('../data/risk.txt', 'r') as reader:
+    with open('data/risk.txt', 'r') as reader:
         actual_result = countwords.count_words(reader)
     assert actual_result == expected_result
 ```
@@ -332,7 +332,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/amira/bin
+rootdir: /Users/amira
 collected 2 items                                                              
 
 test_zipfs.py F.                                                         [100%]
@@ -442,7 +442,7 @@ def test_word_count():
                         'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
                         'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
     expected_result = Counter(risk_poem_counts)
-    with open('../data/risk.txt', 'r') as reader:
+    with open('data/risk.txt', 'r') as reader:
         actual_result = countwords.count_words(reader)
     assert actual_result == expected_result
 ```
@@ -456,7 +456,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/amira/bin
+rootdir: /Users/amira
 collected 2 items                                                              
 
 test_zipfs.py ..                                                         [100%]
@@ -502,7 +502,7 @@ from randomwordgenerator import randomwordgenerator
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
 random_words = randomwordgenerator.generate_random_words(n=max_freq)
-fout = open('../data/random_words.txt', 'w')
+fout = open('data/random_words.txt', 'w')
 for index in range(max_freq):
     word_sequence = f"{random_words[index]} " * int(word_counts[index])
     fout.write(word_sequence + '\n')
@@ -515,7 +515,7 @@ The following integration test can then be added to `test_zipfs.py`,
 def test_integration():
     """Test the full word count to alpha parameter workflow."""    
 
-    with open('../data/random_words.txt', 'r') as reader:
+    with open('data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     word_counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)
@@ -532,7 +532,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/amira/bin
+rootdir: /Users/amira
 collected 3 items                                                                                         
 
 test_zipfs.py ...                                                        [100%]
@@ -562,7 +562,7 @@ We can use this expected result to add a regression test to `test_zipfs.py`:
 def test_regression():
     """Regression test for Dracula."""    
 
-    with open('../data/dracula.txt', 'r') as reader:
+    with open('data/dracula.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     word_counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)
@@ -577,7 +577,7 @@ $ pytest
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/amira/bin
+rootdir: /Users/amira
 collected 4 items                                                                                
 
 test_zipfs.py ....                                                       [100%]
@@ -607,7 +607,7 @@ $ coverage run -m pytest
 ```text
 ====================================== test session starts =======================================
 platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/amira/bin
+rootdir: /Users/amira
 collected 4 items                                                                                
 
 test_zipfs.py ....                                                                         [100%]
@@ -715,6 +715,209 @@ These checklists can be a bit daunting for newcomers,
 but they are a great way to pass on hard-earned experience.
 
 
+## Continuous integration {#py-rse-correct-ci}
+
+Now that we've defined our suite of tests,
+we could simply run `pytest` manually every now and again to execute those tests and check our code. 
+This is probably sufficient for relatively small/uncomplicated projects,
+but a manual approach can be problematic.
+If we make a bunch of different changes/commits to our code between runs of `pytest`,
+it might be difficult to identify which change is responsible for a test failure.
+The solution to this problem is [continuous integration][continuous-integration] (CI),
+which involves running checks and tests automatically whenever a change is made.
+This allows code developers to know immediately if new changes have caused problems,
+making it much easier to fix the problem by seeing what was changed.
+These tools can also be set up to run tests with several different configurations of the software
+or on several different operating systems,
+so that if (for example) a programmer makes a change on Windows 
+and it then breaks only for Mac users or vice versa,
+they can find out before releasing the software to others.
+
+This section introduces a CI tool called [Travis CI][travis-ci],
+which integrates well with [GitHub][github].
+If Travis CI has been set up,
+then every time a change is committed to a GitHub repository,
+Travis CI creates a fresh environment,
+makes a fresh clone of the repository
+(which is described in Chapter \@ref(py-rse-git-advanced-fork)),
+and runs whatever commands the project's managers have set up.
+
+### Creating a Travis account
+
+To set up CI for your project, you first must:
+
+1.  Create an account on [Travis CI][travis-ci].
+2.  Link your Travis CI account to your GitHub account.
+3.  Tell Travis CI to watch the repository that contains your project.
+
+Creating an account with an online service may likely be a familiar process,
+but linking your Travis CI account to your GitHub account may be something new.
+Linking Travis to GitHub allows Travis to access all your GitHub repositories
+in order to build and run the project.
+Be careful when giving services access to your repository
+and only trust well-established and -used services like Travis to have access.
+
+Go through the process of creating an account. 
+Then, tell Travis CI which repository you want it to watch.
+On the left,
+besides the "My Repositories" link,
+click the "+" to add a GitHub repository,
+as in Figure \@ref(fig:py-rse-ci-add-repo).
+Add the repository we have been using throughout the course.
+After finding the repository in the list that pops up,
+flick the switch button so that it turns green
+(Figure \@ref(fig:py-rse-ci-list-repos)).
+If the repository doesn't show up,
+re-synchronize the list using the green "Sync account" button on the left sidebar.
+If it still doesn't appear,
+the repository likely belongs to someone else or is private.
+
+```{r py-rse-ci-add-repo, echo=FALSE, fig.cap="ci-add-repo"}
+knitr::include_graphics("figures/rse-ci/add-repo.png")
+```
+
+```{r py-rse-ci-list-repos, echo=FALSE, fig.cap="ci-list-repos"}
+knitr::include_graphics("figures/rse-ci/list-repos.png")
+```
+
+### Configuring a project for Travis
+
+In order for Travis to know what to do with the project repository,
+a file called `.travis.yml` must be present inside the repository.
+So, let's create this file.
+
+Make the `.travis.yml` file in the root directory of the repository.
+(The leading `.` in the name hides the file from casual listings on Mac or Linux,
+but not on Windows.)
+This file controls Travis CI's operation,
+and is written in the [YAML][yaml] format we met earlier (Chapter \@ref(py-rse-configuration)).
+
+Now that we have a `.travis.yml` file, open it and add the following lines:
+
+```yaml
+language: python
+
+python:
+- "3.6"
+
+script:
+- pytest
+```
+
+The `language` key tells Travis CI which programming language to use,
+so that it knows which of its standard [virtual machines][virtual-machine] to run
+as a starting point for the project.
+The `python` key specifies the version/s of Python to use, 
+while the `script` key lists the commands to run. 
+In this case, we want to run `pytest` in order to run our tests.
+We can now go ahead and push the `.travis.yml` file to GitHub.
+
+```shell
+$ git add .travis.yml 
+$ git commit -m "Initial commit of travis configuration file"
+```
+```text
+[master 71084f7] Initial commit of travis file
+ 1 file changed, 4 insertions(+)
+ create mode 100644 .travis.yml
+```
+```shell
+$ git push origin master
+```
+```text
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/amira-khan/zipf.git
+   1f0590b..71084f7  master -> master
+```
+
+In response to this commit,
+Travis CI follows our instructions from the `.travis.yml` file
+and reports a summary on whether the build passed,
+shown in green,
+or whether it produced warnings or errors,
+shown in red.
+In this case, we can see that the build failed (Figure \@ref(fig:py-rse-correct-build-fail)).
+
+```{r py-rse-ci-build-overview, echo=FALSE, fig.cap="Travis Build Overview"}
+knitr::include_graphics("figures/rse-correct/travis-build-fail.png")
+```
+
+Scrolling down to read the job log in detail,
+it says that it "could not locate requirements.txt."
+This is an issue because the Python scripts that are run when `pytest` is executed
+(i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `mymodule.py`)
+import a number of packages that don't come with the
+[Python Standard Library][python-standard-library].
+To address this issue, 
+we need to add an `install` key to `.travis.yml`: 
+
+```yaml
+language: python
+
+python:
+- "3.6"
+
+install:
+- pip install -r requirements.txt
+
+script:
+- pytest
+```
+
+In a new `requirements.txt` file,
+we list the libraries that need to be installed:
+
+```text
+numpy
+pandas
+matplotlib
+scipy
+pytest
+pyyaml
+```
+
+When we commit these changes to GitHub,
+
+```shell
+$ git add .travis.yml
+$ git add requirements.txt 
+$ git commit -m "Adding requirements"
+```
+```text
+[master d96593f] Adding requirements
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+ create mode 100644 requirements.txt
+```
+```shell
+$ git push origin master
+```
+```text
+
+```
+
+Travis CI automatically runs again and this time the build completes successfully
+and our tests pass (Figure \@ref(fig:py-rse-correct-build-fail)).
+
+```{r py-rse-correct-build-pass, echo=FALSE, fig.cap="Travis Build Overview"}
+knitr::include_graphics("figures/rse-correct/travis-build-pass.png")
+```
+
+To summarize what Travis has done, it:
+
+1.  Creates a new Linux virtual machine.
+1.  Installs the desired version of Python.
+1.  Installs the software described in `requirements.txt`.
+1.  Runs the commands below the `script` key.
+1.  Reports the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
+    where <code><em>user/repo</em></code>
+    identifies the repository.
+
+
 ## Other considerations when testing {#py-rse-correct-other}
 
 TODO:
@@ -724,11 +927,12 @@ TODO:
 - Checking that things fail correctly (i.e. with the correct error message)
 
 
-
-
 ## Exercises {#py-rse-correct-exercises}
 
 TODO
+
+Add the Travis CI display status to the README file
+#[![Build Status](https://travis-ci.org/DamienIrving/zipf.svg?branch=master)](https://travis-ci.org/DamienIrving/zipf)
 
 
 ## Key Points {#py-rse-correct-keypoints}
