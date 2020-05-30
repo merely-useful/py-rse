@@ -537,6 +537,9 @@
 **Logging framework**<a id="logging-framework"></a>
 :   FIXME
 
+**Long option**<a id="long-option"></a>
+:   FIXME
+
 **Loop body**<a id="loop-body"></a>
 :   FIXME
 
