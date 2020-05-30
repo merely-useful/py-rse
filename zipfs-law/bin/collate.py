@@ -15,6 +15,7 @@ def main(args):
     """Run the command line program."""
     word_counts = Counter()
     for file_name in args.infiles:
+        assert file_name[-4:] == '.csv', "input files must be word count CSV files"
         with open(file_name, 'r') as reader:
             update_counts(reader, word_counts)
     mymodule.collection_to_csv(word_counts, ntop=args.ntop)
