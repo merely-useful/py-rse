@@ -31,9 +31,9 @@ the CLI <strong>r</strong>eads the command,
 <strong>e</strong>valuates it (i.e., executes it),
 <strong>p</strong>rints the command's output,
 and <strong>l</strong>oops around to wait for another command.
-
 If you have used an interactive console for R or Python,
 you have already used a simple CLI.
+
 This lesson introduces another CLI that lets us interact with our computer's operating system.
 It is called a [command shell][command-shell],
 or just "shell" for short,
@@ -49,28 +49,42 @@ or how they do what they do.
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-Programmers have written many different shells over the last forty years.
-The most popular on Unix systems today,
-and in most packages that provide Unix-like tools for Windows,
-is called Bash
-(an acronym of <strong>B</strong>ourne <strong>A</strong>gain <strong>SH</strong>ell,
-and a weak pun on the name of its predecessor,
-the Bourne shell).
-Like other shells,
+The shell's greatest strength is that
 it lets us combine programs to create pipelines
 that can handle large volumes of data.
 Sequences of commands can be saved in a [script][script],
 just as commands for R or Python can be saved in programs,
 which makes our workflows more reproducible.
 Finally,
-the shell is often the easiest way to interact with remote machines—in fact,
+the shell is often the easiest way to interact with remote machines---in fact,
 the shell is practically essential for working with clusters and the cloud.
+We won't need this much power in our Zipf's Law examples,
+but as we will see,
+being able to combine commands and save our work
+makes life easier even when working on small problems.
 
-> **Acknowledgments**
+> **What's in a Name?**
 >
-> Many of the explanations and exercises below
-> have been adapted from Software Carpentry's lesson
-> [The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+> Programmers have written many different shells over the last forty years,
+> just as they have created many different text editors and plotting packages.
+> The most popular shell today is called Bash
+> (an acronym of <strong>B</strong>ourne <strong>A</strong>gain <strong>SH</strong>ell,
+> and a weak pun on the name of its predecessor,
+> the Bourne shell).
+> Other shells may differ from Bash in minor ways,
+> but the core commands and ideas remain the same.
+> In particular,
+> the most recent versions of MacOS use a shell called the Z Shell or `zsh`;
+> we will point out a few differences as we go along.
+
+Please see Appendix \@ref(py-rse-install) for instructions
+on how to launch the shell on your computer.
+
+### Acknowledgments
+
+Many of the explanations and exercises below
+have been adapted from Software Carpentry's lesson
+[The Unix Shell](http://swcarpentry.github.io/shell-novice/).
 
 ## Exploring Files and Directories {#py-rse-bash-basics-explore}
 
@@ -83,8 +97,10 @@ $
 ```
 
 However,
-different shells may use a different symbol,
-and as we'll see later,
+different shells may use a different symbol:
+in particular,
+the `zsh` shell that is the default on newer version of MacOS uses `%`.
+As we'll see in Chapter \@ref(py-rse-bash-advanced),
 we can customize the prompt to give us more information.
 
 > **Don't Type the Dollar Sign**
@@ -136,7 +152,7 @@ $ pwd
 
 Here,
 the computer's response is `/Users/amira`,
-which tells us that we are in a directory called `amira` that is contained in a top-level directory called `User`.
+which tells us that we are in a directory called `amira` that is contained in a top-level directory called `Users`.
 This directory is Amira's [home directory][home-directory];
 to understand what that means,
 we must first understand how the filesystem is organized.
@@ -175,7 +191,7 @@ Jun's files are stored in `/Users/jun`,
 Sami's in `/Users/sami`,
 and Amira's in `/Users/amira`.
 This is where the name "home directory" comes from:
-when we first log,
+when we first log in,
 the shell puts us in the directory that holds our files.
 
 > **Home Directory Variations**
@@ -247,7 +263,7 @@ $ ls /Users
 ```
 
 ```text
-Amira   Jun     Sami
+amira   jun     sami
 ```
 
 We often call the file and directory names that we give to commands [arguments][command-argument]
@@ -259,7 +275,7 @@ $ ls -F /Users
 ```
 
 ```text
-Amira/  Jun/    Sami/
+amira/  jun/    sami/
 ```
 
 but we must put the options (like `-F`)
@@ -273,7 +289,7 @@ $ ls /Users -F
 
 ```text
 ls: -F: No such file or directory
-Amira   Jun     Sami
+amira   jun     sami
 ```
 
 > **Command Line Differences**
@@ -293,8 +309,9 @@ Amira   Jun     Sami
 
 ## Moving Around {#py-rse-bash-basics-navigate}
 
-Let's run `ls` again to look at what's in our current working directory,
-which is what the command shows if we don't ask it to show us anything else:
+Let's run `ls` again.
+Without any arguments,
+it shows us what's in our current working directory:
 
 ```shell
 $ ls -F
@@ -556,7 +573,7 @@ data/
 ```
 
 To create a new directory,
-we use the command `mkdir` (short for <strong>m</strong>a<strong>k</strong>e <strong>dir</strong>irectory):
+we use the command `mkdir` (short for <strong>m</strong>a<strong>k</strong>e <strong>d</strong>irectory):
 
 ```shell
 $ mkdir analysis
@@ -683,7 +700,7 @@ $ ls
 draft.txt
 ```
 
-> **What's In A Name?**
+> **Dot Something**
 >
 > All of Amira's files are named "something dot something".
 > This is just a convention:
@@ -953,7 +970,7 @@ Instead,
 we can use [wildcards][wildcard] to specify a set of files at once.
 The most commonly-used wildcard is `*` (a single asterisk).
 It matches zero or more characters,
-so `data/*.csv` matches all of the files in the `data` directory:
+so `data/*.txt` matches all of the text files in the `data` directory:
 
 ```text
 $ ls data/*.txt
@@ -1350,6 +1367,14 @@ $ wc -l *.txt | sort -n | head -n 3
    7832 frankenstein.txt
   13028 sense_and_sensibility.txt
 ```
+
+> **Options Can Have Values**
+>
+> When we write `head -n 3`,
+> the value 3 is not input to `head`.
+> Instead, it is associated with the option `-n`.
+> Many options take values like this,
+> such as the names of input files or the background color to use in a plot.
 
 We could always redirect the output to a file
 by adding `> shortest.txt` to the end of the pipeline,
@@ -1797,7 +1822,7 @@ wc -l *.txt | sort -n | head -n 3
 The shell prints the command it is going to re-run to standard error
 before executing it.
 This means that (for example) `!572 > results.txt`
-will the command's output into a file
+will put the command's output in a file
 *without* also writing the command to the file.
 
 Having an accurate record of the things we have done
@@ -2457,19 +2482,19 @@ $ for filename in *d*
 Consider running the following loop in the  `data/` directory:
 
 ```shell
-for books in *.txt
+for book in *.txt
 > do
->     echo $books
->     head -16 $books > headers.txt
+>     echo $book
+>     head -n 16 $book > headers.txt
 > done
 ```
 
 Why would the following loop be preferable?
 
 ```shell
-for books in *.txt
+for book in *.txt
 > do
->     head -16 $datafile >> headers.txt
+>     head -n 16 $book >> headers.txt
 > done
 ```
 

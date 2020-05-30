@@ -1,2 +1,3 @@
--   Explain the reasons for testing software.
--   Write and run unit tests using `pytest` for Python and `testthat` for R.
+-   Explain the different options for testing code
+-   Write and run tests using `pytest`
+-   Automate testing using Travis CI

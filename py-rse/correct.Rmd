@@ -1,18 +1,27 @@
 # Correctness {#py-rse-correct}
 
-TODO: Add Git commits for exercises throughout
-
 ```{r py-rse-correct-setup, include=FALSE}
 source(here::here("_common.R"))
 ```
 
-We all hope the software we write does what we wrote it to do.
-But how can we be sure?
+Now that we've written our software for counting and analyzing the words in classic texts,
+how can we be sure that it’s producing reliable results?
 The short is answer is that we can't be completely certain,
 but that as in science,
 we can test our expectations against reality to help us decide if we are sure enough.
+In this chapter we explore the approaches available for testing code;
+namely assertions, unit tests, integration tests and regression tests.
 
-We'll start with our Zipf's Law project files as they were structured at the end of the previous chapter:
+> **Scientist's Nightmare**
+>
+> If you need any motivation to learn how to test your code,
+> look no further than the story of Geoffrey Chang [@Miller2006].
+> A successful early career researcher in protein crystallography,
+> Chang had to retract five published papers -- three from
+> the prestigious journal Science -- because his code had
+> inadvertently flipped two columns of data.
+
+Our Zipf's Law project files are structured as they were at the end of the previous chapter:
 
 ```text
 ├── CONDUCT.md
@@ -29,6 +38,7 @@ We'll start with our Zipf's Law project files as they were structured at the end
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
+│   ├── risk.txt
 │   └── ...
 └── results
     ├── dracula.csv
@@ -36,126 +46,642 @@ We'll start with our Zipf's Law project files as they were structured at the end
     └── ...
 ```
 
-## How would I manually test a function? {#py-rse-correct-manual}
+## Assertions {#py-rse-assertions}
 
-Testing is about comparing what you "expect" a function outputs with the "actual" output.
-Let's do a simple example to demonstrate by writing out a function that gets the sign of a number.
+The first step toward getting the right answers from our programs
+is to assume that mistakes will happen and to guard against them.
+This is called defensive programming,
+and the most common way to do it is to add assertions to our code
+so that it checks itself as it runs.
+An assertion is simply a statement that something must be true at a certain point in a program.
+When Python sees an assertion, it evaluates the assertion’s condition.
+If it’s true, Python does nothing, but if it’s false,
+Python halts the program immediately and prints a user defined error message.
 
-```{python manual-test}
-def num_sign(x):
-    if x > 0:
-        out = 1
-    else:
-        out = -1
-    return out
+To demonstrate an assertion in action,
+consider this code that halts as soon as the loop encounters a
+weather station rainfall observation that isn’t positive:
+
+```python
+rainfall_observations = [1.5, 2.3, 0.7, -0.2, 4.4]
+total = 0.0
+for ob in rainfall_observations:
+    assert ob >= 0.0, 'Rainfall observations should only contain positive values'
+    total += ob
+print('total rainfall is:', total)
 ```
 
-The simplest way to test the function would be to interactively check it produces the correct values.
-Type out these commands to see that we get what we expect.
+```text
+---------------------------------------------------------------------------
+AssertionError                            Traceback (most recent call last)
+<ipython-input-19-33d87ea29ae4> in <module>()
+      2 total = 0.0
+      3 for ob in rainfall_obs:
+----> 4     assert ob > 0.0, 'Rainfall observations should only contain positive values'
+      5     total += ob
+      6 print('total rainfall is:', total)
 
-```{python manual-test-2}
-num_sign(2) == 1
-num_sign(0) == 0
-num_sign(-4) == -1
+AssertionError: Rainfall observations should only contain positive values
 ```
 
-These simple tests show that the function handles (some) positive and negatives value correctly,
-but gives the wrong value for zero, which should be 0.
+Programs like the Firefox browser are full of assertions:
+10-20% of the code they contain are there to check that the other 80-90% are working correctly.
+Broadly speaking, assertions fall into three categories:
 
-Manually testing functions is a great place to start,
-but quickly becomes unmanageable as the function or tests get longer or more complicated.
-And if we want to easily re-run multiple tests in one command?
-Then we need to start considering automated methods of testing.
-The Python `assert` statement can achieve some of what we want.
+- A *precondition* is something that must be true at the start of a function in order for it to work correctly.
+- A *postcondition* is something that the function guarantees is true when it finishes.
+- An *invariant* is something that is always true at a particular point inside a piece of code.
 
-Let's try it out.
-Type out this new function...
+If the rainfall observation code above was part of a larger meteorological data processing script,
+then that assertion is an example of an invariant -- at that particular point in the code,
+it is always the case that a negative rainfall total makes no sense.
+Data entry errors are possible, so it's important to check the validity of each observation.
 
-```{python stop-not}
-import math
+Our `collate.py` script is a good example of the need for a precondition.
+A user could easily overlook the doc string at the top of the script,
+which states that it combines multiple word count CSV-files into a single cumulative count.
+If they passed a series of text files instead of CSV files,
+they'd get an error message that isn't particularly helpful in explaining the source of the problem.
 
-def test_num_sign():
-    assert num_sign(0.1) == 1
-    assert num_sign(0) == 0
-    assert num_sign(math.inf) == -1
+```shell
+$ python bin/collate.py data/jane_eyre.txt data/dracula.txt 
+```
+```text
+Traceback (most recent call last):
+  File "collate.py", line 29, in <module>
+    main(args)
+  File "collate.py", line 19, in main
+    update_counts(reader, word_counts)
+  File "collate.py", line 10, in update_counts
+    for word, count in csv.reader(reader):
+ValueError: too many values to unpack (expected 2)
 ```
 
-Then execute it:
+A precondition (with informative error message) in the `main` function of `collate.py`
+requiring the input files to end in ".csv" can clear up any potential confusion.
 
-```{python stop-not-eval, error=TRUE}
-test_num_sign()
+```python
+def main(args):
+    """Run the command line program."""
+    word_counts = Counter()
+    for file_name in args.infiles:
+        assert file_name[-4:] == '.csv', "input files must be word count CSV files"
+        with open(file_name, 'r') as reader:
+            update_counts(reader, word_counts)
+    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
 ```
 
-Do Exercise \@ref(py-rse-correct-ex-numsign) on fixing `num_sign()` so the tests pass.
-
-## What does a testing framework have? {#py-rse-correct-features}
-
-The individual tests in `test_num_sign()` are called [unit tests][unit-test]
-because they test small "units" or pieces of our code.
-On it's own, this function is fine, but it misses two things:
-
-1. If one test fails or throws an error, the subsequent tests don't get executed,
-as we saw from running it.
-In this case, we don't know if `num_sign()` handles `-Inf` correctly or not because
-testing stops when `num_sign(0)` gives the wrong answer.
-2. If a test fails, it doesn't tell us *how many tests failed* and *what tests did fail*.
-In this case, the failure only tells us that *something failed* but doesn't say anything else.
-Another requirement for a good set of tests is [isolation][test-isolation].
-For example, there are two functions `first` and `second` that are tested in this way:
-
+```shell
+$ python bin/collate.py data/jane_eyre.txt data/dracula.txt 
 ```
-first_result = first()
-check(first_result)
-second_result = second(first_result)
-check(second_result)
+```text
+Traceback (most recent call last):
+  File "collate.py", line 30, in <module>
+    main(args)
+  File "collate.py", line 18, in main
+    assert file_name[-4:] == '.csv', "input files must be word count CSV files"
+AssertionError: input files must be word count CSV files
 ```
 
-If `first()` produces a wrong answer,
-we won't know if `second()` is working properly
-because the `first()` test fails.
-Using the output of one test as the input of another
-increases the risk of [false positives][false-positive] (tests passing when they should fail)
-and [false negatives][false-negative] (tests failing when they should pass).
+## Unit testing {#py-rse-unit-testing}
 
-Put together, a single unit test should have:
+As the name suggests,
+unit tests relate to small "units" or pieces of our code.
+This typically means functions that we've defined.
+What is considered to be the smallest code unit is subjective --
+the body of a function can be long or short,
+and shorter functions are arguably more unit-like than long ones --
+but a good guideline is that if the code cannot be made any simpler
+logically (you cannot split apart the addition operator) or 
+practically (a function is self-contained and well defined),
+then it is a unit.
+
+In the case of our Zipf's Law software,
+the `count_words` function in the `wordcounts.py` script is a good example of a code unit:
+
+```
+def count_words(reader):
+    """Count the occurrence of each word in a string."""
+    text = reader.read()
+    findwords = re.compile(r"\w+", re.IGNORECASE)
+    word_list = re.findall(findwords, text)
+    word_counts = Counter(word_list)
+    return word_counts
+```
+
+A single unit test will typically have:
 
 -   a [fixture][fixture],
-    which is the thing being tested (e.g., the number 0 or a list of images);
+    which is the thing being tested (e.g., an array of numbers);
 -   an [actual result][actual-result],
     which is what the code produces when given the fixture; and
 -   an [expected result][expected-result]
     that the actual result is compared to.
 
-Each test can have one of three results:
+In defining/creating an appropriate test fixture,
+a common approach is to use a subset or smaller version of the data
+that the function will typically process.
+For instance, in order to write a unit test for the `count_words` function,
+an appropriate fixture would be a small body of text
+for which we know the frequency of each word.
+The poem Risk by Anais Nin is a good choice,
 
--   [success][test-success]: the code passed the test.
--   [failure][test-failure]: the code didn't pass the test.
--   [error][test-error]: something went wrong with the test itself,
-    so we don't know anything for certain about the code being tested.
+```shell
+$ cat data/risk.txt
+```
 
-A [test framework][test-framework] (also called a [test runner][test-runner]) should:
+```text
+And then the day came,
+when the risk
+to remain tight
+in a bud
+was more painful
+than the risk
+it took
+to blossom.
+```
 
--   find and run tests;
--   summarize results;
--   pinpoint the locations of failures so that users know where to start debugging;
--   encourage people to isolate tests; and
--   make it easy to write and update tests (because otherwise people won't do it).
+because it's so short that we can count the words by hand in order to create
+an expected result variable:
 
-The next two sections will introduce the most popular framework for Python.
-We will then explore general issues
-such as how we can tell which parts of our code have and haven't been tested
-and what kinds of tests we should write.
+```python
+from collections import Counter
 
-TODO: Exercise idea is identify the different parts of a unit test (fixture, etc)
+risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
+                    'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
+                    'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
+                    'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
+expected_result = Counter(risk_poem_counts)
+```
 
-## When should I write my tests? {#py-rse-correct-tdd}
+We can generate the actual result by calling the `word_counts` function,
+and then use an assertion to check that the actual and expected results
+are the same:
 
+```python
+import countwords
+
+with open('data/risk.txt', 'r') as reader:
+    actual_result = countwords.count_words(reader)
+assert actual_result == expected_result
+```
+
+There's no output,
+which means the test has passed
+(recall that assertions only do something if the condition evaluates to false).
+
+### Testing frameworks
+
+Writing a single unit test for our Zipf's Law software is a good start,
+but to be sure about the reliability of our code we'll probably want to write more unit tests.
+To coordinate the running of many tests,
+we can use a [test framework][test-framework] (also called a [test runner][test-runner]).
+The most widely used test framework for Python is [`pytest`][pytest],
+for which tests obey three rules:
+
+1.  All tests are put in files whose names begin with `test_`.
+2.  Each test is a function whose name also begins with `test_`.
+3.  These functions use `assert` to check results.
+
+Following these rules,
+we can create a `test_zipfs.py` script that contains the test we just developed:
+
+```python
+from collections import Counter
+import countwords
+
+def test_word_count():
+    """Test the counting of words.
+    
+    The example poem is Risk, by Anais Nin.
+    """
+    risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
+                        'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
+                        'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
+                        'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
+    expected_result = Counter(risk_poem_counts)
+    with open('risk.txt', 'r') as reader:
+        actual_result = countwords.count_words(reader)
+    assert actual_result == expected_result
+```
+
+The `pytest` library comes with a command-line tool that is also called `pytest`.
+When we run it with no options,
+it searches for all files in the working directory and subdirectories named `test_*.py`.
+It runs the tests in these files and then summarizes their results.
+(If you only want to run tests in a particular file,
+use the command `pytest path/to/test_file.py`.)
+
+```shell
+$ pytest
+```
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira
+collected 1 item                                                               
+
+bin/test_zipfs.py .                                                      [100%]
+
+============================== 1 passed in 0.02s ===============================
+```
+
+In order to add to our suite of unit tests,
+we can now simply add more `test_` functions to `test_zipfs.py`.
+For instance,
+besides the counting of words (which we've already tested),
+the other critical part of our code is the calculation of the \(\alpha\) parameter.
+Earlier we defined a power law relating \(\alpha\)
+to the word frequency \(f\), word rank \(r\) 
+and a constant \(c\) of proportionality (Section \@ref(py-rse-git-advanced-zipf-math)).\[
+r = cf^{\frac{-1}{\alpha}}
+\]
+We also noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
+Setting \(\alpha\) to one and re-arranging the power law gives the expression,\[
+c = f/r
+\]
+
+We can use this expression generate synthetic word counts data 
+(i.e. our test fixture) with a constant of proportionality
+set to a hypothetical maximum word frequency of 600
+(and thus \(r\) ranges from 1 to 600):
+
+```python
+import numpy as np
+
+max_freq = 600
+word_counts = np.floor(max_freq / np.arange(1, max_freq + 1)) 
+```
+
+(The `np.floor` function rounds down to the nearest whole number,
+because you can't have fractional word counts.)
+
+Passing this test fixture to the `get_power_law_params` function from our
+`plotcounts.py` script,
+
+```python
+def get_power_law_params(word_counts):
+    """
+    Get the power law parameters.
+    References
+    ----------
+    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
+      beta (Eq. 2) and the maximum likelihood estimation (mle)
+      of beta (Eq. 6).
+    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
+      Large-Scale Analysis of Zipf’s Law in English Texts.
+      PLoS ONE 11(1): e0147073.
+      https://doi.org/10.1371/journal.pone.0147073
+    """
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
+                          args=(word_counts), method='brent')
+    beta = mle.x
+    alpha = 1 / (beta - 1)
+    return alpha
+```
+should return an expected value of 1.0.
+
+To test this, we can add a second test to `test_zipfs.py`,
+
+```python
+import numpy as np
+from collections import Counter
+
+import plotcounts
+import countwords
+
+def test_alpha():
+    """Test the calculation of the alpha parameter.
+    
+    The test word counts satisfy the relationship,
+      r = cf**(-1/alpha), where
+      r is the rank,
+      f the word count, and
+      c is a constant of proportionality.
+
+    To generate test word counts for an expected alpha value of 1.0,
+      a maximum word frequency of 600 is used
+      (i.e. c = 600 and r ranges from 1 to 600)
+    """    
+    max_freq = 600
+    word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+    actual_alpha = plotcounts.get_power_law_params(word_counts)
+    expected_alpha = 1.0
+    assert actual_alpha == expected_alpha
+
+def test_word_count():
+    """Test the counting of words.
+    
+    The example poem is Risk, by Anais Nin.
+    """
+    risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
+                        'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
+                        'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
+                        'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
+    expected_result = Counter(risk_poem_counts)
+    with open('data/risk.txt', 'r') as reader:
+        actual_result = countwords.count_words(reader)
+    assert actual_result == expected_result
+```
+
+and then re-run pytest:
+
+```shell
+$ pytest
+```
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira
+collected 2 items                                                              
+
+bin/test_zipfs.py F.                                                     [100%]
+
+=================================== FAILURES ===================================
+__________________________________ test_alpha __________________________________
+
+    def test_alpha():
+        """Test the calculation of the alpha parameter.
+    
+        The test word counts satisfy the relationship,
+          r = cf**(-1/alpha), where
+          r is the rank,
+          f the word count, and
+          c is a constant of proportionality.
+    
+        To generate test word counts for an expected alpha value of 1.0,
+          a maximum word frequency of 600 is used
+          (i.e. c = 600 and r ranges from 1 to 600)
+        """
+        max_freq = 600
+        word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+        actual_alpha = plotcounts.get_power_law_params(word_counts)
+        expected_alpha = 1.0
+>       assert actual_alpha == expected_alpha
+E       assert 0.9951524579316625 == 1.0
+
+bin/test_zipfs.py:24: AssertionError
+=========================== short test summary info ============================
+FAILED bin/test_zipfs.py::test_alpha - assert 0.9951524579316625 == 1.0
+========================= 1 failed, 1 passed in 0.85s ==========================
+```
+
+The output tells us that one test failed but the other test passed.
+This is a nice feature of test runners like `pytest` -- they continue on and complete all the tests
+rather than stopping at the first assertion failure like a regular Python script would.
+Looking more closely at the output, we can see that although `test_alpha` failed,
+the `actual_alpha` value of 0.9951524579316625 was awfully close to the expected value of 1.0.
+In fact,
+we don't expect the estimation routine used by `get_power_law_params` to be perfect -- it
+is an estimation after all.
+In order to edit `test_alpha` so that "close enough is good enough"
+we can borrow a `pytest` function used for equating floating point values...  
+
+### Testing and floating-point values {#py-rse-correct-numeric}
+
+Testing floating-point values is tricky because of the way computers represent these values.
+Different operating systems, hardware,
+and software have subtle differences in how these values are stored as numbers.
+So, if we are testing a function that uses floating point numbers,
+what do we compare its result to if computers represent the number differently?
+If we try to test against a value with many decimal places (highly precise),
+the test may fail because floating point values are represented as approximations.
+No one has a good generic answer to this problem
+because its root cause is that we're using approximations,
+and each approximation has to be judged in its own context.
+
+So what can you do to test your programs?
+A good approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
+which is best expressed as a relative or absolute error.
+The [absolute error][absolute-error] is the absolute value of
+the difference between the approximation and the actual value.
+The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
+For example,
+if we are off by 1 in approximating 8+1 and 56+1,
+we have the same absolute error,
+but the relative error is larger in the first case than it is in the second.
+
+For our `test_alpha` function,
+we might decide that an absolute error of 0.01 in the estimation of \(\alpha\) is acceptable.
+Using the `pytest` library,
+we can define this tolerance level using `pytest.approx`:
+
+```python
+import pytest
+import numpy as np
+from collections import Counter
+
+import plotcounts
+import countwords
+
+def test_alpha():
+    """Test the calculation of the alpha parameter.
+    
+    The test word counts satisfy the relationship,
+      r = cf**(-1/alpha), where
+      r is the rank,
+      f the word count, and
+      c is a constant of proportionality.
+
+    To generate test word counts for an expected alpha value of 1.0,
+      a maximum word frequency of 600 is used
+      (i.e. c = 600 and r ranges from 1 to 600)
+    """    
+    max_freq = 600
+    word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+    actual_alpha = plotcounts.get_power_law_params(word_counts)
+    expected_alpha = pytest.approx(1.0, abs=0.01)
+    assert actual_alpha == expected_alpha
+
+def test_word_count():
+    """Test the counting of words.
+    
+    The example poem is Risk, by Anais Nin.
+    """
+    risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
+                        'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
+                        'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
+                        'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
+    expected_result = Counter(risk_poem_counts)
+    with open('data/risk.txt', 'r') as reader:
+        actual_result = countwords.count_words(reader)
+    assert actual_result == expected_result
+```
+
+Re-running pytest, all tests now pass:
+
+```shell
+$ pytest
+```
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira
+collected 2 items                                                              
+
+bin/test_zipfs.py ..                                                     [100%]
+
+============================== 2 passed in 0.69s ===============================
+```
+
+> **Testing Visualizations**
+>
+> One thing we haven't tested is the plot of our word count data.
+> Testing visualizations is hard:
+> any change to the dimension of the plot,
+> however small,
+> can change many pixels in a [raster image][raster-image],
+> and cosmetic changes such as moving the legend up a couple of pixels
+> will similarly cause false positives.
+>
+> The simplest solution is therefore to test the data used to produce the image
+> (as we've done here)
+> rather than the image itself.
+> Unless we suspect that the plotting library contains bugs,
+> the correct data should always produce the correct plot.
+
+## Testing error handling {#py-rse-correct-failure}
+
+FIXME: explain how to test that expected errors occurred.
+
+## Integration testing {#py-rse-correct-integration}
+
+We've seen in previous chapters that our Zipf's Law analysis is a two-step process.
+The first involves counting the words in a text
+and the second involves estimating the \(\alpha\) parameter from the word count.
+Our unit tests `test_word_count` and `test_alpha` have checked that these two
+individual components work in isolation, but do they work correctly together?
+Checking that multiple units work correctly together is called *integration testing*.
+
+The structure of integration tests is very similar to that of unit tests.
+There is an expected result, which is compared against the actual result.
+However, the work involved in creating the expected result
+and/or setting up the code to run
+can be considerably more complicated and involved. 
+For example,
+in the case of our Zipf's Law software an appropriate integration test fixture
+might be a text file with a word frequency distribution that has a known alpha value. 
+In order to create this text fixture,
+we'll need a way of generating random words.
+Fortunately, a Python library exits to do just that.
+We can install it (and the `pypandoc` library it depends on) at the command line
+using the Python Package Installer (pip): 
+
+```shell
+$ pip install pypandoc
+$ pip install randomwordgenerator
+```
+
+Borrowing from the word count distribution we created for `test_alpha`,
+we can then create a text file full of random words
+with a frequency distribution that corresponds to an alpha value
+of approximately 1.0.
+
+```python
+import numpy as np
+from randomwordgenerator import randomwordgenerator
+
+max_freq = 600
+word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+random_words = randomwordgenerator.generate_random_words(n=max_freq)
+fout = open('data/random_words.txt', 'w')
+for index in range(max_freq):
+    word_sequence = f"{random_words[index]} " * int(word_counts[index])
+    fout.write(word_sequence + '\n')
+fout.close()
+```
+
+The following integration test can then be added to `test_zipfs.py`,
+
+```python
+def test_integration():
+    """Test the full word count to alpha parameter workflow."""    
+
+    with open('data/random_words.txt', 'r') as reader:
+        word_counts_dict = countwords.count_words(reader)
+    word_counts_array = np.array(list(word_counts_dict.values()))
+    actual_alpha = plotcounts.get_power_law_params(word_counts_array)
+    expected_alpha = pytest.approx(1.0, abs=0.01)
+    assert actual_alpha == expected_alpha
+```
+
+and we can re-run `pytest` to see whether the integration test passes.
+
+```shell
+$ pytest
+```
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira
+collected 3 items                                                                                         
+
+bin/test_zipfs.py ...                                                    [100%]
+
+=============================== 3 passed in 0.48s ==============================
+```
+
+
+## Regression testing {#py-rse-correct-regression}
+
+So far we've tested two simplified texts --
+a short poem and a collection of random words
+with a known frequency distribution -- but not a "real"  text.
+The problem with testing a large text is that we don't know the expected result 
+(e.g. it's not practical to sit and count the words in Dracula by hand).
+For this kind of situation we can consider *regression testing*.
+Rather than assuming that the test author knows what the expected result should be,
+regression tests look to the past for the expected behavior.
+The expected result is taken as what was previously computed for the same inputs.
+In this way regression tests are great for letting developers know when and how a code base has changed,
+but not great for letting anyone know why the change occurred.
+The change between what a code produces now and what it computed before is called a regression.
+
+In Section \@ref(py-rse-git-advanced-zipf-verify)
+we calculated an \(\alpha\) value of 1.1620041050803658 for Dracula.
+We can use this expected result to add a regression test to `test_zipfs.py`:
+
+```python
+def test_regression():
+    """Regression test for Dracula."""    
+
+    with open('data/dracula.txt', 'r') as reader:
+        word_counts_dict = countwords.count_words(reader)
+    word_counts_array = np.array(list(word_counts_dict.values()))
+    actual_alpha = plotcounts.get_power_law_params(word_counts_array)
+    expected_alpha = pytest.approx(1.162, abs=0.001)
+    assert actual_alpha == expected_alpha
+```
+
+```shell
+$ pytest
+```
+
+```text
+============================= test session starts ==============================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira
+collected 4 items                                                                                
+
+bin/test_zipfs.py ....                                                   [100%]
+
+============================== 4 passed in 0.56s ===============================
+```
+
+## When to write tests
+
+We've now met the three major types of test: unit, integration and regression.
+At what point in the code development process should we be writing these tests?
+The answer depends on who you ask.
 Many programmers are passionate advocates of a practice called
 [test-driven development][tdd] (TDD).
 Rather than writing code and then writing tests,
 they write the tests first and then write just enough code to make those tests pass.
 Once the code is working,
-they clean it up (Section \@ref(py-rse-style-refactor)) and then move on to the next task.
+they clean it up (Section \@ref(py-rse-style-refactor)) and then move on to the next task.
 
 TDD's advocates claim that working this way leads to better code in less time because:
 
@@ -207,744 +733,81 @@ but they won't check that assumptions and invariants hold.
 And unlike comments,
 runnable assertions can't fall out of step with what the code is actually doing.
 
-We also need to distinguish between testing during development
-and testing in production.
-During development,
-our main concern is whether our answers are (close enough to) what we expect.
-We do this by analyzing small datasets
-and convincing ourselves that we're getting the right answer in some ad hoc way.
+## Test coverage {#py-rse-correct-coverage}
 
-In production,
-on the other hand,
-our goal is to detect cases where behavior deviates significantly from what we previously decided was right.
-We want this to be automated
-so that our pipeline will inform us that something is wrong,
-even if we're busy working on something else.
-This can happen because real data will never have exactly the same characteristics as the data we used during development.
-We also need these checks because the pipeline's environment can change:
-for example,
-a library we depend on could get upgraded,
-which could lead to getting slightly different answers than we expected.
-
-## How do I create and run unit tests? {#py-rse-correct-create-python}
-
-[`pytest`][pytest] is the most widely used test framework for Python.
-Tests obey three rules:
-
-1.  All tests are put in files whose names begin with `test_`.
-2.  Each test is a function whose name also begins with `test_`.
-3.  These functions use `assert` to check results.
-
-The `pytest` library comes with a command-line tool that is also called `pytest`.
-When we run it with no options:
+In defining tests for counting words and calculating the \(\alpha\) parameter,
+it's likely that we have now tested (or "covered") all critical lines of our code.
+To be sure,
+we can use a tool to check the coverage of our tests.
+Most Python programmers use the `coverage` library:
 
 ```shell
-$ pytest
+$ pip install coverage
 ```
 
-it searches for all files in the working directory and subdirectories named `test_*.py`.
-It runs the tests in these files and then summarizes their results.
-If you only want to run tests in a particular file,
-use the command `pytest path/to/test_file.py`.
-
-Tests can be saved anywhere in the project directory,
-but usually they are placed in a `tests/` subdirectory.
-If the project uses a [build tool][build-tool] like Make (Chapter \@ref(py-rse-automate)),
-adding a target called `test` makes it easy to re-run tests by using `make test`.
-So a project structure would look something like:
-
-```
-project
-├── ...
-├── tests
-│   └── test_add.py
-└── Makefile
-```
-
-Tests all have a similar structure.
-Let's demonstrate it by creating a file called `test_add.py` inside `tests/`
-and inserting the following code:
-
-```python
-def add(x, y):
-    val = x + y
-    return val
-
-def test_add_two_small_integers_2():
-    assert add_two(1, 2) == 3
-
-def test_add_integer_and_float():
-    left = 1
-    right = 2.0
-    result = add_two(left, right)
-    assert result == 3
-    assert type(result) == int
-```
-
-Generally we wouldn't include the function being tested in the tests file.
-Normally you'd import these functions into the test file.
-For the demonstration, we've put the function `add()` in the test file.
-The best practice for writing tests is to use descriptive names for test functions,
-even if the function name will be long.
-That's because `pytest` will print the names of the functions that fail testing.
-There are two styles of testing presented here:
-
-- one where the fixture is the value passed on to the function
-and the result is checked immediately,
-- and, one where the fixture is constructed step-by-step
-(i.e. the variables `left` and `right`)
-and the function's result is set as a variable so multiple checks can be used.
-
-Run these tests by using:
+Using the command-line utility that comes with the install,
+we can then run `pytest` under coverage:
 
 ```shell
-$ pytest test_add.py
-```
-
-The output is:
-
-```text
-============================= test session starts ==============================
-platform darwin -- Python 3.7.3, pytest-5.0.1, py-1.8.0, pluggy-0.12.0
-rootdir: /Users/merely/tests
-plugins: openfiles-0.3.2, arraydiff-0.3, doctestplus-0.3.0, remotedata-0.3.1
-collected 2 items
-
-test_add.py FF                                                          [100%]
-
-=================================== FAILURES ===================================
-________________________ test_add_two_small_integers_2 _________________________
-
-    def test_add_two_small_integers_2():
->       assert add_two(1, 2) == 3
-E       NameError: name 'add_two' is not defined
-
-test_add.py:6: NameError
-__________________________ test_add_integer_and_float __________________________
-
-    def test_add_integer_and_float():
-        left = 1
-        right = 2.0
->       result = add_two(left, right)
-E       NameError: name 'add_two' is not defined
-
-test_add.py:11: NameError
-=========================== 2 failed in 0.10 seconds ===========================
-```
-
-The two `F`'s in the top line after `test_add.py` tell us there are two failures.
-The `E` in the `FAILURES` section tells us why that test failed,
-and the output immediately above this line tells us where the code failed.
-In this example, we used the wrong function name.
-There is no function called `add_two()`,
-since the function we created is called `add()`.
-Fix the name and re-run the tests. We'll get:
-
-```text
-============================= test session starts ==============================
-platform darwin -- Python 3.7.3, pytest-5.0.1, py-1.8.0, pluggy-0.12.0
-rootdir: /Users/merely/tests
-plugins: openfiles-0.3.2, arraydiff-0.3, doctestplus-0.3.0, remotedata-0.3.1
-collected 2 items
-
-test_add.py .F                                                           [100%]
-
-=================================== FAILURES ===================================
-__________________________ test_add_integer_and_float __________________________
-
-    def test_add_integer_and_float():
-        left = 1
-        right = 2.0
-        result = add_two(left, right)
-        assert result == 3
->       assert type(result) == int
-E       AssertionError: assert <class 'float'> == int
-E        +  where <class 'float'> = type(3.0)
-
-test_add.py:13: AssertionError
-====================== 1 failed, 1 passed in 0.05 seconds ======================
-```
-
-This time the first line of output tells us that one test passed (the `.`)
-and another failed (the `F`).
-`pytest` then shows where the problem occurred in the failing test:
-we wrote that `result` should be an integer `int`,
-but it is actually `float`.
-
-Complete Exercises \@ref(py-rse-correct-ex-purpose),
-\@ref(py-rse-correct-ex-create-countwords-test)
-and \@ref(py-rse-correct-ex-pytest-makefile).
-
-## How should fixtures be set up? {#py-rse-correct-fixtures}
-
-Test files all have a similar structure:
-
-1.  Load the software to be tested
-    (since it normally won't be in the same file as the tests).
-2.  Write one short function to test each feature of the software.
-
-Each test function also has a stereotypical structure:
-
-1.  Create the fixture.
-2.  Run the test.
-3.  Check the result.
-
-Creating a fixture often requires many lines of code,
-so we often write helper functions to do this.
-Using helper functions to create fixtures like this
-reduces the [cognitive load][cognitive-load] on whoever has to maintain the tests,
-since they only have to form a [mental model][mental-model] of a few cases
-rather than a new one for each test.
-Below is an example structure of how a Python helper function may look like:
-
-TODO: Include example Python code of a helper function for fixtures.
-
-```python
-import ... # Load software/functions to test
-
-def test_NAME():
-    value = ... # Fixture
-    assert function_to_test(value, 2) == expected # Test assertion
-```
-
-Note that we do *not* create the fixture once as a global variable
-and then re-use it in many tests.
-Tests should be isolated,
-and having them share data increases the chances that
-one of our tests will modify the data in ways that interfere with other tests.
-
-## How should I check the results of tests? {#py-rse-correct-check}
-
-Using the `assert` statement to test functions is useful as
-it [raises][raise] an [exception][exception] when a condition is not true.
-This normally causes Python to halt the program,
-but `pytest` catches these exceptions,
-adds them to its summary report,
-and then runs the next test function.
-Because of this,
-when all of the test functions are run,
-they only run until the first failed `assert` (Figure \@ref(fig:py-rse-correct-failed-test)).
-
-```{r py-rse-correct-failed-test, echo=FALSE, fig.cap="Test Failure"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
-This is one reason to re-use fixtures and keep test functions short.
-Look at the code below.
-In this example,
-we can't be sure that the second test runs in `combined_tests()`:
-
-```python
-def combined_tests():
-    fixture = make_fixture()
-    result = function(fixture)
-    assert len(result) > 2
-    assert result[0] != 0  # might not run
-```
-
-but we can be sure that both checks run in `split_test_len()` and `split_test_zero()`.
-
-```python
-def split_test_len():
-    fixture = make_fixture()
-    result = function(fixture)
-    assert len(result) > 2
-
-def split_test_zero():
-    fixture = make_fixture()
-    result = function(fixture)
-    assert result[0] != 0
-```
-
-But in practice,
-most programmers would write `combined_tests()` in the first case
-because it is simpler and faster to write and read.
-The purpose of testing is to draw attention to things that don't work as expected.
-If the second check in `combined_tests()` doesn't run because the first one failed,
-we may not have all the information that we could,
-but we know one thing:
-our code is broken.
-
-## Why and how should I test that software fails correctly? {#py-rse-correct-failure}
-
-Testing to check for correctness is great when functions fail "loudly",
-but somtimes, there are [silent failures][silent-failure]:
-something that goes wrong but doesn't crash,
-print a warning,
-or otherwise signal that human attention is required.
-Testing that our code fails when it should
-is therefore just as important as testing that it runs correctly.
-The need to test error handling is not just folklore:
-in their study of failures in data-intensive applications,
-@Yuan2014 found that,
-"the majority of catastrophic failures could easily have been prevented
-by performing simple testing on error handling code—the last line of defense—even without
-an understanding of the software design."
-
-We test for an error by using a `with` statement and the `pytest.raises()` function.
-For example,
-for a function called `count_words()` is supposed to raise a `ValueError` exception when given an empty string.
-We test this behavior like below:
-
-```python
-import pytest
-
-def test_text_must_not_be_empty():
-    with pytest.raises(ValueError):
-        count_words('')
-```
-
-Add some more unit tests for `count_words()` by completing Exercises \@ref(py-rse-correct-ex-count-words)
-and \@ref(py-rse-correct-ex-check-errors).
-
-## How do I write tests that have floating-point values? {#py-rse-correct-numeric}
-
-Testing floating-point values is tricky because of the way computers represent these values.
-Different operating systems, hardware, and software have subtle differences in how these values are stored as numbers.
-So, if we are testing a function that uses floating point numbers,
-what do we compare its result to if computers represent the number differently?
-If we try to test against a value with many decimal places (highly precise),
-the test may fail because floating point values are represented as approximations.
-No one has a good generic answer to this problem
-because its root cause is that we're using approximations,
-and each approximation has to be judged in its own context.
-
-So what can you do to test your programs?
-A generally good approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
-which is best expressed as a relative error.
-The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
-The [absolute error][absolute-error] is the absolute value of
-the difference between the approximation and the actual value.
-So for example,
-if we are off by 1 in approximating 8+1 and 56+1,
-we have the same absolute error,
-but the relative error is larger in the first case than it is in the second.
-
-Relative error is almost always more important than absolute error when we are testing software.
-It makes little sense to say that we're off by a hundredth
-when the value is a billionth.
-[Accuracy][accuracy] is how close our answer is to being right,
-and [precision][precision] is how close repeated measurements are to each other.
-We can be precise without being accurate (systematic bias),
-or accurate without being precise (near the right answer but without many significant digits).
-Accuracy is generally more important than precision for human decision making:
-a relative error of 10^-2^ (two decimal places) is good enough for most data science
-because the decision a human being would make won't change if the number changes by 1%.
-
-In Python,
-we can use `pytest.approx`,
-which works on lists, sets, arrays, and other collections,
-and can be given either relative or absolute error bounds.
-To show how it works,
-here's an example with an unrealistically tight absolute bound:
-
-```{python}
-from pytest import approx
-
-for bound in (1e-15, 1e-16):
-    vals = []
-    for i in range(1, 10):
-        number = 9.0 * 10.0 ** -i
-        vals.append(number)
-        total = sum(vals)
-        expected = 1.0 - (10.0 ** -i)
-        if total != approx(expected, abs=bound):
-            print('{:22.21f} {:2d} {:22.21f} {:22.21f}'.format(bound, i, total, expected))
-```
-
-This tells us that two tests pass with an absolute error of 10^-15^
-but fail when the bound is 10^-16^,
-both of which are unreasonably tight.
-Again,
-it helps to think of physical experiments:
-an absolute error of 10^-15^ is one part in a trillion,
-which only a handful of high-precision experiments have ever achieved.
-
-## How can I test plots and other graphical results? {#py-rse-correct-plots}
-
-TODO: Update this section when I know more about how the plot scripts work.
-
-Testing visualizations is hard:
-any change to the dimension of the plot,
-however small,
-can change many pixels in a [raster image][raster-image],
-and cosmetic changes such as moving the legend up a couple of pixels
-will similarly cause false positives.
-
-The simplest solution is therefore to test the data used to produce the image
-rather than the image itself.
-Unless we suspect that the plotting library contains bugs,
-the correct data should always produce the correct plot.
-
-If we *do* need to test the generated image,
-the only practical approach is to compare it to a saved image that we have visually verified.
-For example,
-[pytest-mpl][pytest-mpl] does this by calculating the root mean square (RMS) difference between images,
-which must be below a threshold for the comparison to pass.
-It also allows us to turn off comparison of text,
-because font differences can throw up spurious failures.
-As with choosing tolerances for floating-point tests,
-our rule for picking thresholds should be,
-"If images are close enough that a human being would make the same decision about meaning,
-the test should pass"
-
-Another approach is to save the plot in a [vector format][vector-image] like [SVG][svg]
-that stores the coordinates of lines and other elements as text.
-We can then check that the right elements are there with the right properties.
-However,
-this is usually unrewarding:
-again,
-small changes to the library or to plotting parameters can make all of the tests fail
-by moving elements by a pixel or two.
-Vector-based tests therefore still need to have thresholds on floating-point values.
-
-## What data should I use to test my analyses? {#py-rse-correct-data}
-
-There aren't any useful general rules for testing the calculations that our pipelines do,
-since those calculations vary from one pipeline to the next,
-but there *are* some rules about where to get data to test with.
-The first method is random [subsampling][subsampling]:
-choose random subsets of your data,
-analyze it,
-and see how close the output is to what you get with the full dataset.
-If the output doesn't converge as the sample size grows,
-something is probably unstable in either the algorithm or its implementation.
-It's important to randomly subset the data to reduce our risk of potential biases
-inherent in the ordering of the data.
-
-The other approach is to test with [synthetic data][synthetic-data].
-It's possible to generate uniform data (i.e., data having the same values for all observations),
-strongly bimodal data (which is handy for testing clustering algorithms),
-or a pseudorandom sample with a known distribution with only a few lines of code.
-If we do this,
-we should give our pipeline data that *doesn't* fit your expected distribution
-and make sure that our tests let us know about this unexpected distribution.
-Doing this is the data science equivalent of testing the fire alarm every once in a while.
-
-Let's write a short program to generate data that conforms to Zips' Law and then use it to test our analysis.
-Since words either occur or don't,
-the data will be integers and the distributions will be fractional.
-We'll set an arbitrary threshold of 5% relative error to test for correctness.
-
-```python
-from pytest import approx
-
-RELATIVE_ERROR = 0.05
-
-def is_zipf(hist):
-    scaled = [h/hist[0] for h in hist]
-    print('scaled', scaled)
-    perfect = [1/(1 + i) for i in range(len(hist))]
-    print('perfect', perfect)
-    return scaled == approx(perfect, rel=RELATIVE_ERROR)
-```
-
-Let's write up some tests to check if the function works on synthetic data:
-
-```python
-def test_fit_correct():
-    actual = [round(100 / (1 + i)) for i in range(10)]
-    print('actual', actual)
-    assert is_zipf(actual)
-
-def test_fit_first_too_small():
-    actual = [round(100 / (1 + i)) for i in range(10)]
-    actual[0] /= 2
-    assert not is_zipf(actual)
-
-def test_fit_last_too_large():
-    actual = [round(100 / (1 + i)) for i in range(10)]
-    actual[-1] = actual[1]
-    assert not is_zipf(actual)
-```
-
-Now, try running the tests. Do they pass or fail?
-Complete Exercise \@ref(py-rse-correct-ex-test-dataset)
-
-## How can I test a data analysis pipeline in production? {#py-rse-correct-production}
-
-An [operational test][operational-test] is one that is kept in place during production
-to tell users if everything is still working as it should.
-Some common operational tests include:
-
--   Does this pipeline stage produce the same number of output records as input records?
--   Or fewer if the stage is aggregating?
--   If two or more tables are being [joined][join],
-    is the number of output records equal to the product of the number of input records?
--   Is the standard deviation smaller than the range of the data?
--   Are there any NaNs or NULLs where there aren't supposed to be?
-
-A common pattern for such tests is to have every tool append information to a [log file][log-file]
-and then have another tool check that log file after the run is over.
-Logging while calculating and checking afterward makes it easy to compare values between pipeline stages,
-and ensures that there's a record of why a problem was reported.
-
-To illustrate these ideas,
-let's write a script that reads a document and prints one line per word:
-
-```python
-import sys
-
-num_lines = num_words = 0
-for line in sys.stdin:
-    num_lines += 1
-    words = [strip_punctuation(w) for w in line.strip().split()]
-    num_words += len(words)
-    for w in words:
-        print(w)
-
-with open('logfile.csv', 'a') as logger:
-    logger.write('text_to_words.py,num_lines,{}\n'.format(num_lines))
-    logger.write('text_to_words.py,num_words,{}\n'.format(num_words))
-```
-
-Then, let's write another script script that counts how often words appear in its input:
-
-```python
-import sys
-
-num_words = 0
-count = {}
-for word in sys.stdin:
-    num_words += 1
-    count[word] = count.get(word, 0) + 1
-
-for word in count:
-    print('{} {}', word, count[word])
-
-with open('logfile.csv', 'a') as logger:
-    logger.write('word_count.py,num_words,{}\n'.format(num_words))
-    logger.write('word_count.py,num_distinct,{}\n'.format(len(count)))
-```
-
-Both of these scripts write records to `logfile.csv`.
-Open up the file and look at the contents.
-You should see something like this:
-
-```text
-text_to_words.py,num_lines,431
-text_to_words.py,num_words,2554
-word_count.py,num_words,2554
-word_count.py,num_distinct,1167
-```
-
-Now, let's write a small program to check that everything went as planned:
-
-```python
-import sys
-import csv
-
-data = {}
-for row in csv.reader(sys.stdin):
-    data[(row[0], row[1])] = int(row[2])
-
-assert data[('text_to_words.py', 'num_lines')] <= data['word_count.py', 'num_words')]
-assert data[('text_to_words.py', 'num_words')] == data['word_count.py', 'num_words')]
-assert data[('word_count.py', 'num_words')] >= data['word_count.py', 'num_distinct')]
-```
-
-Tests like these are simple to write
-and catch a surprising number of errors,
-particularly when the person using the pipeline isn't its original author.
-
-## How can I infer and check properties of my data? {#py-rse-correct-infer}
-
-Writing tests for the properties of data can be tedious,
-but some of the work can be automated.
-In particular,
-the Python [TDDA library][tdda-site] for can infer test rules from data,
-such as "`age` should be less than 100",
-"`Date` should be sorted in ascending order",
-or "`StartDate` should be less than or equal to `EndDate`".
-The library comes with a command-line tool called `tdda`,
-so that the command:
-
-```shell
-$ tdda discover training-data.csv properties.tdda
-```
-
-infers rules from data,
-while the command:
-
-```shell
-$ tdda verify actual-data.csv properties.tdda
-```
-
-verifies data against those rules.
-The inferred rules are stored as [JSON][json],
-which is (sort of) readable with a bit of practice.
-Reading the generated rules is a good way to get to know your data,
-and modifying values
-(e.g., changing the maximum allowed value for `Grade` from the observed 94.5 to the actual 100.0)
-is an easy way to make constraints explicit.
-For example,
-if we run:
-
-```shell
-$ tdda discover elements92.csv elements.tdda
-```
-
-(which contains information about the first 92 elements)
-the output includes:
-
-```json
-"fields": {
-    "Name": {
-        "type": "string",
-        "min_length": 3,
-        "max_length": 12,
-        "max_nulls": 0,
-        "no_duplicates": true
-    },
-    "Symbol": {
-        "type": "string",
-        "min_length": 1,
-        "max_length": 2,
-        "max_nulls": 0,
-        "no_duplicates": true
-    },
-    "ChemicalSeries": {
-        "type": "string",
-        "min_length": 7,
-        "max_length": 20,
-        "max_nulls": 0,
-        "allowed_values": [
-            "Actinoid",
-            "Alkali metal",
-            "Alkaline earth metal",
-            "Halogen",
-            "Lanthanoid",
-            "Metalloid",
-            "Noble gas",
-            "Nonmetal",
-            "Poor metal",
-            "Transition metal"
-        ]
-    },
-    "AtomicWeight": {
-        "type": "real",
-        "min": 1.007947,
-        "max": 238.028913,
-        "sign": "positive",
-        "max_nulls": 0
-    },
-    ...more...
-}
-```
-
-We can apply these inferred rules to all elements up to number 118
-using the `-7` option to get pure ASCII output
-and the `-f` option to show only fields with failures:
-
-```shell
-$ tdda verify -f elements118.csv elements.tdda
+$ coverage run -m pytest
 ```
 
 ```text
-FIELDS:
+====================================== test session starts =======================================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira
+collected 4 items                                                                                
 
-Z: 1 failure  5 passes  type ✓  min ✓  max ✗  sign ✓  max_nulls ✓  no_duplicates ✓
+bin/test_zipfs.py ....                                                                     [100%]
 
-Name: 1 failure  4 passes  type ✓  min_length ✓  max_length ✗  max_nulls ✓  no_duplicates ✓
-
-Symbol: 1 failure  4 passes  type ✓  min_length ✓  max_length ✗  max_nulls ✓  no_duplicates ✓
-
-AtomicWeight: 2 failures  3 passes  type ✓  min ✓  max ✗  sign ✓  max_nulls ✗
-
-...other reports...
-
-SUMMARY:
-
-Constraints passing: 57
-Constraints failing: 15
+======================================= 4 passed in 0.72s ========================================
 ```
 
-Another way to use TDDA is to generate constraints for two datasets and then look at differences
-in order to see how similar the datasets are to each other.
-This is especially useful if the constraint file is put under version control.
-
-## How can I tell what code has been tested or not? {#py-rse-correct-coverage}
-
-As we add to or change our code,
-we may lose track of what has and hasn't been tested.
-Even in short programs,
-loops and conditionals can make it difficult to figure out
-what does or doesn't execute.
-Take a few moments to read this function in Python:
-
-```python
-def first(left, right):
-    if left < right:
-        left, right = right, left
-    while left > right:
-        value = second(left, right)
-        left, right = right, int(right/2)
-    return value
-
-def second(check, balance):
-    if check > 0:
-        return balance
-    else:
-        return 0
-
-print(first(3, 5))
-```
-
-Can you easily tell what and how many lines gets executed?
-While this is a simple example,
-even manually checking the code is difficult.
-The good news is that there is a tool to do this automatically,
-and it's called [code coverage][code-coverage].
-Essentially,
-a code coverage tool records whether a line of code gets evaluated or not
-(Figure \@ref(fig:py-rse-correct-how-coverage-works)).
-When the code coverage program finishes,
-the tool tells us which lines were evaluated
-and reports some summary statistics like the number or percentage of lines that weren't used.
-
-```{r py-rse-correct-how-coverage-works, echo=FALSE, fig.cap="How Coverage Works"}
-knitr::include_graphics("figures/FIXME.png")
-```
-
-Most Python programmers use the `coverage` module as a coverage checking tool.
-When we install it we get a command-line utility that is also called `coverage`.
-If the example program above is in a file called `demo.py`,
-we can check coverage by running:
-
-```shell
-$ coverage run demo.py
-```
-
-This command doesn't display anything of its own;
+This coverage command hasn't displayed any information of its own;
 instead,
 it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
 To display that data,
 we run:
 
 ```shell
-$ coverage report
+$ coverage report -m
 ```
 
 ```text
-Name      Stmts   Miss  Cover
------------------------------
-demo.py      12      1    92%
+Name            Stmts   Miss  Cover   Missing
+---------------------------------------------
+countwords.py      20      8    60%   19-21, 25-31
+mymodule.py         7      4    43%   24-27
+plotcounts.py      46     27    41%   41-47, 67-69, 74-90, 94-104
+test_zipfs.py      32      0   100%
+---------------------------------------------
+TOTAL             105     39    63%
 ```
 
-To get a more complete report,
-run `coverage html`
-and open `htmlcov/index.html`.
-Clicking on the name of our file produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
+From this coverage summary,
+we can see that not every single line of `countwords.py` or `plotcounts.py`
+was executed when we ran the tests (only 60% and 41% of the lines were run, respectively).
+This would seem to make sense, because much of the code in those scripts
+is devoted to handling command line arguments or file input/output,
+rather than the word counting and parameter estimation functionality 
+that our unit, integration and regression tests focus on.
+To make sure that's the case,
+we can get a more complete report by running `coverage html` at the command line
+and opening `htmlcov/index.html`.
+Clicking on the name of our `countwords.py` script, for instance,
+produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
 
-```{r python-coverage, echo=FALSE, fig.cap="Python Coverage"}
+```{r python-coverage, echo=FALSE, fig.cap="Coverage report"}
 knitr::include_graphics("figures/rse-correct/python-coverage.png")
 ```
 
-Complete Exercise \@ref(py-rse-correct-ex-coverage).
+This output confirms that all lines relating to word counting were tested,
+but not any of the lines related to the handling of command line arguments or
+file input and output. 
 
 ### How much test coverage is enough? {#py-rse-correct-enough}
 
-How testing we do of our software depends on the purposes it will be used for.
+How much we test our software depends on the purposes it will be used for.
 If we are writing software for a safety-critical application such as a medical device,
 we should aim for 100% code coverage,
 i.e.,
@@ -959,7 +822,8 @@ when checking the voltage of a household electrical outlet.
 We always need to balance the effort required to create tests
 against the likelihood that those tests will uncover useful information.
 
-It's important to understand that no amount of testing can prove a piece of software is completely correct.
+It's also important to understand that no amount of testing
+can prove a piece of software is completely correct.
 A function with only two numeric arguments has 2^128^ possible inputs.
 Even if we could write the tests,
 how could we be sure we were checking the result of each one correctly?
@@ -972,7 +836,8 @@ The key distinction is the difference between [validation][validation],
 which asks whether the specification is correct,
 and [verification][verification],
 which asks whether we have met that specification.
-The difference between them is the difference between building the right thing and building something right,
+The difference between them is the difference between
+building the right thing and building something right,
 and the first is often hard for data scientists to address.
 
 Luckily,
@@ -997,89 +862,269 @@ Some projects develop [checklists][checklist] to remind programmers what they ou
 These checklists can be a bit daunting for newcomers,
 but they are a great way to pass on hard-earned experience.
 
-## Summary {#py-rse-correct-summary}
 
-FIXME: summarize correctness chapter.
+## Continuous integration {#py-rse-correct-ci}
+
+Now that we've defined our suite of tests,
+we could simply run `pytest` manually every now and again to execute those tests and check our code. 
+This is probably sufficient for relatively small/uncomplicated projects,
+but a manual approach can be problematic.
+If we make a bunch of different changes/commits to our code between runs of `pytest`,
+it might be difficult to identify which change is responsible for a test failure.
+The solution to this problem is [continuous integration][continuous-integration] (CI),
+which involves running checks and tests automatically whenever a change is made.
+This allows code developers to know immediately if new changes have caused problems,
+making it much easier to fix the problem by seeing what was changed.
+These tools can also be set up to run tests with several different configurations of the software
+or on several different operating systems,
+so that if (for example) a programmer makes a change on Windows 
+and it then breaks only for Mac users or vice versa,
+they can find out before releasing the software to others.
+
+This section introduces a CI tool called [Travis CI][travis-ci],
+which integrates well with [GitHub][github].
+If Travis CI has been set up,
+then every time a change is committed to a GitHub repository,
+Travis CI creates a fresh environment,
+makes a fresh clone of the repository
+(which is described in Section \@ref(py-rse-git-advanced-fork)),
+and runs whatever commands the project's managers have set up.
+
+### Creating a Travis account
+
+To set up CI for your project, you first must:
+
+1.  Create an account on [Travis CI][travis-ci].
+2.  Link your Travis CI account to your GitHub account.
+3.  Tell Travis CI to watch the repository that contains your project.
+
+Creating an account with an online service may likely be a familiar process,
+but linking your Travis CI account to your GitHub account may be something new.
+Linking Travis to GitHub allows Travis to access all your GitHub repositories
+in order to build and run the project.
+Be careful when giving services access to your repository
+and only trust well-established and -used services like Travis to have access.
+
+Go through the process of creating an account. 
+Next, tell Travis CI which repository you want it to watch
+by clicking the "+" next to the "My Repositories" link
+on the left-hand side of your Travis CI homepage (\@ref(fig:py-rse-correct-add-repo)).
+
+```{r py-rse-correct-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI"}
+knitr::include_graphics("figures/rse-correct/travis-add-repo.png")
+```
+
+Add the GitHub repository we have been using throughout the course
+(Section \@ref(py-rse-git-cmdline-remotes))
+by locating it in the repository list and
+flicking the switch button so that it turns green
+(Figure \@ref(fig:py-rse-correct-list-repos)).
+If the repository doesn't show up,
+re-synchronize the list using the green "Sync account" button on the left sidebar.
+If it still doesn't appear,
+the repository likely belongs to someone else or is private.
+
+```{r py-rse-correct-list-repos, echo=FALSE, fig.cap="Find your Zipf's Law repository and switch it on"}
+knitr::include_graphics("figures/rse-correct/travis-list-repos.png")
+```
+
+### Configuring a project for Travis
+
+In order for Travis to know what to do with the project repository,
+a file called `.travis.yml` must be present inside the repository.
+So, let's create this file.
+
+Make the `.travis.yml` file in the root directory of the repository.
+(The leading `.` in the name hides the file from casual listings on Mac or Linux,
+but not on Windows.)
+This file controls Travis CI's operation,
+and is written in the [YAML][yaml] format we met earlier (Chapter \@ref(py-rse-configuration)).
+
+Now that we have a `.travis.yml` file, open it and add the following lines:
+
+```yaml
+language: python
+
+python:
+- "3.6"
+
+script:
+- pytest
+```
+
+The `language` key tells Travis CI which programming language to use,
+so that it knows which of its standard [virtual machines][virtual-machine] to run
+as a starting point for the project.
+The `python` key specifies the version/s of Python to use, 
+while the `script` key lists the commands to run. 
+In this case, we want to run `pytest` in order to run our tests.
+We can now go ahead and push the `.travis.yml` file to GitHub.
+
+```shell
+$ git add .travis.yml 
+$ git commit -m "Initial commit of travis configuration file"
+```
+```text
+[master 71084f7] Initial commit of travis file
+ 1 file changed, 4 insertions(+)
+ create mode 100644 .travis.yml
+```
+```shell
+$ git push origin master
+```
+```text
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/amira-khan/zipf.git
+   1f0590b..71084f7  master -> master
+```
+
+In response to this commit,
+Travis CI follows our instructions from the `.travis.yml` file
+and reports a summary on whether the build passed,
+shown in green,
+or whether it produced warnings or errors,
+shown in red.
+In this case, we can see that the build failed (Figure \@ref(fig:py-rse-correct-build-fail)).
+
+```{r py-rse-correct-build-fail, echo=FALSE, fig.cap="Travis Build Overview"}
+knitr::include_graphics("figures/rse-correct/travis-build-fail.png")
+```
+
+Scrolling down to read the job log in detail,
+it says that it "could not locate requirements.txt."
+This is an issue because the Python scripts that are run when `pytest` is executed
+(i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `mymodule.py`)
+import a number of packages that don't come with the
+[Python Standard Library][python-standard-library].
+To address this issue, 
+we need to add an `install` key to `.travis.yml`: 
+
+```yaml
+language: python
+
+python:
+- "3.6"
+
+install:
+- pip install -r requirements.txt
+
+script:
+- pytest
+```
+
+In a new `requirements.txt` file,
+we list the libraries that need to be installed:
+
+```text
+numpy
+pandas
+matplotlib
+scipy
+pytest
+pyyaml
+```
+
+When we commit these changes to GitHub,
+
+```shell
+$ git add .travis.yml
+$ git add requirements.txt 
+$ git commit -m "Adding requirements"
+```
+```text
+[master d96593f] Adding requirements
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+ create mode 100644 requirements.txt
+```
+```shell
+$ git push origin master
+```
+```text
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/amira-khan/zipf.git
+   1f0590b..71084f7  master -> master
+```
+
+Travis CI automatically runs again and this time the build completes successfully
+and our tests pass (Figure \@ref(fig:py-rse-correct-build-pass)).
+
+```{r py-rse-correct-build-pass, echo=FALSE, fig.cap="Travis Build Overview"}
+knitr::include_graphics("figures/rse-correct/travis-build-pass.png")
+```
+
+To summarize what Travis has done, it:
+
+1.  Created a new Linux virtual machine.
+1.  Installed the desired version of Python.
+1.  Installed the software described in `requirements.txt`.
+1.  Ran the commands below the `script` key.
+1.  Reported the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
+    where <code><em>user/repo</em></code>
+    identifies the repository.
+
 
 ## Exercises {#py-rse-correct-exercises}
 
-### Fixing `num_sign()` {#py-rse-correct-ex-numsign}
+TODO: Need more exercises.
 
-1.  Fix the implementation of `num_sign()` so that all tests will succeed.
-2.  Re-run the tests to confirm that the function is working.
-3.  Extend the function so that it does something sensible when passed a string or an empty list.
-    Write functions to check your changes.
+### Testing Assertions
 
-### Explain the purpose of tests {#py-rse-correct-ex-purpose}
-
-1. Based on the contents of the tests below,
-try to write an informative and descriptive test name.
-
-TODO: Convert to Python code.
+Given a sequence of a number of cars, the function `get_total_cars` returns
+the total number of cars.
 
 ```python
-def add(x, y):
-    val = x + y
-    return val
-
-def test____()
-    assert add_two(1, 2) == 3
+get_total_cars([1, 2, 3, 4])
 ```
-
-### Create a first, simple unit test for `countwords.py` {#py-rse-correct-ex-create-countwords-test}
-
-1. If not create, create a `tests/` directory in the Zipf's Law project.
-2. Create a `test_countwords.py` file for the `countwords.py` script in the `tests/` directory.
-TODO: This needs to be fixed so it fits the testing framework (i.e. how do you test a script?)
-3. Add a simple test in the file to check that it can count at least one word.
-4. Run `pytest` in the project directory. Does it work? What is the output?
-
-### Include the Python testing command in the project Makefile {#py-rse-correct-ex-pytest-makefile}
-
-1. Open up the project Makefile and create a new recipe for `pytest` to run the unit tests.
-The new recipe should be called `test`.
-2. Run `make test` in the project directory and see how it works.
-If it doesn't work, fix it until it gives the testing output.
-
-### Add more tests for `count_words()` {#py-rse-correct-ex-count-words}
-
-TODO: This currently doesn't fit with how countwords.py is structured.. it is a script, how to test it as a function?
-
-1. In the `tests/test_countwords.py` file, add some additional unit tests for `count_words()` that checks the following:
-    -   Returns zero when given an empty string.
-    -   Returns `NA` when given `NA`.
-    -   Returns 2 when given two words separated by a space.
-    -   Returns 2 when given two words separated by a dash `-`.
-1. Run `make test` to run the new tests. What does the output give you?
-
-### Checking that errors occur for `count_words()` {#py-rse-correct-ex-check-errors}
-
-1. Add new unit tests for the word-counting function
-to check that it raises errors when it should.
-1. Run `make test` to run these new tests.
-
-### Generate a dataset of text to test on {#py-rse-correct-ex-test-dataset}
-
-1. Create a new test file called `test_textdata.py` in the `tests/` directory.
-1. Write code to generate random text and words.
-Use the below code as a template:
-1. Run `make test` to check if this new test works.
-
-TODO: Add a template that they can base off of? Some with more Python experience deal with this.
+```text
+10
+```
+```python
+get_total_cars(['a', 'b', 'c'])
+```
+```text
+ValueError: invalid literal for int() with base 10: 'a'
+```
+Explain in words what the assertions in this function check,
+and for each one,
+give an example of input that will make that assertion fail.
 
 ```python
-def random_words():
-    ...
+def get_total(values):
+    assert len(values) > 0
+    for element in values:
+        assert int(element)
+    values = [int(element) for element in values]
+    total = sum(values)
+    assert total > 0
+    return total
 ```
 
-### Check coverage of project and add to Makefile {#py-rse-correct-ex-coverage}
+> **Solution**
+> * The first assertion checks that the input sequence `values` is not empty.
+>   An empty sequence such as `[]` will make it fail.
+> * The second assertion checks that each value in the list can be turned into an integer.
+>   Input such as `[1, 2,'c', 3]` will make it fail.
+> * The third assertion checks that the total of the list is greater than 0.
+>   Input such as `[-10, 2, 3]` will make it fail.
 
-1. Run coverage using this command `coverage run countwords.py BOOKTEXT` and
-then run `coverage report`.
-What does the report say?
-1. Add the coverage command as a recipe in the Makefile.
-Call the recipe `coverage`.
-1. Run `make coverage` to check that it works.
+
+### Add the Travis CI status to your README
+
+You'll notice that the README file in many GitHub repositories includes a little
+Travis CI display status logo.
+Follow [these instructions](https://docs.travis-ci.com/user/status-images/) to include
+the status display in the REAMDE for this Zipf's Law project.
+
 
 ## Key Points {#py-rse-correct-keypoints}
 
