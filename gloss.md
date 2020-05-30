@@ -540,6 +540,9 @@
 **Logging framework**<a id="logging-framework"></a>
 :   FIXME
 
+**Long option**<a id="long-option"></a>
+:   FIXME
+
 **Loop body**<a id="loop-body"></a>
 :   FIXME
 
@@ -1019,6 +1022,14 @@
     containing only the packages and versions of packages you want to use for a particular project or task,
     and to install new packages into the environment
     without affecting other virtual environments or the system-wide default environment.
+
+**Virtual machine**<a id="virtual-machine"></a>
+:   A program that pretends to be a computer.
+    This may seem a bit redundant,
+    but VMs are quick to create and start up,
+    and changes made inside the virtual machine are contained within that VM
+    so we can install new packages or run a completely different operating system
+    without affecting the underlying computer.
 
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG):
    FIXME
