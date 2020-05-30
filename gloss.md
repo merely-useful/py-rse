@@ -1017,6 +1017,14 @@
     and to install new packages into the environment
     without affecting other virtual environments or the system-wide default environment.
 
+**Virtual machine**<a id="virtual-machine"></a>
+:   A program that pretends to be a computer.
+    This may seem a bit redundant,
+    but VMs are quick to create and start up,
+    and changes made inside the virtual machine are contained within that VM
+    so we can install new packages or run a completely different operating system
+    without affecting the underlying computer.
+
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG):
    FIXME
 

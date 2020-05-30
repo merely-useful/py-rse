@@ -268,9 +268,10 @@
 [pypi]: https://pypi.org/
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
 [pytest]: http://pytest.org/
+[python]: glossary.html#python
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
-[python]: glossary.html#python
+[python-standard-library]: https://docs.python.org/3/library/
 [r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
 [r-pkg-book-testing]: http://r-pkgs.had.co.nz/tests.html

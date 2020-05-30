@@ -68,7 +68,6 @@ PY_RSE_FILES=\
   py-rse/style.Rmd \
   py-rse/project.Rmd \
   py-rse/correct.Rmd \
-  py-rse/ci.Rmd \
   py-rse/package-py.Rmd \
   py-rse/publish.Rmd \
   py-rse/finale.Rmd \
