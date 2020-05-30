@@ -1,7 +1,5 @@
 # Correctness {#py-rse-correct}
 
-TODO: Add Git commits for exercises throughout
-
 ```{r py-rse-correct-setup, include=FALSE}
 source(here::here("_common.R"))
 ```
@@ -11,8 +9,17 @@ how can we be sure that it’s producing reliable results?
 The short is answer is that we can't be completely certain,
 but that as in science,
 we can test our expectations against reality to help us decide if we are sure enough.
-In this chapter we will explore the approaches available for testing code:
-assertions, unit tests, regresson tests and integration tests.
+In this chapter we explore the approaches available for testing code;
+namely assertions, unit tests, integration tests and regression tests.
+
+> **Scientist's Nightmare**
+>
+> If you need any motivation to learn how to test your code,
+> look no further than the story of Geoffrey Chang [@Miller2006].
+> A successful early career researcher in protein crystallography,
+> Chang had to retract five published papers -- three from
+> the prestigious journal Science -- because his code had
+> inadvertently flipped two columns of data.
 
 Our Zipf's Law project files are structured as they were at the end of the previous chapter:
 
@@ -47,13 +54,13 @@ This is called defensive programming,
 and the most common way to do it is to add assertions to our code
 so that it checks itself as it runs.
 An assertion is simply a statement that something must be true at a certain point in a program.
-When Python sees one, it evaluates the assertion’s condition.
+When Python sees an assertion, it evaluates the assertion’s condition.
 If it’s true, Python does nothing, but if it’s false,
-Python halts the program immediately and prints the error message if one is provided.
+Python halts the program immediately and prints a user defined error message.
 
 To demonstrate an assertion in action,
-consider this piece of code that halts as soon as the loop encounters
-a rainfall observation that isn’t positive:
+consider this code that halts as soon as the loop encounters a
+weather station rainfall observation that isn’t positive:
 
 ```python
 rainfall_observations = [1.5, 2.3, 0.7, -0.2, 4.4]
@@ -79,7 +86,62 @@ AssertionError: Rainfall observations should only contain positive values
 
 Programs like the Firefox browser are full of assertions:
 10-20% of the code they contain are there to check that the other 80-90% are working correctly.
+Broadly speaking, assertions fall into three categories:
 
+- A *precondition* is something that must be true at the start of a function in order for it to work correctly.
+- A *postcondition* is something that the function guarantees is true when it finishes.
+- An *invariant* is something that is always true at a particular point inside a piece of code.
+
+If the rainfall observation code above was part of a larger meteorological data processing script,
+then that assertion is an example of an invariant -- at that particular point in the code,
+it is always the case that a negative rainfall total makes no sense.
+Data entry errors are possible, so it's important to check the validity of each observation.
+
+Our `collate.py` script is a good example of the need for a precondition.
+A user could easily overlook the doc string at the top of the script,
+which states that it combines multiple word count CSV-files into a single cumulative count.
+If they passed a series of text files instead of CSV files,
+they'd get an error message that isn't particularly helpful in explaining the source of the problem.
+
+```shell
+$ python bin/collate.py data/jane_eyre.txt data/dracula.txt 
+```
+```text
+Traceback (most recent call last):
+  File "collate.py", line 29, in <module>
+    main(args)
+  File "collate.py", line 19, in main
+    update_counts(reader, word_counts)
+  File "collate.py", line 10, in update_counts
+    for word, count in csv.reader(reader):
+ValueError: too many values to unpack (expected 2)
+```
+
+A precondition (with informative error message) in the `main` function of `collate.py`
+requiring the input files to end in ".csv" can clear up any potential confusion.
+
+```python
+def main(args):
+    """Run the command line program."""
+    word_counts = Counter()
+    for file_name in args.infiles:
+        assert file_name[-4:] == '.csv', "input files must be word count CSV files"
+        with open(file_name, 'r') as reader:
+            update_counts(reader, word_counts)
+    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+```
+
+```shell
+$ python bin/collate.py data/jane_eyre.txt data/dracula.txt 
+```
+```text
+Traceback (most recent call last):
+  File "collate.py", line 30, in <module>
+    main(args)
+  File "collate.py", line 18, in main
+    assert file_name[-4:] == '.csv', "input files must be word count CSV files"
+AssertionError: input files must be word count CSV files
+```
 
 ## Unit testing {#py-rse-unit-testing}
 
@@ -181,7 +243,7 @@ for which tests obey three rules:
 2.  Each test is a function whose name also begins with `test_`.
 3.  These functions use `assert` to check results.
 
-Following those rules,
+Following these rules,
 we can create a `test_zipfs.py` script that contains the test we just developed:
 
 ```python
@@ -203,9 +265,6 @@ def test_word_count():
     assert actual_result == expected_result
 ```
 
-Tests can be saved anywhere in the project directory,
-but usually they are placed in a `tests/` subdirectory.
-
 The `pytest` library comes with a command-line tool that is also called `pytest`.
 When we run it with no options,
 it searches for all files in the working directory and subdirectories named `test_*.py`.
@@ -222,7 +281,7 @@ platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
 rootdir: /Users/amira
 collected 1 item                                                               
 
-test_zipfs.py .                                                          [100%]
+bin/test_zipfs.py .                                                      [100%]
 
 ============================== 1 passed in 0.02s ===============================
 ```
@@ -234,13 +293,15 @@ besides the counting of words (which we've already tested),
 the other critical part of our code is the calculation of the \(\alpha\) parameter.
 Earlier we defined a power law relating \(\alpha\)
 to the word frequency \(f\), word rank \(r\) 
-and a constant \(c\) of proportionality,\[
+and a constant \(c\) of proportionality (Section \@ref(py-rse-git-advanced-zipf-math)).\[
 r = cf^{\frac{-1}{\alpha}}
 \]
-and noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
+We also noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
 Setting \(\alpha\) to one and re-arranging the power law gives the expression,\[
 c = f/r
-\], which we can use to generate synthetic word counts data 
+\]
+
+We can use this expression generate synthetic word counts data 
 (i.e. our test fixture) with a constant of proportionality
 set to a hypothetical maximum word frequency of 600
 (and thus \(r\) ranges from 1 to 600):
@@ -335,7 +396,7 @@ platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
 rootdir: /Users/amira
 collected 2 items                                                              
 
-test_zipfs.py F.                                                         [100%]
+bin/test_zipfs.py F.                                                     [100%]
 
 =================================== FAILURES ===================================
 __________________________________ test_alpha __________________________________
@@ -360,23 +421,24 @@ __________________________________ test_alpha __________________________________
 >       assert actual_alpha == expected_alpha
 E       assert 0.9951524579316625 == 1.0
 
-test_zipfs.py:24: AssertionError
+bin/test_zipfs.py:24: AssertionError
 =========================== short test summary info ============================
-FAILED test_zipfs.py::test_alpha - assert 0.9951524579316625 == 1.0
+FAILED bin/test_zipfs.py::test_alpha - assert 0.9951524579316625 == 1.0
 ========================= 1 failed, 1 passed in 0.85s ==========================
 ```
 
 The output tells us that one test failed but the other test passed.
-This is a nice feature of test runners like pytest -- they continue on and complete all the tests
+This is a nice feature of test runners like `pytest` -- they continue on and complete all the tests
 rather than stopping at the first assertion failure like a regular Python script would.
 Looking more closely at the output, we can see that although `test_alpha` failed,
 the `actual_alpha` value of 0.9951524579316625 was awfully close to the expected value of 1.0.
 In fact,
-we don't expect the estimation routine used by `get_power_law_params` to be perfect.
+we don't expect the estimation routine used by `get_power_law_params` to be perfect -- it
+is an estimation after all.
 In order to edit `test_alpha` so that "close enough is good enough"
 we can borrow a `pytest` function used for equating floating point values...  
 
-### Testing and floating-point values? {#py-rse-correct-numeric}
+### Testing and floating-point values {#py-rse-correct-numeric}
 
 Testing floating-point values is tricky because of the way computers represent these values.
 Different operating systems, hardware,
@@ -401,8 +463,8 @@ we have the same absolute error,
 but the relative error is larger in the first case than it is in the second.
 
 For our `test_alpha` function,
-we might decide that an absolute error of 0.01 is acceptable.
-Using the pytest library,
+we might decide that an absolute error of 0.01 in the estimation of \(\alpha\) is acceptable.
+Using the `pytest` library,
 we can define this tolerance level using `pytest.approx`:
 
 ```python
@@ -459,27 +521,45 @@ platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
 rootdir: /Users/amira
 collected 2 items                                                              
 
-test_zipfs.py ..                                                         [100%]
+bin/test_zipfs.py ..                                                     [100%]
 
 ============================== 2 passed in 0.69s ===============================
 ```
+
+> **Testing visualizations**
+>
+> One thing we haven't tested is the plot of our word count data.
+> Testing visualizations is hard:
+> any change to the dimension of the plot,
+> however small,
+> can change many pixels in a [raster image][raster-image],
+> and cosmetic changes such as moving the legend up a couple of pixels
+> will similarly cause false positives.
+>
+> The simplest solution is therefore to test the data used to produce the image
+> (as we've done here)
+> rather than the image itself.
+> Unless we suspect that the plotting library contains bugs,
+> the correct data should always produce the correct plot.
+
 
 ## Integration testing {#py-rse-correct-integration}
 
 We've seen in previous chapters that our Zipf's Law analysis is a two-step process.
 The first involves counting the words in a text
 and the second involves estimating the \(\alpha\) parameter from the word count.
-Our unit tests `test_word_count` and `test_alpha` have checked that those two
+Our unit tests `test_word_count` and `test_alpha` have checked that these two
 individual components work in isolation, but do they work correctly together?
 Checking that multiple units work correctly together is called *integration testing*.
 
 The structure of integration tests is very similar to that of unit tests.
-There is an expected result, which is compared against the observed value.
-However, the work involved in creating the expected result or setting up the code to run
-can be considerably more complicated and more involved. 
+There is an expected result, which is compared against the actual result.
+However, the work involved in creating the expected result
+and/or setting up the code to run
+can be considerably more complicated and involved. 
 For example,
 in the case of our Zipf's Law software an appropriate integration test fixture
-might be a text file full of words that have a known alpha value. 
+might be a text file with a word frequency distribution that has a known alpha value. 
 In order to create this text fixture,
 we'll need a way of generating random words.
 Fortunately, a Python library exits to do just that.
@@ -492,7 +572,8 @@ $ pip install randomwordgenerator
 ```
 
 Borrowing from the word count distribution we created for `test_alpha`,
-we can then create a text file full of random words that correspond to an alpha value
+we can then create a text file full of random words
+with a frequency distribution that corresponds to an alpha value
 of approximately 1.0.
 
 ```python
@@ -535,7 +616,7 @@ platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
 rootdir: /Users/amira
 collected 3 items                                                                                         
 
-test_zipfs.py ...                                                        [100%]
+bin/test_zipfs.py ...                                                    [100%]
 
 =============================== 3 passed in 0.48s ==============================
 ```
@@ -544,7 +625,8 @@ test_zipfs.py ...                                                        [100%]
 ## Regression testing {#py-rse-correct-regression}
 
 So far we've tested two simplified texts --
-a short poem and a collection of random words -- but not a "real"  text.
+a short poem and a collection of random words
+with a known frequency distribution -- but not a "real"  text.
 The problem with testing a large text is that we don't know the expected result 
 (e.g. it's not practical to sit and count the words in Dracula by hand).
 For this kind of situation we can consider *regression testing*.
@@ -555,7 +637,8 @@ In this way regression tests are great for letting developers know when and how 
 but not great for letting anyone know why the change occurred.
 The change between what a code produces now and what it computed before is called a regression.
 
-In Chapter X we calculated an \(\alpha\) value of 1.1620041050803658 for Dracula.
+In Section \@ref(py-rse-git-advanced-zipf-verify)
+we calculated an \(\alpha\) value of 1.1620041050803658 for Dracula.
 We can use this expected result to add a regression test to `test_zipfs.py`:
 
 ```python
@@ -580,14 +663,76 @@ platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
 rootdir: /Users/amira
 collected 4 items                                                                                
 
-test_zipfs.py ....                                                       [100%]
+bin/test_zipfs.py ....                                                   [100%]
 
 ============================== 4 passed in 0.56s ===============================
 ```
 
+## When to write tests
+
+We've now met the three major types of test: unit, integration and regression.
+At what point in the code development process should we be writing these tests?
+The answer depends on who you ask.
+Many programmers are passionate advocates of a practice called
+[test-driven development][tdd] (TDD).
+Rather than writing code and then writing tests,
+they write the tests first and then write just enough code to make those tests pass.
+Once the code is working,
+they clean it up (Section \@ref(py-rse-style-refactor)) and then move on to the next task.
+
+TDD's advocates claim that working this way leads to better code in less time because:
+
+1.  Writing tests clarifies what the code is actually supposed to do.
+
+2.  It eliminates [confirmation bias][confirmation-bias].
+    If someone has just written a function,
+    they are predisposed to want it to be right,
+    so they will bias their tests towards proving that it is correct
+    instead of trying to uncover errors.
+
+3.  Writing tests first ensures that they actually get written.
+
+These arguments are plausible.
+However,
+studies such as @Fucc2016 don't support them:
+in practice,
+writing tests first or last doesn't appear to affect productivity.
+What *does* have an impact is working in small, interleaved increments,
+i.e.,
+writing just a few lines of code and testing it before moving on
+rather than writing several pages of code and then spending hours on testing.
+
+So how do most data scientists figure out if their software is doing the right thing?
+The answer is spot checks:
+each time they produce an intermediate or final result,
+they scan a table, create a chart, or inspect some summary statistics
+to see if everything looks OK.
+Their heuristics are usually easy to state,
+like "there shouldn't be NAs at this point" or "the age range should be reasonable",
+but applying those heuristics to a particular analysis always depends on
+their evolving insight into the data in question.
+
+By analogy with test-driven development,
+we could call this process [checking-driven development][cdd] (CDD).
+Each time we add a step to our pipeline and look at its output,
+we can also add a check of some kind to the pipeline to ensure that
+what we are checking for remains true as the pipeline evolves or is run on other data.
+This helps reusability—it's amazing how often a one-off analysis
+winds up being used many times—but the real goal is comprehensibility.
+If someone can get our code and data,
+then runs the code on the data,
+and gets the same result that we did,
+then our computation is reproducible,
+but that doesn't mean they can understand it.
+Comments help
+(either in the code or as blocks of prose in a [computational notebook][computational-notebook]),
+but they won't check that assumptions and invariants hold.
+And unlike comments,
+runnable assertions can't fall out of step with what the code is actually doing.
+
 ## Test coverage {#py-rse-correct-coverage}
 
-In defining tests for counting words and calculating the alpha parameter,
+In defining tests for counting words and calculating the \(\alpha\) parameter,
 it's likely that we have now tested (or "covered") all critical lines of our code.
 To be sure,
 we can use a tool to check the coverage of our tests.
@@ -610,7 +755,7 @@ platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
 rootdir: /Users/amira
 collected 4 items                                                                                
 
-test_zipfs.py ....                                                                         [100%]
+bin/test_zipfs.py ....                                                                     [100%]
 
 ======================================= 4 passed in 0.72s ========================================
 ```
@@ -638,11 +783,11 @@ TOTAL             105     39    63%
 
 From this coverage summary,
 we can see that not every single line of `countwords.py` or `plotcounts.py`
-was executed when we ran the tests (only 60% and 41% of the lines we run, respectively).
+was executed when we ran the tests (only 60% and 41% of the lines were run, respectively).
 This would seem to make sense, because much of the code in those scripts
 is devoted to handling command line arguments or file input/output,
 rather than the word counting and parameter estimation functionality 
-that our unit, integration and regression tests focused on.
+that our unit, integration and regression tests focus on.
 To make sure that's the case,
 we can get a more complete report by running `coverage html` at the command line
 and opening `htmlcov/index.html`.
@@ -739,7 +884,7 @@ If Travis CI has been set up,
 then every time a change is committed to a GitHub repository,
 Travis CI creates a fresh environment,
 makes a fresh clone of the repository
-(which is described in Chapter \@ref(py-rse-git-advanced-fork)),
+(which is described in Section \@ref(py-rse-git-advanced-fork)),
 and runs whatever commands the project's managers have set up.
 
 ### Creating a Travis account
@@ -758,26 +903,26 @@ Be careful when giving services access to your repository
 and only trust well-established and -used services like Travis to have access.
 
 Go through the process of creating an account. 
-Then, tell Travis CI which repository you want it to watch.
-On the left,
-besides the "My Repositories" link,
-click the "+" to add a GitHub repository,
-as in Figure \@ref(fig:py-rse-ci-add-repo).
-Add the repository we have been using throughout the course.
-After finding the repository in the list that pops up,
-flick the switch button so that it turns green
+Next, tell Travis CI which repository you want it to watch
+by clicking the "+" next to the "My Repositories" link
+on the left-hand side of your Travis CI homepage (\@ref(fig:py-rse-correct-add-repo)).
+
+```{r py-rse-correct-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI"}
+knitr::include_graphics("figures/rse-correct/travis-add-repo.png")
+```
+
+Add the GitHub repository we have been using throughout the course
+(Section \@ref(py-rse-git-cmdline-remotes))
+by locating it in the repository list and
+flicking the switch button so that it turns green
 (Figure \@ref(fig:py-rse-ci-list-repos)).
 If the repository doesn't show up,
 re-synchronize the list using the green "Sync account" button on the left sidebar.
 If it still doesn't appear,
 the repository likely belongs to someone else or is private.
 
-```{r py-rse-ci-add-repo, echo=FALSE, fig.cap="ci-add-repo"}
-knitr::include_graphics("figures/rse-ci/add-repo.png")
-```
-
-```{r py-rse-ci-list-repos, echo=FALSE, fig.cap="ci-list-repos"}
-knitr::include_graphics("figures/rse-ci/list-repos.png")
+```{r py-rse-correct-list-repos, echo=FALSE, fig.cap="Find your Zipf's Law repository and switch it on"}
+knitr::include_graphics("figures/rse-correct/travis-list-repos.png")
 ```
 
 ### Configuring a project for Travis
@@ -843,7 +988,7 @@ or whether it produced warnings or errors,
 shown in red.
 In this case, we can see that the build failed (Figure \@ref(fig:py-rse-correct-build-fail)).
 
-```{r py-rse-ci-build-overview, echo=FALSE, fig.cap="Travis Build Overview"}
+```{r py-rse-correct-build-fail, echo=FALSE, fig.cap="Travis Build Overview"}
 knitr::include_graphics("figures/rse-correct/travis-build-fail.png")
 ```
 
@@ -897,11 +1042,18 @@ $ git commit -m "Adding requirements"
 $ git push origin master
 ```
 ```text
-
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/amira-khan/zipf.git
+   1f0590b..71084f7  master -> master
 ```
 
 Travis CI automatically runs again and this time the build completes successfully
-and our tests pass (Figure \@ref(fig:py-rse-correct-build-fail)).
+and our tests pass (Figure \@ref(fig:py-rse-correct-build-pass)).
 
 ```{r py-rse-correct-build-pass, echo=FALSE, fig.cap="Travis Build Overview"}
 knitr::include_graphics("figures/rse-correct/travis-build-pass.png")
@@ -909,30 +1061,66 @@ knitr::include_graphics("figures/rse-correct/travis-build-pass.png")
 
 To summarize what Travis has done, it:
 
-1.  Creates a new Linux virtual machine.
-1.  Installs the desired version of Python.
-1.  Installs the software described in `requirements.txt`.
-1.  Runs the commands below the `script` key.
-1.  Reports the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
+1.  Created a new Linux virtual machine.
+1.  Installed the desired version of Python.
+1.  Installed the software described in `requirements.txt`.
+1.  Ran the commands below the `script` key.
+1.  Reported the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
     where <code><em>user/repo</em></code>
     identifies the repository.
 
 
-## Other considerations when testing {#py-rse-correct-other}
-
-TODO:
-- When should I write my tests?
-- Plots and graphical results
-- What data should I use? (subsampling, synthetic)
-- Checking that things fail correctly (i.e. with the correct error message)
-
-
 ## Exercises {#py-rse-correct-exercises}
 
-TODO
+TODO: Need more exercises.
 
-Add the Travis CI display status to the README file
-#[![Build Status](https://travis-ci.org/DamienIrving/zipf.svg?branch=master)](https://travis-ci.org/DamienIrving/zipf)
+### Testing Assertions
+
+Given a sequence of a number of cars, the function `get_total_cars` returns
+the total number of cars.
+
+```python
+get_total_cars([1, 2, 3, 4])
+```
+```text
+10
+```
+```python
+get_total_cars(['a', 'b', 'c'])
+```
+```text
+ValueError: invalid literal for int() with base 10: 'a'
+```
+Explain in words what the assertions in this function check,
+and for each one,
+give an example of input that will make that assertion fail.
+
+```python
+def get_total(values):
+    assert len(values) > 0
+    for element in values:
+        assert int(element)
+    values = [int(element) for element in values]
+    total = sum(values)
+    assert total > 0
+    return total
+```
+
+> **Solution**
+> * The first assertion checks that the input sequence `values` is not empty.
+>   An empty sequence such as `[]` will make it fail.
+> * The second assertion checks that each value in the list can be turned into an integer.
+>   Input such as `[1, 2,'c', 3]` will make it fail.
+> * The third assertion checks that the total of the list is greater than 0.
+>   Input such as `[-10, 2, 3]` will make it fail.
+
+
+### Add the Travis CI status to your README
+
+You'll notice that the README file in many GitHub repositories includes a little
+Travis CI display status logo.
+Follow [these instructions](https://docs.travis-ci.com/user/status-images/) to include
+the status display in the REAMDE for this Zipf's Law project.
 
 
 ## Key Points {#py-rse-correct-keypoints}
