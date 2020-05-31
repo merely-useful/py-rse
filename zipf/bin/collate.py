@@ -2,7 +2,7 @@
 import csv
 import argparse
 from collections import Counter
-import mymodule
+import utilities
 
 
 def update_counts(reader, word_counts):
@@ -18,13 +18,13 @@ def main(args):
         assert file_name[-4:] == '.csv', "input files must be word count CSV files"
         with open(file_name, 'r') as reader:
             update_counts(reader, word_counts)
-    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+    utilities.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', '--ntop', type=int, default=None,
-                        help='Limit output to n most frequent words')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
     args = parser.parse_args()
     main(args)

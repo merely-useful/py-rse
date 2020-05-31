@@ -10,7 +10,7 @@ import sys
 import csv
 
 
-def collection_to_csv(collection, ntop=None):
+def collection_to_csv(collection, num=None):
     """
     Write out a collection of items and counts in csv format.
 
@@ -18,10 +18,11 @@ def collection_to_csv(collection, ntop=None):
     ----------
     collection : collections.Counter
         Collection of items and counts
-    ntop : int
-        Limit output to n most frequent items
+    num : int
+        Limit output to N most frequent items
     """
     collection = collection.most_common()
-    limit = ntop if ntop else len(collection)
+    if num is None:
+        num = len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(collection[0:limit])
+    writer.writerows(collection[0:num])

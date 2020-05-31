@@ -627,6 +627,9 @@
 **Oppression**<a id="oppression"></a>
 :   FIXME
 
+**Optional argument**<a id="optional-argument"></a>
+:   FIXME
+
 **Orthogonality**<a id="orthogonality"></a>
 :   FIXME
 
@@ -668,6 +671,9 @@
 
 **Pipe**<a id="pipe-unix"></a> (in Unix):
    FIXME
+
+**Positional argument**<a id="positional-argument"></a>
+:   FIXME
 
 **Post-mortem**<a id="post-mortem"></a>
 :   FIXME
@@ -827,6 +833,9 @@
 
 **Short identifier**<a id="short-identifier-git"></a> (in Git):
    FIXME
+
+**Short option**<a id="short-option"></a>
+:   FIXME
 
 **Side effects**<a id="side-effects"></a>
 :   FIXME
@@ -1033,6 +1042,9 @@
 
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG):
    FIXME
+
+**Whitespace**<a id="whitespace"></a>
+:   FIXME
 
 **Wildcard**<a id="wildcard"></a>
 :   FIXME
