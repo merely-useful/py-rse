@@ -3,7 +3,7 @@
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py-novice/index.html _book/r-novice/index.html _book/py-rse/index.html _book/r-rse/index.html
 ALL_PDF=_book/py-novice/py-novice.pdf _book/r-novice/r-novice.pdf _book/py-rse/py-rse.pdf _book/r-rse/r-rse.pdf
-EXTRA=climate-data data src zipfs-law
+EXTRA=climate-data data src zipf
 
 R_NOVICE_FILES=\
   _r-novice.yml \
