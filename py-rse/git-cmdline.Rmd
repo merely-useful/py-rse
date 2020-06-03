@@ -4,13 +4,38 @@
 source(here::here("_common.R"))
 ```
 
-The first two volumes in this series introduced version control with Git
-using a graphical interface like [GitKraken][gitkraken] or [the RStudio IDE][rstudio-ide].
-These interfaces are actually wrappers around Git's original command-line interface,
-which allows us to access all of Git's features.
-This lesson describes how the basic cycle of add, commit, push, and pull works at the command line.
+Now that we've developed a series of Python scripts for counting words
+and plotting their frequency distribution,
+how are we going to manage future changes/improvements to these scripts?
+The answer is to use version control.
+A version control system stores a master copy of your code in a repository,
+which you can’t edit directly.
+Instead, you checkout a working copy of the code,
+edit that code, then commit changes back to the repository.
+In this way, the system records a complete revision history (i.e. of every commit),
+so that you can retrieve and compare previous versions at any time.
+This is useful from an individual viewpoint,
+because you don’t need to store multiple (but slightly different) copies of the same script
+(Figure \@ref(fig:py-rse-git-cmdline-phdcomics)).
+It’s also useful from a collaboration viewpoint,
+because the system keeps a record of who made what changes and when.
 
-To illustrate with the Zipf's Law project,
+```{r py-rse-git-cmdline-phdcomics, echo=FALSE, fig.cap="Without a version control system, managing different versions of the same file can get messy."}
+knitr::include_graphics("figures/py-rse-git-cmdline/phd-comics.gif")
+```
+
+There are a number of version control systems out there
+including Git, Mercurial and Subversion.
+All of them do essentially the same thing,
+but we're going to use Git
+because it's the most popular system today.
+Part of this popularity stems from Git's association with
+a popular online hosting service called [GitHub][github].
+As we'll see,
+hosting services such as GitHub, GitLab and Bitbucket
+are a great place to backup your code and to share/collaborate with others.
+
+To illustrate the functionality of Git and GitHub with the Zipf's Law project,
 we will start by tracking our work up to this point in Git.
 The project directory should currently include:
 
@@ -90,8 +115,9 @@ and the rest of the command are options.
 We put the name in quotation marks because it contains a space;
 we don't actually need to quote the email address,
 but do so for consistency.
-Since we are going to be using [GitHub][github],
-the email address should be the same as the one we used when setting up our GitHub account.
+Since we are going to be using GitHub,
+the email address should be the same as you have or intend to use 
+when setting up your GitHub account.
 
 These two commands only need to be run once:
 the flag `--global` tells Git to use the settings for all of our projects on this computer.
@@ -128,9 +154,6 @@ core.ignorecase=true
 
 Once Git is configured, we can start using it.
 This section will cover how to create a Git repository associated with a project folder.
-
-Most of the commands we will use (such as `git add` and `git commit`) will sound familiar,
-as the same terminology is used in graphical interfaces like [GitKraken][gitkraken] and [the RStudio IDE][rstudio-ide].
 
 Let's begin tracking our Zipf's Law project in Git.
 First, we need to make sure we are in the `zipf` directory
@@ -205,7 +228,8 @@ Untracked files:
 nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-We have "no commits yet", and Git has recognized that the existing folders, `bin/`, `data/` and `results/`, are not yet tracked in version control.
+We have "no commits yet", and Git has recognized that the existing folders,
+`bin/`, `data/` and `results/`, are not yet tracked in version control.
 
 ## How can I add existing work to a Git repository? {#py-rse-git-cmdline-add-existing}
 
@@ -528,6 +552,23 @@ but we haven't told Git we want to save those changes
 nor have we saved them
 (which we do with `git commit`).
 
+> **Staging area**
+>
+> Git insists that we add files to the set we want to commit before actually committing anything.
+> This allows us to commit our changes in stages and capture changes in logical portions
+> rather than only large batches.
+> For example, suppose we’re writing our thesis using LaTeX
+> (the plain text `.tex` files can be tracked using Git)
+> and we add a few citations to the introduction chapter.
+> We might want to commit those additions to our `introduction.tex` file but not commit
+> the work we’re doing on the `conclusion.tex` file (which we haven’t finished yet).
+> To allow for this, Git has a special [staging area][git-stage] where it keeps track of things
+> that have been added to the current changeset but not yet committed.
+>
+> ```{r py-rse-git-cmdline-staging, echo=FALSE, fig.cap="The staging area."}
+> knitr::include_graphics("figures/py-rse-git-cmdline/staging-area.svg")
+> ```
+
 Let's do that now.
 It is good practice to review our changes before saving them,
 which we can do with `git diff`.
@@ -806,6 +847,11 @@ Already up-to-date.
 
 Pulling has no effect in this case
 because the two repositories are already synchronized.
+
+```{r py-rse-git-cmdline-remote, echo=FALSE, fig.cap="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?"}
+knitr::include_graphics("figures/py-rse-git-cmdline/git-remote.png")
+```
+
 
 ## How can I explore a project's history? {#py-rse-git-cmdline-history}
 
@@ -1134,6 +1180,14 @@ and Git will ignore anything that matches any of these lines.
 >
 > Don't forget to commit `.gitignore` to your repository
 > so that Git knows to use it.
+
+TODO: Go through the actual process of creating a `.gitignore` file for the 
+`__pycache__` subdirectory that will have popped up in Amira Khan's 
+working directory during the last chapter.
+(See the exercises in the last chapter for text/information about `__pycache__`.)
+It should appear as a untracked directory in all the `git status`
+output in this chapter.
+ 
 
 ## Exercises {#py-rse-git-cmdline-exercises}
 
