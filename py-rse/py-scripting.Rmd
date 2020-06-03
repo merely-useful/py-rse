@@ -1,26 +1,27 @@
 # Command Line Programs in Python {#py-rse-py-scripting}
 
-The Jupyter Notebook, PyCharm and other graphical interfaces
+The Jupyter Notebook, PyCharm, and other graphical interfaces
 are great for prototyping code and exploring data,
-but in many cases we ultimately need to apply our code to thousands of data files,
+but eventually we may need to apply our code to thousands of data files,
 run it with many different parameters,
-or combine it with other programs in a data analysis pipeline.
-The easiest way to do this effectively is often
+or combine it with other programs as part of a data analysis pipeline.
+The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
 just like other command-line tools [@Tasc2017].
 
 In this chapter we will develop a command-line Python program
-that can be controlled by several option flags,
-handles input and output in ways that other command-line tools expect,
+that handles input and output in the same way as other shell commands,
+can be controlled by several option flags,
 and provides useful information when things go wrong.
 The result will have more scaffolding than useful application code,
 but that scaffolding stays more or less the same as programs get larger.
 
-Our Zipf's Law project structure should include the following:
+After the previous chapters,
+our Zipf's Law project should have the following files and directories:
 
 ```text
 ├── bin
-│   └── book_summary.sh
+│   └── book_summary.sh
 └── data
     ├── README.md
     ├── dracula.txt
@@ -32,20 +33,18 @@ Our Zipf's Law project structure should include the following:
     └── time_machine.txt
 ```
 
-## How can I tell if my code is a program or a module? {#py-rse-py-scripting-main}
+## Programs and Modules {#py-rse-py-scripting-main}
 
-Let's consider some hypothetical Python code.
-
-If we are going to create a Python program that can run from the command line,
-the first thing we should do is to add the following to the bottom of the file.
+To create a Python program that can run from the command line,
+the first thing we do is to add the following to the bottom of the file:
 
 ```python
 if __name__ == '__main__':
 ```
 
-This line differentiates between
-running a Python file as a standalone program
-and importing it as a module.
+This strange-looking check tells us
+whether the file is running as a standalone program
+or whether it is being imported as a module by some other program.
 When we import a Python file as a module in another program,
 the `__name__` variable is automatically set to the name of the file.
 When we run a Python file as a standalone program,
@@ -84,24 +83,25 @@ Type "help", "copyright", "credits" or "license" for more information.
 print_name
 ```
 
-This means that we can separate the two cases above
-by checking the value of the variable `__name__`.
-If that tells us that the file is running as a standalone program,
-we can then handle command-line options, print help, or whatever else is appropriate.
-We could put the main program code directly under the `if` statement,
-but that's generally considered bad practice,
-since it makes testing harder.
-Instead,
-we define this functionality inside a function conventionally called `main`,
-but we can call it whatever we want.
-So instead of writing out code like this:
+Checking the value of the variable `__name__`
+therefore tells us whether our file is the top-level program or not.
+If it is,
+we can handle command-line options, print help, or whatever else is appropriate;
+if it isn't,
+we should assume that some other code is doing this.
+
+We could put the main program code directly under the `if` statement like this:
 
 ```python
 if __name__ == "__main__":
     # code goes here
 ```
 
-We write it like this
+but that is considered poor practice,
+since it makes testing harder (Chapter \@ref(py-rse-correct)).
+Instead,
+we put the high-level logic in a function,
+then call that function if our file is being run directly:
 
 ```python
 def main():
@@ -112,66 +112,64 @@ if __name__ == "__main__":
     main()
 ```
 
-> **Quickly Running Short Python Statements**
->
-> We don't need to open the interactive interpreter to run Python statements.
-> Instead,
-> we could invoke Python with the command flag and the quoted statement:
->
->```
->$ python -c "import print_name"
->print_name
->```
+This top-level function is usually called `main`,
+but we can use whatever name we want.
 
-## How can I handle command-line options? {#py-rse-py-scripting-options}
+## Handling Command-Line Options {#py-rse-py-scripting-options}
 
-The next thing we need is
-a library to parse any options given to the program on the command line.
-The most commonly used library in Python is [`argparse`][argparse],
+The first thing the main function usually does
+is parse any options the user gave the program on the command line.
+The most commonly used library for doing this in Python is [`argparse`][argparse],
 which can handle options with or without arguments,
-convert those arguments from strings to numbers or other types,
+convert arguments from strings to numbers or other types,
 display help,
 and many other things.
 
-The simplest way to explain how `argparse` works is by example,
-so let's create a short Python script called `script_template.py`:
+The simplest way to explain how `argparse` works is by example.
+Let's create a short Python program called `script_template.py`:
 
 ```python
-"""One-line description of what the script does."""
 import argparse
 
 
 def main(args):
-    """Run the program."""
     print('Input file:', args.infile)
     print('Output file:', args.outfile)
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
+    USAGE = 'One-line description of what the script does.'
+    parser = argparse.ArgumentParser(description=USAGE)
     parser.add_argument('infile', type=str, help='Input file name')
     parser.add_argument('outfile', type=str, help='Output file name')
     args = parser.parse_args()
     main(args)
 ```
 
-If we examine the contents of `script_template.py` we can see that if it is run
-as a standalone program at the command line
-(i.e. if `__name__ == '__main__'` is true) then the script goes ahead and uses
-the `argparse` library to create an argument parser.
-In this case the description of the program for the help information is set to `__doc__`,
-which is the character string provided in the very first line of the script.
-Two command line arguments are then defined:
-an input file name (`infile`) and output file name (`outfile`).
-The script parses the command line to get those arguments using `parse_args()`,
-stores them in an `argparse.Namespace` object,
-which we assign to the variable `args`
-and pass on to the `main` function.
-The main function then retrieves the arguments from the `argparse.Namespace` object
-by calling `args.infile` and `args.outfile`.
+If `script_template.py` is run as a standalone program at the command line
+then `__name__ == '__main__'` is true,
+so the program uses `argparse` to create an argument parser.
+It then specifies that it expects two command-line arguments:
+and input filename (`infile`) and output filename (`outfile`).
+The program uses `parse_args()` to parse the actual command-line arguments given by the user
+and stores the result in a variable called `args`,
+which it passes to `main`.
+That function can then get the values using the names specified
+in the `parser.add_argument` calls.
 
-If we go ahead and run `script_template.py` at the command line
-we can see that `argparse` has successfully handled the input arguments:
+> **Specifying Types**
+>
+> We have passed `type=str` to `add_argument` to tell `argparse` that
+> we want `infile` and `outfile` to be treated as strings.
+> `str` is not quoted because it is not a string itself:
+> instead,
+> it is the built-in Python function that converts things to strings.
+> As we will see below,
+> we can pass in other functions like `int`
+> if we want arguments converted to numbers.
+
+If we run `script_template.py` at the command line
+the output shows us that `argparse` has successfully handled the arguments:
 
 ```shell
 $ python script_template.py in.csv out.png
@@ -182,7 +180,7 @@ Input file: in.csv
 Output file: out.png
 ```
 
-It also issues errors when users give the program invalid arguments:
+It also displays an error message if we give the program invalid arguments:
 
 ```shell
 $ python script_template.py in.csv
@@ -193,7 +191,9 @@ usage: script_template.py [-h] infile outfile
 script_template.py: error: the following arguments are required: outfile
 ```
 
-and automatically generates help information:
+Finally,
+it automatically generates help information
+(which we can get using the `-h` option):
 
 ```shell
 $ python script_template.py -h
@@ -212,99 +212,222 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-## A practical example: Zipf's Law analysis {#py-rse-py-scripting-example}
+## Documentation {#py-rse-py-scripting-docstrings}
 
-### Counting words
-
-Now that we've got a template for creating Python scripts,
-we can go ahead and apply it to the problem of counting words
-(and ultimately verifying Zipf's Law) in our collection of classic English novels.
-We recommend moving the template script outside your project directory,
-so you can reference it for later projects as well.
-We'll move to `bin/`,
-where we previously stored our shell script,
-before we start creating more scripts:
-
-```shell
-$ cd ~/zipf/bin
-```
-
-Before we create our scripts for Zipf's Law,
-let's think through the tasks our scripts will need to accomplish.
-
+Our template is a good starting point,
+but we can make one improvement right away.
 To start,
-here's a function that uses the regular expressions (`re`) library
-to identify all the words in a text file and a counter function
-from the `collections` library to tally up the occurrences of each word.
+let's write a function that doubles a number,
+but add a bit of documentation:
 
 ```python
-import re
+def double(num):
+    'Double the input.'
+    return 2 * num
+```
+
+The first line of this function is a string
+that isn't assigned to a variable.
+Such a string is called a documentation string,
+or [docstring][docstring] for short.
+If we call our function it does what we expect:
+
+```python
+double(3)
+```
+
+```text
+6
+```
+
+However,
+we can also ask for the function's documentation,
+which is stored in `double.__doc__`:
+
+```python
+double.__doc__
+```
+
+```text
+'Double the input.'
+```
+
+Python creates the variable `__doc__` automatically for every function,
+just as it creates the variable `__name__` for every file.
+If we don't write a docstring for a function,
+`__doc__`'s value is an empty string.
+We can put whatever text we want into a function's docstring,
+but it is usually used to provide online documentation.
+
+We can also put a docstring at the start of a file,
+in which case it is assigned to a variable called `__doc__`
+that is visible inside the file.
+If we add documentation to our template,
+it becomes:
+
+```python
+"""One-line description of what the script does."""
+
+import argparse
+
+
+def main(args):
+    """Run the program."""
+    print('Input file:', args.infile)
+    print('Output file:', args.outfile)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=str, help='Input file name')
+    parser.add_argument('outfile', type=str, help='Output file name')
+    args = parser.parse_args()
+    main(args)
+```
+
+Note that docstrings are usually written using triple-quoted strings,
+since these can span multiple lines.
+Note also how we pass `description=__doc__` to `argparse.ArgumentParser`.
+This saves us from typing the same information twice,
+but more importantly ensures that
+the help message provided in response to the `-h` option
+will be the same as the interactive help.
+
+Let's try this out in an interactive Python session.
+(Remember, do not type the `>>>` prompt:
+Python provides this for us.)
+
+```shell
+$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import script_template
+>>> script_template.__doc__
+```
+
+```text
+'One-line description of what the script does.'
+```
+
+```shell
+>>> help(script_template)
+```
+
+```text
+Help on module script_template:
+
+NAME
+    script_template - One-line description of what the script does.
+
+FUNCTIONS
+    main(args)
+        Run the program.
+
+FILE
+    /Users/amira/script_template.py
+```
+
+As this example shows,
+if we ask for help on the module,
+Python formats and displays all of the docstrings for everything in the file.
+
+## Counting Words {#py-rse-py-scripting-wordcount}
+
+Now that we have a template for command-line Python programs,
+we can use it to check Zipf's Law for our collection of classic English novels.
+We start by moving the template into the directory
+where we store various programs and shell scripts we have created
+so that we can refer to it later for other projects:
+
+FIXME: where do we introduce `~/bin`?
+
+```shell
+$ mv script_template.py ~/bin
+```
+
+Next,
+let's write a function that counts how often words appear in a file.
+Our function splits the text on [whitespace][whitespace] characters
+(which is the default behavior of the string object's `split` method),
+then strips leading and trailing punctuation.
+This isn't completely correct---if two words are joined by a long dash
+like "correct" and "if" in this sentence, for example,
+they will be treated as one word---so
+we will explore better options in the exercises.
+We also use the `Counter` class from the `collections` library
+to count how many times each word occurs.
+If we give `Counter` a list of words,
+the result is an object that contains
+the number of times each one appears in the list:
+
+```python
+import string
 from collections import Counter
 
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
-    findwords = re.compile(r"\w+", re.IGNORECASE)
-    word_list = re.findall(findwords, text)
+    chunks = text.split()
+    stripped = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in stripped if word]
     word_counts = Counter(word_list)
     return word_counts
 ```
 
-`\w+` means to match all characters that commonly occur inside words,
-such as letters, numbers, and underscores.
-Spaces and punctuation are not matched,
-so most strings will be split at these characters,
-effectively separating the text into individual words.
-
-We can apply that function to the Dracula ebook (for example):
+Let's try our function on *Dracula*:
 
 ```python
-with open('../data/dracula.txt', 'r') as reader:
+with open('data/dracula.txt', 'r') as reader:
     word_counts = count_words(reader)
 print(word_counts)
 ```
 
 ```text
-Counter({'the': 7474, 'and': 5803, 'I': 4846, 'to': 4662, 'of': 3707, 'a': 2955, 'in': 2466, 'that': 2436, 'he': 1996, 'was': 1870, 'it': 1808, 'is': 1498, 'for': 1480, 'as': 1476, 'me': 1452, ...
+Counter({'the': 7430, 'and': 5723, 'I': 4712, 'to': 4489, 'of': 3697,
+         'a': 2908, 'in': 2457, 'that': 2397, 'he': 1961, 'was': 1865,
+         'it': 1781, 'is': 1498, 'as': 1458, 'for': 1452, 'me': 1443,
+         'his': 1381, 'not': 1374, 'with': 1271, ...})
 ```
 
-The `open` function takes a file path as a string,
-and reads in that file in a format familiar to Python.
-This format is commonly referred to as a `file object` or `stream`,
-and allows Python to effectively operate on the content of the file.
-
-If we want the word counts in a more familiar format like CSV,
-we can write a small function that takes our `collections.Counter` object,
-ensures that it orders the words from most to least frequent,
-and then writes it out to [standard output][standard output] in csv format:
+If we want the word counts in a format like CSV for easier processing,
+we can write another small function that takes our `Counter` object,
+orders its contents from most to least frequent,
+and then writes it to standard output as CSV:
 
 ```python
 import csv
 
 
-def collection_to_csv(collection, ntop=None):
+def collection_to_csv(collection):
     """Write out a collection of items and counts in csv format."""
     collection = collection.most_common()
     writer = csv.writer(sys.stdout)
     writer.writerows(collection)
 ```
 
-Running this would output all the words in the book together with their count.
-To make the output a little easier to view on our screen,
-we can add an option to limit the output to the n most frequent words.
+Running this would print all the distinct words in the book
+along with their counts.
+This list could well be several thousand lines long,
+so to make the output a little easier to view on our screen,
+we can add an option to limit the output to the most frequent words.
+We set its default value to `None`
+so that we can easily tell if the caller *hasn't* specified a cutoff,
+in which case we display the whole collection:
 
 ```python
-def collection_to_csv(collection, ntop=None):
+def collection_to_csv(collection, num=None):
     """Write out a collection of items and counts in csv format."""
     collection = collection.most_common()
-    limit = ntop if ntop else len(collection)
+    if num is None:
+        num = len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(collection[0:limit])
+    writer.writerows(collection[0:num])
 ```
 
 ```python
-collection_to_csv(word_counts, ntop=10)
+collection_to_csv(word_counts, num=10)
 ```
 
 ```text
@@ -321,70 +444,67 @@ was,1870
 ```
 
 To make our `count_words` and `collection_to_csv` functions available at the command line,
-we need to insert them into the script template developed earlier
-and call the functions from within the `main` function.
-Let's call the script `countwords.py`:
+we need to insert them into our script template
+and call them from within the `main` function.
+Let's call our program `countwords.py`
+and put it in the `bin` subdirectory of the `zipf` project:
 
 ```python
 """Count the occurrences of all words in a text and output them in CSV format."""
+
 import sys
-import re
+import string
 import argparse
 import csv
 from collections import Counter
 
 
-def collection_to_csv(collection, ntop=None):
+def collection_to_csv(collection, num=None):
     """Write out a collection of items and counts in csv format."""
     collection = collection.most_common()
-    limit = ntop if ntop else len(collection)
+    if num is None:
+        num = len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(collection[0:limit])
+    writer.writerows(collection[0:num])
 
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
-    findwords = re.compile(r"\w+", re.IGNORECASE)
-    word_list = re.findall(findwords, text)
+    chunks = text.split()
+    stripped = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in stripped if word]
     word_counts = Counter(word_list)
     return word_counts
 
 
 def main(args):
     """Run the command line program."""
-    with args.infile as reader:
+    with open(args.infile, 'r') as reader:
         word_counts = count_words(reader)
-    collection_to_csv(word_counts, ntop=args.ntop)
+    collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Input file name')
-    parser.add_argument('-n', '--ntop', type=int, default=None,
-                        help='Limit output to n most frequent words')
+    parser.add_argument('infile', type=str, help='Input file name')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
     args = parser.parse_args()
     main(args)
 ```
 
-In addition to pasting the two new functions and updating our `main` function,
-we have changed the argparse options for the `'infile'` arguments.
-Setting `type=argparse.FileType('r')`
-instructs argparse to read a file and pass on its contents as a file object
-(just like `open`),
-instead of just passing the file path as a string.
-This is why we no longer need to use `open` inside the main function.
-Together with `nargs='?'`,
-this will allow us to effectively use our script in a pipeline,
-as we will see later.
+Note that we have replaced the `'outfile'` argument with an optional `-n` (or `--num`) flag
+to control how much output is printed
+and modified `collection_to_csv` so that it always prints to standard output
+(Section \@ref(py-rse-bash-basics-stdio)).
+If we want that output in a file,
+we can redirect with `>`.
 
-We have also replaced the `'outfile'` argument with an optional `-n` (or `--ntop`) flag
-to limit the output so that it's easier to view in our terminal window.
-Let's see this in action:
+Let's take our program for a test drive:
 
 ```shell
-$ python countwords.py ../data/dracula.txt -n 10
+$ python bin/countwords.py data/dracula.txt -n 10
 ```
 
 ```text
@@ -400,21 +520,61 @@ he,1996
 was,1870
 ```
 
-For the `infile` option,
-the number of expected arguments (`nargs`) is set to `?`.
-This means that one argument (i.e. a file name)
-will be consumed from the command line *if possible*.
-If we don't provide a file name,
-`nargs='?'` dictates that the `default` value of `-` will be used.
-The `argparse.FileType('r')` argument type understands the pseudo-argument '-'
-to mean standard input and reads from `sys.stdin`.
-This means the script can participate in a pipeline like
-many of the other command line programs we've met.
-For instance,
-this pipeline counts the words in the first 500 lines of the book:
+## Pipelining {#py-rse-py-scripting-pipeline}
+
+Most of the Unix commands we have seen so far follow a useful convention:
+if the user doesn't specify the names of any input files,
+they read from standard input.
+Similarly,
+if no output file is specified,
+the command sends its results to standard output.
+This makes it easy to use the command in a pipeline.
+
+Our program always sends its output to standard output;
+as noted above,
+we can always redirect it to a file with `>`.
+If we want it to read from standard input,
+we only need to change the handling of `infile` in the argument parser
+and simplify `main` to match:
+
+```python
+def main(args):
+    """Run the command line program."""
+    word_counts = count_words(args.infile)
+    collection_to_csv(word_counts, num=args.num)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
+    args = parser.parse_args()
+    main(args)
+```
+
+There are two changes to how `add_argument` handles `infile`:
+
+1.  Setting `type=argparse.FileType('r')`
+    tells `argparse` to treat the argument as a filename
+    and open that file for reading.
+    This is why we no longer need to call `open` ourselves,
+    and why `main` can pass `args.infile` directly to `count_words`.
+
+2.  The number of expected arguments (`nargs`) is set to `?`.
+    This means that if an argument is given it will be used,
+    but if none is provided,
+    a default of `'-'` will be used instead.
+    `argparse.FileType('r')` understands `'-'` to mean "read from standard input";
+    this is another Unix convention that many programs follow.
+
+After these changes,
+we can create a pipeline like this
+to count the words in the first 500 lines of a book:
 
 ```shell
-$ head -500 ../data/dracula.txt | python countwords.py --ntop 10
+$ head -500 data/dracula.txt | python bin/countwords.py --num 10
 ```
 
 ```text
@@ -430,72 +590,77 @@ that,41
 it,40
 ```
 
+## Positional and Optional Arguments
+
+We have met two kinds of command-line arguments while writing `countwords.py`.
+[Optional arguments][optional-argument] are defined using a leading `-` or `--` (or both),
+which means that all three of the following definitions are valid:
+
+```python
+parser.add_argument('-n', type=int, help='Limit output')
+parser.add_argument('--num', type=int, help='Limit output')
+parser.add_argument('-n', '--num', type=int, help='Limit output')
+```
+
+The convention is for `-` to precede a [short][short-option] (single letter) option
+and `--` a [long][long-option] (multi-letter) option.
+The user can provide optional arguments at the command line in any order they like.
+
+[Positional arguments][positional-argument] have no leading dashes and are not optional:
+the user must provide them at the command line
+in the order in which they are specified to `add_argument`
+(unless `nargs='?'` is provided to say that the value is optional).
+
+## Collating Results {#py-rse-py-scripting-collate}
+
 Ultimately,
-we want to save the word counts to a CSV file for further analysis and plotting,
-which we can do via redirection using `>`:
+we want to save the word counts to a CSV file for further analysis and plotting.
+Let's create a subdirectory to hold our results:
 
 ```shell
-$ mkdir ../results
+$ mkdir results
+```
+
+and then save the counts for various files:
+
+```shell
+$ python bin/countwords.py data/dracula.txt > results/dracula.csv
 ```
 
 ```shell
-$ python countwords.py ../data/dracula.txt > ../results/dracula.csv
+$ python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
 ```
 
 ```shell
-$ python countwords.py ../data/moby_dick.txt > ../results/moby_dick.csv
+$ python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-```shell
-$ python countwords.py ../data/jane_eyre.txt > ../results/jane_eyre.csv
-```
+We will talk more in Chapter \@ref(py-rse-project)
+about using subdirectories like `results` to organize our work.
 
-In the code above,
-we created a subdirectory in our project directory to hold our files containing output from data analysis.
-We'll talk more in Chapter \@ref(py-rse-project) to explain this organization.
-
-> **Positional and Optional Arguments**
->
-> In writing the `countwords.py` script we've met two types of command line arguments.
->
-> *Optional arguments* are defined using a leading `-` or `--` (or both),
-> such that all three of the following definitions are valid:
-> ```python
-> parser.add_argument('-f', type=int, help='foo option')
-> parser.add_argument('--foo', type=int, help='foo option')
-> parser.add_argument('-f', '--foo', type=int, help='foo option')
-> ```
-> The convention is for `-` to precede a "short" single letter option
-> and `--` a "long" multiple letter option.
-> The user can provide optional arguments at the command line in any order they like.
->
-> *Positional arguments* have no leading dashes and are not optional - the user
-> must provide them at the command line in the order in which they are defined
-> (the exception being if `nargs='?'`, which we saw earlier).
-
-### Collating results
-
-Now that we've got word counts for a number of books,
-we may want to collate the word counts.
+Now that we can get word counts for individual books
+we can collate the counts for several books.
 This can be done using a loop that adds up the counts of a word
-from the each of the csv-files created from `countwords.py`.
+from the each of the CSV files created by `countwords.py`.
 Using the same template as before,
-we can write the following script called `collate.py`:
+we can write a program called `collate.py`:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
+
 import sys
 import csv
 import argparse
 from collections import Counter
 
 
-def collection_to_csv(collection, ntop=None):
+def collection_to_csv(collection, num=None):
     """Write out a collection of items and counts in csv format."""
     collection = collection.most_common()
-    limit = ntop if ntop else len(collection)
+    if num is None:
+        num = len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(collection[0:limit])
+    writer.writerows(collection[0:num])
 
 
 def update_counts(reader, word_counts):
@@ -510,35 +675,40 @@ def main(args):
     for file_name in args.infiles:
         with open(file_name, 'r') as reader:
             update_counts(reader, word_counts)
-    collection_to_csv(word_counts, ntop=args.ntop)
+    collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', '--ntop', type=int, default=None,
+    parser.add_argument('-n', '--num', type=int, default=None,
                         help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
 
 The loop in the `main` function iterates over each filename in `infiles`,
-opens the CSV-file,
-and runs the `update_counts` function with the file object as one of the parameters.
-This function iterates through all the words in each of the CSV-files
-and adds up the counts with the `+=` operator.
+opens the CSV file,
+and calls `update_counts` with the input stream as one parameter
+and the counter as the other.
+`update_counts` then iterates through all the words the CSV-files
+and increments the counts using the `+=` operator.
 
-You will notice that we have not used `type=argparse.FileType('r')` here.
-This is to show how the syntax would look when we use filenames with `open` instead,
-and because we are not interested in passing standard input directly to the `collate.py` script.
-Passing the filename rather than its content
-is also useful when you are intending to e.g. move or copy the file.
+Note that we have not used `type=argparse.FileType('r')` here.
+Instead,
+we have called the option `infiles` (plural)
+and specified `nargs='*'`
+to tell `argparse` that we will accept zero or more filenames.
+We must then open the files ourselves.
+Passing the filename rather than having `argparse` read its content automatically
+is also useful when doing things like moving or coping files;
+we will look in the exercises at how to combine this with reading from standard input.
 
-The `collate.py` script will take an arbitrary number of input files
-generated using `countwords.py` and collate the word counts:
+Let's give `collate.py` a try
+(using `-n 10` to limit the number of lines of output):
 
 ```shell
-$ python collate.py ../results/dracula.csv ../results/moby_dick.csv ../results/jane_eyre.csv -n 10
+$ python bin/collate.py results/dracula.csv results/moby_dick.csv results/jane_eyre.csv -n 10
 ```
 
 ```text
@@ -554,17 +724,17 @@ it,6171
 was,5891
 ```
 
-### Writing your own modules
+## Writing Our Own Modules
 
-You might have noticed the duplication between `countwords.py` and `collate.py` --
-both use the function `collection_to_csv`.
-Having the same function in numerous different scripts is inefficient and error prone.
-For instance,
-if we want to make an improvement to `collection_to_csv` in the future,
-we have to find every single script that we've copy and pasted it into.
-To avoid this situation,
-let's create a module (i.e. a file with a bunch of Python functions in it)
-called `mymodule.py` for our commonly used functions:
+`countwords.py` and `collate.py` both now contain the function `collection_to_csv`.
+Having the same function in two or more places is a bad idea:
+if we want to improve it or fix a bug,
+we have to find and change every single script that contains a copy.
+
+The solution is to put the shared functions in a separate file
+and load that file as a module.
+Let's create a file called `utilities.py` in the `bin` directory
+that looks like this:
 
 ```python
 """
@@ -575,10 +745,11 @@ Functions
 collection_to_csv
     write out a collection of items and counts in csv format
 """
+
 import sys
 import csv
 
-def collection_to_csv(collection, ntop=None):
+def collection_to_csv(collection, num=None):
     """
     Write out a collection of items and counts in csv format.
 
@@ -586,65 +757,72 @@ def collection_to_csv(collection, ntop=None):
     ----------
     collection : collections.Counter
         Collection of items and counts
-    ntop : int
-        Limit output to n most frequent items
+    num : int
+        Limit output to N most frequent items
     """
     collection = collection.most_common()
-    limit = ntop if ntop else len(collection)
+    if num is None:
+        num = len(collection)
     writer = csv.writer(sys.stdout)
-    writer.writerows(collection[0:limit])
+    writer.writerows(collection[0:num])
 ```
 
-(You'll see we've also taken the time to improve the docstring for `collection_to_csv`.)
+Note that we have written a much more detailed docstring for `collection_to_csv`:
+as a rule,
+the more widely used code is,
+the more it's worth explaining exactly what it does.
 
-We can now import that function into our scripts,
-rather than having to define it anew every time.
-We either import the entire module with `import mymodule`
-or just the function of interest with `from mymodule import collection_to_csv`.
-Here's our new `countwords.py` script,
+We can now import our utilities into our programs
+just as we would import any other Python module
+using either `import utilities` (to get the whole thing)
+or something like `from utilities import collection_to_csv` (to get a single function).
+After making this change,
+`countwords.py` looks like this:
 
 ```python
 """Count the occurrences of all words in a text and write them to a CSV-file."""
+
 import re
 import argparse
 from collections import Counter
-import mymodule
+import utilities
 
 
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
-    findwords = re.compile(r"\w+", re.IGNORECASE)
-    word_list = re.findall(findwords, text)
+    chunks = text.split()
+    stripped = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in stripped if word]
     word_counts = Counter(word_list)
     return word_counts
 
 
 def main(args):
     """Run the command line program."""
-    with args.infile as reader:
-        word_counts = count_words(reader)
-    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+    word_counts = count_words(args.infile)
+    utilities.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
                         default='-', help='Input file name')
-    parser.add_argument('-n', '--ntop', type=int, default=None,
+    parser.add_argument('-n', '--num', type=int, default=None,
                         help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
 
-and here's the updated `collate.py`:
+`collate.py` is now:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
+
 import csv
 import argparse
 from collections import Counter
-import mymodule
+import utilities
 
 
 def update_counts(reader, word_counts):
@@ -659,55 +837,49 @@ def main(args):
     for fn in args.infiles:
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
-    mymodule.collection_to_csv(word_counts, ntop=args.ntop)
+    utilities.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', '--ntop', type=int, default=None,
+    parser.add_argument('-n', '--num', type=int, default=None,
                         help='Limit output to n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
 
-> **Module Naming Conventions**
->
-> Any Python source file can be imported by any other.
-> This is why Python files should be named using [`snake_case`][snake-case]
-> instead of [`kebab-case`][kebab-case]
-> (an expression like `import some-thing` isn't allowed
-> because `some-thing` isn't a legal variable name.)
-> When a file is imported,
-> the statements in it are executed as it loads.
-> Variables, functions, and items defined in the file are
-> then available as `module.name`, where `module` is the
-> filename (without the `.py` extension) and `name` is the
-> name of the item.
+Any Python source file can be imported by any other.
+This is why Python files should be named using [`snake_case`][snake-case]
+instead of [`kebab-case`][kebab-case]:
+an expression like `import some-thing` isn't allowed
+because `some-thing` isn't a legal variable name.
+When a file is imported,
+the statements in it are executed as it loads.
+Variables, functions, and items defined in the file are then available as `module.thing`,
+where `module` is the filename (without the `.py` extension)
+and `thing` is the name of the item.
 
-> **Ignoring the `__pycache__` Directory**
+> **The `__pycache__` Directory**
 >
-> It also creates a subdirectory called `__pycache__`
-> that holds the compiled versions of the imported files.
-> The next time Python imports the module,
-> it checks the timestamp on the script
-> and the timestamp on the corresponding file in `__pycache__`.
-> If the latter is more recent,
-> Python doesn't bother to recompile the file:
-> it just loads the bytes in the cached version and uses those.
-> In the general spirit of ["Don't Repeat Yourself (DRY)"][dry]
-> we typically don't put both the original and processed versions of files in
-> version control,
-> so we normally add the `__pycache__` directory to in `.gitignore`
-> (under some circumstances,
-> it can be convenient to have `__pychache__` under version control,
-> but then you have to have processes in place
-> to make sure that they stay in sync).
+> When we import a file,
+> Python translates the source code into instructions called [byte codes][byte-code]
+> that it can execute efficiently.
+> Since the byte codes only change when the source changes,
+> Python saves the byte code in a separate file,
+> and reloads that file instead of re-translating the source code
+> the next time it's asked to import the file
+> (unless the file has changed,
+> in which case Python starts from the beginning).
+>
+> Python creates a subdirectory called `__pycache__`
+> that holds the byte code for the files imported from that directory.
+> We typically don't want to put the files in `__pycache__` in version control,
+> so we normally tell Git to ignore it as discussed in Section \@ref(py-rse-git-cmdline-ignore).
 
-## Mission Critical Exercise {#py-rse-py-scripting-critical-exercise}
+## Plotting {#py-rse-py-scripting-plotting}
 
 The last thing for us to do is to plot the word count distribution.
-
 Recall that [Zipf's Law][zipfs-law] states the second most common word in a body of text
 appears half as often as the most common,
 the third most common appears a third as often, and so on.
@@ -715,13 +887,13 @@ Mathematically, this might be written as
 "word frequency is proportional to 1/rank."
 
 The following code plots the word frequency against the inverse rank
-using the popular pandas library:
+using the Pandas library:
 
 ```python
 import pandas as pd
 
 
-input_csv = '../results/jane_eyre.csv'
+input_csv = 'results/jane_eyre.csv'
 df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
 df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
 df['inverse_rank'] = 1 / df['rank']
@@ -733,41 +905,108 @@ df.plot.scatter(x='word_frequency', y='inverse_rank',
 knitr::include_graphics("figures/py-rse-scripting/jane_eyre.png")
 ```
 
-Using `script_template.py` as a guide,
-take this plotting code and write a new python script called `plotcounts.py`.
-The script should:
-
-a. Use the `type=argparse.FileType('r')`, `nargs='?'` and `default='-'` options
-   for the input file argument (i.e. similar to the `countwords.py` script)
-   so that `plotcounts.py` uses standard input if no csv file is given.
-
-b. Include an optional `--outfile` argument for the name of the output image file.
-   The default value should be `plotcounts.png`.
-
-b. Include an optional `--xlim` argument so that the user can change the x-axis bounds.
-
-Once you've written `plotcounts.py`,
-generate a plot of the word counts for *Jane Eyre*:
-
-```shell
-$ python plotcounts.py ../results/jane_eyre.csv --outfile ../results/jane_eyre.png
-```
-
-
 ## Summary {#py-rse-py-scripting-summary}
 
-In the novice lessons,
-we learned how to reuse (rather than cut and paste)
-code by defining functions.
-In order to use those functions in other python notebooks/scripts,
-we can save them in a file (called a module) that can be imported.
-In this chapter we have seen that we can go one step further
-and run our Python code outside of a Python environment,
-by writing Python scripts that can be executed at the command line.
+Why is building a simple command-line tool so complex?
+One answer is that the conventions for command-line programs
+have evolved over several decades,
+so libraries like `argparse` must now support several different generations of option handling.
+Another is that the things we want to do genuinely *are* complex:
+read from either standard input or a list of files,
+display help when asked to,
+respect parameters that might not be there,
+and so on.
+As with many other things in programming (and life),
+everyone wishes it was simpler,
+but no one can agree on what to throw away.
+
+The good news is that this complexity is a fixed cost:
+our template for command-line tools can be re-used for programs
+that are much larger than the examples shown in this chapter.
+Making tools that behave in ways people expect
+greatly increases the chances that others will find them useful.
 
 ## Exercises {#py-rse-py-scripting-exercises}
 
-TODO
+### Running Python statements from the command line {#py-rse-scripting-ex-command-line}
+
+We don't need to open the interactive interpreter to run Python code.
+Instead,
+we can invoke Python with the command flag `-c`
+and the statement we want to run:
+
+```python
+$ python -c "print(2+3)"
+```
+
+```text
+5
+```
+
+When and why is this useful?
+
+### Better word identification {#py-rse-scripting-identify-words}
+
+Look at the output of the word-counting program
+and identify as many mistaken "words" as you can,
+then modify the program so that it handles these correctly.
+
+### Collating while counting {#py-rse-scripting-ex-collate-count}
+
+1.  Modify the word-counting program so that it can handle multiple input files,
+    i.e.,
+    so that it collates word counts from multiple files in a single pass.
+2.  How could we achieve the same effect using the program we have now?
+    (Hint: think about reading from standard input.)
+
+### Optional output file {#py-rse-scripting-ex-collate-count}
+
+We decided in Section \@ref(py-rse-py-scripting-pipeline)
+that our program would always print to standard output,
+and that we would redirect to a file when we needed to save our results.
+Modify the program so that it takes an optional `-o` or `--output` flag
+with a filename
+and writes to that file,
+but still writes to standard output if no file is specified.
+
+### Multiple files and standard input {#py-rse-scripting-ex-multiple-files}
+
+We have used `nargs='*'` to get `collate.py` to read from zero or more files:
+
+```python
+parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
+```
+
+However,
+if no filenames are specified,
+it does *not* read from standard input.
+Modify the argument handling and the `main` function so that it can do this.
+
+### A better plotting program {#py-rse-scripting-ex-better-plotting}
+
+Using `script_template.py` as a guide,
+take the plotting code from the final section
+and write a new Python program called `plotcounts.py`.
+The script should:
+
+1. Use the `type=argparse.FileType('r')`, `nargs='?'` and `default='-'` options
+   for the input file argument (i.e. similar to the `countwords.py` script)
+   so that `plotcounts.py` uses standard input if no csv file is given.
+
+2. Include an optional `--outfile` argument for the name of the output image file.
+   The default value should be `plotcounts.png`.
+
+3. Include an optional `--xlim` argument so that the user can change the x-axis bounds.
+
+When you are done,
+generate a plot of the word counts for *Jane Eyre*:
+
+```shell
+$ python plotcounts.py results/jane_eyre.csv --outfile results/jane_eyre.png
+```
+
+Note:
+the solution to this exercise is used in following chapters.
 
 ## Key Points {#py-rse-py-scripting-keypoints}
 
