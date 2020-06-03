@@ -11,7 +11,7 @@ def count_words(reader):
     text = reader.read()
     chunks = text.split()
     stripped = [word.strip(string.punctuation) for word in chunks]
-    word_list = [word for word in stripped if word]
+    word_list = [word.lower() for word in stripped if word]
     word_counts = Counter(word_list)
     return word_counts
 
