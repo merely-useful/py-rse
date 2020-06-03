@@ -4,15 +4,15 @@
 source(here::here("_common.R"))
 ```
 
-Chapter \@ref(py-rse-bash-basics) explained how we can use the command line
-to do all of the things we can do with a graphical file explorer,
-and how to go beyond that to combine commands in powerful ways using pipes and redirection.
-This chapter extends those ideas to show how we can save commands in files
-to create new tools of our own,
+The previous chapter explained how we can use the command line
+to do all of the things we can do with a GUI,
+and how to combine commands in new ways using pipes and redirection.
+This chapter extends those ideas to show
+how we can create new tools by saving commands in files
 and how to use a more powerful version of [wildcards][wildcard]
 to extract data from files.
 
-We'll be continuing to work in `zipfs_law/`,
+We'll be continuing to work in the `zipf` project,
 which after the previous chapter should contain the following files:
 
 ```text
@@ -29,46 +29,46 @@ which after the previous chapter should contain the following files:
 
 > **Deleting Extra Files**
 >
-> If you worked through all of the exercises in the previous chapter,
-> you may have additional files present,
-> but we won't be using them for the rest of the book.
-> Feel free to delete or move these files to a separate directory.
-> We'll include a summary like this at the beginning of each chapter
-> to ensure you have *at least* the essential files present.
-> If you've accidentally deleted an essential file,
-> feel free to download it again from FIXME.
+> You may have additional files
+> if you worked through all of the exercises in the previous chapter.
+> Feel free to delete them or move them to a separate directory.
+> If you have accidentally deleted files you need,
+> you can download them again by following the instructions in Appendix \@ref(py-rse-install).
 
-## How can I create new commands of my own? {#py-rse-bash-advanced-script}
+## Creating New Commands {#py-rse-bash-advanced-script}
 
-Loops and history let us do tasks repeatedly,
-but we can go even further and save commands in files
-so that we can re-run complex sequences of operations with a few keystrokes.
-For historical reasons,
+Loops let us run the same commands many times,
+but we can go further and save commands in files
+so that we can repeat complex operations with a few keystrokes.
+For historical reasons
 a file full of shell commands is usually called a [shell script][shell-script],
 but it is really just another kind of program.
 
-Let's start by ensuring our working directory is `zipfs_law`,
-and creating a new file called `book_summary.sh`
-to hold our shell script:
+Let's start by ensuring our working directory is `zipf`:
 
 ```shell
-$ cd ~/zipfs_law
+$ cd ~/zipf
+```
+
+Edit a new file called `book_summary.sh` to hold our shell script:
+
+```shell
 $ nano book_summary.sh
 ```
 
-Insert this line:
+and insert this line:
 
 ```text
-head -n 19 data/moby_dick.txt | tail -n 11
+head -n 17 data/moby_dick.txt | tail -n 8
 ```
 
-Note that we do *not* put a dollar sign `$` at the front of the line:
-we have been showing that for interactive commands,
+Note that we do *not* put the `$` prompt at the front of the line.
+We have been showing that to highlight interactive commands,
 but in this case we are putting the command in a file rather than running it immediately.
 
-Once we have added this line to the file,
-we can write it out with <kbd>Ctrl</kbd>+<kbd>O</kbd>
-and exit with <kbd>Ctrl</kbd>+<kbd>O</kbd>.
+Once we have added this line,
+we can save the file with <kbd>Ctrl</kbd>+<kbd>O</kbd>
+and exit with <kbd>Ctrl</kbd>+<kbd>X</kbd>.
 `ls` shows that our file now exists:
 
 ```shell
@@ -79,7 +79,7 @@ $ ls
 book_summary.sh	  data/
 ```
 
-We can view the contents of the file using `cat book_summary.sh`.
+We can check the contents of the file using `cat book_summary.sh`.
 More importantly,
 we can now ask the shell to run this file:
 
@@ -88,7 +88,6 @@ $ bash book_summary.sh
 ```
 
 ```text
-
 Title: Moby Dick
        or The Whale
 Author: Herman Melville
@@ -97,52 +96,54 @@ Release Date: December 25, 2008 [EBook #2701]
 Posting Date:
 Last Updated: December 3, 2017
 Language: English
-Character set encoding: UTF-8
-
 ```
 
 Sure enough,
-our script's output is exactly what we would get if we ran the command directly.
-For example,
-we can count how many lines of output there are by putting our script in a pipeline:
+our script's output is exactly the same text we would get if we ran the command directly.
+If we want,
+we can pipe the output of our shell script to another command to count how many lines it contains:
 
 ```shell
 $ bash book_summary.sh | wc -l
 ```
 
 ```text
-    11
+     8
 ```
 
-What if we want to extract the name of the author?
-
-We'll need to modify our script:
+What if we want our script to print the name of the book's author?
+The command `grep` finds and prints lines that match a pattern.
+We'll learn more about `grep` in Section \@ref(py-rse-bash-advanced-grep),
+but for now we can edit the script:
 
 ```shell
 $ nano book_summary.sh
 ```
 
-The command `grep` searches for every line that contains a pattern and prints the matching lines.
-We'll learn more about `grep` in Section \@ref(py-rse-bash-advanced-grep),
-but for now we can edit the script to add a search for the word "Author":
+and add a search for the word "Author":
 
 ```text
-head -n 19 data/moby_dick.txt | tail -n 11 | grep Author
+head -n 17 data/moby_dick.txt | tail -n 8 | grep Author
 ```
 
-Let's finally run the modified script:
+Sure enough,
+when we run our modified script:
 
 ```shell
 $ bash book_summary.sh
 ```
 
+we get the line we want:
+
 ```text
 Author: Herman Melville
 ```
 
-Once again,
+And once again
 we can pipe the output of our script into other commands
-just as we would pipe the output from any other program:
+just as we would pipe the output from any other program.
+Here,
+we count the number of words in the author line:
 
 ```shell
 $ bash book_summary.sh | wc -w
@@ -152,54 +153,55 @@ $ bash book_summary.sh | wc -w
       3
 ```
 
-## How can I make my scripts more versatile? {#py-rse-bash-advanced-params}
+## Making Scripts More Versatile {#py-rse-bash-advanced-params}
 
 Getting the name of the author for only one of the books isn't all that useful.
 What we really want is a way to get the name of the author from any of our files.
-Let's edit `book_summary.sh` again and replace `data/moby_dick.txt`
-with a special variable `$1`.
+Let's edit `book_summary.sh` again
+and replace `data/moby_dick.txt` with a special variable `$1`.
 Once our change is made,
 `book_summary.sh` should contain:
 
 ```text
-head -n 19 $1 | tail -n 11 | grep Author
+head -n 17 $1 | tail -n 8 | grep Author
 ```
 
 Inside a shell script,
 `$1` means "the first argument on the command line".
-We can now run our script like this:
+If we now run our script like this:
 
 ```shell
 $ bash book_summary.sh data/moby_dick.txt
 ```
 
-and get exactly the same output as before,
-or give it a different filename:
+then `$1` is assigned `data/moby_dick.txt`
+and get exactly the same output as before.
+If we give the script a different filename:
 
 ```shell
 $  bash book_summary.sh data/frankenstein.txt
 ```
 
-and get the author name for that book instead.
+we get the name of the author of that book instead:
 
 ```text
 Author: Mary Wollstonecraft (Godwin) Shelley
 ```
 
 Our small script is now doing something useful,
-but it may take the next person who reads it a moment to figure out exactly what that is.
+but it may take the next person who reads it a moment to figure out exactly what.
 We can improve our script by adding [comments][comment] at the top:
 
 ```text
 # Get author information from a Project Gutenberg eBook.
 # Usage: bash book_summary.sh /path/to/file.txt
-head -n 19 $1 | tail -n 11 | grep Author
+head -n 17 $1 | tail -n 8 | grep Author
 ```
 
 As in R and Python,
 a comment starts with a `#` character and runs to the end of the line.
 The computer ignores comments,
-but they help people (including our future self) understand and use scripts.
+but they help people (including our future self) understand and use what we've created.
 
 Let's make one more change to our script.
 Instead of always extracting the author name,
@@ -207,8 +209,8 @@ let's have it select whatever information the user specified:
 
 ```text
 # Get desired information from a Project Gutenberg eBook.
-# Usage: bash book_summary.sh /path/to/file.txt
-head -n 19 $1 | tail -n 11 | grep $2
+# Usage: bash book_summary.sh /path/to/file.txt what_to_look_for
+head -n 17 $1 | tail -n 8 | grep $2
 ```
 
 The change is very small:
@@ -222,26 +224,28 @@ which is assigned the value of the second command-line argument we give the scri
 > A description that sends readers in the wrong direction is worse than none at all,
 > so do your best to avoid this common oversight.
 
-Let's check that it works by asking for 'Release Date':
+Let's check that it works by asking for *Frankenstein*'s release date:
 
 ```shell
-$ bash book_summary.sh data/frankenstein.txt Release Date
+$ bash book_summary.sh data/frankenstein.txt Release
 ```
 
 ```text
 Release Date: June 17, 2008 [EBook #84]
 ```
 
-## How can I turn interactive work into a script? {#py-rse-bash-advanced-capture}
+## Turning Interactive Work into a Script {#py-rse-bash-advanced-capture}
 
 Suppose we have just run a series of commands that did something useful,
 such as summarizing all books in a given directory.
 Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
-we can run the following command to save the six most recent commands in `summarize_all_books.sh`:
+we can use `history` and redirection to save recent commands to a file.
+For example,
+we can save the last six commands to `summarize_all_books.sh`:
 
 ```shell
-$ history 5 > summarize_all_books.sh
+$ history 6 > summarize_all_books.sh
 $ cat summarize_all_books.sh
 ```
 
@@ -254,35 +258,39 @@ $ cat summarize_all_books.sh
 302 history 6 > summarize_all_books.sh
 ```
 
-Open the file in an editor,
+We can now open the file in an editor,
 remove the serial numbers at the start of each line,
-and delete the extraneous lines (`ls` and the last line),
-and you've created a script that accurately and efficiently captures what we actually did.
-
+and delete the lines we don't want
+to create a script that captures exactly what we actually did.
 This is how we usually develop shell scripts:
 run commands interactively a few times to make sure they are doing the right thing,
 then save our recent history to a file and turn that into a reusable script.
 
-## How can I find things in a file? {#py-rse-bash-advanced-grep}
+## Finding Things in Files {#py-rse-bash-advanced-grep}
 
 We can use `head` and `tail` to select lines from a file by position,
 but we also often want to select lines that contain certain values.
-This operation is called [filtering][filter] When we are working with database tables or dataframes,
-and in the shell,
-we usually do it by the command `grep` that we already used before.
-The name comes from "global regular expression print",
+This is called [filtering][filter],
+and we usually do it in the shell with the command `grep`
+that we briefly met in Section \@ref(py-rse-bash-advanced-script).
+Its name is an acronym of "global regular expression print",
 which was a common sequence of operations in early Unix text editors.
-To show more on how `grep` works,
-we will use our sleuthing skills to explore `data/sherlock_holmes.txt`.
 
-Let's find lines that contain the word "Sherlock".
-Since we're searching the entire text of a book,
-we'll pipe to `head` so that only the first few lines are shown
-(`-n 5` means the first five results will be printed):
+To show how `grep` works,
+we will use our sleuthing skills to explore `data/sherlock_holmes.txt`.
+First,
+let's find lines that contain the word "Sherlock".
+Since there are likely to be hundreds of matches,
+we will pipe `grep`'s output to `head` to show only the first few:
 
 ```shell
 $ grep Sherlock data/sherlock_holmes.txt | head -n 5
 ```
+
+Here, `Sherlock` is our (very simple) pattern.
+`grep` searches the file line by line
+and shows those lines that contain matches,
+so the output is:
 
 ```text
 Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
@@ -292,16 +300,10 @@ as I had pictured it from Sherlock Holmes' succinct description,
 "Good-night, Mister Sherlock Holmes."
 ```
 
-Here, `Sherlock` is our (very simple) pattern.
-`grep` searches the file line by line
-and shows those lines that contain matches.
-
-A search for `grep sherlock`
-would yield no results, but also no error:
-as with other Unix commands,
-grep searches are case-sensitive.
+If we run `grep sherlock` instead we get no output,
+since `grep` patterns are case-sensitive.
 If we wanted to make the search case-insensitive,
-we could add the option `-i`:
+we can add the option `-i`:
 
 ```shell
 $ grep -i sherlock data/sherlock_holmes.txt | head -n 5
@@ -315,8 +317,8 @@ THE ADVENTURES OF SHERLOCK HOLMES
 To Sherlock Holmes she is always THE woman. I have seldom heard
 ```
 
-Note that these results are not quite identical to our previous search,
-due to the presence of "SHERLOCK" near the top of the text file.
+This output is different from our previous output
+because of the lines containing "SHERLOCK" near the top of the file.
 
 Next, let's search for the pattern `on`:
 
@@ -332,11 +334,10 @@ with this eBook or online at www.gutenberg.net
 Author: Arthur Conan Doyle
 ```
 
-In each of these five results,
-our pattern ("on") is part of a larger word,
-such as "Conan".
-To restrict matching to lines containing `on` on its own,
-we can give `grep` the `-w` option:
+In each of these lines,
+our pattern ("on") is part of a larger word such as "Conan".
+To restrict matching to lines containing `on` by itself,
+we can give `grep` the `-w` option (for "match words"):
 
 ```shell
 $ grep -w on data/sherlock_holmes.txt
@@ -367,13 +368,12 @@ data/sherlock_holmes.txt:Author: Arthur Conan Doyle
 
 In this case,
 `grep` uses `on` as the pattern
-and tries to find it in the files `the` and `data/sherlock_holmes.txt`.
+and tries to find it in files called `the` and `data/sherlock_holmes.txt`.
 It then tells us that the file `the` cannot be found,
 but prints `data/sherlock_holmes.txt` as a prefix to each other line of output
 to tell us which file those lines came from.
-
 If we want to give `grep` both words as a single argument,
-we must wrap them in quotation marks:
+we must wrap them in quotation marks as before:
 
 ```shell
 $ grep "on the" data/sherlock_holmes.txt
@@ -390,15 +390,15 @@ pink-tinted note-paper which had been lying open upon the table.
 > **Quoting**
 >
 > Quotation marks aren't specific to `grep`:
-> the shell interprets them before running the command,
-> just as it expands wildcards to create actual filenames
-> no matter what we're asking it to do.
+> the shell interprets them before running commands,
+> just as it expands wildcards to create filenames
+> no matter what command those filenames are being passed to.
 > This allows us to do things like `head -n 5 "My Thesis.txt"`
-> if we want to edit a file that has a space in its name.
+> to get lines from a file that has a space in its name.
 > It is also why many programmers write `"$variable"` instead of just `$variable`
 > when creating loops or shell scripts:
 > if there's any chance at all that the variable's value will contain spaces,
-> it's safest to quote it.
+> it's safest to put it in quotes.
 
 One of the most useful options for `grep` is `-n`,
 which numbers the lines that match the search:
@@ -415,8 +415,7 @@ $ grep -n "on the" data/sherlock_holmes.txt
 198:pink-tinted note-paper which had been lying open upon the table.
 ```
 
-`grep` has many options—-
-so many,
+`grep` has many options---so many,
 in fact,
 that almost every letter of the alphabet means something to it:
 
@@ -438,12 +437,11 @@ SYNOPSIS
 ...more...
 ```
 
-We can combine options (i.e. flags) as we do with other Unix commands.
+We can combine options to `grep` as we do with other Unix commands.
 For example,
-we can combine two options we've covered previously with a new option,
-`-v`,
-which inverts the match—-
-i.e., prints lines that *don't* match the pattern:
+we can combine two options we've covered previously with `-v`
+to invert the match—--i.e.,
+to print lines that *don't* match the pattern:
 
 ```shell
 $ grep -i -n -v the data/sherlock_holmes.txt
@@ -457,38 +455,39 @@ $ grep -i -n -v the data/sherlock_holmes.txt
 8:
 ```
 
-As we learned in Chapter \@ref(py-rse-bash-basics),
-we can also condense this search as `grep -inv`.
+As we learned in Section \@ref(py-rse-bash-basics-navigate),
+we can write this command as `grep -inv`,
+but probably shouldn't for the sake of readability.
 
 If we want to search several files at once,
 all we have to do is give `grep` all of their names.
-In these cases,
-we can use wildcards,
-such as to count how many lines in all of the books contain "pain":
+The easiest way to do this is usually to use wildcards.
+For example,
+this command counts how many lines contain "pain" in all of our books:
 
 ```shell
-$ grep pain data/*.txt | wc -l
+$ grep -w pain data/*.txt | wc -l
 ```
 
 ```text
-    334
+     122
 ```
 
-Finally,
+Alternatively,
 the `-r` option (for "recursive") tells `grep` to search all of the files
 in or below a directory:
 
 ```shell
-$ grep -r pain data | wc -l
+$ grep -w -r pain data | wc -l
 ```
 
 ```text
-      334
+     122
 ```
 
-`grep` becomes even more powerful through the use of [regular expressions][regular-expression],
-which are specialized sets of letters, numbers, and symbols
-that allow searches for specific patterns.
+`grep` becomes even more powerful
+when we start using [regular expressions][regular-expression],
+which are sets of letters, numbers, and symbols that define complex patterns.
 For example,
 this command finds lines that start with the letter 'T':
 
@@ -505,30 +504,32 @@ The distinction is clear. For example, you have frequently seen
 ```
 
 The `-E` option tells `grep` to interpret the pattern as a regular expression,
-rather than searching for the specific term provided.
-The quotation marks prevent the shell from treating any special characters in the pattern as wildcards,
-and the `^` means that a line only matches if it begins with the search term--
-in this case, `T`.
+rather than searching for an actual circumflex followed by an upper-case 'T'.
+The quotation marks prevent the shell from treating special characters in the pattern as wildcards,
+and the `^` means that a line only matches
+if it begins with the search term---in this case, `T`.
 
 Many tools support regular expressions:
 we can use them in programming languages,
 database queries,
 online search engines,
-and most text editors (though not Nano—its creators wanted to keep it as small as possible).
-A detailed guide of regular expressions is outside the scope of this learning material,
-but a wide range of tutorials are available online;
-@Goyv2012 is a useful companion if you need to go further.
+and most text editors (though not Nano---its creators wanted to keep it as small as possible).
+A detailed guide of regular expressions is outside the scope of this book,
+but a wide range of tutorials are available online,
+and @Goyv2012 is a useful companion if you need to go further.
 
-## How can I find files? {#py-rse-bash-advanced-find}
+## Finding Files {#py-rse-bash-advanced-find}
 
 While `grep` finds things in files,
 the `find` command finds files themselves.
 It also has a lot of options,
-but unlike most Unix commands these are written as full words rather than abbreviations.
+but unlike most Unix commands they are written as full words
+rather than single-letter abbreviations.
 To show how it works,
-we will use the entire contents of our `zipfs_law` directory,
+we will use the entire contents of our `zipf` directory,
 including files we created earlier in this chapter:
 
+```text
 ├── book_summary.sh
 ├── data
 │   ├── README.md
@@ -543,12 +544,13 @@ including files we created earlier in this chapter:
 │   ├── authors.txt
 │   └── releases.txt
 └── summarize_all_books.sh
+```
 
 For our first command,
 let's run `find .` to find and list everything in this directory.
-(As always,
+As always,
 `.` on its own means the current working directory,
-which is where we want our search to start.)
+which is where we want our search to start.
 
 ```shell
 $ find .
@@ -625,10 +627,31 @@ $ find . -name "*.txt"
 ./data/jane_eyre.txt
 ```
 
-As stated earlier,
-the command line's power lies in combining tools.
-We have seen how to do that with pipes;
-let's use another technique to see how large our HTML files are:
+Notice the quotes around `"*.txt"`.
+If we omit them and type:
+
+```shell
+$ find . -name *.txt
+```
+
+then the shell tries to expand the `*` wildcard in `*.txt`
+*before* running `find`.
+Since there aren't any text files in the current directory,
+the expanded list is empty,
+so the shell tries to run the equivalent of
+
+```shell
+$ find . -name
+```
+
+and gives us the error message:
+
+```text
+find: -name: requires additional arguments
+```
+
+We have seen before how to combine commands using pipes.
+Let's use another technique to see how large our books are:
 
 ```shell
 $ wc -l $(find . -name "*.txt")
@@ -647,22 +670,23 @@ $ wc -l $(find . -name "*.txt")
 96883 total
 ```
 
-When the shell executes this command,
-it runs whatever is inside the `$()`
-and then replaces `$()` with that command's output.
-Since the output of `find` is the paths of four HTML files,
+When the shell executes our command,
+it runs whatever is inside `$(...)`
+and then replaces `$(...)` with that command's output.
+Since the output of `find` is the paths to our text files,
 the shell constructs the command:
 
 ```shell
-$ wc -l ./summaries/releases.txt ./summaries/authors.txt ./data/moby_dick.txt ./data/sense_and_sensibility.txt ./data/sherlock_holmes.txt ./data/time_machine.txt ./data/frankenstein.txt ./data/dracula.txt ./data/jane_eyre.txt
+$ wc -l ./summaries/releases.txt ./summaries/authors.txt ... ./data/jane_eyre.txt
 ```
 
+(We are using `...` in place of six files' names in order to fit things neatly on the printed page.)
 This results in the output as seen above.
 It is exactly like expanding the wildcard in `*.txt`,
 but more flexible.
 
 We will often use `find` and `grep` together.
-The first finds files whose names match a pattern,
+The first command finds files whose names match a pattern,
 while the second looks for lines inside those files that match another pattern.
 For example,
 we can look for Authors in all our text files:
@@ -688,7 +712,7 @@ $ grep "Author:" $(find . -name "*.txt")
 ./data/jane_eyre.txt:Author: Charlotte Bronte
 ```
 
-We can also use `$()` expansion to create a list of filenames to use in a loop:
+We can also use `$(...)` expansion to create a list of filenames to use in a loop:
 
 ```shell
 $ for file in $(find . -name "*.txt")
@@ -710,14 +734,17 @@ $ find . -name "*.bak"
 ./data/sherlock_holmes.txt.bak
 ```
 
-## How can I change the shell's settings? {#py-rse-bash-advanced-vars}
+## Configuring the Shell {#py-rse-bash-advanced-vars}
 
-The shell is just a program, and like other programs, it has variables.
-Those variables control its execution,
-so by changing their values
+As Section \@ref(py-rse-bash-basics-loops) explained,
+the shell is a program,
+and like any other program it has variables.
+Some of those variables control the shell's operations;
+by changing their values
 we can change how the shell and other programs behave.
 
-Let's run the command `set` and look at some of the variables in a typical shell session:
+Let's run the command `set`
+and look at some of the variables the shell defines:
 
 ```shell
 $ set
@@ -738,38 +765,40 @@ USERNAME=amira
 ...
 ```
 
-There are quite a few—many more than are shown here.
+There are many more than are shown here---roughly a hundred
+in our current shell session.
 And yes,
 using `set` to *show* things might seem a little strange,
 even for Unix,
 but if we don't give it any arguments,
-it might as well show us things we *could* set.
+the command might as well show us things we *could* set.
 
-Every variable has a name.
-By convention, variables that are always present are given upper-case names.
-All shell variables' values are strings, even those (like `UID`) that look like numbers.
+By convention,
+shell variables that are always present have upper-case names.
+All shell variables' values are strings,
+even those (such as `UID`) that look like numbers.
 It's up to programs to convert these strings to other types when necessary.
-For example, if a program wanted to find out how many processors the computer had,
-it would convert the value of the `NUMBER_OF_PROCESSORS` variable from a string to an integer.
+For example,
+if a program wanted to find out how many processors the computer had,
+it would convert the value of `NUMBER_OF_PROCESSORS` from a string to an integer.
 
 Similarly, some variables (like `PATH`) store lists of values.
 In this case, the convention is to use a colon ':' as a separator.
 If a program wants the individual elements of such a list,
-it's the program's responsibility to split the variable's string value into pieces.
+it must split the variable's value into pieces.
 
 Let's have a closer look at `PATH`.
 Its value defines the shell's [search path][search-path],
-i.e., the list of directories that the shell looks in for runnable programs
-when we type in a program name without specifying what directory it is in.
-
+which is the list of directories that the shell looks in for programs
+when we type in a command name without specifying exactly where it is.
 For example,
 when we type a command like `analyze`,
 the shell needs to decide whether to run `./analyze` (in our current directory)
 or `/bin/analyze` (in a system directory).
-The rule it uses is simple:
-the shell checks each directory in the `PATH` variable in turn,
-looking for a program with the requested name in that directory.
-As soon as it finds a match, it stops searching and runs the program.
+To do this,
+the shell checks each directory in the `PATH` variable in turn.
+As soon as it finds a program with the right name,
+it stops searching and runs what it has found.
 
 To show how this works,
 here are the components of `PATH` listed one per line:
@@ -796,7 +825,11 @@ unless we type the path in explicitly
 (for example,
 as `./analyze` if we are in `/Users/amira`).
 
-Let's show the value of the variable `HOME`:
+If we want to see a variable's value,
+we can print it using the `echo` command
+introduced at the end of Section \@ref(py-rse-bash-basics-history).
+Let's look at the value of the variable `HOME`,
+which keeps track of our home directory:
 
 ```shell
 $ echo HOME
@@ -806,9 +839,9 @@ $ echo HOME
 HOME
 ```
 
-Whoops: this just prints "HOME", which isn't what we wanted
-(though it is what we asked for).
-Let's try this instead:
+Whoops: this just prints "HOME", which isn't what we wanted.
+Instead,
+we need to run this:
 
 ```shell
 $ echo $HOME
@@ -818,17 +851,19 @@ $ echo $HOME
 /Users/amira
 ```
 
-The dollar sign tells the shell that we want the value of the variable named `HOME`;
-as we have seen,
-`echo` simply prints the literal string `HOME` if we omit it
-(because that's what we want `echo` to do if we type `echo hello` or something similar).
-This works just like wildcards:
-the shell does the replacement before running the program we've asked for.
-Thanks to this expansion, what we actually run is `echo /Users/amira`,
+As with loop variables (Section \@ref(py-rse-bash-basics-loops)),
+the dollar sign before the variable names tells the shell
+that we want the variable's value.
+This works just like wildcard expansion
+the shell replaces the variable's name with its value
+*before* running the command we've asked for.
+Thus,
+`echo $HOME` becomes `echo /Users/amira`,
 which displays the right thing.
 
-Creating a variable is easy—we just assign a value to a name using "=",
-and put quotes around the value if it contains spaces or special characters:
+Creating a variable is easy:
+we assign a value to a name using "=",
+putting quotes around the value if it contains spaces or special characters:
 
 ```shell
 $ DEPARTMENT="Library Science"
@@ -839,7 +874,7 @@ $ echo $DEPARTMENT
 Library Science
 ```
 
-To change the value, we just assign a new one:
+To change the value, we simply assign a new one:
 
 ```shell
 $ DEPARTMENT="Information Science"
@@ -852,11 +887,6 @@ Information Science
 
 If we want to set some variables automatically every time we run a shell,
 we can put commands to do this in a file called `.bashrc` in our home directory.
-(The '.' character at the front prevents `ls` from listing this file
-unless we specifically ask it to using `-a`.
-The "rc" at the end is an abbreviation for "run commands",
-which meant something really important decades ago,
-and is now just a convention everyone follows without understanding why.)
 For example,
 here are two lines in `/Users/amira/.bashrc`:
 
@@ -869,14 +899,28 @@ export BACKUP_DIR=$TEMP_DIR/backup
 These three lines create the variables `DEPARTMENT`,
 `TEMP_DIR`,
 and `BACKUP_DIR`,
-and export them so that any programs the shell runs can see them as well.
+and [export][export-variable] them so that any programs the shell runs can see them as well.
 Notice that `BACKUP_DIR`'s definition relies on the value of `TEMP_DIR`,
 so that if we change where we put temporary files,
 our backups will be relocated automatically.
+However,
+this will only happen once we restart the shell,
+because `.bashrc` is only executed when the shell starts up.
+
+> **What's in a Name?**
+>
+> The '.' character at the front of the name `.bashrc`
+> prevents `ls` from listing this file
+> unless we specifically ask it to using `-a`.
+> The "rc" at the end is an abbreviation for "run commands",
+> which meant something really important decades ago,
+> and is now just a convention everyone follows without understanding why.
 
 While we're here,
-it's also common to use the `alias` command to create shortcuts for things we frequently type.
-For example, we can define the alias `backup`
+it's also common to use the `alias` command
+to create shortcuts for things we frequently type.
+For example,
+we can define the alias `backup`
 to run `/bin/zback` with a specific set of arguments:
 
 ```shell
@@ -906,41 +950,52 @@ by searching online for "sample bashrc".
 FIXME: explain how to customize the shell prompt
 (because we promised to do this in the Bash basics chapter).
 
-Demonstrating concepts in this chapter has resulted
-in a number of extraneous files that we won't use anymore.
-We can use these files to explore how our aliases work in practice,
-while cleaning up our project in preparation for our next chapter.
+## Summary {#py-rse-bash-advanced-summary}
+
+As powerful as the Unix shell is,
+it does have its shortcomings:
+dollar signs, quotes, and other punctuation
+can make a complex shell script look as though
+it was created by a cat dancing on a keyboard.
+However,
+it is the glue that holds data science together:
+shell scripts are used to create pipelines from miscellaneous sets of programs,
+while shell variables are used to do everything from
+specifying package installation directories to managing database login credentials.
+And while `grep` and `find` may take some getting used to,
+they and their cousins can handle enormous datasets very efficiently.
+If you would like to go further,
+[@Ray2014] is an excellent general introduction,
+while [@Jans2014] looks specifically at how to process data on the command line.
+
+## Exercises {#py-rse-bash-advanced-exercises}
+
+Many of the exercises below have been adapted from Software Carpentry's lesson
+[The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+As with the previous chapter,
+extra files and directories created during these exercises
+may need to be removed when you are done.
+
+### Cleaning up {#py-rse-bash-advanced-cleaning-up}
+
+As we have gone through this chapter,
+we have created several files that we won't need again.
+We can clean them up with the following commands;
+briefly explain what each line does.
 
 ```shell
 $ for file in $(find . -name "*.bak")
 > do
-> rm $file
+>   rm $file
 > done
 $ mkdir bin
 $ mv book_summary.sh bin
 $ rm -r summaries
 ```
 
-We'll talk more about organizing files associated with projects in Chapter \@ref(py-rse-project),
-but will continue setting up our files in an appropriate directory structure until then.
-
-## Summary {#py-rse-bash-advanced-summary}
-
-FIXME: summarize advanced Bash.
-
-## Exercises {#py-rse-bash-advanced-exercises}
-
-Many of the exercises below have been adapted from Software Carpentry's lesson
-[The Unix Shell](http://swcarpentry.github.io/shell-novice/).
-
-As with the previous chapter,
-extra files and directories created during these exercises may need to be removed from your Zipf's Law project.
-We include an overview of the status of the project at the start of the next chapter.
-
 ### Variables in shell scripts {#py-rse-bash-advanced-ex-script-variables}
 
-Imagine you have a shell script called `script.sh` containing the
-following commands:
+Imagine you have a shell script called `script.sh` that contains:
 
 ```shell
 head -n $2 $1
@@ -978,17 +1033,16 @@ the most lines.
 ### Script reading comprehension {#py-rse-bash-advanced-ex-reading-scripts}
 
 For this question, consider your `data` directory once again.
-
 Explain what each of the following three scripts would do when run as
 `bash script1.sh *.txt`, `bash script2.sh *.txt`, and `bash script3.sh *.txt` respectively.
 
 ```shell
-# Script 1
+# script1.sh
 echo *.*
 ```
 
 ```shell
-# Script 2
+# script2.sh
 for filename in $1 $2 $3
 > do
 >     cat $filename
@@ -996,14 +1050,16 @@ for filename in $1 $2 $3
 ```
 
 ```shell
-# Script 3
+# script3.sh
 echo $@.txt
 ```
 
+(You may need to search online to find the meaning of `$@`.)
+
 ### Using `grep` {#py-rse-bash-advanced-ex-using-grep}
 
-Assume the following text from The Adventures of Sherlock Holmes
-is contained within a file called `excerpt.txt`:
+Assume the following text from *The Adventures of Sherlock Holmes*
+is contained in a file called `excerpt.txt`:
 
 ```text
 To Sherlock Holmes she is always THE woman. I have seldom heard
@@ -1025,9 +1081,10 @@ and predominates the whole of her sex. It was not that he felt
 
 ### Tracking publication years {#py-rse-bash-advanced-ex-tracking-species}
 
-In the previous chapter's exercises,
-you examined a command that extracted the publication year from a list of book titles (\@ref(py-rse-bash-basics-ex-pipe-construction)).
+FIXME: check that the exercise from the basics chapter actually does this.
 
+In Exercise \@ref(py-rse-bash-basics-ex-pipe-construction)
+you examined a command that extracted the publication year from a list of book titles.
 Write a shell script called `year.sh` that takes any number of
 filenames as command-line arguments,
 and uses a variation of that command to print a list
@@ -1035,26 +1092,27 @@ of the unique publication years appearing in each of those files separately.
 
 ### Counting names {#py-rse-bash-advanced-ex-sense-sensibility}
 
-You and your friend,
-having just finished reading *Sense and Sensibility*,
-are having an argument.  
+You and your friend have just finished reading *Sense and Sensibility*
+and are now having an argument.  
 Your friend thinks that the elder of the two Dashwood sisters,
-Harriet, was mentioned more frequently in the book.
-You, however, are certain it was the younger sister, Marianne.  
-Luckily, you have a file `sense_and_sensibility.txt` containing the full text of the novel.
-Using a `for` loop, how would you tabulate the number of times each
-of the sisters is mentioned?
+Harriet,
+was mentioned more frequently in the book,
+but you are certain it was the younger sister, Marianne.  
+Luckily, `sense_and_sensibility.txt` contains the full text of the novel.
+Using a `for` loop,
+how would you tabulate the number of times each of the sisters is mentioned?
 
 Hint: one solution might employ
-the commands `grep` and `wc` and a `|`, while another might utilize
-`grep` options.
-There is often more than one way to solve a programming task, so a
-particular solution is usually chosen based on a combination of
-yielding the correct result, elegance, readability, and speed.
+the commands `grep` and `wc` and a `|`,
+while another might utilize `grep` options.
+There is often more than one way to solve a problem with the shell;
+people choose solutions based on readability,
+speed,
+and what commands they are most familiar with.
 
 ### Matching and subtracting {#py-rse-bash-advanced-ex-match-subtract}
 
-Assume your working directory is the root directory of your Zipf's Law project.
+Assume you are in the root directory of the `zipf` project.
 Which of the following commands will find all files in `data` whose names end in `e.txt`,
 but do *not* contain the word `machine`?
 
@@ -1073,28 +1131,14 @@ wc -l $(find . -name '*.dat') | sort -n
 
 ### Finding files with different properties {#py-rse-bash-advanced-ex-find-properties}
 
-The `find` command can be given several other criteria known as "tests"
-to locate files with specific attributes, such as creation time, size,
-permissions, or ownership.  Use `man find` to explore these, and then
-write a single command to find all files in or below the current directory
+The `find` command can be given criteria called "tests"
+to locate files with specific attributes,
+such as creation time, size, or ownership.
+Use `man find` to explore these,
+then write a single command using `-type`, `-mtime`, and `-user`
+to find all files in or below the current directory
 that are owned by the user `ahmed` and were modified in the last 24 hours.
-
-Hint 1: you will need to use three tests: `-type`, `-mtime`, and `-user`.
-
-Hint 2: The value for `-mtime` will need to be negative—why?
-
-### Combining options {#py-rse-bash-advanced-ex-combining-options}
-
-In some command line tools,
-multiple options can be combined with a single `-` and no spaces between the options,
-so that (for example) `ls -Fal` is equivalent to `ls -F -a -l`.
-Should you use this or not?
-
-### Other wildcards {#py-rse-bash-advanced-ex-other-wildcards}
-
-The shell provides several wildcards beyond the widely-used `*`.
-To explore them,
-explain in plain language what files the expression `novel-????-[ab]*.{txt,pdf}` matches and why.
+Explain why the value for `-mtime` need to be negative.
 
 ## Key Points {#py-rse-bash-advanced-keypoints}
 
