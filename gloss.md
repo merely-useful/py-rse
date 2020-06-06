@@ -162,13 +162,13 @@
 **Comment**<a id="comment"></a>
 :   FIXME
 
+**Commit**<a id="commit"></a>
+:   FIXME: define both noun and verb.
+
 **Commit hash**<a id="commit-hash"></a>
 :   FIXME
 
 **Commit message**<a id="commit-message"></a>
-:   FIXME
-
-**Commit**<a id="commit"></a>
 :   FIXME
 
 **Commons**<a id="commons"></a>
@@ -413,6 +413,9 @@
 
 **GNU Public License**<a id="gpl"></a> (GPL):
    FIXME
+
+**Git**<a id="git"></a>
+:   FIXME
 
 **Git branch**<a id="git-branch"></a>
 :   FIXME
@@ -1021,6 +1024,9 @@
 :   FIXME
 
 **Verification**<a id="verification"></a>
+:   FIXME
+
+**Version control system**<a id="version-control-system"></a>
 :   FIXME
 
 **Violin plot**<a id="violin-plot"></a>

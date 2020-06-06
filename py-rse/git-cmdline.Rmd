@@ -4,15 +4,29 @@
 source(here::here("_common.R"))
 ```
 
-The first two volumes in this series introduced version control with Git
-using a graphical interface like [GitKraken][gitkraken] or [the RStudio IDE][rstudio-ide].
-These interfaces are actually wrappers around Git's original command-line interface,
-which allows us to access all of Git's features.
-This lesson describes how the basic cycle of add, commit, push, and pull works at the command line.
+A [version control system][version-control-system] records changes to files
+and helps people share their work with each other.
+These things can be done by emailing files to colleagues
+or by using "track changes" in Microsoft Word and Google Docs,
+but version control does both more accurately and efficiently.
+Originally developed to support software development,
+over the past fifteen years it has become the cornerstone
+of [reproducible research][reproducible-research].
 
-To illustrate with the Zipf's Law project,
-we will start by tracking our work up to this point in Git.
-The project directory should currently include:
+The most widely used version control system today is [Git][git].
+Many people first encounter it through a GUI like [GitKraken][gitkraken]
+or [the RStudio IDE][rstudio-ide],
+and we assume that you have used one of these to save your work before.
+However,
+these tools are actually wrappers around Git's original command-line interface,
+which gives us access to all of Git's features.
+This lesson describes how to perform fundamental operations using that interface;
+Chapter \@ref(py-rse-git-advanced) then introduces more advanced operations
+that can be used to implement a smoother research workflow.
+
+To show how git works,
+we will apply it to the Zipf's Law project.
+Our project directory should currently include:
 
 ```text
 ├── bin
@@ -33,14 +47,15 @@ The project directory should currently include:
     └── moby_dick.csv
 ```
 
-The code in `bin/plotcounts.py`
-is the solution to the mission critical exercise at the end of the last chapter.
-Since there are different possible solutions,
-here is the code we have in `bin/plotcounts.py`,
-so you can follow along with the changes we make in this chapter:
+`bin/plotcounts.py` is the solution to Exercise \@ref(py-rse-scripting-ex-better-plotting);
+over the course of this chapter
+we will edit it to produce more informative plots.
+Initially,
+it looks like this:
 
 ```python
 """Plot word counts."""
+
 import argparse
 import pandas as pd
 
@@ -66,21 +81,17 @@ if __name__ == '__main__':
     main(args)
 ```
 
-To illustrate the version control cycle we'll be making some edits
-to this code to produce a more informative plot.
+## Setting Up {#py-rse-git-cmdline-setup}
 
-## How can I set up Git for command-line use? {#py-rse-git-cmdline-setup}
-
-On a command line,
-we write Git commands as <code>git <em>verb</em> <em>options</em></code>,
+We write Git commands as <code>git <em>verb</em> <em>options</em></code>,
 where the [subcommand][subcommand] <code><em>verb</em></code> tells Git what we want to do
-and <code><em>options</em></code> provide any additional optional information that subcommand needs.
+and <code><em>options</em></code> provide whatever additional information that subcommand needs.
 Using this syntax,
 the first thing we need to do is configure Git:
 
 ```shell
 $ git config --global user.name "Amira Khan"
-$ git config --global user.email "amira@zipfs.org"
+$ git config --global user.email "amira@zipf.org"
 ```
 
 (Please use your own name and email address instead of the one shown.)
@@ -93,10 +104,11 @@ but do so for consistency.
 Since we are going to be using [GitHub][github],
 the email address should be the same as the one we used when setting up our GitHub account.
 
-These two commands only need to be run once:
-the flag `--global` tells Git to use the settings for all of our projects on this computer.
-We can re-run these commands any time if you want to change our details.
-We can also check our settings:
+The `--global` option tells Git to use the settings for all of our projects on this computer,
+so these two commands only need to be run once.
+However,
+we can re-run them any time if we want to change our details.
+We can also check our settings using the `--list` option:
 
 ```shell
 $ git config --list
@@ -104,37 +116,36 @@ $ git config --list
 
 ```text
 user.name=Amira Khan
-user.email=amira@zipfs.org
+user.email=amira@zipf.org
 core.autocrlf=input
 core.editor=nano
 core.repositoryformatversion=0
 core.filemode=true
 core.bare=false
 core.ignorecase=true
+...
 ```
 
 > **Git Help and Manual**
 >
-> If you forget a Git command,
-> we can get a list of the ones available using `--help`.
-> This option will also give us more information about specific commands.
+> If we forget a Git command,
+> we can list which ones are available using `--help`:
 >
 > ```shell
 > $ git --help
+> ```
+>
+> This option also gives us more information about specific commands:
+>
+> ```shell
 > $ git config --help
 > ```
 
-## How can I create a new repository? {#py-rse-git-cmdline-repos}
+## Creating a New Repository {#py-rse-git-cmdline-repos}
 
-Once Git is configured, we can start using it.
-This section will cover how to create a Git repository associated with a project folder.
-
-Most of the commands we will use (such as `git add` and `git commit`) will sound familiar,
-as the same terminology is used in graphical interfaces like [GitKraken][gitkraken] and [the RStudio IDE][rstudio-ide].
-
-Let's begin tracking our Zipf's Law project in Git.
-First, we need to make sure we are in the `zipf` directory
-(that is, the top-level directory of our Zipf's Law project):
+Once Git is configured,
+we can use it to track work on our Zipf's Law project.
+First, we need to make sure we are in the top-level directory of our project:
 
 ```shell
 $ cd ~/zipf
@@ -145,10 +156,10 @@ $ ls
  bin       data      results
 ```
 
-To tell Git to make this directory a [repository][repository],
+We want to make this directory a [repository][repository],
 i.e.,
-a place where Git can store versions of our files,
-use the `init` command:
+a place where Git can store versions of our files.
+We do this using the `init` command with `.` to mean "the current directory":
 
 ```shell
 $ git init .
@@ -158,7 +169,7 @@ $ git init .
 Initialized empty Git repository in /Users/amira/zipf/.git/
 ```
 
-`ls` seems to show that the directory hasn't changed:
+`ls` seems to show that nothing has changed:
 
 ```shell
 $ ls
@@ -205,67 +216,36 @@ Untracked files:
 nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-We have "no commits yet", and Git has recognized that the existing folders, `bin/`, `data/` and `results/`, are not yet tracked in version control.
+"No commits yet" means that Git hasn't recorded any history yet,
+while "Untracked files" means Git has noticed that
+there are things in the repository that it hasn't recorded.
 
-## How can I add existing work to a Git repository? {#py-rse-git-cmdline-add-existing}
+## Adding Existing Work {#py-rse-git-cmdline-add-existing}
 
-Now that we have a repository for our work,
-we can add files to it and track their history.
-This section will cover adding our existing work to our new repository.
-
-To start, let's make sure we're still in the right directory:
-
-```shell
-$ cd ~/zipf
-```
-
-Then check the status, to see that we have untracked files:
-
-```shell
-$ git status
-```
-
-```text
-On branch master
-
-No commits yet
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-
-        bin/
-        data/
-        results/
-
-nothing added to commit but untracked files present (use "git add" to track)
-```
-
-"Untracked files" means there is a file in the directory whose history Git isn't tracking.
-This is often the case when we initialize a Git repo in an existing directory ---
-the work we've already done is in the directory
-but Git won't automatically track it.
-
-We can tell Git to start keeping track of files or directories using `git add`.
-We can add single files:
+Now that our project is a repository,
+we can tell Git to start recording its history.
+To do this,
+we add things to the list of things Git is tracking using `git add`.
+We can do this for single files:
 
 ```shell
 $ git add bin/countwords.py
 ```
-Or entire directories:
+
+or entire directories:
 
 ```shell
 $ git add bin
 ```
 
-With an existing project
-we sometimes want to tell Git to track all the files that are already there,
-in which case, pass the current directory, `.`:
+The easiest thing to do with an existing project
+is to tell Git to add everything in the current directory using `.`:
 
 ```shell
 $ git add .
 ```
 
-Then we can check the status to see all the files that have been added:
+We can then check the repository's status to see what files have been added:
 
 ```shell
 $ git status
@@ -298,27 +278,35 @@ Changes to be committed:
         new file:   results/jane_eyre.png
 ```
 
-Adding all your existing files is a dangerous operation,
-since it's easy to inadvertently add files that should never be in version control --- things that may contain passwords,
-access tokens,
-or other potentially sensitive information.
-Carefully check this list of files to be committed
-for anything that shouldn't be there.  
+Adding all of our existing files this way is easy,
+but we can accidentally add things that should never be in version control,
+such as files containing passwords or other sensitive information.
+The output of `git status` tells us that
+we can remove such files from the list of things to be saved
+using `git rm --cached`;
+we will practice this in Exercise \@ref(py-rse-git-cmdline-ex-unsave).
 
-While you always want to version your script files
-(e.g. in this case, the files in `bin/`),
-here we've chosen to also include our original data files,
-result files, and image files in version control.
-This should be a project specific decision ---
-for instance, you might not want to include these files if they
-are large or in a binary format.
-You'll learn more about how to make the decision of
-what does and doesn't go in version control
-in Chapter \@ref(py-rse-project).
+> **What to Save**
+>
+> We always want to save programs, manuscripts,
+> and everything else we have created by hand
+> in version control.
+> In this project,
+> we have also chosen to save our data files
+> and the results we have generated
+> (including our plots).
+> This is a project-specific decision:
+> if these files are very large,
+> for example,
+> we may decide to save them elsewhere,
+> while if they are easy to re-create,
+> we may not save them at all.
+> We will explore this issue further in Chapter \@ref(py-rse-project).
 
-We now have no "untracked files",
-but the tracked files haven't been committed to our history.
-Commit changes with `git commit`:
+We no longer have any untracked files,
+but the tracked files haven't been [committed][commit]
+(i.e., saved permanently in our project's history).
+We can do this using `git commit`:
 
 ```shell
 $ git commit -m "Add scripts, novels, word counts, and word rank plot"
@@ -346,78 +334,104 @@ $ git commit -m "Add scripts, novels, word counts, and word rank plot"
  create mode 100644 results/moby_dick.csv
 ```
 
-When we run `git commit`,
-Git takes everything we have told it to save by using `git add`
-and stores a copy permanently inside the special `.git` directory.
+`git commit` takes everything we have told Git to save using `git add`
+and stores a copy permanently inside the repository's `.git` directory.
 This permanent copy is called a [commit][commit] or a [revision][revision].
-In this case,
-its [short identifier][short-identifier-git] is `31a216a`;
-this is the first few characters of a computer generated label that is unique to each commit,
-so your commit will have another identifier.
+Git gives is a unique identifier,
+and the first line of output from `git commit` displays
+its [short identifier][short-identifier-git] `31a216a`,
+which is the first few characters of that unique label.
 
 We use the `-m` option (short for <strong>m</strong>essage)
-to record a short descriptive that will remind us later what we did and why.
-Once again, we put the message in double quotes because it contains spaces.
-If we just run `git commit` without the `-m` option,
-Git will launch `nano`
-(or whatever other editor is configured using `git config --global core.editor`)
-so that we can write a longer [commit message][commit-message].
-In a longer message,
-the first line is referred to as the "subject"
-and the rest as the "body".
-With `-m`,
-we're only writing the subject line.
-It is important to write [descriptive commit messages][desc-cmt-msgs]
-to save your collaborators' time
-(remember, your most frequent collaborator is a future version of yourself).
-Following these guidelines will help with that:
-
-1. Separate subject from body with a blank line
-2. Limit the subject line to 50 characters
-3. Capitalize the subject line
-4. Do not end the subject line with a period
-5. Use the imperative mood in the subject line
-6. Wrap the body at 72 characters
-7. Use the body to explain what and why rather than how
-
+to record a short comment with the commit
+to remind us later what we did and why.
+(Once again,
+we put it in double quotes because it contains spaces.)
 If we run `git status` now:
 
 ```shell
 $ git status
 ```
 
+the output tells us that
+all of our existing work is tracked and up to date:
+
 ```text
 On branch master
 nothing to commit, working tree clean
 ```
 
-Git tells us all of our existing work is tracked and up to date.  
+This first commit becomes the starting point of our project's history:
+we won't be able to see changes made before this point.
+This implies that we should make our project a Git repository
+as soon as we create it
+rather than after we have done some work.
 
-This first commit becomes the first point in our Git history ---
-you can't time travel back beyond this point.
-This means you generally want to initialize your project as a Git repository sooner rather than later.
+## Describing Commits {#py-rse-git-cmdline-commit-message}
 
-## How can I save and track changes? {#py-rse-git-cmdline-changes}
+If we run `git commit` *without* the `-m` option,
+Git opens a text editor
+so that we can write a longer [commit message][commit-message].
+In this message,
+the first line is referred to as the "subject"
+and the rest as the "body",
+just as in an email.
 
-Our initial commit gives us a starting point in our history.
-Now, let's see how we might record the history of a new file.
-The process is similar to adding our existing work:
+When we use `-m`,
+we are only writing the subject line;
+this makes things easier in the short run,
+but if our project's history fills up with one-liners like
+"Fixed problem" or "Updated",
+our future self will wish that we had taken a few extra seconds
+to explain things in a little more detail.
+Following [these guidelines][desc-cmt-msgs] will help:
+
+1.  Separate the subject from the body with a blank line
+    so that it is easy to spot.
+2.  Limit subject lines to 50 characters so that they are easy to scan.
+3.  Write the subject line in Title Case (like a section heading).
+4.  Do not end the subject line with a period.
+5.  Write as if giving a command
+    (e.g., "Make each plot half the width of the page").
+6.  Wrap the body
+    (i.e., insert line breaks to format text as paragraphs
+    rather than relying on editors to wrap lines automatically).
+7.  Use the body to explain what and why rather than how.
+
+> **Which Editor?**
+>
+> The default editor in the Unix shell is called Vim.
+> It has many useful features,
+> but no one has ever claimed that its interface is intuitive.
+> ("How do I exit the Vim editor?"
+> is one of the most frequently read questions on Stack Overflow.)
+> Section \@ref(py-rse-install-git-nano) explains
+> how to configure Git to use the `nano` editor
+> introduced in Chapter \@ref(py-rse-bash-basics) instead.
+
+## Saving and Tracking Changes {#py-rse-git-cmdline-changes}
+
+Our initial commit gave us a starting point.
+The process to build on top of it is similar:
 first add the file, then commit changes.
-
-Again, verify you are still in the right directory:
+Let's check that we're in the right directory:
 
 ```shell
-$ cd ~/zipf
+$ pwd
 ```
 
-Let's use our `plotcounts.py` program to generate
-a plot of the word counts in `results/dracula.csv`:
+```text
+/Users/amira/zipf
+```
+
+Let's use `plotcounts.py` to plot the word counts in `results/dracula.csv`:
 
 ```shell
 python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
-We can check the status of our repo again:
+If we check the status of our repository again,
+Git tells us that we have a new file:
 
 ```shell
 $ git status
@@ -433,8 +447,8 @@ Untracked files:
 nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-Since `results/dracula.png` is a new file, Git isn't tracking it yet.
-Let's add it, and commit it:
+Git isn't tracking this file yet because we haven't told it to.
+Let's do that with `git add` and then commit our change:
 
 ```shell
 $ git add results/dracula.png
@@ -456,13 +470,13 @@ $ git log
 
 ```text
 commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa (HEAD -> master)
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 10:46:19 2020 -0800
 
     Add plot of word counts for 'Dracula'
 
 commit 31a216a6119de9a8d2233e5e275af9a2967415af
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
     Add scripts, novels, word counts, and word rank plot
@@ -471,31 +485,30 @@ Date:   Wed Feb 19 15:39:04 2020 -0800
 `git log` lists all commits made to a repository in reverse chronological order.
 The listing for each commit includes
 the commit's [full identifier][full-identifier-git]
-(which starts with the same characters as the short identifier printed by `git commit` earlier),
+(which starts with the same characters as the short identifier printed by `git commit`),
 the commit's author,
 when it was created,
-and the log message Git was given when the commit was created.
+and the commit message that we wrote.
 
-The plot (Figure \@ref(fig:py-rse-git-cmdline-initial-plot)) we've made is a little sub-optimal,
-because most of the visual space
-is devoted to the ten to twenty words with very high frequency and
-it is hard to see what is happening with the other, more than 10,000, words.
+The plot we have made is shown in Figure \@ref(fig:py-rse-git-cmdline-initial-plot).
+It could be better:
+most of the visual space is devoted to a few very common words,
+which makes it hard to see what is happening with the other ten thousand or so words.
 
 ```{r py-rse-git-cmdline-initial-plot, echo=FALSE, fig.cap="Inverse rank versus word frequency for Dracula"}
 knitr::include_graphics("figures/py-rse-git-cmdline/plot-initial.png")
 ```
 
-An alternative way to visually evaluate Zipf's Law is to plot
-the word frequency against rank on log-log axes. Let's edit `plotcounts.py` to create this alternative plot.
-
-We can make the change by editing the line:
+An alternative way to visually evaluate Zipf's Law is
+to plot the word frequency against rank on log-log axes.
+Let's change the line:
 
 ```python
     ax = df.plot.scatter(x='word_frequency', y='inverse_rank',
                          figsize=[12, 6], grid=True, xlim=args.xlim)
 ```
 
-To put `'rank'` on the y-axis and add `loglog=True`:
+to put `'rank'` on the y-axis and add `loglog=True`:
 
 ```python
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
@@ -503,7 +516,7 @@ To put `'rank'` on the y-axis and add `loglog=True`:
 ```
 
 When we run `git status` now,
-it tells us that a file it already knows about has been modified:
+it prints:
 
 ```shell
 $ git status
@@ -520,17 +533,14 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-The last line is the key phrase:
-"no changes added to commit".
-We have changed this file,
-but we haven't told Git we want to save those changes
-(which we do with `git add`)
-nor have we saved them
-(which we do with `git commit`).
+The last line tells us that
+a file Git already knows about has been modified.
+To save those changes in the repository's history,
+we must `git add` and then `git commit`.
 
-Let's do that now.
-It is good practice to review our changes before saving them,
-which we can do with `git diff`.
+Before we do,
+though,
+let's review the changes using `git diff`.
 This command shows us the differences between the current state of our repository
 and the most recently saved version:
 
@@ -553,7 +563,8 @@ index 13e7f38..a6005cd 100644
      ax.figure.savefig(args.outfile)
 ```
 
-The output is cryptic (even by the standards of the Unix command line)
+The output is cryptic,
+even by the standards of the Unix command line,
 because it is actually a series of commands telling editors and other tools
 how to turn the file we *had* into the file we *have*.
 If we break it down into pieces:
@@ -571,7 +582,7 @@ If we break it down into pieces:
     that have been changed to add context.
 
 To be specific,
-this `diff` is describing that this line in the file was removed:
+this `diff` tells us that this line in the file was removed:
 
 ```python
     df.plot.scatter(x='word_frequency', y='inverse_rank',
@@ -585,9 +596,8 @@ and this line was added:
 
 Git's default is to compare line by line,
 but it can be instructive to instead compare word by word
-with the `--word-diff` or `--color-words` optional flags.
-This can be particularly useful when running `git diff` on prose,
-rather than code.
+using the `--word-diff` or `--color-words` options.
+These are particularly useful when running `git diff` on prose rather than code.
 
 After reviewing our change
 we can commit it just as we did before:
@@ -606,7 +616,7 @@ no changes added to commit
 
 Whoops:
 we forgot to add the file to the set of things we want to commit.
-Let's fix that:
+Let's do that and then try the commit again:
 
 ```shell
 $ git add bin/plotcounts.py
@@ -640,17 +650,19 @@ python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 knitr::include_graphics("figures/py-rse-git-cmdline/plot-loglog.png")
 ```
 
-We are still looking for a linear relationship,
-although now it will be negative, rather than positive
-(since we're plotting the rank instead of the reverse rank).
-The low frequency words (below about 120 instances)
-seem to follow a straight line very closely,
-but we currently have to make this evaluation by eye.
-In the next chapter, we'll write code to fit and add a
-line to our plot.
+> **Interpreting Our Plot**
+>
+> If Zipf's Law holds,
+> we should still see a linear relationship,
+> although now it will be negative, rather than positive
+> (since we're plotting the rank instead of the reverse rank).
+> The low-frequency words (below about 120 instances)
+> seem to follow a straight line very closely,
+> but we currently have to make this evaluation by eye.
+> In the next chapter,
+> we'll write code to fit and add a line to our plot.
 
-Checking `git status` again reveals our plot file has
-been modified:
+Running `git status` again shows that our plot has been modified:
 
 ```text
 On branch master
@@ -663,11 +675,9 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-But, since `results/dracula.png` is a binary file rather than plain text,
-viewing the differences between the files would be meaningless to most people.
-Therefore,
-`git diff` simply tells us that the new file is different from the old one,
-without displaying the actual differences:
+Since `results/dracula.png` is a binary file rather than text,
+`git diff` can't show what has changed.
+It therefore simply tells us that the new file is different from the old one:
 
 ```diff
 diff --git a/results/dracula.png b/results/dracula.png
@@ -675,9 +685,17 @@ index d8162ac..e9fe7f8 100644
 Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
-If we are sure we want to commit all of our changes,
-we can combine `git add` and `git commit` into a single command.
-To save our work in one step give `git commit` the `-a` option:
+This is one of the biggest weaknesses of Git
+(and other version control systems):
+they are built to handle text.
+They can track changes to images, PDFs, and other formats,
+but they cannot do as much to show or merge differences.
+In a better world than ours,
+programmers fixed this years ago.
+
+If we are sure we want to save all of our changes,
+we can add and commit in a single command
+by giving `git commit` the `-a` option:
 
 ```shell
 $ git commit -a -m "Update dracula plot"
@@ -689,23 +707,26 @@ $ git commit -a -m "Update dracula plot"
  rewrite results/dracula.png (99%)
 ```
 
-## How can I synchronize with other repositories? {#py-rse-git-cmdline-remotes}
+## Synchronizing with Other Repositories {#py-rse-git-cmdline-remotes}
 
 Sooner or later our computer will experience a hardware failure,
 be stolen,
-or be thrown in the lake by someone who thinks we shouldn't spend the *entire* vacation working on our thesis.
+or be thrown in the lake by someone who thinks that
+we shouldn't spend the entire vacation working on our thesis.
 Even before that happens
 we will probably want to collaborate with others,
-which we can do by linking our local repository to one stored on a hosting service such as [GitHub][github].
+which we can do by linking our local repository
+to one stored on a hosting service such as [GitHub][github].
 
-The first step in doing that is to create an account on GitHub if we don't already have one,
+The first steps are to create an account on GitHub,
 and then to create a new repository to synchronize with.
 The remote repository doesn't have to have the same name as the local one,
 but we will probably get confused if they are different,
 so the repository we create on GitHub will also be called `zipf`.
 
-The next step is to connect the two repositories.
-We do this by making the GitHub repository a [remote][remote-repository] for the local repository.
+Next,
+we need to connect our desktop repository with the one on GitHub.
+We do this by making the GitHub repository a [remote][remote-repository] of the local repository.
 The home page of the repository on GitHub includes the string we need to identify it
 (Figure \@ref(fig:py-rse-git-cmdline-repo-link)).
 
@@ -719,17 +740,17 @@ and then copy that URL.
 > **HTTPS vs. SSH**
 >
 > We use HTTPS here because it does not require additional configuration.
-> You may want to set up SSH access,
-> which is a bit more secure,
-> by following one of the tutorials from [GitHub][git-ssh-github],
+> If we want to set up SSH access so that we do not have to type in our password as often,
+> the tutorials from [GitHub][git-ssh-github],
 > [Bitbucket][git-ssh-bitbucket],
 > or [GitLab][git-ssh-gitlab]
-> (the last of which includes a screencast).
+> explain the steps required.
 
 Next,
 let's go into the local `zipf` repository and run this command:
 
 ```shell
+$ cd ~/zipf
 $ git remote add origin https://github.com/amira/zipf.git
 ```
 
@@ -738,8 +759,7 @@ the only difference should be that it includes your username instead of `amira`.
 
 A Git remote is like a bookmark:
 it gives a short name to a URL.
-In this case,
-the remote's name is `origin`;
+In this case the remote's name is `origin`;
 we could use anything we want,
 but `origin` is Git's default,
 so we will stick with it.
@@ -760,7 +780,7 @@ to download from one URL but upload to another.
 Sensible people don't do this,
 so we won't explore this possibility any further.
 
-Once we have set up the remote,
+Now that we have configured a remote,
 we can [push][git-push] the work we have done so far to the repository on GitHub:
 
 ```shell
@@ -769,7 +789,7 @@ $ git push origin master
 
 This may prompt us to enter our username and password;
 once we do that,
-we see a few lines of administrative information:
+Git prints a few lines of administrative information:
 
 ```text
 Enumerating objects: 33, done.
@@ -785,14 +805,14 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 ```
 
 If we view our GitHub repository in the browser,
-we will now see that it includes all of our project files,
-along with all of the commits we made to create it (Figure \@ref(fig:py-rse-git-cmdline-history)).
+it now includes all of our project files,
+along with all of the commits we have made so far (Figure \@ref(fig:py-rse-git-cmdline-history)).
 
 ```{r py-rse-git-cmdline-history, echo=FALSE, fig.cap="Repository history on GitHub"}
 knitr::include_graphics("figures/py-rse-git-cmdline/repo-history.png")
 ```
 
-We can now [pull][git-pull] changes from the remote repository to the local one as well:
+We can also [pull][git-pull] changes from the remote repository to the local one:
 
 ```shell
 $ git pull origin master
@@ -807,16 +827,15 @@ Already up-to-date.
 Pulling has no effect in this case
 because the two repositories are already synchronized.
 
-## How can I explore a project's history? {#py-rse-git-cmdline-history}
+## Exploring History {#py-rse-git-cmdline-history}
 
-We have now made a few changes to our project.
-Git lets us look at the previous versions of the project files
+Git lets us look at previous versions of files
 and restore specific files to earlier states if we want to.
-To do this,
-we need to use an identifier that indicates the versions we want.
+In order to do these things,
+we need to identify the versions we want.
 
-There are two ways to do this,
-which are similar in spirit to [absolute][absolute-path] and [relative][relative-path] paths.
+The two ways to do this
+are analogous to [absolute][absolute-path] and [relative][relative-path] paths.
 The "absolute" version is the unique identifier that Git gives to each commit.
 These identifiers are 40 characters long,
 but in most situations Git will let us use just the first half dozen characters or so.
@@ -826,49 +845,51 @@ it shows us something like this:
 
 ```text
 commit d77bc5cc204f3140d95f942d0515b143927c6f51 (HEAD -> master, origin/master)
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:44:54 2020 -0800
 
     Update dracula plot
 
 commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
     Edit to plot frequency against rank on log-log axes
 
 commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 10:46:19 2020 -0800
 
     Add plot of word counts for 'Dracula'
 
 commit 31a216a6119de9a8d2233e5e275af9a2967415af
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
     Add scripts, novels, word counts, and word rank plot
 ```
 
-The commit in which we changed `plotcounts.py` has the absolute
-identifier `b5176bfd2ce9650ad5e79e117cd68a666c9cdabc`, but we
-only need to provide `b5176bf` to reference this commit.
+The commit in which we changed `plotcounts.py`
+has the absolute identifier `b5176bfd2ce9650ad5e79e117cd68a666c9cdabc`,
+but we can use `b5176bf` to reference it in almost all situations.
 
 While `git log` includes the commit message,
 it doesn't tell us exactly what changes were made in each commit.
-If we add the `-p` (short for **p**atch) option,
-we get additional details, similar to `git diff`,
-describing the changes made in each commit:
+If we add the `-p` option (short for <strong>p</strong>atch),
+we get the same kind of details `git diff` provides
+to describe the changes in each commit:
 
 ```shell
 git log -p
 ```
 
-Here's the first part of the output, but we've truncated the rest, since it is very long:
+The first part of the output is shown below;
+we have truncated the rest,
+since it is very long:
 
 ```text
 commit d77bc5cc204f3140d95f942d0515b143927c6f51 (HEAD -> master, origin/master)
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:44:54 2020 -0800
 
     Update dracula plot
@@ -879,19 +900,20 @@ Binary files a/results/dracula.png and b/results/dracula.png differ
 ...
 ```
 
-Alternatively, you can use `git diff` directly to examine the
-differences between files at any stage in the repository's history.
+Alternatively,
+we can use `git diff` directly
+to examine the differences between files at any stage in the repository's history.
 Let's explore this with the `plotcounts.py` file.
-Perhaps you noticed we no longer need the line of code in `plotcounts.py`
+We no longer need the line of code in `plotcounts.py`
 that calculates the inverse rank:
 
 ```python
 df['inverse_rank'] = 1 / df['rank']
 ```
 
-Let's delete the line from `bin/plotcounts.py`.
-Then `git diff` on its own will show the difference between the file as it is now
-and the most recent version:
+If we delete that line from `bin/plotcounts.py`,
+`git diff` on its own will show
+the difference between the file as it is now and the most recent version:
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
@@ -908,7 +930,9 @@ index a6005cd..d085f22 100644
      ax.figure.savefig(args.outfile)
 ```
 
-but `git diff b5176bf` shows the difference between the current state
+`git diff b5176bf`,
+on the other hand,
+shows the difference between the current state
 and the commit referenced by the short identifier:
 
 ```diff
@@ -931,21 +955,19 @@ index d8162ac..e9fe7f8 100644
 Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
-Note that you may need to use a different identifier than `b5176bf`.
+Note that you may need to use something other than `b5176bf`,
+since Git may have assigned your commit a different unique identifier.
 Note also that we have *not* committed this change:
 we will look at ways of undoing it in the next section.
 
 The "relative" version of history relies on a special identifier called `HEAD`,
 which always refers to the most recent version in the repository.
-`git diff HEAD`
-shows the same thing as `git diff`.
-Instead of typing in a version identifier to back up one commit,
-though,
-we can simply use `HEAD~1` (where `~` is the tilde symbol).
+`git diff HEAD` therefore shows the same thing as `git diff`,
+but instead of typing in a version identifier to back up one commit,
+we can use `HEAD~1` (where `~` is the tilde symbol).
 This shorthand is read "HEAD minus one",
-and gives us the difference to the *previous* saved version.
+and gives us the difference to the previous saved version.
 `git diff HEAD~2` goes back two revisions and so on.
-
 We can also look at the differences between two saved versions
 by separating their identifiers with two dots `..` like this:
 
@@ -969,15 +991,16 @@ index a6005cd..13e7f38 100644
 ```
 
 If we want to see the changes made in a particular commit,
-we can use `git show`:
+we can use `git show`
+with an identifier and a file joined by a colon:
 
 ```shell
-$ git show HEAD~1 bin/plotcounts.py
+$ git show HEAD~1:bin/plotcounts.py
 ```
 
 ```diff
 ommit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
-Author: Amira Khan <amira@zipfs.org>
+Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
     Edit to plot frequency against rank on log-log axes
@@ -996,11 +1019,11 @@ index 13e7f38..a6005cd 100644
      ax.figure.savefig(args.outfile)
 ```
 
-## How can I restore old versions of files? {#py-rse-git-cmdline-restore}
+## Restoring Old Versions of Files {#py-rse-git-cmdline-restore}
 
 We can see what we changed,
 but how can we restore it?
-Let's suppose we change our mind about the last update to `bin/plotcounts.py`
+Suppose we change our mind about the last update to `bin/plotcounts.py`
 before we add it or commit it.
 `git status` tells us that the file has been changed,
 but those changes haven't been [staged][git-stage]:
@@ -1050,16 +1073,14 @@ $ head -12 bin/plotcounts.py | tail -4
 As its name suggests,
 `git checkout` checks out (i.e., restores) an old version of a file.
 In this case,
-we told Git to recover the version of the file saved in `HEAD`,
-i.e.,
-in the most recent commit.
-We can use a commit identifier to go back as far as we want:
+we told Git to recover the version of the file saved in the most recent commit.
+We can use a specific commit identifier rather than `HEAD` to go back as far as we want:
 
 ```shell
 $ git checkout 65b7e61 bin/countwords.py
 ```
 
-Doing this does *not* change the history:
+Doing this does not change the history:
 `git log` still shows our four commits.
 Instead,
 it replaces the content of the file with the old content:
@@ -1079,7 +1100,8 @@ Changes to be committed:
 ```
 
 Notice that the changes have already been added to the staging area for new commits.
-We can bring the file back in sync with the most recent commit using `git checkout`:
+If we change our mind again,
+we can return the file to the state of the most recent commit using `git checkout`:
 
 ```shell
 $ git checkout HEAD bin/countwords.py
@@ -1107,18 +1129,14 @@ $ head -12 bin/plotcounts.py | tail -4
                     figsize=[12, 6], grid=True, xlim=args.xlim)
 ```
 
-Since we didn't commit the change that
-removed the line that calculates the inverse rank,
+Since we didn't commit the change
+that removed the line that calculates the inverse rank,
 that work is now lost:
 Git can only go back and forth between committed versions of files.
 
-## How can I tell Git to ignore some files? {#py-rse-git-cmdline-ignore}
+## Ignoring Files {#py-rse-git-cmdline-ignore}
 
-We have only modified one file at a time in this tutorial,
-but everything we have done works just as well with multiple files.
-Sometimes,
-though,
-we don't want Git to track files' history.
+We don't always want Git to track every file's history.
 For example,
 we might want to track text files with names ending in `.txt`
 but not data files with names ending in `.dat`.
@@ -1129,11 +1147,35 @@ This file can contain filenames like `thesis.pdf`
 or [wildcard][wildcard] patterns like `*.dat`.
 Each must be on a line of its own,
 and Git will ignore anything that matches any of these lines.
+For example,
+the `.gitignore` file for the Zipf's Law project contains:
+
+```text
+.Rhistory
+.Rproj.user
+__pycache__
+*.bak
+```
+
+which tells Git to ignore the files created by the RStudio IDE,
+any `__pycache__` directory created by Python,
+and any backup files ending in `.bak`.
 
 > **Remember to Ignore**
 >
 > Don't forget to commit `.gitignore` to your repository
 > so that Git knows to use it.
+
+## Summary {#py-rse-git-cmdline-summary}
+
+The biggest benefit of version control for individual research is that
+we can always go back to the precise set of files
+that we used to produce a particular result.
+Being able to back up our changes on sites like GitHub
+with just a few keystrokes
+is a close second,
+but some of Git's advanced features make it even more powerful.
+We will explore these in the next chapter.
 
 ## Exercises {#py-rse-git-cmdline-exercises}
 
@@ -1154,6 +1196,28 @@ $ git heaps-law     # make heaps-law a Git repository
 
 Is the `git init` command that she runs inside the `heaps-law` subdirectory
 required for tracking files stored there?
+
+### Removing before saving {#py-rse-git-cmdline-ex-unsave}
+
+The output of `git status` tells us that
+we can take files out of the list of things to be saved
+using `git rm --cached`.
+Try this out:
+
+1.  Create a new file in the repository called `example.txt`.
+2.  Use `git add` to add this file.
+3.  Use `git status` to check that Git has noticed it.
+4.  Use `git rm --cached` to remove it from the list of things to be saved.
+
+What does `git status` now show?
+What (if anything) has happened to the file?
+
+### Viewing changes {#py-rse-git-cmdline-ex-word-diff}
+
+Make a few changes to a file in your Git repository,
+then view those differences using both `git diff`
+and `git diff --word-diff`.
+Which output do you find easiest to understand?
 
 ### Committing changes {#py-rse-git-cmdline-ex-commit}
 
@@ -1190,12 +1254,12 @@ that you want to commit as a single snapshot.
 3.  Add changes from both files to the staging area
     and commit those changes.
 
-### Write a biography {#py-rse-git-cmdline-ex-bio}
+### Write your biography {#py-rse-git-cmdline-ex-bio}
 
--   Create a new Git repository on your computer called `bio`.
--   Write a three-line biography for yourself in a file called `me.txt` and commit your changes.
--   Modify one line and add a fourth line.
--   Display the differences between the file's original state and its updated state.
+1.  Create a new Git repository on your computer called `bio`.
+2.  Write a three-line biography for yourself in a file called `me.txt` and commit your changes.
+3.  Modify one line and add a fourth line.
+4.  Display the differences between the file's original state and its updated state.
 
 ### Ignoring nested files {#py-rse-git-cmdline-ex-ignore-nested}
 
@@ -1219,16 +1283,16 @@ How would you get that same information in the shell?
 
 ### GitHub timestamps {#py-rse-git-cmdline-ex-timestamp}
 
--   Create a remote repository on GitHub.
--   Push the contents of your local repository to the remote.
--   Make changes to your local repository and push these changes as well.
--   Go to the repo you just created on GitHub and check the timestamps of the files.
+1.  Create a remote repository on GitHub.
+2.  Push the contents of your local repository to the remote.
+3.  Make changes to your local repository and push these changes as well.
+4.  Go to the repo you just created on GitHub and check the timestamps of the files.
 
 How does GitHub record times, and why?
 
 ### Push versus commit {#py-rse-git-cmdline-ex-push-commit}
 
-How is `git push` different from `git commit`?
+Explain in one or two sentences how `git push` is different from `git commit`.
 
 ### License and README files {#py-rse-git-cmdline-ex-boilerplate}
 
@@ -1239,7 +1303,7 @@ what would have happened when we tried to link our local and remote repositories
 
 ### Recovering older versions of a file {#py-rse-git-cmdline-ex-recover}
 
-Jennifer made changes this morning to a shell script called `data_cruncher.sh`
+Amira made changes this morning to a shell script called `data_cruncher.sh`
 that she has been working on for weeks.
 Her changes broke the script,
 and she has now spent an hour trying to get it back in working order.
@@ -1285,9 +1349,9 @@ $ cat motivation.txt
 
 ### Understanding `git diff` {#py-rse-git-cmdline-ex-diff}
 
--   What will the command `git diff HEAD~9 bin/plotcounts.py` do if we run it?
--   What does it actually do?
--   What does `git diff HEAD bin/plotcounts.py` do?
+1.   What will the command `git diff HEAD~9 bin/plotcounts.py` do if we run it?
+2.  What does it actually do?
+3.  What does `git diff HEAD bin/plotcounts.py` do?
 
 ### Getting rid of staged changes {#py-rse-git-cmdline-ex-unstage}
 
@@ -1295,9 +1359,9 @@ $ cat motivation.txt
 but will it also work for changes that have been staged but not committed?
 To find out:
 
--   Change `bin/plotcounts.py`.
--   `git add` that change.
--   Use `git checkout` to see if you can remove your change.
+1.  Change `bin/plotcounts.py`.
+2.  `git add` that change.
+3.  Use `git checkout` to see if you can remove your change.
 
 Does it work?
 
@@ -1305,8 +1369,8 @@ Does it work?
 
 Run the command `git blame bin/plotcounts.py`.
 
--   What does each line of the output show?
--   Why do some lines start with a circumflex `^`?
+1.  What does each line of the output show?
+2.  Why do some lines start with a circumflex `^`?
 
 ## Key Points {#py-rse-git-cmdline-keypoints}
 
