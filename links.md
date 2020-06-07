@@ -153,9 +153,9 @@
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
 [git-stage]: glossary.html#git-stage
 [git]: glossary.html#git
+[github]: http://github.com
 [github-pages]: https://pages.github.com/
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
-[github]: http://github.com
 [gitkraken]: https://www.gitkraken.com/
 [gitlab]: https://gitlab.com/
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
