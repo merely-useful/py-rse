@@ -1,6 +1,6 @@
-# Automating Analyses {#py-rse-automate}
+# Automating Analyses {#automate}
 
-```{r py-rse-automate-setup, include=FALSE}
+```{r automate-setup, include=FALSE}
 source(here::here("_common.R"))
 ```
 
@@ -44,7 +44,7 @@ Our current Zipf's Law project includes the following files:
 > **Keep Tracking With Version Control**
 >
 > We learned about tracking our project's version history using Git
-> in Chapters \@ref(py-rse-git-cmdline) and \@ref(py-rse-git-advanced).
+> in Chapters \@ref(git-cmdline) and \@ref(git-advanced).
 > We encourage you to continue apply the Git workflow throughout the rest of our code development,
 > though we won't continue to remind you.
 
@@ -108,7 +108,7 @@ maintained by [Gerard Capes][capes-gerard]
 and on [Jonathan Dursi][dursi-jonathan]'s
 [introduction to pattern rules][dursi-pattern-rules].
 
-## How can I update a single file using Make? {#py-rse-automate-single-file}
+## How can I update a single file using Make? {#automate-single-file}
 
 To start,
 let's create a file called `Makefile` in the root of our project:
@@ -213,7 +213,7 @@ As a further test:
     Again,
     Make runs the recipe.
 
-## How can I manage multiple files? {#py-rse-automate-multiple}
+## How can I manage multiple files? {#automate-multiple}
 
 Our Makefile isn't particularly helpful so far,
 though it *does* already document exactly how to reproduce one specific result.
@@ -251,7 +251,7 @@ $ make results/jane_eyre.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I update several files at once? {#py-rse-automate-phony}
+## How can I update several files at once? {#automate-phony}
 
 If we have to run `make` once for each result
 we're right back where we started.
@@ -272,7 +272,7 @@ it creates a list of the things `all` depends on,
 then brings each of those prerequisites up to date (Figure \@ref(fig:automate-all)).
 
 ```{r automate-all, echo=FALSE, fig.cap="Making Everything"}
-knitr::include_graphics("figures/rse-automate/make-dependency-graph.png")
+knitr::include_graphics("figures/py-rse/automate/make-dependency-graph.png")
 ```
 
 As this diagram shows,
@@ -337,7 +337,7 @@ to explicitly state which targets are phony:
 .PHONY : all clean
 ```
 
-## How can I update files when programs change? {#py-rse-automate-depend-programs}
+## How can I update files when programs change? {#automate-depend-programs}
 
 Right now,
 our Makefile says that each result file depends only on the corresponding data file.
@@ -384,7 +384,7 @@ if we don't think an addition or modification ought to affect the results,
 but it would,
 we may have some debugging to do.
 
-## How can I reduce repetition in a Makefile? {#py-rse-automate-variables}
+## How can I reduce repetition in a Makefile? {#automate-variables}
 
 Our Makefile now mentions `bin/countwords.py` four times.
 If we ever change the name of the program or move it to a different location,
@@ -432,7 +432,7 @@ variables don't just cut down on typing.
 They also signal to readers that several things are always and exactly the same,
 which reduces [cognitive load][cognitive-load].
 
-## How can I take specific filenames out of my rules? {#py-rse-automate-autovar}
+## How can I take specific filenames out of my rules? {#automate-autovar}
 
 We could add a third rule to analyze a third novel and a fourth to analyze a fourth,
 but that clearly wouldn't scale to analyzing hundreds or thousands of files.
@@ -501,7 +501,7 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 but is a situationally useful syntax,
 which is good to be aware of.
 
-## How can I write a generic rule to update many files? {#py-rse-automate-pattern}
+## How can I write a generic rule to update many files? {#automate-pattern}
 
 We can now replace all the rules for generating results files with one [pattern rule][pattern-rule-make]
 using the [wildcard][wildcard] `%`,
@@ -580,7 +580,7 @@ $ make results/jane_eyre.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-## How can I automatically define a set of files? {#py-rse-automate-functions}
+## How can I automatically define a set of files? {#automate-functions}
 
 Our analysis is still not fully automated:
 if we add another book to `data`,
@@ -753,7 +753,7 @@ add a data file and run Make.
 This is a big improvement over running things manually,
 particularly as we start to add more steps like merging data files and generating plots.
 
-## How can I document my Makefile? {#py-rse-automate-doc}
+## How can I document my Makefile? {#automate-doc}
 
 Every well-behaved program tells people how to use it [@Tasc2017].
 If we run `make --help`,
@@ -782,7 +782,7 @@ we will add a target or rule and forget to update this list.
 A better approach is to format some comments in a special way
 and then extract and display those comments when asked to.
 We'll use `##` (a double comment marker) to indicate the lines we want displayed
-and `grep` (Section \@ref(py-rse-bash-advanced-find)) to pull these lines out of the file:
+and `grep` (Section \@ref(bash-advanced-find)) to pull these lines out of the file:
 
 ```make
 .PHONY: all clean help settings
@@ -830,7 +830,7 @@ $ make help
 With a bit more work we can remove the `##` markers,
 but this is a good start.
 
-## How can I create entire analysis pipelines? {#py-rse-automate-pipeline}
+## How can I create entire analysis pipelines? {#automate-pipeline}
 
 To finish our example,
 we will automatically generate a collated list of word frequencies.
@@ -922,7 +922,7 @@ clean :
 	rm $(RESULTS) results/collated.csv results/plotcounts.png
 ```
 
-## Summary {#py-rse-automate-summary}
+## Summary {#automate-summary}
 
 Make's reliance on shell commands instead of direct calls to functions in Python or R
 sometimes makes it clumsy to use.
@@ -931,31 +931,31 @@ that also makes it very flexible:
 a single Makefile can run shell commands and programs written in a variety of languages,
 which makes it a great way to assemble pipelines out of whatever is lying around.
 
-## Exercises {#py-rse-automate-exercises}
+## Exercises {#automate-exercises}
 
-### Create a summary results file {#py-rse-automate-ex-create-summary-results}
+### Create a summary results file {#automate-ex-create-summary-results}
 
 -   Add a rule to Makefile to create a summary CSV file from all of the book CSV files.
 -   Be careful about writing the prerequisites so that it doesn't depend on itself.
 
-### Generate a plot for the top N words {#py-rse-automate-ex-plot-top-n}
+### Generate a plot for the top N words {#automate-ex-plot-top-n}
 
 -   Make it depend on the summary.
 
-### Make sure the output directory exists {#py-rse-automate-ex-mkdir}
+### Make sure the output directory exists {#automate-ex-mkdir}
 
 -   Why is `mkdir -p` useful?
 
-### Report results that would change {#py-rse-automate-ex-report-change}
+### Report results that would change {#automate-ex-report-change}
 
 -   Write a rule to report which result files would actually change.
 -   Hint: use `diff`.
 
-### Create more readable help {#py-rse-automate-ex-readable-help}
+### Create more readable help {#automate-ex-readable-help}
 
 -   Modify the command in the `help` recipe to remove the leading '##' markers from the output.
 
-### The perils of shell wildcards {#py-rse-automate-ex-wildcard-perils}
+### The perils of shell wildcards {#automate-ex-wildcard-perils}
 
 What is wrong with writing the rule for `results/collated.csv` like this:
 
@@ -966,9 +966,9 @@ results/collated.csv : results/*.csv
 
 Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
 
-## Key Points {#py-rse-automate-keypoints}
+## Key Points {#automate-keypoints}
 
-```{r, child="keypoints/rse-automate.md"}
+```{r, child="keypoints/py-rse/automate.md"}
 ```
 
 ```{r, child="./links.md"}

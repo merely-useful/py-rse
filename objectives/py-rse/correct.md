@@ -1,3 +1,6 @@
+-   Explain the different options for testing code
+-   Write and run tests using `pytest`
+-   Automate testing using Travis CI
 -   Explain what continuous integration is, how it works, and why it's useful.
 -   Configure continuous integration for small Python software projects.
 -   Examine and explain output of continuous integration builds.

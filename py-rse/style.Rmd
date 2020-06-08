@@ -1,4 +1,4 @@
-# Code Style, Review, and Refactoring {#py-rse-style}
+# Code Style, Review, and Refactoring {#style}
 
 ```{r style-setup, include=FALSE}
 source(here::here("_common.R"))
@@ -42,7 +42,7 @@ occasionally referencing parts of your current project directory:
 We present guidelines for good Python programming style
 and introduce some language features that can make programs more flexible and more readable.
 
-## What is good style for Python programs? {#py-rse-style-pep8}
+## What is good style for Python programs? {#style-pep8}
 
 The single most important rule of style is to be consistent,
 both internally and with other programs @Kern1999.
@@ -99,7 +99,7 @@ Don't write <code>( 1+2 )</code>.
 This applies to function calls as well:
 write `max(a, b)` rather than <code>max( a, b )</code>.
 (We will see a related rule when we discussed default parameter values
-in Section \@ref(py-rse-style-features).)
+in Section \@ref(style-features).)
 
 **Always use spaces around comparisons like `>` and `<=`.**
 
@@ -202,11 +202,11 @@ If you need to do something in some runs of the program and not do it in others,
 use an `if` statement to enable or disable that block of code.
 It's more reliable—you're far less likely to accidentally comment out one too many lines—and
 you may find that you want to leave those conditional sections in the finished program
-for logging purposes (Section \@ref(py-rse-errors-logging)).
+for logging purposes (Section \@ref(errors-logging)).
 If you are sure you don't need the code,
 take it out completely:
 you can always get it back from version control
-(Section \@ref(py-rse-git-cmdline-ex-recover)).
+(Section \@ref(git-cmdline-ex-recover)).
 
 **Handle special cases at the start of the function.**
 
@@ -243,19 +243,19 @@ def positive_sum(values):
 This removes one level of nesting,
 and makes it clear what the special case is and how it's being handled.
 
-## Where should things appear in a source code file? {#py-rse-style-order}
+## Where should things appear in a source code file? {#style-order}
 
 The order of items in each file should be:
 
 -   The [shebang][shebang] line (because it has to come first to work).
--   The file's documentation string (Section \@ref(py-rse-package-py-document)).
+-   The file's documentation string (Section \@ref(package-py-document)).
 -   All of the `import` statements, one per line.
 -   Global variable definitions
     (especially things that would be constants in languages that support them).
 -   Function definitions.
 -   If the file can be run as a program,
     the `if __name__ == '__main__'` statement discussed in
-    Section \@ref(py-rse-py-scripting-main).
+    Section \@ref(scripting-main).
 
 That much is clear,
 but programmers disagree (strongly) on whether high-level functions should come first or last,
@@ -266,7 +266,7 @@ so that it is immediately before the check on `__name__`.
 Wherever it goes,
 `main` tends to follow one of three patterns:
 
-1.  Figure out what the user has asked it to do (Chapter \@ref(py-rse-configuration)).
+1.  Figure out what the user has asked it to do (Chapter \@ref(configuration)).
 2.  Read all input data.
 3.  Process it.
 4.  Write output.
@@ -301,11 +301,11 @@ In fact,
 this is a good practice even if those functions are only used by one program,
 since it signals even more clearly which are specific to this program
 and which are likely to be reused elsewhere.
-This is why we create `collate.py` in Section \@ref(py-rse-py-scripting-collate):
+This is why we create `collate.py` in Section \@ref(scripting-collate):
 we could have kept all of our code in `countwords.py`,
 but collating felt like something we might want to do separately.
 
-## How can I check that code follows style guidelines? {#py-rse-style-check}
+## How can I check that code follows style guidelines? {#style-check}
 
 Checking that code conforms to guidelines like PEP-8 would be time consuming
 if it had to be done manually,
@@ -397,7 +397,7 @@ n = count(lines)
 print('number', n)
 ```
 
-## How can I improve code systematically? {#py-rse-style-refactor}
+## How can I improve code systematically? {#style-refactor}
 
 Now that our little program gets a clean bill of health from `pycodestyle`,
 it's worth having a human being look it over and suggest ipmrovements.
@@ -775,7 +775,7 @@ def count_vowels_and_consonants(text):
 One thing you may not notice about the combination is that
 it assumes characters are either vowels or consonants,
 which means it might work differently than separate calls to the two original functions.
-Issues like this are why experienced developers write unit tests (Chapter \@ref(py-rse-correct))
+Issues like this are why experienced developers write unit tests (Chapter \@ref(correct))
 *before* starting to refactor.
 
 ### Replace code with data.
@@ -841,9 +841,9 @@ The expressions used to update `num_vowels` and `num_consonants` make use of the
 which the function `int` converts to either 1 or 0.
 We will explore ways of making this code more readable in the exercises.
 
-## How should I review code? {#py-rse-style-review}
+## How should I review code? {#style-review}
 
-At the end of Section \@ref(py-rse-style-check),
+At the end of Section \@ref(style-check),
 our stop-word program looked like this:
 
 ```python
@@ -877,7 +877,7 @@ and the discussion of refactoring in the previous section,
 these things should be changed:
 
 -   The commented-out `print` statements should either be removed
-    or turned into logging statements (Section \@ref(py-rse-errors-logging)).
+    or turned into logging statements (Section \@ref(errors-logging)).
 
 -   The variables `ln`, `i`, and `j` should be given clearer names.
 
@@ -949,7 +949,7 @@ reviewers need to understand the problem domain well enough to comment on algori
 rather than indentation and variable naming,
 and the number of people who can do that for a research project is often very small @Petr2014.
 
-Section \@ref(py-rse-git-advanced-pull-requests) explained how to create and merge pull requests.
+Section \@ref(git-advanced-pull-requests) explained how to create and merge pull requests.
 *How* you review these is just as important as *what* you look for:
 being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
 or avoid having you review their work.
@@ -973,7 +973,7 @@ Look for algorithmic problems first.
     The first pass over any change should therefore look for algorithmic problems.
     Are the calculations right?
     Are any rare cases going to be missed?
-    Are errors being caught and handled Chapter \@ref(py-rse-errors-logging)?
+    Are errors being caught and handled Chapter \@ref(errors-logging)?
     Using a consistent style helps reviewers focus on these issues.
 
 Use a checklist.
@@ -1041,7 +1041,7 @@ Don't let people break these rules just because they're frequent contributors or
     The main figures in a project should be *more* respectful than everyone else
     in order to show what standards everyone else is expected to meet.
 
-## What features of Python can make code more readable? {#py-rse-style-features}
+## What features of Python can make code more readable? {#style-features}
 
 [Working memory][working-memory] can only hold a few items at once:
 initial estimates in the 1950s put the number at 7 plus or minus 2 @Mill1956,
@@ -1130,7 +1130,7 @@ it can also be called like this:
 Note that there are no spaces around the `=`
 when defining a default parameter value.
 This is consistent with PEP-8's rules about spacing in function definitions and calls
-(Section \@ref(py-rse-style-pep8)).
+(Section \@ref(style-pep8)).
 
 Default parameter values make code easier to understand and use,
 but there is a subtle trap.
@@ -1296,7 +1296,7 @@ Betty Jennings <jennings@eniac.org>
 Marlyn Wescoff <mwescoff@eniac.org>
 ```
 
-## Summary {#py-rse-style-summary}
+## Summary {#style-summary}
 
 George Orwell laid out [six rules for good writing][orwells-rules],
 the last and most important of which is,
@@ -1307,13 +1307,13 @@ There will always be cases where your code will be easier to understand
 if you *don't* do the things described in this lesson,
 but there are probably fewer of them than you think.
 
-## Exercises {#py-rse-style-exercises}
+## Exercises {#style-exercises}
 
 FIXME: create exercises for review.
 
-## Key Points {#py-rse-style-keypoints}
+## Key Points {#style-keypoints}
 
-```{r, child="keypoints/rse-style.md"}
+```{r, child="keypoints/py-rse/style.md"}
 ```
 
 ```{r, child="./links.md"}

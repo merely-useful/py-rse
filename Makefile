@@ -58,7 +58,7 @@ PY_RSE_FILES=\
   py-rse-index.Rmd \
   py-rse/bash-basics.Rmd \
   py-rse/bash-advanced.Rmd \
-  py-rse/py-scripting.Rmd \
+  py-rse/scripting.Rmd \
   py-rse/git-cmdline.Rmd \
   py-rse/git-advanced.Rmd \
   py-rse/automate.Rmd \
@@ -68,7 +68,7 @@ PY_RSE_FILES=\
   py-rse/style.Rmd \
   py-rse/project.Rmd \
   py-rse/correct.Rmd \
-  py-rse/package-py.Rmd \
+  py-rse/packaging.Rmd \
   py-rse/publish.Rmd \
   py-rse/finale.Rmd \
   py-rse/objectives.Rmd \
