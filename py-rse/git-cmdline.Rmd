@@ -13,7 +13,25 @@ Originally developed to support software development,
 over the past fifteen years it has become the cornerstone
 of [reproducible research][reproducible-research].
 
-The most widely used version control system today is [Git][git].
+A version control system stores a master copy of your code in a repository,
+which you can't edit directly.
+Instead, you checkout a working copy of the code,
+edit that code, then commit changes back to the repository.
+In this way, the system records a complete revision history (i.e. of every commit),
+so that you can retrieve and compare previous versions at any time.
+This is useful from an individual viewpoint,
+because you don't need to store multiple (but slightly different) copies of the same script
+(Figure \@ref(fig:py-rse-git-cmdline-phdcomics)).
+It's also useful from a collaboration viewpoint,
+because the system keeps a record of who made what changes and when.
+
+```{r py-rse-git-cmdline-phdcomics, echo=FALSE, fig.cap="Without a version control system, managing different versions of the same file can get messy."}
+knitr::include_graphics("figures/py-rse-git-cmdline/phd-comics.gif")
+```
+
+There are many different version control systems,
+such as CVS, Subversion, and Mercurial,
+but the most widely used version control system today is [Git][git].
 Many people first encounter it through a GUI like [GitKraken][gitkraken]
 or [the RStudio IDE][rstudio-ide],
 and we assume that you have used one of these to save your work before.
@@ -47,7 +65,7 @@ Our project directory should currently include:
     └── moby_dick.csv
 ```
 
-`bin/plotcounts.py` is the solution to Exercise \@ref(py-rse-scripting-ex-better-plotting);
+`bin/plotcounts.py` is the solution to Exercise \@ref(py-rse-py-scripting-ex-better-plotting);
 over the course of this chapter
 we will edit it to produce more informative plots.
 Initially,
@@ -101,8 +119,9 @@ and the rest of the command are options.
 We put the name in quotation marks because it contains a space;
 we don't actually need to quote the email address,
 but do so for consistency.
-Since we are going to be using [GitHub][github],
-the email address should be the same as the one we used when setting up our GitHub account.
+Since we are going to be using GitHub,
+the email address should be the same as you have or intend to use 
+when setting up your GitHub account.
 
 The `--global` option tells Git to use the settings for all of our projects on this computer,
 so these two commands only need to be run once.
@@ -218,7 +237,8 @@ nothing added to commit but untracked files present (use "git add" to track)
 
 "No commits yet" means that Git hasn't recorded any history yet,
 while "Untracked files" means Git has noticed that
-there are things in the repository that it hasn't recorded.
+there are things in `bin/`, `data/` and `results/`
+that it is not yet keeping track of.
 
 ## Adding Existing Work {#py-rse-git-cmdline-add-existing}
 
@@ -537,7 +557,6 @@ The last line tells us that
 a file Git already knows about has been modified.
 To save those changes in the repository's history,
 we must `git add` and then `git commit`.
-
 Before we do,
 though,
 let's review the changes using `git diff`.
@@ -639,6 +658,24 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 [master b5176bf] Edit to plot frequency against rank on log-log axes
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
+
+> **The Staging Area**
+>
+> Git insists that we add files to the set we want to commit before actually committing anything.
+> This allows us to commit our changes in stages and capture changes in logical portions
+> rather than only large batches.
+> For example,
+> suppose we add a few citations to the introduction of our thesis,
+> which is in the file `introduction.tex`.
+> We might want to commit those additions
+> but not commit the changes to `conclusion.tex` (which we haven't finished writing yet).
+> To allow for this,
+> Git has a special [staging area][git-stage] where it keeps track of things
+> that have been added to the current changeset but not yet committed.
+>
+> ```{r py-rse-git-cmdline-staging, echo=FALSE, fig.cap="The staging area."}
+> knitr::include_graphics("figures/py-rse-git-cmdline/staging-area.svg")
+> ```
 
 Let's take a look at our new plot (Figure \@ref(fig:py-rse-git-cmdline-loglog-plot)):
 
@@ -826,6 +863,10 @@ Already up-to-date.
 
 Pulling has no effect in this case
 because the two repositories are already synchronized.
+
+```{r py-rse-git-cmdline-remote, echo=FALSE, fig.cap="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?"}
+knitr::include_graphics("figures/py-rse-git-cmdline/git-remote.png")
+```
 
 ## Exploring History {#py-rse-git-cmdline-history}
 
