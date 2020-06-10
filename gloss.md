@@ -573,6 +573,9 @@
 **Martha's Rules**<a id="marthas-rules"></a>
 :   FIXME
 
+**Maximum likelihood extimation**<a id="max-like-est"></a>
+:   FIXME
+
 **Memory**<a id="memory"></a>
 :   A physical device on your computer that temporarily stores information for immediate use.
 
@@ -682,6 +685,9 @@
 :   FIXME
 
 **Pothole case**<a id="pothole-case"></a>
+:   FIXME
+
+**Power law**<a id="power-law"></a>
 :   FIXME
 
 **Precision**<a id="precision"></a>

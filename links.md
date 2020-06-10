@@ -9,8 +9,8 @@
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
 [api]: glossary.html#api
 [append-mode]: glossary.html#append-mode
-[argparse]: https://docs.python.org/3/library/argparse.html
 [argparse-tutorial]: https://docs.python.org/3/howto/argparse.html
+[argparse]: https://docs.python.org/3/library/argparse.html
 [arxiv]: https://arxiv.org/
 [assertr]: https://cran.r-project.org/web/packages/assertr/index.html
 [authentic-task]: glossary.html#authentic-task
@@ -68,8 +68,8 @@
 [compiled-language]: glossary.html#compiled-language
 [compiler]: glossary.html#compiler
 [computational-notebook]: glossary.html#computational-notebook
-[conda]: https://conda.io/
 [conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
+[conda]: https://conda.io/
 [conditional-expression]: glossary.html#conditional-expression
 [confirmation-bias]: glossary.html#confirmation-bias
 [continuation-prompt]: glossary.html#continuation-prompt
@@ -153,6 +153,7 @@
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
 [git-stage]: glossary.html#git-stage
 [git]: glossary.html#git
+[github-gitignore]: https://github.com/github/gitignore
 [github-pages]: https://pages.github.com/
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [github]: http://github.com
@@ -268,10 +269,10 @@
 [pypi]: https://pypi.org/
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
 [pytest]: http://pytest.org/
-[python]: glossary.html#python
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [python-standard-library]: https://docs.python.org/3/library/
+[python]: glossary.html#python
 [r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
 [r-pkg-book-testing]: http://r-pkgs.had.co.nz/tests.html
