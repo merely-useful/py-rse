@@ -9,8 +9,8 @@
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
 [api]: glossary.html#api
 [append-mode]: glossary.html#append-mode
-[argparse]: https://docs.python.org/3/library/argparse.html
 [argparse-tutorial]: https://docs.python.org/3/howto/argparse.html
+[argparse]: https://docs.python.org/3/library/argparse.html
 [arxiv]: https://arxiv.org/
 [assertr]: https://cran.r-project.org/web/packages/assertr/index.html
 [authentic-task]: glossary.html#authentic-task
@@ -22,6 +22,7 @@
 [bibtex]: http://www.bibtex.org/
 [binary-code]: glossary.html#binary-code
 [biorxiv]: https://www.biorxiv.org/
+[bitbucket]: https://bitbucket.org/
 [boilerplate]: glossary.html#boilerplate
 [bootswatch]: https://bootswatch.com/3/
 [branch-per-feature]: glossary.html#branch-per-feature-workflow
@@ -67,6 +68,7 @@
 [compiled-language]: glossary.html#compiled-language
 [compiler]: glossary.html#compiler
 [computational-notebook]: glossary.html#computational-notebook
+[conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
 [conda]: https://conda.io/
 [conditional-expression]: glossary.html#conditional-expression
 [confirmation-bias]: glossary.html#confirmation-bias
@@ -86,6 +88,7 @@
 [declarative-programming]: glossary.html#declarative-programming
 [default-target-make]: glossary.html#default-target-make
 [delimiter]: glossary.html#delimiter
+[desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
 [design-pattern]: glossary.html#design-pattern
 [destructuring]: glossary.html#destructuring
 [dictionary]: glossary.html#dictionary
@@ -100,6 +103,7 @@
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [embedded-documentation]: glossary.html#embedded-documentation
 [eniac]: glossary.html#eniac
+[entry-points]: https://setuptools.readthedocs.io/en/latest/pkg_resources.html?highlight=namespace#entry-points
 [environment]: glossary.html#environment
 [error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co
 [exception]: glossary.html#exception
@@ -120,6 +124,7 @@
 [filename-stem]: glossary.html#filename-stem
 [filesystem]: glossary.html#filesystem
 [filter]: glossary.html#filter
+[find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
 [fixture]: glossary.html#fixture
 [flag-variable]: glossary.html#flag-variable
 [folder]: glossary.html#folder
@@ -135,6 +140,7 @@
 [ggplot2]: https://ggplot2.tidyverse.org/
 [gh-myoctocat]: https://myoctocat.com
 [gh-pages]: https://pages.github.com/
+[gistemp]: https://data.giss.nasa.gov/gistemp/
 [git-branch]: glossary.html#git-branch
 [git-clone]: glossary.html#git-clone
 [git-conflict]: glossary.html#git-conflict
@@ -147,11 +153,12 @@
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
 [git-stage]: glossary.html#git-stage
 [git]: glossary.html#git
+[github-gitignore]: https://github.com/github/gitignore
 [github-pages]: https://pages.github.com/
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [github]: http://github.com
-[github]: http://github.com
 [gitkraken]: https://www.gitkraken.com/
+[gitlab]: https://gitlab.com/
 [gnu-make-other-vars]: https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
 [gnu-make]: http://www.gnu.org/software/make/
 [gnu-man-coreutils]: http://www.gnu.org/software/coreutils/manual/coreutils.html
@@ -160,6 +167,7 @@
 [gpl]: glossary.html#gpl
 [gui]: glossary.html#gui
 [gutenberg]: https://www.gutenberg.org/
+[heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
 [hitchhiker]: glossary.html#hitchhiker
 [home-directory]: glossary.html#home-directory
 [huff-testing]: https://github.com/katyhuff/python-testing
@@ -207,6 +215,7 @@
 [mertz-documentation]: https://realpython.com/documenting-python-code/
 [mit-license]: glossary.html#mit-license
 [model-coc]: http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[mutate-useful]: https://dplyr.tidyverse.org/reference/mutate.html#useful-functions-available-in-calculations-of-variables
 [namespace]: glossary.html#namespace
 [nano]: glossary.html#nano
 [ngo]: glossary.html#ngo
@@ -214,6 +223,7 @@
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
 [novice]: glossary.html#novice
 [numpy-docstring]: https://numpydoc.readthedocs.io/en/latest/format.html
+[nyc-opendata-dogs]: https://data.cityofnewyork.us/Health/NYC-Dog-Licensing-Dataset/nu7n-tubp
 [object]: glossary.html#object
 [oop]: glossary.html#oop
 [open-license]: glossary.html#open-license
@@ -243,6 +253,7 @@
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [phony-target-make]: glossary.html#phony-target-make
+[pip-and-conda]: https://www.anaconda.com/understanding-conda-and-pip/
 [pipe-unix]: glossary.html#pipe-unix
 [pothole-case]: glossary.html#pothole-case
 [precision]: glossary.html#precision
@@ -260,6 +271,7 @@
 [pytest]: http://pytest.org/
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
+[python-standard-library]: https://docs.python.org/3/library/
 [python]: glossary.html#python
 [r-here-pkg]: https://here.r-lib.org/
 [r-markdown]: https://rmarkdown.rstudio.com/
@@ -273,6 +285,7 @@
 [raise]: glossary.html#raise
 [raster-image]: glossary.html#raster-image
 [readthedocs]: https://docs.readthedocs.io/en/latest/
+[recipe-make]: https://www.gnu.org/software/make/manual/html_node/Rule-Introduction.html
 [recursion]: glossary.html#recursion
 [redirection]: glossary.html#redirection
 [refactoring]: glossary.html#refactoring
@@ -343,6 +356,7 @@
 [subcommand]: glossary.html#subcommand
 [subdirectory]: glossary.html#subdirectory
 [subsampling]: glossary.html#subsampling
+[summarise-useful]: https://dplyr.tidyverse.org/reference/summarise#useful-functions
 [sustainable-software]: glossary.html#sustainable-software
 [svg]: glossary.html#svg
 [swc-git]: https://swcarpentry.github.io/git-novice/
@@ -375,13 +389,15 @@
 [timestamp]: glossary.html#timestamp
 [tinytex]: https://yihui.name/tinytex/
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
-[tldr]: glossary.html#tldr
+[tldr]: https://tldr.sh/
 [tolerance]: glossary.html#tolerance
 [transitive-dependency]: glossary.html#transitive-dependency
 [travis-ci]: https://travis-ci.org/
+[travis-lang]: https://docs.travis-ci.com/user/language-specific/
 [triage]: glossary.html#triage
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [tuple]: glossary.html#tuple
+[twine]: https://twine.readthedocs.io/en/latest/
 [tyranny-structurelessness]: http://www.jofreeman.com/joreen/tyranny.htm
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [unit-test]: glossary.html#unit-test
@@ -404,6 +420,7 @@
 [virtual-machine]: glossary.html#virtual-machine
 [vs-code]: https://code.visualstudio.com/
 [wayback-machine]: http://web.archive.org/
+[wheels]: https://packaging.python.org/guides/distributing-packages-using-setuptools/#wheels
 [wickham-packages]: http://r-pkgs.had.co.nz/
 [wiki-rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 [wikipedia-iso-country]: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
