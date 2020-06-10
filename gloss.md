@@ -129,6 +129,9 @@
 **Code coverage**<a id="code-coverage"></a>
 :   FIXME
 
+**Code review**<a id="code-review"></a>
+:   FIXME
+
 **Cognitive load**<a id="cognitive-load"></a>
 :   FIXME
 
@@ -159,13 +162,13 @@
 **Comment**<a id="comment"></a>
 :   FIXME
 
+**Commit**<a id="commit"></a>
+:   FIXME: define both noun and verb.
+
 **Commit hash**<a id="commit-hash"></a>
 :   FIXME
 
 **Commit message**<a id="commit-message"></a>
-:   FIXME
-
-**Commit**<a id="commit"></a>
 :   FIXME
 
 **Commons**<a id="commons"></a>
@@ -329,6 +332,9 @@
 **Exponent**<a id="exponent"></a>
 :   FIXME
 
+**Export a variable**<a id="export-variable"></a>
+:   FIXME
+
 **External error**<a id="external-error"></a>
 :   FIXME
 
@@ -407,6 +413,9 @@
 
 **GNU Public License**<a id="gpl"></a> (GPL):
    FIXME
+
+**Git**<a id="git"></a>
+:   FIXME
 
 **Git branch**<a id="git-branch"></a>
 :   FIXME
@@ -534,6 +543,9 @@
 **Logging framework**<a id="logging-framework"></a>
 :   FIXME
 
+**Long option**<a id="long-option"></a>
+:   FIXME
+
 **Loop body**<a id="loop-body"></a>
 :   FIXME
 
@@ -559,6 +571,9 @@
 :   FIXME
 
 **Martha's Rules**<a id="marthas-rules"></a>
+:   FIXME
+
+**Maximum likelihood extimation**<a id="max-like-est"></a>
 :   FIXME
 
 **Memory**<a id="memory"></a>
@@ -618,6 +633,9 @@
 **Oppression**<a id="oppression"></a>
 :   FIXME
 
+**Optional argument**<a id="optional-argument"></a>
+:   FIXME
+
 **Orthogonality**<a id="orthogonality"></a>
 :   FIXME
 
@@ -660,10 +678,16 @@
 **Pipe**<a id="pipe-unix"></a> (in Unix):
    FIXME
 
+**Positional argument**<a id="positional-argument"></a>
+:   FIXME
+
 **Post-mortem**<a id="post-mortem"></a>
 :   FIXME
 
 **Pothole case**<a id="pothole-case"></a>
+:   FIXME
+
+**Power law**<a id="power-law"></a>
 :   FIXME
 
 **Precision**<a id="precision"></a>
@@ -819,6 +843,9 @@
 **Short identifier**<a id="short-identifier-git"></a> (in Git):
    FIXME
 
+**Short option**<a id="short-option"></a>
+:   FIXME
+
 **Side effects**<a id="side-effects"></a>
 :   FIXME
 
@@ -859,6 +886,9 @@
 :   FIXME
 
 **Standard output**<a id="stdout"></a>
+:   FIXME
+
+**Stop word**<a id="stop-word"></a>
 :   FIXME
 
 **Streaming data**<a id="streaming-data"></a>
@@ -913,6 +943,9 @@
    FIXME
 
 **Technical debt**<a id="technical-debt"></a>
+:   FIXME
+
+**Ternary expression**<a id="ternary-expression"></a>
 :   FIXME
 
 **Test coverage**<a id="test-coverage"></a>
@@ -999,6 +1032,9 @@
 **Verification**<a id="verification"></a>
 :   FIXME
 
+**Version control system**<a id="version-control-system"></a>
+:   FIXME
+
 **Violin plot**<a id="violin-plot"></a>
 :   FIXME
 
@@ -1008,8 +1044,19 @@
     and to install new packages into the environment
     without affecting other virtual environments or the system-wide default environment.
 
+**Virtual machine**<a id="virtual-machine"></a>
+:   A program that pretends to be a computer.
+    This may seem a bit redundant,
+    but VMs are quick to create and start up,
+    and changes made inside the virtual machine are contained within that VM
+    so we can install new packages or run a completely different operating system
+    without affecting the underlying computer.
+
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG):
    FIXME
+
+**Whitespace**<a id="whitespace"></a>
+:   FIXME
 
 **Wildcard**<a id="wildcard"></a>
 :   FIXME

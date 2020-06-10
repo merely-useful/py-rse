@@ -7,7 +7,7 @@ source(here::here("_common.R"))
 > Another response of the wizards,
 > when faced with a new and unique situation,
 > was to look through their libraries to see if it had ever happened before.
-> This was…a good survival trait.
+> This was… a good survival trait.
 > It meant that in times of danger you spent the day sitting very quietly in a building with very thick walls.
 >
 > — Terry Pratchett
@@ -20,456 +20,182 @@ This lesson shows you how to use Python's tools to create and share libraries of
 
 This material is based in part on [Python 102][python-102] by [Ashwin Srinath][srinath-ashwin].
 
-## How can I turn a set of Python source files into a module? {#py-rse-package-py-modules}
-
-Any Python source file can be imported by any other.
-(This is why Python files should be named using [`pothole_case`][pothole-case]
-instead of [`kebab-case`][kebab-case]:
-an expression like `import some-thing` isn't allowed
-because `some-thing` isn't a legal variable name.)
-When a file is imported,
-the statements in it are executed as it loads.
-Variables, functions, and items defined in the file are
-then available as `module.name`, where `module` is the
-filename (without the `.py` extention) and `name` is the
-name of the item.
-
-As an example,
-we can put a constant and two functions used in our Zipf's Law study in a file called `zipf.py`:
-
-```python
-from pytest import approx
-
-RELATIVE_ERROR = 0.05
-
-def make_zipf(length):
-    assert length > 0, 'Zipf distribution must have at least one element'
-    result = [1/(1 + i) for i in range(length)]
-    return result
-
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-```
-
-and then use `import zipf`,
-`from zipf import is_zipf`,
-and so on:
-
-```python
-from zipf import make_zipf, is_zipf
-
-generated = make_zipf(5)
-print('generated distribution: {}'.format(generated))
-generated[-1] *= 2
-print('passes test with default tolerance: {}'.format(is_zipf(generated)))
-print('passes test with tolerance of 1.0: {}'.format(is_zipf(generated, rel=1.0)))
-```
-
-Running this program produces the following output:
+We'll continue with our Zipf's Law project,
+which should include the following files:
 
 ```text
-generated distribution: [1.0, 0.5, 0.3333333333333333, 0.25, 0.2]
-passes test with default tolerance: False
-passes test with tolerance of 1.0: True
+├── CONDUCT.md
+├── LICENSE.md
+├── Makefile
+├── README.md
+├── bin
+│   ├── book_summary.sh
+│   ├── collate.py
+│   ├── countwords.py
+│   ├── mymodule.py
+│   ├── plotcounts.py
+│   └── rcparams.yml
+├── data
+│   ├── README.md
+│   ├── dracula.txt
+│   └── ...
+├── results
+│   ├── dracula.csv
+│   ├── dracula.png
+│   └── ...
+└── tests
+    └── test_countwords.py
+    └── ...
 ```
 
-It also creates a subdirectory called `__pycache__`
-that holds the compiled versions of the imported files.
-The next time Python imports `zipf`,
-it checks the timestamp on `zipf.py` and the timestamp on the corresponding file in `__pycache__`.
-If the latter is more recent,
-Python doesn't bother to recompile the file:
-it just loads the bytes in the cached version and uses those.
-In the general spirit of ["Don't Repeat Yourself (DRY)"][dry]
-we typically don't put both the original and processed versions of files in
-version control (it can be convenient, but then you have to have processes
-in place to make sure that they stay in sync) so we normally add the
-`__pycache__` directory to in `.gitignore`.
+## How can I create an installable Python package? {#py-rse-package-py-package}
 
-### Exercise: Hello, Zipf!
+A package is essentially a few Python scripts in a specific directory structure
+coupled with installation instructions for the computer.
+Python packages can come from various sources.
+Many that you will use are part of the standard distribution,
+but packages can be created by anyone
+and there are thousands that can be downloaded and installed from online repositories.
+Note that you will sometimes hear packages referred to as "modules".
+These two words are often used interchangeably.
+Technically,
+a package is a folder that contains modules (scripts),
+which in turn contains functions (code).
 
-Put a statement
+A general package folder hierarchy looks like this
 
-```python
-print("Hello, Zipf!")
+```text
+pkg_name
+├── pkg_name
+│   ├── module1.py
+│   └── module2.py
+├── README.md
+└── setup.py
 ```
-at the end of `zipf.py`.
 
-1. What happens when you start Python interactively and import the
-module with the command `import zipf`?
-2. Python caches modules that have been imported.  What happens if you
-type `import zipf` again?
+which in our case would mean changing the name of `bin/` to `zipf`.
 
-## How can I control what is executed during import and what isn't? {#py-rse-package-py-import}
+It may initially be confusing to have two folders with the same name
+(the original project directory,
+and the renamed `bin/`),
+but it makes it easier to setup your project for installation
+and it is the convention used by most Python projects.
+Alternative directory structures are possible,
+but in this chapter we're focusing on the approach we believe is the most beneficial to learn.
 
-Sometimes it's handy to be able to import code and also run it as a program.
-For example,
-we may have a file full of useful functions for extracting keywords from text
-that we want to be able to use in other programs,
-but also want to be able to run `keywords somefile.txt` to get a listing.
+> You will often see Python packages containing a file with a special name: `__init__.py`.
+> This was a requirement before Python 3.3,
+> but is now only needed to execute code upon package import.
+> Just as importing a module file executes the code in the module,
+> importing a package executes the code in `__init__.py`.
 
-To help us do this,
-Python automatically creates a variable called `__name__` in each module.
-If the module is the main program,
-(e.g. when the script is run from the command line)
-that variable is assigned the string `'__main__'`.
-Otherwise (e.g. when the module is imported into a script), it is assigned the module's name.
-Using this leads to modules like this:
+For our scripts to work as a Python package,
+we only need to make one important change to the code itself:
+changing the syntax for how we import `mymodule`.
+Currently,
+both `collate.py` and `countwords.py` contains this line:
 
 ```python
-import sys
-from pytest import approx
+import mymodule
+```
 
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-RELATIVE_ERROR = 0.05
+This is called an implicit relative import,
+because it is not clear whether there exists a Python package called `mymodule`
+or there is a file in our local directory named `mymodule.py` (as in our case).
+This ambiguity is not ideal
+and when making a package we need to be more explicit and write:
 
-def make_zipf(length):
-    ...as before...
+```python
+from zipf import mymodule
+```
 
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    ...as before...
+This is referred to as an absolute import,
+since we are specifying the full location of `mymodule` inside the `zipf` package.
+Absolute imports are the preferred way of importing your own code inside a package,
+but you will probably also encounter explicit relative imports,
+which can provide some advantages when restructuring large projects:
 
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
+```python
+from . import mymodule
 ```
 
 Here,
-the code guarded by `if __name__ == '__main__'` isn't executed when the file loaded by something else.
-We can test this by re-running `use.py` as before:
-the usage message doesn't appear,
-which means the main block wasn't executed,
-which is what we want.
+the `.` makes it clear that `mymodule` exists in the current directory.
 
-### Exercise: What is `__name__` in different contexts?
-
-1. Start an interactive Python interpreter, and run `print(__name__)`.
-What do you get?
-2. Add the statement `print(__name__)` to the end of the file `zipf.py`
-and from the Python interpreter, run `import zipf`.  What is the name
-printed?
-
-### Exercise: Turn `use.py` into a unit test
-
-1. Turn the `use.py` script into a `pytest` unit test; name the file `test_zipf.py`.
-
-## How do I create a package? {#py-rse-package-py-creating}
-
-Let's say we wanted to add some capabilities to what
-we've built: we want to be able to generate noisy
-Zipf distributions—noise within the same default `RELATIVE_ERROR`—and
-we want to add a Zipf-checker that can handle unsorted inputs:
+Python has several ways to build an installable package.
+We will show how to use [setuptools][setuptools],
+which is the lowest common denominator.
+The setuptools approach we describe below will
+allow everyone,
+regardless of what python distribution they use,
+to easily use your package.
+To use `setuptools`,
+we must create a file called `setup.py` in the directory *above* the root directory of the package:
+The file `setup.py` must have exactly that name,
+and must contain these lines:
 
 ```python
-...as before...
+from setuptools import setup
 
-def make_zipf(length):
-    assert length > 0, 'Zipf distribution must have at least one element'
-    result = [1/(1 + i) for i in range(length)]
-    return result
 
-def make_noisy_zipf(length, rel=RELATIVE_ERROR):
-    data = make_zipf(length)
-    minnoise = 1.0 - rel/2
-    maxnoise = 1.0 + rel/2
-    for i in range(length):
-        data[i] = data[i] * random_uniform(minnoise, maxnoise)
-    return data
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-
-def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
-    sortedhist = sorted(hist)
-    return is_zipf(unsorted, rel)
-
-...as before...
+setup(
+    name='zipf',
+    version='0.1',
+    author='Amira Khan',
+    packages=['zipf'])
 ```
 
-As our package grows,
-we should split its source code into multiple files,
-and this is now starting to look like two broad types of
-related functionality: generating a Zipf distribution, and
-checking against a Zipf distribution.  But they are related;
-and what's more, there are constants that would be common
-across the two pieces - the `RELATIVE_ERROR` constant.
-
-If we want multiple files, but they are related and
-and have some common items, that's a good indication that
-we are outgrowing a single-file module and we want a Python
-package.
-
-A package in Python is no more than a directory containing
-Python code, and by convention a Python file with a special
-name, `__init__.py` (this was a requirement before Python 3.3).
-Just as importing a module file executes the code in the module,
-importing a package executes the code in `__init__.py`.
-
-### Exercise: Create a package for our Zipf code.
-
-We're going to create a package for the code we've written
-for the Zipf distribution.  In the long and honourable(?)
-tradition of package names ending in "py", we'll call our
-package zipfpy.
-
-1. Create a `zipfpy` directory and move the file `zipf.py` into that directory.
-2. Create an empty file `zipfpy/__init__.py`.
-3. Modify the test suite so that it runs; functions will now be found in the [namespace][namespace] `zipfpy.zipf` rather than `zipf`.
-4. Run the test suite with `pytest`
-
-### Exercise: "Hello `__init__.py`"
-
-Repeat the "Hello, Zipf!" exercise by temporarily adding the
-line `print("Hello, Init!")` to the `__init__.py`.  Then
-from the directory containing the directory `zipfpy`, start
-a Python interpreter and run:
-
-```python
-import zipfpy
-```
-
-What happens?
-
-When you're done, remove the `print()` line from `__init__.py`.
-
-
-## Referring to modules within the same package: multiple files
-
-With that done, we're going to start splitting our module up into smaller components,
-which will each be part of the package.  We'll split our routines up into functions that
-generate Zipf-distributed data and those that test for Zipf-y-ness.  So we'll
-have a `zipf/generate.py`
-
-```python
-from random import uniform
-
-RELATIVE_ERROR = 0.05
-
-def make_zipf(length):
-    ...
-
-
-def make_noisy_zipf(length, rel=RELATIVE_ERROR):
-    ...
-```
-
-and a `zipf/check.py`.  Now here we have another
-change to make; the the `is_zipf` function refers
-to the `generate` routine, which is in another file,
-but within the same module.
-
-In this case of within-package imports, we have to use [`relative imports`][relative-import] to
-refer to other files within the module; this is
-a little bit like using relative paths vs absolutely
-paths in the shell, right down to `.` referring
-to the current directory.  We could use:
-
-```python
-from . import generate
-
-...
-x = generate.make_zipf(...)
-```
-
-or
-
-```python
-from .generate import make_zipf
-
-...
-x = make_zipf(...)
-```
-
-either would work.  Let's use the second to write `zipf/check.py`:
-
-```python
-import sys
-from pytest import approx
-from .generate import make_zipf
-
-
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-RELATIVE_ERROR = 0.05
-
-
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-
-
-def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
-    ...
-
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
-```
-
-Now we just need to update our tests; outside of the package,
-we refer to `zipfpy.generate` and `zipfpy.check` as we did
-before with `zipfpy.zipf`:
-
-```python
-import zipfpy.generate
-import zipfpy.check
-
-def test_default_tolerance(length=5):
-    generated = zipf.generate.make_zipf(length)
-    assert zipf.check.is_zipf(generated)
-
-...
-```
-
-### Exercise: Factor out the package-wide constant `RELATIVE_ERROR`
-
-It's perfectly valid for an `__init__.py` file to be empty,
-but it is also a very useful place to put definitions that are
-common to the entire package.
-
-Here, both `generate` and `check` use the same default `RELATIVE_ERROR`;
-let's move that into `__init__.py`:
-
-1. Add the line `RELATIVE_ERROR = 0.05` to `__init__.py`;
-2. Now we can remove the line definining `RELATIVE_ERROR` from `check.py`
-and `generate.py`, but;
-3. We still need to import that definition somehow, or else those functions
-won't know what a `RELATIVE_ERROR` is; add the line `from . import RELATIVE_ERROR`
-to each so that it is visible.  When we don't specify a file, it imports the
-definition from `__init__.py` (just as `import zipfpy` will read the `__init__.py`)
-4. Run the test suite with `pytest`
-
-We haven't shortened the code any here—we've replaced a `RELATIVE_ERROR = 0.05`
-with an `from . import RELATIVE_ERROR`—but now the constant is defined in only
-one location so we don't have to worry about editing it in one location and that
-value being out of sync in the other.
-
-### Exercise: Importing from within __init__.py
-
-Since any code that does an `import zipf` will read `__init__.py`, it
-can be convenient to put import statments in `__init__.py` itself, to
-ensure that some key definitions are readily available when the package
-is imported.
-
-We'll try that here:
-
-1. Add the lines `from .generate import *` and `from .check import *` to
-`zipfpy/__init__.py`.
-2. In the test suite, you can now just call `import zipfpy` and refer to,
-_e.g._, `zipfpy.make_zipf(...)` instead of `zipfpy.generate_make_zipf(...)`.
-Make those changes
-3. Run the test suite with `pytest`
-
-Note that it doesn't make sense to import absolutely everything like we
-have here into the `zipfpy` namespace—it kind of defeats the purpose
-of having split up the files—but for a modest number of key definitions
-this can be very convenient for the package users.
-
-4. Undo the changes you made in 1. and 2., and make sure the test suite
-still runs.
-
-## What does it mean to install a Python package? {#py-rse-package-py-install}
-
-By the end of this chapter, you'll have made and published a Python
-package that anyone with an internet connection can install.  You've
-certainly installed Python packages before, such as with `pip install`;
-the `pip` tool is the most common way to install Python packages.
-The command <code>pip install <em>package</em></code>
-checks to see if the package is already installed (or needs to be upgraded);
-if so,
-it downloads the package from [PyPI][pypi] (the Python Package Index),
-unpacks it,
-and installs it.
-
-But what does it mean to install a Python package?
-
-You've seen that when you have a Python module or package in the current
-directory named, say, `zipfpy`, Python will successfully find that module
-and directory when it runs `import zipfpy`.  But clearly having all of the
-Python standard library, all installed packages, and our own code in the
-same directory gets unwieldly quickly - especially if we want to run our
-routines from a directory full of data!
-
-Just as the `PATH` environment in the shell contains a list of directories that
-the shell searches for programs it can execute, in Python a variable `sys.path`
-(in the system-standard `sys` package) contains a list of the directories to
-search.  Create a Python file `showpath.py` containing the following, and
-then run it with `python showpath.py`:
-
-```python
-import sys
-
-for directory in sys.path:
-    print(directory)
-```
-
-If you are using the Anaconda distribution of Python and you run this script
-from your desktop, you will see a list that looks like this:
-
-```
-/Users/pterry/Desktop
-/Users/pterry/anaconda3/lib/python36.zip
-/Users/pterry/anaconda3/lib/python3.6
-/Users/pterry/anaconda3/lib/python3.6/lib-dynload
-/Users/pterry/anaconda3/lib/python3.6/site-packages
-/Users/pterry/anaconda3/lib/python3.6/site-packages/aeosa
-```
-
-the first will be your current directory - a Python environment
-always looks there first - and the rest are system paths for
-the Python installation you are using.
-
-To install a package, then means to copy the contents of the
-package in some form into one of the directories that Python
-will search from.
-
-### Exercise: Find a package in pip list
-
-The `pip list` command will generate a list of Python packages
-installed using pip in the current environment.  Here we'll find
-a package that we've recently installed.
-
-1.  Run `pip list`, and from the list pick something that you've
-installed recently; if you can't think of anything, choose `pytest`.
-2.  Run the `showpath.py` script to show the list of paths the package could be in.
-3.  Search the paths in 2. for files corresponding to the package you choose in 1.;
-`site-packages` is normally a good place to start looking.
-
-## How can I have only the packages my projects need? {#py-rse-package-py-virtualenv}
+We can add additional information later,
+but this is enough to be able to install the package
+from the local copy source code using standard tools.
+However,
+it is considered good practice to first create a separate, virtual Python environment
+before installing our own packages.
+This will allow us to test how our package installs in a clean Python environment,
+rather that the current state of our primary Python environment.
+
+> **Semantic Versioning**
+>
+> How do we decide what version number to use?
+> Most software projects use semantic versioning for software releases,
+> where a version number takes the form X.Y.Z and X, Y and Z are integers.
+> X is the major version, Y is the minor version, and Z is the patch version.
+> Major version zero (0.Y.Z) is for initial development, so we've started with 0.1.0.
+> The very first stable public release would be version 1.0.0.
+> In general, the version number is incremented as follows:
+>
+> -   Increment `major` every time there's an incompatible externally-visible change
+> -   Increment `minor` when adding new functionality in a backwards-compatible manner (i.e. without breaking any existing code)
+> -   Increment `patch` for backwards-compatible bug fixes that don't add any new features
+
+> **Finding Packages**
+>
+> Above we have specified the folder name containing the packaging code to the `packages` parameter.
+> This was straightforward for our package since we only have a single package directory.
+> For more complex projects,
+> it is good to know about the `find_packages()`[find-packages] function from `setuptools`,
+> which can automatically find all packages by recursively searching the current directory.
+
+## How can I create a virtual Python environment? {#py-rse-package-py-virtualenv}
 
 It can be convenient to have several different Python environments that
-you can switch between.  One reason is that you're probably working on
-multiple projects at any given time, each with different requirements
-for Python packages, and you want to keep them straight.
+you can switch between.
+One reason is that you're probably working on
+multiple projects at any given time,
+each with different requirements
+for Python packages,
+and you want to keep them straight.
 
-Another reason concerns us a bit more immediately.  We want to make sure
-that other people can successfully install and use our package.  That
-means:
+Another reason concerns us a bit more immediately.
+We want to make sure that other people can successfully install and use our package.
+That means:
 
-* We want to be able to easily test install and uninstall our package, without affecting
-the entire Python environment; and
-* We want to avoid having to answer problems people have with your package with
-something more helpful than "I don't know, it works for me", by making sure we
-can install and run our package in a completely empty environment, so we can tell
-that we're not accidentlly relying on some other package being installed.
+- We want to be able to easily test install and uninstall our package,
+  without affecting the entire Python environment.
+- We want to answer problems people have with our package with something more helpful than
+  "I don't know, it works for me".
+  By installing and running our package in a completely empty environment,
+  we can ensure that we're not accidentally relying on other packages being installed.
 
 A very handy answer to both of those needs is a [virtual environment][virtual-environment].
 A virtual environment is a layer on top of an existing Python installation.
@@ -482,104 +208,65 @@ without affecting the main installation (Figure \@ref(fig:py-rse-package-py-vir
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-We can create and manage virtual environments using a tool called `virtualenv`.
-To install it,
-run `pip install virtualenv`.
-Once we have done that,
-we can create a new virtual environment called `test` by running:
+We can create and manage virtual environments using `conda`,
+the same tool we used to install packages earlier.
+We can create a new virtual environment called `zipf` with the `conda create` command
+and specify the environment name with the `-n` or `--name` flag:
 
 ```shell
-$ virtualenv test
-```
-```text
-Using base prefix '/Users/pterry/anaconda3'
-New python executable in /Users/pterry/test/bin/python
-Installing setuptools, pip, wheel...
-done.
+$ conda create -n zipf
 ```
 
-`virtualenv` creates a new directory called `test`,
-which contains subdirectories called `bin`, `lib`, and so on—everything
+```text
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /home/amira/anaconda3/envs/zipf
+
+
+
+Proceed ([y]/n)? y
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+#
+# To activate this environment, use
+#
+#     $ conda activate zipf
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+```
+
+`conda` creates the directory `~/anaconda3/envs/zipf`,
+which contains subdirectories called `bin`, `lib`, and so on — everything
 needed for a minimal Python installation.
 Crucially,
-`test/bin/python` checks for packages in `test/lib` *before* checking the system-wide install.
+`~/anaconda3/envs/zipf/bin/python` checks for packages in these directories
+instead of checking the system-wide install.
 
-We can switch to the `test` environment by running:
+We can switch to the `zipf` environment by running:
 
 ```shell
-$ source test/bin/activate
+$ conda activate zipf
 ```
 
-`source` is a Unix shell command meaning "run all the commands from a file in this currently-active shell".
-We use it because typing `test/bin/activate` on its own would run those commands in a sub-shell,
-which would have no effect on the shell we're in.
 Once we have done this,
-we're running the Python interpreter in `test/bin`:
+we're running the Python interpreter in `zipf/bin`:
 
 ```shell
-$ which python
-```
-```text
-/Users/pterry/test/bin/python
+(zipf)$ which python
 ```
 
-We can now install packages to our heart's delight.
-Everything we install will go under `test`,
-and won't affect the underlying Python installation.
-When we're done,
-we can switch back to the default environment with `deactivate`.
-(We don't need to `source` this.)
-
-Many developers create a directory called `~/envs`
-(i.e., a directory called `envs` directly below their home directory)
-to store their virtual environments:
-
-```shell
-$ cd ~
-$ mkdir envs
-$ which python
-```
 ```text
-/Users/pterry/anaconda3/bin/python
-```
-```shell
-$ virtualenv envs/test
-```
-```text
-Using base prefix '/Users/pterry/anaconda3'
-New python executable in /Users/pterry/envs/test/bin/python
-Installing setuptools, pip, wheel...done.
-```
-```shell
-$ which python
-```
-```text
-/Users/pterry/anaconda3/bin/python
-```
-```shell
-$ source envs/test/bin/activate
-```
-```text
-(test)
-```
-```shell
-$ which python
-```
-```text
-/Users/pterry/envs/test/bin/python
-(test)
-```
-```shell
-$ deactivate
-```
-```shell
-$ which python
-```
-```text
-/Users/pterry/anaconda3/bin/python
+/home/amira/anaconda3/envs/zipf/bin/python
 ```
 
-Notice how every command now displays `(test)` when that virtual environment is active.
+Notice how every command now displays `(zipf)` when that virtual environment is active.
 Between Git branches and virtual environments,
 it can be very easy to lose track of what exactly you're working on and with.
 Having prompts like this can make it a little less confusing;
@@ -587,337 +274,533 @@ using virtual environment names that match the names of your projects
 (and branches, if you're testing different environments on different branches)
 quickly becomes essential.
 
+We can now install packages to our heart's delight.
+Everything we install will go under `zipf`,
+and won't affect the underlying Python installation.
+When we're done,
+we can switch back to the default environment with `conda deactivate`.
 
-### Exercises: Examining the virtual environment
+```shell
+(zipf)$ conda deactivate
 
-1. If you haven't already, create a `test` virtual environment and activate it.  Your prompt should now start with `(test)`.
-2. Run `pip list`. What packages are installed?
-3. Run the `showpath.py` script from the earlier section, and note that the paths are different from your
-base environment where you looked for packages.  They probably look like `/Users/pterry/envs/test/lib/python-3.7/site-packages`.
-4. Pick a package you know you have installed in your base environment—pick `pytest` if you can't think of one—and
-try to import it in a Python interpreter.  Can it be found?
-5. Deactive the environment and try again.
-
-### Exercises: Installing a package into the virtual environment
-
-1. Re-activate the `test` virtual environment from above, and if necessary,
-re-run the `showpath.py` script.
-2. Let's install a simple package, `click`; it's a commonly used package for
-creating simple command-line tools, but for our purposes it's just a small
-self-contained package.  Run `pip install click`.
-3. Search in the directories output from `showpath.py` for a package named `click`;
-it will be a directory containing an `__init__.py`.
-4. Start a Python interpreter, and run `import click`; it is installed in the environment.
-5. From that same interpretter, run `print(click.path)`; that is the path to the click package.
-It should report the same directory that you found it in.
-6. Exit the Python interpretter
-
-Now let's just clarify that the environment is different than the directory you
-installed the virtual environment contents in:
-
-1. Start another terminal, and go to the directory containing the `test` virtual environment contents.
-2. Run the `showpath.py` script - does it show the directories in the base environment or the virtual environment?
-3. Start a Python interpretter, and try `import click`.
-4.
-    a. If you didn't have `click` installed in the base environment, this will fail.
-    b. If you did have `click` installed in the base environment, this will be successful, but the click path will be different: `print(click.__path__)` to verify.
-5. Exit the Python interpreter, and deactivate the `test` environment in the other terminal.
-
-## How can I create an installable Python package? {#py-rse-package-py-package}
-
-People can always get your package by cloning your repository and copying files from that
-(assuming your repository is accessible,
-which is should be for published research),
-but it's much friendlier to create something they can install
-(and it will be easier for us when it comes to running test suites
-and distributing, too!)
-
-For historical reasons,
-Python has several ways to build an installable package.
-We will show how to use [setuptools][setuptools],
-which is the lowest common denominator;
-[conda][conda] is a modern does-everything solution,
-but the setuptools approach we describe below will
-allow everyone, regardless of what python distribution
-they use, to easily use your package.
-
-To use `setuptools`,
-we must create a file called `setup.py` in the directory *above* the root directory of the package:
+```
+```shell
+$ which python
+```
 
 ```text
-+- setup.py
-+- test_zipfpy.py
-+- zipfpy
-    +- __init__.py
-    +- check.py
-    +- generate.py
+/usr/bin/python
 ```
 
-The file `setup.py` must have exactly that name,
-and must contain these lines:
+## How can I install my package? {#py-rse-package-py-installing}
 
-```python
-from setuptools import setup
+Let's proceed to install our package inside this virtual environment.
+First we need to activate it again:
 
-setup(
-    name='zipfpy',
-    version='0.1',
-    author='Greg Wilson',
-    packages=['zipfpy']
-)
+```shell
+$ conda activate zipf
 ```
 
-This is enough to be able to install the package from the
-local copy source code using standard tools!
+Now the prompt should have changed to `(zipf)$` again.
+From now on,
+everything we do will be in this environment,
+but we will simply type `$` from now on for brevity.
 
-Let's create a virtual environment to test the installation:
+Let's change to the `zipf` directory containing our `setup.py` file
+and install our package by typing `pip install -e .`,
+where `.` references the current directory.
+The `-e` flag indicates that we want to to install the package in "editable" mode,
+which means that any changes we make in the package code are directly available to use
+without having to reinstall the package.
 
 ```text
-$ virtualenv ~/envs/test_zipfpy
-...
-$ source ~/envs/test_zipfpy/bin/activate
-(test_zipfpy) $ pip install .
-Processing /Users/pterry/zipfpy/
-Building wheels for collected packages: zipfpy
-  Building wheel for zipfpy (setup.py) ... done
-  Stored in directory: /private/var/folders/44/[etc]
-Successfully built zipfpy
-Installing collected packages: zipfpy
-Successfully installed zipfpy-0.1
+$ cd zipf
+$ pip install -e .
 ```
-
-Success!  If you take a look in `test_zipfpy/lib/python3.7/site-packages/`, you will
-now see the package with all the other site packages.
-
-We can generate Zipf-distributed data to our hearts content:
-
-```python
->>> import zipfpy
->>> import zipfpy.generate
->>> zipf_out = zipfpy.generate.make_zipf(5)
->>> print(zipf_out)
-[1.0, 0.5, 0.3333333333333333, 0.25, 0.2]
-```
-
-But if we continue and try to check the output, we'll find a problem:
-
-```python
->>> import zipfpy.check
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/Users/pterry/zipfpy/zipfpy/check.py", line 2, in <module>
-    from pytest import approx
-ModuleNotFoundError: No module named 'pytest'
-```
-
-Ah ha - we're missing a dependency. We use `pytest` for approximate
-value comparison.  How best should we document this requirement?
-
-Since a project may depend on many packages,
-developers frequently put a list of those dependencies in a file called `requirements.txt`.
-`pip install -r requirements.txt` will then install the dependencies listed in that file.
-(The file can be called anything,
-but everyone uses `requirements.txt`,
-so you should too.)
-This file can just list package names,
-or it can specify exact versions, minimum versions, etc.:
 
 ```text
-request
-scipy==1.1.0
-tdda>=1.0
-```
-If you want to create a file like this,
-`pip freeze` will print the exact versions of all installed packages.
-`pip freeze` provides the same output as `pip list`, but in less human-reader-friendly
-way and a more easily parsed by computer program format.
-
-So let's install the dependency, ensure that it works, and then create the
-`requirements.txt` file:
-
-```text
-(test_zipfpy) $ pip uninstall zipfpy
-(test_zipfpy) $ pip install pytest
-Collecting pytest
-...[stuff omitted]...
-Installing collected packages: py, zipp, importlib-metadata, pluggy, wcwidth, pyparsing, six, packaging, attrs, more-itertools, atomicwrites, pytest
-Successfully installed atomicwrites-1.3.0 attrs-19.1.0 importlib-metadata-0.18 more-itertools-7.0.0 packaging-19.0 pluggy-0.12.0 py-1.8.0 pyparsing-2.4.0 pytest-4.6.3 six-1.12.0 wcwidth-0.1.7 zipp-0.5.1
-(test_zipfpy) $ pip freeze > requirements.txt
-(test_zipfpy) $ cat requirements.txt
-atomicwrites==1.3.0
-attrs==19.1.0
-importlib-metadata==0.18
-more-itertools==7.0.0
-packaging==19.0
-pluggy==0.12.0
-py==1.8.0
-pyparsing==2.4.0
-pytest==4.6.3
-six==1.12.0
-wcwidth==0.1.7
-zipp==0.5.1
-```
-
-(Note that the version numbers, current at the time of writing, will change).
-
-Now we should be able to import `zipfpy.check`:
-
-```text
-(test_zipfpy) $ pip install .
-...
-(test_zipfpy) $ python
-Python 3.7.2 (default, Mar  9 2019, 23:21:06)
-[Clang 10.0.0 (clang-1000.11.45.5)] on darwin
-Type "help", "copyright", "credits" or "license" for more information.
->>> import zipfpy.check
->>>
-```
-
-Great!  Let's make sure it works from scratch.  Let's deactivate and
-completely delete the previous environment and try again:
-
-```text
-(test_zipfpy) $ deactivate
-$ rm -r test_zipfpy
-$ virtualenv test_zipfpy_2
-$ source test_zipfpy_2/bin/activate
-(test_zipfpy_2) $ pip install -r requirements.txt
-Installing collected packages: atomicwrites, attrs, zipp, importlib-metadata, more-itertools, pyparsing, six, packaging, pluggy, py, wcwidth, pytest
-Successfully installed atomicwrites-1.3.0 attrs-19.1.0 importlib-metadata-0.18 more-itertools-7.0.0 packaging-19.0 pluggy-0.12.0 py-1.8.0 pyparsing-2.4.0 pytest-4.6.3 six-1.12.0 wcwidth-0.1.7 zipp-0.5.1
-(test_zipfpy_2) $ pip install .
-Processing ...
-Building wheels for collected packages: zipfpy
-  Building wheel for zipfpy (setup.py) ... done
-  Stored in directory: /private/var/folders/44/k2tfp8d12h7ggxc0xz8phfmr0000gn/T/pip-ephem-wheel-cache-ab2atma5/wheels/4b/65/6c/557b5122e27983111d3410a06ef63b7b0f3b848df218bb28ed
-Successfully built zipfpy
-Installing collected packages: zipfpy
-Successfully installed zipfpy-0.1
-(test_zipfpy_2) $ python -m pytest
-=============================================================== test session starts ================================================================
-platform darwin -- Python 3.7.2, pytest-4.6.3, py-1.8.0, pluggy-0.12.0
-rootdir: /Users/pterry/Desktop/zipfpy
-collected 3 items
-
-test_zipf.py ...                                                                                                                             [100%]
-
-============================================================= 3 passed in 0.02 seconds =============================================================
-(test_zipfpy_2)
+Processing /home/amira/proj/merely-useful.github.io/zipf/bin/zipf
+Building wheels for collected packages: zipf
+  Building wheel for zipf (setup.py) ... done
+  Created wheel for zipf: filename=zipf-0.1-py3-none-any.whl size=4574 sha256=b7d645f1d07775714855a83d0cc62911c8502eb917fcb3fe2d9fe46206c84656
+  Stored in directory: /tmp/pip-ephem-wheel-cache-19cuetii/wheels/a8/a6/0e/8b2a5cbf87d4a33551e65bc911bfdee49a4c117b0c5c834a47
+Successfully built zipf
+Installing collected packages: zipf
+Successfully installed zipf-0.1
 ```
 
 Success!
-
-## How can I distribute command-line scripts in my Python package? {#py-rse-package-py-distrib-scripts}
-
-Our package now works and can be installed in Python environments.
-
-One downside of our packaging is that we've now buried the useful command-line
-script that is now currently sits in `zipfpy/check.py`; we used to be able to
-run that script as `python zipf.py 100 50 33` to test if a set of counts approximately
-matched a zipf distribution:
-
-```python
-import sys
-...
-
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-
-...
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
-```
-
-The `setuptools` package allows us to install not only the Python
-package itself, but also associated scripts that it places with
-other executable files.  So let's split that command line utility
-out into its own tool, `bin/check_zipf.py`:
-
-```python
-#!/usr/bin/env python
-import sys
-import zipfpy.check
-
-USAGE = '''zipf num [num...]: are the given values Zipfy?'''
-
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print(USAGE)
-    else:
-        values = [int(a) for a in sys.argv[1:]]
-        result = zipfpy.check.is_zipf(values)
-        print('{}: {}'.format(result, values))
-    sys.exit(0)
-```
-
-That means that the `zipfpy/check.py` file now contains only
-the routines `is_zipf()` and `is_unsorted_zipf()`:
-
-```python
-from pytest import approx
-from .generate import make_zipf
-from . import RELATIVE_ERROR
+If you take a look in `~/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
+you will now see the `zipf` package with all the other site packages.
 
 
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
+> [**`pip` and `conda`**][pip-and-conda]
+>
+> `pip` and `conda` can install packages from their respective online repositories.
+> Whereas `pip` only installs Python packages,
+> `conda` can install packages written in other language,
+> which can facilitate installations of Python packages that relies on underlying C or Fortran libraries
+> (such as `numpy`).
+> `conda` packages are always distributed as binaries,
+> which reduces installation times
+> and `conda` is also capable of creating isolated Python environments.
+> Creating packages compatible with `pip` is simpler than creating `conda` packages,
+> and it is practical for installing local packages,
+> which is how we are using it here.
+> Once a package has been uploaded to PyPI,
+> which we will go through later in this chapter,
+> it can be converted to a `conda` package [in a few steps][conda-skeleton-pypi].
+> Generally,
+> you don't want to mix using `pip` and `conda`,
+> but mainly rely on one package manager
+> and only use the other one if needed.
 
-
-def is_unsorted_zipf(hist, rel=RELATIVE_ERROR):
-    sortedhist = sorted(hist)
-    return is_zipf(sortedhist)
-```
-
-Now we make sure that setuptools knows about this script and
-will install it:
+If you try to run the package at this stage,
+you will see that it complains that some of the packages we use,
+such as pandas,
+are not installed.
+We could install these manually,
+but it is preferred to automate this process
+by listing all the required packages as dependencies of our package
+using the `install_requires` parameter in `setup.py`:
 
 ```python
 from setuptools import setup
 
+
 setup(
-    name='zipfpy',
+    name='zipf',
     version='0.1',
-    author='Greg Wilson',
-    packages=['zipfpy'],
-    scripts=['bin/check_zipf.py']
-)
+    author='Amira Khan',
+    packages=['zipf'],
+    install_requires=[
+        'matplotlib',
+        'pandas',
+        'scipy',
+        'pyyaml'])  # Note the diff name from the import
 ```
 
+We don't have to list `numpy` explicitly
+since it will be installed as a dependency for `pandas` and `scipy`.
+It is good practice to specify limits for the version numbers of the dependencies.For example,
+if we have only tested our package on pandas version 1.0.1,
+we could put `pandas==1.0.1` or `pandas>=1.0.1` instead of just `pandas`
+in the list argument passed to the `install_requires` parameter.
+Now we can install our package and all its dependencies in a single command:
 
-Now we we'll install the updated package in a virtual environment:
+```shell
+$ pip install .
+```
 
 ```text
-coredump-2:08 pterry$ virtualenv test_script
-..
-Installing setuptools, pip, wheel...
-done.
-$ source test_script/bin/activate
-(test_script) $ pip install -r requirements.txt
-...
-Installing collected packages: atomicwrites, attrs, zipp, importlib-metadata, more-itertools, six, pyparsing, packaging, pluggy, py, wcwidth, pytest
-pip Successfully installed atomicwrites-1.3.0 attrs-19.1.0 importlib-metadata-0.18 more-itertools-7.0.0 packaging-19.0 pluggy-0.12.0 py-1.8.0 pyparsing-2.4.0 pytest-4.6.3 six-1.12.0 wcwidth-0.1.7 zipp-0.5.1
-ins
-(test_script) $ pip install .
-...
-Building wheels for collected packages: zipfpy
-  Building wheel for zipfpy (setup.py) ... done
-  Stored in directory: /private/var/folders/44/k2tfp8d12h7ggxc0xz8phfmr0000gn/T/pip-ephem-wheel-cache-0z_4yd1b/wheels/1c/84/f1/3dedca5ae7f979ead1ca046473b4a1f13552e873ccf1c1d958
-Successfully built zipfpy
-Installing collected packages: zipfpy
-Successfully installed zipfpy-0.1
-
-(test_script) $ check_zipf.py 100 50 33 25
-True: [100, 50, 33, 25]
+Obtaining file:///home/amira/zipf
+Collecting matplotlib
+  Downloading matplotlib-3.2.1-cp37-cp37m-manylinux1_x86_64.whl (12.4 MB)
+     |████████████████████████████████| 12.4 MB 1.9 MB/s
+Collecting pandas
+  Downloading pandas-1.0.3-cp37-cp37m-manylinux1_x86_64.whl (10.0 MB)
+     |████████████████████████████████| 10.0 MB 16.1 MB/s
+Collecting scipy
+  Downloading scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
+     |████████████████████████████████| 26.1 MB 11.4 MB/s
+Requirement already satisfied: pyyaml in /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages (from zipf==0.1) (5.3.1)
+Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
+  Using cached pyparsing-2.4.6-py2.py3-none-any.whl (67 kB)
+Collecting python-dateutil>=2.1
+  Using cached python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.2.0-cp37-cp37m-manylinux1_x86_64.whl (88 kB)
+     |████████████████████████████████| 88 kB 8.6 MB/s
+Collecting cycler>=0.10
+  Using cached cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
+Collecting numpy>=1.11
+  Downloading numpy-1.18.2-cp37-cp37m-manylinux1_x86_64.whl (20.2 MB)
+     |████████████████████████████████| 20.2 MB 16.3 MB/s
+Requirement already satisfied: pytz>=2017.2 in /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages (from pandas->zipf==0.1) (2019.3)
+Requirement already satisfied: six>=1.5 in /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages (from python-dateutil>=2.1->matplotlib->zipf==0.1) (1.14.0)
+Installing collected packages: pyparsing, python-dateutil, kiwisolver, cycler, numpy, matplotlib, pandas, scipy, zipf
+  Running setup.py develop for zipf
+Successfully installed cycler-0.10.0 kiwisolver-1.2.0 matplotlib-3.2.1 numpy-1.18.2 pandas-1.0.3 pyparsing-2.4.6 python-dateutil-2.8.1 scipy-1.4.1 zipf
 ```
 
+Note that the output will be similar to the above,
+but not identical,
+since package versions might change.
+
+We could now import the functionality from our package inside Python code,
+such as in a script or Jupyter notebook.
+For example,
+to use the function in `mymodule`,
+we would write the following:
+
+```python
+from zipf import mymodule
+
+
+mymodule.collection_to_csv(...)
+```
+
+However,
+one downside of our packaging is that the useful command-line
+scripts that we used to count and plot word counts,
+are no longer accessible directly from the terminal.
+Fortunately,
+the `setuptools` package allows us to install not only the Python package itself,
+but also associated scripts that it places with other executable files.
+We can make sure that `setuptools` will install the scripts
+by defining entry points[entry-points]:
+
+```python
+from setuptools import setup
+
+
+setup(
+    name='zipf',
+    version='0.1',
+    author='Amira Khan',
+    packages=['zipf'],
+    install_requires=[
+        'matplotlib',
+        'pandas',
+        'scipy',
+        'pyyaml'],
+    entry_points={
+        'console_scripts': [
+            'countwords = zipf.countwords:main',
+            'collate = zipf.collate:main',
+            'plotcounts = zipf.plotcounts:main']})
+```
+
+The right side of the `=` operator is the location of a function (`package.module:function`),
+and the left side is the name we want to use to call this function from the command line.
+Let's remove our currently installed version of `zipf`
+and install it again with the updated setup file.
+
+```shell
+$ pip uninstall zipf
+```
+
+```text
+Found existing installation: zipf 0.1
+Uninstalling zipf-0.1:
+  Would remove:
+    /home/amira/.local/lib/python3.8/site-packages/zipf.egg-link
+Proceed (y/n)? y
+  Successfully uninstalled zipf-0.1
+```
+
+```shell
+$ pip install -e .
+```
+
+```text
+Defaulting to user installation because normal site-packages is not writeable
+Obtaining file:///home/amira/zipf
+Requirement already satisfied: matplotlib in /usr/lib/python3.8/site-packages (from zipf==0.1) (3.2.1)
+Requirement already satisfied: pandas in /home/amira/.local/lib/python3.8/site-packages (from zipf==0.1) (1.0.3)
+Requirement already satisfied: scipy in /usr/lib/python3.8/site-packages (from zipf==0.1) (1.4.1)
+Requirement already satisfied: pyyaml in /usr/lib/python3.8/site-packages (from zipf==0.1) (5.3.1)
+Requirement already satisfied: cycler>=0.10 in /usr/lib/python3.8/site-packages (from matplotlib->zipf==0.1) (0.10.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf==0.1) (1.1.0)
+Requirement already satisfied: numpy>=1.11 in /usr/lib/python3.8/site-packages (from matplotlib->zipf==0.1) (1.18.2)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf==0.1) (2.4.6)
+Requirement already satisfied: python-dateutil>=2.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf==0.1) (2.8.1)
+Requirement already satisfied: pytz>=2017.2 in /usr/lib/python3.8/site-packages (from pandas->zipf==0.1) (2019.3)
+Requirement already satisfied: six in /usr/lib/python3.8/site-packages (from cycler>=0.10->matplotlib->zipf==0.1) (1.14.0)
+Requirement already satisfied: setuptools in /usr/lib/python3.8/site-packages (from kiwisolver>=1.0.1->matplotlib->zipf==0.1) (46.1.3)
+Installing collected packages: zipf
+  Running setup.py develop for zipf
+Successfully installed zipf
+```
+
+The output looks slightly different this time
+because pip did not need to go online to fetch the repositories,
+since there was a local cached version from the previous install.
+
+Now we can use our commands directly from the terminal
+without writing the full path to the file
+and without prefixing it with `python`.
+
+```shell
+countwords ../data/dracula.csv -n 5
+```
+
+```text
+the,7474
+and,5803
+I,4846
+to,4662
+of,3707
+```
+
+## What does it mean to install a Python package? {#py-rse-package-py-installation}
+
+Now that we have created and installed our very first Python package,
+let's explore what actually happens during the installation of a package.
+
+In essence,
+installing a package means that the contents of the package are copied
+into one of the directories that Python will search in.
+This means that you can "install" packages
+by manually copying source code into the right places
+but it's much more efficient and safer
+to use a tool specifically made for this purpose,
+such as `conda` or `pip`.
+
+Most commonly when installing packages,
+they will be copied into the `site-packages` directory,
+but this is not the only directory Python searches.
+Just as the `PATH` environment in the shell contains a list of directories
+that the shell searches for programs it can execute,
+the Python variable `sys.path` contains a list of the directories to search.
+We can see the which directories Python looks in,
+by opening the Python interpreter and typing the following.
+
+```python
+import sys
+
+
+sys.path
+```
+
+```
+['',
+'/home/amira/anaconda3/envs/zipf/lib/python37.zip',
+'/home/amira/anaconda3/envs/zipf/lib/python3.7',
+'/home/amira/anaconda3/envs/zipf/lib/python3.7/lib-dynload',
+'/home/amira/.local/lib/python3.7/site-packages',
+'/home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages',
+'/home/amira/zipf']
+```
+
+The first will be your current directory,
+and the rest are system paths for
+the Python installation you are using.
+This might differ slightly on different systems.
+
+
+## How can I distribute software packages that I have created? {#py-rse-package-py-distribute}
+
+With our package working, testable, installable, and documented,
+we should distribute it so anyone can just `pip install zipf`
+and start running!
+
+To create a package that can be installed by `pip`
+we first need to create a source distribution
+(an `sdist` in Python packaging jargon)
+using setuptools:
+
+```shell
+python setyp.py sdist
+```
+
+```text
+running sdist
+running egg_info
+writing zipf.egg-info/PKG-INFO
+writing dependency_links to zipf.egg-info/dependency_links.txt
+writing entry points to zipf.egg-info/entry_points.txt
+writing requirements to zipf.egg-info/requires.txt
+writing top-level names to zipf.egg-info/top_level.txt
+package init file 'zipf/__init__.py' not found (or not a regular file)
+reading manifest file 'zipf.egg-info/SOURCES.txt'
+writing manifest file 'zipf.egg-info/SOURCES.txt'
+running check
+warning: check: missing required meta-data: url
+
+warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
+
+creating zipf-0.1
+creating zipf-0.1/zipf
+creating zipf-0.1/zipf.egg-info
+copying files to zipf-0.1...
+copying README.md -> zipf-0.1
+copying setup.py -> zipf-0.1
+copying zipf/collate.py -> zipf-0.1/zipf
+copying zipf/countwords.py -> zipf-0.1/zipf
+copying zipf/mymodule.py -> zipf-0.1/zipf
+copying zipf/plotcounts.py -> zipf-0.1/zipf
+copying zipf.egg-info/PKG-INFO -> zipf-0.1/zipf.egg-info
+copying zipf.egg-info/SOURCES.txt -> zipf-0.1/zipf.egg-info
+copying zipf.egg-info/dependency_links.txt -> zipf-0.1/zipf.egg-info
+copying zipf.egg-info/entry_points.txt -> zipf-0.1/zipf.egg-info
+copying zipf.egg-info/requires.txt -> zipf-0.1/zipf.egg-info
+copying zipf.egg-info/top_level.txt -> zipf-0.1/zipf.egg-info
+Writing zipf-0.1/setup.cfg
+creating dist
+Creating tar archive
+removing 'zipf-0.1' (and everything under it)
+```
+
+These distribution files can now be distributed via PyPI,
+the standard Python repository for Python packages.
+There is a TestPyPI repository that lets us test putting packages on PyPI
+without having them appear on the standard repository;
+let's start with that.
+Go to [test.pypi.org](https://test.pypi.org),
+create an account,
+and confirm your email.
+
+The preferred tool for uploading packages to PyPI is called [twine][twine];
+we will install that package:
+
+```shell
+$ pip install twine
+```
+and now we can upload our distributions from the `dist/` folder:
+
+```shell
+$ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+Enter your username: amirakhan
+Enter your passowrd: *********
+Uploading distributions to https://test.pypi.org/legacy/
+Uploading zipf-0.1.tar.gz
+100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
+
+View at:
+https://test.pypi.org/project/zipf/0.1/
+```
+
+The `--repository-url` allows us to specify the TestPyPI repository, and we
+have now uploaded both types of distribution, allowing users with different
+environments to use the wheel distribution if their systems allow it, or
+the source distribution otherwise.
+
+We can now test this with a virtual environment and installing with pip:
+
+```shell
+$ conda create -n zipf-test
+$ conda activate zipf-test
+(zipf-test)$ pip install --index-url https://test.pypi.org/simple zipf
+```
+
+```text
+Looking in indexes: https://test.pypi.org/simple
+Collecting zipf
+  Downloading https://test-files.pythonhosted.org/packages/aa/fb/352af20b6f4bb13c3f06e7c2f1e1b7ec8a11e771533d5ad05407d48059a9/zipf-0.1.tar.gz (3.1 kB)
+Requirement already satisfied: matplotlib in /usr/lib/python3.8/site-packages (from zipf) (3.2.1)
+Requirement already satisfied: pandas in ./.local/lib/python3.8/site-packages (from zipf) (1.0.3)
+Requirement already satisfied: scipy in /usr/lib/python3.8/site-packages (from zipf) (1.4.1)
+Requirement already satisfied: pyyaml in /usr/lib/python3.8/site-packages (from zipf) (5.3.1)
+Requirement already satisfied: cycler>=0.10 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (0.10.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (1.1.0)
+Requirement already satisfied: numpy>=1.11 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (1.18.2)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (2.4.7)
+Requirement already satisfied: python-dateutil>=2.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (2.8.1)
+Requirement already satisfied: pytz>=2017.2 in /usr/lib/python3.8/site-packages (from pandas->zipf) (2019.3)
+Requirement already satisfied: six in /usr/lib/python3.8/site-packages (from cycler>=0.10->matplotlib->zipf) (1.14.0)
+Requirement already satisfied: setuptools in /usr/lib/python3.8/site-packages (from kiwisolver>=1.0.1->matplotlib->zipf) (46.1.3)
+Installing collected packages: zipf
+    Running setup.py install for zipf ... done
+Successfully installed zipf-0.1
+```
+
+Success,
+You can see that `pip` took advantage of the fact that some packages already existing on our system,
+and didn't download these again.
+Once we are happy with how our package appears in TestPyPI
+(including its [project page](https://test.pypi.org/project/zipf/)),
+we can go through the same process to put it on the main PyPI repository
+at [pypi.org](https://pypi.org/).
+But first we have a few improvements to make to our `setup.py` so that
+our package webpage is useful and to make it easier for potential users
+to find, understand, and install our package.
+
+> If you are building larger projects,
+> it is beneficial to not only distribute a source distribution
+> but also a binary one since this will be faster for users to install.
+> Binary distributions can be build with `python setup.py bdist`.
+> They are platform specific and often referred to as [wheels][wheels].
+
 ## How should I document my package for others? {#py-rse-package-py-document}
+
+Writing good documentation does not have to be time-consuming
+and involve learning new tools.
+Here we will mention the bare necessities for creating great documentation
+and then highlight extensions that are useful for more complex projects.
+
+Documentation starts with writing clear explanatory docstrings for each function and module,
+which we have already done.
+This is one of the most important steps,
+since it means that others can understand what each function is meant to do,
+without going through the source code.
+
+What is missing is an introduction to what our package is meant to do,
+instructions on how to install it,
+and some examples of how it can be used.
+We can include these elements in the README.md.
+An example of a good README.md file for our project would be
+
+
+````markdown
+# zipf
+
+The `zipf` package tallies the occurrences of words in text files
+and plots each word's rank versus its frequency
+together with a line for the theoretical distribution for Zipf's Law.
+
+## Motivation
+
+Zipf’s Law is often stated as an observational pattern seen in the
+relationship between the frequency and rarity of words in a text:
+
+> "…the most frequent word will occur approximately twice as often as
+> the second most frequent word, three times as often as the third most
+> frequent word, etc."
+> — <https://en.wikipedia.org/wiki/Zipf%27s_law>
+
+As many books are available to download in plain text format,
+e.g from https://www.gutenberg.org/,
+we created this package to qualitative explore how well authors align
+with the word frequencies predicted by Zipf's Law.
+
+## Installation
+
+For now,
+this package can be installed by downloading the package directory
+and running `pip install .` from inside the `zipf` folder.
+It will soon be available for download directly via `pip`,
+stay tuned!
+
+## Usage
+
+After installing this package,
+the following three commands will be available from the command line
+
+- `countwords` for counting the occurrences of words in a text.
+- `collate` for collating multiple word count files together.
+- `plotcounts` for visualizing the word counts.
+
+A typical usage scenario would include running the following from your terminal.
+
+```shell
+countwords dracula.txt > dracula.csv
+countwords moby_dick.txt > moby_dick.csv
+collate dracula.csv moby_dick.csv > collated.csv
+plotcounts collated.csv --outfile zipf-drac-moby.jpg
+```
+
+The output file would look something like
+
+![]image ref
+
+
+Additional information on each function can be found in their docstrings and appending the `-h` flag,
+e.g. `countwords -h`.
+````
+
+For simple packages,
+carefully written docstrings and READMEs
+are sufficient to describe the package
+and is infinitely better than not documenting your package at all.
+As you code base grows larger,
+it will become convenient to complement these manually written sections
+with automatically generated content,
+references between functions,
+and search functionality.
+We will see how to do this next.
+
+## Advanced docs
 
 As we get our package ready for sharing with others, we should
 make sure there's enough documentation written for our intended
@@ -925,7 +808,7 @@ initial users to successfully install the software and begin to
 use key functionality.
 
 Ideally we've been maintaining documentation throughout the development
-process.  But the documentation we keep through that process is often
+process. But the documentation we keep through that process is often
 intended for a different audience and purpose—that is, it's meant for
 us while developing the code, and so includes things that are good and
 useful like code comments reminding us why steps are taken, but may
@@ -941,7 +824,7 @@ In the Python community, much documentation is written in
 a markup format for plain text documents which can be rendered
 into documents with quite complex indexes and cross-linking
 by many documentation tools; GitHub will recognize reST files
-ending in `.rst` and display them nicely.   We'll use that here;
+ending in `.rst` and display them nicely. We'll use that here;
 titles are underlined and overlined, section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented.
 So let's create a `README.rst`:
@@ -1055,7 +938,7 @@ code, but it helpfully shows up when a user types, for instance,
 <!-- used="py-rse-package-py/09/setup.py" -->
 <!-- used="py-rse-package-py/09/test_zipf.py" -->
 
-## How do I generate web pages of documentation for my package? {#py-rse-package-py-sphinx}
+### How do I generate web pages of documentation for my package? {#py-rse-package-py-sphinx}
 
 When you've viewed documentation for large Python packages, they
 have very likely been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
@@ -1115,6 +998,8 @@ lines below and add another pointing up one level from `docs/` so that we have:
 ```python
 import os
 import sys
+
+
 sys.path.insert(0, os.path.abspath('./'))
 sys.path.insert(0, os.path.abspath('../'))
 ```
@@ -1186,7 +1071,7 @@ for users of the package, but for its development and testing.  For this
 package, we could usefully pull out `pytest` from our `requirements.txt`
 into a `requirements_dev.txt`
 
-## How do I put the documentation for my package online? {#py-rse-package-py-rtd}
+### How do I put the documentation for my package online? {#py-rse-package-py-rtd}
 
 There are a number of ways of hosting the web pages that document
 your project.  A very common option, particularly for Python
@@ -1231,178 +1116,7 @@ Note the syntax for adding an image to a reST file; `.. image::` followed by the
 to the image, and additional, optional fields on indented lines, such as `:target:` for
 a link to follow when the image is clicked, and `:alt:` for alternate text for the image.
 
-## How can I distribute software packages that I have created? {#py-rse-package-py-distribute}
-
-With our package working, testable, installable, and documented,
-we should distribute it so anyone can just `pip install pterry_zipfpy`
-and start running!
-
-`pip` installs packages either from a source distribution (an `sdist` in
-Python packaging jargon) or a binary distribution called a wheel (`bdist_wheel`).
-We can use setuptools to generate both of these:
-
-```shell
-$ python setup.py sdist bdist_wheels
-```
-```text
-running sdist
-running egg_info
-creating zipfpy.egg-info
-writing zipfpy.egg-info/PKG-INFO
-writing dependency_links to zipfpy.egg-info/dependency_links.txt
-...
-warning: check: missing required meta-data: url
-warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
-
-creating zipfpy-0.1
-creating zipfpy-0.1/bin
-creating zipfpy-0.1/zipfpy
-...
-creating dist
-Creating tar archive
-removing 'zipfpy-0.1' (and everything under it)
-
-running bdist_wheel
-running build
-running build_py
-creating build
-creating build/lib
-creating build/lib/zipfpy
-...
-adding 'zipfpy/__init__.py'
-adding 'zipfpy/check.py'
-adding 'zipfpy/generate.py'
-adding 'zipfpy-0.1.data/scripts/check_zipf.py'
-adding 'zipfpy-0.1.dist-info/top_level.txt'
-adding 'zipfpy-0.1.dist-info/WHEEL'
-adding 'zipfpy-0.1.dist-info/METADATA'
-adding 'zipfpy-0.1.dist-info/RECORD'
-removing build/bdist.macosx-10.7-x86_64/wheel
-```
-
-We will look at how to clean up the warnings about `url`, and `author_email` in the exercises, as
-well as considering other package metadata we should add for our package.
-
-`python setup.py sdist` creates a compressed file `dist/zipf-0.1.tar.gz` that contains the following:
-
-```shell
-$ tar ztvf dist/zipf-0.1.tar.gz
-```
-```text
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/
--rw-r--r--  0 pterry staff     182 Jul 23 16:30 zipfpy-0.1/PKG-INFO
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/bin/
--rwxr-xr-x  0 pterry staff     467 Jul 23 16:24 zipfpy-0.1/bin/check_zipf.py
--rw-r--r--  0 pterry staff     792 Jul 23 16:24 zipfpy-0.1/README.md
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/
--rw-r--r--  0 pterry staff     182 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/PKG-INFO
--rw-r--r--  0 pterry staff     210 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/SOURCES.txt
--rw-r--r--  0 pterry staff       7 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/top_level.txt
--rw-r--r--  0 pterry staff       1 Jul 23 16:30 zipfpy-0.1/zipfpy.egg-info/dependency_links.txt
--rw-r--r--  0 pterry staff     162 Jul 23 16:24 zipfpy-0.1/setup.py
-drwxr-xr-x  0 pterry staff       0 Jul 23 16:30 zipfpy-0.1/zipfpy/
--rw-r--r--  0 pterry staff    1978 Jul 23 16:24 zipfpy-0.1/zipfpy/check.py
--rw-r--r--  0 pterry staff    2022 Jul 23 16:24 zipfpy-0.1/zipfpy/generate.py
--rw-r--r--  0 pterry staff     318 Jul 23 16:24 zipfpy-0.1/zipfpy/__init__.py
--rw-r--r--  0 pterry staff      38 Jul 23 16:30 zipfpy-0.1/setup.cfg
-```
-
-The source files `__init__.py` and `generate.py` are in there,
-along with the odds and ends that `pip` will need to install this package properly when the time comes.
-
-Also present in `dist` is a file `zipfpy-0.1-py3-none-any.whl`, the "wheel" file;
-running `file dist/zipfpy-0.1-py3-none-any.whl` will show it to be a zip file.  We
-can list its contents and see the same source files and some metadata:
-
-```shell
-$ unzip -l dist/zipfpy-0.1-py3-none-any.whl
-```
-```text
-Archive:  dist/zipfpy-0.1-py3-none-any.whl
-  Length      Date    Time    Name
----------  ---------- -----   ----
-      318  07-23-2019 20:24   zipfpy/__init__.py
-     1978  07-23-2019 20:24   zipfpy/check.py
-     2022  07-23-2019 20:24   zipfpy/generate.py
-      454  07-23-2019 20:30   zipfpy-0.1.data/scripts/check_zipf.py
-        7  07-23-2019 20:30   zipfpy-0.1.dist-info/top_level.txt
-       92  07-23-2019 20:30   zipfpy-0.1.dist-info/WHEEL
-      172  07-23-2019 20:30   zipfpy-0.1.dist-info/METADATA
-      606  07-23-2019 20:30   zipfpy-0.1.dist-info/RECORD
----------                     -------
-     5649                     8 files
-```
-
-These distribution files can now be distributed via `pypi`, the standard Python
-repository for Python packages.
-
-There is a `testpypi` repository that lets us test putting packages
-on pypi without having them appear on the standard repository; let's
-start with that.  Go to [`https://test.pypi.org`](https://test.pypi.org),
-create an account, and confirm your email.
-
-The preferred tool for uploading packages to the PyPI family of repositories
-is called [`twine`](https://twine.readthedocs.io/en/latest/); we will
-install that package:
-
-```shell
-$ pip install twine
-```
-and now we can upload our distributions:
-
-```shell
-$ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-Enter your username: pterry
-Enter your passowrd: *********
-Uploading zipfpy-0.1-py3-none-any.whl
-...
-Uploading zipfpy-0.1.tar.gz
-...
-```
-
-The `--repository-url` allows us to specify the test PyPI repository, and we
-have now uploaded both types of distribution, allowing users with different
-environments to use the wheel distribution if their systems allow it, or
-the source distribution otherwise.
-
-We can now test this with a virtual environment and installing with pip:
-
-```shell
-$ virtualenv ~/envs/testpypi
-Using base prefix '/usr/local/Cellar/python/3.7.2_2/Frameworks/Python.framework/Versions/3.7'
-New python executable in /Users/pterry/envs/testpypi/bin/python3.7
-Also creating executable in /Users/pterry/envs/testpypi/bin/python
-sourInstalling setuptools, pip, wheel...
-$ source ~/envs/testpypi/bin/activate
-(testpypi) $ pip install --index-url https://test.pypi.org/simple/ zipfpy
-Looking in indexes: https://test.pypi.org/simple/
-Collecting zipfpy
-  Using cached https://test-files.pythonhosted.org/packages/f8/ac/d152eed95bff7567954becef22b8fe0f2aae15008fbeb346c69f75b9d2a0/zipfpy-0.1-py3-none-any.whl
-Installing collected packages: zipfpy
-Successfully installed zipfpy-0.1
-(testpypi) $
-```
-
-Success!  Once we are happy with how our package appears in testpypi
-(including its [project page](https://test.pypi.org/project/zipfpy/)),
-we can go through the same process to put it on the main pypi repository.
-But first we have a few improvements to make to our setup.py so that
-our package webpage is useful and to make it easier for potential users
-to find, understand, and install our package.
-
-### Exercise: Clean up warning messages
-
--   FIXME: clean up warning messages from `python setup.py sdist`
-
-### Exercise License, longinfo, and classification metadata
-
--   FIXME: add additional metadata to setup.py
-
-### Exercise: Requirements in setup.py
-
--   FIXME: add requirements metadata to setup.py
-
-## Announcing Work {#py-rse-package-py-announce}
+### Announcing Work {#py-rse-package-py-announce}
 
 FIXME: <https://medium.com/indeed-engineering/marketing-for-data-science-a-7-step-go-to-market-plan-for-your-next-data-product-60c034c34d55>
 
@@ -1416,8 +1130,173 @@ if (knitr::is_latex_output()) {
 }
 ```
 
+FIXME: summarize Python packaging chapter
 
 ## Key Points {#py-rse-package-py-keypoints}
 
 ```{r, child="keypoints/rse-package-py.md"}
+```
+
+## Exercises
+
+### Exercises: Examining the virtual environment
+
+1. If you haven't already, create a `test` virtual environment and activate it.  Your prompt should now start with `(test)`.
+2. Run `pip list`. What packages are installed?
+3. Run the `showpath.py` script from the earlier section, and note that the paths are different from your
+base environment where you looked for packages.  They probably look like `/Users/pterry/envs/test/lib/python-3.7/site-packages`.
+4. Pick a package you know you have installed in your base environment—pick `pytest` if you can't think of one—and
+try to import it in a Python interpreter.  Can it be found?
+5. Deactivate the environment and try again.
+
+### Exercise: Hello, Zipf!
+
+Put a statement
+
+```python
+print("Hello, Zipf!")
+```
+at the end of `zipf.py`.
+
+1. What happens when you start Python interactively and import the
+module with the command `import zipf`?
+2. Python caches modules that have been imported.  What happens if you
+type `import zipf` again?
+
+### Exercise: What is `__name__` in different contexts?
+
+1. Start an interactive Python interpreter, and run `print(__name__)`.
+What do you get?
+2. Add the statement `print(__name__)` to the end of the file `zipf.py`
+and from the Python interpreter, run `import zipf`.  What is the name
+printed?
+
+### Exercise: Create a package for our Zipf code.
+
+We're going to create a package for the code we've written
+for the Zipf distribution.  In the long and honourable(?)
+tradition of package names ending in "py", we'll call our
+package zipfpy.
+
+1. Create a `zipfpy` directory and move the file `zipf.py` into that directory.
+2. Create an empty file `zipfpy/__init__.py`.
+3. Modify the test suite so that it runs; functions will now be found in the [namespace][namespace] `zipfpy.zipf` rather than `zipf`.
+4. Run the test suite with `pytest`
+
+### Exercise: "Hello `__init__.py`"
+
+Repeat the "Hello, Zipf!" exercise by temporarily adding the
+line `print("Hello, Init!")` to the `__init__.py`.  Then
+from the directory containing the directory `zipfpy`, start
+a Python interpreter and run:
+
+```python
+import zipfpy
+```
+
+What happens?
+
+When you're done, remove the `print()` line from `__init__.py`.
+
+
+### Exercise: Factor out the package-wide constant `RELATIVE_ERROR`
+
+It's perfectly valid for an `__init__.py` file to be empty,
+but it is also a very useful place to put definitions that are
+common to the entire package.
+
+Here, both `generate` and `check` use the same default `RELATIVE_ERROR`;
+let's move that into `__init__.py`:
+
+1. Add the line `RELATIVE_ERROR = 0.05` to `__init__.py`;
+2. Now we can remove the line definining `RELATIVE_ERROR` from `check.py`
+and `generate.py`, but;
+3. We still need to import that definition somehow, or else those functions
+won't know what a `RELATIVE_ERROR` is; add the line `from . import RELATIVE_ERROR`
+to each so that it is visible.  When we don't specify a file, it imports the
+definition from `__init__.py` (just as `import zipfpy` will read the `__init__.py`)
+4. Run the test suite with `pytest`
+
+We haven't shortened the code any here—we've replaced a `RELATIVE_ERROR = 0.05`
+with an `from . import RELATIVE_ERROR`—but now the constant is defined in only
+one location so we don't have to worry about editing it in one location and that
+value being out of sync in the other.
+
+### Exercise: Importing from within __init__.py
+
+Since any code that does an `import zipf` will read `__init__.py`, it
+can be convenient to put import statments in `__init__.py` itself, to
+ensure that some key definitions are readily available when the package
+is imported.
+
+We'll try that here:
+
+1. Add the lines `from .generate import *` and `from .check import *` to
+`zipfpy/__init__.py`.
+2. In the test suite, you can now call `import zipfpy` and refer to,
+_e.g._, `zipfpy.make_zipf(...)` instead of `zipfpy.generate_make_zipf(...)`.
+Make those changes
+3. Run the test suite with `pytest`
+
+Note that it doesn't make sense to import absolutely everything like we
+have here into the `zipfpy` namespace—it kind of defeats the purpose
+of having split up the files—but for a modest number of key definitions
+this can be very convenient for the package users.
+
+4. Undo the changes you made in 1. and 2., and make sure the test suite
+still runs.
+
+### Exercise: Clean up warning messages
+
+-   FIXME: clean up warning messages from `python setup.py sdist`
+
+### Exercise License, longinfo, and classification metadata
+
+-   FIXME: add additional metadata to setup.py
+
+### Exercise: Requirements in setup.py
+
+-   FIXME: add requirements metadata to setup.py
+
+
+### Exercise: Find a package in pip list
+
+The `pip list` command will generate a list of Python packages
+installed using pip in the current environment.  Here we'll find
+a package that we've recently installed.
+
+1.  Run `pip list`, and from the list pick something that you've
+installed recently; if you can't think of anything, choose `pytest`.
+2.  Run the `showpath.py` script to show the list of paths the package could be in.
+3.  Search the paths in 2. for files corresponding to the package you choose in 1.;
+`site-packages` is normally a good place to start looking.
+
+### Exercises: Installing a package into the virtual environment
+
+
+1. Re-activate the `test` virtual environment from above, and if necessary,
+re-run the `showpath.py` script.
+2. Let's install a simple package, `click`; it's a commonly used package for
+creating simple command-line tools, but for our purposes it's just a small
+self-contained package.  Run `pip install click`.
+3. Search in the directories output from `showpath.py` for a package named `click`;
+it will be a directory containing an `__init__.py`.
+4. Start a Python interpreter, and run `import click`; it is installed in the environment.
+5. From that same interpretter, run `print(click.path)`; that is the path to the click package.
+It should report the same directory that you found it in.
+6. Exit the Python interpretter
+
+Now let's just clarify that the environment is different than the directory you
+installed the virtual environment contents in:
+
+1. Start another terminal, and go to the directory containing the `test` virtual environment contents.
+2. Run the `showpath.py` script - does it show the directories in the base environment or the virtual environment?
+3. Start a Python interpretter, and try `import click`.
+4.
+    a. If you didn't have `click` installed in the base environment, this will fail.
+    b. If you did have `click` installed in the base environment, this will be successful, but the click path will be different: `print(click.__path__)` to verify.
+5. Exit the Python interpreter, and deactivate the `test` environment in the other terminal.
+
+
+```{r, child="./links.md"}
 ```
