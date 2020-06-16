@@ -1,3 +1,0 @@
--   Explain the different options for testing code
--   Write and run tests using `pytest`
--   Automate testing using Travis CI

@@ -1,6 +1,6 @@
-# Git at the Command Line {#py-rse-git-cmdline}
+# Git at the Command Line {#git-cmdline}
 
-```{r py-rse-git-cmdline-setup, include=FALSE}
+```{r git-cmdline-setup, include=FALSE}
 source(here::here("_common.R"))
 ```
 
@@ -21,12 +21,12 @@ In this way, the system records a complete revision history (i.e. of every commi
 so that you can retrieve and compare previous versions at any time.
 This is useful from an individual viewpoint,
 because you don't need to store multiple (but slightly different) copies of the same script
-(Figure \@ref(fig:py-rse-git-cmdline-phdcomics)).
+(Figure \@ref(fig:git-cmdline-phdcomics)).
 It's also useful from a collaboration viewpoint,
 because the system keeps a record of who made what changes and when.
 
-```{r py-rse-git-cmdline-phdcomics, echo=FALSE, fig.cap="Without a version control system, managing different versions of the same file can get messy."}
-knitr::include_graphics("figures/py-rse-git-cmdline/phd-comics.png")
+```{r git-cmdline-phdcomics, echo=FALSE, fig.cap="Without a version control system, managing different versions of the same file can get messy."}
+knitr::include_graphics("figures/py-rse/git-cmdline/phd-comics.png")
 ```
 
 There are many different version control systems,
@@ -38,7 +38,7 @@ However,
 these tools are actually wrappers around Git's original command-line interface,
 which gives us access to all of Git's features.
 This lesson describes how to perform fundamental operations using that interface;
-Chapter \@ref(py-rse-git-advanced) then introduces more advanced operations
+Chapter \@ref(git-advanced) then introduces more advanced operations
 that can be used to implement a smoother research workflow.
 
 To show how git works,
@@ -64,7 +64,7 @@ Our project directory should currently include:
     └── moby_dick.csv
 ```
 
-`bin/plotcounts.py` is the solution to Exercise \@ref(py-rse-py-scripting-ex-better-plotting);
+`bin/plotcounts.py` is the solution to Exercise \@ref(scripting-ex-better-plotting);
 over the course of this chapter
 we will edit it to produce more informative plots.
 Initially,
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-## Setting Up {#py-rse-git-cmdline-setup}
+## Setting Up {#git-cmdline-setup}
 
 We write Git commands as <code>git <em>verb</em> <em>options</em></code>,
 where the [subcommand][subcommand] <code><em>verb</em></code> tells Git what we want to do
@@ -159,7 +159,7 @@ core.ignorecase=true
 > $ git config --help
 > ```
 
-## Creating a New Repository {#py-rse-git-cmdline-repos}
+## Creating a New Repository {#git-cmdline-repos}
 
 Once Git is configured,
 we can use it to track work on our Zipf's Law project.
@@ -239,7 +239,7 @@ while "Untracked files" means Git has noticed that
 there are things in `bin/`, `data/` and `results/`
 that it is not yet keeping track of.
 
-## Adding Existing Work {#py-rse-git-cmdline-add-existing}
+## Adding Existing Work {#git-cmdline-add-existing}
 
 Now that our project is a repository,
 we can tell Git to start recording its history.
@@ -303,7 +303,7 @@ such as files containing passwords or other sensitive information.
 The output of `git status` tells us that
 we can remove such files from the list of things to be saved
 using `git rm --cached`;
-we will practice this in Exercise \@ref(py-rse-git-cmdline-ex-unsave).
+we will practice this in Exercise \@ref(git-cmdline-ex-unsave).
 
 > **What to Save**
 >
@@ -320,7 +320,7 @@ we will practice this in Exercise \@ref(py-rse-git-cmdline-ex-unsave).
 > we may decide to save them elsewhere,
 > while if they are easy to re-create,
 > we may not save them at all.
-> We will explore this issue further in Chapter \@ref(py-rse-project).
+> We will explore this issue further in Chapter \@ref(project).
 
 We no longer have any untracked files,
 but the tracked files haven't been [committed][commit]
@@ -386,7 +386,7 @@ This implies that we should make our project a Git repository
 as soon as we create it
 rather than after we have done some work.
 
-## Describing Commits {#py-rse-git-cmdline-commit-message}
+## Describing Commits {#git-cmdline-commit-message}
 
 If we run `git commit` *without* the `-m` option,
 Git opens a text editor
@@ -424,11 +424,11 @@ Following [these guidelines][desc-cmt-msgs] will help:
 > but no one has ever claimed that its interface is intuitive.
 > ("How do I exit the Vim editor?"
 > is one of the most frequently read questions on Stack Overflow.)
-> Section \@ref(py-rse-install-git-nano) explains
+> Section \@ref(install-git-nano) explains
 > how to configure Git to use the `nano` editor
-> introduced in Chapter \@ref(py-rse-bash-basics) instead.
+> introduced in Chapter \@ref(bash-basics) instead.
 
-## Saving and Tracking Changes {#py-rse-git-cmdline-changes}
+## Saving and Tracking Changes {#git-cmdline-changes}
 
 Our initial commit gave us a starting point.
 The process to build on top of it is similar:
@@ -509,13 +509,13 @@ the commit's author,
 when it was created,
 and the commit message that we wrote.
 
-The plot we have made is shown in Figure \@ref(fig:py-rse-git-cmdline-initial-plot).
+The plot we have made is shown in Figure \@ref(fig:git-cmdline-initial-plot).
 It could be better:
 most of the visual space is devoted to a few very common words,
 which makes it hard to see what is happening with the other ten thousand or so words.
 
-```{r py-rse-git-cmdline-initial-plot, echo=FALSE, fig.cap="Inverse rank versus word frequency for Dracula"}
-knitr::include_graphics("figures/py-rse-git-cmdline/plot-initial.png")
+```{r git-cmdline-initial-plot, echo=FALSE, fig.cap="Inverse rank versus word frequency for Dracula"}
+knitr::include_graphics("figures/py-rse/git-cmdline/plot-initial.png")
 ```
 
 An alternative way to visually evaluate Zipf's Law is
@@ -670,20 +670,25 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 > but not commit the changes to `conclusion.tex` (which we haven't finished writing yet).
 > To allow for this,
 > Git has a special [staging area][git-stage] where it keeps track of things
-> that have been added to the current changeset but not yet committed.
->
-> ```{r py-rse-git-cmdline-staging, echo=FALSE, fig.cap="The staging area."}
-> insert_graphic("figures/py-rse-git-cmdline/staging-area.pdf")
+> that have been added to the current changeset but not yet committed
+> (Figure \@ref(fig:git-cmdline-staging-area)).
+
+```{r py-rse-git-cmdline-staging, echo=FALSE, fig.cap="The staging area."}
+if (knitr::is_latex_output()) {
+  knitr::include_graphics("figures/py-rse/git-cmdline/staging-area.pdf")
+} else {
+  knitr::include_graphics("figures/py-rse/git-cmdline/staging-area.svg")
+}
 > ```
 
-Let's take a look at our new plot (Figure \@ref(fig:py-rse-git-cmdline-loglog-plot)):
+Let's take a look at our new plot (Figure \@ref(fig:git-cmdline-loglog-plot)):
 
 ```shell
 python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
-```{r py-rse-git-cmdline-loglog-plot, echo=FALSE, fig.cap="Rank versus word frequency, on log-log axes, for Dracula"}
-knitr::include_graphics("figures/py-rse-git-cmdline/plot-loglog.png")
+```{r git-cmdline-loglog-plot, echo=FALSE, fig.cap="Rank versus word frequency, on log-log axes, for Dracula"}
+knitr::include_graphics("figures/py-rse/git-cmdline/plot-loglog.png")
 ```
 
 > **Interpreting Our Plot**
@@ -743,7 +748,7 @@ $ git commit -a -m "Update dracula plot"
  rewrite results/dracula.png (99%)
 ```
 
-## Synchronizing with Other Repositories {#py-rse-git-cmdline-remotes}
+## Synchronizing with Other Repositories {#git-cmdline-remotes}
 
 Sooner or later our computer will experience a hardware failure,
 be stolen,
@@ -764,10 +769,10 @@ Next,
 we need to connect our desktop repository with the one on GitHub.
 We do this by making the GitHub repository a [remote][remote-repository] of the local repository.
 The home page of the repository on GitHub includes the string we need to identify it
-(Figure \@ref(fig:py-rse-git-cmdline-repo-link)).
+(Figure \@ref(fig:git-cmdline-repo-link)).
 
-```{r py-rse-git-cmdline-repo-link, echo=FALSE, fig.cap="Where to Find the Repository Link"}
-knitr::include_graphics("figures/py-rse-git-cmdline/repo-link.png")
+```{r git-cmdline-repo-link, echo=FALSE, fig.cap="Where to Find the Repository Link"}
+knitr::include_graphics("figures/py-rse/git-cmdline/repo-link.png")
 ```
 
 We can click on "HTTPS" to change the URL from SSH to HTTPS
@@ -842,10 +847,10 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 
 If we view our GitHub repository in the browser,
 it now includes all of our project files,
-along with all of the commits we have made so far (Figure \@ref(fig:py-rse-git-cmdline-history)).
+along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline-history)).
 
-```{r py-rse-git-cmdline-history, echo=FALSE, fig.cap="Repository history on GitHub"}
-knitr::include_graphics("figures/py-rse-git-cmdline/repo-history.png")
+```{r git-cmdline-history, echo=FALSE, fig.cap="Repository history on GitHub"}
+knitr::include_graphics("figures/py-rse/git-cmdline/repo-history.png")
 ```
 
 We can also [pull][git-pull] changes from the remote repository to the local one:
@@ -863,11 +868,11 @@ Already up-to-date.
 Pulling has no effect in this case
 because the two repositories are already synchronized.
 
-```{r py-rse-git-cmdline-remote, echo=FALSE, fig.cap="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?"}
-knitr::include_graphics("figures/py-rse-git-cmdline/git-remote.png")
+```{r git-cmdline-remote, echo=FALSE, fig.cap="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?"}
+knitr::include_graphics("figures/py-rse/git-cmdline/git-remote.png")
 ```
 
-## Exploring History {#py-rse-git-cmdline-history}
+## Exploring History {#git-cmdline-history}
 
 Git lets us look at previous versions of files
 and restore specific files to earlier states if we want to.
@@ -1059,7 +1064,7 @@ index 13e7f38..a6005cd 100644
      ax.figure.savefig(args.outfile)
 ```
 
-## Restoring Old Versions of Files {#py-rse-git-cmdline-restore}
+## Restoring Old Versions of Files {#git-cmdline-restore}
 
 We can see what we changed,
 but how can we restore it?
@@ -1174,7 +1179,7 @@ that removed the line that calculates the inverse rank,
 that work is now lost:
 Git can only go back and forth between committed versions of files.
 
-## Ignoring Files {#py-rse-git-cmdline-ignore}
+## Ignoring Files {#git-cmdline-ignore}
 
 We don't always want Git to track every file's history.
 For example,
@@ -1204,7 +1209,7 @@ and any backup files ending in `.bak`.
 > Don't forget to commit `.gitignore` to your repository
 > so that Git knows to use it.
 
-## Summary {#py-rse-git-cmdline-summary}
+## Summary {#git-cmdline-summary}
 
 The biggest benefit of version control for individual research is that
 we can always go back to the precise set of files
@@ -1215,9 +1220,9 @@ is a close second,
 but some of Git's advanced features make it even more powerful.
 We will explore these in the next chapter.
 
-## Exercises {#py-rse-git-cmdline-exercises}
+## Exercises {#git-cmdline-exercises}
 
-### Places to create Git repositories {#py-rse-git-cmdline-ex-places}
+### Places to create Git repositories {#git-cmdline-ex-places}
 
 Along with information about the Zipf's Law project,
 Amira would also like to keep some notes on
@@ -1235,7 +1240,7 @@ $ git heaps-law     # make heaps-law a Git repository
 Is the `git init` command that she runs inside the `heaps-law` subdirectory
 required for tracking files stored there?
 
-### Removing before saving {#py-rse-git-cmdline-ex-unsave}
+### Removing before saving {#git-cmdline-ex-unsave}
 
 The output of `git status` tells us that
 we can take files out of the list of things to be saved
@@ -1250,14 +1255,14 @@ Try this out:
 What does `git status` now show?
 What (if anything) has happened to the file?
 
-### Viewing changes {#py-rse-git-cmdline-ex-word-diff}
+### Viewing changes {#git-cmdline-ex-word-diff}
 
 Make a few changes to a file in your Git repository,
 then view those differences using both `git diff`
 and `git diff --word-diff`.
 Which output do you find easiest to understand?
 
-### Committing changes {#py-rse-git-cmdline-ex-commit}
+### Committing changes {#git-cmdline-ex-commit}
 
 Which command(s) below would save changes to `myfile.txt` to a local Git repository?
 
@@ -1279,7 +1284,7 @@ Which command(s) below would save changes to `myfile.txt` to a local Git reposit
    $ git commit -m myfile.txt "Add recent changes"
    ```
 
-### Committing multiple files {#py-rse-git-cmdline-ex-multiple}
+### Committing multiple files {#git-cmdline-ex-multiple}
 
 The staging area can hold changes from any number of files
 that you want to commit as a single snapshot.
@@ -1292,25 +1297,25 @@ that you want to commit as a single snapshot.
 3.  Add changes from both files to the staging area
     and commit those changes.
 
-### Write your biography {#py-rse-git-cmdline-ex-bio}
+### Write your biography {#git-cmdline-ex-bio}
 
 1.  Create a new Git repository on your computer called `bio`.
 2.  Write a three-line biography for yourself in a file called `me.txt` and commit your changes.
 3.  Modify one line and add a fourth line.
 4.  Display the differences between the file's original state and its updated state.
 
-### Ignoring nested files {#py-rse-git-cmdline-ex-ignore-nested}
+### Ignoring nested files {#git-cmdline-ex-ignore-nested}
 
 Suppose our project has a directory `results` with two subdirectories called `data` and `plots`.
 How would we ignore all of the files in `results/plots`
 but not ignore files in `results/data`?
 
-### Including specific files {#py-rse-git-cmdline-ex-include}
+### Including specific files {#git-cmdline-ex-include}
 
 How would you ignore all `.dat` files in your root directory except for `final.dat`?
 (Hint: find out what the exclamation mark `!` means in a `.gitignore` file.)
 
-### Exploring the GitHub interface {#py-rse-git-cmdline-ex-github-interface}
+### Exploring the GitHub interface {#git-cmdline-ex-github-interface}
 
 Browse to your `zipf` repository on GitHub.
 Under the `Code` tab,
@@ -1319,7 +1324,7 @@ Hover over and click on the three buttons to the right of each commit.
 What information can you gather/explore from these buttons?
 How would you get that same information in the shell?
 
-### GitHub timestamps {#py-rse-git-cmdline-ex-timestamp}
+### GitHub timestamps {#git-cmdline-ex-timestamp}
 
 1.  Create a remote repository on GitHub.
 2.  Push the contents of your local repository to the remote.
@@ -1328,18 +1333,18 @@ How would you get that same information in the shell?
 
 How does GitHub record times, and why?
 
-### Push versus commit {#py-rse-git-cmdline-ex-push-commit}
+### Push versus commit {#git-cmdline-ex-push-commit}
 
 Explain in one or two sentences how `git push` is different from `git commit`.
 
-### License and README files {#py-rse-git-cmdline-ex-boilerplate}
+### License and README files {#git-cmdline-ex-boilerplate}
 
 When we initialized our GitHub repo,
 we didn't add a `README.md` or license file.
 If we had,
 what would have happened when we tried to link our local and remote repositories?
 
-### Recovering older versions of a file {#py-rse-git-cmdline-ex-recover}
+### Recovering older versions of a file {#git-cmdline-ex-recover}
 
 Amira made changes this morning to a shell script called `data_cruncher.sh`
 that she has been working on for weeks.
@@ -1356,7 +1361,7 @@ to recover the last committed version of her script?
 4.  `$ git checkout <unique ID of last commit> data_cruncher.sh`
 5.  Both 2 and 4
 
-### Workflow and history {#py-rse-git-cmdline-ex-history}
+### Workflow and history {#git-cmdline-ex-history}
 
 What is the output of the last command in the sequence below?
 
@@ -1385,13 +1390,13 @@ $ cat motivation.txt
 
 4. An error message because we have changed `motivation.txt` without committing first.
 
-### Understanding `git diff` {#py-rse-git-cmdline-ex-diff}
+### Understanding `git diff` {#git-cmdline-ex-diff}
 
 1.   What will the command `git diff HEAD~9 bin/plotcounts.py` do if we run it?
 2.  What does it actually do?
 3.  What does `git diff HEAD bin/plotcounts.py` do?
 
-### Getting rid of staged changes {#py-rse-git-cmdline-ex-unstage}
+### Getting rid of staged changes {#git-cmdline-ex-unstage}
 
 `git checkout` can be used to restore a previous commit when unstaged changes have been made,
 but will it also work for changes that have been staged but not committed?
@@ -1403,16 +1408,16 @@ To find out:
 
 Does it work?
 
-### Figuring out who did what {#py-rse-git-cmdline-ex-blame}
+### Figuring out who did what {#git-cmdline-ex-blame}
 
 Run the command `git blame bin/plotcounts.py`.
 
 1.  What does each line of the output show?
 2.  Why do some lines start with a circumflex `^`?
 
-## Key Points {#py-rse-git-cmdline-keypoints}
+## Key Points {#git-cmdline-keypoints}
 
-```{r, child="keypoints/rse-git-cmdline.md"}
+```{r, child="keypoints/py-rse/git-cmdline.md"}
 ```
 
 ```{r, child="./links.md"}
