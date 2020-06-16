@@ -36,6 +36,7 @@ but this is to give a direction on how to write those sections
     - Deadlines for milestones to acheive for project, with instructor feedback on progress
     - Out-of-class formative assessments based on maybe learnr tutorials?
     - After completing in-class exercises, go over them as class?
+    - Peer review activities? E.g. exercises that have a rubric that go with them that can be used to guide peer review.
 
 - Key resources to use for this:
   - R packages: usethis, devtools, drake?, pkgdown, testthat, styler, rmarkdown
@@ -126,7 +127,7 @@ Here is a draft outline to guide development.
     - Running local CRAN checks
     - Managing your versions, git tagging
 
-- Making your R package development to a team-based environment
+- R package development in a team-based environment
     - Making use of GitHub Organizations/Teams
     - Branch protection, member roles
     - Decision making
