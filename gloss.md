@@ -99,10 +99,7 @@
 **Bug tracker**<a id="bug-tracker"></a>
 :   FIXME
 
-**Build tool**<a id="build-tool"></a>
-:   FIXME
-
-**Build tool**<a id="build-tool"></a>
+**Build manager**<a id="build-manager"></a>
 :   FIXME <https://en.wikipedia.org/wiki/List_of_build_automation_software>
 
 **Byte code**<a id="byte-code"></a>
@@ -240,9 +237,6 @@
 :   FIXME
 
 **Data package**<a id="data-package"></a>
-:   FIXME
-
-**Declarative programming**<a id="declarative-programming"></a>
 :   FIXME
 
 **Default target**<a id="default-target"></a>
