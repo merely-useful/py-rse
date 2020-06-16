@@ -24,7 +24,6 @@ It is assumed that students have completed the novice course.
 ## The Unix Shell
 
 **Lead author:** Damien Irving  
-**Status:** First draft complete ([#105](https://github.com/merely-useful/merely-useful.github.io/issues/105))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/shell-novice/),
 [shell.Rmd](https://merely-useful.github.io/still-magic/en/shell.html)
@@ -64,25 +63,9 @@ It is assumed that students have completed the novice course.
 > -   Bonus material: non-standard commands you might find useful (tree, htop, autojump, fd, etc)
 
 
-## Configuring software
-
-**Lead author:** Damien Irving  
-**Status:** First draft in progress ([#156](https://github.com/merely-useful/merely-useful.github.io/issues/156))  
-**Source materials:** [configure.Rmd](https://merely-useful.github.io/still-magic/en/configure.html)
-
-> Topic outline:
-> -   How do I parse the command line from within a Python script?
->     -   basic structure of python scripts
->     -   argparse
-> -   How would I implement a configuration file?
->     -   as a data structure (JSON)
->     -   as key/value pairs (YAML)
-
-
 ## Version control
 
 **Lead author:** Damien Irving  
-**Status:** First draft complete ([#164](https://github.com/merely-useful/merely-useful.github.io/issues/164))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/git-novice/),
 [branches.Rmd](https://merely-useful.github.io/still-magic/en/branches.html)
@@ -103,8 +86,9 @@ It is assumed that students have completed the novice course.
 
 ## Automating analyses
 
+TODO: Maybe cover drake instead of Make? Not sure how many R projects use Make, but I haven't seen many.
+
 **Lead author:** Luke Johnston  
-**Status:** First draft complete ([#48](https://github.com/merely-useful/merely-useful.github.io/issues/48))  
 **Source materials:**
 [Software Carpentry](http://swcarpentry.github.io/make-novice/),
 [automate.Rmd](https://merely-useful.github.io/still-magic/en/automate.html)
@@ -121,13 +105,11 @@ It is assumed that students have completed the novice course.
 > -   How should I document a Makefile?
 > -   What other tools can I use?
 >     -   drake for R
->     -   snakemake for Python
 
 
 ## Testing
 
 **Lead author:** Jonathan Dursi  
-**Status:** First draft complete ([#106](https://github.com/merely-useful/merely-useful.github.io/issues/106))  
 **Source materials:**
 [Katy Huff](http://katyhuff.github.io/python-testing/),
 [unit.Rmd](https://merely-useful.github.io/still-magic/en/unit.html),
@@ -154,8 +136,7 @@ It is assumed that students have completed the novice course.
 ## Continuous integration
 
 **Lead author:** Luke Johnston  
-**Status:** First draft complete ([#99](https://github.com/merely-useful/merely-useful.github.io/issues/99))  
-**Source materials:** [rse-ci.Rmd](https://merely-useful.github.io/still-magic/en/integrate.html)
+**Source materials:** [r-rse-ci.Rmd](https://merely-useful.github.io/still-magic/en/integrate.html)
 
 > Topic outline:
 > -   How can I run commands automatically every time a repository is updated?
@@ -166,14 +147,12 @@ It is assumed that students have completed the novice course.
 ## Project structure
 
 **Lead author:** Charlotte Wickham  
-**Status:** First draft in progress ([#160](https://github.com/merely-useful/merely-useful.github.io/issues/160))  
 **Source materials:** [project.Rmd](https://merely-useful.github.io/still-magic/en/project.html)
 
 
 ## Project management
 
 **Lead author:** Kate Hertweck  
-**Status:** First draft in progress ([#148](https://github.com/merely-useful/merely-useful.github.io/issues/148), [#161](https://github.com/merely-useful/merely-useful.github.io/issues/161), [#162](https://github.com/merely-useful/merely-useful.github.io/issues/162))  
 **Source materials:**
 [inclusive.Rmd](https://merely-useful.github.io/still-magic/en/teamwork.html), 
 [backlog.Rmd](https://merely-useful.github.io/still-magic/en/backlog.html),
@@ -194,49 +173,16 @@ It is assumed that students have completed the novice course.
 
 ## Packaging
 
-**Lead author:** Greg Wilson (R), Jonathan Dursi (Python)  
-**Status:** First draft of R packaging complete ([#87](https://github.com/merely-useful/merely-useful.github.io/issues/87)), first draft Python packaging complete ([#117](https://github.com/merely-useful/merely-useful.github.io/issues/117))  
+**Lead author:** Greg Wilson (R)
 **Source materials:** [package.Rmd](https://merely-useful.github.io/still-magic/en/package.html)
 
 > Topic outline:
-> -   How do I install and manage my Python environment?
->     -   Python distributions (Anaconda)
->     -   Package managers (pip, conda)
->     -   conda environments
-> -   How can I write a package that can be installed via pip?
 > -   How do I write a package that can be shared on CRAN?
 > -   How do version numbers work?
-> -   How can I put documentation for my package on the web? (e.g. Sphinx / Read The Docs for Python, pkgdown for R)
+> -   How can I put documentation for my package on the web? 
 
 
 ## Publishing
 
 **Lead author:** Damien Irving  
-**Status:** First draft is complete ([#142](https://github.com/merely-useful/merely-useful.github.io/issues/142))  
 **Source materials:** [publish.Rmd](https://merely-useful.github.io/still-magic/en/publish.html) 
-
-
-## Topics that might actually belong in the novice course
-
-- [Documentation](https://merely-useful.github.io/still-magic/en/docs.html), [#158](https://github.com/merely-useful/merely-useful.github.io/issues/158)
-- [Code style](https://merely-useful.github.io/still-magic/en/style.html), [#149](https://github.com/merely-useful/merely-useful.github.io/issues/149)
-- [Refactoring](https://merely-useful.github.io/still-magic/en/refactor.html), [#159](https://github.com/merely-useful/merely-useful.github.io/issues/159)
-
-
-## Topics that aren't included
-
-(But could possibly be as bonus/elective lessons?)
-
-- [Working remotely](https://merely-useful.github.io/still-magic/en/remote.html), [#157](https://github.com/merely-useful/merely-useful.github.io/issues/157)
-- [Data Syndication](https://merely-useful.github.io/still-magic/en/syndicate.html), [#145](https://github.com/merely-useful/merely-useful.github.io/issues/145)
-- [Logging](https://merely-useful.github.io/still-magic/en/logging.html)
-- [Other tools](https://merely-useful.github.io/still-magic/en/tools.html)
-- [Pacing](https://merely-useful.github.io/still-magic/en/pacing.html), [#163](https://github.com/merely-useful/merely-useful.github.io/issues/163)
-- [Development process](https://merely-useful.github.io/still-magic/en/process.html)
-- SQL, [#70](https://github.com/merely-useful/merely-useful.github.io/issues/70)
-- Regular expressions, [#71](https://github.com/merely-useful/merely-useful.github.io/issues/71)
-- JSON, [#72](https://github.com/merely-useful/merely-useful.github.io/issues/72)
-- Object-oriented programming
-- Nonstandard evaluation (in R)
-- Profiling and performance tuning
-- Everything with "parallel" in its name...
