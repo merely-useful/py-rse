@@ -168,6 +168,7 @@
 [gui]: glossary.html#gui
 [gutenberg]: https://www.gutenberg.org/
 [heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
+[hippocratic-license]: https://firstdonoharm.dev/
 [hitchhiker]: glossary.html#hitchhiker
 [home-directory]: glossary.html#home-directory
 [huff-testing]: https://github.com/katyhuff/python-testing
@@ -212,6 +213,7 @@
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [marthas-rules]: glossary.html#marthas-rules
 [mental-model]: glossary.html#mental-model
+[merely-useful]: https://github.com/merely-useful/merely-useful.github.io/
 [mertz-documentation]: https://realpython.com/documenting-python-code/
 [mit-license]: glossary.html#mit-license
 [model-coc]: http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
@@ -315,6 +317,7 @@
 [rstudio]: https://rstudio.com/
 [rubber-duck-debugging]: https://en.wikipedia.org/wiki/Rubber_duck_debugging
 [rule-make]: glossary.html#rule-make
+[scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [sci-reproducibility]: https://en.wikipedia.org/wiki/Reproducibility
 [scientific-data]: https://www.nature.com/sdata/
 [script]: glossary.html#script
@@ -399,6 +402,7 @@
 [tuple]: glossary.html#tuple
 [twine]: https://twine.readthedocs.io/en/latest/
 [tyranny-structurelessness]: http://www.jofreeman.com/joreen/tyranny.htm
+[udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [unit-test]: glossary.html#unit-test
 [unix-shell]: glossary.html#unix-shell

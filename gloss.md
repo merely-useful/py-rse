@@ -465,6 +465,9 @@
 **ISO date format**<a id="iso-date-format"></a>
 :   FIXME
 
+**Impact/effort matrix**<a id="impact-effort-matrix"></a>
+:   FIXME
+
 **Impostor syndrome**<a id="impostor-syndrome"></a>
 :   FIXME
 
@@ -522,9 +525,6 @@
 **LaTeX**<a id="latex"></a>:
     FIXME
 
-**Learned helplessness**<a id="learned-helplessness"></a>
-:   FIXME
-
 **Library**<a id="library"></a>
 :   FIXME
 
@@ -548,6 +548,9 @@
 
 **Loop**<a id="loop-unix"></a> (in Unix):
     FIXME
+
+**Milestone**<a id="milestone"></a>
+:   FIXME
 
 **MIT License**<a id="mit-license"></a>
 :   FIXME
@@ -862,6 +865,9 @@
 :   FIXME
 
 **Source code**<a id="source-code"></a>
+:   FIXME
+
+**Sprint**<a id="sprint"></a>
 :   FIXME
 
 **Stand-up meeting**<a id="stand-up-meeting"></a>
