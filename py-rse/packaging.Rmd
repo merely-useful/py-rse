@@ -32,9 +32,9 @@ which should include the following files:
 │   ├── book_summary.sh
 │   ├── collate.py
 │   ├── countwords.py
-│   ├── mymodule.py
+│   ├── utilities.py
 │   ├── plotcounts.py
-│   └── rcparams.yml
+│   └── plotparams.yml
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
@@ -48,7 +48,7 @@ which should include the following files:
     └── ...
 ```
 
-## How can I create an installable Python package? {#package-py-package}
+## Creating an installable Python package? {#package-py-package}
 
 A package is essentially a few Python scripts in a specific directory structure
 coupled with installation instructions for the computer.
@@ -91,36 +91,36 @@ but in this chapter we're focusing on the approach we believe is the most benefi
 
 For our scripts to work as a Python package,
 we only need to make one important change to the code itself:
-changing the syntax for how we import `mymodule`.
+changing the syntax for how we import `utilities`.
 Currently,
 both `collate.py` and `countwords.py` contains this line:
 
 ```python
-import mymodule
+import utilities
 ```
 
 This is called an implicit relative import,
-because it is not clear whether there exists a Python package called `mymodule`
-or there is a file in our local directory named `mymodule.py` (as in our case).
+because it is not clear whether there exists a Python package called `utilities`
+or there is a file in our local directory named `utilities.py` (as in our case).
 This ambiguity is not ideal
 and when making a package we need to be more explicit and write:
 
 ```python
-from zipf import mymodule
+from zipf import utilities
 ```
 
 This is referred to as an absolute import,
-since we are specifying the full location of `mymodule` inside the `zipf` package.
+since we are specifying the full location of `utilities` inside the `zipf` package.
 Absolute imports are the preferred way of importing your own code inside a package,
 but you will probably also encounter explicit relative imports,
 which can provide some advantages when restructuring large projects:
 
 ```python
-from . import mymodule
+from . import utilities
 ```
 
 Here,
-the `.` makes it clear that `mymodule` exists in the current directory.
+the `.` makes it clear that `utilities` exists in the current directory.
 
 Python has several ways to build an installable package.
 We will show how to use [setuptools][setuptools],
@@ -176,7 +176,7 @@ rather that the current state of our primary Python environment.
 > it is good to know about the `find_packages()`[find-packages] function from `setuptools`,
 > which can automatically find all packages by recursively searching the current directory.
 
-## How can I create a virtual Python environment? {#package-py-virtualenv}
+## Creating a virtual Python environment {#package-py-virtualenv}
 
 It can be convenient to have several different Python environments that
 you can switch between.
@@ -319,7 +319,7 @@ $ pip install -e .
 ```
 
 ```text
-Processing /home/amira/proj/merely-useful.github.io/zipf/bin/zipf
+Processing /home/amira/proj/merely-useful.github.io/zipf/zipf
 Building wheels for collected packages: zipf
   Building wheel for zipf (setup.py) ... done
   Created wheel for zipf: filename=zipf-0.1-py3-none-any.whl size=4574 sha256=b7d645f1d07775714855a83d0cc62911c8502eb917fcb3fe2d9fe46206c84656
@@ -430,14 +430,14 @@ since package versions might change.
 We could now import the functionality from our package inside Python code,
 such as in a script or Jupyter notebook.
 For example,
-to use the function in `mymodule`,
+to use the function in `utilities`,
 we would write the following:
 
 ```python
-from zipf import mymodule
+from zipf import utilities
 
 
-mymodule.collection_to_csv(...)
+utilities.collection_to_csv(...)
 ```
 
 However,
@@ -522,7 +522,7 @@ without writing the full path to the file
 and without prefixing it with `python`.
 
 ```shell
-countwords ../data/dracula.csv -n 5
+countwords ../data/dracula.txt -n 5
 ```
 
 ```text
