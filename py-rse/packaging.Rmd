@@ -261,6 +261,7 @@ we're running the Python interpreter in `zipf/bin`:
 ```shell
 (zipf)$ which python
 ```
+FIXME: Pretty sure this new environment won't have python (or pip) until we install it?
 
 ```text
 /home/amira/anaconda3/envs/zipf/bin/python
@@ -473,7 +474,59 @@ setup(
 
 The right side of the `=` operator is the location of a function (`package.module:function`),
 and the left side is the name we want to use to call this function from the command line.
-Let's remove our currently installed version of `zipf`
+For each module we are calling the `main` function,
+which as it stands requires an input argument `args`
+that stores the command-line arguments given by the user (Section \@ref(scripting-options)).
+For example,
+the relevant section of our `countwords.py` script reads as follows:
+
+```python
+def main(args):
+    """Run the command line program."""
+    with args.infile as reader:
+        word_counts = count_words(reader)
+    utilities.collection_to_csv(word_counts, num=args.num)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
+    args = parser.parse_args()
+    main(args)
+```
+
+We can't pass any arguments to `main` when we define entry points in our `setup.py` file,
+so we need to make a slight edit to our scripts so that `main` doesn't require any.
+For example,
+we can edit `countwords.py` as follows:
+
+```python
+def parse_command_line():
+    """Parse the command line for input arguments."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
+    args = parser.parse_args()
+    return args
+
+def main():
+    """Run the command line program."""
+    args = parse_command_line()
+    with args.infile as reader:
+        word_counts = count_words(reader)
+    utilities.collection_to_csv(word_counts, num=args.num)
+
+if __name__ == '__main__':
+    main()
+```
+
+Now that we've defined out entry points
+and edited our command line programs so that `main` doesn't require any input arguments,
+let's remove our currently installed version of `zipf`
 and install it again with the updated setup file.
 
 ```shell
@@ -522,15 +575,15 @@ without writing the full path to the file
 and without prefixing it with `python`.
 
 ```shell
-countwords ../data/dracula.txt -n 5
+countwords data/dracula.txt -n 5
 ```
 
 ```text
-the,7474
-and,5803
-I,4846
-to,4662
-of,3707
+the,8036
+and,5896
+i,4712
+to,4540
+of,3738
 ```
 
 ## What does it mean to install a Python package? {#package-py-installation}
