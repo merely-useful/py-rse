@@ -79,6 +79,8 @@ Filling in these gaps will help researchers get more done in less time and with 
 
 **4. The minimally-qualified reader (MQR)**
 
+At the beginning of the book, we introduce three personas who characterize our audience:
+
 *Amira Khan*
 completed a master's in library science five years ago
 and has since worked for a small aid organization.
@@ -127,16 +129,32 @@ our answers for community management and project leadership draw on extensive ex
 
 *What other books are available on this topic?*
 
-*The Turing Way* (https://the-turing-way.netlify.app/), produced by the Turing Institute in the UK,
+*The Turing Way* (https://the-turing-way.netlify.app/),
+produced by the Turing Institute in the UK,
 is the only up-to-date resource we know of with similar breadth.
 Other books cover only one topic in more depth than our audience needs
-(e.g., Ray & Ray's *Unix and Linux: Visual QuickStart Guide*)
-or are aimed at commercial software developers
-(any number of books on testing, coding style, and dev ops).
+(e.g., Ray & Ray's *Unix and Linux: Visual QuickStart Guide*),
+are aimed at commercial software developers
+(any number of books on testing, coding style, and dev ops),
+or go into data science rather than telling readers
+how to build software
+(e.g., Zhang's upcoming *A Tour of Data Science*).
 
 *How does the proposed book compare to them?*
 
-Our book has broader and deeper coverage, and includes exercises with solutions.
+1.  Our book has broader and deeper coverage, and includes exercises with solutions.
+
+2.  Our focus on programming best practices (e.g. principles like writing modular, reusable, testable code).
+    Others teach basic Python and R syntax and how to complete isolated tasks with particular libraries,
+    but today, people can pick up that information from a Google search.
+    Our content is the bigger picture you can't glean from online code snippets or Stack Overflow answers.
+
+3.  We go through the process of building a data science workflow/package from scratch.
+    Most other texts simply present information (like a reference book):
+    we tackle a real data science problem from beginning to end,
+    weaving in relevant information as we go.
+
+4.  Our book is a ready-to-go university semester course.
 
 *What resources would you currently recommend to someone wanting to learn this subject?*
 
