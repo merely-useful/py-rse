@@ -48,7 +48,7 @@ which should include the following files:
     └── ...
 ```
 
-## Creating an installable Python package? {#package-py-package}
+## Creating an installable Python package {#package-py-package}
 
 A package is essentially a few Python scripts in a specific directory structure
 coupled with installation instructions for the computer.
@@ -293,7 +293,7 @@ $ which python
 /usr/bin/python
 ```
 
-## How can I install my package? {#package-py-installing}
+## Installing your package {#package-py-installing}
 
 Let's proceed to install our package inside this virtual environment.
 First we need to activate it again:
@@ -586,7 +586,7 @@ to,4540
 of,3738
 ```
 
-## What does it mean to install a Python package? {#package-py-installation}
+## What it means to install a Python package {#package-py-installation}
 
 Now that we have created and installed our very first Python package,
 let's explore what actually happens during the installation of a package.
@@ -644,7 +644,7 @@ we first need to create a source distribution
 using setuptools:
 
 ```shell
-python setyp.py sdist
+python setup.py sdist
 ```
 
 ```text
@@ -700,10 +700,11 @@ we will install that package:
 ```shell
 $ pip install twine
 ```
-and now we can upload our distributions from the `dist/` folder:
+Following the [Python Packaging User Guide](https://packaging.python.org/guides/using-testpypi/),
+we can now upload our distributions from the `dist/` folder:
 
 ```shell
-$ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+$ twine upload --repository testpypi dist/*
 Enter your username: amirakhan
 Enter your passowrd: *********
 Uploading distributions to https://test.pypi.org/legacy/
@@ -714,7 +715,11 @@ View at:
 https://test.pypi.org/project/zipf/0.1/
 ```
 
-The `--repository-url` allows us to specify the TestPyPI repository, and we
+```{r packaging-testpypi, echo=FALSE, fig.cap="Our new project at https://test.pypi.org/project/zipf/0.1/"}
+knitr::include_graphics("figures/py-rse/packaging/testpypi.png")
+```
+
+The `--repository` option allows us to specify the TestPyPI repository, and we
 have now uploaded both types of distribution, allowing users with different
 environments to use the wheel distribution if their systems allow it, or
 the source distribution otherwise.
@@ -765,15 +770,12 @@ to find, understand, and install our package.
 > Binary distributions can be build with `python setup.py bdist`.
 > They are platform specific and often referred to as [wheels][wheels].
 
-## How should I document my package for others? {#package-py-document}
+## Documenting your package for others {#package-py-document}
 
-Writing good documentation does not have to be time-consuming
-and involve learning new tools.
-Here we will mention the bare necessities for creating great documentation
-and then highlight extensions that are useful for more complex projects.
-
-Documentation starts with writing clear explanatory docstrings for each function and module,
-which we have already done.
+Good documentation starts with writing a clear explanatory [docstring][docstring]
+for each function and module,
+which is something we've been doing throughout the development
+of our Zipf's Law code (Section \@ref(scripting-docstrings)).
 This is one of the most important steps,
 since it means that others can understand what each function is meant to do,
 without going through the source code.
@@ -781,11 +783,32 @@ without going through the source code.
 What is missing is an introduction to what our package is meant to do,
 instructions on how to install it,
 and some examples of how it can be used.
-We can include these elements in the README.md.
-An example of a good README.md file for our project would be
+We can include these elements in our "README" file,
+which we first created when learning about git conflicts 
+(Section \@ref(git-advanced-conflict))... and mentioned again in Section 12.X FIXME
 
+```
+$ cat README.md
 
-````markdown
+```
+
+This file could be a plain text or regular markdown format,
+bit in the Python community much documentation is written in
+[reStructuredText][restructured-text],
+which is
+a markup format for plain text documents which can be rendered
+into documents with quite complex indexes and cross-linking
+by many documentation tools; GitHub will recognize reST files
+ending in `.rst` and display them nicely. We'll use that here;
+titles are underlined and overlined, section headings are underlined,
+and code blocks are set off with two colons (`::`) and indented.
+So let's create a `README.rst`:
+
+An example of a good `README.rst` file for our project would be:
+
+FIXME
+
+```markdown
 # zipf
 
 The `zipf` package tallies the occurrences of words in text files
@@ -795,16 +818,16 @@ together with a line for the theoretical distribution for Zipf's Law.
 ## Motivation
 
 Zipf’s Law is often stated as an observational pattern seen in the
-relationship between the frequency and rarity of words in a text:
+relationship between the frequency and rank of words in a text:
 
 > "…the most frequent word will occur approximately twice as often as
 > the second most frequent word, three times as often as the third most
 > frequent word, etc."
 > — <https://en.wikipedia.org/wiki/Zipf%27s_law>
 
-As many books are available to download in plain text format,
-e.g from https://www.gutenberg.org/,
-we created this package to qualitative explore how well authors align
+As many books are available to download in plain text format
+from sites such as [Project Gutenberg](https://www.gutenberg.org/),
+we created this package to qualitatively explore how well different books align
 with the word frequencies predicted by Zipf's Law.
 
 ## Installation
@@ -826,17 +849,12 @@ the following three commands will be available from the command line
 
 A typical usage scenario would include running the following from your terminal.
 
-```shell
+```
 countwords dracula.txt > dracula.csv
 countwords moby_dick.txt > moby_dick.csv
 collate dracula.csv moby_dick.csv > collated.csv
 plotcounts collated.csv --outfile zipf-drac-moby.jpg
 ```
-
-The output file would look something like
-
-![]image ref
-
 
 Additional information on each function can be found in their docstrings and appending the `-h` flag,
 e.g. `countwords -h`.
@@ -853,161 +871,26 @@ references between functions,
 and search functionality.
 We will see how to do this next.
 
-## Advanced docs
+### Creating a web page for documentation {#package-py-sphinx}
 
-As we get our package ready for sharing with others, we should
-make sure there's enough documentation written for our intended
-initial users to successfully install the software and begin to
-use key functionality.
-
-Ideally we've been maintaining documentation throughout the development
-process. But the documentation we keep through that process is often
-intended for a different audience and purpose—that is, it's meant for
-us while developing the code, and so includes things that are good and
-useful like code comments reminding us why steps are taken, but may
-not include overviews of the package and how (and why!) to use it, which
-we largely take for granted.
-
-We should certainly have a README for the package, describing how to
-install the package and how to use it in a couple of key use cases,
-so let's add that.
-
-In the Python community, much documentation is written in
-[reStructuredText][restructured-text], which is
-a markup format for plain text documents which can be rendered
-into documents with quite complex indexes and cross-linking
-by many documentation tools; GitHub will recognize reST files
-ending in `.rst` and display them nicely. We'll use that here;
-titles are underlined and overlined, section headings are underlined,
-and code blocks are set off with two colons (`::`) and indented.
-So let's create a `README.rst`:
-
-```text
-======
-Zipfpy
-======
-
-This python package provides routines for generating lists of counts
-that follow (exactly or approximately) a Zipf distribution, and for
-testing whether a counts distribution does or doesn't follow such
-a distribution.
-
-Installation
-------------
-
-To install, clone this repository, change into the repository directory
-and run the commands::
-
-    pip install -r requirements.txt
-    pip install .
-
-Use
----
-
-You can use the package after installation with `import zipfpy`, with functions
-in the modules `check` and `generate`.
-
-You can also use the command line tool `check_zipf.py` which tests to see if
-a provided list of countsfollows a Zipf distribution::
-
-    $ check_zipf.py 100 50 33 25
-    True: [100, 50, 33, 25]
-
-Authors
--------
-
-Terry Pratchett
-```
-
-In addition to the README, we should also make sure that there are
-[docstrings](#docs-docstrings) written for the package as a whole
-(in the `__init__.py`):
-
-```python
-"""
-The zipfpy package contains tests of distributions of counts to see if
-they follow a Zipf distribution (https://en.wikipedia.org/wiki/Zipf%27s_law)
-using the routines in the check module, and routines for generating
-lists of counts that follow a Zipf distribution in the generate module.
-"""
-RELATIVE_ERROR = 0.05
-```
-
-and for key routines like `is_zipf` and `make_zipf`:
-
-```python
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    """Tests if a histogram of counts follows a Zipf distribution.
-
-    Given a list of counts as hist, assumed sorted in decreasing order,
-    and a relative error tolerance (if not provided, the default value
-    zipfpy.RELATIVE_ERROR is used), tests to see if the counts follow
-    a Zipf distribution.
-
-    Args:
-        hist: an list or other iterable containing a list of numeric counts
-        rel: the relative error tolerance used if provided; if not,
-             the package default is used.
-
-    Returns:
-        True if the list of counts follows a zipf distribution within
-        the relative tolerance.  False otherwise.
-
-    Raises:
-        AssertionError: raised if an empty list is passed.
-    """
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-```
-
-```python
-def make_zipf(length):
-    """Returns a list of counts that follows a Zipf distribution.
-
-    Args:
-        length: the number of counts to be generated
-
-    Returns:
-        A list of the provided length of floating point numbers corresponding
-        exactly the zipf distribution.  For example, for length=5:
-
-        [1.0, 0.5, 0.3333333333333333, 0.25, 0.2]
-
-    Raises:
-        AssertionError: raised if a zero or negative length is provided
-    """
-    assert length > 0, 'Zipf distribution must have at least one element'
-    result = [1/(1 + i) for i in range(length)]
-    return result
-```
-
-Not only is the documentation then useful for those reading the
-code, but it helpfully shows up when a user types, for instance,
-`help(zipfpy)`.
-
-<!-- used="package-py/09/requirements.txt" -->
-<!-- used="package-py/09/setup.py" -->
-<!-- used="package-py/09/test_zipf.py" -->
-
-### How do I generate web pages of documentation for my package? {#package-py-sphinx}
-
-When you've viewed documentation for large Python packages, they
-have very likely been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
+When you've viewed documentation for large Python packages,
+they have very likely been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
 a package for writing software documentation and generating web packages
 for that documentation that is widely used in the Python community.
-When combined with [Read The Docs](https://readthedocs.org), a free service for
-hosting that online documentation that includes tools to automatically update
-documentation when your package and its documentation changes, and that understands
-documents written to support Sphinx, it is an extremely useful way to
-build both documentation and an online home for your package.  Both tools
-recognize reStructuredText files.
+When combined with [Read The Docs](https://readthedocs.org),
+a free service for hosting that online documentation
+that includes tools to automatically update documentation
+when your package and its documentation changes,
+and that understands documents written to support Sphinx,
+it is an extremely useful way to build both documentation and an online home for your package.
+Both tools recognize reStructuredText files.
 
-We'll start by putting together a minimal set of documentation that includes
-your `README.rst` and the docstrings for your package.  Sphinx makes it
-relatively straightforwrd to get started, using the `quickstart` tool.  We'll
-create doucmentation in a `docs/` directory at the top of our repository:
+We'll start by putting together a minimal set of documentation
+that includes the `README.rst` file we just created
+and the docstrings we've written along the way.
+Sphinx makes it relatively straightforwrd to get started,
+using the `quickstart` tool.
+We'll create doucmentation in a `docs/` directory at the top of our repository:
 
 ```bash
 $ mkdir docs
