@@ -32,9 +32,9 @@ which should include the following files:
 │   ├── book_summary.sh
 │   ├── collate.py
 │   ├── countwords.py
-│   ├── mymodule.py
+│   ├── utilities.py
 │   ├── plotcounts.py
-│   └── rcparams.yml
+│   └── plotparams.yml
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
@@ -48,7 +48,7 @@ which should include the following files:
     └── ...
 ```
 
-## How can I create an installable Python package? {#package-py-package}
+## Creating an installable Python package {#package-py-package}
 
 A package is essentially a few Python scripts in a specific directory structure
 coupled with installation instructions for the computer.
@@ -91,36 +91,36 @@ but in this chapter we're focusing on the approach we believe is the most benefi
 
 For our scripts to work as a Python package,
 we only need to make one important change to the code itself:
-changing the syntax for how we import `mymodule`.
+changing the syntax for how we import `utilities`.
 Currently,
 both `collate.py` and `countwords.py` contains this line:
 
 ```python
-import mymodule
+import utilities
 ```
 
 This is called an implicit relative import,
-because it is not clear whether there exists a Python package called `mymodule`
-or there is a file in our local directory named `mymodule.py` (as in our case).
+because it is not clear whether there exists a Python package called `utilities`
+or there is a file in our local directory named `utilities.py` (as in our case).
 This ambiguity is not ideal
 and when making a package we need to be more explicit and write:
 
 ```python
-from zipf import mymodule
+from zipf import utilities
 ```
 
 This is referred to as an absolute import,
-since we are specifying the full location of `mymodule` inside the `zipf` package.
+since we are specifying the full location of `utilities` inside the `zipf` package.
 Absolute imports are the preferred way of importing your own code inside a package,
 but you will probably also encounter explicit relative imports,
 which can provide some advantages when restructuring large projects:
 
 ```python
-from . import mymodule
+from . import utilities
 ```
 
 Here,
-the `.` makes it clear that `mymodule` exists in the current directory.
+the `.` makes it clear that `utilities` exists in the current directory.
 
 Python has several ways to build an installable package.
 We will show how to use [setuptools][setuptools],
@@ -176,7 +176,7 @@ rather that the current state of our primary Python environment.
 > it is good to know about the `find_packages()`[find-packages] function from `setuptools`,
 > which can automatically find all packages by recursively searching the current directory.
 
-## How can I create a virtual Python environment? {#package-py-virtualenv}
+## Creating a virtual Python environment {#package-py-virtualenv}
 
 It can be convenient to have several different Python environments that
 you can switch between.
@@ -261,6 +261,7 @@ we're running the Python interpreter in `zipf/bin`:
 ```shell
 (zipf)$ which python
 ```
+FIXME: Pretty sure this new environment won't have python (or pip) until we install it?
 
 ```text
 /home/amira/anaconda3/envs/zipf/bin/python
@@ -292,7 +293,7 @@ $ which python
 /usr/bin/python
 ```
 
-## How can I install my package? {#package-py-installing}
+## Installing your package {#package-py-installing}
 
 Let's proceed to install our package inside this virtual environment.
 First we need to activate it again:
@@ -319,7 +320,7 @@ $ pip install -e .
 ```
 
 ```text
-Processing /home/amira/proj/merely-useful.github.io/zipf/bin/zipf
+Processing /home/amira/proj/merely-useful.github.io/zipf/zipf
 Building wheels for collected packages: zipf
   Building wheel for zipf (setup.py) ... done
   Created wheel for zipf: filename=zipf-0.1-py3-none-any.whl size=4574 sha256=b7d645f1d07775714855a83d0cc62911c8502eb917fcb3fe2d9fe46206c84656
@@ -430,14 +431,14 @@ since package versions might change.
 We could now import the functionality from our package inside Python code,
 such as in a script or Jupyter notebook.
 For example,
-to use the function in `mymodule`,
+to use the function in `utilities`,
 we would write the following:
 
 ```python
-from zipf import mymodule
+from zipf import utilities
 
 
-mymodule.collection_to_csv(...)
+utilities.collection_to_csv(...)
 ```
 
 However,
@@ -473,7 +474,59 @@ setup(
 
 The right side of the `=` operator is the location of a function (`package.module:function`),
 and the left side is the name we want to use to call this function from the command line.
-Let's remove our currently installed version of `zipf`
+For each module we are calling the `main` function,
+which as it stands requires an input argument `args`
+that stores the command-line arguments given by the user (Section \@ref(scripting-options)).
+For example,
+the relevant section of our `countwords.py` script reads as follows:
+
+```python
+def main(args):
+    """Run the command line program."""
+    with args.infile as reader:
+        word_counts = count_words(reader)
+    utilities.collection_to_csv(word_counts, num=args.num)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
+    args = parser.parse_args()
+    main(args)
+```
+
+We can't pass any arguments to `main` when we define entry points in our `setup.py` file,
+so we need to make a slight edit to our scripts so that `main` doesn't require any.
+For example,
+we can edit `countwords.py` as follows:
+
+```python
+def parse_command_line():
+    """Parse the command line for input arguments."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
+    args = parser.parse_args()
+    return args
+
+def main():
+    """Run the command line program."""
+    args = parse_command_line()
+    with args.infile as reader:
+        word_counts = count_words(reader)
+    utilities.collection_to_csv(word_counts, num=args.num)
+
+if __name__ == '__main__':
+    main()
+```
+
+Now that we've defined out entry points
+and edited our command line programs so that `main` doesn't require any input arguments,
+let's remove our currently installed version of `zipf`
 and install it again with the updated setup file.
 
 ```shell
@@ -522,18 +575,18 @@ without writing the full path to the file
 and without prefixing it with `python`.
 
 ```shell
-countwords ../data/dracula.csv -n 5
+countwords data/dracula.txt -n 5
 ```
 
 ```text
-the,7474
-and,5803
-I,4846
-to,4662
-of,3707
+the,8036
+and,5896
+i,4712
+to,4540
+of,3738
 ```
 
-## What does it mean to install a Python package? {#package-py-installation}
+## What it means to install a Python package {#package-py-installation}
 
 Now that we have created and installed our very first Python package,
 let's explore what actually happens during the installation of a package.
@@ -579,7 +632,7 @@ the Python installation you are using.
 This might differ slightly on different systems.
 
 
-## How can I distribute software packages that I have created? {#package-py-distribute}
+## Distributing your package {#package-py-distribute}
 
 With our package working, testable, installable, and documented,
 we should distribute it so anyone can just `pip install zipf`
@@ -591,7 +644,7 @@ we first need to create a source distribution
 using setuptools:
 
 ```shell
-python setyp.py sdist
+python setup.py sdist
 ```
 
 ```text
@@ -647,10 +700,11 @@ we will install that package:
 ```shell
 $ pip install twine
 ```
-and now we can upload our distributions from the `dist/` folder:
+Following the [Python Packaging User Guide](https://packaging.python.org/guides/using-testpypi/),
+we can now upload our distributions from the `dist/` folder:
 
 ```shell
-$ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+$ twine upload --repository testpypi dist/*
 Enter your username: amirakhan
 Enter your passowrd: *********
 Uploading distributions to https://test.pypi.org/legacy/
@@ -661,7 +715,11 @@ View at:
 https://test.pypi.org/project/zipf/0.1/
 ```
 
-The `--repository-url` allows us to specify the TestPyPI repository, and we
+```{r packaging-testpypi, echo=FALSE, fig.cap="Our new project at `https://test.pypi.org/project/zipf/0.1/`"}
+knitr::include_graphics("figures/py-rse/packaging/testpypi.png")
+```
+
+The `--repository` option allows us to specify the TestPyPI repository, and we
 have now uploaded both types of distribution, allowing users with different
 environments to use the wheel distribution if their systems allow it, or
 the source distribution otherwise.
@@ -712,82 +770,114 @@ to find, understand, and install our package.
 > Binary distributions can be build with `python setup.py bdist`.
 > They are platform specific and often referred to as [wheels][wheels].
 
-## How should I document my package for others? {#package-py-document}
+## Documenting your package for others {#package-py-document}
 
-Writing good documentation does not have to be time-consuming
-and involve learning new tools.
-Here we will mention the bare necessities for creating great documentation
-and then highlight extensions that are useful for more complex projects.
-
-Documentation starts with writing clear explanatory docstrings for each function and module,
-which we have already done.
+Good documentation starts with writing a clear explanatory [docstring][docstring]
+for each function and module,
+which is something we've been doing throughout the development
+of our Zipf's Law code (Section \@ref(scripting-docstrings)).
 This is one of the most important steps,
-since it means that others can understand what each function is meant to do,
+as it means others can understand what each function is meant to do
 without going through the source code.
 
 What is missing is an introduction to what our package is meant to do,
 instructions on how to install it,
 and some examples of how it can be used.
-We can include these elements in the README.md.
-An example of a good README.md file for our project would be
+We can include these elements in our "README" file,
+which we created earlier (Chapter \@ref(git-advanced)).
+At the moment it reads as follows:
 
+```shell
+$ cat README.md
+```
 
-````markdown
-# zipf
+```text
+# Zipf's Law
 
-The `zipf` package tallies the occurrences of words in text files
+These Zipf's Law scripts tally the occurrences of words in text files
+and plot each word's rank versus its frequency,
+together with a line for the theoretical distribution for Zipf's Law.
+
+## Contributors
+
+- Amira Khan <amira@zipf.org>
+- Sami Virtanen <sami@zipf.org>
+```
+
+Our README file is currently written in regular [markdown][markdown] format,
+which as we've seen can be preferable to plain text
+because GitHub recognises markdown files ending in `.md` and displays them nicely.
+It would be fine to continue to work in markdown format,
+however in this case we ultimately want to  
+create a website for our package documentation (Section \@ref(package-py-sphinx)).
+The most popular documentation generators in the Python community use 
+[reStructuredText][restructured-text], so we should switch to that.
+Similar to markdown, reST is a markup format for plain text documents,
+which can be rendered into documents with quite complex indexes
+and cross-linking by many documentation tools;
+GitHub will recognize reST files ending in `.rst` and display them nicely.
+
+```shell
+$ git mv README.md README.rst
+```
+
+In the updated `README.rst` file below,
+notice that titles are underlined and overlined,
+section headings are underlined,
+and code blocks are set off with two colons (`::`) and indented.
+
+```text
+The ``zipf`` package tallies the occurrences of words in text files
 and plots each word's rank versus its frequency
 together with a line for the theoretical distribution for Zipf's Law.
 
-## Motivation
+Motivation
+----------
 
 Zipf’s Law is often stated as an observational pattern seen in the
-relationship between the frequency and rarity of words in a text:
+relationship between the frequency and rank of words in a text:
 
-> "…the most frequent word will occur approximately twice as often as
-> the second most frequent word, three times as often as the third most
-> frequent word, etc."
-> — <https://en.wikipedia.org/wiki/Zipf%27s_law>
+`"…the most frequent word will occur approximately twice as often
+as the second most frequent word,
+three times as often as the third most
+frequent word, etc."`  
+— `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
 
-As many books are available to download in plain text format,
-e.g from https://www.gutenberg.org/,
-we created this package to qualitative explore how well authors align
+Many books are available to download in plain text format
+from sites such as `Project Gutenberg <https://www.gutenberg.org/>`_,
+so we created this package to qualitatively explore how well different books align
 with the word frequencies predicted by Zipf's Law.
 
-## Installation
+Installation
+------------
 
 For now,
 this package can be installed by downloading the package directory
-and running `pip install .` from inside the `zipf` folder.
-It will soon be available for download directly via `pip`,
+and running ``pip install .`` from inside the ``zipf`` folder.
+It will soon be available for download directly via ``pip``,
 stay tuned!
 
-## Usage
+Usage
+-----
 
 After installing this package,
 the following three commands will be available from the command line
 
-- `countwords` for counting the occurrences of words in a text.
-- `collate` for collating multiple word count files together.
-- `plotcounts` for visualizing the word counts.
+- ``countwords`` for counting the occurrences of words in a text.
+- ``collate`` for collating multiple word count files together.
+- ``plotcounts`` for visualizing the word counts.
 
-A typical usage scenario would include running the following from your terminal.
+A typical usage scenario would include running the following from your terminal::
 
-```shell
-countwords dracula.txt > dracula.csv
-countwords moby_dick.txt > moby_dick.csv
-collate dracula.csv moby_dick.csv > collated.csv
-plotcounts collated.csv --outfile zipf-drac-moby.jpg
+    countwords dracula.txt > dracula.csv
+    countwords moby_dick.txt > moby_dick.csv
+    collate dracula.csv moby_dick.csv > collated.csv
+    plotcounts collated.csv --outfile zipf-drac-moby.jpg
+
+Additional information on each function
+can be found in their docstrings and appending the ``-h`` flag,
+e.g. ``countwords -h``.
 ```
-
-The output file would look something like
-
-![]image ref
-
-
-Additional information on each function can be found in their docstrings and appending the `-h` flag,
-e.g. `countwords -h`.
-````
 
 For simple packages,
 carefully written docstrings and READMEs
@@ -800,189 +890,83 @@ references between functions,
 and search functionality.
 We will see how to do this next.
 
-## Advanced docs
+### Creating a web page for documentation {#package-py-sphinx}
 
-As we get our package ready for sharing with others, we should
-make sure there's enough documentation written for our intended
-initial users to successfully install the software and begin to
-use key functionality.
+If you've ever viewed the online documentation for a large Python package,
+it's likely to have been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
+a package for writing software documentation and generating web packages.
+When combined with [Read The Docs](https://readthedocs.org) --
+a free service for hosting online documentation
+that understands documents written to support Sphinx --
+it is an extremely useful way to build documentation and an online home for your package.
+Both tools recognize reStructuredText files.
 
-Ideally we've been maintaining documentation throughout the development
-process. But the documentation we keep through that process is often
-intended for a different audience and purpose—that is, it's meant for
-us while developing the code, and so includes things that are good and
-useful like code comments reminding us why steps are taken, but may
-not include overviews of the package and how (and why!) to use it, which
-we largely take for granted.
+We'll start by putting together a minimal set of documentation
+that includes the `README.rst` file we just created
+and the docstrings we've written along the way.
+Sphinx makes it relatively straightforwrd to get started,
+using the `quickstart` tool.
+Let's install Sphinx and create a `docs/` directory at the top of our repository:
 
-We should certainly have a README for the package, describing how to
-install the package and how to use it in a couple of key use cases,
-so let's add that.
-
-In the Python community, much documentation is written in
-[reStructuredText][restructured-text], which is
-a markup format for plain text documents which can be rendered
-into documents with quite complex indexes and cross-linking
-by many documentation tools; GitHub will recognize reST files
-ending in `.rst` and display them nicely. We'll use that here;
-titles are underlined and overlined, section headings are underlined,
-and code blocks are set off with two colons (`::`) and indented.
-So let's create a `README.rst`:
-
-```text
-======
-Zipfpy
-======
-
-This python package provides routines for generating lists of counts
-that follow (exactly or approximately) a Zipf distribution, and for
-testing whether a counts distribution does or doesn't follow such
-a distribution.
-
-Installation
-------------
-
-To install, clone this repository, change into the repository directory
-and run the commands::
-
-    pip install -r requirements.txt
-    pip install .
-
-Use
----
-
-You can use the package after installation with `import zipfpy`, with functions
-in the modules `check` and `generate`.
-
-You can also use the command line tool `check_zipf.py` which tests to see if
-a provided list of countsfollows a Zipf distribution::
-
-    $ check_zipf.py 100 50 33 25
-    True: [100, 50, 33, 25]
-
-Authors
--------
-
-Terry Pratchett
-```
-
-In addition to the README, we should also make sure that there are
-[docstrings](#docs-docstrings) written for the package as a whole
-(in the `__init__.py`):
-
-```python
-"""
-The zipfpy package contains tests of distributions of counts to see if
-they follow a Zipf distribution (https://en.wikipedia.org/wiki/Zipf%27s_law)
-using the routines in the check module, and routines for generating
-lists of counts that follow a Zipf distribution in the generate module.
-"""
-RELATIVE_ERROR = 0.05
-```
-
-and for key routines like `is_zipf` and `make_zipf`:
-
-```python
-def is_zipf(hist, rel=RELATIVE_ERROR):
-    """Tests if a histogram of counts follows a Zipf distribution.
-
-    Given a list of counts as hist, assumed sorted in decreasing order,
-    and a relative error tolerance (if not provided, the default value
-    zipfpy.RELATIVE_ERROR is used), tests to see if the counts follow
-    a Zipf distribution.
-
-    Args:
-        hist: an list or other iterable containing a list of numeric counts
-        rel: the relative error tolerance used if provided; if not,
-             the package default is used.
-
-    Returns:
-        True if the list of counts follows a zipf distribution within
-        the relative tolerance.  False otherwise.
-
-    Raises:
-        AssertionError: raised if an empty list is passed.
-    """
-    assert len(hist) > 0, 'Cannot test Zipfiness without data'
-    scaled = [h/hist[0] for h in hist]
-    perfect = make_zipf(len(hist))
-    return scaled == approx(perfect, rel=rel)
-```
-
-```python
-def make_zipf(length):
-    """Returns a list of counts that follows a Zipf distribution.
-
-    Args:
-        length: the number of counts to be generated
-
-    Returns:
-        A list of the provided length of floating point numbers corresponding
-        exactly the zipf distribution.  For example, for length=5:
-
-        [1.0, 0.5, 0.3333333333333333, 0.25, 0.2]
-
-    Raises:
-        AssertionError: raised if a zero or negative length is provided
-    """
-    assert length > 0, 'Zipf distribution must have at least one element'
-    result = [1/(1 + i) for i in range(length)]
-    return result
-```
-
-Not only is the documentation then useful for those reading the
-code, but it helpfully shows up when a user types, for instance,
-`help(zipfpy)`.
-
-<!-- used="package-py/09/requirements.txt" -->
-<!-- used="package-py/09/setup.py" -->
-<!-- used="package-py/09/test_zipf.py" -->
-
-### How do I generate web pages of documentation for my package? {#package-py-sphinx}
-
-When you've viewed documentation for large Python packages, they
-have very likely been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
-a package for writing software documentation and generating web packages
-for that documentation that is widely used in the Python community.
-When combined with [Read The Docs](https://readthedocs.org), a free service for
-hosting that online documentation that includes tools to automatically update
-documentation when your package and its documentation changes, and that understands
-documents written to support Sphinx, it is an extremely useful way to
-build both documentation and an online home for your package.  Both tools
-recognize reStructuredText files.
-
-We'll start by putting together a minimal set of documentation that includes
-your `README.rst` and the docstrings for your package.  Sphinx makes it
-relatively straightforwrd to get started, using the `quickstart` tool.  We'll
-create doucmentation in a `docs/` directory at the top of our repository:
-
-```bash
+```shell
+$ pip install sphinx
 $ mkdir docs
 $ cd docs
+```
+
+We can then run the `quickstart` tool to get started.
+We'll be asked to specify the project's name, our (the author's) name, and a release.
+Otherwise we can use the default settings.
+
+```shell
 $ sphinx-quickstart
 ```
 
-We'll be asked to specify the project's name, our (the author's) name, and
-a release.  Otherwise we can mostly use the defaults, but we'll want
-to use specfiy that we do want autodoc to automatically insert our docstrings:
-
 ```text
-...
+Welcome to the Sphinx 3.1.1 quickstart utility.
+
+Please enter values for the following settings (just press Enter to
+accept a default value, if one is given in brackets).
+
+Selected root path: .
+
+You have two options for placing the build directory for Sphinx output.
+Either, you use a directory "_build" within the root path, or you separate
+"source" and "build" directories within the root path.
+> Separate source and build directories (y/n) [n]: n
+
 The project name will occur in several places in the built documentation.
-> Project name: zipfpy
-> Author name(s): Terry Pratchett
-> Project release []: 1.0
-...
-> autodoc: automatically insert docstrings from modules (y/n) [n]: y
-...
+> Project name: zipf
+> Author name(s): Amira Khan
+> Project release []: 0.1
+
+If the documents are to be written in a language other than English,
+you can select a language here by its language code. Sphinx will then
+translate text that it generates into that language.
+
+For a list of supported codes, see
+https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
+> Project language [en]: 
+
+Creating file /Users/amira/zipf/docs/conf.py.
+Creating file /Users/amira/zipf/docs/index.rst.
+Creating file /Users/amira/zipf/docs/Makefile.
+Creating file /Users/amira/zipf/docs/make.bat.
+
+Finished: An initial directory structure has been created.
+
+You should now populate your master file /Users/amira/zipf/docs/index.rst and create other documentation
+source files. Use the Makefile to build the docs, like so:
+   make builder
+where "builder" is one of the supported builders, e.g. html, latex or linkcheck.
 ```
 
-Once that is complete, there will be a file called `conf.py` in the docs
-directory that configures Sphinx.  We'll make one change to that, so that
-autodoc can find our module (and its docstrings).
-
-First, we'll set the "Path setup" section, which starts very near the head
-of the file:
+Once that is complete,
+there will be a file called `conf.py` in the `docs` directory that configures Sphinx.
+We'll make two changes to that file,
+so that autodoc can find our modules (and their docstrings).
+The first change relates to the "path setup" section,
+which starts very near the head of the file:
 
 ```text
 # -- Path setup --------------------------------------------------------------
@@ -992,40 +976,62 @@ of the file:
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 ```
 
-Here we those extensions are in another directory, so we'll uncomment those
-lines below and add another pointing up one level from `docs/` so that we have:
+Relative to the `docs/` directory,
+our modules (i.e. `countwords.py`, `utilities.py`, etc) are located in the `../zipf` directory.
+We therefore need to uncomment the relevant lines of the path setup section in `conf.py`
+to tell Sphinx where those modules are:
 
 ```python
 import os
 import sys
 
+sys.path.insert(0, os.path.abspath('../zipf'))
+```
+The second change relates to the "general configuration" section,
+where we need to add autodoc to the list of extensions:
 
-sys.path.insert(0, os.path.abspath('./'))
-sys.path.insert(0, os.path.abspath('../'))
+```python
+extensions = ['sphinx.ext.autodoc']
 ```
 
-With that done, we can generate run a sphinx autodoc script which will read
-the docstrings from our package and include them into .rst files in the
-`docs/source` directory:
+With those edits to `conf.py` complete,
+we can now generate a sphinx autodoc script that will read the docstrings from our package
+and include them into `.rst` files in the `docs/source` directory:
 
-```bash
-sphinx-apidoc -o source/ ../zipfpy
+```shell
+sphinx-apidoc -o source/ ../zipf
 ```
-
-Now we're ready.  In the `/docs` directory there's a Makefile,
-generated by `sphinx-quickstart`;
-if we run `make html`
-and in a web browser open the file `docs/_build/index.html` we'll have a very minimal
-documentation in a familiar looking form; if you look under `modules` you will
-see the documentation for the individual modules.  But that first page is
-still a little sparse.
-
-If we add the line `.. include:: ../README.rst` to the `docs/index.rst` file
-at the beginning, so that page starts with our README, and then include a direct
-link to the zipfpy package documentation:
 
 ```text
-Welcome to Zipfpy's documentation!
+Creating file source/collate.rst.
+Creating file source/countwords.rst.
+Creating file source/plotcounts.rst.
+Creating file source/test_zipfs.rst.
+Creating file source/utilities.rst.
+Creating file source/modules.rst.
+```
+
+Now we're ready to generate our webpage.
+In the `/docs` directory there's a Makefile that was generated by `sphinx-quickstart`.
+If we run `make html` and open the file `docs/_build/index.html` in a web broswer
+we'll have some (very minimal) documentation in a familiar looking form; 
+if you look under `modules` you will
+see the documentation for the individual modules.
+
+```{r packaging-sphinx-module-list, echo=FALSE, fig.cap="The module index at `file:///Users/amira/zipf/docs/_build/html/py-modindex.html`"}
+knitr::include_graphics("figures/py-rse/packaging/module_index.png")
+```
+
+```{r packaging-sphinx-module-countwords, echo=FALSE, fig.cap="The countwords documentation at `file:///Users/z3526123/Desktop/zipf/docs/_build/html/source/countwords.html#module-countwords"}
+knitr::include_graphics("figures/py-rse/packaging/module_countwords.png`")
+```
+
+The first/landing page for the website is the perfect place for the contents of our README file,
+so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file
+to include it.
+
+```text
+Welcome to Zipf's documentation!
 ==================================
 
 .. include:: ../README.rst
@@ -1033,8 +1039,6 @@ Welcome to Zipfpy's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
-   zipfpy
 
 Indices and tables
 ==================
@@ -1044,81 +1048,65 @@ Indices and tables
 * :ref:`search`
 ```
 
-and rerun `make html`, we now get an updated set of web pages which
-re-uses your README to be the introduction to the documentation.
+If we re-run `make html`,
+we now get an updated set of web pages that
+re-uses our README as the introduction to the documentation.
 
-Note that we needed additional packages to build the documentation
-here that is not reflected in our `requirements.txt`; the `Sphinx`
-package and its dependencies.
+```{r packaging-sphinx-landing-page, echo=FALSE, fig.cap="The landing page at `file:///Users/amira/zipf/docs/_build/html/index.html`"}
+knitr::include_graphics("figures/py-rse/packaging/landing_page.png")
+```
 
-They aren't needed for running, developing, or even testing
-the package, but it is needed for building the documentation.
-To note this requirement, but without requiring everyone installing
-the package to have `Sphinx`
-installed, let's create a `requirements_docs.txt` file that contains
+Now that we've successfully generated the html pages for our website,
+we should pause and note that Sphinx is not captured
+in our list of installation requirements (`requirements.txt`; Section \@ref(correct-ci)).  
+Sphinx isn't needed to run, develop, or even test our package,
+but it is needed for building the documentation.
+To note this requirement,
+but without requiring everyone installing the package to have Sphinx installed,
+let's create a `requirements_docs.txt` file that contains
 only those things (where versions come from `pip freeze`):
 
 ```text
 Sphinx>=1.7.4
 ```
 
-Then anyone wanting to build the documentation (including you, on another computer)
+Now anyone wanting to build the documentation (including us, on another computer)
 need only run `pip install -r requirement_docs.txt`
 
 This breakdown of requirements by use case is often seen with packages
-that have a `requirements_dev.txt` for additional packaged not needed
-for users of the package, but for its development and testing.  For this
-package, we could usefully pull out `pytest` from our `requirements.txt`
-into a `requirements_dev.txt`
+that have a `requirements_dev.txt` file for additional packages
+not needed for users of the package,
+but for its development and testing.
+For this package,
+we could usefully pull out `pytest` from `requirements.txt`
+into a new `requirements_dev.txt` file.
 
-### How do I put the documentation for my package online? {#package-py-rtd}
+### Hosting your documentation online? {#package-py-rtd}
 
-There are a number of ways of hosting the web pages that document
-your project.  A very common option, particularly for Python
-projects, is [Read The Docs](https://readthedocs.org), a community
-supported site which hosts software documentation free of charge.
+There are a number of ways of hosting the web pages that document your project.
+A very common option, particularly for Python projects,
+is [Read The Docs](https://readthedocs.org),
+which is a community supported site that hosts software documentation free of charge.
 
-Read The Docs integrates nicely with GitHub, which will allow
-you to have the documentation re-built automatically upon update
-of your repository.  Thus we recommend
-[registering for Read The Docs](https://readthedocs.org/accounts/signup/) with your GitHub
-account.
+Read The Docs integrates nicely with GitHub,
+so that the online documentation is automatically re-built
+(similar to continuous integration; Section \@ref(correct-ci))
+every time any updates are pushed to GitHub.
+Thus we recommend
+[registering for Read The Docs](https://readthedocs.org/accounts/signup/)
+with your GitHub account.
 
-Once you have registered for Read The Docs, confirmed your email, and signed in,
-you will be able to add new projects by [importing a project](https://readthedocs.org/dashboard/import/?)
-from your github repository; Read The Docs will then build the documentation
-(_e.g._, run make) and host the resulting files.  For this to work, all of
-the source files (in our case, `docs/source/modules.rst`, `docs/source/zipfpy.rst`,
-`docs/Makefile`, `docs.conf.py`) need to be checked into your repository.
+Once you have registered for Read The Docs,
+you will be able to add new projects by importing a project
+from your GitHub repository;
+Read The Docs will then build the documentation
+(i.e., it runs `make html`) and host the resulting files.
+For this to work, all of the source files
+(in our case, `docs/source/*.rst`, `docs/Makefile`, `docs/conf.py` and `docs/index.rst`)
+need to be checked into your repository.
+If we named our project `zipf`,
+the documents would be available at https://zipf.readthedocs.io/en/latest/.
 
-Then you should be able to build; after a few minutes, your documents should
-be visible!  If you named your project, _e.g._, `pterry_zipfpy`, your
-documents will be available at
-[`https://pterry_zipfpy.readthedocs.io/en/latest/`](https://pterry_zipfpy.readthedocs.io/en/latest/).
-
-As with [continuous integration with Travis-CI](integrate.html#integrate-basic),
-GitHub works with ReadTheDocs so that if you have set up your ReadTheDocs project
-with your GitHub account, changes to the documentation will automatically result
-in the online documentation being rebuilt.
-
-Also as with continuous integration testing, there are badges for your README linking
-both to the documentation and reporting on the status of the documentation build;
-you would be able to add that badge and link by adding the following line to your
-`README.rst`:
-
-```text
-.. image:: https://pterry_zipfpy.readthedocs.io/en/latest/?badge=latest
-    :target: https://readthedocs.org/projects/pterry_zipfpy/badge/?version=latest
-    :alt: Documentation Status
-```
-
-Note the syntax for adding an image to a reST file; `.. image::` followed by the link
-to the image, and additional, optional fields on indented lines, such as `:target:` for
-a link to follow when the image is clicked, and `:alt:` for alternate text for the image.
-
-### Announcing Work {#package-py-announce}
-
-FIXME: <https://medium.com/indeed-engineering/marketing-for-data-science-a-7-step-go-to-market-plan-for-your-next-data-product-60c034c34d55>
 
 ## Summary {#package-py-summary}
 
@@ -1133,6 +1121,8 @@ if (knitr::is_latex_output()) {
 FIXME: summarize Python packaging chapter
 
 ## Exercises
+
+FIXME: The exercises below have not been updated since the latest Zipf's Law narrative was implemented.
 
 ### Exercises: Examining the virtual environment
 
