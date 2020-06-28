@@ -36,7 +36,7 @@ def get_power_law_params(word_counts):
 
 
 def set_plot_params(param_file):
-    """Set the matplotlib rc parameters."""
+    """Set the matplotlib parameters."""
     if param_file:
         with open(param_file, 'r') as reader:
             param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
@@ -78,13 +78,16 @@ def main(args):
 
     alpha = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
+
     # Since the ranks are already sorted, we can take the last one instead of
     # computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
+
     # Use the range of the data as the boundaries when drawing the power law curve
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
+    # Plot the result
     plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
     ax.figure.savefig(args.outfile)
 
@@ -97,7 +100,7 @@ if __name__ == '__main__':
                         help='Output image file name')
     parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
-    parser.add_argument('--rcparams', type=str, default=None,
-                        help='YAML file containing new matplotlib runtime configuration parameters')
+    parser.add_argument('--plotparams', type=str, default=None,
+                        help='YAML file containing matplotlib parameters')
     args = parser.parse_args()
     main(args)
