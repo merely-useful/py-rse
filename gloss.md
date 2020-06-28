@@ -13,13 +13,13 @@
 :   FIXME
 
 **Action**<a id="action-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **Active listening**<a id="active-listening"></a>
 :   FIXME
 
 **Actual output**<a id="actual-output"></a> (of a test):
-   FIXME
+    FIXME
 
 **Actual result**<a id="actual-result"></a>
 :   FIXME
@@ -37,13 +37,13 @@
 :   FIXME
 
 **Annotated tag**<a id="annotated-tag"></a> (in version control):
-   FIXME
+    FIXME
 
 **Append mode**<a id="append-mode"></a>
 :   FIXME
 
 **Application Programming Interface**<a id="api"></a> (API):
-   FIXME
+    FIXME
 
 **Assertion**<a id="assertion"></a>
 :   FIXME
@@ -61,7 +61,7 @@
 :   FIXME
 
 **Automatic variable**<a id="automatic-variable-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **Backlog**<a id="backlog"></a>
 :   FIXME
@@ -112,10 +112,10 @@
 :   FIXME
 
 **Catch**<a id="catch"></a> (an exception):
-   FIXME
+    FIXME
 
 **Checking-driven development**<a id="cdd"></a> (CDD):
-   FIXME
+    FIXME
 
 **Checklist**<a id="checklist"></a>
 :   FIXME
@@ -133,7 +133,7 @@
 :   FIXME
 
 **Comma-separated values**<a id="csv"></a> (CSV):
-   FIXME
+    FIXME
 
 **Command argument**<a id="command-argument"></a>
 :   FIXME
@@ -154,7 +154,7 @@
 :   FIXME
 
 **Command-line interface**<a id="cli"></a> (CLI):
-   FIXME
+    FIXME
 
 **Comment**<a id="comment"></a>
 :   FIXME
@@ -218,7 +218,7 @@
 :   FIXME
 
 **Creative Commons - Attribution License**<a id="cc-by"></a> (CC-BY):
-   FIXME
+    FIXME
 
 **Curb cuts**<a id="curb-cuts"></a>
 :   https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
@@ -243,7 +243,7 @@
 :   FIXME
 
 **Default target**<a id="default-target-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **Delimiter**<a id="delimiter"></a>
 :   FIXME
@@ -264,7 +264,7 @@
 :   FIXME
 
 **Digital Object Identifier**<a id="doi"></a> (DOI):
-   FIXME
+    FIXME
 
 **Directory Tree**<a id="directory-tree"></a>
 :   If the nesting relationships between directories in a filesystem are drawn as arrows from the containing directory to the nested ones,
@@ -297,7 +297,7 @@
 :   FIXME
 
 **Error**<a id="test-error"></a> (result from a unit test):
-   FIXME
+    FIXME
 
 **Escape sequence**<a id="escape-sequence"></a>
 :   FIXME
@@ -309,7 +309,7 @@
 :   FIXME
 
 **Expected output**<a id="expected-output"></a> (of a test):
-   FIXME
+    FIXME
 
 **Expected result**<a id="expected-result"></a>
 :   FIXME
@@ -333,7 +333,7 @@
 :   FIXME
 
 **Failure**<a id="test-failure"></a> (result from a unit test):
-   FIXME
+    FIXME
 
 **False beginner**<a id="false-beginner"></a>
 :   Someone who has studied a language before but is learning it again.
@@ -391,10 +391,10 @@
 :   FIXME
 
 **Frequently Asked Questions**<a id="faq"></a> (FAQ):
-   FIXME
+    FIXME
 
 **Full identifier**<a id="full-identifier-git"></a> (in Git):
-   FIXME
+    FIXME
 
 **Fully-qualified name**<a id="fully-qualified-name"></a>
 :   FIXME
@@ -403,10 +403,10 @@
 :   FIXME
 
 **Function**<a id="function-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **GNU Public License**<a id="gpl"></a> (GPL):
-   FIXME
+    FIXME
 
 **Git**<a id="git"></a>
 :   FIXME
@@ -445,7 +445,7 @@
 :   FIXME
 
 **Graphical user interface**<a id="gui"></a> (GUI):
-   FIXME
+    FIXME
 
 **HTTP status code**<a id="http-status-code"></a>
 :   FIXME
@@ -478,7 +478,7 @@
 :   FIXME
 
 **Integrated Development Environment**<a id="ide"></a> (IDE):
-   FIXME
+    FIXME
 
 **Internal error**<a id="internal-error"></a>
 :   FIXME
@@ -499,16 +499,16 @@
 :   FIXME
 
 **Iteration**<a id="iteration"></a> (in software development):
-   FIXME
+    FIXME
 
 **JSON**<a id="json"></a>
 :   FIXME
 
 **Jenny**<a id="jenny"></a> (a repository):
-   FIXME
+    FIXME
 
 **Join**<a id="join"></a> (of database tables):
-   FIXME
+    FIXME
 
 **Kebab case**<a id="kebab-case"></a>
 :   FIXME
@@ -517,7 +517,10 @@
 :   FIXME
 
 **Label**<a id="issue-label"></a> (in issue tracker):
-   FIXME
+    FIXME
+
+**LaTeX**<a id="latex"></a>:
+    FIXME
 
 **Learned helplessness**<a id="learned-helplessness"></a>
 :   FIXME
@@ -544,7 +547,7 @@
 :   FIXME
 
 **Loop**<a id="loop-unix"></a> (in Unix):
-   FIXME
+    FIXME
 
 **MIT License**<a id="mit-license"></a>
 :   FIXME
@@ -596,7 +599,7 @@
 :   FIXME
 
 **Not Invented Here**<a id="not-invented-here"></a> (NIH):
-   FIXME
+    FIXME
 
 **Novice**<a id="novice"></a>
 :   Someone who has not yet built a usable mental model of a domain.
@@ -670,7 +673,7 @@
 :   FIXME
 
 **Pipe**<a id="pipe-unix"></a> (in Unix):
-   FIXME
+    FIXME
 
 **Positional argument**<a id="positional-argument"></a>
 :   FIXME
@@ -688,7 +691,7 @@
 :   FIXME
 
 **Prerequisite**<a id="prerequisite-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **Privilege**<a id="privilege"></a>
 :   FIXME
@@ -712,10 +715,10 @@
 :   FIXME
 
 **Pseudorandom number generator**<a id="prng"></a> (PRNG):
-   FIXME
+    FIXME
 
 **Public domain license**<a id="cc-0"></a> (CC-0):
-   FIXME
+    FIXME
 
 **Pull request**<a id="pull-request"></a>
 :   FIXME
@@ -772,16 +775,16 @@
 :   FIXME
 
 **Representation State Transfer**<a id="rest"></a> (REST):
-   FIXME
+    FIXME
 
 **Reproducible example**<a id="reprex"></a> (reprex):
-   FIXME
+    FIXME
 
 **Reproducible research**<a id="reproducible-research"></a>
 :   FIXME
 
 **Research software engineer**<a id="rse"></a> (RSE):
-   FIXME
+    FIXME
 
 **Restructured Text (reST)**<a id="restructured-text"></a>
 :   A plain text markup language used by much Python documentation and documentation tooling.
@@ -796,7 +799,7 @@
 :   FIXME
 
 **Rule**<a id="rule-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **SSH key**<a id="ssh-key"></a>
 :   FIXME
@@ -805,7 +808,7 @@
 :   FIXME
 
 **Scalable Vector Graphics**<a id="svg"></a> (SVG):
-   FIXME
+    FIXME
 
 **Script**<a id="script"></a>
 :   FIXME
@@ -814,7 +817,7 @@
 :   FIXME
 
 **Seed**<a id="prng-seed"></a> (for pseudorandom number generator):
-   FIXME
+    FIXME
 
 **Semantic versioning**<a id="semantic-versioning"></a>
 :   FIXME <https://semver.org/>
@@ -823,7 +826,7 @@
 :   FIXME
 
 **Set and override**<a id="set-and-override"></a> (pattern):
-   FIXME
+    FIXME
 
 **Shebang**<a id="shebang"></a>
 :   FIXME
@@ -835,7 +838,7 @@
 :   FIXME
 
 **Short identifier**<a id="short-identifier-git"></a> (in Git):
-   FIXME
+    FIXME
 
 **Short option**<a id="short-option"></a>
 :   FIXME
@@ -901,7 +904,7 @@
 :   FIXME
 
 **Success**<a id="test-success"></a> (result from a unit test):
-   FIXME
+    FIXME
 
 **Sustainability**<a id="sustainability"></a>
 :   FIXME
@@ -922,7 +925,7 @@
 :   FIXME
 
 **Tag**<a id="git-tag"></a> (in version control):
-   FIXME
+    FIXME
 
 **Tag**<a id="tag"></a>
 :   FIXME
@@ -931,10 +934,10 @@
 :   FIXME
 
 **Target**<a id="target-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **Target**<a id="target-oppression"></a> (of oppression):
-   FIXME
+    FIXME
 
 **Technical debt**<a id="technical-debt"></a>
 :   FIXME
@@ -976,7 +979,7 @@
 :   FIXME
 
 **Timestamp**<a id="timestamp"></a> (on a file):
-   FIXME
+    FIXME
 
 **Tldr**<a id="tldr"></a>
 :   FIXME
@@ -1018,7 +1021,7 @@
    A symbolic name that reserves memory to store a value.
 
 **Variable**<a id="variable-make"></a> (in Make):
-   FIXME
+    FIXME
 
 **Vector image**<a id="vector-image"></a>
 :   FIXME
@@ -1047,7 +1050,7 @@
     without affecting the underlying computer.
 
 **What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG):
-   FIXME
+    FIXME
 
 **Whitespace**<a id="whitespace"></a>
 :   FIXME
