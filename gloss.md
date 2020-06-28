@@ -245,6 +245,9 @@
 **Default target**<a id="default-target-make"></a> (in Make):
     FIXME
 
+**Defensive programming**<a id="defensive-programming"></a>:
+    FIXME
+
 **Delimiter**<a id="delimiter"></a>
 :   FIXME
 
@@ -495,6 +498,9 @@
 **Interruption bingo**<a id="interruption-bingo"></a>
 :   FIXME
 
+**Invariant**<a id="invariant"></a>
+:   FIXME
+
 **Issue tracking system**<a id="issue-tracking-system"></a>
 :   FIXME
 
@@ -684,6 +690,9 @@
 **Post-mortem**<a id="post-mortem"></a>
 :   FIXME
 
+**Postcondition**<a id="postcondition"></a>
+:   FIXME
+
 **Pothole case**<a id="pothole-case"></a>
 :   FIXME
 
@@ -691,6 +700,9 @@
 :   FIXME
 
 **Precision**<a id="precision"></a>
+:   FIXME
+
+**Precondition**<a id="precondition"></a>
 :   FIXME
 
 **Prerequisite**<a id="prerequisite-make"></a> (in Make):

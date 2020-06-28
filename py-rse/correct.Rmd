@@ -4,22 +4,23 @@
 source(here::here("_common.R"))
 ```
 
-Now that we've written our software for counting and analyzing the words in classic texts,
-how can we be sure that it’s producing reliable results?
-The short is answer is that we can't be completely certain,
-but that as in science,
-we can test our expectations against reality to help us decide if we are sure enough.
-In this chapter we explore the approaches available for testing code;
-namely assertions, unit tests, integration tests and regression tests.
+We have written software to count and analyze the words in classic texts,
+but how can we be sure it's producing reliable results?
+The short is answer is that we can't---not completely---but
+we can test its behavior against our expectations to decide if we are sure enough.
+This chapter therefore explores ways to do this,
+including assertions, unit tests, integration tests, and regression tests.
 
-> **Scientist's Nightmare**
+> **A Scientist's Nightmare**
 >
-> If you need any motivation to learn how to test your code,
-> look no further than the story of Geoffrey Chang [@Miller2006].
 > A successful early career researcher in protein crystallography,
-> Chang had to retract five published papers -- three from
-> the prestigious journal Science -- because his code had
-> inadvertently flipped two columns of data.
+> Geoffrey Chang,
+> had to retract five published papers---three from
+> the prestigious journal *Science*---because his code had
+> inadvertently flipped two columns of data @Miller2006.
+> More recently, a simple calculation mistake in a paper by Reinhart and Rogoff
+> contributed to making the financial crash of 2008 even worse
+> for millions of people @Borw2013.
 
 Our Zipf's Law project files are structured as they were at the end of the previous chapter:
 
@@ -38,7 +39,6 @@ Our Zipf's Law project files are structured as they were at the end of the previ
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
-│   ├── risk.txt
 │   └── ...
 └── results
     ├── dracula.csv
@@ -46,28 +46,28 @@ Our Zipf's Law project files are structured as they were at the end of the previ
     └── ...
 ```
 
-## Assertions {#assertions}
+## Assertions {#correct-assertions}
 
-The first step toward getting the right answers from our programs
-is to assume that mistakes will happen and to guard against them.
-This is called defensive programming,
-and the most common way to do it is to add assertions to our code
+The first step in building confidence in our programs
+is to assume that mistakes will happen and guard against them.
+This is called [defensive programming][defensive-programming],
+and the most common way to do it is to add [assertions][assertion] to our code
 so that it checks itself as it runs.
-An assertion is simply a statement that something must be true at a certain point in a program.
-When Python sees an assertion, it evaluates the assertion’s condition.
-If it’s true, Python does nothing, but if it’s false,
-Python halts the program immediately and prints a user defined error message.
-
-To demonstrate an assertion in action,
-consider this code that halts as soon as the loop encounters a
-weather station rainfall observation that isn’t positive:
+An assertion is a statement that something must be true at a certain point in a program.
+When Python sees an assertion, it checks the assertion's condition.
+If it's true, Python does nothing;
+if it's false,
+Python halts the program immediately and prints a user-defined error message.
+For example,
+this code halts as soon as the loop encounters a
+weather station rainfall observation that isn't positive:
 
 ```python
 rainfall_observations = [1.5, 2.3, 0.7, -0.2, 4.4]
 total = 0.0
-for ob in rainfall_observations:
-    assert ob >= 0.0, 'Rainfall observations should only contain positive values'
-    total += ob
+for obs in rainfall_observations:
+    assert obs >= 0.0, 'Rainfall values must be non-negative'
+    total += obs
 print('total rainfall is:', total)
 ```
 
@@ -76,32 +76,42 @@ print('total rainfall is:', total)
 AssertionError                            Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
       2 total = 0.0
-      3 for ob in rainfall_obs:
-----> 4     assert ob > 0.0, 'Rainfall observations should only contain positive values'
-      5     total += ob
+      3 for obs in rainfall_obs:
+----> 4     assert obs > 0.0, 'Rainfall values must be non-negative'
+      5     total += obs
       6 print('total rainfall is:', total)
 
-AssertionError: Rainfall observations should only contain positive values
+AssertionError: Rainfall values must be non-negative
 ```
 
-Programs like the Firefox browser are full of assertions:
+Programs intended for widespread use are full of assertions:
 10-20% of the code they contain are there to check that the other 80-90% are working correctly.
 Broadly speaking, assertions fall into three categories:
 
-- A *precondition* is something that must be true at the start of a function in order for it to work correctly.
-- A *postcondition* is something that the function guarantees is true when it finishes.
-- An *invariant* is something that is always true at a particular point inside a piece of code.
+-   A [precondition][precondition] is something that must be true at the start of a function
+    in order for it to work correctly.
+    For example,
+    a function might check that the list it has been given has at least two elements
+    and that all of its elements are integers.
 
-If the rainfall observation code above was part of a larger meteorological data processing script,
-then that assertion is an example of an invariant -- at that particular point in the code,
-it is always the case that a negative rainfall total makes no sense.
-Data entry errors are possible, so it's important to check the validity of each observation.
+-   A [postcondition][postcondition] is something that the function guarantees is true
+    when it finishes.
+    For example,
+    a function could check that the value being returned is an integer
+    that is greater than zero,
+    but less than the length of the input list.
+
+-   An [invariant][invariant] is something that is true for every iteration in a loop.
+    The invariant might be a property of the data (as in the example above),
+    or it might be something like,
+    "the value of `highest` is less than or equal to the current loop index".
 
 Our `collate.py` script is a good example of the need for a precondition.
-A user could easily overlook the doc string at the top of the script,
-which states that it combines multiple word count CSV-files into a single cumulative count.
-If they passed a series of text files instead of CSV files,
-they'd get an error message that isn't particularly helpful in explaining the source of the problem.
+A user could easily overlook the docstring at the top of the script,
+which states that it combines multiple CSV files containing word counts
+to create a single cumulative count.
+If they pass a set of plain text files instead of CSV files,
+the error message `collate.py` produces isn't particularly helpful:
 
 ```shell
 $ python bin/collate.py data/jane_eyre.txt data/dracula.txt 
@@ -117,8 +127,9 @@ Traceback (most recent call last):
 ValueError: too many values to unpack (expected 2)
 ```
 
-A precondition (with informative error message) in the `main` function of `collate.py`
-requiring the input files to end in ".csv" can clear up any potential confusion.
+An assertion in the `main` function of `collate.py`
+makes the requirement clear in the code,
+and is also a convenient place to write a better error message:
 
 ```python
 def main(args):
@@ -143,21 +154,15 @@ Traceback (most recent call last):
 AssertionError: input files must be word count CSV files
 ```
 
-## Unit testing {#unit-testing}
+## Unit Testing {#correct-unit}
 
 As the name suggests,
-unit tests relate to small "units" or pieces of our code.
-This typically means functions that we've defined.
-What is considered to be the smallest code unit is subjective --
-the body of a function can be long or short,
-and shorter functions are arguably more unit-like than long ones --
-but a good guideline is that if the code cannot be made any simpler
-logically (you cannot split apart the addition operator) or 
-practically (a function is self-contained and well defined),
-then it is a unit.
-
-In the case of our Zipf's Law software,
-the `count_words` function in the `wordcounts.py` script is a good example of a code unit:
+a [unit test][unit-test] checks the correctness of a single unit of software.
+Exactly what constitutes a "unit" is subjective,
+but it typically means the behavior of a single function in one situation.
+In our Zipf's Law software,
+the `count_words` function in `wordcounts.py` is
+a good candidate for unit testing:
 
 ```
 def count_words(reader):
@@ -174,17 +179,17 @@ A single unit test will typically have:
 -   a [fixture][fixture],
     which is the thing being tested (e.g., an array of numbers);
 -   an [actual result][actual-result],
-    which is what the code produces when given the fixture; and
+    which is what the code produces when given the fixture;
+    and
 -   an [expected result][expected-result]
     that the actual result is compared to.
 
-In defining/creating an appropriate test fixture,
-a common approach is to use a subset or smaller version of the data
-that the function will typically process.
-For instance, in order to write a unit test for the `count_words` function,
-an appropriate fixture would be a small body of text
-for which we know the frequency of each word.
-The poem Risk by Anais Nin is a good choice,
+The fixture is typically a subset or smaller version of the data
+the function will typically process.
+For instance,
+in order to write a unit test for the `count_words` function,
+we could use a piece of text small enough for us to count word frequencies by hand.
+The poem "Risk" by Anaïs Nin is a good choice:
 
 ```shell
 $ cat data/risk.txt
@@ -201,8 +206,7 @@ it took
 to blossom.
 ```
 
-because it's so short that we can count the words by hand in order to create
-an expected result variable:
+The expected result is:
 
 ```python
 from collections import Counter
@@ -214,9 +218,8 @@ risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
 expected_result = Counter(risk_poem_counts)
 ```
 
-We can generate the actual result by calling the `word_counts` function,
-and then use an assertion to check that the actual and expected results
-are the same:
+We then generate the actual result by calling `word_counts`,
+and use an assertion to check if it is what we expected:
 
 ```python
 import countwords
@@ -227,19 +230,19 @@ assert actual_result == expected_result
 ```
 
 There's no output,
-which means the test has passed
-(recall that assertions only do something if the condition evaluates to false).
+which means the assertion (and test) passed.
+(Remember, assertions only do something if the condition is false.)
 
-### Testing frameworks
+## Testing Frameworks {#correct-framework}
 
-Writing a single unit test for our Zipf's Law software is a good start,
-but to be sure about the reliability of our code we'll probably want to write more unit tests.
-To coordinate the running of many tests,
+Writing one unit test is easy enough,
+but we should check other cases as well.
+To manage them,
 we can use a [test framework][test-framework] (also called a [test runner][test-runner]).
-The most widely used test framework for Python is [`pytest`][pytest],
-for which tests obey three rules:
+The most widely-used test framework for Python is called [`pytest`][pytest],
+which structures tests as follows:
 
-1.  All tests are put in files whose names begin with `test_`.
+1.  Tests are put in files whose names begin with `test_`.
 2.  Each test is a function whose name also begins with `test_`.
 3.  These functions use `assert` to check results.
 
@@ -253,7 +256,7 @@ import countwords
 def test_word_count():
     """Test the counting of words.
     
-    The example poem is Risk, by Anais Nin.
+    The example poem is Risk, by Anaïs Nin.
     """
     risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
                         'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
@@ -267,10 +270,11 @@ def test_word_count():
 
 The `pytest` library comes with a command-line tool that is also called `pytest`.
 When we run it with no options,
-it searches for all files in the working directory and subdirectories named `test_*.py`.
-It runs the tests in these files and then summarizes their results.
-(If you only want to run tests in a particular file,
-use the command `pytest path/to/test_file.py`.)
+it searches for all files in or below the working directory
+whose names match the pattern `test_*.py`.
+It then runs the tests in these files and summarizes their results.
+(If we only want to run the tests in a particular file,
+we can use the command `pytest path/to/test_file.py`.)
 
 ```shell
 $ pytest
@@ -286,24 +290,25 @@ bin/test_zipfs.py .                                                      [100%]
 ============================== 1 passed in 0.02s ===============================
 ```
 
-In order to add to our suite of unit tests,
-we can now simply add more `test_` functions to `test_zipfs.py`.
+To add more tests,
+we simply write more `test_` functions in `test_zipfs.py`.
 For instance,
-besides the counting of words (which we've already tested),
+besides counting words,
 the other critical part of our code is the calculation of the \(\alpha\) parameter.
 Earlier we defined a power law relating \(\alpha\)
-to the word frequency \(f\), word rank \(r\) 
-and a constant \(c\) of proportionality (Section \@ref(git-advanced-theory)).\[
+to the word frequency \(f\),
+the word rank \(r\),
+and a constant of proportionality \(c\) (Section \@ref(git-advanced-theory)).\[
 r = cf^{\frac{-1}{\alpha}}
 \]
 We also noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
-Setting \(\alpha\) to one and re-arranging the power law gives the expression,\[
+Setting \(\alpha\) to one and re-arranging the power law gives us\[
 c = f/r
 \]
 
-We can use this expression generate synthetic word counts data 
-(i.e. our test fixture) with a constant of proportionality
-set to a hypothetical maximum word frequency of 600
+We can use this formula to generate synthetic word counts data 
+(i.e. our test fixture)
+with a constant of proportionality set to a hypothetical maximum word frequency of 600
 (and thus \(r\) ranges from 1 to 600):
 
 ```python
@@ -313,11 +318,9 @@ max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1)) 
 ```
 
-(The `np.floor` function rounds down to the nearest whole number,
-because you can't have fractional word counts.)
-
-Passing this test fixture to the `get_power_law_params` function from our
-`plotcounts.py` script,
+(We use `np.floor` to round down to the nearest whole number,
+because we can't have fractional word counts.)
+Passing this test fixture to `get_power_law_params` in `plotcounts.py`:
 
 ```python
 def get_power_law_params(word_counts):
@@ -329,7 +332,7 @@ def get_power_law_params(word_counts):
       beta (Eq. 2) and the maximum likelihood estimation (mle)
       of beta (Eq. 6).
     Moreno-Sanchez I, Font-Clos F, Corral A (2016)
-      Large-Scale Analysis of Zipf’s Law in English Texts.
+      Large-Scale Analysis of Zipf's Law in English Texts.
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
@@ -339,8 +342,8 @@ def get_power_law_params(word_counts):
     alpha = 1 / (beta - 1)
     return alpha
 ```
-should return an expected value of 1.0.
 
+should give us a value of 1.0.
 To test this, we can add a second test to `test_zipfs.py`,
 
 ```python
@@ -370,21 +373,10 @@ def test_alpha():
     assert actual_alpha == expected_alpha
 
 def test_word_count():
-    """Test the counting of words.
-    
-    The example poem is Risk, by Anais Nin.
-    """
-    risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
-                        'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
-                        'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
-                        'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
-    expected_result = Counter(risk_poem_counts)
-    with open('data/risk.txt', 'r') as reader:
-        actual_result = countwords.count_words(reader)
-    assert actual_result == expected_result
+    ...as before...
 ```
 
-and then re-run pytest:
+Let's re-run both of our tests:
 
 ```shell
 $ pytest
@@ -428,44 +420,57 @@ FAILED bin/test_zipfs.py::test_alpha - assert 0.9951524579316625 == 1.0
 ```
 
 The output tells us that one test failed but the other test passed.
-This is a nice feature of test runners like `pytest` -- they continue on and complete all the tests
-rather than stopping at the first assertion failure like a regular Python script would.
-Looking more closely at the output, we can see that although `test_alpha` failed,
-the `actual_alpha` value of 0.9951524579316625 was awfully close to the expected value of 1.0.
-In fact,
-we don't expect the estimation routine used by `get_power_law_params` to be perfect -- it
-is an estimation after all.
-In order to edit `test_alpha` so that "close enough is good enough"
-we can borrow a `pytest` function used for equating floating point values...  
+This is a very useful feature of test runners like `pytest`:
+they continue on and complete all the tests
+rather than stopping at the first assertion failure as a regular Python script would.
 
-### Testing and floating-point values {#correct-numeric}
+## Testing Floating-Point Values {#correct-numeric}
 
-Testing floating-point values is tricky because of the way computers represent these values.
-Different operating systems, hardware,
-and software have subtle differences in how these values are stored as numbers.
-So, if we are testing a function that uses floating point numbers,
-what do we compare its result to if computers represent the number differently?
-If we try to test against a value with many decimal places (highly precise),
-the test may fail because floating point values are represented as approximations.
-No one has a good generic answer to this problem
-because its root cause is that we're using approximations,
-and each approximation has to be judged in its own context.
+Looking at the output,
+we can see that while `test_alpha` failed,
+the `actual_alpha` value of 0.9951524579316625 was very close to the expected value of 1.0.
+After a bit of thought,
+we decide that this isn't actually a failure:
+the value produced by `get_power_law_params` is an estimate,
+and being off by half a percent is good enough.
 
-So what can you do to test your programs?
-A good approach is to write a test that checks whether numbers are the same within some [tolerance][tolerance],
-which is best expressed as a relative or absolute error.
-The [absolute error][absolute-error] is the absolute value of
-the difference between the approximation and the actual value.
-The [relative error][relative-error] is the ratio of the absolute error to the value we're approximating.
+This example shows that testing scientific software
+almost always requires us to make the same kind of judgment calls
+that scientists have to make when doing any other sort of experimental work.
+If we are measuring the mass of a proton,
+we might expect ten decimal places of accuracy.
+If we are measuring the weight of a baby penguin,
+on the other hand,
+we'll probably be satisfied if we're within five grams.
+What matters most is that we are explicit about the bounds we used
+so that other people can tell what we actually did.
+
+> **Degrees of Difficulty**
+>
+> There's an old joke that physicists worry about decimal places,
+> astronomers worry about powers of ten,
+> and economists are happy if they've got the sign right.
+
+So how should we write tests when we don't know precisely what the right answer is?
+The best approach is to write tests that check
+if the actual value is within some [tolerance][tolerance] of the expected value.
+The tolerance can be expressed as the [absolute error][absolute-error],
+which is the absolute value of the difference between two,
+or the [relative error][relative-error],
+which the ratio of the absolute error to the value we're approximating.
 For example,
-if we are off by 1 in approximating 8+1 and 56+1,
-we have the same absolute error,
-but the relative error is larger in the first case than it is in the second.
+if we add 9+1 and get 11,
+the absolute error is 1 (i.e., 11-10),
+and the relative error is 10%.
+If we add 99+1 and get 101,
+on the other hand,
+the absolute error is still 1,
+but the relative error is only 1%.
 
-For our `test_alpha` function,
+For `test_alpha`,
 we might decide that an absolute error of 0.01 in the estimation of \(\alpha\) is acceptable.
-Using the `pytest` library,
-we can define this tolerance level using `pytest.approx`:
+If we are using `pytest`,
+we can check that values lie within this tolerance using `pytest.approx`:
 
 ```python
 import pytest
@@ -495,21 +500,11 @@ def test_alpha():
     assert actual_alpha == expected_alpha
 
 def test_word_count():
-    """Test the counting of words.
-    
-    The example poem is Risk, by Anais Nin.
-    """
-    risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
-                        'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
-                        'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
-                        'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
-    expected_result = Counter(risk_poem_counts)
-    with open('data/risk.txt', 'r') as reader:
-        actual_result = countwords.count_words(reader)
-    assert actual_result == expected_result
+    ...as before...
 ```
 
-Re-running pytest, all tests now pass:
+When we re-run `pytest`,
+both tests now pass:
 
 ```shell
 $ pytest
@@ -528,16 +523,14 @@ bin/test_zipfs.py ..                                                     [100%]
 
 > **Testing Visualizations**
 >
-> One thing we haven't tested is the plot of our word count data.
 > Testing visualizations is hard:
 > any change to the dimension of the plot,
 > however small,
 > can change many pixels in a [raster image][raster-image],
 > and cosmetic changes such as moving the legend up a couple of pixels
-> will similarly cause false positives.
+> will cause all of our tests to fail.
 >
 > The simplest solution is therefore to test the data used to produce the image
-> (as we've done here)
 > rather than the image itself.
 > Unless we suspect that the plotting library contains bugs,
 > the correct data should always produce the correct plot.
@@ -546,7 +539,7 @@ bin/test_zipfs.py ..                                                     [100%]
 
 FIXME: explain how to test that expected errors occurred.
 
-## Integration testing {#correct-integration}
+## Integration Testing {#correct-integration}
 
 We've seen in previous chapters that our Zipf's Law analysis is a two-step process.
 The first involves counting the words in a text
