@@ -189,6 +189,7 @@ FIXME: PLEASE ADD YOURS
 
 -   Dr. Damien B. Irving
 -   Dr. Gregory V. Wilson
+-   Joel Ostblom
 
 Name (as it would appear on a book cover):
 
@@ -196,6 +197,8 @@ FIXME: PLEASE ADD YOURS
 
 -   Damien Irving
 -   Greg Wilson
+-   Joel Ostblom
+-   Luke Johnston
 
 Mailing Address:
 
@@ -203,6 +206,8 @@ FIXME: PLEASE ADD YOURS
 
 -   For Damien Irving: 124 Marlyn Road, South Hobart, Tasmania 7004, Australia
 -   For Greg Wilson: 65 Highfield Road, Toronto, Ontario M4L 2T9, Canada
+-   For Joel Ostblom: 4227 W 12th Ave, Vancouver, British Columbia, V6R 2P8, Canada
+-   For Joel Ostblom: Vesterport 3, 2.1, 8000 Aarhus, Denmark
 
 Preferred email:
 
@@ -210,6 +215,8 @@ FIXME: PLEASE ADD YOURS
 
 -   For Damien Irving: irving.damien@gmail.com
 -   For Greg Wilson: gvwilson@third-bit.com
+-   For Joel Ostblom: joel.ostblom@protonmail.com
+-   For Luke Johnston: lwjohnst@gmail.com
 
 Website/blogs/Twitter, etc:
 
@@ -217,6 +224,8 @@ FIXME: PLEASE ADD YOURS
 
 -   For Damien Irving: https://damienirving.github.io/
 -   For Greg Wilson: http://third-bit.com
+-   For Joel Ostblom: https://joelostblom.com 
+-   For Luke Johnston: http://lukewjohnston.com
 
 **9. Schedule**
 
