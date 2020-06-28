@@ -632,7 +632,7 @@ the Python installation you are using.
 This might differ slightly on different systems.
 
 
-## How can I distribute software packages that I have created? {#package-py-distribute}
+## Distributing your package {#package-py-distribute}
 
 With our package working, testable, installable, and documented,
 we should distribute it so anyone can just `pip install zipf`
@@ -715,7 +715,7 @@ View at:
 https://test.pypi.org/project/zipf/0.1/
 ```
 
-```{r packaging-testpypi, echo=FALSE, fig.cap="Our new project at https://test.pypi.org/project/zipf/0.1/"}
+```{r packaging-testpypi, echo=FALSE, fig.cap="Our new project at `https://test.pypi.org/project/zipf/0.1/`"}
 knitr::include_graphics("figures/py-rse/packaging/testpypi.png")
 ```
 
@@ -777,88 +777,107 @@ for each function and module,
 which is something we've been doing throughout the development
 of our Zipf's Law code (Section \@ref(scripting-docstrings)).
 This is one of the most important steps,
-since it means that others can understand what each function is meant to do,
+as it means others can understand what each function is meant to do
 without going through the source code.
 
 What is missing is an introduction to what our package is meant to do,
 instructions on how to install it,
 and some examples of how it can be used.
 We can include these elements in our "README" file,
-which we first created when learning about git conflicts 
-(Section \@ref(git-advanced-conflict))... and mentioned again in Section 12.X FIXME
+which we created earlier (Chapter \@ref(git-advanced)).
+At the moment it reads as follows:
 
-```
+```shell
 $ cat README.md
-
 ```
 
-This file could be a plain text or regular markdown format,
-bit in the Python community much documentation is written in
-[reStructuredText][restructured-text],
-which is
-a markup format for plain text documents which can be rendered
-into documents with quite complex indexes and cross-linking
-by many documentation tools; GitHub will recognize reST files
-ending in `.rst` and display them nicely. We'll use that here;
-titles are underlined and overlined, section headings are underlined,
+```text
+# Zipf's Law
+
+These Zipf's Law scripts tally the occurrences of words in text files
+and plot each word's rank versus its frequency,
+together with a line for the theoretical distribution for Zipf's Law.
+
+## Contributors
+
+- Amira Khan <amira@zipf.org>
+- Sami Virtanen <sami@zipf.org>
+```
+
+Our README file is currently written in regular [markdown][markdown] format,
+which as we've seen can be preferable to plain text
+because GitHub recognises markdown files ending in `.md` and displays them nicely.
+It would be fine to continue to work in markdown format,
+however in this case we ultimately want to  
+create a website for our package documentation (Section \@ref(package-py-sphinx)).
+The most popular documentation generators in the Python community use 
+[reStructuredText][restructured-text], so we should switch to that.
+Similar to markdown, reST is a markup format for plain text documents,
+which can be rendered into documents with quite complex indexes
+and cross-linking by many documentation tools;
+GitHub will recognize reST files ending in `.rst` and display them nicely.
+
+```shell
+$ git mv README.md README.rst
+```
+
+In the updated `README.rst` file below,
+notice that titles are underlined and overlined,
+section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented.
-So let's create a `README.rst`:
 
-An example of a good `README.rst` file for our project would be:
-
-FIXME
-
-```markdown
-# zipf
-
-The `zipf` package tallies the occurrences of words in text files
+```text
+The ``zipf`` package tallies the occurrences of words in text files
 and plots each word's rank versus its frequency
 together with a line for the theoretical distribution for Zipf's Law.
 
-## Motivation
+Motivation
+----------
 
 Zipf’s Law is often stated as an observational pattern seen in the
 relationship between the frequency and rank of words in a text:
 
-> "…the most frequent word will occur approximately twice as often as
-> the second most frequent word, three times as often as the third most
-> frequent word, etc."
-> — <https://en.wikipedia.org/wiki/Zipf%27s_law>
+`"…the most frequent word will occur approximately twice as often
+as the second most frequent word,
+three times as often as the third most
+frequent word, etc."`  
+— `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
 
-As many books are available to download in plain text format
-from sites such as [Project Gutenberg](https://www.gutenberg.org/),
-we created this package to qualitatively explore how well different books align
+Many books are available to download in plain text format
+from sites such as `Project Gutenberg <https://www.gutenberg.org/>`_,
+so we created this package to qualitatively explore how well different books align
 with the word frequencies predicted by Zipf's Law.
 
-## Installation
+Installation
+------------
 
 For now,
 this package can be installed by downloading the package directory
-and running `pip install .` from inside the `zipf` folder.
-It will soon be available for download directly via `pip`,
+and running ``pip install .`` from inside the ``zipf`` folder.
+It will soon be available for download directly via ``pip``,
 stay tuned!
 
-## Usage
+Usage
+-----
 
 After installing this package,
 the following three commands will be available from the command line
 
-- `countwords` for counting the occurrences of words in a text.
-- `collate` for collating multiple word count files together.
-- `plotcounts` for visualizing the word counts.
+- ``countwords`` for counting the occurrences of words in a text.
+- ``collate`` for collating multiple word count files together.
+- ``plotcounts`` for visualizing the word counts.
 
-A typical usage scenario would include running the following from your terminal.
+A typical usage scenario would include running the following from your terminal::
 
+    countwords dracula.txt > dracula.csv
+    countwords moby_dick.txt > moby_dick.csv
+    collate dracula.csv moby_dick.csv > collated.csv
+    plotcounts collated.csv --outfile zipf-drac-moby.jpg
+
+Additional information on each function
+can be found in their docstrings and appending the ``-h`` flag,
+e.g. ``countwords -h``.
 ```
-countwords dracula.txt > dracula.csv
-countwords moby_dick.txt > moby_dick.csv
-collate dracula.csv moby_dick.csv > collated.csv
-plotcounts collated.csv --outfile zipf-drac-moby.jpg
-```
-
-Additional information on each function can be found in their docstrings and appending the `-h` flag,
-e.g. `countwords -h`.
-````
 
 For simple packages,
 carefully written docstrings and READMEs
@@ -873,16 +892,13 @@ We will see how to do this next.
 
 ### Creating a web page for documentation {#package-py-sphinx}
 
-When you've viewed documentation for large Python packages,
-they have very likely been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
-a package for writing software documentation and generating web packages
-for that documentation that is widely used in the Python community.
-When combined with [Read The Docs](https://readthedocs.org),
-a free service for hosting that online documentation
-that includes tools to automatically update documentation
-when your package and its documentation changes,
-and that understands documents written to support Sphinx,
-it is an extremely useful way to build both documentation and an online home for your package.
+If you've ever viewed the online documentation for a large Python package,
+it's likely to have been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
+a package for writing software documentation and generating web packages.
+When combined with [Read The Docs](https://readthedocs.org) --
+a free service for hosting online documentation
+that understands documents written to support Sphinx --
+it is an extremely useful way to build documentation and an online home for your package.
 Both tools recognize reStructuredText files.
 
 We'll start by putting together a minimal set of documentation
@@ -890,35 +906,67 @@ that includes the `README.rst` file we just created
 and the docstrings we've written along the way.
 Sphinx makes it relatively straightforwrd to get started,
 using the `quickstart` tool.
-We'll create doucmentation in a `docs/` directory at the top of our repository:
+Let's install Sphinx and create a `docs/` directory at the top of our repository:
 
-```bash
+```shell
+$ pip install sphinx
 $ mkdir docs
 $ cd docs
+```
+
+We can then run the `quickstart` tool to get started.
+We'll be asked to specify the project's name, our (the author's) name, and a release.
+Otherwise we can use the default settings.
+
+```shell
 $ sphinx-quickstart
 ```
 
-We'll be asked to specify the project's name, our (the author's) name, and
-a release.  Otherwise we can mostly use the defaults, but we'll want
-to use specfiy that we do want autodoc to automatically insert our docstrings:
-
 ```text
-...
+Welcome to the Sphinx 3.1.1 quickstart utility.
+
+Please enter values for the following settings (just press Enter to
+accept a default value, if one is given in brackets).
+
+Selected root path: .
+
+You have two options for placing the build directory for Sphinx output.
+Either, you use a directory "_build" within the root path, or you separate
+"source" and "build" directories within the root path.
+> Separate source and build directories (y/n) [n]: n
+
 The project name will occur in several places in the built documentation.
-> Project name: zipfpy
-> Author name(s): Terry Pratchett
-> Project release []: 1.0
-...
-> autodoc: automatically insert docstrings from modules (y/n) [n]: y
-...
+> Project name: zipf
+> Author name(s): Amira Khan
+> Project release []: 0.1
+
+If the documents are to be written in a language other than English,
+you can select a language here by its language code. Sphinx will then
+translate text that it generates into that language.
+
+For a list of supported codes, see
+https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
+> Project language [en]: 
+
+Creating file /Users/amira/zipf/docs/conf.py.
+Creating file /Users/amira/zipf/docs/index.rst.
+Creating file /Users/amira/zipf/docs/Makefile.
+Creating file /Users/amira/zipf/docs/make.bat.
+
+Finished: An initial directory structure has been created.
+
+You should now populate your master file /Users/amira/zipf/docs/index.rst and create other documentation
+source files. Use the Makefile to build the docs, like so:
+   make builder
+where "builder" is one of the supported builders, e.g. html, latex or linkcheck.
 ```
 
-Once that is complete, there will be a file called `conf.py` in the docs
-directory that configures Sphinx.  We'll make one change to that, so that
-autodoc can find our module (and its docstrings).
-
-First, we'll set the "Path setup" section, which starts very near the head
-of the file:
+Once that is complete,
+there will be a file called `conf.py` in the `docs` directory that configures Sphinx.
+We'll make two changes to that file,
+so that autodoc can find our modules (and their docstrings).
+The first change relates to the "path setup" section,
+which starts very near the head of the file:
 
 ```text
 # -- Path setup --------------------------------------------------------------
@@ -928,40 +976,62 @@ of the file:
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 ```
 
-Here we those extensions are in another directory, so we'll uncomment those
-lines below and add another pointing up one level from `docs/` so that we have:
+Relative to the `docs/` directory,
+our modules (i.e. `countwords.py`, `utilities.py`, etc) are located in the `../zipf` directory.
+We therefore need to uncomment the relevant lines of the path setup section in `conf.py`
+to tell Sphinx where those modules are:
 
 ```python
 import os
 import sys
 
+sys.path.insert(0, os.path.abspath('../zipf'))
+```
+The second change relates to the "general configuration" section,
+where we need to add autodoc to the list of extensions:
 
-sys.path.insert(0, os.path.abspath('./'))
-sys.path.insert(0, os.path.abspath('../'))
+```python
+extensions = ['sphinx.ext.autodoc']
 ```
 
-With that done, we can generate run a sphinx autodoc script which will read
-the docstrings from our package and include them into .rst files in the
-`docs/source` directory:
+With those edits to `conf.py` complete,
+we can now generate a sphinx autodoc script that will read the docstrings from our package
+and include them into `.rst` files in the `docs/source` directory:
 
-```bash
-sphinx-apidoc -o source/ ../zipfpy
+```shell
+sphinx-apidoc -o source/ ../zipf
 ```
-
-Now we're ready.  In the `/docs` directory there's a Makefile,
-generated by `sphinx-quickstart`;
-if we run `make html`
-and in a web browser open the file `docs/_build/index.html` we'll have a very minimal
-documentation in a familiar looking form; if you look under `modules` you will
-see the documentation for the individual modules.  But that first page is
-still a little sparse.
-
-If we add the line `.. include:: ../README.rst` to the `docs/index.rst` file
-at the beginning, so that page starts with our README, and then include a direct
-link to the zipfpy package documentation:
 
 ```text
-Welcome to Zipfpy's documentation!
+Creating file source/collate.rst.
+Creating file source/countwords.rst.
+Creating file source/plotcounts.rst.
+Creating file source/test_zipfs.rst.
+Creating file source/utilities.rst.
+Creating file source/modules.rst.
+```
+
+Now we're ready to generate our webpage.
+In the `/docs` directory there's a Makefile that was generated by `sphinx-quickstart`.
+If we run `make html` and open the file `docs/_build/index.html` in a web broswer
+we'll have some (very minimal) documentation in a familiar looking form; 
+if you look under `modules` you will
+see the documentation for the individual modules.
+
+```{r packaging-sphinx-module-list, echo=FALSE, fig.cap="The module index at `file:///Users/amira/zipf/docs/_build/html/py-modindex.html`"}
+knitr::include_graphics("figures/py-rse/packaging/module_index.png")
+```
+
+```{r packaging-sphinx-module-countwords, echo=FALSE, fig.cap="The countwords documentation at `file:///Users/z3526123/Desktop/zipf/docs/_build/html/source/countwords.html#module-countwords"}
+knitr::include_graphics("figures/py-rse/packaging/module_countwords.png`")
+```
+
+The first/landing page for the website is the perfect place for the contents of our README file,
+so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file
+to include it.
+
+```text
+Welcome to Zipf's documentation!
 ==================================
 
 .. include:: ../README.rst
@@ -969,8 +1039,6 @@ Welcome to Zipfpy's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
-   zipfpy
 
 Indices and tables
 ==================
@@ -980,81 +1048,65 @@ Indices and tables
 * :ref:`search`
 ```
 
-and rerun `make html`, we now get an updated set of web pages which
-re-uses your README to be the introduction to the documentation.
+If we re-run `make html`,
+we now get an updated set of web pages that
+re-uses our README as the introduction to the documentation.
 
-Note that we needed additional packages to build the documentation
-here that is not reflected in our `requirements.txt`; the `Sphinx`
-package and its dependencies.
+```{r packaging-sphinx-landing-page, echo=FALSE, fig.cap="The landing page at `file:///Users/amira/zipf/docs/_build/html/index.html`"}
+knitr::include_graphics("figures/py-rse/packaging/landing_page.png")
+```
 
-They aren't needed for running, developing, or even testing
-the package, but it is needed for building the documentation.
-To note this requirement, but without requiring everyone installing
-the package to have `Sphinx`
-installed, let's create a `requirements_docs.txt` file that contains
+Now that we've successfully generated the html pages for our website,
+we should pause and note that Sphinx is not captured
+in our list of installation requirements (`requirements.txt`; Section \@ref(correct-ci)).  
+Sphinx isn't needed to run, develop, or even test our package,
+but it is needed for building the documentation.
+To note this requirement,
+but without requiring everyone installing the package to have Sphinx installed,
+let's create a `requirements_docs.txt` file that contains
 only those things (where versions come from `pip freeze`):
 
 ```text
 Sphinx>=1.7.4
 ```
 
-Then anyone wanting to build the documentation (including you, on another computer)
+Now anyone wanting to build the documentation (including us, on another computer)
 need only run `pip install -r requirement_docs.txt`
 
 This breakdown of requirements by use case is often seen with packages
-that have a `requirements_dev.txt` for additional packaged not needed
-for users of the package, but for its development and testing.  For this
-package, we could usefully pull out `pytest` from our `requirements.txt`
-into a `requirements_dev.txt`
+that have a `requirements_dev.txt` file for additional packages
+not needed for users of the package,
+but for its development and testing.
+For this package,
+we could usefully pull out `pytest` from `requirements.txt`
+into a new `requirements_dev.txt` file.
 
-### How do I put the documentation for my package online? {#package-py-rtd}
+### Hosting your documentation online? {#package-py-rtd}
 
-There are a number of ways of hosting the web pages that document
-your project.  A very common option, particularly for Python
-projects, is [Read The Docs](https://readthedocs.org), a community
-supported site which hosts software documentation free of charge.
+There are a number of ways of hosting the web pages that document your project.
+A very common option, particularly for Python projects,
+is [Read The Docs](https://readthedocs.org),
+which is a community supported site that hosts software documentation free of charge.
 
-Read The Docs integrates nicely with GitHub, which will allow
-you to have the documentation re-built automatically upon update
-of your repository.  Thus we recommend
-[registering for Read The Docs](https://readthedocs.org/accounts/signup/) with your GitHub
-account.
+Read The Docs integrates nicely with GitHub,
+so that the online documentation is automatically re-built
+(similar to continuous integration; Section \@ref(correct-ci))
+every time any updates are pushed to GitHub.
+Thus we recommend
+[registering for Read The Docs](https://readthedocs.org/accounts/signup/)
+with your GitHub account.
 
-Once you have registered for Read The Docs, confirmed your email, and signed in,
-you will be able to add new projects by [importing a project](https://readthedocs.org/dashboard/import/?)
-from your github repository; Read The Docs will then build the documentation
-(_e.g._, run make) and host the resulting files.  For this to work, all of
-the source files (in our case, `docs/source/modules.rst`, `docs/source/zipfpy.rst`,
-`docs/Makefile`, `docs.conf.py`) need to be checked into your repository.
+Once you have registered for Read The Docs,
+you will be able to add new projects by importing a project
+from your GitHub repository;
+Read The Docs will then build the documentation
+(i.e., it runs `make html`) and host the resulting files.
+For this to work, all of the source files
+(in our case, `docs/source/*.rst`, `docs/Makefile`, `docs/conf.py` and `docs/index.rst`)
+need to be checked into your repository.
+If we named our project `zipf`,
+the documents would be available at https://zipf.readthedocs.io/en/latest/.
 
-Then you should be able to build; after a few minutes, your documents should
-be visible!  If you named your project, _e.g._, `pterry_zipfpy`, your
-documents will be available at
-[`https://pterry_zipfpy.readthedocs.io/en/latest/`](https://pterry_zipfpy.readthedocs.io/en/latest/).
-
-As with [continuous integration with Travis-CI](integrate.html#integrate-basic),
-GitHub works with ReadTheDocs so that if you have set up your ReadTheDocs project
-with your GitHub account, changes to the documentation will automatically result
-in the online documentation being rebuilt.
-
-Also as with continuous integration testing, there are badges for your README linking
-both to the documentation and reporting on the status of the documentation build;
-you would be able to add that badge and link by adding the following line to your
-`README.rst`:
-
-```text
-.. image:: https://pterry_zipfpy.readthedocs.io/en/latest/?badge=latest
-    :target: https://readthedocs.org/projects/pterry_zipfpy/badge/?version=latest
-    :alt: Documentation Status
-```
-
-Note the syntax for adding an image to a reST file; `.. image::` followed by the link
-to the image, and additional, optional fields on indented lines, such as `:target:` for
-a link to follow when the image is clicked, and `:alt:` for alternate text for the image.
-
-### Announcing Work {#package-py-announce}
-
-FIXME: <https://medium.com/indeed-engineering/marketing-for-data-science-a-7-step-go-to-market-plan-for-your-next-data-product-60c034c34d55>
 
 ## Summary {#package-py-summary}
 
@@ -1069,6 +1121,8 @@ if (knitr::is_latex_output()) {
 FIXME: summarize Python packaging chapter
 
 ## Exercises
+
+FIXME: The exercises below have not been updated since the latest Zipf's Law narrative was implemented.
 
 ### Exercises: Examining the virtual environment
 
