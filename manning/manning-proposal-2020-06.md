@@ -190,6 +190,7 @@ FIXME: PLEASE ADD YOURS
 -   Dr. Damien B. Irving
 -   Dr. Gregory V. Wilson
 -   Joel Ostblom
+-   Dr. Luke W. Johnston
 
 Name (as it would appear on a book cover):
 
