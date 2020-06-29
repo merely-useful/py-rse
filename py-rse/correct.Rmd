@@ -535,31 +535,86 @@ bin/test_zipfs.py ..                                                     [100%]
 > Unless we suspect that the plotting library contains bugs,
 > the correct data should always produce the correct plot.
 
-## Testing error handling {#correct-failure}
+## Testing Error Handling {#correct-failure}
 
-FIXME: explain how to test that expected errors occurred.
+An alarm isn't much use if it doesn't go off when it's supposed to.
+Equally,
+if a function doesn't raise an exception when it should (Section \@ref(errors-exceptions)),
+errors can easily slip past us.
+If we want to check that a function called `func` raises an `ExpectedError` exception
+we can use the following template:
+
+```python
+...set up fixture...
+try:
+    actual = func(fixture)
+    assert False, 'Expected function to raise exception'
+except ExpectedError as error:
+    pass
+except Exception as error:
+    assert False, 'Function raised the wrong exception'
+```
+
+This template has three cases:
+
+1.  If the call to `func` returns a value without throwing an exception
+    then something has gone wrong,
+    so we `assert False` (which always fails).
+
+2.  If `func` raises the error it's supposed to
+    then we go into the first `except` branch
+    *without* triggering the `assert` immedately below the function call.
+    The code in this `except` branch could check that
+    the exception contains the right error message,
+    but in this case it does nothing
+    (which in Python is written `pass`).
+
+3.  Finally,
+    if the function raises the wrong kind of exception
+    we also `assert False`.
+    Checking this case might seem overly cautious,
+    but if the function raises the wrong kind of exception,
+    users could easily fail to catch it.
+
+This pattern is so common that `pytest` provides support for it.
+Instead of the eight lines in our original example,
+we can instead write:
+
+```python
+import pytest
+
+...set up fixture...
+with pytest.raises(ExpectedError):
+    actual = func(fixture)
+```
+
+The argument to `pytest.raises` is the type of exception we expect.
+The call to the function then goes in the body of the `with` statement.
+We will explore `pytest.raises` further in the exercises.
 
 ## Integration Testing {#correct-integration}
 
-We've seen in previous chapters that our Zipf's Law analysis is a two-step process.
-The first involves counting the words in a text
-and the second involves estimating the \(\alpha\) parameter from the word count.
-Our unit tests `test_word_count` and `test_alpha` have checked that these two
-individual components work in isolation, but do they work correctly together?
-Checking that multiple units work correctly together is called *integration testing*.
+Our Zipf's Law analysis has two steps:
+counting the words in a text
+and estimating the \(\alpha\) parameter from the word count.
+Our unit tests give us some confidence that these components work in isolation,
+but do they work correctly together?
+Checking that is called [integration testing][integration-testing].
 
-The structure of integration tests is very similar to that of unit tests.
-There is an expected result, which is compared against the actual result.
-However, the work involved in creating the expected result
-and/or setting up the code to run
-can be considerably more complicated and involved. 
+Integration tests are structured the same way as unit tests:
+a fixture is used to produce an actual result
+that is compared against the expected result.
+However,
+creating the fixture and running the code
+can be considerably more complicated. 
 For example,
 in the case of our Zipf's Law software an appropriate integration test fixture
 might be a text file with a word frequency distribution that has a known alpha value. 
 In order to create this text fixture,
-we'll need a way of generating random words.
-Fortunately, a Python library exits to do just that.
-We can install it (and the `pypandoc` library it depends on) at the command line
+we need a way to generate random words.
+
+Fortunately, a Python library called `randomwordgenerator` exists to do just that.
+We can install it and the `pypandoc` library it depends on
 using the Python Package Installer (pip): 
 
 ```shell
@@ -569,8 +624,7 @@ $ pip install randomwordgenerator
 
 Borrowing from the word count distribution we created for `test_alpha`,
 we can then create a text file full of random words
-with a frequency distribution that corresponds to an alpha value
-of approximately 1.0.
+with a frequency distribution that corresponds to an \(\alpha\) of approximately 1.0:
 
 ```python
 import numpy as np
@@ -579,14 +633,14 @@ from randomwordgenerator import randomwordgenerator
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
 random_words = randomwordgenerator.generate_random_words(n=max_freq)
-fout = open('data/random_words.txt', 'w')
+writer = open('data/random_words.txt', 'w')
 for index in range(max_freq):
     word_sequence = f"{random_words[index]} " * int(word_counts[index])
-    fout.write(word_sequence + '\n')
-fout.close()
+    writer.write(word_sequence + '\n')
+writer.close()
 ```
 
-The following integration test can then be added to `test_zipfs.py`,
+We can then add this integration test to `test_zipfs.py`:
 
 ```python
 def test_integration():
@@ -600,7 +654,8 @@ def test_integration():
     assert actual_alpha == expected_alpha
 ```
 
-and we can re-run `pytest` to see whether the integration test passes.
+Finally,
+we re-run `pytest` to check that the integration test passes:
 
 ```shell
 $ pytest
@@ -618,24 +673,28 @@ bin/test_zipfs.py ...                                                    [100%]
 ```
 
 
-## Regression testing {#correct-regression}
+## Regression Testing {#correct-regression}
 
-So far we've tested two simplified texts --
-a short poem and a collection of random words
-with a known frequency distribution -- but not a "real"  text.
-The problem with testing a large text is that we don't know the expected result 
-(e.g. it's not practical to sit and count the words in Dracula by hand).
-For this kind of situation we can consider *regression testing*.
+So far we have tested two simplified texts:
+a short poem and a collection of random words with a known frequency distribution.
+The next step is to test with real data,
+i.e., an actual book.
+The problem is,
+we don't know the expected result:
+it's not practical to count the words in Dracula by hand,
+and even if we tried,
+the odds are good that we'd make a mistake.
+For this kind of situation we can use [regression testing][regression-testing].
 Rather than assuming that the test author knows what the expected result should be,
-regression tests look to the past for the expected behavior.
-The expected result is taken as what was previously computed for the same inputs.
-In this way regression tests are great for letting developers know when and how a code base has changed,
-but not great for letting anyone know why the change occurred.
-The change between what a code produces now and what it computed before is called a regression.
+regression tests compares today's answer with a previous one.
+This doesn't guarantee that the answer is right---if the original answer is wrong,
+we could carry that mistake forward indefinitely---but
+it does draw attention to any changes,
+or [regressions][regression].
 
 In Section \@ref(git-advanced-zipf-verify)
-we calculated an \(\alpha\) value of 1.1620041050803658 for Dracula.
-We can use this expected result to add a regression test to `test_zipfs.py`:
+we calculated an \(\alpha\) of 1.1620041050803658 for *Dracula*.
+Let's use that value to add a regression test to `test_zipfs.py`:
 
 ```python
 def test_regression():
@@ -664,19 +723,342 @@ bin/test_zipfs.py ....                                                   [100%]
 ============================== 4 passed in 0.56s ===============================
 ```
 
-## When to write tests
+## Test Coverage {#correct-coverage}
 
-We've now met the three major types of test: unit, integration and regression.
-At what point in the code development process should we be writing these tests?
+How much of our code do the tests we have written so far actually check?
+To find out,
+we can use a tool to check their [coverage][coverage].
+Most Python programmers use the `coverage` library,
+which we can once again install using `pip`:
+
+```shell
+$ pip install coverage
+```
+
+Once we have it,
+we can use it to run `pytest` on our behalf:
+
+```shell
+$ coverage run -m pytest
+```
+
+```text
+====================================== test session starts =======================================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+rootdir: /Users/amira
+collected 4 items                                                                                
+
+bin/test_zipfs.py ....                                                                     [100%]
+
+======================================= 4 passed in 0.72s ========================================
+```
+
+The `coverage` command doesn't display any information of its own,
+since mixing that in with our program's output would be confusing.
+Instead,
+it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
+To display that data,
+we run:
+
+```shell
+$ coverage report -m
+```
+
+```text
+Name            Stmts   Miss  Cover   Missing
+---------------------------------------------
+countwords.py      20      8    60%   19-21, 25-31
+plotcounts.py      46     27    41%   41-47, 67-69, 74-90, 94-104
+test_zipfs.py      32      0   100%
+utilities.py        7      4    43%   24-27
+---------------------------------------------
+TOTAL             105     39    63%
+```
+
+This summary shows us that
+some lines of `countwords.py` or `plotcounts.py`
+were not executed when we ran the tests:
+in fact,
+only 60% and 41% of the lines were run respectively.
+This makes sense,
+since much of the code in those scripts
+is devoted to handling command line arguments or file I/O
+rather than the word counting and parameter estimation functionality 
+that our unit, integration and regression tests focus on.
+
+To make sure that's the case,
+we can get a more complete report by running `coverage html` at the command line
+and opening `htmlcov/index.html`.
+Clicking on the name of our `countwords.py` script, for instance,
+produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
+
+```{r python-coverage, echo=FALSE, fig.cap="Coverage report"}
+knitr::include_graphics("figures/py-rse/correct/python-coverage.png")
+```
+
+This output confirms that all lines relating to word counting were tested,
+but not any of the lines related to argument handling or I/O.
+
+Is this good enough?
+The answer depends on what the software is being used for and by whom.
+If it is for a safety-critical application such as a medical device,
+we should aim for 100% code coverage,
+i.e.,
+every single line in the application should be tested.
+In fact,
+we should probably go further and aim for 100% [path coverage][path-coverage]
+to ensure that every possible path through the code has been checked.
+Similarly,
+if the software has become popular and is being used by thousands of researchers all over the world,
+we should probably check that it's not going to embarrass us.
+
+But most of us don't write software that people's lives depend on,
+or that is in a "top 100" list,
+so requiring 100% code coverage is like asking for ten decimal places of accuracy
+when checking the voltage of a household electrical outlet.
+We always need to balance the effort required to create tests
+against the likelihood that those tests will uncover useful information.
+We also have to accept that no amount of testing
+can prove a piece of software is completely correct.
+A function with only two numeric arguments has 2^128^ possible inputs.
+Even if we could write the tests,
+how could we be sure we were checking the result of each one correctly?
+
+Luckily,
+we can usually put test cases into groups.
+For example,
+when testing a function that summarizes a table full of data,
+it's probably enough to check that it handles table with:
+
+-   no rows
+-   only one row
+-   many identical rows
+-   rows having keys that are supposed to be unique, but aren't
+-   rows that contain nothing but missing values
+
+Some projects develop [checklists][checklist] like this one
+to remind programmers what they ought to test.
+These checklists can be a bit daunting for newcomers,
+but they are a great way to pass on hard-earned experience.
+
+## Continuous Integration {#correct-ci}
+
+Now that we have a set of tests,
+we could run `pytest` every now and again to check our code. 
+This is probably sufficient for short-lived projects,
+but if several people are involved,
+or if we are making changes over weeks or months,
+we might forget to run the tests
+or it might be difficult to identify which change is responsible for a test failure.
+
+The solution is [continuous integration][continuous-integration] (CI),
+which runs tests automatically whenever a change is made.
+CI tells developers immediately if changes have caused problems,
+which makes them much easier to fix.
+CI can also be set up to run tests with several different configurations of the software
+or on several different operating systems,
+so that a programmer using Windows
+can be warned that a change breaks things for Mac users and vice versa.
+
+One popular CI tool is [Travis CI][travis-ci],
+which integrates well with [GitHub][github].
+If Travis CI has been set up,
+then every time a change is committed to a GitHub repository,
+Travis CI creates a fresh environment,
+makes a fresh clone of the repository (Section \@ref(git-advanced-fork)),
+and runs whatever commands the project's managers have set up.
+
+To set up CI for a project, we must:
+
+1.  Create an account on [Travis CI][travis-ci] (if we don't already have one).
+2.  Link our Travis CI account to our GitHub account (if we haven't done so already).
+3.  Tell Travis CI to watch the repository that contains our project.
+
+Creating an account with an online service is probably a familiar process,
+but linking our Travis CI account to our GitHub account may be something new.
+We only have to do this once
+to allow Travis CI to access all our GitHub repositories,
+but we should always be careful when giving sites access to other sites,
+and only trust well-established and widely-used services.
+
+Once we have created an account,
+we can tell Travis CI which repository we want it to watch
+by clicking the "+" next to the "My Repositories" link
+on the left-hand side of the Travis CI homepage (\@ref(fig:correct-add-repo)).
+
+```{r correct-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI"}
+knitr::include_graphics("figures/py-rse/correct/travis-add-repo.png")
+```
+
+To add the GitHub repository we have been using throughout the course,
+find it in the repository list
+and toggle the switch so that it turns green
+(Figure \@ref(fig:correct-list-repos)).
+If the repository doesn't show up,
+re-synchronize the list using the green "Sync account" button on the left sidebar.
+If it still doesn't appear,
+the repository may belong to someone else or be private.
+
+```{r correct-list-repos, echo=FALSE, fig.cap="Find your Zipf's Law repository and switch it on"}
+knitr::include_graphics("figures/py-rse/correct/travis-list-repos.png")
+```
+
+The next step is to tell Travis CI what we want it to do
+by creating a file called `.travis.yml`.
+(The leading `.` in the name hides the file from casual listings on Mac or Linux,
+but not on Windows.)
+This file must be in the root directory of the repository,
+and is written in [YAML][yaml]
+(Section \@ref(configuration-formats) and Appendix \@ref(yaml)).
+For our project,
+we add the following lines:
+
+```yaml
+language: python
+
+python:
+- "3.6"
+
+script:
+- pytest
+```
+
+The `language` key tells Travis CI which programming language to use,
+so that it knows which of its standard [virtual machines][virtual-machine] to use
+as a starting point for the project.
+The `python` key specifies the version or versions of Python to use, 
+while the `script` key lists the commands to run---in this case, `pytest`.
+We can now go ahead and push the `.travis.yml` file to GitHub.
+
+```shell
+$ git add .travis.yml 
+$ git commit -m "Initial commit of travis configuration file"
+```
+```text
+[master 71084f7] Initial commit of travis file
+ 1 file changed, 4 insertions(+)
+ create mode 100644 .travis.yml
+```
+```shell
+$ git push origin master
+```
+```text
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/amira-khan/zipf.git
+   1f0590b..71084f7  master -> master
+```
+
+When this commit reaches GitHub,
+that sites notifies Travis CI that the repository has changed.
+Travis CI then follows the instructions in `.travis.yml`
+and reports whether the build passed (shown in green)
+or produced warnings or errors (shown in red).
+To create this report, Travis CI has:
+
+1.  Created a new Linux virtual machine.
+1.  Installed the desired version of Python.
+1.  Ran the commands below the `script` key.
+1.  Reported the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
+    where <code><em>user/repo</em></code>
+    identifies the repository.
+
+In this case,
+we can see that the build failed (Figure \@ref(fig:correct-build-fail)).
+
+```{r correct-build-fail, echo=FALSE, fig.cap="Travis Build Overview"}
+knitr::include_graphics("figures/py-rse/correct/travis-build-fail.png")
+```
+
+Scrolling down to read the job log in detail,
+it says that it "could not locate requirements.txt."
+This happens because the Python scripts that are run when `pytest` is executed
+(i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `utilities.py`)
+import a number of packages that don't come with the
+[Python Standard Library][python-standard-library].
+To fix this problem,
+we need to do two things.
+The first is to add an `install` key to `.travis.yml`: 
+
+```yaml
+language: python
+
+python:
+- "3.6"
+
+install:
+- pip install -r requirements.txt
+
+script:
+- pytest
+```
+
+The second is to create `requirements.txt`,
+which lists the libraries that need to be installed:
+
+```text
+numpy
+pandas
+matplotlib
+scipy
+pytest
+pyyaml
+```
+
+We commit these changes to GitHub:
+
+```shell
+$ git add .travis.yml requirements.txt
+$ git commit -m "Adding requirements"
+```
+```text
+[master d96593f] Adding requirements
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+ create mode 100644 requirements.txt
+```
+```shell
+$ git push origin master
+```
+```text
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/amira-khan/zipf.git
+   1f0590b..71084f7  master -> master
+```
+
+Travis CI automatically runs again.
+This time our tests pass and the build completes successfully
+(Figure \@ref(fig:correct-build-pass)).
+
+```{r correct-build-pass, echo=FALSE, fig.cap="Travis Build Overview"}
+knitr::include_graphics("figures/py-rse/correct/travis-build-pass.png")
+```
+
+This example shows one of the other benefits of CI:
+it forces us to be explicit about what we are doing and how we do it,
+just as writing a Makefile forces us to be explicit about exactly how we produce results @Zamp2020.
+
+## When to Write Tests {#correct-tdd}
+
+We have now met the three major types of test: unit, integration and regression.
+At what point in the code development process should we write these?
 The answer depends on who you ask.
+
 Many programmers are passionate advocates of a practice called
 [test-driven development][tdd] (TDD).
 Rather than writing code and then writing tests,
 they write the tests first and then write just enough code to make those tests pass.
 Once the code is working,
 they clean it up (Section \@ref(style-refactor)) and then move on to the next task.
-
-TDD's advocates claim that working this way leads to better code in less time because:
+TDD's advocates claim that this leads to better code because:
 
 1.  Writing tests clarifies what the code is actually supposed to do.
 
@@ -713,8 +1095,8 @@ we could call this process [checking-driven development][cdd] (CDD).
 Each time we add a step to our pipeline and look at its output,
 we can also add a check of some kind to the pipeline to ensure that
 what we are checking for remains true as the pipeline evolves or is run on other data.
-This helps reusability—it's amazing how often a one-off analysis
-winds up being used many times—but the real goal is comprehensibility.
+Doing this helps reusability---it's amazing how often a one-off analysis
+winds up being used many times---but the real goal is comprehensibility.
 If someone can get our code and data,
 then runs the code on the data,
 and gets the same result that we did,
@@ -726,103 +1108,10 @@ but they won't check that assumptions and invariants hold.
 And unlike comments,
 runnable assertions can't fall out of step with what the code is actually doing.
 
-## Test coverage {#correct-coverage}
-
-In defining tests for counting words and calculating the \(\alpha\) parameter,
-it's likely that we have now tested (or "covered") all critical lines of our code.
-To be sure,
-we can use a tool to check the coverage of our tests.
-Most Python programmers use the `coverage` library:
-
-```shell
-$ pip install coverage
-```
-
-Using the command-line utility that comes with the install,
-we can then run `pytest` under coverage:
-
-```shell
-$ coverage run -m pytest
-```
-
-```text
-====================================== test session starts =======================================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
-rootdir: /Users/amira
-collected 4 items                                                                                
-
-bin/test_zipfs.py ....                                                                     [100%]
-
-======================================= 4 passed in 0.72s ========================================
-```
-
-This coverage command hasn't displayed any information of its own;
-instead,
-it puts coverage data in a file called `.coverage` (with a leading `.`) in the current directory.
-To display that data,
-we run:
-
-```shell
-$ coverage report -m
-```
-
-```text
-Name            Stmts   Miss  Cover   Missing
----------------------------------------------
-countwords.py      20      8    60%   19-21, 25-31
-plotcounts.py      46     27    41%   41-47, 67-69, 74-90, 94-104
-test_zipfs.py      32      0   100%
-utilities.py        7      4    43%   24-27
----------------------------------------------
-TOTAL             105     39    63%
-```
-
-From this coverage summary,
-we can see that not every single line of `countwords.py` or `plotcounts.py`
-was executed when we ran the tests (only 60% and 41% of the lines were run, respectively).
-This would seem to make sense, because much of the code in those scripts
-is devoted to handling command line arguments or file input/output,
-rather than the word counting and parameter estimation functionality 
-that our unit, integration and regression tests focus on.
-To make sure that's the case,
-we can get a more complete report by running `coverage html` at the command line
-and opening `htmlcov/index.html`.
-Clicking on the name of our `countwords.py` script, for instance,
-produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
-
-```{r python-coverage, echo=FALSE, fig.cap="Coverage report"}
-knitr::include_graphics("figures/py-rse/correct/python-coverage.png")
-```
-
-This output confirms that all lines relating to word counting were tested,
-but not any of the lines related to the handling of command line arguments or
-file input and output. 
-
-### How much test coverage is enough? {#correct-enough}
-
-How much we test our software depends on the purposes it will be used for.
-If we are writing software for a safety-critical application such as a medical device,
-we should aim for 100% code coverage,
-i.e.,
-every single line in the application should be tested.
-In fact,
-we should probably go further and aim for 100% [path coverage][path-coverage]
-and ensure that every possible path through the code has been checked.
-
-But most of us don't write software that people's lives depend on,
-so requiring 100% code coverage is like asking for ten decimal places of accuracy
-when checking the voltage of a household electrical outlet.
-We always need to balance the effort required to create tests
-against the likelihood that those tests will uncover useful information.
-
-It's also important to understand that no amount of testing
-can prove a piece of software is completely correct.
-A function with only two numeric arguments has 2^128^ possible inputs.
-Even if we could write the tests,
-how could we be sure we were checking the result of each one correctly?
+## Summary {#correct-summary}
 
 Testing data analysis pipelines is often harder than testing mainstream software applications,
-since data analysts often don't know what the right answer is.
+since data analysts often don't know what the right answer is @Brai2018.
 (If we did,
 we would have submitted our report and moved on to the next problem already.)
 The key distinction is the difference between [validation][validation],
@@ -830,271 +1119,42 @@ which asks whether the specification is correct,
 and [verification][verification],
 which asks whether we have met that specification.
 The difference between them is the difference between
-building the right thing and building something right,
-and the first is often hard for data scientists to address.
-
-Luckily,
-we can group the test cases for most functions into classes.
-For example,
-it might be possible to test a function that takes numbers as inputs
-as well as needing to use only a few cases:
-zero, a positive number, a negative one, and infinity.
-If we want to go further,
-we could check that it fails the right way when given a string or a list.
-Similarly,
-when testing a function that summarizes a table full of data,
-we probably should check that it handles tables with:
-
--   no rows
--   only one row
--   many identical rows
--   rows having keys that are supposed to be unique, but aren't
--   rows that contain nothing but missing values
-
-Some projects develop [checklists][checklist] to remind programmers what they ought to test.
-These checklists can be a bit daunting for newcomers,
-but they are a great way to pass on hard-earned experience.
-
-## Continuous Integration {#correct-ci}
-
-Now that we've defined our suite of tests,
-we could simply run `pytest` manually every now and again to execute those tests and check our code. 
-This is probably sufficient for relatively small/uncomplicated projects,
-but a manual approach can be problematic.
-If we make a bunch of different changes/commits to our code between runs of `pytest`,
-it might be difficult to identify which change is responsible for a test failure.
-The solution to this problem is [continuous integration][continuous-integration] (CI),
-which involves running checks and tests automatically whenever a change is made.
-This allows code developers to know immediately if new changes have caused problems,
-making it much easier to fix the problem by seeing what was changed.
-These tools can also be set up to run tests with several different configurations of the software
-or on several different operating systems,
-so that if (for example) a programmer makes a change on Windows 
-and it then breaks only for Mac users or vice versa,
-they can find out before releasing the software to others.
-
-This section introduces a CI tool called [Travis CI][travis-ci],
-which integrates well with [GitHub][github].
-If Travis CI has been set up,
-then every time a change is committed to a GitHub repository,
-Travis CI creates a fresh environment,
-makes a fresh clone of the repository
-(which is described in Section \@ref(git-advanced-fork)),
-and runs whatever commands the project's managers have set up.
-
-### Creating a Travis account
-
-To set up CI for your project, you first must:
-
-1.  Create an account on [Travis CI][travis-ci].
-2.  Link your Travis CI account to your GitHub account.
-3.  Tell Travis CI to watch the repository that contains your project.
-
-Creating an account with an online service may likely be a familiar process,
-but linking your Travis CI account to your GitHub account may be something new.
-Linking Travis to GitHub allows Travis to access all your GitHub repositories
-in order to build and run the project.
-Be careful when giving services access to your repository
-and only trust well-established and -used services like Travis to have access.
-
-Go through the process of creating an account. 
-Next, tell Travis CI which repository you want it to watch
-by clicking the "+" next to the "My Repositories" link
-on the left-hand side of your Travis CI homepage (\@ref(fig:correct-add-repo)).
-
-```{r correct-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI"}
-knitr::include_graphics("figures/py-rse/correct/travis-add-repo.png")
-```
-
-Add the GitHub repository we have been using throughout the course
-(Section \@ref(git-cmdline-remotes))
-by locating it in the repository list and
-flicking the switch button so that it turns green
-(Figure \@ref(fig:correct-list-repos)).
-If the repository doesn't show up,
-re-synchronize the list using the green "Sync account" button on the left sidebar.
-If it still doesn't appear,
-the repository likely belongs to someone else or is private.
-
-```{r correct-list-repos, echo=FALSE, fig.cap="Find your Zipf's Law repository and switch it on"}
-knitr::include_graphics("figures/py-rse/correct/travis-list-repos.png")
-```
-
-### Configuring a project for Travis
-
-In order for Travis to know what to do with the project repository,
-a file called `.travis.yml` must be present inside the repository.
-So, let's create this file.
-
-Make the `.travis.yml` file in the root directory of the repository.
-(The leading `.` in the name hides the file from casual listings on Mac or Linux,
-but not on Windows.)
-This file controls Travis CI's operation,
-and is written in the [YAML][yaml] format we met earlier (Chapter \@ref(configuration)).
-
-Now that we have a `.travis.yml` file, open it and add the following lines:
-
-```yaml
-language: python
-
-python:
-- "3.6"
-
-script:
-- pytest
-```
-
-The `language` key tells Travis CI which programming language to use,
-so that it knows which of its standard [virtual machines][virtual-machine] to run
-as a starting point for the project.
-The `python` key specifies the version/s of Python to use, 
-while the `script` key lists the commands to run. 
-In this case, we want to run `pytest` in order to run our tests.
-We can now go ahead and push the `.travis.yml` file to GitHub.
-
-```shell
-$ git add .travis.yml 
-$ git commit -m "Initial commit of travis configuration file"
-```
-```text
-[master 71084f7] Initial commit of travis file
- 1 file changed, 4 insertions(+)
- create mode 100644 .travis.yml
-```
-```shell
-$ git push origin master
-```
-```text
-Enumerating objects: 4, done.
-Counting objects: 100% (4/4), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
-To https://github.com/amira-khan/zipf.git
-   1f0590b..71084f7  master -> master
-```
-
-In response to this commit,
-Travis CI follows our instructions from the `.travis.yml` file
-and reports a summary on whether the build passed,
-shown in green,
-or whether it produced warnings or errors,
-shown in red.
-In this case, we can see that the build failed (Figure \@ref(fig:correct-build-fail)).
-
-```{r correct-build-fail, echo=FALSE, fig.cap="Travis Build Overview"}
-knitr::include_graphics("figures/py-rse/correct/travis-build-fail.png")
-```
-
-Scrolling down to read the job log in detail,
-it says that it "could not locate requirements.txt."
-This is an issue because the Python scripts that are run when `pytest` is executed
-(i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `utilities.py`)
-import a number of packages that don't come with the
-[Python Standard Library][python-standard-library].
-To address this issue, 
-we need to add an `install` key to `.travis.yml`: 
-
-```yaml
-language: python
-
-python:
-- "3.6"
-
-install:
-- pip install -r requirements.txt
-
-script:
-- pytest
-```
-
-In a new `requirements.txt` file,
-we list the libraries that need to be installed:
-
-```text
-numpy
-pandas
-matplotlib
-scipy
-pytest
-pyyaml
-```
-
-When we commit these changes to GitHub,
-
-```shell
-$ git add .travis.yml
-$ git add requirements.txt 
-$ git commit -m "Adding requirements"
-```
-```text
-[master d96593f] Adding requirements
- 2 files changed, 16 insertions(+), 1 deletion(-)
- create mode 100644 requirements.txt
-```
-```shell
-$ git push origin master
-```
-```text
-Enumerating objects: 4, done.
-Counting objects: 100% (4/4), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
-To https://github.com/amira-khan/zipf.git
-   1f0590b..71084f7  master -> master
-```
-
-Travis CI automatically runs again and this time the build completes successfully
-and our tests pass (Figure \@ref(fig:correct-build-pass)).
-
-```{r correct-build-pass, echo=FALSE, fig.cap="Travis Build Overview"}
-knitr::include_graphics("figures/py-rse/correct/travis-build-pass.png")
-```
-
-To summarize what Travis has done, it:
-
-1.  Created a new Linux virtual machine.
-1.  Installed the desired version of Python.
-1.  Installed the software described in `requirements.txt`.
-1.  Ran the commands below the `script` key.
-1.  Reported the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
-    where <code><em>user/repo</em></code>
-    identifies the repository.
-
-## Summary {#correct-summary}
-
-FIXME @Zamp2020
+building the right thing and building something right;
+the practices introduced in this chapter will help with both.
 
 ## Exercises {#correct-exercises}
 
 TODO: Need more exercises.
 
-### Testing Assertions
+### Explaining assertions {#correct-ex-explain-assertions}
 
-Given a sequence of a number of cars, the function `get_total_cars` returns
-the total number of cars.
+Given a list of a numbers,
+the function `total` returns the total:
 
 ```python
-get_total_cars([1, 2, 3, 4])
+total([1, 2, 3, 4])
 ```
+
 ```text
 10
 ```
+
+`total` only works on numbers:
+
 ```python
-get_total_cars(['a', 'b', 'c'])
+total(['a', 'b', 'c'])
 ```
+
 ```text
 ValueError: invalid literal for int() with base 10: 'a'
 ```
+
 Explain in words what the assertions in this function check,
 and for each one,
 give an example of input that will make that assertion fail.
 
 ```python
-def get_total(values):
+def total(values):
     assert len(values) > 0
     for element in values:
         assert int(element)
@@ -1104,14 +1164,9 @@ def get_total(values):
     return total
 ```
 
-> **Solution**
-> * The first assertion checks that the input sequence `values` is not empty.
->   An empty sequence such as `[]` will make it fail.
-> * The second assertion checks that each value in the list can be turned into an integer.
->   Input such as `[1, 2,'c', 3]` will make it fail.
-> * The third assertion checks that the total of the list is greater than 0.
->   Input such as `[-10, 2, 3]` will make it fail.
+### Test assertions {#correct-ex-test-assert}
 
+FIXME
 
 ### Add the Travis CI status to your README
 

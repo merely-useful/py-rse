@@ -498,6 +498,9 @@
 **Interruption bingo**<a id="interruption-bingo"></a>
 :   FIXME
 
+**Integration testing**<a id="integration-testing"></a>
+:   FIXME
+
 **Invariant**<a id="invariant"></a>
 :   FIXME
 
@@ -760,6 +763,12 @@
 :   FIXME
 
 **Refactoring**<a id="refactoring"></a>
+:   FIXME
+
+**Regression testing**<a id="regression-testing"></a>
+:   FIXME
+
+**Regression**<a id="regression"></a>
 :   FIXME
 
 **Regular expression**<a id="regular-expression"></a>
