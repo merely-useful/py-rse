@@ -191,6 +191,7 @@ FIXME: PLEASE ADD YOURS
 -   Dr. Gregory V. Wilson
 -   Joel Ostblom
 -   Dr. Luke W. Johnston
+-   Dr. Kate L. Hertweck
 
 Name (as it would appear on a book cover):
 
@@ -200,6 +201,7 @@ FIXME: PLEASE ADD YOURS
 -   Greg Wilson
 -   Joel Ostblom
 -   Luke Johnston
+-   Kate Hertweck
 
 Mailing Address:
 
@@ -209,6 +211,7 @@ FIXME: PLEASE ADD YOURS
 -   For Greg Wilson: 65 Highfield Road, Toronto, Ontario M4L 2T9, Canada
 -   For Joel Ostblom: 4227 W 12th Ave, Vancouver, British Columbia, V6R 2P8, Canada
 -   For Joel Ostblom: Vesterport 3, 2.1, 8000 Aarhus, Denmark
+-   For Kate Hertweck: 1237 Taylor Ave N #2, Seattle, WA 98109, USA
 
 Preferred email:
 
@@ -218,6 +221,7 @@ FIXME: PLEASE ADD YOURS
 -   For Greg Wilson: gvwilson@third-bit.com
 -   For Joel Ostblom: joel.ostblom@protonmail.com
 -   For Luke Johnston: lwjohnst@gmail.com
+-   For Kate Hertweck: k8hertweck@gmail.com
 
 Website/blogs/Twitter, etc:
 
@@ -227,6 +231,7 @@ FIXME: PLEASE ADD YOURS
 -   For Greg Wilson: http://third-bit.com
 -   For Joel Ostblom: https://joelostblom.com 
 -   For Luke Johnston: http://lukewjohnston.com
+-   For Kate Hertweck: http://katehertweck.com
 
 **9. Schedule**
 
