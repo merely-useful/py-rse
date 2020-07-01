@@ -245,6 +245,9 @@
 **Default target**<a id="default-target-make"></a> (in Make):
     FIXME
 
+**Defensive programming**<a id="defensive-programming"></a>:
+    FIXME
+
 **Delimiter**<a id="delimiter"></a>
 :   FIXME
 
@@ -465,6 +468,9 @@
 **ISO date format**<a id="iso-date-format"></a>
 :   FIXME
 
+**Impact/effort matrix**<a id="impact-effort-matrix"></a>
+:   FIXME
+
 **Impostor syndrome**<a id="impostor-syndrome"></a>
 :   FIXME
 
@@ -490,6 +496,12 @@
 :   FIXME
 
 **Interruption bingo**<a id="interruption-bingo"></a>
+:   FIXME
+
+**Integration testing**<a id="integration-testing"></a>
+:   FIXME
+
+**Invariant**<a id="invariant"></a>
 :   FIXME
 
 **Issue tracking system**<a id="issue-tracking-system"></a>
@@ -522,9 +534,6 @@
 **LaTeX**<a id="latex"></a>:
     FIXME
 
-**Learned helplessness**<a id="learned-helplessness"></a>
-:   FIXME
-
 **Library**<a id="library"></a>
 :   FIXME
 
@@ -548,6 +557,9 @@
 
 **Loop**<a id="loop-unix"></a> (in Unix):
     FIXME
+
+**Milestone**<a id="milestone"></a>
+:   FIXME
 
 **MIT License**<a id="mit-license"></a>
 :   FIXME
@@ -681,6 +693,9 @@
 **Post-mortem**<a id="post-mortem"></a>
 :   FIXME
 
+**Postcondition**<a id="postcondition"></a>
+:   FIXME
+
 **Pothole case**<a id="pothole-case"></a>
 :   FIXME
 
@@ -688,6 +703,9 @@
 :   FIXME
 
 **Precision**<a id="precision"></a>
+:   FIXME
+
+**Precondition**<a id="precondition"></a>
 :   FIXME
 
 **Prerequisite**<a id="prerequisite-make"></a> (in Make):
@@ -745,6 +763,12 @@
 :   FIXME
 
 **Refactoring**<a id="refactoring"></a>
+:   FIXME
+
+**Regression testing**<a id="regression-testing"></a>
+:   FIXME
+
+**Regression**<a id="regression"></a>
 :   FIXME
 
 **Regular expression**<a id="regular-expression"></a>
@@ -862,6 +886,9 @@
 :   FIXME
 
 **Source code**<a id="source-code"></a>
+:   FIXME
+
+**Sprint**<a id="sprint"></a>
 :   FIXME
 
 **Stand-up meeting**<a id="stand-up-meeting"></a>

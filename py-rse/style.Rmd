@@ -14,8 +14,11 @@ but people do if they are to create, debug, and extend them.
 In the preceding chapters we wrote code to analyze word counts in classic novels
 and explored ways to share that code and work with other programmers.
 In this chapter we will step back
-and discuss some of the style choices we made in that code and why,
-occasionally referencing parts of your current project directory:
+and discuss some of the style choices we made in that code.
+We present guidelines for good Python programming style
+and introduce some language features that can make programs more flexible and more readable.
+At the start,
+our Zipf's Law project directory should look like this:
 
 ```text
 ├── CONDUCT.md
@@ -26,9 +29,9 @@ occasionally referencing parts of your current project directory:
 │   ├── book_summary.sh
 │   ├── collate.py
 │   ├── countwords.py
-│   ├── mymodule.py
 │   ├── plotcounts.py
-│   └── rcparams.yml
+│   ├── plotparams.yml
+│   └── utilities.py
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
@@ -39,10 +42,7 @@ occasionally referencing parts of your current project directory:
     └── ...
 ```
 
-We present guidelines for good Python programming style
-and introduce some language features that can make programs more flexible and more readable.
-
-## What is good style for Python programs? {#style-pep8}
+## Python Style {#style-pep8}
 
 The single most important rule of style is to be consistent,
 both internally and with other programs @Kern1999.
@@ -69,7 +69,7 @@ def transpose(original):
   return result
 ```
 
-but is much more readable when rewritten as:
+The same block of code is much more readable when written as:
 
 ```python
 def transpose(original):
@@ -95,7 +95,7 @@ but the legacy of those ancient times lives on.
 
 **Do not put spaces inside parentheses.**
 
-Don't write <code>( 1+2 )</code>.
+Write <code>(1+2)</code> instead of <code>( 1+2 )</code>.
 This applies to function calls as well:
 write `max(a, b)` rather than <code>max( a, b )</code>.
 (We will see a related rule when we discussed default parameter values
@@ -104,11 +104,11 @@ in Section \@ref(style-features).)
 **Always use spaces around comparisons like `>` and `<=`.**
 
 Python automatically interprets `a+b<c+d` as `(a+b)<(c+d)`,
-but that's a lot of punctuation crowded together;
-using spaces around comparison operators makes it easier to see
+but that's a lot of punctuation crowded together.
+Using spaces around comparison operators makes it easier to see
 what's being compared to what.
 However,
-you should use your own judgment for spacing around arithmetic operators like `+` and `/`.
+we should use our own judgment for spacing around arithmetic operators like `+` and `/`.
 For example,
 `a+b+c` is perfectly readable,
 but
@@ -117,15 +117,13 @@ but
 substrate[i, j] + overlay[i, j]
 ```
 
-is probably easier for the eye to follow
-than the spaceless:
+is easier for the eye to follow than the spaceless:
 
 ```python
 substrate[i, j]+overlay[i, j]
 ```
 
-Most programmers also use spaces to make arithmetic clearer,
-for example writing:
+Most programmers would also write:
 
 ```python
 a*b + c*d
@@ -143,7 +141,7 @@ or:
 (a*b)+(c*d)
 ```
 
-Doing this helps make simple expressions more readable,
+Adding spaces makes simple expressions more readable,
 but does not change the way Python interprets them---when it encounters `a * b+c`,
 for example,
 Python still does the multiplication before the addition.
@@ -160,7 +158,7 @@ though the fact that functions always start in the first column helps as well.
 This convention is inherited from C,
 which was used to write the first version of Python.
 In that language,
-it was used to indicate a constant whose value couldn't be modified;
+upper case was used to indicate a constant whose value couldn't be modified;
 Python doesn't enforce that rule,
 but `SHOUTING_AT_PROGRAMMERS` helps remind them that
 some things shouldn't be messed with.
@@ -169,16 +167,17 @@ some things shouldn't be messed with.
 
 Research on naming conventions has produced mixed results @Bink2012,@Scha2018,
 but Python has (mostly) settled on underscored names for most things.
-This naming convention is called [snake case][snake-case] or [pothole case][pothole-case];
-you should only use [`CamelCase`][camel-case] for classes,
+This style is called [snake case][snake-case] or [pothole case][pothole-case];
+we should only use [`CamelCase`][camel-case] for classes,
 which are outside the scope of this lesson.
 
 **Avoid abbreviations in function and variable names.**
 
-They can be ambiguous,
+Abbreviations and acronyms can be ambiguous
+(does `xcl` mean "Excel", "exclude", or "excellent"?),
 and can be be hard for non-native speakers to understand.
-This rule doesn't necessarily mean you will have to do more typing:
-a good programming editor will [auto-complete][auto-completion] names for you.
+Following this rule doesn't necessarily require more typing:
+a good programming editor will [auto-complete][auto-completion] names for us.
 
 **Use short names for short-lived local variables and longer names for things with wider scope.**
 
@@ -188,66 +187,25 @@ Anything that is used at a greater distance
 or whose purpose isn't immediately clear
 (such as a function) should have a longer name.
 
-**Keep functions short.**
-
-No function should be longer than a printed page (about 80 lines)
-or have more than four levels of indentation because of nested loops and conditionals.
-Anything longer or more deeply nested is hard for readers to fit into [working memory][working-memory];
-if you need to break these limits,
-break the function into smaller functions instead.
-
 **Do not comment and uncomment sections of code to change behavior.**
 
-If you need to do something in some runs of the program and not do it in others,
-use an `if` statement to enable or disable that block of code.
-It's more reliable—you're far less likely to accidentally comment out one too many lines—and
-you may find that you want to leave those conditional sections in the finished program
-for logging purposes (Section \@ref(errors-logging)).
-If you are sure you don't need the code,
-take it out completely:
-you can always get it back from version control
+If we need to do something in some runs of the program and not in others,
+use an `if` statement to enable or disable that block of code:
+it eliminates the risk of accidentally commenting out one too many lines.
+If the lines we were removing or commenting out print debugging information,
+we should replace them with logging calls (Section \@ref(errors-logging)).
+If they are operations that we want to execute,
+we can add a configuration option (Chapter \@ref(config)),
+and if we are sure we don't need the code,
+we should take it out completely:
+we can always get it back from version control
 (Section \@ref(git-cmdline-ex-recover)).
 
-**Handle special cases at the start of the function.**
-
-This helps readers mentally get them out of the way
-and focus on the "normal" case.
-For example, this:
-
-```python
-def positive_sum(values):
-    if values == []:
-        result = None
-    else:
-        result = 0
-        for v in values:
-            if v > 0:
-                result += v
-    return result
-```
-
-should instead be written:
-
-```python
-def positive_sum(values):
-    if values == []:
-        return None
-
-    result = 0
-    for v in values:
-        if v > 0:
-            result += v
-    return result
-```
-
-This removes one level of nesting,
-and makes it clear what the special case is and how it's being handled.
-
-## Where should things appear in a source code file? {#style-order}
+## Order {#style-order}
 
 The order of items in each file should be:
 
--   The [shebang][shebang] line (because it has to come first to work).
+-   The [shebang][shebang] line (because it has to be first to work).
 -   The file's documentation string (Section \@ref(package-py-document)).
 -   All of the `import` statements, one per line.
 -   Global variable definitions
@@ -266,7 +224,7 @@ so that it is immediately before the check on `__name__`.
 Wherever it goes,
 `main` tends to follow one of three patterns:
 
-1.  Figure out what the user has asked it to do (Chapter \@ref(configuration)).
+1.  Figure out what the user has asked it to do (Chapter \@ref(config)).
 2.  Read all input data.
 3.  Process it.
 4.  Write output.
@@ -292,11 +250,13 @@ Each step in each of the outlines above usually becomes a function.
 Those functions depend on others,
 some of which are written to break code into comprehensible chunks and are then called just once,
 others of which are utilities that may be called many times from many different places.
+
 We put all of the single-use functions in the first half of the file
 in the order in which they are likely to be called,
 and then put all of the multi-use utility functions in the bottom of the file in alphabetical order.
 If any of those utility functions are used by other scripts or programs,
 they should go in a file of their own.
+
 In fact,
 this is a good practice even if those functions are only used by one program,
 since it signals even more clearly which are specific to this program
@@ -305,13 +265,12 @@ This is why we create `collate.py` in Section \@ref(scripting-collate):
 we could have kept all of our code in `countwords.py`,
 but collating felt like something we might want to do separately.
 
-## How can I check that code follows style guidelines? {#style-check}
+## Checking Style {#style-check}
 
 Checking that code conforms to guidelines like PEP-8 would be time consuming
-if it had to be done manually,
-but luckily it doesn't.
-Most languages have tools that will check style rules;
-these are often called [linters][linter],
+if we had to do it manually,
+but most languages have tools that will check style rules for us.
+These tools are often called [linters][linter],
 after an early tool called `[lint][lint]` that found lint (or fluff) in C code.
 
 Python's linter used to be called `pep8` and is now called `pycodestyle`.
@@ -397,44 +356,44 @@ n = count(lines)
 print('number', n)
 ```
 
-## How can I improve code systematically? {#style-refactor}
+## Refactoring {#style-refactor}
 
-Now that our little program gets a clean bill of health from `pycodestyle`,
-it's worth having a human being look it over and suggest ipmrovements.
-[Refactoring][refactoring] means changing the structure of code without changing what it does,
-like refactoring an equation to simplify it.
+Once a program gets a clean bill of health from `pycodestyle`,
+it's worth having a human being look it over and suggest improvements.
+To [refactor][refactoring] code means to change its structure without changing what it does,
+like simplifying an equation.
 It is just as much a part of programming as writing code in the first place:
 nobody gets things right the first time @Bran1995,
 and needs or insights can change over time.
 
 Most discussions of refactoring focus on [object-oriented programming][oop],
 but many patterns can and should be used to clean up [procedural][procedural-programming] code.
-Knowing a few of these patterns will help you create better software,
-and also make it easier for you to communicate with your peers.
+Knowing a few of these patterns helps us create better software
+and makes it easier to communicate with our peers.
 
 ### Do not repeat values.
 
-The first and simplest refactoring is called "replace value with name".
+The first and simplest refactoring is "replace value with name".
 It tells us to replace magic numbers with names,
 i.e., to define constants.
 This can seem ridiculous in simple cases
 (why define and use `inches_per_foot` instead of just writing 12?).
 However,
-what may be obvious to you when you're writing code won't be obvious to the next person,
-particularly if they're working in a different context
+what may be obvious to us when we're writing code won't be obvious to the next person,
+particularly if they are working in a different context
 (most of the world uses the metric system and doesn't know how many inches are in a foot).
-It's also a matter of habit:
-if you write numbers without explanation in your code for simple cases,
-you're more likely to do so for complex cases,
+It is also a matter of habit:
+if we write numbers without explanation in our code for simple cases,
+we are more likely to do so in complex cases,
 and more likely to regret it afterward.
 
-Using names instead of raw values also makes it easier to understand code when you read it aloud,
+Using names instead of raw values also makes it easier to understand code when we read it aloud,
 which is always a good test of its style.
 Finally,
 a single value defined in one place is much easier to change
-than a bunch of numbers scattered throughout your program.
-You may not think you will have to change it,
-but then people want to use your software on Mars and you discover that constants aren't @Mak2006.
+than a bunch of numbers scattered throughout our program.
+We may not think we will have to change it,
+but then people want to use our software on Mars and we discover that constants aren't @Mak2006.
 
 ```python
 # ...before...
@@ -459,8 +418,7 @@ Our second refactoring,
 "hoist repeated calculation out of loop",
 tells us to move the repeated calculation out of the loop or function.
 Doing this signals that its value is always the same.
-And by naming that common value,
-you help readers understand what its purpose is.
+And naming that common value helps readers understand what its purpose is.
 
 ```python
 # ...before...
@@ -497,16 +455,17 @@ if was_greater:
     # ...do something...
 ```
 
-This refactoring is called "replace repeated test with flag".
-When it is used,
+This refactoring is "replace repeated test with flag".
+Again,
 there is no need to write `if was_greater == True`:
 that always produces the same result as `if was_greater`.
-Similarly, the equality tests in `if was_greater == False` is redundant:
+Similarly,
+the equality tests in `if was_greater == False` is redundant:
 the expression can simply be written `if not was_greater`.
 Creating and using a [flag][flag-variable] instead of repeating the test
 is therefore like moving a calculation out of a loop:
 even if that value is only used once,
-it makes our intention clearer—these really are the same test.
+it makes our intention clearer.
 
 ```python
 # ...before...
@@ -531,7 +490,7 @@ def process_data(data, scaling):
 
 If it takes many lines of code to process data and create a score,
 and the test then needs to change from `>` to `>=`,
-we're more likely to get the refactored version right the first time,
+we are more likely to get the refactored version right the first time,
 since the test only appears in one place and its result is given a name.
 
 ### Use in-place operators to avoid duplicating expression.
@@ -563,14 +522,14 @@ For example:
 samples[least_factor_index, max(current_offset, offset_limit)] *= scaling_factor
 ```
 
-is much easier to read than the equivalent expression:
+is less difficult to read than the equivalent expression:
 
 ```python
 samples[least_factor_index, max(current_offset, offset_limit)] = \
     scaling_factor * samples[least_factor_index, max(current_limit, offset_limit)]
 ```
 
-(The proof of this claim is that you probably didn't notice on first reading
+(The proof of this claim is that you probably didn't notice
 that the long form uses different expressions to index `samples`
 on the left and right of the assignment.)
 The refactoring "use in-place operator" does what its name suggests:
@@ -636,10 +595,9 @@ def rescale_by_average(values, factors, weights):
 > If a function contains any explicit `return` statements at all,
 > it should end with one as well.
 
-A related refactoring pattern is called "default and override".
+A related refactoring pattern is "default and override".
 To use it,
-find cases where a value is set conditionally;
-assign the default or most common value unconditionally,
+assign a default or most common value to a variable unconditionally,
 and then override it in a special case.
 The result is fewer lines of code and clearer control flow;
 however,
@@ -683,17 +641,22 @@ which is less clear.
 
 > **A Little Jargon**
 >
-> `X if test else Y` is called a [ternary expression][ternary-expression]:
-> just as a binary expression like `A + B` has two parts,
+> `X if test else Y` is called a [ternary expression][ternary-expression].
+> Just as a binary expression like `A + B` has two parts,
 > a ternary expression has three.
 > Conditional expressions are the only ternary expression in most programming languages.
 
 ### Use functions to make code more comprehensible.
 
-Functions were created so that programmers could write common operations and re-use them
-in order to reduce the amount of code that needed to be compiled.
-Moving complex operations into functions also reduces [cognitive load][cognitive-load]
+Functions were created so that programmers could re-use common operations,
+but moving code into functions also reduces [cognitive load][cognitive-load]
 by reducing the number of things that have to be understood simultaneously.
+
+A common rule of thumb is that
+no function should be longer than a printed page (about 80 lines)
+or have more than four levels of indentation because of nested loops and conditionals.
+Anything longer or more deeply nested is hard for readers to understand,
+so we should moves pieces of long functions into small ones.
 
 ```python
 # ...before...
@@ -715,14 +678,12 @@ def in_interior(grid, point):
     (0 < point.y) and (point.y < grid.height-1)
 ```
 
-You should always extract functions when code can be used in other contests.
-Even if it can't,
-you should extract functions whenever it makes the function clearer
-when it is read aloud.
-Multi-part conditionals,
-parts of long equations,
-and the bodies of loops are good candidates for extraction;
-if you can't think of a plausible name,
+We should *always* extract functions when code can be re-used.
+Even if they are only used once,
+multi-part conditionals,
+long equations,
+and the bodies of loops are good candidates for extraction.
+If we can't think of a plausible name,
 or if a lot of data has to be passed into the function after it's extracted,
 the code should probably be left where it is.
 Finally,
@@ -736,9 +697,9 @@ If operations are always done together,
 it can sometimes be be more efficient to do them together,
 and might be easier to understand.
 However,
-combining functions often reduces their reusability and readability;
-one sign that functions shouldn't have been combined is
-how often people use the combination and throw some results away.
+combining functions often reduces their reusability and readability.
+(One sign that functions shouldn't have been combined is
+people using the combination and throwing some of the result away.)
 
 The fragment below shows how two functions can be combined:
 
@@ -772,12 +733,6 @@ def count_vowels_and_consonants(text):
     return num_vowels, num_consonants
 ```
 
-One thing you may not notice about the combination is that
-it assumes characters are either vowels or consonants,
-which means it might work differently than separate calls to the two original functions.
-Issues like this are why experienced developers write unit tests (Chapter \@ref(correct))
-*before* starting to refactor.
-
 ### Replace code with data.
 
 It is easier to understand and maintain lookup tables than complicated conditionals,
@@ -809,8 +764,8 @@ def count_vowels_and_consonants(text):
     return num_vowels, num_consonants
 ```
 
-The more distinct cases there are,
-the greater the advantage lookup tables have over multi-branch conditionals.
+The more cases there are,
+the greater the advantage lookup tables have over multi-part conditionals.
 Those advantages multiply when items can belong to more than one category,
 in which case the table is often best written as a dictionary with items as keys
 and sets of categories as values:
@@ -841,7 +796,7 @@ The expressions used to update `num_vowels` and `num_consonants` make use of the
 which the function `int` converts to either 1 or 0.
 We will explore ways of making this code more readable in the exercises.
 
-## How should I review code? {#style-review}
+## Code Reviews {#style-review}
 
 At the end of Section \@ref(style-check),
 our stop-word program looked like this:
@@ -872,8 +827,8 @@ n = count(lines)
 print('number', n)
 ```
 
-Based on our coding guidelines
-and the discussion of refactoring in the previous section,
+This passes a PEP-8 style check,
+but based on our coding guidelines and our discussion of refactoring,
 these things should be changed:
 
 -   The commented-out `print` statements should either be removed
@@ -931,18 +886,17 @@ if __name__ == '__main__':
 
 Reading code in order to find bugs and suggest improvements like these
 is called [code review][code-review].
-Study after study over more than 40 years has shown that code review is the most effective way to find bugs in software
+Multiple studies over more than 40 years have shown that
+code review is the most effective way to find bugs in software
 @Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
 It is also a great way to transfer knowledge between programmers:
-reading someone else's code critically will give you lots of ideas about what you could do better,
-and highlight things that you should probably stop doing as well.
+reading someone else's code critically will give us lots of ideas about what we could do better,
+and highlight things that we should probably stop doing as well.
 
 Despite this,
 code review still isn't common in research software development.
-This is partly a chicken-and-egg problem---people don't do it
-because other people don't do it @Sega2005,
-and other people don't do it because software development does not have the same social status
-as theorem proving or benchwork.
+This is partly a chicken-and-egg problem:
+people don't do it because other people don't do it @Sega2005.
 Code review is also more difficult to do in specialized scientific fields:
 in order for review to be useful,
 reviewers need to understand the problem domain well enough to comment on algorithms and design choices
@@ -950,12 +904,12 @@ rather than indentation and variable naming,
 and the number of people who can do that for a research project is often very small @Petr2014.
 
 Section \@ref(git-advanced-pull-requests) explained how to create and merge pull requests.
-*How* you review these is just as important as *what* you look for:
-being dismissive or combative are good ways to ensure that people don't pay attention to your reviews,
-or avoid having you review their work.
+How we review these is just as important as what we look for:
+being dismissive or combative are good ways to ensure that people don't pay attention to our reviews,
+or avoid having us review their work @Bern2018.
 Equally,
 being defensive when someone offers suggestions politely and sincerely is very human,
-but can stunt your development as a programmer.
+but can stunt our development as a programmer.
 
 Lots of people have written guidelines for doing reviews that avoid these traps @Quen2018,@Sank2018.
 A few common points are:
@@ -980,16 +934,16 @@ Use a checklist.
 :   Linters are great,
     but can't decide when someone should have used a lookup table instead of conditionals.
     A list of things to check for can make review faster and more comprehensible,
-    especially when you can copy-and-paste or drag-and-drop specific comments
+    especially when we can copy-and-paste or drag-and-drop specific comments
     onto specific lines
     (something that GitHub unfortunately doesn't yet support).
 
 Ask for clarification.
-:   If you don't understand something,
+:   If we don't understand something,
     or don't understand why the author did it,
-    ask.
-    (And when the author explains it,
-    think about suggesting that the explanation ought to be documented somewhere.)
+    we should ask.
+    (When the author explains it,
+    we might suggest that the explanation should be documented somewhere.)
 
 Offer alternatives.
 :   Telling authors that something is wrong is helpful;
@@ -1022,16 +976,16 @@ Don't try to sneak in feature requests.
 :   Nobody enjoys fixing bugs and style violations.
     Asking them to add entirely new functionality while they're at it is rude.
 
-How you respond to reviews is just as important:
+How we respond to reviews is just as important:
 
 Be specific in replies to reviewers.
 :   If someone has suggested a better variable name,
-    you can probably simply fix it.
+    we can probably simply fix it.
     If someone has suggested a major overhaul to an algorithm,
-    you should reply to their comment to point at the commit that includes the fix.
+    we should reply to their comment to point at the commit that includes the fix.
 
-Thank your reviewers.
-:   If someone has taken the time to read your code carefully,
+Thank our reviewers.
+:   If someone has taken the time to read our code carefully,
     thank them for doing it.
 
 And finally:
@@ -1041,16 +995,16 @@ Don't let people break these rules just because they're frequent contributors or
     The main figures in a project should be *more* respectful than everyone else
     in order to show what standards everyone else is expected to meet.
 
-## What features of Python can make code more readable? {#style-features}
+## Python Features {#style-features}
 
 [Working memory][working-memory] can only hold a few items at once:
-initial estimates in the 1950s put the number at 7 plus or minus 2 @Mill1956,
+initial estimates in the 1950s put the number at 7±2 @Mill1956,
 and more recent estimates put it as low as 4 or 5.
 High-level languages from FORTRAN to Python
 are essentially a way to reduce the number of things programmers have to think about at once
 so that they can fit what the computer is doing into this limited space.
 The sections below describe some of these features;
-as you become more comfortable with Python you will find and use others.
+as we become more comfortable with Python we will find and use others.
 
 But beware:
 the things that make programs more compact and comprehensible for experienced programmers
@@ -1083,13 +1037,12 @@ Another is to use a nested [list comprehension][list-comprehension]:
 [[i+j for j in range(5)] for i in range(5)]
 ```
 
-An experienced programmer will recognize what the latter is doing
-and (probably) be able to understand it at a glance;
-the rest of us are probably better off writing the more verbose solution.
+An experienced programmer might recognize what the latter is doing;
+the rest of us are probably better off reading and writing the more verbose solution.
 
 ### Provide default values for parameters.
 
-If your function requires two dozen parameters,
+If our function requires two dozen parameters,
 the odds are very good that users will frequently forget them
 or put them in the wrong order.
 One solution is to bundle parameters together so that (for example)
@@ -1099,14 +1052,14 @@ A second approach (which can be combined with the previous one)
 is to specify default values for some of the parameters.
 Doing this gives users control over everything
 while also allowing them to ignore details;
-it also codifies what you consider "normal" for the function.
+it also indicates what we consider "normal" for the function.
 
 For example,
 suppose we are comparing images to see if they are the same or different.
 We can specify two kinds of tolerance:
 how large a difference in color value to notice,
 and how many differences above that threshold to tolerate
-(as a percentage of the total number of pixels).
+as a percentage of the total number of pixels.
 By default,
 any color difference is considered significant,
 and only 1% of pixels are allowed to differ:
@@ -1127,8 +1080,7 @@ it can also be called like this:
 -   `image_diff(old, new, per_pixel=1, fraction=0.005)`
     raises the per-pixel threshold but decrease number of allowed differences.
 
-Note that there are no spaces around the `=`
-when defining a default parameter value.
+Note that we do not put spaces around the `=` when defining a default parameter value.
 This is consistent with PEP-8's rules about spacing in function definitions and calls
 (Section \@ref(style-pep8)).
 
@@ -1142,8 +1094,10 @@ def collect(new_value, accumulator=set()):
     return accumulator
 ```
 
-it calls `set()` to create a new empty set,
-and then uses that set as the default value for `accumulator` every time the function is called.
+it calls `set()` to create a new empty set
+*when it is reading the function definition*,
+and then uses that set as the default value for `accumulator`
+every time the function is called.
 It does *not* call `set()` once for each call,
 so all calls using the default will share the same set:
 
@@ -1210,18 +1164,17 @@ print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
 ```
 
 An equivalent special form exists for named arguments:
-the catch-all variable is conventionally called `kwargs`
-(for "keyword arguments")
-and its name is prefixed with `**` (i.e., two asterisks instead of one).
+the catch-all variable's name is prefixed with `**` (i.e., two asterisks instead of one),
+and it is conventionally called `kwargs` (for "keyword arguments").
 When this is used,
 the function is given a [dictionary][dictionary] of names and values
 rather than a list:
 
 ```python
 def set_options(tag, **kwargs):
-    result = '<{}'.format(tag)
+    result = f'<{tag}'
     for key in kwargs:
-        result += ' {}="{}"'.format(key, kwargs[key])
+        result += f' {key}="{kwargs[key]}"'
     result += '/>'
     return result
 
@@ -1235,9 +1188,10 @@ print(set_options('p', align='center', size='150%'))
 ```
 
 Notice that the names of parameters are not quoted:
-the call is `color='blue'` and not `'color'='blue'`.
+we pass `color='blue'` to the function,
+not `'color'='blue'`.
 
-### Pass a variable number of arguments.
+### Unpacking variable arguments.
 
 We can use the inverse of `*args` and `**kwargs` to match a list of values to arguments.
 In this case,
@@ -1259,23 +1213,25 @@ some matrix with lower bound and upper bound
 
 ### Use destructuring to assign multiple values at once.
 
-Modern programming languages have lots of other tools to make life more convenient for programmers.
-One that's particularly useful is [destructuring][destructuring]:
+One last feature of Python is [destructuring][destructuring].
+Suppose we have a nested list such as `[1, [2, 3]]`,
+and we want to assign its numbers to three variables
+called `first`, `second`, and `third`.
+Instead of writing this:
+
+```python
+first = values[0]
+second = values[1][0]
+third = values[1][1]
+```
+
+we can write this:
 
 ```python
 [first, [second, third]] = [1, [2, 3]]
-print(first)
-print(second)
-print(third)
 ```
 
-```text
-1
-2
-3
-```
-
-As this example shows,
+In general,
 if the variables on the left are arranged in the same way as the values on the right,
 Python will automatically unpack the values and assign them correctly.
 This is particularly useful when looping over lists of structured values:
@@ -1287,7 +1243,7 @@ people = [
     [['Marlyn', 'Wescoff'], 'mwescoff@eniac.org']
 ]
 for [[first, last], email] in people:
-    print('{} {} <{}>'.format(first, last, email))
+    print('{first} {last} <{email}>')
 ```
 
 ```text
@@ -1309,7 +1265,7 @@ but there are probably fewer of them than you think.
 
 ## Exercises {#style-exercises}
 
-FIXME: create exercises for review.
+FIXME: create exercises for coding style.
 
 ## Key Points {#style-keypoints}
 

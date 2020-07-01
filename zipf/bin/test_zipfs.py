@@ -4,6 +4,7 @@ from collections import Counter
 import plotcounts
 import countwords
 
+
 def test_alpha():
     """Test the calculation of the alpha parameter.
     
@@ -23,6 +24,7 @@ def test_alpha():
     expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
 
+
 def test_word_count():
     """Test the counting of words.
     
@@ -37,6 +39,7 @@ def test_word_count():
         actual_result = countwords.count_words(reader)
     assert actual_result == expected_result
 
+
 def test_integration():
     """Test the full word count to alpha parameter workflow."""    
 
@@ -46,6 +49,7 @@ def test_integration():
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)
     expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
+
     
 def test_regression():
     """Regression test for Dracula."""    
