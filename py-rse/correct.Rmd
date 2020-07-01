@@ -59,16 +59,14 @@ If it's true, Python does nothing;
 if it's false,
 Python halts the program immediately and prints a user-defined error message.
 For example,
-this code halts as soon as the loop encounters a
-weather station rainfall observation that isn't positive:
+this code halts as soon as the loop encounters an impossible word frequency:
 
 ```python
-rainfall_observations = [1.5, 2.3, 0.7, -0.2, 4.4]
 total = 0.0
-for obs in rainfall_observations:
-    assert obs >= 0.0, 'Rainfall values must be non-negative'
-    total += obs
-print('total rainfall is:', total)
+for freq in frequencies[:10]:
+    assert freq >= 0.0, 'Word frequencies must be non-negative'
+    total += freq
+print('total frequency of first 10 words:', total)
 ```
 
 ```text
@@ -76,12 +74,12 @@ print('total rainfall is:', total)
 AssertionError                            Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
       2 total = 0.0
-      3 for obs in rainfall_obs:
-----> 4     assert obs > 0.0, 'Rainfall values must be non-negative'
-      5     total += obs
-      6 print('total rainfall is:', total)
+      3 for freq in frequencies[:10]:
+----> 4     assert freq >= 0.0, 'Word frequencies must be non-negative'
+      5     total += freq
+      6 print('total frequency of first 10 words:', total)
 
-AssertionError: Rainfall values must be non-negative
+AssertionError: Word frequencies must be non-negative
 ```
 
 Programs intended for widespread use are full of assertions:
@@ -106,52 +104,37 @@ Broadly speaking, assertions fall into three categories:
     or it might be something like,
     "the value of `highest` is less than or equal to the current loop index".
 
-Our `collate.py` script is a good example of the need for a precondition.
-A user could easily overlook the docstring at the top of the script,
-which states that it combines multiple CSV files containing word counts
-to create a single cumulative count.
-If they pass a set of plain text files instead of CSV files,
-the error message `collate.py` produces isn't particularly helpful:
-
-```shell
-$ python bin/collate.py data/jane_eyre.txt data/dracula.txt 
-```
-```text
-Traceback (most recent call last):
-  File "collate.py", line 29, in <module>
-    main(args)
-  File "collate.py", line 19, in main
-    update_counts(reader, word_counts)
-  File "collate.py", line 10, in update_counts
-    for word, count in csv.reader(reader):
-ValueError: too many values to unpack (expected 2)
-```
-
-An assertion in the `main` function of `collate.py`
-makes the requirement clear in the code,
-and is also a convenient place to write a better error message:
+The function `get_power_law_params` is a good example of the need for a precondition.
+Its docstring does not say that its `word_counts` parameter must be a list of non-negative integers;
+even if we add that,
+a user might easily pass in a list of frequencies or the words themselves.
+Adding an assertion makes the requirement clearer,
+and also guarantees that the function will fail as soon as it is called
+rather than returning a nonsensical value:
 
 ```python
-def main(args):
-    """Run the command line program."""
-    word_counts = Counter()
-    for file_name in args.infiles:
-        assert file_name[-4:] == '.csv', "input files must be word count CSV files"
-        with open(file_name, 'r') as reader:
-            update_counts(reader, word_counts)
-    mymodule.collection_to_csv(word_counts, num=args.num)
-```
+def get_power_law_params(word_counts):
+    """
+    Get the power law parameters.
 
-```shell
-$ python bin/collate.py data/jane_eyre.txt data/dracula.txt 
-```
-```text
-Traceback (most recent call last):
-  File "collate.py", line 30, in <module>
-    main(args)
-  File "collate.py", line 18, in main
-    assert file_name[-4:] == '.csv', "input files must be word count CSV files"
-AssertionError: input files must be word count CSV files
+    References
+    ----------
+    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
+      beta (Eq. 2) and the maximum likelihood estimation (mle)
+      of beta (Eq. 6).
+
+    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
+      Large-Scale Analysis of Zipf’s Law in English Texts.
+      PLoS ONE 11(1): e0147073.
+      https://doi.org/10.1371/journal.pone.0147073
+    """
+    assert(all([isinstance(c, int) and (c >= 0) for c in word_counts]), \
+           'All input values must be non-negative integers')
+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
+                          args=(word_counts), method='brent')
+    beta = mle.x
+    alpha = 1 / (beta - 1)
+    return alpha
 ```
 
 ## Unit Testing {#correct-unit}
@@ -189,7 +172,7 @@ the function will typically process.
 For instance,
 in order to write a unit test for the `count_words` function,
 we could use a piece of text small enough for us to count word frequencies by hand.
-The poem "Risk" by Anaïs Nin is a good choice:
+Let's add the poem "Risk" by Anaïs Nin to our data:
 
 ```shell
 $ cat data/risk.txt
@@ -206,7 +189,7 @@ it took
 to blossom.
 ```
 
-The expected result is:
+We can then count the words by hand to construct the expected result:
 
 ```python
 from collections import Counter
@@ -609,13 +592,13 @@ creating the fixture and running the code
 can be considerably more complicated. 
 For example,
 in the case of our Zipf's Law software an appropriate integration test fixture
-might be a text file with a word frequency distribution that has a known alpha value. 
+might be a text file with a word frequency distribution that has a known \(\alpha\) value. 
 In order to create this text fixture,
 we need a way to generate random words.
 
 Fortunately, a Python library called `randomwordgenerator` exists to do just that.
 We can install it and the `pypandoc` library it depends on
-using the Python Package Installer (pip): 
+using [`pip`][pip], the Python Package Installer: 
 
 ```shell
 $ pip install pypandoc
@@ -681,7 +664,7 @@ The next step is to test with real data,
 i.e., an actual book.
 The problem is,
 we don't know the expected result:
-it's not practical to count the words in Dracula by hand,
+it's not practical to count the words in *Dracula* by hand,
 and even if we tried,
 the odds are good that we'd make a mistake.
 For this kind of situation we can use [regression testing][regression-testing].
@@ -954,7 +937,7 @@ To https://github.com/amira-khan/zipf.git
 ```
 
 When this commit reaches GitHub,
-that sites notifies Travis CI that the repository has changed.
+that site notifies Travis CI that the repository has changed.
 Travis CI then follows the instructions in `.travis.yml`
 and reports whether the build passed (shown in green)
 or produced warnings or errors (shown in red).
@@ -1124,7 +1107,7 @@ the practices introduced in this chapter will help with both.
 
 ## Exercises {#correct-exercises}
 
-TODO: Need more exercises.
+TODO: Need more exercises (including one exploring `pytest.raises`).
 
 ### Explaining assertions {#correct-ex-explain-assertions}
 

@@ -255,6 +255,7 @@
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [phony-target-make]: glossary.html#phony-target-make
+[pip]: https://pypi.org/project/pip/
 [pip-and-conda]: https://www.anaconda.com/understanding-conda-and-pip/
 [pipe-unix]: glossary.html#pipe-unix
 [pothole-case]: glossary.html#pothole-case
