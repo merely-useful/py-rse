@@ -190,6 +190,7 @@ FIXME: PLEASE ADD YOURS
 -   Dr. Damien B. Irving
 -   Dr. Gregory V. Wilson
 -   Joel Ostblom
+-   Dr. Luke Johnston
 
 Name (as it would appear on a book cover):
 
@@ -207,7 +208,7 @@ FIXME: PLEASE ADD YOURS
 -   For Damien Irving: 124 Marlyn Road, South Hobart, Tasmania 7004, Australia
 -   For Greg Wilson: 65 Highfield Road, Toronto, Ontario M4L 2T9, Canada
 -   For Joel Ostblom: 4227 W 12th Ave, Vancouver, British Columbia, V6R 2P8, Canada
--   For Joel Ostblom: Vesterport 3, 2.1, 8000 Aarhus, Denmark
+-   For Luke Johnston: Vesterport 3, 2.1, 8000 Aarhus, Denmark
 
 Preferred email:
 
