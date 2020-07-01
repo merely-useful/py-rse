@@ -188,45 +188,50 @@ Formal Name (as it should appear on a book contract):
 FIXME: PLEASE ADD YOURS
 
 -   Dr. Damien B. Irving
--   Dr. Gregory V. Wilson
--   Joel Ostblom
+-   Dr. Kate L. Hertweck
 -   Dr. Luke Johnston
+-   Joel Ostblom
+-   Dr. Gregory V. Wilson
 
 Name (as it would appear on a book cover):
 
 FIXME: PLEASE ADD YOURS
 
 -   Damien Irving
--   Greg Wilson
--   Joel Ostblom
+-   Kate Hertweck
 -   Luke Johnston
+-   Joel Ostblom
+-   Greg Wilson
 
 Mailing Address:
 
 FIXME: PLEASE ADD YOURS
 
--   For Damien Irving: 124 Marlyn Road, South Hobart, Tasmania 7004, Australia
--   For Greg Wilson: 65 Highfield Road, Toronto, Ontario M4L 2T9, Canada
--   For Joel Ostblom: 4227 W 12th Ave, Vancouver, British Columbia, V6R 2P8, Canada
--   For Luke Johnston: Vesterport 3, 2.1, 8000 Aarhus, Denmark
+-   Damien Irving: 124 Marlyn Road, South Hobart, Tasmania 7004, Australia
+-   Kate Hertweck: 1237 Taylor Ave N #2, Seattle, WA 98109, USA
+-   Luke Johnston: Vesterport 3, 2.1, 8000 Aarhus, Denmark
+-   Joel Ostblom: 4227 W 12th Ave, Vancouver, British Columbia, V6R 2P8, Canada
+-   Greg Wilson: 65 Highfield Road, Toronto, Ontario M4L 2T9, Canada
 
 Preferred email:
 
 FIXME: PLEASE ADD YOURS
 
--   For Damien Irving: irving.damien@gmail.com
--   For Greg Wilson: gvwilson@third-bit.com
--   For Joel Ostblom: joel.ostblom@protonmail.com
--   For Luke Johnston: lwjohnst@gmail.com
+-   Damien Irving: irving.damien@gmail.com
+-   Kate Hertweck: k8hertweck@gmail.com
+-   Luke Johnston: lwjohnst@gmail.com
+-   Joel Ostblom: joel.ostblom@protonmail.com
+-   Greg Wilson: gvwilson@third-bit.com
 
 Website/blogs/Twitter, etc:
 
 FIXME: PLEASE ADD YOURS
 
--   For Damien Irving: https://damienirving.github.io/
--   For Greg Wilson: http://third-bit.com
--   For Joel Ostblom: https://joelostblom.com 
--   For Luke Johnston: http://lukewjohnston.com
+-   Damien Irving: https://damienirving.github.io/
+-   Kate Hertweck: http://katehertweck.com/
+-   Luke Johnston: http://lukewjohnston.com/
+-   Joel Ostblom: https://joelostblom.com/
+-   Greg Wilson: http://third-bit.com/
 
 **9. Schedule**
 
