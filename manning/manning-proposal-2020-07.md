@@ -185,57 +185,52 @@ Please estimate:
 
 Formal Name (as it should appear on a book contract):
 
-FIXME: PLEASE ADD YOURS
-
 -   Dr. Damien B. Irving
 -   Dr. Kate L. Hertweck
 -   Dr. Luke Johnston
 -   Sara Mahallati
 -   Joel Ostblom
+-   Dr. Charlotte Wickham
 -   Dr. Gregory V. Wilson
 
 Name (as it would appear on a book cover):
-
-FIXME: PLEASE ADD YOURS
 
 -   Damien Irving
 -   Kate Hertweck
 -   Luke Johnston
 -   Sara Mahallati
 -   Joel Ostblom
+-   Charlotte Wickham
 -   Greg Wilson
 
 Mailing Address:
-
-FIXME: PLEASE ADD YOURS
 
 -   Damien Irving: 124 Marlyn Road, South Hobart, Tasmania 7004, Australia
 -   Kate Hertweck: 1237 Taylor Ave N #2, Seattle, WA 98109, USA
 -   Luke Johnston: Vesterport 3, 2.1, 8000 Aarhus, Denmark
 -   Sara Mahallati: 9 Kendal Ave, Toronto, Ontario M5R 1L5, Canada
 -   Joel Ostblom: 4227 W 12th Ave, Vancouver, British Columbia V6R 2P8, Canada
+-   Charlotte Wickham: 808 NW 11th St, Corvallis, OR 97330, USA
 -   Greg Wilson: 65 Highfield Road, Toronto, Ontario M4L 2T9, Canada
 
 Preferred email:
-
-FIXME: PLEASE ADD YOURS
 
 -   Damien Irving: irving.damien@gmail.com
 -   Kate Hertweck: k8hertweck@gmail.com
 -   Luke Johnston: lwjohnst@gmail.com
 -   Sara Mahallati: sara.mahallati@gmail.com
 -   Joel Ostblom: joel.ostblom@protonmail.com
+-   Charlotte Wickham: cwickham@gmail.com
 -   Greg Wilson: gvwilson@third-bit.com
 
 Website/blogs/Twitter, etc:
-
-FIXME: PLEASE ADD YOURS
 
 -   Damien Irving: https://damienirving.github.io/
 -   Kate Hertweck: http://katehertweck.com/
 -   Luke Johnston: http://lukewjohnston.com/
 -   Luke Johnston: https://scholar.google.ca/citations?user=8zCoa-UAAAAJ
 -   Joel Ostblom: https://joelostblom.com/
+-   Charlotte Wickham: https://www.cwick.co.nz/
 -   Greg Wilson: http://third-bit.com/
 
 **9. Schedule**
