@@ -28,6 +28,8 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
+    assert(all([isinstance(c, int) and (c >= 0) for c in word_counts]), \
+           'All input values must be non-negative integers')
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
                           args=(word_counts), method='brent')
     beta = mle.x
