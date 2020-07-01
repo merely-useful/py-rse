@@ -23,7 +23,7 @@ def main(links_file, source_files):
 
     with open(links_file, 'r') as reader:
         defined = set(PAT_DEF.findall(reader.read()))
-    used = read_all_files(source_files, find_uses, remove_code=True)
+    used = read_all_files(source_files, find_uses, remove_code=False)
     report('Links: undefined', used - defined)
     report('Links: unused', defined - used)
 

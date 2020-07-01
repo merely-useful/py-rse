@@ -71,6 +71,7 @@ PY_RSE_FILES=\
   py-rse/packaging.Rmd \
   py-rse/publish.Rmd \
   py-rse/finale.Rmd \
+  py-rse/install.Rmd \
   py-rse/objectives.Rmd \
   py-rse/keypoints.Rmd \
   py-rse/solutions.Rmd \
