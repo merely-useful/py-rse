@@ -1,11 +1,5 @@
-"""
-Collection of commonly used functions.
+"""Collection of commonly used functions."""
 
-Functions
----------
-collection_to_csv
-    write out a collection of items and counts in csv format
-"""
 import sys
 import csv
 

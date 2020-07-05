@@ -62,15 +62,16 @@ PY_RSE_FILES=\
   py-rse/git-cmdline.Rmd \
   py-rse/git-advanced.Rmd \
   py-rse/automate.Rmd \
-  py-rse/configuration.Rmd \
+  py-rse/config.Rmd \
   py-rse/errors.Rmd \
   py-rse/teams.Rmd \
   py-rse/style.Rmd \
   py-rse/project.Rmd \
-  py-rse/correct.Rmd \
+  py-rse/testing.Rmd \
   py-rse/packaging.Rmd \
   py-rse/publish.Rmd \
   py-rse/finale.Rmd \
+  py-rse/install.Rmd \
   py-rse/objectives.Rmd \
   py-rse/keypoints.Rmd \
   py-rse/solutions.Rmd \
