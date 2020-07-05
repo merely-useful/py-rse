@@ -145,7 +145,7 @@ _book/r-novice/index.html : ${R_NOVICE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 _book/py-rse/index.html : ${PY_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f py-rse.Rmd
 	cp py-rse-index.Rmd index.Rmd
-	Rscript -e "options(bookdown.render.file_scope = false); bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py-rse.yml'); warnings()"
+	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', config_file='_py-rse.yml'); warnings()"
 
 _book/r-rse/index.html : ${R_RSE_FILES} ${COMMON_FILES} ${INDEX_HTML}
 	rm -f r-rse.Rmd
