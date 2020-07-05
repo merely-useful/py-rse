@@ -1,5 +1,6 @@
 [abandonware]: glossary.html#abandonware
 [absolute-error]: glossary.html#absolute-error
+[absolute-import]: glossary.html#absolute-import
 [absolute-path]: glossary.html#absolute-path
 [accuracy]: glossary.html#accuracy
 [action-make]: glossary.html#action-make
@@ -34,9 +35,9 @@
 [bug-report]: glossary.html#bug-report
 [bug-tracker]: glossary.html#bug-tracker
 [build-manager]: glossary.html#build-manager
-[build-tool]: glossary.html#build-tool
 [byte-code]: glossary.html#byte-code
 [call-stack]: glossary.html#call-stack
+[camel-case]: glossary.html#camel-case
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
@@ -111,12 +112,14 @@
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [embedded-documentation]: glossary.html#embedded-documentation
 [eniac]: glossary.html#eniac
+[entry-point]: glossary.html#entry-point
 [entry-points]: https://setuptools.readthedocs.io/en/latest/pkg_resources.html?highlight=namespace#entry-points
 [environment]: glossary.html#environment
 [error-unexpected]: https://stackoverflow.com/questions/25889234/error-unexpected-symbol-input-string-constant-numeric-constant-special-in-my-co
 [exception]: glossary.html#exception
 [expected-result]: glossary.html#expected-result
 [expert]: glossary.html#expert
+[explicit-relative-import]: glossary.html#explicit-relative-import
 [exploratory-programming]: glossary.html#exploratory-programming
 [exponent]: glossary.html#exponent
 [export-variable]: glossary.html#export-variable
@@ -184,6 +187,7 @@
 [home-directory]: glossary.html#home-directory
 [huff-testing]: https://github.com/katyhuff/python-testing
 [impact-effort-matrix]: glossary.html#impact-effort-matrix
+[implicit-relative-import]: glossary.html#implicit-relative-import
 [impostor-syndrome]: glossary.html#impostor-syndrome
 [in-place-operator]: glossary.html#in-place-operator
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
@@ -269,6 +273,7 @@
 [pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
 [parent-directory]: glossary.html#parent-directory
 [parking-lot]: glossary.html#parking-lot
+[patch]: glossary.html#patch
 [path-coverage]: glossary.html#path-coverage
 [path]: glossary.html#path
 [pattern-rule-make]: glossary.html#pattern-rule-make
@@ -298,6 +303,7 @@
 [provenance]: glossary.html#provenance
 [pull-request]: glossary.html#pull-request
 [py-docs]: glossary.html#py-docs
+[pypi-user-guide]: https://packaging.python.org/guides/using-testpypi/
 [pypi]: https://pypi.org/
 [pytest-mpl]: https://github.com/matplotlib/pytest-mpl
 [pytest]: https://pytest.org/
@@ -379,6 +385,7 @@
 [so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
 [so]: https://stackoverflow.com/
 [source-code]: glossary.html#source-code
+[source-distribution]: glossary.html#source-distribution
 [sphinx]: https://www.sphinx-doc.org/en/master/
 [sprint]: glossary.html#sprint
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
@@ -483,4 +490,5 @@
 [xkcd-duty-calls]: https://xkcd.com/386/
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
+[zipf-project-page]: https://test.pypi.org/project/zipf/
 [zipfs-law]: https://en.wikipedia.org/wiki/Zipf%27s_law

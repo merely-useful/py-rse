@@ -1,4 +1,4 @@
-# Python Packaging {#package-py}
+# Python Packaging {#packaging}
 
 ```{r package-py-setup, include=FALSE}
 source(here::here("_common.R"))
@@ -7,21 +7,19 @@ source(here::here("_common.R"))
 > Another response of the wizards,
 > when faced with a new and unique situation,
 > was to look through their libraries to see if it had ever happened before.
-> This was... a good survival trait.
+> This was...a good survival trait.
 > It meant that in times of danger you spent the day sitting very quietly
 > in a building with very thick walls.
 >
 > --- Terry Pratchett
 
-The more software you write,
-the more you realize that a programming language is a way to build and combine software libraries.
+The more software we write,
+the more we think of a programming language as a way to build and combine libraries.
 Every widely-used language now has an online repository
 from which people can download and install those libraries.
 This lesson shows you how to use Python's tools to create and share libraries of your own.
 
-This material is based in part on [Python 102][python-102] by [Ashwin Srinath][srinath-ashwin].
-
-We'll continue with our Zipf's Law project,
+We will continue with our Zipf's Law project,
 which should include the following files:
 
 ```text
@@ -50,21 +48,24 @@ which should include the following files:
     └── ...
 ```
 
-## Creating an installable Python package {#package-py-package}
+## Creating a Python Package {#packaging-package}
 
-A package is essentially a few Python scripts in a specific directory structure
-coupled with installation instructions for the computer.
-Python packages can come from various sources.
-Many that you will use are part of the standard distribution,
-but packages can be created by anyone
+A package consists of one or more Python source files
+in a specific directory structure
+combined with installation instructions for the computer.
+Python packages can come from various sources:
+some are distributed with Python itself,
+but anyone can create one,
 and there are thousands that can be downloaded and installed from online repositories.
-Note that you will sometimes hear packages referred to as "modules".
-These two words are often used interchangeably.
-Technically,
-a package is a folder that contains modules (scripts),
-which in turn contains functions (code).
 
-A general package folder hierarchy looks like this
+> **Terminology**
+>
+> People sometimes refer to packages as modules.
+> Strictly speaking,
+> a module is a single source file,
+> while a package is a directory structure that contains one or more modules.
+
+A generic package folder hierarchy looks like this:
 
 ```text
 pkg_name
@@ -75,23 +76,27 @@ pkg_name
 └── setup.py
 ```
 
-which in our case would mean changing the name of `bin/` to `zipf`.
+The top-level directory is named after the package.
+It contains a directory that is also named after the package,
+and that contains the package's source files.
+It is initially a little confusing to have two directories with the same name,
+but most Python projects follow this convention because
+it makes it easier to set up the project for installation.
+We can get this structure in our Zipf's Law project
+simply by renaming `zipf/bin` to `zipf`.
 
-It may initially be confusing to have two folders with the same name
-(the original project directory,
-and the renamed `bin/`),
-but it makes it easier to setup your project for installation
-and it is the convention used by most Python projects.
-Alternative directory structures are possible,
-but in this chapter we're focusing on the approach we believe is the most beneficial to learn.
-
-> You will often see Python packages containing a file with a special name: `__init__.py`.
-> This was a requirement before Python 3.3,
-> but is now only needed to execute code upon package import.
+> **`__init__.py`**
+>
+> Python packages often contain a file with a special name: `__init__.py`
+> (two underscores before and after `init`).
 > Just as importing a module file executes the code in the module,
 > importing a package executes the code in `__init__.py`.
+> Packages *had* to have this file before Python 3.3,
+> even if it was empty,
+> but since Python 3.3 it is only needed
+> if we want to run some code as the package is being imported.
 
-For our scripts to work as a Python package,
+To make the modules in the Zipf's Law project work as a Python package,
 we only need to make one important change to the code itself:
 changing the syntax for how we import `utilities`.
 Currently,
@@ -101,40 +106,43 @@ both `collate.py` and `countwords.py` contains this line:
 import utilities
 ```
 
-This is called an implicit relative import,
-because it is not clear whether a Python package called `utilities` exists
-or if there is a file in our local directory named `utilities.py` (as in our case).
-This ambiguity is not ideal
-and when making a package we need to be more explicit and write:
+This is called an [implicit relative import][implicit-relative-import],
+because it is not clear whether we mean
+"import a Python package called `utilities`"
+or
+"import a file in our local directory called `utilities.py`"
+(which is what we want).
+To remove this ambiguity we need to be explicit and write:
 
 ```python
 from zipf import utilities
 ```
 
-This is referred to as an absolute import,
+This is an [absolute import][absolute-import],
 since we are specifying the full location of `utilities` inside the `zipf` package.
-Absolute imports are the preferred way of importing your own code inside a package,
-but you will probably also encounter explicit relative imports,
-which can provide some advantages when restructuring large projects:
+Absolute imports are the preferred way for parts of a package to import other parts,
+but we can also use [explicit relative imports][explicit-relative-import],
+which require a little less typing
+and can sometimes make it easier to restructure very large projects:
 
 ```python
 from . import utilities
 ```
 
 Here,
-the `.` makes it clear that `utilities` exists in the current directory.
+the `.` signals that `utilities` exists in the current directory.
 
 Python has several ways to build an installable package.
 We will show how to use [setuptools][setuptools],
-which is the lowest common denominator.
-The setuptools approach we describe below will
-allow everyone,
-regardless of what python distribution they use,
-to easily use your package.
+which is the lowest common denominator
+and will allow everyone,
+regardless of what Python distribution they have,
+to use our package.
 To use `setuptools`,
-we must create a file called `setup.py` in the directory *above* the root directory of the package:
-The file `setup.py` must have exactly that name,
-and must contain these lines:
+we must create a file called `setup.py` in the directory *above* the root directory of the package.
+(This is why we require the two-level directory structure described earlier.)
+`setup.py` must have exactly that name,
+and must contain lines like these:
 
 ```python
 from setuptools import setup
@@ -142,79 +150,65 @@ from setuptools import setup
 
 setup(
     name='zipf',
-    version='0.1',
+    version='0.1.0',
     author='Amira Khan',
     packages=['zipf'])
 ```
 
-We can add additional information later,
-but this is enough to be able to install the package
-from the local copy source code using standard tools.
-However,
-it is considered good practice to first create a separate, virtual Python environment
-before installing our own packages.
-This will allow us to test how our package installs in a clean Python environment,
-rather that the current state of our primary Python environment.
+The `name` and `author` parameters are self-explanatory.
+Most software projects use [semantic versioning][semantic-versioning] for software releases.
+A version number consists of three integers X.Y.Z,
+where X is the major version, Y is the minor version, and Z is the [patch][patch] version.
+Major version zero (0.Y.Z) is for initial development, so we have started with 0.1.0.
+The first stable public release would be version 1.0.0,
+and in general, the version number is incremented as follows:
 
-> **Semantic Versioning**
->
-> How do we decide what version number to use?
-> Most software projects use semantic versioning for software releases,
-> where a version number takes the form X.Y.Z and X, Y and Z are integers.
-> X is the major version, Y is the minor version, and Z is the patch version.
-> Major version zero (0.Y.Z) is for initial development, so we've started with 0.1.0.
-> The very first stable public release would be version 1.0.0.
-> In general, the version number is incremented as follows:
->
-> -   Increment `major` every time there's an incompatible externally-visible change
-> -   Increment `minor` when adding new functionality in a backwards-compatible manner (i.e. without breaking any existing code)
-> -   Increment `patch` for backwards-compatible bug fixes that don't add any new features
+-   Increment `major` every time there's an incompatible externally-visible change
+-   Increment `minor` when adding new functionality in a backwards-compatible manner
+    (i.e. without breaking any existing code)
+-   Increment `patch` for backwards-compatible bug fixes that don't add any new features
 
-> **Finding Packages**
->
-> Above we have specified the folder name containing the packaging code to the `packages` parameter.
-> This was straightforward for our package since we only have a single package directory.
-> For more complex projects,
-> it is good to know about the `find_packages()`[find-packages] function from `setuptools`,
-> which can automatically find all packages by recursively searching the current directory.
+Finally,
+we specify the name of the directory
+containing the code to be packaged with the `packages` parameter.
+This is straightforward in our case because we only have a single package directory.
+For more complex projects,
+the [`find_packages`][find-packages] function from `setuptools`
+can automatically find all packages by recursively searching the current directory.
 
-## Creating a virtual Python environment {#package-py-virtualenv}
+## Virtual Environments {#packaging-virtualenv}
 
-It can be convenient to have several different Python environments that
-you can switch between.
-One reason is that you're probably working on
-multiple projects at any given time,
-each with different requirements
-for Python packages,
-and you want to keep them straight.
+We can add additional information to our package later,
+but this is enough to be able to build it for testing purposes.
+Before we do that,
+though,
+we should create a [virtual environment][virtual-environment]
+to test how our package installs
+without breaking anything in our main Python installation.
 
-Another reason concerns us a bit more immediately.
-We want to make sure that other people can successfully install and use our package.
-That means:
-
-- We want to be able to easily test install and uninstall our package,
-  without affecting the entire Python environment.
-- We want to answer problems people have with our package with something more helpful than
-  "I don't know, it works for me".
-  By installing and running our package in a completely empty environment,
-  we can ensure that we're not accidentally relying on other packages being installed.
-
-A very handy answer to both of those needs is a [virtual environment][virtual-environment].
 A virtual environment is a layer on top of an existing Python installation.
-Whenever Python needs to find a library,
-This gives us a place to install packages that only some projects need,
-or that are still under development,
-without affecting the main installation (Figure \@ref(fig:package-py-virtualenv).
+Whenever Python needs to find a package,
+it looks in the virtual environment before checking the main Python installation.
+This gives us a place to install packages that only some projects need
+without affecting other projects (Figure \@ref(fig:package-py-virtualenv).
 
 ```{r package-py-virtualenv, echo=FALSE, fig.cap="Virtual Environments"}
 knitr::include_graphics("figures/FIXME.png")
 ```
 
-We can create and manage virtual environments using `conda`,
-the same tool we used to install packages earlier.
-We can create a new virtual environment called `zipf` with the `conda create` command,
-specifying the environment name with the `-n` or `--name` flag
-and listing python as the initial software to install in the environment:
+Virtual environments also help with package development:
+
+-   We want to be able to easily test install and uninstall our package,
+    without affecting the entire Python environment.
+-   We want to answer problems people have with our package with something more helpful than
+    "I don't know, it works for me".
+    By installing and running our package in a completely empty environment,
+    we can ensure that we're not accidentally relying on other packages being installed.
+
+We can manage virtual environments using a tool called `conda`.
+To create a new virtual environment called `zipf` we run `conda create`,
+specifying the environment's name with the `-n` or `--name` flag
+and listing `python` as the base to build on:
 
 ```shell
 $ conda create -n zipf python
@@ -248,11 +242,10 @@ Executing transaction: done
 ```
 
 `conda` creates the directory `~/anaconda3/envs/zipf`,
-which contains subdirectories called `bin`, `lib`, and so on:
-everything needed for a minimal Python installation.
-Crucially,
-`~/anaconda3/envs/zipf/bin/python` checks for packages in these directories
-instead of checking the system-wide install.
+which contains the subdirectories needed for a minimal Python installation,
+such as `bin` and `lib`.
+It also creates `~/anaconda3/envs/zipf/bin/python`,
+which checks for packages in these directories before checking the main installation.
 
 We can switch to the `zipf` environment by running:
 
@@ -261,7 +254,7 @@ $ conda activate zipf
 ```
 
 Once we have done this,
-we're running the Python interpreter in `zipf/bin`:
+the `python` command runs the interpreter in `zipf/bin`:
 
 ```shell
 (zipf)$ which python
@@ -271,19 +264,19 @@ we're running the Python interpreter in `zipf/bin`:
 /home/amira/anaconda3/envs/zipf/bin/python
 ```
 
-Notice how every command now displays `(zipf)` when that virtual environment is active.
+Notice that every shell command displays `(zipf)` when that virtual environment is active.
 Between Git branches and virtual environments,
-it can be very easy to lose track of what exactly you're working on and with.
-Having prompts like this can make it a little less confusing;
+it can be very easy to lose track of what exactly we are working on and with.
+Prompts like this can make it a little less confusing;
 using virtual environment names that match the names of your projects
 (and branches, if you're testing different environments on different branches)
 quickly becomes essential.
 
-We can now install packages to our heart's delight.
-Everything we install will go under `zipf`,
-and won't affect the underlying Python installation.
-When we're done,
-we can switch back to the default environment with `conda deactivate`.
+We can now install packages safely.
+Everything we install will go into `zipf` virtual environment
+without affecting the underlying Python installation.
+When we are done,
+we can switch back to the default environment using `conda deactivate`:
 
 ```shell
 (zipf)$ conda deactivate
@@ -297,54 +290,49 @@ $ which python
 /usr/bin/python
 ```
 
-## Installing your package {#package-py-installing}
+## Installing a Development Package {#packaging-installing}
 
-Let's proceed to install our package inside this virtual environment.
-First we need to activate it again:
+Let's install our package inside this virtual environment.
+First we re-activate it:
 
 ```shell
 $ conda activate zipf
 ```
 
-Now the prompt should have changed to `(zipf)$` again.
-From now on,
-everything we do will be in this environment,
-but we will simply type `$` from now on for brevity.
-
-Let's change to the `zipf` directory containing our `setup.py` file
-and install our package by typing `pip install -e .`,
-where `.` references the current directory.
-The `-e` flag indicates that we want to to install the package in "editable" mode,
+Next,
+we go into the upper `zipf` directory that contains our `setup.py` file
+and install our package using `pip install -e .`.
+The `-e` option indicates that we want to to install the package in "editable" mode,
 which means that any changes we make in the package code are directly available to use
-without having to reinstall the package.
+without having to reinstall the package;
+the `.` means "install from the current directory":
 
 ```text
-$ cd zipf
-$ pip install -e .
+(zipf)$ cd zipf
+(zipf)$ pip install -e .
 ```
 
 ```text
 Processing /home/amira/proj/merely-useful.github.io/zipf/zipf
 Building wheels for collected packages: zipf
   Building wheel for zipf (setup.py) ... done
-  Created wheel for zipf: filename=zipf-0.1-py3-none-any.whl size=4574 sha256=b7d645f1d07775714855a83d0cc62911c8502eb917fcb3fe2d9fe46206c84656
+  Created wheel for zipf: filename=zipf-0.1.0-py3-none-any.whl size=4574 sha256=b7d645f1d07775714855a83d0cc62911c8502eb917fcb3fe2d9fe46206c84656
   Stored in directory: /tmp/pip-ephem-wheel-cache-19cuetii/wheels/a8/a6/0e/8b2a5cbf87d4a33551e65bc911bfdee49a4c117b0c5c834a47
 Successfully built zipf
 Installing collected packages: zipf
-Successfully installed zipf-0.1
+Successfully installed zipf-0.1.0
 ```
 
-Success!
-If you take a look in `~/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
-you will now see the `zipf` package with all the other site packages.
-
-If you try to run the package at this stage,
-you will see that it complains that some of the packages we use,
-such as pandas,
+If we look in `~/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
+we can see the `zipf` package beside all the other locally-installed packages.
+If we try to use the package at this stage,
+though,
+Python will complain that some of the packages it depends on,
+such as `pandas`,
 are not installed.
 We could install these manually,
-but it is preferred to automate this process
-by listing all the required packages as dependencies of our package
+but it is more reliable to automate this process
+by listing everything that our package depends on
 using the `install_requires` parameter in `setup.py`:
 
 ```python
@@ -361,19 +349,24 @@ setup(
         'pandas',
         'scipy',
         'pyyaml',
-        'pytest'])  # Note the diff name from the import
+        'pytest'])
 ```
 
 We don't have to list `numpy` explicitly
-since it will be installed as a dependency for `pandas` and `scipy`.
-It is good practice to specify limits for the version numbers of the dependencies.
-For example, if we have only tested our package on pandas version 1.0.1,
-we could put `pandas==1.0.1` or `pandas>=1.0.1` instead of just `pandas`
-in the list argument passed to the `install_requires` parameter.
-Now we can install our package and all its dependencies in a single command:
+because it will be installed as a dependency for `pandas` and `scipy`.
+
+> **Versioning Dependencies**
+>
+> It is good practice to specify the versions of our dependencies
+> and even better to specify version ranges.
+> For example, if we have only tested our package on pandas version 1.0.1,
+> we could put `pandas==1.0.1` or `pandas>=1.0.1` instead of just `pandas`
+> in the list argument passed to the `install_requires` parameter.
+
+We can now install our package and all its dependencies in a single command:
 
 ```shell
-$ pip install .
+(zipf)$ pip install -e .
 ```
 
 ```text
@@ -407,15 +400,14 @@ Installing collected packages: pyparsing, python-dateutil, kiwisolver, cycler, n
 Successfully installed cycler-0.10.0 kiwisolver-1.2.0 matplotlib-3.2.1 numpy-1.18.2 pandas-1.0.3 pyparsing-2.4.6 python-dateutil-2.8.1 scipy-1.4.1 zipf
 ```
 
-Note that the output will be similar to the above,
-but not identical,
-since package versions might change.
+(The precise output of this command will change
+depending on which versions of our dependencies get installed.)
 
-We could now import the functionality from our package inside Python code,
-such as in a script or Jupyter notebook.
+We can now import our package in a script or a Jupyter notebook
+just as we would any other package.
 For example,
 to use the function in `utilities`,
-we would write the following:
+we would write:
 
 ```python
 from zipf import utilities
@@ -425,14 +417,12 @@ utilities.collection_to_csv(...)
 ```
 
 However,
-one downside of our packaging is that the useful command-line
-scripts that we used to count and plot word counts,
+the useful command-line scripts that we used to count and plot word counts
 are no longer accessible directly from the terminal.
 Fortunately,
-the `setuptools` package allows us to install not only the Python package itself,
-but also associated scripts that it places with other executable files.
-We can make sure that `setuptools` will install the scripts
-by defining entry points[entry-points]:
+the `setuptools` package allows us to install programs along with the package.
+These programs are placed beside those of other packages.
+We tell `setuptools` to do this by defining [entry points][entry-point]:
 
 ```python
 from setuptools import setup
@@ -456,13 +446,14 @@ setup(
             'plotcounts = zipf.plotcounts:main']})
 ```
 
-The right side of the `=` operator is the location of a function (`package.module:function`),
-and the left side is the name we want to use to call this function from the command line.
-For each module we are calling the `main` function,
+The right side of the `=` operator is the location of a function,
+written as `package.module:function`;
+the left side is the name we want to use to call this function from the command line.
+In this case we want to call each module's `main`,
 which as it stands requires an input argument `args`
-that stores the command-line arguments given by the user (Section \@ref(scripting-options)).
+containing the command-line arguments given by the user (Section \@ref(scripting-options)).
 For example,
-the relevant section of our `countwords.py` script reads as follows:
+the relevant section of our `countwords.py` program is:
 
 ```python
 def main(args):
@@ -482,9 +473,7 @@ if __name__ == '__main__':
 ```
 
 We can't pass any arguments to `main` when we define entry points in our `setup.py` file,
-so we need to make a slight edit to our scripts so that `main` doesn't require any.
-For example,
-we can edit `countwords.py` as follows:
+so we need to change this slightly:
 
 ```python
 def parse_command_line():
@@ -508,26 +497,24 @@ if __name__ == '__main__':
     main()
 ```
 
-Now that we've defined out entry points
-and edited our command line programs so that `main` doesn't require any input arguments,
-let's remove our currently installed version of `zipf`
-and install it again with the updated setup file.
+Once we have made the corresponding change in `collate.py` and `plotcounts.py`,
+we can remove the currently-installed version of `zipf` and re-install it:
 
 ```shell
-$ pip uninstall zipf
+(zipf)$ pip uninstall zipf
 ```
 
 ```text
 Found existing installation: zipf 0.1
-Uninstalling zipf-0.1:
+Uninstalling zipf-0.1.0:
   Would remove:
     /home/amira/.local/lib/python3.8/site-packages/zipf.egg-link
 Proceed (y/n)? y
-  Successfully uninstalled zipf-0.1
+  Successfully uninstalled zipf-0.1.0
 ```
 
 ```shell
-$ pip install -e .
+(zipf)$ pip install -e .
 ```
 
 ```text
@@ -550,11 +537,11 @@ Installing collected packages: zipf
 Successfully installed zipf
 ```
 
-The output looks slightly different this time
-because pip did not need to go online to fetch the repositories,
-since there was a local cached version from the previous install.
+The output looks slightly different than the first run
+because `pip` could re-use some packages saved locally by the previous install
+rather than re-fetching them from online repositories.
 
-Now we can use our commands directly from the terminal
+We can now use our commands directly from the terminal
 without writing the full path to the file
 and without prefixing it with `python`.
 
@@ -570,33 +557,27 @@ to,4540
 of,3738
 ```
 
-## What it means to install a Python package {#package-py-installation}
+## What Installation Does {#packaging-installation}
 
-Now that we have created and installed our very first Python package,
-let's explore what actually happens during the installation of a package.
-
-In essence,
-installing a package means that the contents of the package are copied
-into one of the directories that Python will search in.
-This means that you can "install" packages
-by manually copying source code into the right places
-but it's much more efficient and safer
-to use a tool specifically made for this purpose,
+Now that we have created and installed a Python package,
+let's explore what actually happens during installation.
+The short version is that
+the contents of the package are copied into a directory that Python will search
+when it imports things.
+In theory we can "install" packages by manually copying source code into the right places,
+but it's much more efficient and safer to use a tool specifically made for this purpose,
 such as `conda` or `pip`.
 
-Most commonly when installing packages,
-they will be copied into the `site-packages` directory,
-but this is not the only directory Python searches.
+Most of the time,
+these tools copy packages into the Python installation's `site-packages` directory,
+but this is not the only place Python searches.
 Just as the `PATH` environment in the shell contains a list of directories
-that the shell searches for programs it can execute,
-the Python variable `sys.path` contains a list of the directories to search.
-We can see the which directories Python looks in,
-by opening the Python interpreter and typing the following.
+that the shell searches for programs it can execute (Section \@ref(bash-advanced-vars)),
+the Python variable `sys.path` contains a list of the directories it searches.
+We can look at this list inside the interpreter:
 
 ```python
 import sys
-
-
 sys.path
 ```
 
@@ -610,22 +591,18 @@ sys.path
 '/home/amira/zipf']
 ```
 
-The first will be your current directory,
-and the rest are system paths for
-the Python installation you are using.
-This might differ slightly on different systems.
+The empty string at the start of the list means "the current directory".
+The rest are system paths for our Python installation,
+and will vary from computer to computer.
 
+## Distributing Packages {#packaging-distribute}
 
-## Distributing your package {#package-py-distribute}
-
-With our package working, testable, installable, and documented,
-we should distribute it so anyone can just `pip install zipf`
-and start running!
-
-To create a package that can be installed by `pip`
-we first need to create a source distribution
-(an `sdist` in Python packaging jargon)
-using setuptools:
+Now that our package can be installed,
+we should distribute it so that anyone can run `pip install zipf`
+and start use it.
+To do this,
+we need to use `setuptools` to create a [source distribution][source-distribution]
+(known as an `sdist` in Python packaging jargon):
 
 ```shell
 python setup.py sdist
@@ -647,52 +624,55 @@ warning: check: missing required meta-data: url
 
 warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
 
-creating zipf-0.1
-creating zipf-0.1/zipf
-creating zipf-0.1/zipf.egg-info
-copying files to zipf-0.1...
-copying README.md -> zipf-0.1
-copying setup.py -> zipf-0.1
-copying zipf/collate.py -> zipf-0.1/zipf
-copying zipf/countwords.py -> zipf-0.1/zipf
-copying zipf/plotcounts.py -> zipf-0.1/zipf
-copying zipf/utilities.py -> zipf-0.1/zipf
-copying zipf.egg-info/PKG-INFO -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/SOURCES.txt -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/dependency_links.txt -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/entry_points.txt -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/requires.txt -> zipf-0.1/zipf.egg-info
-copying zipf.egg-info/top_level.txt -> zipf-0.1/zipf.egg-info
-Writing zipf-0.1/setup.cfg
+creating zipf-0.1.0
+creating zipf-0.1.0/zipf
+creating zipf-0.1.0/zipf.egg-info
+copying files to zipf-0.1.0...
+copying README.md -> zipf-0.1.0
+copying setup.py -> zipf-0.1.0
+copying zipf/collate.py -> zipf-0.1.0/zipf
+copying zipf/countwords.py -> zipf-0.1.0/zipf
+copying zipf/plotcounts.py -> zipf-0.1.0/zipf
+copying zipf/utilities.py -> zipf-0.1.0/zipf
+copying zipf.egg-info/PKG-INFO -> zipf-0.1.0/zipf.egg-info
+copying zipf.egg-info/SOURCES.txt -> zipf-0.1.0/zipf.egg-info
+copying zipf.egg-info/dependency_links.txt -> zipf-0.1.0/zipf.egg-info
+copying zipf.egg-info/entry_points.txt -> zipf-0.1.0/zipf.egg-info
+copying zipf.egg-info/requires.txt -> zipf-0.1.0/zipf.egg-info
+copying zipf.egg-info/top_level.txt -> zipf-0.1.0/zipf.egg-info
+Writing zipf-0.1.0/setup.cfg
 creating dist
 Creating tar archive
-removing 'zipf-0.1' (and everything under it)
+removing 'zipf-0.1.0' (and everything under it)
 ```
 
-These distribution files can now be distributed via PyPI,
-the standard Python repository for Python packages.
-There is a TestPyPI repository that lets us test putting packages on PyPI
-without having them appear on the standard repository;
-let's start with that.
-Go to [test.pypi.org](https://test.pypi.org),
-create an account,
-and confirm your email.
+These distribution files can now be distributed via [PyPI][pypi],
+the standard repository for Python packages.
+Before doing that,
+though,
+we can put `zipf` on [TestPyPI][testpypi],
+which lets us test package distribution
+without having things appear in the main PyPI repository.
+We must have an account,
+but they are free to create.
 
-The preferred tool for uploading packages to PyPI is called [twine][twine];
-we will install that package:
+The preferred tool for uploading packages to PyPI is called [twine][twine],
+which we can install with:
 
 ```shell
 $ pip install twine
 ```
-Following the [Python Packaging User Guide](https://packaging.python.org/guides/using-testpypi/),
-we can now upload our distributions from the `dist/` folder:
+
+Following the [Python Packaging User Guide][pypi-user-guide],
+we can now upload our distributions from the `dist/` folder
+using the `--repository` option to specify the TestPyPI repository:
 
 ```shell
 $ twine upload --repository testpypi dist/*
 Enter your username: amirakhan
 Enter your passowrd: *********
 Uploading distributions to https://test.pypi.org/legacy/
-Uploading zipf-0.1.tar.gz
+Uploading zipf-0.1.0.tar.gz
 100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
 
 View at:
@@ -703,12 +683,12 @@ https://test.pypi.org/project/zipf/0.1/
 knitr::include_graphics("figures/py-rse/packaging/testpypi.png")
 ```
 
-The `--repository` option allows us to specify the TestPyPI repository, and we
-have now uploaded both types of distribution, allowing users with different
-environments to use the wheel distribution if their systems allow it, or
-the source distribution otherwise.
-
-We can now test this with a virtual environment and installing with pip:
+We have now uploaded both types of distribution,
+allowing people to use the wheel distribution if their system supports it
+or the source distribution if it does not.
+We can test that this has worked
+by creating a virtual environment
+and installing our package from TestPyPI:
 
 ```shell
 $ conda create -n zipf-test
@@ -719,7 +699,7 @@ $ conda activate zipf-test
 ```text
 Looking in indexes: https://test.pypi.org/simple
 Collecting zipf
-  Downloading https://test-files.pythonhosted.org/packages/aa/fb/352af20b6f4bb13c3f06e7c2f1e1b7ec8a11e771533d5ad05407d48059a9/zipf-0.1.tar.gz (3.1 kB)
+  Downloading https://test-files.pythonhosted.org/packages/aa/fb/352af20b6f4bb13c3f06e7c2f1e1b7ec8a11e771533d5ad05407d48059a9/zipf-0.1.0.tar.gz (3.1 kB)
 Requirement already satisfied: matplotlib in /usr/lib/python3.8/site-packages (from zipf) (3.2.1)
 Requirement already satisfied: pandas in ./.local/lib/python3.8/site-packages (from zipf) (1.0.3)
 Requirement already satisfied: scipy in /usr/lib/python3.8/site-packages (from zipf) (1.4.1)
@@ -734,67 +714,25 @@ Requirement already satisfied: six in /usr/lib/python3.8/site-packages (from cyc
 Requirement already satisfied: setuptools in /usr/lib/python3.8/site-packages (from kiwisolver>=1.0.1->matplotlib->zipf) (46.1.3)
 Installing collected packages: zipf
     Running setup.py install for zipf ... done
-Successfully installed zipf-0.1
+Successfully installed zipf-0.1.0
 ```
 
-Success,
-You can see that `pip` took advantage of the fact that some packages already existing on our system,
-and didn't download these again.
+Once again,
+`pip` takes advantage of the fact that some packages already existing on our system
+and doesn't download them again.
 Once we are happy with how our package appears in TestPyPI
-(including its [project page](https://test.pypi.org/project/zipf/)),
-we can go through the same process to put it on the main PyPI repository
-at [pypi.org](https://pypi.org/).
+(including its [project page][zipf-project-page]),
+we can go through the same process to put it on the main PyPI repository.
 
-> [**`pip` and `conda`**][pip-and-conda]
->
-> `pip` and `conda` can install packages from their respective online repositories.
-> Whereas `pip` only installs Python packages,
-> `conda` can install packages written in other language,
-> which can facilitate installations of Python packages that relies on underlying C or Fortran libraries
-> (such as `numpy`).
-> `conda` packages are always distributed as binaries,
-> which reduces installation times
-> and `conda` is also capable of creating isolated Python environments.
-> Creating packages compatible with `pip` is simpler than creating `conda` packages,
-> and it is practical for installing local packages,
-> which is how we are using it here.
-> Once a package has been uploaded to PyPI,
-> which we will go through later in this chapter,
-> it can be converted to a `conda` package [in a few steps][conda-skeleton-pypi].
-> Generally,
-> you don't want to mix using `pip` and `conda`,
-> but mainly rely on one package manager
-> and only use the other one if needed.
+## Documenting Packages {#packaging-document}
 
-FIXME: I like the idea of ending this section on pip 
-by briefly mentioning why we might use conda instead.
-The problem is that we need to get our story straight.
-We just installed `zipf` using pip,
-even though we say above that pip should have failed to install the non-Python
-dependencies associated with numpy.
-Will pip work for `zipf` in all cases?
-If not,
-in our README below we need to list the dependencies for the pip install,
-and we can say here that we could get around the dependecy problem by writing
-a conda package for `zipf`.
-
-## Documenting your package for others {#package-py-document}
-
-Now that we've packaged and distributed our code for others to use,
-we need to ensure that it is well documented.
-Good documentation starts with writing a clear explanatory [docstring][docstring]
-for each function and module,
-which is something we've been doing
-throughout the code development process (Section \@ref(scripting-docstrings)).
-This is one of the most important steps,
-as it means others can understand what each function is meant to do
-without going through the source code.
-
-What is missing is an introduction to what our package is meant to do,
+The final step in creating a usable Python package is to document it.
+Good documentation starts with writing a [docstring][docstring] for each function and module
+(Section \@ref(scripting-docstrings)),
+but users also need an introduction to what our package is meant to do,
 instructions on how to install it,
-and some examples of how it can be used.
-We can include these elements in our "README" file,
-which we created earlier (Chapter \@ref(git-advanced)).
+and examples of how to use it.
+We can include these elements in the `README.md` file we in Chapter \@ref(git-advanced).
 At the moment it reads as follows:
 
 ```shell
@@ -813,29 +751,36 @@ and plot each word's rank versus its frequency.
 - Sami Virtanen <sami@zipf.org>
 ```
 
-Our README file is currently written in regular [markdown][markdown] format,
-which as we've seen can be preferable to plain text
-because GitHub recognises markdown files ending in `.md` and displays them nicely.
-It would be fine to continue to work in markdown format,
-however in this case we ultimately want to  
-create a website for our package documentation (Section \@ref(package-py-sphinx)).
-The most popular documentation generators in the Python community use 
-[reStructuredText][restructured-text], so we should switch to that.
-Similar to markdown, reST is a markup format for plain text documents,
-which can be rendered into documents with quite complex indexes
-and cross-linking by many documentation tools;
-GitHub will recognize reST files ending in `.rst` and display them nicely.
+This file is currently written in [Markdown][markdown]
+because GitHub recognises files ending in `.md` and displays them nicely.
+We could continue to do this,
+but for a Python package we eventually want
+to create a website for our package documentation (Section \@ref(packaging-sphinx)).
+The most popular documentation generator in the Python community
+uses a format called [reStructuredText][restructured-text] (reST),
+so we will switch to that.
+
+Like Markdown,
+reST is a plain-text markup format
+that can be rendered into HTML or PDF documents
+with complex indices and cross-links.
+GitHub recognizes files ending in `.rst` as reST files and displays them nicely,
+so our first task is to rename our existing file:
 
 ```shell
 $ git mv README.md README.rst
 ```
 
-In the updated `README.rst` file below,
-notice that titles are underlined and overlined,
+We then make a few edits to the file:
+titles are underlined and overlined,
 section headings are underlined,
-and code blocks are set off with two colons (`::`) and indented.
+and code blocks are set off with two colons (`::`) and indented:
 
 ```text
+======
+zipf
+======
+
 The ``zipf`` package tallies the occurrences of words in text files
 and plots each word's rank versus its frequency.
 
@@ -848,7 +793,7 @@ relationship between the frequency and rank of words in a text:
 `"...the most frequent word will occur approximately twice as often
 as the second most frequent word,
 three times as often as the third most
-frequent word, etc."`  
+frequent word, etc."` 
 - `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
 
 Many books are available to download in plain text format
@@ -889,36 +834,20 @@ Contributors
 - Sami Virtanen <sami@zipf.org>
 ```
 
-FIXME: Does the installation section of the README need to list the dependencies
-(i.e. `numpy`, `scipy`, `pytest` etc)? 
+### Creating a Web Page for Documentation {#packaging-sphinx}
 
-For simple packages,
-carefully written docstrings and READMEs
-are sufficient to describe the package
-and is infinitely better than not documenting your package at all.
-As you code base grows larger,
-it will become convenient to complement these manually written sections
-with automatically generated content,
+Docstrings and READMEs are sufficient to describe most simple packages,
+and are infinitely better than no documentation at all.
+As our code base grows larger,
+though,
+we will want to complement these manually written sections with automatically generated content,
 references between functions,
 and search functionality.
-We will see how to do this next.
 
-### Creating a web page for documentation {#package-py-sphinx}
-
-If you've ever viewed the online documentation for a large Python package,
-it's likely to have been prepared using [Sphinx](http://www.sphinx-doc.org/en/master/),
-a package for writing software documentation and generating web packages.
-When combined with [Read The Docs](https://readthedocs.org) --
-a free service for hosting online documentation
-that understands documents written to support Sphinx --
-it is an extremely useful way to build documentation and an online home for your package.
-Both tools recognize reStructuredText files.
-
-We'll start by putting together a minimal set of documentation
-that includes the `README.rst` file we just created
-and the docstrings we've written along the way.
-Sphinx makes it relatively straightforwrd to get started,
-using the `quickstart` tool.
+The online documentation for most large Python packages
+is generated using a tool called [Sphinx](http://www.sphinx-doc.org/en/master/),
+which is often used in combination with [Read The Docs](https://readthedocs.org),
+a free service for hosting online documentation.
 Let's install Sphinx and create a `docs/` directory at the top of our repository:
 
 ```shell
@@ -927,9 +856,13 @@ $ mkdir docs
 $ cd docs
 ```
 
-We can then run the `quickstart` tool to get started.
-We'll be asked to specify the project's name, our (the author's) name, and a release.
-Otherwise we can use the default settings.
+We can then run Sphinx's `quickstart` tool to create a minimal set of documentation
+that includes the `README.rst` file we just created
+and the docstrings we've written along the way.
+It asks us to specify the project's name,
+the name of the project's author,
+and a release;
+we can use the default settings for everything else.
 
 ```shell
 $ sphinx-quickstart
@@ -959,7 +892,7 @@ translate text that it generates into that language.
 
 For a list of supported codes, see
 https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
-> Project language [en]: 
+> Project language [en]:
 
 Creating file /Users/amira/zipf/docs/conf.py.
 Creating file /Users/amira/zipf/docs/index.rst.
@@ -971,15 +904,13 @@ Finished: An initial directory structure has been created.
 You should now populate your master file /Users/amira/zipf/docs/index.rst and create other documentation
 source files. Use the Makefile to build the docs, like so:
    make builder
-where "builder" is one of the supported builders, e.g. html, latex or linkcheck.
+where "builder" is one of the supported builders, e.g. HTML, LaTeX or linkcheck.
 ```
 
-Once that is complete,
-there will be a file called `conf.py` in the `docs` directory that configures Sphinx.
-We'll make two changes to that file,
-so that autodoc can find our modules (and their docstrings).
-The first change relates to the "path setup" section,
-which starts very near the head of the file:
+`quickstart` creates a file called `conf.py` in the `docs` directory that configures Sphinx.
+We will make two changes to that file
+so that another tool called `autodoc` can find our modules (and their docstrings).
+The first change relates to the "path setup" section near the head of the file:
 
 ```text
 # -- Path setup --------------------------------------------------------------
@@ -1001,16 +932,17 @@ import sys
 sys.path.insert(0, os.path.abspath('../zipf'))
 ```
 
-The second change relates to the "general configuration" section,
-where we need to add autodoc to the list of extensions:
+We will also change the "general configuration" section
+to add `autodoc` to the list of Sphinx extensions we want:
 
 ```python
 extensions = ['sphinx.ext.autodoc']
 ```
 
-With those edits to `conf.py` complete,
-we can now generate a sphinx autodoc script that will read the docstrings from our package
-and include them into `.rst` files in the `docs/source` directory:
+With those edits complete,
+we can now generate a Sphinx `autodoc` script
+that will read the docstrings from our package
+and put them in `.rst` files in the `docs/source` directory:
 
 ```shell
 sphinx-apidoc -o source/ ../zipf
@@ -1025,12 +957,12 @@ Creating file source/utilities.rst.
 Creating file source/modules.rst.
 ```
 
-Now we're ready to generate our webpage.
-In the `/docs` directory there's a Makefile that was generated by `sphinx-quickstart`.
-If we run `make html` and open the file `docs/_build/index.html` in a web broswer
-we'll have some (very minimal) documentation in a familiar looking form; 
-if you look under `modules` you will
-see the documentation for the individual modules.
+We are finally ready to generate our webpage.
+The `docs` sub-directory contains a Makefile that was generated by `sphinx-quickstart`.
+If we run `make html` and open `docs/_build/index.html` in a web broswer
+we'll have some minimal documentation in a familiar looking form (Figure \@ref(fig:packaging-sphinx-module-list)).
+If we look under `modules` we will
+see the documentation for the individual modules (Figure \@ref(fig:packaging-sphinx-module-countwords)).
 
 ```{r packaging-sphinx-module-list, echo=FALSE, fig.cap="The module index at `file:///Users/amira/zipf/docs/_build/html/py-modindex.html`"}
 knitr::include_graphics("figures/py-rse/packaging/module_index.png")
@@ -1040,9 +972,8 @@ knitr::include_graphics("figures/py-rse/packaging/module_index.png")
 knitr::include_graphics("figures/py-rse/packaging/module_countwords.png")
 ```
 
-The first/landing page for the website is the perfect place for the contents of our README file,
-so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file
-to include it.
+The landing page for the website is the perfect place for the content of our README file,
+so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file to insert it:
 
 ```text
 Welcome to Zipf's documentation!
@@ -1064,65 +995,60 @@ Indices and tables
 
 If we re-run `make html`,
 we now get an updated set of web pages that
-re-uses our README as the introduction to the documentation.
+re-uses our README as the introduction to the documentation (Figure \@ref(fig:packaging-sphinx-landing-page)).
 
 ```{r packaging-sphinx-landing-page, echo=FALSE, fig.cap="The landing page at `file:///Users/amira/zipf/docs/_build/html/index.html`"}
 knitr::include_graphics("figures/py-rse/packaging/landing_page.png")
 ```
 
-Now that we've successfully generated the html pages for our website,
-we should pause and note that Sphinx is not captured
-in our list of installation requirements (`requirements.txt`; Section \@ref(testing-ci)).  
+Before going on,
+note that Sphinx is not included in the installation requirements in `requirements.txt` (Section \@ref(testing-ci)).
 Sphinx isn't needed to run, develop, or even test our package,
 but it is needed for building the documentation.
 To note this requirement,
-but without requiring everyone installing the package to have Sphinx installed,
-let's create a `requirements_docs.txt` file that contains
-only those things (where versions come from `pip freeze`):
+but without requiring everyone installing the package to install Sphinx,
+let's create a `requirements_docs.txt` file that contains this line
+(where the version number is found by running `pip freeze`):
 
 ```text
 Sphinx>=1.7.4
 ```
 
-Now anyone wanting to build the documentation (including us, on another computer)
-need only run `pip install -r requirement_docs.txt`
+Anyone wanting to build the documentation (including us, on another computer)
+now only needs run `pip install -r requirement_docs.txt`
 
-This breakdown of requirements by use case is often seen with packages
-that have a `requirements_dev.txt` file for additional packages
-not needed for users of the package,
-but for its development and testing.
-For this package,
-we could usefully pull out `pytest` from `requirements.txt`
-into a new `requirements_dev.txt` file.
+## Hosting Documentation Online {#packaging-rtd}
 
-### Hosting your documentation online {#package-py-rtd}
+We can host the documentation for our project in several ways.
+As mentioned above,
+A very common option for Python projects is [Read The Docs](https://readthedocs.org),
+a community-supported site that hosts software documentation free of charge.
 
-There are a number of ways of hosting the web pages that document your project.
-A very common option, particularly for Python projects,
-is [Read The Docs](https://readthedocs.org),
-which is a community supported site that hosts software documentation free of charge.
+Just as continuous integration systems automatically re-test things (Section \@ref(testing-ci)),
+Read The Docs integrates with GitHub
+so that documentation is automatically re-built
+every time updates are pushed to the project's GitHub repository.
+If we [register for Read The Docs](https://readthedocs.org/accounts/signup/)
+with our GitHub account,
+we can import a project from our GitHub repository.
+Read The Docs will then build the documentation using `make html`
+and host the resulting files.
 
-Read The Docs integrates nicely with GitHub,
-so that online documentation created using Sphinx is automatically re-built
-(similar to continuous integration; Section \@ref(testing-ci))
-every time updates are pushed to GitHub.
-Thus we recommend
-[registering for Read The Docs](https://readthedocs.org/accounts/signup/)
-with your GitHub account.
+> FIXME: there was a note saying "We may need to add the line `master_doc = 'index'`
+> to `docs/conf.py` if it isn't already there."
+> This needs to be expanded.
 
-Once you have registered for Read The Docs,
-you will be able to add new projects by importing a project
-from your GitHub repository.
-Read The Docs will then build the documentation
-(i.e., it runs `make html` just like we have been) and host the resulting files.
-For this to work, all of the source files
-(in our case `docs/source/*.rst`, `docs/Makefile`, `docs/conf.py` and `docs/index.rst`)
-need to be checked into your GitHub repository.
-(You may need to add the line `master_doc = 'index'`
-to `docs/conf.py` if it isn't already there.)
-You'll also need to create and save a
+For this to work,
+all of the source files
+need to be checked into your GitHub repository:
+in our case,
+this means `docs/source/*.rst`,
+`docs/Makefile`,
+`docs/conf.py`,
+and `docs/index.rst`.
+We also need to create and save a
 [Read the Docs configuration file](https://docs.readthedocs.io/en/stable/config-file/v2.html)
-in the root directory of your `zipf` package.
+in the root directory of our `zipf` package:
 
 ```shell
 $ pwd
@@ -1157,32 +1083,50 @@ python:
 
 The configuration file uses the now-familiar [YAML][yaml] format
 (Section \@ref(config-formats) and Appendix \@ref(yaml))
-and specifies the location of the Sphinx configuration script (`docs/conf.py`)
+to specify the location of the Sphinx configuration script (`docs/conf.py`)
 and the dependencies for our package (`requirements.txt`).
-We created `requirements.txt` when setting up continuous integration
-using Travis CI (Section \@ref(testing-ci)).
-
 If we named our project `zipf-docs`,
-our documentation would be available at `https://zipf-docs.readthedocs.io/en/latest/`.
+our documentation is now available at `https://zipf-docs.readthedocs.io/en/latest/`.
 
+## Summary {#packaging-summary}
 
-## Summary {#package-py-summary}
-
-```{r p-package-concept, echo=FALSE, fig.cap="Python Packaging Concept Map"}
-if (knitr::is_latex_output()) {
-  knitr::include_graphics("figures/py-rse/packaging/concept.pdf")
-} else {
-  knitr::include_graphics("figures/py-rse/packaging/concept.svg")
-}
-```
-
-FIXME: summarize Python packaging chapter
+Thousands of people have helped write the software that our Zipf's Law example relies on,
+but their work is only useful because they packaged it
+and documented how to use it.
+Doing this is increasingly recognized as a credit-worthy activity
+by universities, government labs, and other organizations,
+particularly for research software engineers.
+It is also deeply satisfying to make strangers' lives better,
+if only in small ways.
 
 ## Exercises
 
-TODO
+### Fixing warnings {#packaging-ex-fixing-warnings}
 
-## Key Points {#package-py-keypoints}
+When we ran `python setup.py sdist` in Section \@ref(packaging-distribute),
+`setup.py` warned us about some missing metadata.
+Review its output and then fix the problem.
+
+### Using `conda` {#packaging-ex-using-conda}
+
+`conda` can be used to install packages as well as create virtual environments.
+Whereas `pip` only installs Python packages,
+`conda` can install packages that rely on other languages as well.
+Once a package has been uploaded to PyPI,
+it can be converted to a `conda` package.
+Follow [these instructions][conda-skeleton-pypi]
+to do this for your Zipf's Law package.
+
+### Separating requirements {#packaging-ex-separating-requirements}
+
+As well as `requirements_docs.txt`,
+developers often create a `requirements_dev.txt` file
+to list packages that are not needed by the package's users,
+but are required for its development and testing.
+Pull `pytest` out of `requirements.txt` and put it in a new `requirements_dev.txt` file,
+using `pip freeze` to find the minimum required version.
+
+## Key Points {#packaging-keypoints}
 
 ```{r, child="keypoints/py-rse/packaging.md"}
 ```

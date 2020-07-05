@@ -6,6 +6,9 @@
 **Absolute error**<a id="absolute-error"></a>
 :   FIXME
 
+**Absolute import**<a id="absolute-import"></a>
+:   FIXME
+
 **Absolute path**<a id="absolute-path"></a>
 :   FIXME
 
@@ -293,7 +296,7 @@
 **Embedded documentation**<a id="embedded-documentation"></a>
 :   FIXME
 
-**Eniac**<a id="eniac"></a>
+**Entry point**<a id="entry-point"></a>
 :   FIXME
 
 **Environment**<a id="environment"></a>
@@ -322,6 +325,9 @@
     knows when the usual rules do not apply,
     and tends to recognize solutions rather than reasoning to them.
     See also [competent practitioner][competent-practitioner] and [novice][novice].
+
+**Explicit relative import**<a id="explicit-relative-import"></a>
+:   FIXME
 
 **Exploratory programming**<a id="exploratory-programming"></a>
 :   FIXME
@@ -469,6 +475,9 @@
 :   FIXME
 
 **Impact/effort matrix**<a id="impact-effort-matrix"></a>
+:   FIXME
+
+**Implicit relative import**<a id="implicit-relative-import"></a>
 :   FIXME
 
 **Impostor syndrome**<a id="impostor-syndrome"></a>
@@ -667,6 +676,9 @@
 :   FIXME
 
 **Parking lot**<a id="parking-lot"></a>
+:   FIXME
+
+**Patch**<a id="patch"></a>
 :   FIXME
 
 **Path coverage**<a id="path-coverage"></a>
@@ -886,6 +898,9 @@
 :   FIXME
 
 **Source code**<a id="source-code"></a>
+:   FIXME
+
+**Source distribution**<a id="source-distribution"></a>
 :   FIXME
 
 **Sprint**<a id="sprint"></a>
