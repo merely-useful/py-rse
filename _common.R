@@ -33,6 +33,3 @@ insert_graphic <- function(file) {
 
 # To use Python inside the bookdown R Markdown files.
 library(reticulate)
-
-# To prevent an error due to having files in multiple folders
-options(bookdown.render.file_scope = FALSE)
