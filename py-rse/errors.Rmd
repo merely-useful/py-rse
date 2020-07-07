@@ -1,11 +1,14 @@
-# Error Handling {#py-rse-errors}
+# Error Handling {#errors}
 
+We live in an imperfect world.
 People will give our programs options that aren't supported
 or ask those programs to read files that don't exist.
 Our code will also inevitably contain bugs,
 so we should plan from the start to catch and handle errors.
-
-Your Zipf's Law project should now include:
+In this chapter,
+we will explore how errors are represented in programs
+and what we should do with them.
+The Zipf's Law project should now include:
 
 ```text
 ├── Makefile
@@ -14,9 +17,9 @@ Your Zipf's Law project should now include:
 │   ├── book_summary.sh
 │   ├── collate.py
 │   ├── countwords.py
-│   ├── mymodule.py
 │   ├── plotcounts.py
-│   └── rcparams.yml
+│   ├── plotparams.yml
+│   └── utilities.py
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
@@ -27,27 +30,21 @@ Your Zipf's Law project should now include:
     └── ...
 ```
 
-In this chapter,
-we'll explore different types of errors,
-how they are communicated using code,
-and apply them to our Zipf's Law project.
-
-## What are exceptions? {#py-rse-errors-what}
+## Exceptions {#errors-exceptions}
 
 Most modern programming languages use [exceptions][exception] for error handling.
 As the name suggests,
 an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
-The code below shows a very simple example that tests different denominators and
-reports attempts to divide by zero:
+The code below uses exceptions to report attempts to divide by zero:
 
 ```python
 for denom in [-5, 0, 5]:
     try:
         result = 1/denom
-        print('1/{} == {}'.format(denom, result))
+        print(f'1/{denom} == {result}')
     except:
-        print('Cannot divide by {}'.format(denom))
+        print(f'Cannot divide by {denom}')
 ```
 
 ```text
@@ -58,29 +55,30 @@ Cannot divide by 0
 
 `try`/`except` looks like `if`/`else` and works in a similar fashion.
 If nothing unexpected happens inside the `try` block,
-the `except` block isn't run (Figure \@ref(fig:py-rse-errors-control-flow)).
-If something *does* happen inside the `try`,
+the `except` block isn't run (Figure \@ref(fig:errors-control-flow)).
+If something goes wrong inside the `try`,
+on the other hand,
 the program jumps immediately to the `except`.
 This is why the `print` statement inside the `try` doesn't run when `denom` is 0:
 as soon as Python tries to calculate `1/denom`,
-it skips directly to the error message.
+it skips directly to the code under `except`.
 
-```{r py-rse-errors-control-flow, echo=FALSE, fig.cap="Exception Control Flow"}
-knitr::include_graphics("figures/py-rse-errors/exceptions.png")
+```{r errors-control-flow, echo=FALSE, fig.cap="Exception Control Flow"}
+knitr::include_graphics("figures/py-rse/errors/exceptions.png")
 ```
 
 We often want to know exactly what went wrong,
 so Python and other languages store information about the error
-in an object called an exception.
+in an object (which is also called an exception).
 We can [catch][catch] an exception and inspect it as follows:
 
 ```python
 for denom in [-5, 0, 5]:
     try:
         result = 1/denom
-        print('1/{} == {}'.format(denom, result))
+        print(f'1/{denom} == {result}')
     except Exception as error:
-        print('{} has no reciprocal: {}'.format(denom, error))
+        print(f'{denom} has no reciprocal: {error}')
 ```
 
 ```text
@@ -103,11 +101,11 @@ for i in [0, 1, 2, 3]:
     try:
         denom = numbers[i]
         result = 1/denom
-        print('1/{} == {}'.format(denom, result))
+        print(f'1/{denom} == {result}')
     except IndexError as error:
-        print('index {} out of range'.format(i))
+        print(f'index {i} out of range')
     except ZeroDivisionError as error:
-        print('{} has no reciprocal: {}'.format(denom, error))
+        print(f'{denom} has no reciprocal: {error}')
 ```
 
 ```text
@@ -133,8 +131,8 @@ the ones that people handle most often are:
 -   `IndexError` and `KeyError`:
     something has gone wrong indexing a list or lookup something up in a dictionary.
 -   `OSError`:
-    covers cases like a file not being found,
-    the program not having permission to read or write it,
+    thrown when a file is not found,
+    the program doesn't have permission to read it,
     and so on.
 
 So where do exceptions come from?
@@ -144,10 +142,10 @@ The answer is that programmers can [raise][raise] them explicitly:
 for number in [1, 0, -1]:
     try:
         if number < 0:
-            raise ValueError('negative values not supported: {}'.format(number))
+            raise ValueError(f'negative values not supported: {number}')
         print(number)
     except ValueError as error:
-        print('exception: {}'.format(error))
+        print(f'exception: {error}')
 ```
 
 ```text
@@ -160,14 +158,19 @@ We can define our own exception types,
 and many libraries do,
 but the built-in types are enough to cover common cases.
 
-One final note is that exceptions don't have to be handled where they are raised—in fact,
+One final note is that exceptions don't have to be handled where they are raised.
+In fact,
 their greatest strength is that they allow long-range error handling.
 If an exception occurs inside a function and there is no `except` for it there,
-Python looks in whoever called that function.
-It keeps working its way through the [call stack][call-stack]
-until it finds a matching `except`;
-if there isn't one,
-it takes care of the exception itself.
+Python checks to see if whoever called the function is willing to handle the error.
+It keeps working its way up through the [call stack][call-stack]
+until it finds a matching `except`.
+If there isn't one,
+Python takes care of the exception itself.
+The example below relies on this:
+the second call to `sum_reciprocals` tries to divide by zero,
+but the exception is caught in the calling code
+rather than in the function.
 
 ```python
 def sum_reciprocals(values):
@@ -180,30 +183,27 @@ numbers = [-1, 0, 1]
 try:
     one_over = sum_reciprocals(numbers)
 except ArithmeticError as error:
-    print('Error trying to sum reciprocals: {}'.format(error))
+    print(f'Error trying to sum reciprocals: {error}')
 ```
 
 ```text
 Error trying to sum reciprocals: division by zero
 ```
 
-This leads to the rule "throw low, catch high":
+This behavior is designed to support a pattern called "throw low, catch high":
 write most of your code without exception handlers,
 since there's nothing useful you can do in the middle of a small utility function,
-but put a few handlers in the main body of your program
+but put a few handlers in the uppermost functions of your program
 to catch and report all errors.
 
-## What exceptions should I raise and catch? {#py-rse-errors-where}
-
-Now that we have learned about error handling,
-we can go ahead and add it to our Zipf's Law code.
-First,
-there is already some error handling built in,
-e.g. if you try to read a file that does not exist,
-the error handling inside the `open` function throws a `FileNotFoundError`:
+We can now go ahead and add error handling to our Zipf's Law code.
+Some is already built in:
+for example,
+if we try to read a file that does not exist,
+the `open` function throws a `FileNotFoundError`:
 
 ```shell
-python bin/collate.py results/none.csv
+python bin/collate.py results/none.csv results/dracula.csv
 ```
 
 ```text
@@ -234,12 +234,12 @@ Traceback (most recent call last):
 ValueError: not enough values to unpack (expected 2, got 1)
 ```
 
-This error is not that easy to understand
-unless you are familiar with the code's internals.
-Our program should therefore check that the input files are CSV-files,
+This error is hard to understand,
+even if we are familiar with the code's internals.
+Our program should therefore check that the input files are CSV files,
 and if not,
 raise an error with a useful explanation to what went wrong.
-We could achieve this by wrapping the open statement in a `try/except` clause:
+We can achieve this by wrapping the call to `open` in a `try/except` clause:
 
 ```python
 for file_name in args.infiles:
@@ -247,7 +247,7 @@ for file_name in args.infiles:
         with open(file_name, 'r') as reader:
             update_counts(reader, word_counts)
     except ValueError as e:
-        print(f'{file_name} is not a CSV-file.')
+        print(f'{file_name} is not a CSV file.')
         print(f'ValueError: {e}')
 ```
 
@@ -256,29 +256,28 @@ $ python bin/collate.py Makefile
 ```
 
 ```text
-Makefile is not a CSV-file.
+Makefile is not a CSV file.
 ValueError: not enough values to unpack (expected 2, got 1)
 ```
 
 This is definitely more informative than before.
 However,
-an issue with this approach is that all `ValueErrors`
-that are raised when trying to open a file
+*all* `ValueErrors` that are raised when trying to open a file
 will result in this error message,
-including those potentially raised when actually using a CSV-file as input.
-A more precise approach in this case would be to throw an exception specifically
-if a file other than a CSV-file is passed as input:
+including those raised when we actually do use a CSV file as input.
+A more precise approach in this case would be to throw an exception
+only if some other kind of file is specified as an input:
 
 ```python
 for file_name in args.infiles:
     if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV-file.')
+        raise OSError(f'{file_name} is not a CSV file.')
     with open(file_name, 'r') as reader:
         update_counts(reader, word_counts)
 ```
 
 ```shell
-$ python bin/collate.py Makefile                                                                          1 ↵
+$ python bin/collate.py Makefile
 ```
 
 ```text
@@ -286,66 +285,58 @@ Traceback (most recent call last):
   File "bin/collate.py", line 29, in <module>
     main(args)
   File "bin/collate.py", line 18, in main
-    raise OSError(f'{file_name} is not a valid CSV-file of word counts.')
-OSError: Makefile is not a CSV-file.
+    raise OSError(f'{file_name} is not a valid CSV file of word counts.')
+OSError: Makefile is not a CSV file.
 ```
 
-This is not perfect:
-ideally we should check the content of the file
-and confirm that the format is that of the output files from `countwords.py`,
-instead of relying on the file extension.
-This could involve checking that there are two columns separated by a comma,
+This approach is still not perfect:
+we are checking that the file's suffix is `.csv`
+instead of checking the content of the file
+and confirming that it is what we require.
+What we *should* do is check that there are two columns separated by a comma,
 that the first column contains strings,
 and that the second is numerical.
-But for the purpose of demonstration,
-our sample code above works fine.
 
-The `if/raise` approach is commonly referred to as "look before your leap",
-while the `try/except` approach above is called
+## Kinds of Errors {#errors-kind}
+
+The "`if` then `raise`" approach is sometimes referred to as "look before you leap",
+while the `try/except` approach obeys the old adage that
 "it's easier to ask for forgiveness than permission".
-
 The first approach is more precise,
-but has the shortcoming that programmers never can anticipate all of the things
-that can go wrong when running a program,
+but has the shortcoming that programmers can't anticipate everything that can go wrong when running a program,
 so there should always be an `except` somewhere
 to deal with unexpected cases.
-In our code,
-this is often dealt with in an informative way
-by the exceptions in the built-in Python functions,
-such as that which was displayed by open
-when we tried reading non-existing file.
 
 Generally speaking,
 we should distinguish between [internal errors][internal-error],
 such as calling a function with `None` instead of a list,
 and [external errors][external-error],
 such as trying to read a file that doesn't exist.
-Internal errors should be forestalled by unit testing (Chapter \@ref(py-rse-correct)),
-but software always encounters new situations in the real world
-and those situations can trigger previously unseen bugs.
+Internal errors should be prevented by doing unit testing (Chapter \@ref(testing)),
+but software is always used in new ways in the real world,
+and those new ways can trigger unanticipated bugs.
 When an internal error occurs,
 the only thing we can do in most cases is report it and halt the program.
 If a function has been passed `None` instead of a valid list,
 for example,
-the odds are good that one of our data structures is corrupted
-(or at least in an unexpected state).
+the odds are good that one of our data structures is corrupted.
 We can try to guess what the problem is and take corrective action,
-but experience teaches us that our guess will often be wrong
+but our guess will often be wrong
 and our attempt to correct the problem might actually make things worse.
 
 External errors,
 on the other hand,
 are usually caused by interactions between the program and the outside world:
-for example,
-a user may mis-type a filename or the network might be down.
-Section \@ref(py-rse-correct-failure) described some ways to write unit tests
-to check that software is doing the right thing in these situations,
-but we still need to report them.
-Alternatively,
-if we're interacting with a user,
-it might make sense for us to prompt them to try again:
-it's easy to mis-type a password or select the wrong file for analysis,
-and users shouldn't have to re-start the program to correct something like this.
+a user may mis-type a filename,
+the network might be down,
+and so on.
+Section \@ref(testing-failure) describes some ways to test that
+software will do the right thing when this happens,
+but we still need to catch and handle these errors when they arise.
+For example,
+if a user mis-types her password,
+prompting her to try again would be friendlier than
+requiring her to restart the program.
 
 The one rule we should *always* follow is to check for errors as early as possible
 so that we don't waste the user's time.
@@ -355,61 +346,52 @@ It's a little extra work to check things like this up front,
 but the larger your program or the longer it runs,
 the more useful those checks will be.
 
-## How can I write useful error messages? {#py-rse-errors-messages}
+## Writing Useful Error Messages {#errors-messages}
 
-The error message shown in Figure \@ref(fig:py-rse-errors-error-message) is not helpful:
+The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:
 
-```{r py-rse-errors-error-message, echo=FALSE, fig.cap="An Unhelpful Error Message"}
-knitr::include_graphics("figures/rse-py-scripting/error-message.png")
+```{r errors-error-message, echo=FALSE, fig.cap="An Unhelpful Error Message"}
+knitr::include_graphics("figures/py-rse/scripting/error-message.png")
 ```
 
-In the context of our example with `collate.py`,
-a bad error message could have looked like this:
+Having `collate.py` print the message below would be equally unfriendly:
 
 ```text
 OSError: Something went wrong, try again.
 ```
 
-This doesn't provide any information on what went wrong,
+This message doesn't provide any information on what went wrong,
 so it is difficult to know what to change for next time.
-A better,
-but still subpar message would have been:
+A slightly better message would be:
 
 ```text
 OSError: Unsupported file type.
 ```
 
-At least we now know that it is the file type which is not correct,
-but we don't get any information on what file types are supported,
-so we still would have to do a lot of guesswork or read the source code.
-A more informative message error is that which we wrote in the previous section:
-
-```text
-OSError: The file is not a CSV-file.
-```
-
-This makes it cleat that the program only works with CSV files.
-However,
-since we don't actually check the content of the file,
+This tells us the problem is with the type of file we're trying to process,
+but it still doesn't tell us what file types are supported,
+which means we have to rely on guesswork or read the source code.
+Telling the user "*filename* is not a CSV file"
+(as we did in the previous section)
+makes it clear that the program only works with CSV files,
+but since we don't actually check the content of the file,
 this message could confuse someone who has comma-separated values saved in a `.txt` file.
-We could be even more explicit:
+An even better message would therefore be:
 
 ```text
 OSError: The filename must end in `.csv`.
 ```
 
-This tells us exactly what criteria need to be met to avoid the error.
+This message tells us exactly what the criteria are to avoid the error.
 
-Error messages are often the first thing people actually read about a piece of software
-(or possibly the second if they had to install it themselves),
+Error messages are often the first thing people read about a piece of software,
 so they should therefore be the most carefully written documentation for that software.
-A quick web search for "writing good error messages" turns up hundreds of hits,
-but recommendations are often more like gripes than solid guidelines
+A web search for "writing good error messages" turns up hundreds of hits,
+but recommendations are often more like gripes than guidelines
 and are usually not backed up by evidence.
 What research there is gives us the following rules @Beck2016:
 
-1.  Do not tell the user what the program did that caused the problem,
-    but what the user did.
+1.  Tell the user what they did, not what the program did.
     Putting it another way,
     the message shouldn't state the effect of the error,
     it should state the cause.
@@ -420,32 +402,28 @@ What research there is gives us the following rules @Beck2016:
     Few things are as frustrating as being pointed at line 28
     when the problem is really on line 35.
 
-3.  Do not provide tips or potential solutions.
-    In most languages it is not possible to determine what the actual error is from the message with 100% certainty.
-    Therefore it is better to give an as-specific-as-possible message on what went wrong without offering guidance on fixing it.
-    Tips and hints could be provided by a different tool,
-    but they should be based on the error message and not part of it.
-
-4.  Be as specific as possible without ever being (or seeming) wrong:
-    from a user's point of view,
+3.  Be as specific as possible without being or seeming wrong
+    from a user's point of view.
+    For example,
     "file not found" is very different from "don't have permissions to open file" or "file is empty".
 
-5.  Write for your audience's level of understanding.
-    For example, error messages should never use programming terms more advanced than
-    those you would use to describe the code the user wrote.
+4.  Write for your audience's level of understanding.
+    For example,
+    error messages should never use programming terms more advanced than
+    those you would use to describe the code to the user.
 
-6.  Do not blame the user, and do not use words like fatal, illegal, etc.
-    The former can frustrate—in many cases, "user error" actually isn't—and
+5.  Do not blame the user, and do not use words like fatal, illegal, etc.
+    The former can be frustrating---in many cases, "user error" actually isn't---and
     the latter can make people worry that the program has damaged their data,
     their computer,
     or their reputation.
 
-7.  Do not try to make the computer sound like a human being.
+6.  Do not try to make the computer sound like a human being.
     In particular, avoid humor:
     very few jokes are funny on the dozenth re-telling,
     and most users are going to see error messages at least that often.
 
-8.  Use a consistent vocabulary.
+7.  Use a consistent vocabulary.
     This rule can be hard to enforce when error messages are written by several different people,
     but putting them all in one module makes review easier.
 
@@ -457,13 +435,12 @@ if file_name[-4:] != '.csv':
     raise OSError(f'{file_name} must end in `.csv`.')
 ```
 
-A better approach for large projects is to put all the error messages in a dictionary,
-which can be assigned to a global variable in separate file:
+A better approach is to put all the error messages in a dictionary:
 
 ```python
 ERROR_MESSAGES = {
-    'cannot_read_file' : f'{file_name} must end in `.csv`.',
-    'config_corrupted' : f'Configuration file {config_name} corrupted',
+    'cannot_read_file' : '{file_name} must end in `.csv`.',
+    'config_corrupted' : 'Configuration file {config_name} corrupted',
     # ...more error messages...
 }
 ```
@@ -471,11 +448,8 @@ ERROR_MESSAGES = {
 and then only use messages from that dictionary:
 
 ```python
-from error_messages import ERROR_MESSAGES
-
-
 if file_name[-4:] != '.csv':
-    raise OSError(ERROR_MESSAGES['cannot_read_file'])
+    raise OSError(ERROR_MESSAGES['cannot_read_file'].format(file_name))
 ```
 
 Doing this makes it much easier to ensure that messages are consistent.
@@ -484,46 +458,42 @@ It also makes it much easier to give messages in the user's preferred language:
 ```python
 ERROR_MESSAGES = {
     'en' : {
-        'cannot_read_file' : f'{file_name} must end in `.csv`.',
-        'config_corrupted' : f'Configuration file {config_name} corrupted',
+        'cannot_read_file' : '{file_name} must end in `.csv`.',
+        'config_corrupted' : 'Configuration file {config_name} corrupted',
         # ...more error messages in English...
     },
     'fr' : {
-        'cannot_read_file' : f'{file_name} doit se terminer par `.csv`',
-        'config_corrupted' : f'Fichier de configuration {config_name} corrompu',
+        'cannot_read_file' : '{file_name} doit se terminer par `.csv`',
+        'config_corrupted' : 'Fichier de configuration {config_name} corrompu',
         # ...more error messages in French...
     }
     # ...other languages...
 }
 ```
 
-The error report is then looked up as:
+The error report is then looked up and formatted as:
 
 ```python
-ERROR_MESSAGES[user_language]['cannot_read_file']
+ERROR_MESSAGES[user_language]['cannot_read_file'].format(file_name=file_name)
 ```
 
 where `user_language` is a two-letter code for the user's preferred language.
 
-## How should I report errors? {#py-rse-errors-logging}
+## Reporting Errors {#errors-logging}
 
-Programs should report things that go wrong.
-They should also sometimes report things that go right
-so that people can monitor their progress
-and down the sources of errors.
-Adding `print` statements for debugging is a common approach,
-but removing them or commenting them out,
-only to add them again,
-is tedious—especially when the software is in production.
+Programs should report things that go wrong;
+they should also sometimes report things that go right
+so that people can monitor their progress.
+Adding `print` statements is a common approach,
+but removing them or commenting them out when the code goes into production is tedious and error-prone.
 
 A better approach is to use a [logging framework][logging-framework],
 such as Python's `logging` library.
-This lets you leave your debugging statements in your code
+This lets us leave debugging statements in our code
 and turn them on or off at will.
-It also lets you send output to any of several destinations,
-which is helpful when your data analysis pipeline has several stages
-and you're trying to figure out which one contains a bug
-(or whether the problem lies in their interaction).
+It also lets us send output to any of several destinations,
+which is helpful when our data analysis pipeline has several stages
+and we are trying to figure out which one contains a bug.
 
 To understand how logging frameworks work,
 suppose we want to turn `print` statements in our program on or off
@@ -531,36 +501,36 @@ without editing the program's source code.
 We would probably wind up with code like this:
 
 ```python
-if LOG_LEVEL > 0:
+if LOG_LEVEL >= 0:
     print('Processing files...')
 for file_name in args.infiles:
-    if LOG_LEVEL > 1:
+    if LOG_LEVEL >= 1:
         print(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV-file.')
+        raise OSError(f'{file_name} is not a CSV file.')
     with open(file_name, 'r') as reader:
-        if LOG_LEVEL > 1:
+        if LOG_LEVEL >= 1:
             print(f'Computing word counts...')
         update_counts(reader, word_counts)
 ```
 
-Here,
 `LOG_LEVEL` acts as a threshold:
-any debugging output at a lower level isn't printed.
-So the first log message will always be printed,
+any debugging output at a lower level than its value isn't printed.
+As a result,
+the first log message will always be printed,
 but the other two only in case the user has requested more details
-with a higher value to `LOG_LEVEL`.
+by setting `LOG_LEVEL` higher than zero.
 
-Logging frameworks combine the `if` and the `print` statements,
-and define standard names for the logging levels.
-In order of decreasing severity,
-the levels are:
+A logging framework combines the `if` and `print` statements in a single function call
+and defines standard names for the logging levels.
+In order of increasing severity,
+the usual levels are:
 
--   `CRITICAL`: potential loss of data, security breach, etc.
--   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
--   `WARNING`: something unexpected happened, but the program will keep going.
--   `INFO`: confirmation that things are working as expected.
 -   `DEBUG`: very detailed information used for localizing errors.
+-   `INFO`: confirmation that things are working as expected.
+-   `WARNING`: something unexpected happened, but the program will keep going.
+-   `ERROR`: something has gone badly wrong, but the program hasn't hurt anything.
+-   `CRITICAL`: potential loss of data, security breach, etc.
 
 Each of these has a corresponding function:
 we can use `logging.debug`, `logging.info`, etc. to write messages at these levels.
@@ -568,7 +538,7 @@ By default,
 only `WARNING` and above are displayed;
 messages appear on [standard error][standard-error]
 so that the flow of data in pipes isn't affected.
-The source of the message appears as well,
+The logging framework also displays the source of the message,
 which is called `root` by default.
 Thus,
 if we run the small program shown below,
@@ -586,7 +556,7 @@ logging.info('This is just for information.')
 WARNING:root:This is a warning.
 ```
 
-Rewriting the `collate.py` example above using the logging module
+Rewriting the `collate.py` example above using `logging`
 yields code that is less cluttered:
 
 ```python
@@ -595,19 +565,18 @@ import logging
 
 logging.info('Processing files...')
 for file_name in args.infiles:
-    logging.debug('Reading in {file_name}...')
+    logging.debug(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV-file.')
+        raise OSError(f'{file_name} is not a CSV file.')
     with open(file_name, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
 ```
 
-We can also configure logging to send messages to a file instead of to standard error
+We can also configure logging to send messages to a file instead of standard error
 using `logging.basicConfig`.
-This has to be done before we make any logging calls,
-it's not retroactive.
-We can use the same function to set the logging level:
+(This has to be done before we make any logging calls---it's not retroactive.)
+We can also use that function to set the logging level:
 everything at or above the specified level is displayed.
 
 ```python
@@ -632,25 +601,21 @@ CRITICAL:root:Something went seriously wrong.
 ```
 
 By default,
-`basicConfig` re-opens the log file in [append mode][append-mode];
+`basicConfig` re-opens the file we specify in [append mode][append-mode];
 we can use `filemode='w'` to overwrite the existing log data.
-This is useful during debugging,
+Overwriting is useful during debugging,
 but we should think twice before doing in production,
-since the information we throw away always turns out to have been exactly what we needed to find a bug.
+since the information we throw away often turns out to be
+exactly what we need to find a bug.
 
 Many programs allow users to specify logging levels and log file names as command-line parameters.
 At its simplest,
 this is a single flag `-v` or `--verbose` that changes the logging level from `WARNING` (the default)
 to `DEBUG` (the noisiest level).
 There may also be a corresponding flag `-q` or `--quiet` that changes the level to `ERROR`,
-and a flag `-l` or `--logfile` that specifies a log file name
-(with standard error being the default for message output).
-
-The default configuration in the logging modules uses a single handler,
-by default one that prints the logging messages,
-and if we specify a filename it switches to one that writes the messages to file.
+and a flag `-l` or `--logfile` that specifies a log file name.
 To log messages to a file while also printing them,
-you can specify to use two handlers simultaneously in the logging configuration:
+we can tell `logging` to use two handlers simultaneously:
 
 ```python
 import logging
@@ -665,23 +630,25 @@ logging.basicConfig(
 logging.debug('This is for debugging.')
 ```
 
-The string `'This is for debugging'` message is both printed to stderr
+The string `'This is for debugging'` is both printed to standard error
 and appended to `logging.log`.
 
-Libraries like `logging` can send messages to many destinations:
-e.g. a centralized logging server that collates logs from many different systems.
-Another good practice is [rotating files][rotating-file]
+Libraries like `logging` can send messages to many destinations;
+in production,
+we might send them to a centralized logging server
+that collates logs from many different systems.
+We might also use [rotating files][rotating-file]
 so that the system always has messages from the last few hours
 but doesn't fill up the disk.
 We don't need any of these when we start,
 but the data engineers and system administrators
 who eventually have to install and maintain your programs
-will be very grateful that you used `logging`,
-because then they can set it up the way they want with very little work.
+will be very grateful if we use `logging` instead of `print` statements,
+because it allows them to set things up the way they want with very little work.
 
 > **Logging Configuration**
 >
-> Chapter \@ref(py-rse-configuration) explained why and how
+> Chapter \@ref(config) explained why and how
 > to save the configuration that produced a particular result.
 > We clearly also want this information in the log,
 > so we have three options:
@@ -700,14 +667,25 @@ because then they can set it up the way they want with very little work.
 > as well as in whatever format we normally use),
 > so on balance we recommend option 3.
 
+## Summary {#errors-summary}
 
-## Summary {#py-rse-errors-summary}
+Most programmers spend as much time debugging as they do writing new code,
+but most courses and textbooks only show working code,
+and never discuss how to prevent, diagnose, report, and handle errors.
+Raising our own exceptions instead of using the system's,
+writing useful error messages,
+and logging problems systematically
+can save us and our users a lot of needless work.
 
-FIXME: summarize errors chapter
+## Exercises {#errors-exercises}
 
-## Exercises {#py-rse-errors-exercises}
+### Checking CSV files {#errors-ex-check-csv}
 
-### Handling exceptions {#py-rse-errors-ex-exceptions}
+Modify `collate.py` so that it checks that its input files are formatted correctly
+and raises an exception if it does not.
+Can you use any functions from the `csv` library to help with this?
+
+### Handling exceptions {#errors-ex-exceptions}
 
 1.  Modify the script `collate.py` so that it catches any exceptions
     that are raised when it tries to open files.
@@ -717,23 +695,32 @@ FIXME: summarize errors chapter
 2.  Modify your first solution to handle nonexistent files
     and permission problems separately.
 
-### Error catalogs {#py-rse-errors-ex-catalog}
+### Formatting messages {#errors-ex-format}
+
+Python has three ways to format strings: the `%` operator,
+the `str.format` method,
+and f-strings (where the 'f' stands for "format").
+Look up the documentation for each
+and explain why we have to use `str.format` rather than f-strings
+for formatting error messages that come from a lookup table.
+
+### Error catalogs {#errors-ex-catalog}
 
 1.  Modify your solution to the previous exercise
     to put your error message in a catalog
-    as described in Section \@ref(py-rse-errors-messages).
+    as described in Section \@ref(errors-messages).
 2.  Add messages in a second language.
-    (Use Google Translate if necessary).
+    (Use Google Translate if necessary.)
 3.  Add a command-line flag to allow users to select the language they want to use.
 
-### Set the logging level {#py-rse-errors-ex-set-level}
+### Set the logging level {#errors-ex-set-level}
 
-1.  Modify the way command-line arguments are handled by `collate.py`
-    so that users can adjust the logging level from the command line.
+Modify the way command-line arguments are handled by `collate.py`
+so that users can adjust the logging level from the command line.
 
-## Key Points {#py-rse-errors-keypoints}
+## Key Points {#errors-keypoints}
 
-```{r, child="keypoints/py-rse-errors.md"}
+```{r, child="keypoints/py-rse/errors.md"}
 ```
 
 ```{r, child="./links.md"}

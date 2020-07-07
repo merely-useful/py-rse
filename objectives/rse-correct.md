@@ -1,2 +1,0 @@
--   Explain the reasons for testing software.
--   Write and run unit tests using `pytest` for Python and `testthat` for R.
