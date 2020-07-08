@@ -208,30 +208,27 @@ chapters :
 
 ## crossrefs : check cross-references.
 crossrefs :
-	@bin/crossrefs.py "Novice R" ${R_NOVICE_FILES} ${COMMON_FILES}
-	@bin/crossrefs.py "Novice Python" ${PY_NOVICE_FILES} ${COMMON_FILES}
 	@bin/crossrefs.py "RSE PY" ${PY_RSE_FILES} ${COMMON_FILES}
-	@bin/crossrefs.py "RSE R" ${R_RSE_FILES} ${COMMON_FILES}
 
 ## fixme : list all the FIXME markers
 fixme :
-	@fgrep FIXME ${ALL_FILES}
+	@fgrep FIXME ${PY_RSE_FILES} ${COMMON_FILES}
 
 ## gloss : check that all glossary definitions are defined and used.
 gloss :
-	@bin/gloss.py ./gloss.md ${ALL_FILES}
+	@bin/gloss.py ./gloss.md ${PY_RSE_FILES} ${COMMON_FILES}
 
 ## images : check that all images are defined and used.
 images :
-	@bin/images.py ./figures ${ALL_FILES}
+	@bin/images.py ./figures ${PY_RSE_FILES} ${COMMON_FILES}
 
 ## links : check that all links are defined and used.
 links :
-	@bin/links.py ./links.md ${ALL_FILES}
+	@bin/links.py ./links.md ${PY_RSE_FILES} ${COMMON_FILES}
 
 ## nbspref : check that all cross-references are prefixed with a non-breaking space.
 nbspref :
-	@bin/nbspref.py ${ALL_FILES}
+	@bin/nbspref.py ${PY_RSE_FILES} ${COMMON_FILES}
 
 ## tex-packages : install required LaTeX packages.
 tex-packages :
