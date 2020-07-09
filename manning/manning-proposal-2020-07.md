@@ -36,7 +36,7 @@ We assume readers have some basic programming knowledge, and build on that to co
 -   configuring software
 -   testing and error handling
 -   creating productive, inclusive teams
--   publishing in a reproducible way
+-   documenting, packaging, and releasing software for use by the wider research community
 
 All of this material has been used and refined in workshops,
 some of it by multiple instructors over many years.
@@ -73,7 +73,7 @@ Filling in these gaps will help researchers get more done in less time and with 
 4.  Add error handling and logging to the scripts so that they can be put into production.
 5.  Use style-checking tools to ensure the Python code is well written, and then release it as an installable package.
 6.  Adopt a license, a code of conduct, and efficient decision-making processes to ensure the project runs smoothly.
-7.  Publish results with DOIs, ORCIDs, and other metadata in a fully-reproducible way.
+7.  Document, package, and release software for use by the wider research community.
 
 ## 4. The minimally-qualified reader (MQR).
 

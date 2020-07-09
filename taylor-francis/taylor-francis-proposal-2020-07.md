@@ -11,11 +11,11 @@
 ## 1. Aims
 
 Software is now as essential to research as telescopes, test tubes, and
-reference libraries, which means that researchers need need to know how to
-build, check, use, and share programs.  However, most introductions to
-programming focus on developing commercial applications, not on exploring
-problems whose answers aren't yet known.  Our goal is show readers how to do
-that, both on their own and as part of a team.
+reference libraries, which means that researchers now need to know how to build,
+check, use, and share programs.  However, most introductions to programming
+focus on developing commercial applications, not on exploring problems whose
+answers aren't yet known.  Our goal is show readers how to do that, both on
+their own and as part of a team.
 
 We believe every researcher should know how to write short programs that clean
 and analyze data in a reproducible way, and how to use version control to keep
@@ -40,7 +40,7 @@ knowledge, and build on that to cover:
 -   configuring software
 -   testing and error handling
 -   creating productive, inclusive teams
--   publishing in a reproducible way
+-   documenting, packaging, and releasing software for use by the wider research community
 
 Our book is a ready-to-go university semester course.  All of this material has
 been used and refined in workshops, some of it by multiple instructors over many
@@ -101,8 +101,8 @@ graphics and 150 code listing.
 
 ## 6. Other Information
 
--   Dr. Damien B. Irving: climate scientist working for CSIRO in Tasmania.
-    https://damienirving.github.io/
+-   Dr. Damien B. Irving: post-doctoral researcher in climate science at the
+    University of New South Wales. https://damienirving.github.io/
 
 -   Dr. Kate L. Hertweck: bioinformatics training manager at the Fred Hutchinson
     Cancer Research Center. http://katehertweck.com/
