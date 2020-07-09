@@ -222,6 +222,10 @@ images :
 links :
 	@bin/links.py ./links.md ./gloss.md ${PY_RSE_FILES} ${COMMON_FILES}
 
+## exercises : check that exercises have solutions and solutions have exercises.
+exercises :
+	@bin/exercises.py ${PY_RSE_FILES}
+
 ## nbspref : check that all cross-references are prefixed with a non-breaking space.
 nbspref :
 	@bin/nbspref.py ${PY_RSE_FILES} ${COMMON_FILES}
