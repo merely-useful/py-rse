@@ -46,7 +46,7 @@ the shell can run them without having to know what language they are written in
 or how they do what they do.
 
 ```{r bash-basics-repl, echo=FALSE, fig.cap="The Shell"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/shared-rse/bash-basics/the-shell.png")
 ```
 
 The shell's greatest strength is that
@@ -155,7 +155,7 @@ On Amira's computer
 it looks like Figure \@ref(fig:bash-basics-filesystem).
 
 ```{r bash-basics-filesystem, echo=FALSE, fig.cap="Sample Filesystem"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/shared-rse/bash-basics/sample-filesystem.png")
 ```
 
 At the top is the [root directory][root-directory] that holds everything else,
@@ -634,7 +634,7 @@ $ nano draft.txt
 ```
 
 ```{r bash-basics-nano, echo=FALSE, fig.cap="The Nano Editor"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/shared-rse/bash-basics/nano-editor.png")
 ```
 
 When we say "Nano is a text editor" we really do mean "text":
@@ -1054,90 +1054,6 @@ to find out what they are:
 $ man wc
 ```
 
-FIXME: shorten the text below and typeset it as a figure with callouts pointing at its parts.
-
-```text
-WC(1)                     BSD General Commands Manual                    WC(1)
-
-NAME
-     wc -- word, line, character, and byte count
-
-SYNOPSIS
-     wc [-clmw] [file ...]
-
-DESCRIPTION
-     The wc utility displays the number of lines, words, and bytes contained
-     in each input file, or standard input (if no file is specified) to the
-     standard output.  A line is defined as a string of characters delimited
-     by a <newline> character.  Characters beyond the final <newline> charac-
-     ter will not be included in the line count.
-
-     A word is defined as a string of characters delimited by white space
-     characters.  White space characters are the set of characters for which
-     the iswspace(3) function returns true.  If more than one input file is
-     specified, a line of cumulative counts for all the files is displayed on
-     a separate line after the output for the last file.
-
-     The following options are available:
-
-     -c      The number of bytes in each input file is written to the standard
-             output.  This will cancel out any prior usage of the -m option.
-
-     -l      The number of lines in each input file is written to the standard
-             output.
-
-     -m      The number of characters in each input file is written to the
-             standard output.  If the current locale does not support multi-
-             byte characters, this is equivalent to the -c option.  This will
-             cancel out any prior usage of the -c option.
-
-     -w      The number of words in each input file is written to the standard
-             output.
-
-     When an option is specified, wc only reports the information requested by
-     that option.  The order of output always takes the form of line, word,
-     byte, and file name.  The default action is equivalent to specifying the
-     -c, -l and -w options.
-
-     If no files are specified, the standard input is used and no file name is
-     displayed.  The prompt will accept input until receiving EOF, or [^D] in
-     most environments.
-
-ENVIRONMENT
-     The LANG, LC_ALL and LC_CTYPE environment variables affect the execution
-     of wc as described in environ(7).
-
-EXIT STATUS
-     The wc utility exits 0 on success, and >0 if an error occurs.
-
-EXAMPLES
-     Count the number of characters, words and lines in each of the files
-     report1 and report2 as well as the totals for both:
-
-           wc -mlw report1 report2
-
-COMPATIBILITY
-     Historically, the wc utility was documented to define a word as a "maxi-
-     mal string of characters delimited by <space>, <tab> or <newline> charac-
-     ters".  The implementation, however, did not handle non-printing charac-
-     ters correctly so that "  ^D^E  " counted as 6 spaces, while
-     "foo^D^Ebar" counted as 8 characters.  4BSD systems after 4.3BSD modi-
-     fied the implementation to be consistent with the documentation.  This
-     implementation defines a "word" in terms of the iswspace(3) function,
-     as required by IEEE Std 1003.2 ("POSIX.2").
-
-SEE ALSO
-     iswspace(3)
-
-STANDARDS
-     The wc utility conforms to IEEE Std 1003.1-2001 ("POSIX.1").
-
-HISTORY
-     A wc command appeared in Version 1 AT&T UNIX.
-
-BSD                            February 23, 2005                           BSD
-```
-
 > **Paging Through the Manual**
 >
 > If our screen is too small to display an entire manual page at once,
@@ -1154,6 +1070,14 @@ BSD                            February 23, 2005                           BSD
 > To quit, press <kbd>Q</kbd>.
 
 Manual pages contain a lot of information---often more than we really want.
+Figure \@ref(fig:bash-basics-nano)
+includes excerpts from the manual on your screen,
+and highlights a few of features useful for beginners.
+
+```{r bash-basics-manual, echo=FALSE, fig.cap="Manual highlights"}
+knitr::include_graphics("figures/shared-rse/bash-basics/man-callouts.png")
+```
+
 Some commands have a `--help` option that provides a succinct summary of possibilites,
 but the best place to go for help these days is probably the [TLDR][tldr] website.
 The acronym stands for "too long, didn't read",
@@ -1341,12 +1265,20 @@ $ wc -l *.txt | sort -n
 The vertical bar `|` between the `wc` and `sort` commands
 tells the shell that we want to use the output of the command on the left
 as the input to the command on the right.
-Putting it another way,
-the downstream command doesn't read from a file.
-Instead,
-it reads the output of the upstream command.
 
-FIXME: diagram of pipes
+Running a command with a file as input has a clear flow of information:
+the command performs a task on that file and prints the output to the screen
+(Figure \@ref(fig:bash-basics-pipe)a).
+When using pipes, however,
+the information flows differently after the first (upstream) command.
+The downstream command doesn't read from a file.
+Instead,
+it reads the output of the upstream command
+(Figure \@ref(fig:bash-basics-pipe)b).
+
+```{r bash-basics-pipe, echo=FALSE, fig.cap="Piping commands"}
+knitr::include_graphics("figures/shared-rse/bash-basics/pipe.png")
+```
 
 We can use `|` to build pipes of any length.
 For example,
@@ -1419,11 +1351,8 @@ and temporarily reconnects the keyboard and stream
 to that process's standard input and output (Figure \@ref(fig:bash-basics-stdio)b).
 
 ```{r bash-basics-stdio, echo=FALSE, fig.cap="Standard I/O"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/shared-rse/bash-basics/standard-io.png")
 ```
-
-Redirection with `>` tells the shell to connect the program's standard output to a file
-instead of the screen (Figure \@ref(fig:bash-basics-stdio)c).
 
 If we provide one or more files for the command to read,
 as with `sort lengths.txt`,
@@ -1433,7 +1362,7 @@ though,
 the Unix convention is for the program to read from standard input.
 We can test this by running `sort` on its own,
 typing in a few lines of text,
-and then pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> to signal the end of input.
+and then pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> to signal the end of input .
 `sort` will then sort and print whatever we typed:
 
 ```shell
@@ -1452,20 +1381,20 @@ three
 two
 ```
 
+Redirection with `>` tells the shell to connect the program's standard output to a file
+instead of the screen (Figure \@ref(fig:bash-basics-stdio)c).
+
 When we create a pipe like `wc *.txt | sort`,
 the shell creates one process for each command so that `wc` and `sort` will run simultaneously,
 and then connects the standard output of `wc` directly to the standard input of `sort`
-(Figure \@ref(fig:bash-basics-misconnect)).
+(Figure \@ref(fig:bash-basics-stdio)d).
+
 `wc` doesn't know whether its output is going to the screen,
 another program,
 or to a file via `>`.
 Equally,
 `sort` doesn't know if its input is coming from the keyboard or another process;
 it just knows that it has to read, sort, and print.
-
-```{r bash-basics-misconnect, echo=FALSE, fig.cap="Misconnection"}
-knitr::include_graphics("figures/FIXME.png")
-```
 
 > **Why Isn't It Doing Anything?**
 >
@@ -1885,22 +1814,18 @@ $ ls backup
 jane_eyre.txt  time_machine.txt
 ```
 
-> **Warnings and Errors**
+> **Warnings**
 >
-> In the example above,
-> you may have receive the warning:
+> If you attempt to re-execute the code chunk above,
+> you'll end up with an error after the second line:
 >
 > ```text
 > mkdir: backup: File exists
 > ```
 >
-> This warning lets you know the action couldn't be completed,
-> but won't affect the rest of the code from executing appropriately.
-> If this is the case,
-> you'll also likely still have an additional file, `section-1.txt`,
-> in your `backup/` directory.
->
-> FIXME: I don't understand this callout box: add an explanation or remove it.
+> This warning isn't necessarily a cause for alarm.
+> It lets you know that the command couldn't be completed,
+> but will not prevent you from proceeding.
 
 But what if we want to append the extension `.bak` to the files' names?
 `cp` can do this for a single file:
@@ -2009,31 +1934,27 @@ which is `/Users/amira`?
 ### Relative path resolution {#bash-basics-ex-resolve-rel-path}
 
 Using the filesystem shown in Figure \@ref(fig:bash-basics-ex-rel-path),
-if `pwd` displays `/Users/thing`,
+if `pwd` displays `/Users/sami`,
 what will `ls -F ../backup` display?
 
 1.  `../backup: No such file or directory`
-2.  `2012-12-01 2013-01-08 2013-01-27`
-3.  `2012-12-01/ 2013-01-08/ 2013-01-27/`
-4.  `original/ pnas_final/ pnas_sub/`
+2.  `final original revised`
+3.  `final/ original/ revised/`
+4.  `data/ analysis/ doc/`
 
 ```{r bash-basics-ex-rel-path, echo=FALSE, fig.cap="Exercise Filesystem"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/shared-rse/bash-basics/exercise-filesystem.png")
 ```
 
 ### `ls` reading comprehension {#bash-basics-ex-reading-ls}
 
-Using the filesystem shown in Figure \@ref(fig:bash-basics-ex-reading-ls),
+Using the filesystem shown in Figure \@ref(fig:bash-basics-ex-rel-path),
 if `pwd` displays `/Users/backup`,
 and `-r` tells `ls` to display things in reverse order,
 what command(s) will result in the following output:
 
 ```shell
-pnas_sub/ pnas_final/ original/
-```
-
-```{r bash-basics-ex-reading-ls, echo=FALSE, fig.cap="Filesystem for Exercise"}
-knitr::include_graphics("figures/FIXME.png")
+doc/ data/ analysis/
 ```
 
 1.  `ls pwd`
