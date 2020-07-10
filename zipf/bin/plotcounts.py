@@ -28,10 +28,10 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
-    assert(all([isinstance(c, int) and (c >= 0) for c in word_counts]), \
-           'All input values must be non-negative integers')
+    assert type(word_counts) == np.ndarray, \
+           'Input must be a numerical (numpy) array of word counts'
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -72,7 +72,7 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
 
 def main(args):
     """Run the command line program."""
-    set_plot_params(args.rcparams)
+    set_plot_params(args.plotparams)
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
