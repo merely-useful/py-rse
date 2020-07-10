@@ -105,12 +105,13 @@ Broadly speaking, assertions fall into three categories:
     "the value of `highest` is less than or equal to the current loop index".
 
 The function `get_power_law_params` is a good example of the need for a precondition.
-Its docstring does not say that its `word_counts` parameter must be a list of non-negative integers;
+Its docstring does not say that its `word_counts` parameter must be a list of numeric word counts;
 even if we add that,
-a user might easily pass in a list of frequencies or the words themselves.
+a user might easily pass in a list of the words themselves instead.
 Adding an assertion makes the requirement clearer,
 and also guarantees that the function will fail as soon as it is called
-rather than returning a nonsensical value:
+rather than returning an error from `scipy.optimize.minimize_scalar`
+that would be more difficult to interpret/debug.
 
 ```python
 def get_power_law_params(word_counts):
@@ -128,10 +129,10 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
-    assert(all([isinstance(c, int) and (c >= 0) for c in word_counts]), \
-           'All input values must be non-negative integers')
+    assert type(word_counts) == np.ndarray, \
+           'Input must be a numerical (numpy) array of word counts'
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -175,7 +176,8 @@ we could use a piece of text small enough for us to count word frequencies by ha
 Let's add the poem "Risk" by Anaïs Nin to our data:
 
 ```shell
-$ cat data/risk.txt
+$ mkdir test_data
+$ cat test_data/risk.txt
 ```
 
 ```text
@@ -194,7 +196,7 @@ We can then count the words by hand to construct the expected result:
 ```python
 from collections import Counter
 
-risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
+risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1, 'then': 1,
                     'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
                     'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
                     'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
@@ -207,7 +209,7 @@ and use an assertion to check if it is what we expected:
 ```python
 import countwords
 
-with open('data/risk.txt', 'r') as reader:
+with open('test_data/risk.txt', 'r') as reader:
     actual_result = countwords.count_words(reader)
 assert actual_result == expected_result
 ```
@@ -241,12 +243,12 @@ def test_word_count():
     
     The example poem is Risk, by Anaïs Nin.
     """
-    risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'And': 1, 'then': 1,
+    risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1, 'then': 1,
                         'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight': 1,
                         'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
                         'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
     expected_result = Counter(risk_poem_counts)
-    with open('risk.txt', 'r') as reader:
+    with open('test_data/risk.txt', 'r') as reader:
         actual_result = countwords.count_words(reader)
     assert actual_result == expected_result
 ```
@@ -319,6 +321,8 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
+    assert type(word_counts) == np.ndarray, \
+           'Input must be a numerical (numpy) array of word counts'
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
                           args=(word_counts), method='brent')
     beta = mle.x
@@ -616,7 +620,7 @@ from randomwordgenerator import randomwordgenerator
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
 random_words = randomwordgenerator.generate_random_words(n=max_freq)
-writer = open('data/random_words.txt', 'w')
+writer = open('test_data/random_words.txt', 'w')
 for index in range(max_freq):
     word_sequence = f"{random_words[index]} " * int(word_counts[index])
     writer.write(word_sequence + '\n')
@@ -629,7 +633,7 @@ We can then add this integration test to `test_zipfs.py`:
 def test_integration():
     """Test the full word count to alpha parameter workflow."""    
 
-    with open('data/random_words.txt', 'r') as reader:
+    with open('test_data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     word_counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)
@@ -676,7 +680,7 @@ it does draw attention to any changes,
 or [regressions][regression].
 
 In Section \@ref(git-advanced-zipf-verify)
-we calculated an \(\alpha\) of 1.1620041050803658 for *Dracula*.
+we calculated an \(\alpha\) of 1.0866646252515038 for *Dracula*.
 Let's use that value to add a regression test to `test_zipfs.py`:
 
 ```python
@@ -687,7 +691,7 @@ def test_regression():
         word_counts_dict = countwords.count_words(reader)
     word_counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(word_counts_array)
-    expected_alpha = pytest.approx(1.162, abs=0.001)
+    expected_alpha = pytest.approx(1.087, abs=0.001)
     assert actual_alpha == expected_alpha
 ```
 
