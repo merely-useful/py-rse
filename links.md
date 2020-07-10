@@ -264,6 +264,7 @@
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
+[our-research]: http://ourresearch.org/
 [overlay-configuration]: glossary.html#overlay-configuration
 [overleaf]: https://authorea.com/
 [overloading]: glossary.html#overloading
