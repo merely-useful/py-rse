@@ -15,9 +15,6 @@
 **Actual result**<a id="actual-result"></a>
 :   FIXME
 
-**Aggregate**<a id="aggregate"></a>
-:   FIXME
-
 **Agile development**<a id="agile"></a>
 :   FIXME
 
@@ -39,8 +36,8 @@
 **Auto-completion**<a id="auto-completion"></a>
 :   FIXME
 
-**Automatic variable**<a id="automatic-variable-make"></a> (in Make):
-    FIXME
+**Automatic variable**<a id="automatic-variable-make"></a> (in Make)
+:   FIXME
 
 **Boilerplate**<a id="boilerplate"></a>
 :   FIXME
@@ -67,10 +64,10 @@
 :   FIXME
 
 **Catch**<a id="catch"></a> (an exception)
-:    FIXME
+:   FIXME
 
 **Checking-driven development**<a id="cdd"></a> (CDD)
-:    FIXME
+:   FIXME
 
 **Checklist**<a id="checklist"></a>
 :   FIXME
@@ -100,7 +97,7 @@
 :   FIXME
 
 **Command-line interface**<a id="cli"></a> (CLI)
-:    FIXME
+:   FIXME
 
 **Comment**<a id="comment"></a>
 :   FIXME
@@ -143,7 +140,7 @@
 :   FIXME
 
 **Creative Commons - Attribution License**<a id="cc-by"></a> (CC-BY)
-:    FIXME
+:   FIXME
 
 **Current working directory**<a id="current-working-directory"></a>
 :   FIXME
@@ -151,11 +148,11 @@
 **Data package**<a id="data-package"></a>
 :   FIXME
 
-**Default target**<a id="default-target-make"></a> (in Make):
-    FIXME
+**Default target**<a id="default-target-make"></a> (in Make)
+:   FIXME
 
 **Defensive programming**<a id="defensive-programming"></a>
-:    FIXME
+:   FIXME
 
 **Destructuring**<a id="destructuring"></a>
 :   FIXME
@@ -164,7 +161,7 @@
 :   FIXME
 
 **Digital Object Identifier**<a id="doi"></a> (DOI)
-:    FIXME
+:   FIXME
 
 **Docstring**<a id="docstring"></a>
 :   FIXME
@@ -178,30 +175,9 @@
 **Entry point**<a id="entry-point"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Environment**<a id="environment"></a>
-:   FIXME
-
-**Error**<a id="test-error"></a> (result from a unit test)
-:    FIXME
-
-**Escape sequence**<a id="escape-sequence"></a>
-:   FIXME
-
 **Exception**<a id="exception"></a>
 :   FIXME
 
-**Exit status**<a id="exit-status"></a>
-:   FIXME
-
-**Expected output**<a id="expected-output"></a> (of a test)
-:    FIXME
-
-=======
-**Exception**<a id="exception"></a>
-:   FIXME
-
->>>>>>> checking
 **Expected result**<a id="expected-result"></a>
 :   FIXME
 
@@ -223,12 +199,6 @@
 **External error**<a id="external-error"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Failure**<a id="test-failure"></a> (result from a unit test)
-:    FIXME
-
-=======
->>>>>>> checking
 **False beginner**<a id="false-beginner"></a>
 :   Someone who has studied a language before but is learning it again.
     False beginners start at the same point as true beginners
@@ -263,39 +233,17 @@
 **Forge**<a id="forge"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Fork**<a id="fork"></a>
-:   FIXME
-
-**Format string**<a id="format-string"></a>
-:   FIXME
-
 **Frequently Asked Questions**<a id="faq"></a> (FAQ)
-:    FIXME
-=======
-**Frequently Asked Questions**<a id="faq"></a> (FAQ):
-    FIXME
->>>>>>> checking
+:   FIXME
 
 **Full identifier**<a id="full-identifier-git"></a> (in Git)
-:    FIXME
-
-<<<<<<< HEAD
-**Fully-qualified name**<a id="fully-qualified-name"></a>
-:   FIXME
-
-**Function attribute**<a id="function-attribute"></a>
 :   FIXME
 
 **Function**<a id="function-make"></a> (in Make)
-:    FIXME
-=======
-**Function**<a id="function-make"></a> (in Make):
-    FIXME
->>>>>>> checking
+:   FIXME
 
 **GNU Public License**<a id="gpl"></a> (GPL)
-:    FIXME
+:   FIXME
 
 **Git**<a id="git"></a>
 :   FIXME
@@ -327,19 +275,8 @@
 **Git**<a id="git"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**GitHub Pages**<a id="github-pages"></a>
-:   FIXME
-
-**Globbing**<a id="globbing"></a>
-:   FIXME
-
 **Graphical user interface**<a id="gui"></a> (GUI)
-:    FIXME
-=======
-**Graphical user interface**<a id="gui"></a> (GUI):
-    FIXME
->>>>>>> checking
+:   FIXME
 
 **Hitchhiker**<a id="hitchhiker"></a>
 :   FIXME
@@ -365,18 +302,6 @@
 **In-place operator**<a id="in-place-operator"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Index**<a id="index"></a>
-:   FIXME
-
-**Install**<a id="install"></a>
-:   FIXME
-
-**Integrated Development Environment**<a id="ide"></a> (IDE)
-:    FIXME
-
-=======
->>>>>>> checking
 **Internal error**<a id="internal-error"></a>
 :   FIXME
 
@@ -401,35 +326,17 @@
 **Issue**<a id="issue"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Iteration**<a id="iteration"></a> (in software development)
-:    FIXME
-
 **JSON**<a id="json"></a>
 :   FIXME
 
-**Jenny**<a id="jenny"></a> (a repository)
-:    FIXME
-
-**Join**<a id="join"></a> (of database tables)
-:    FIXME
-
-=======
-**JSON**<a id="json"></a>
-:   FIXME
-
->>>>>>> checking
 **Kebab case**<a id="kebab-case"></a>
 :   FIXME
 
-**Key**<a id="key"></a>
+**Label**<a id="issue-label"></a> (in issue tracker)
 :   FIXME
 
-**Label**<a id="issue-label"></a> (in issue tracker)
-:    FIXME
-
 **LaTeX**<a id="latex"></a>
-:    FIXME
+:   FIXME
 
 **Linter**<a id="linter"></a>
 :   FIXME
@@ -447,7 +354,7 @@
 :   FIXME
 
 **Loop**<a id="loop-unix"></a> (in Unix)
-:    FIXME
+:   FIXME
 
 **Milestone**<a id="milestone"></a>
 :   FIXME
@@ -477,15 +384,9 @@
 **Nano**<a id="nano"></a>
 :   FIXME
 
-**Non-governmental organization**<a id="ngo"></a> (NGO)
+**Ngo**<a id="ngo"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Not Invented Here**<a id="not-invented-here"></a> (NIH)
-:   FIXME
-
-=======
->>>>>>> checking
 **Novice**<a id="novice"></a>
 :   Someone who has not yet built a usable mental model of a domain.
     See also [competent practitioner][competent-practitioner] and [expert][expert].
@@ -520,9 +421,6 @@
 **Parent directory**<a id="parent-directory"></a>
 :   FIXME
 
-**Parking lot**<a id="parking-lot"></a>
-:   FIXME
-
 **Patch**<a id="patch"></a>
 :   FIXME
 
@@ -539,7 +437,7 @@
 :   FIXME
 
 **Pipe**<a id="pipe-unix"></a> (in Unix)
-:    FIXME
+:   FIXME
 
 **Positional argument**<a id="positional-argument"></a>
 :   FIXME
@@ -557,7 +455,7 @@
 :   FIXME
 
 **Prerequisite**<a id="prerequisite-make"></a> (in Make)
-:    FIXME
+:   FIXME
 
 **Privilege**<a id="privilege"></a>
 :   FIXME
@@ -580,16 +478,8 @@
 **Provenance**<a id="provenance"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Pseudorandom number generator**<a id="prng"></a> (PRNG)
-:    FIXME
-
 **Public domain license**<a id="cc-0"></a> (CC-0)
-:    FIXME
-=======
-**Public domain license**<a id="cc-0"></a> (CC-0):
-    FIXME
->>>>>>> checking
+:   FIXME
 
 **Pull request**<a id="pull-request"></a>
 :   FIXME
@@ -642,22 +532,14 @@
 **Repository**<a id="repository"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Representation State Transfer**<a id="rest"></a> (REST)
-:    FIXME
-
 **Reproducible example**<a id="reprex"></a> (reprex)
-:    FIXME
-=======
-**Reproducible example**<a id="reprex"></a> (reprex):
-    FIXME
->>>>>>> checking
+:   FIXME
 
 **Reproducible research**<a id="reproducible-research"></a>
 :   FIXME
 
 **Research software engineer**<a id="rse"></a> (RSE)
-:    FIXME
+:   FIXME
 
 **Restructured Text (reST)**<a id="restructured-text"></a>
 :   A plain text markup language used by much Python documentation and documentation tooling.
@@ -672,10 +554,10 @@
 :   FIXME
 
 **Rule**<a id="rule-make"></a> (in Make)
-:    FIXME
+:   FIXME
 
-**Secure Shell**<a id="secure-shell"></a> (SSH):
-    FIXME
+**Secure Shell**<a id="secure-shell"></a> (SSH)
+:   FIXME
 
 **SSH daemon**<a id="ssh-daemon"></a>
 :   FIXME
@@ -686,36 +568,18 @@
 **SSH protocol**<a id="ssh-protocol"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Scalable Vector Graphics**<a id="svg"></a> (SVG)
-:    FIXME
-
-=======
->>>>>>> checking
 **Script**<a id="script"></a>
 :   FIXME
 
 **Search path**<a id="search-path"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Seed**<a id="prng-seed"></a> (for pseudorandom number generator)
-:    FIXME
-
-=======
->>>>>>> checking
 **Semantic versioning**<a id="semantic-versioning"></a>
 :   FIXME <https://semver.org/>
 
 **Sense vote**<a id="sense-vote"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Set and override**<a id="set-and-override"></a> (pattern)
-:    FIXME
-
-=======
->>>>>>> checking
 **Shebang**<a id="shebang"></a>
 :   FIXME
 
@@ -726,7 +590,7 @@
 :   FIXME
 
 **Short identifier**<a id="short-identifier-git"></a> (in Git)
-:    FIXME
+:   FIXME
 
 **Short option**<a id="short-option"></a>
 :   FIXME
@@ -767,30 +631,12 @@
 **Subdirectory**<a id="subdirectory"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Subsampling**<a id="subsampling"></a>
-:   FIXME
-
-**Success**<a id="test-success"></a> (result from a unit test)
-:    FIXME
-
-**Sustainability**<a id="sustainability"></a>
-:   FIXME
-
-=======
->>>>>>> checking
 **Sustainable software**<a id="sustainable-software"></a>
 :   FIXME
 
 **Tab completion**<a id="tab-completion"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Tag**<a id="git-tag"></a> (in version control)
-:    FIXME
-
-=======
->>>>>>> checking
 **Tag**<a id="tag"></a>
 :   FIXME
 
@@ -798,17 +644,8 @@
 :   FIXME
 
 **Target**<a id="target-make"></a> (in Make)
-:    FIXME
-
-<<<<<<< HEAD
-**Target**<a id="target-oppression"></a> (of oppression)
-:    FIXME
-
-**Technical debt**<a id="technical-debt"></a>
 :   FIXME
 
-=======
->>>>>>> checking
 **Ternary expression**<a id="ternary-expression"></a>
 :   FIXME
 
@@ -836,16 +673,8 @@
     (3) there is one table for each kind of variable, and
     (4) if there are multiple tables, each includes a key so that related data can be linked.
 
-<<<<<<< HEAD
-**Time boxing**<a id="time-boxing"></a>
-:   FIXME
-
 **Timestamp**<a id="timestamp"></a> (on a file)
-:    FIXME
-=======
-**Timestamp**<a id="timestamp"></a> (on a file):
-    FIXME
->>>>>>> checking
+:   FIXME
 
 **Tolerance**<a id="tolerance"></a>
 :   FIXME
@@ -874,16 +703,8 @@
 **Validation**<a id="validation"></a>
 :   FIXME
 
-<<<<<<< HEAD
-**Variable**<a id="python-variable"></a> (in Python)
-:   A symbolic name that reserves memory to store a value.
-
 **Variable**<a id="variable-make"></a> (in Make)
-:    FIXME
-=======
-**Variable**<a id="variable-make"></a> (in Make):
-    FIXME
->>>>>>> checking
+:   FIXME
 
 **Verification**<a id="verification"></a>
 :   FIXME
@@ -905,12 +726,6 @@
     so we can install new packages or run a completely different operating system
     without affecting the underlying computer.
 
-<<<<<<< HEAD
-**What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG)
-:    FIXME
-
-=======
->>>>>>> checking
 **Whitespace**<a id="whitespace"></a>
 :   FIXME
 

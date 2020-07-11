@@ -10,6 +10,9 @@
 **Actual output**<a id="actual-output"></a> (of a test):
     FIXME
 
+**Aggregate**<a id="aggregate"></a>
+:   FIXME
+
 **Analysis and estimation**<a id="ae"></a>
 :   FIXME
 
@@ -200,6 +203,9 @@
 **Join**<a id="join"></a> (of database tables):
     FIXME
 
+**Key**<a id="key"></a>
+:   FIXME
+
 **Library**<a id="library"></a>
 :   FIXME
 
@@ -247,6 +253,9 @@
 :   FIXME
 
 **Pair programming**<a id="pair-programming"></a>
+:   FIXME
+
+**Parking lot**<a id="parking-lot"></a>
 :   FIXME
 
 **Phony target**<a id="phony-target"></a>

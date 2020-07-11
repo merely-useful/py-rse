@@ -1,5 +1,6 @@
 [accuracy]: glossary.html#accuracy
 [action-make]: glossary.html#action-make
+[aggregate]: glossary.html#aggregate
 [anscombe-datasaurus]: https://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html
 [api]: glossary.html#api
 [argparse-tutorial]: https://docs.python.org/3/howto/argparse.html
@@ -15,6 +16,7 @@
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
 [climate-api]: https://data.worldbank.org/developers/climate-data-api
 [code-coverage]: glossary.html#code-coverage
+[cookiecutter]: https://drivendata.github.io/cookiecutter-data-science/
 [corpus]: glossary.html#corpus
 [cran]: https://cran.r-project.org/
 [csv]: glossary.html#csv
@@ -51,6 +53,7 @@
 [join]: glossary.html#join
 [joss]: https://joss.theoj.org/
 [jupytext]: https://jupytext.readthedocs.io/en/latest/introduction.html
+[key]: glossary.html#key
 [lbyl-vs-eafp]: https://blogs.msdn.microsoft.com/pythonengineering/2016/06/29/idiomatic-python-eafp-versus-lbyl/
 [lc]: https://librarycarpentry.org
 [learned-helplessness]: glossary.html#learned-helplessness
@@ -73,6 +76,7 @@
 [package]: glossary.html#package
 [pandas-docstring]: https://pandas.pydata.org/pandas-docs/stable/development/contributing_docstring.html
 [pandoc-markdown]: https://pandoc.org/MANUAL.html#pandocs-markdown
+[parking-lot]: glossary.html#parking-lot
 [peer-action]: glossary.html#peer-action
 [pentium-div-bug]: https://en.wikipedia.org/wiki/Pentium_FDIV_bug
 [pep13]: glossary.html#pep13
@@ -112,6 +116,8 @@
 [so-mre]: https://stackoverflow.com/help/minimal-reproducible-example
 [so]: https://stackoverflow.com/
 [source-code]: glossary.html#source-code
+[stack-exchange-data-explorer]: https://data.stackexchange.com/
+[stack-printer]: http://www.stackprinter.com/
 [streaming-data]: glossary.html#streaming-data
 [styler-pkg]: https://styler.r-lib.org/
 [subsampling]: glossary.html#subsampling

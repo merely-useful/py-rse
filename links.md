@@ -3,7 +3,6 @@
 [absolute-import]: glossary.html#absolute-import
 [absolute-path]: glossary.html#absolute-path
 [actual-result]: glossary.html#actual-result
-[aggregate]: glossary.html#aggregate
 [agile]: glossary.html#agile
 [ally]: glossary.html#ally
 [append-mode]: glossary.html#append-mode
@@ -62,7 +61,6 @@
 [confirmation-bias]: glossary.html#confirmation-bias
 [continuation-prompt]: glossary.html#continuation-prompt
 [continuous-integration]: glossary.html#continuous-integration
-[cookiecutter]: https://drivendata.github.io/cookiecutter-data-science/
 [covenant]: https://www.contributor-covenant.org
 [coverage]: glossary.html#coverage
 [creative-commons]: https://creativecommons.org/
@@ -158,7 +156,6 @@
 [json]: glossary.html#json
 [jupyter]: https://jupyter.org/
 [kebab-case]: glossary.html#kebab-case
-[key]: glossary.html#key
 [latex]: glossary.html#latex
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 [linter]: glossary.html#linter
@@ -197,7 +194,6 @@
 [overleaf]: https://authorea.com/
 [pager]: glossary.html#pager
 [parent-directory]: glossary.html#parent-directory
-[parking-lot]: glossary.html#parking-lot
 [patch]: glossary.html#patch
 [path-coverage]: glossary.html#path-coverage
 [path]: glossary.html#path
@@ -279,10 +275,8 @@
 [ssh-daemon]: glossary.html#ssh-daemon
 [ssh-key]: glossary.html#ssh-key
 [ssh-protocol]: glossary.html#ssh-protocol
-[stack-exchange-data-explorer]: https://data.stackexchange.com/
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
-[stack-printer]: http://www.stackprinter.com/
 [standard-error]: glossary.html#standard-error
 [standard-input]: glossary.html#standard-input
 [standard-output]: glossary.html#standard-output
