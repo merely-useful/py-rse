@@ -1,4 +1,4 @@
-.PHONY : all clean chapters commands crossrefs fixme gloss html links nbspref settings tex-packages
+.PHONY : all clean chapters commands crossrefs fixme html links nbspref settings tex-packages
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py-novice/index.html _book/r-novice/index.html _book/py-rse/index.html _book/r-rse/index.html
@@ -214,17 +214,17 @@ crossrefs :
 fixme :
 	@fgrep FIXME ${PY_RSE_FILES} ${COMMON_FILES}
 
-## gloss : check that all glossary definitions are defined and used.
-gloss :
-	@bin/gloss.py ./gloss.md ${PY_RSE_FILES} ${COMMON_FILES}
-
 ## images : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${PY_RSE_FILES} ${COMMON_FILES}
 
-## links : check that all links are defined and used.
+## links : check that links and glossary entries are defined and used.
 links :
-	@bin/links.py ./links.md ${PY_RSE_FILES} ${COMMON_FILES}
+	@bin/links.py ./links.md ./gloss.md ${PY_RSE_FILES} ${COMMON_FILES}
+
+## exercises : check that exercises have solutions and solutions have exercises.
+exercises :
+	@bin/exercises.py ${PY_RSE_FILES}
 
 ## nbspref : check that all cross-references are prefixed with a non-breaking space.
 nbspref :
