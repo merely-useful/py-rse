@@ -1,6 +1,4 @@
-**Book Title:** Building Research Software
-
-**Name(s) of Author(s):**
+# Research Software Engineering with Python
 
 -   Damien Irving
 -   Kate Hertweck
@@ -10,22 +8,22 @@
 -   Charlotte Wickham
 -   Greg Wilson
 
-**1. Tell us about yourself. **
+## 1. Tell us about yourself.
 
-**What are your qualifications for writing this book?**
+### What are your qualifications for writing this book?
 
 We are all research software engineers, practicing data scientists, and/or professional educators in those fields.
 
-**Do you have any unique characteristics or experiences that will make you stand out as the author?**
+### Do you have any unique characteristics or experiences that will make you stand out as the author?
 
 One of us co-founded Software Carpentry, a non-profit organization
 that has taught programming and data analysis skills to over 50,000 people worldwide since 2010.
 
-**2. Tell us about the book. **
+## 2. Tell us about the book.
 
-**What is the technology or idea that you're writing about?**
+### What is the technology or idea that you're writing about?
 
-This book covers the core skills researchers need
+This book introduces the core skills researchers need
 to develop robust software that others can use,
 to share their work with others,
 and to be productive as part of a research software team.
@@ -38,12 +36,12 @@ We assume readers have some basic programming knowledge, and build on that to co
 -   configuring software
 -   testing and error handling
 -   creating productive, inclusive teams
--   publishing in a reproducible way
+-   documenting, packaging, and releasing software for use by the wider research community
 
 All of this material has been used and refined in workshops,
 some of it by multiple instructors over many years.
 
-**Why is it important now?**
+### Why is it important now?
 
 Software is now as important to research as telescopes and test tubes,
 but most researchers are never taught anything more than basic programming skills.
@@ -53,7 +51,7 @@ have no idea how reliable their software is,
 and cannot share it with others.
 Filling in these gaps will help researchers get more done in less time and with less pain.
 
-**Tell us roughly how it works or what makes it different from its alternatives.**
+### Tell us roughly how it works or what makes it different from its alternatives.
 
 -   Each set of tools and practices is covered in one chapter
     (except for the Unix shell and version control,
@@ -61,13 +59,13 @@ Filling in these gaps will help researchers get more done in less time and with 
 -   A running example demonstrates how to transform a simple data analysis problem
     into a reproducible, reusable project.
 
-**What type of book are you planning to write?**
+### What type of book are you planning to write?
 
 -   The book is a tutorial suitable both for self-study and as a textbook in a one-semester course.
 -   It could fit into either the "In Action" or "In Practice" series.
 -   It includes exercises and solutions, all of which use real-world tools and examples.
 
-**3. Please give us 5 or 6 representative tasks in the domain of your book.**
+## 3. Please give us 5 or 6 representative tasks in the domain of your book.
 
 1.  Create a Unix shell script to re-run a series of data analysis steps on a new input file with a single command.
 2.  Use branches, pull requests, and code review to add a feature to the Python programs invoked by that script.
@@ -75,9 +73,9 @@ Filling in these gaps will help researchers get more done in less time and with 
 4.  Add error handling and logging to the scripts so that they can be put into production.
 5.  Use style-checking tools to ensure the Python code is well written, and then release it as an installable package.
 6.  Adopt a license, a code of conduct, and efficient decision-making processes to ensure the project runs smoothly.
-7.  Publish results with DOIs, ORCIDs, and other metadata in a fully-reproducible way.
+7.  Document, package, and release software for use by the wider research community.
 
-**4. The minimally-qualified reader (MQR)**
+## 4. The minimally-qualified reader (MQR).
 
 At the beginning of the book, we introduce three personas who characterize our audience:
 
@@ -107,9 +105,9 @@ have shifted from fluid dynamics to data analysis;
 this guide will teach them how to build and run data pipelines
 so that they can pass those skills on to their users.
 
-**5. Q&A**
+## 5. Q&A
 
-*What are the three or four most commonly-asked questions about this technology?*
+## What are the three or four most commonly-asked questions about this technology?
 
 We wrote this book in part because the people who need it don't even know what questions to ask.
 "How do I write a general rule in a Makefile?" presupposes that you know that Make exists.
@@ -117,7 +115,7 @@ Similarly,
 people don't ask, "How should a small group run a meeting?"
 because it doesn't occur to them that running meetings is an improvable skill.
 
-*What are others interested in this topic asking in forums?*
+## What are others interested in this topic asking in forums?
 
 All of our chapters are driven by questions we have answered (some of them many times)
 in workshops or in discussions with colleagues.
@@ -125,9 +123,9 @@ Our answers for technical subjects frequently draw on Stack Overflow,
 particularly for topics like continuous integration and packaging;
 our answers for community management and project leadership draw on extensive experience in open source.
 
-**6. Tell us about the competition and the ecosystem.**
+## 6. Tell us about the competition and the ecosystem.
 
-*What other books are available on this topic?*
+### What other books are available on this topic?
 
 *The Turing Way* (https://the-turing-way.netlify.app/),
 produced by the Turing Institute in the UK,
@@ -137,10 +135,10 @@ Other books cover only one topic in more depth than our audience needs
 are aimed at commercial software developers
 (any number of books on testing, coding style, and dev ops),
 or go into data science rather than telling readers
-how to build software
-(e.g., Zhang's upcoming *A Tour of Data Science*).
+how to build software (e.g., Zhang's upcoming
+[*A Tour of Data Science*](https://www.routledge.com/A-Tour-of-Data-Science-Learn-R-and-Python-in-Parallel/Zhang/p/book/9780367895860)).
 
-*How does the proposed book compare to them?*
+### How does the proposed book compare to them?
 
 1.  Our book has broader and deeper coverage, and includes exercises with solutions.
 
@@ -156,34 +154,30 @@ how to build software
 
 4.  Our book is a ready-to-go university semester course.
 
-*What resources would you currently recommend to someone wanting to learn this subject?*
+### What resources would you currently recommend to someone wanting to learn this subject?
 
 -   The Software Carpentry and Data Carpentry lessons (for technical topics).
 -   Fogel's *Open Source Software* (for project management).
 
-*What are the most important web sites and companies associated with this topic?*
+### What are the most important web sites and companies associated with this topic?
 
 -   The Carpentries (http://carpentries.org)
 -   The Turing Way (https://the-turing-way.netlify.app)
 
-*Where do others interested in this topic gather online?*
+### Where do others interested in this topic gather online?
 
 -   The Carpentries have a very active online community (http://carpentries.org).
 -   The UK's Society of Research Software Engineering (https://society-rse.org/).
 
-**7. Book size and illustrations**
+## 7. Book size and illustrations
 
-Please estimate:
+-   Approximate number of published pages: 470.
+-   Approximate number of diagrams and other graphics: 40.
+-   Approximate number of code listings: 150.
 
--   The approximate number of published pages: 470.
+## 8. Contact information
 
--   The approximate number of diagrams and other graphics: 40.
-
--   The approximate number of code listings: 150.
-
-**8. Contact information**
-
-Formal Name (as it should appear on a book contract):
+### Formal name
 
 -   Dr. Damien B. Irving
 -   Dr. Kate L. Hertweck
@@ -193,7 +187,7 @@ Formal Name (as it should appear on a book contract):
 -   Dr. Charlotte Wickham
 -   Dr. Gregory V. Wilson
 
-Name (as it would appear on a book cover):
+### Name as it would appear on the cover
 
 -   Damien Irving
 -   Kate Hertweck
@@ -203,24 +197,23 @@ Name (as it would appear on a book cover):
 -   Charlotte Wickham
 -   Greg Wilson
 
-Website/blogs/Twitter, etc:
+### Social media
 
 -   Damien Irving: https://damienirving.github.io/
 -   Kate Hertweck: http://katehertweck.com/
 -   Luke Johnston: http://lukewjohnston.com/
--   Luke Johnston: https://scholar.google.ca/citations?user=8zCoa-UAAAAJ
+-   Sara Mahallati: https://scholar.google.ca/citations?user=8zCoa-UAAAAJ
 -   Joel Ostblom: https://joelostblom.com/
 -   Charlotte Wickham: https://www.cwick.co.nz/
 -   Greg Wilson: http://third-bit.com/
 
-**9. Schedule**
+## 9. Schedule
 
 First draft complete.
 
-**10. Table of Contents**
+## 10. Table of Contents
 
-FIXME: UPDATE PROJECTS AND PUBLISHING CONTENTS.
-
+```
 1 Introduction
     1.1 What's the big picture?
     1.2 Who are these lessons for?
@@ -380,26 +373,17 @@ FIXME: UPDATE PROJECTS AND PUBLISHING CONTENTS.
     13.12 Exercises
     13.13 Key Points
 14 Python Packaging
-    14.1 Creating an installable Python package
-    14.2 Creating a virtual Python environment
-    14.3 Installing your package
-    14.4 What it means to install a Python package
-    14.5 Distributing your package
-    14.6 Documenting your package for others
-    14.7 Summary
-    14.8 Exercises
-    14.9 Key Points
-15 Publishing
-    15.1 How are reports and authors identified?
-    15.2 Where should I publish my reports?
-    15.3 How should I publish data?
-    15.4 What standards of data sharing should I aspire to?
-    15.5 How should I publish my software packages?
-    15.6 How should I publish my scripts?
-    15.7 Summary
-    15.8 Exercises
-    15.9 Key Points
-16 Finale
+    14.1 Creating a Python Package
+    14.2 Virtual Environments
+    14.3 Installing a Development Package
+    14.4 What Installation Does
+    14.5 Distributing Packages
+    14.6 Documenting Packages
+    14.7 Hosting Documentation Online
+    14.8 Summary
+    14.9 Exercises
+    14.10 Key Points
+15 Finale
 References
 A License
 B Code of Conduct
@@ -410,3 +394,4 @@ F Key Points
 G Solutions
 H YAML
 I Working Remotely
+```

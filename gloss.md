@@ -10,24 +10,11 @@
 :   FIXME
 
 **Absolute path**<a id="absolute-path"></a>
-:   FIXME
-
-**Accuracy**<a id="accuracy"></a>
-:   FIXME
-
-**Action**<a id="action-make"></a> (in Make):
-    FIXME
-
-**Active listening**<a id="active-listening"></a>
-:   FIXME
-
-**Actual output**<a id="actual-output"></a> (of a test):
-    FIXME
+:   Refers to the complete listing of folders between the [root][root-directory]
+folder to the last folder, if the path points to a folder, or to the parent
+folder, if the path points to a file.
 
 **Actual result**<a id="actual-result"></a>
-:   FIXME
-
-**Aggregate**<a id="aggregate"></a>
 :   FIXME
 
 **Agile development**<a id="agile"></a>
@@ -36,17 +23,8 @@
 **Ally**<a id="ally"></a>
 :   FIXME
 
-**Analysis and estimation**<a id="ae"></a>
-:   FIXME
-
-**Annotated tag**<a id="annotated-tag"></a> (in version control):
-    FIXME
-
 **Append mode**<a id="append-mode"></a>
 :   FIXME
-
-**Application Programming Interface**<a id="api"></a> (API):
-    FIXME
 
 **Assertion**<a id="assertion"></a>
 :   FIXME
@@ -58,49 +36,28 @@
     and to work with the same tools and data they would use in real life.
 
 **Auto-completion**<a id="auto-completion"></a>
-:   FIXME
+:   Is a feature that allows the user to finish a word or code quickly through
+the use of hitting the TAB key to list possible words or code that the user can
+select from.
 
-**Automatic variable**<a id="automatic-variable"></a>
-:   FIXME
-
-**Automatic variable**<a id="automatic-variable-make"></a> (in Make):
-    FIXME
-
-**Backlog**<a id="backlog"></a>
-:   FIXME
-
-**Bash**<a id="bash"></a>
-:   FIXME
-
-**Beeswarm plot**<a id="beeswarm-plot"></a>
-:   FIXME
-
-**Binary code**<a id="binary-code"></a>
-:   FIXME
-
-**Bit rot**<a id="bit-rot"></a>
+**Automatic variable**<a id="automatic-variable-make"></a> (in Make)
 :   FIXME
 
 **Boilerplate**<a id="boilerplate"></a>
 :   FIXME
 
-**Branch**<a id="branch"></a>
-:   FIXME
-
 **Branch-per-feature workflow**<a id="branch-per-feature-workflow"></a>
 :   FIXME <https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow>
 
-**Breakpoint**<a id="breakpoint"></a>
-:   FIXME
-
-**Buffer**<a id="buffer"></a>
-:   FIXME
-
 **Bug report**<a id="bug-report"></a>
-:   FIXME
+:   Is a collection of files, logs, or related information that adequately
+describes either an unexpected output of some code or program or an unexpected
+error or warning. This information is used to help find and fix a bug in the
+program or code.
 
 **Bug tracker**<a id="bug-tracker"></a>
-:   FIXME
+:   Is a system that tracks and manages [reported bugs][bug-report] for a software program,
+to make it easier to address and fix the bugs.
 
 **Build manager**<a id="build-manager"></a>
 :   FIXME <https://en.wikipedia.org/wiki/List_of_build_automation_software>
@@ -112,21 +69,17 @@
 :   FIXME
 
 **Camel case**<a id="camel-case"></a>
+:   A style of writing code that involves naming variables and objects with no
+space, underscore (`_`), dot (`.`), or dash (`-`), with each word being capitalized.
+Some examples would be: `CalculateSum`, `findPattern`, `SearchFiles`, or `objectNumber`.
+
+**Catch**<a id="catch"></a> (an exception)
 :   FIXME
 
-**Catch**<a id="catch"></a> (an exception):
-    FIXME
-
-**Checking-driven development**<a id="cdd"></a> (CDD):
-    FIXME
+**Checking-driven development**<a id="cdd"></a> (CDD)
+:   FIXME
 
 **Checklist**<a id="checklist"></a>
-:   FIXME
-
-**Code browser**<a id="code-browser"></a>
-:   FIXME
-
-**Code coverage**<a id="code-coverage"></a>
 :   FIXME
 
 **Code review**<a id="code-review"></a>
@@ -134,9 +87,6 @@
 
 **Cognitive load**<a id="cognitive-load"></a>
 :   FIXME
-
-**Comma-separated values**<a id="csv"></a> (CSV):
-    FIXME
 
 **Command argument**<a id="command-argument"></a>
 :   FIXME
@@ -156,17 +106,16 @@
 **Command switch**<a id="command-switch"></a>
 :   FIXME
 
-**Command-line interface**<a id="cli"></a> (CLI):
-    FIXME
+**Command-line interface**<a id="cli"></a> (CLI)
+:   FIXME
 
 **Comment**<a id="comment"></a>
-:   FIXME
+:   Is text written in a script that is not treated as code to be run, but rather
+as text that describes what the code is doing. These are usually short notes,
+often beginning with a `#` (in many programming languages).
 
 **Commit**<a id="commit"></a>
 :   FIXME: define both noun and verb.
-
-**Commit hash**<a id="commit-hash"></a>
-:   FIXME
 
 **Commit message**<a id="commit-message"></a>
 :   FIXME
@@ -184,29 +133,15 @@
 **Compiler**<a id="compiler"></a>
 :   FIXME
 
-**Computational competence**<a id="computational-competence"></a>
-:   FIXME
-
 **Computational notebook**<a id="computational-notebook"></a>
-:   FIXME
-
-**Computational stylometry**<a id="computational-stylometry"></a>
-:   FIXME
-
-**Computational thinking**<a id="computational-thinking"></a>
 :   FIXME
 
 **Conditional expression**<a id="conditional-expression"></a>
 :   FIXME
 
-**Configuration object**<a id="configuration-object"></a>
-:   FIXME
-
 **Confirmation bias**<a id="confirmation-bias"></a>
-:   FIXME
-
-**Context manager**<a id="context-manager"></a>
-:   FIXME
+:   Is the tendency to seek out or interpret information that re-affirms or
+supports one's pre-existing knowledge, beliefs, or values.
 
 **Continuation prompt**<a id="continuation-prompt"></a>
 :   FIXME
@@ -214,53 +149,24 @@
 **Continuous integration**<a id="continuous-integration"></a>
 :   FIXME
 
-**Corpus**<a id="corpus"></a>
-:   FIXME
-
 **Coverage**<a id="coverage"></a>
 :   FIXME
 
-**Creative Commons - Attribution License**<a id="cc-by"></a> (CC-BY):
-    FIXME
-
-**Curb cuts**<a id="curb-cuts"></a>
-:   https://medium.com/@mosaicofminds/the-curb-cut-effect-how-making-public-spaces-accessible-to-people-with-disabilities-helps-everyone-d69f24c58785
+**Creative Commons - Attribution License**<a id="cc-by"></a> (CC-BY)
+:   FIXME
 
 **Current working directory**<a id="current-working-directory"></a>
-:   FIXME
-
-**DRY (Don't Repeat Yourself)**<a id="dry"></a>
-:   The general principle when programming that it's typically better to define something (a function, a constant...) once
-    and refer to it consistently  as a "single source of truth" throughout a piece of software
-    than to define copies in multiple places,
-    if only because then you only have to make any changes in one place.
-    This is useful and helpful principle but should not be thought of as an involate rule.
-
-**Data engineering**<a id="data-engineering"></a>
-:   FIXME
+:   The folder or directory location that the program is operating in. Any action
+taken by the program occurs relative to this directory.
 
 **Data package**<a id="data-package"></a>
+:   A software package that, mostly, contains only data. Is used to make it
+simpler to disseminate data for easier use.
+
+**Default target**<a id="default-target-make"></a> (in Make)
 :   FIXME
 
-**Default target**<a id="default-target"></a>
-:   FIXME
-
-**Default target**<a id="default-target-make"></a> (in Make):
-    FIXME
-
-**Defensive programming**<a id="defensive-programming"></a>:
-    FIXME
-
-**Delimiter**<a id="delimiter"></a>
-:   FIXME
-
-**Dependency graph**<a id="dependency-graph"></a>
-:   FIXME
-
-**Design pattern**<a id="design-pattern"></a>
-:   FIXME
-
-**Design patterns**<a id="design-patterns"></a>
+**Defensive programming**<a id="defensive-programming"></a>
 :   FIXME
 
 **Destructuring**<a id="destructuring"></a>
@@ -269,20 +175,8 @@
 **Dictionary**<a id="dictionary"></a>
 :   FIXME
 
-**Digital Object Identifier**<a id="doi"></a> (DOI):
-    FIXME
-
-**Directory Tree**<a id="directory-tree"></a>
-:   If the nesting relationships between directories in a filesystem are drawn as arrows from the containing directory to the nested ones,
-    a tree structure develops.
-
-**Directory**<a id="directory"></a>
-:   A folder in a filesystem.
-
-**Disk**<a id="disk"></a>
-:   Disk refers to disk storage, a physical component of a computer that stores  information on a disk.
-    The most common kind of disk storage is a hard disk drive,
-    which is a storage drive with a non-removable disk.
+**Digital Object Identifier**<a id="doi"></a> (DOI)
+:   FIXME
 
 **Docstring**<a id="docstring"></a>
 :   FIXME
@@ -290,32 +184,14 @@
 **Documentation generator**<a id="documentation-generator"></a>
 :   FIXME
 
-**Downvote**<a id="downvote"></a>
-:   FIXME
-
-**Embedded documentation**<a id="embedded-documentation"></a>
+**Down-vote**<a id="down-vote"></a>
 :   FIXME
 
 **Entry point**<a id="entry-point"></a>
 :   FIXME
 
-**Environment**<a id="environment"></a>
-:   FIXME
-
-**Error**<a id="test-error"></a> (result from a unit test):
-    FIXME
-
-**Escape sequence**<a id="escape-sequence"></a>
-:   FIXME
-
 **Exception**<a id="exception"></a>
 :   FIXME
-
-**Exit status**<a id="exit-status"></a>
-:   FIXME
-
-**Expected output**<a id="expected-output"></a> (of a test):
-    FIXME
 
 **Expected result**<a id="expected-result"></a>
 :   FIXME
@@ -332,17 +208,11 @@
 **Exploratory programming**<a id="exploratory-programming"></a>
 :   FIXME
 
-**Exponent**<a id="exponent"></a>
-:   FIXME
-
 **Export a variable**<a id="export-variable"></a>
 :   FIXME
 
 **External error**<a id="external-error"></a>
 :   FIXME
-
-**Failure**<a id="test-failure"></a> (result from a unit test):
-    FIXME
 
 **False beginner**<a id="false-beginner"></a>
 :   Someone who has studied a language before but is learning it again.
@@ -350,20 +220,9 @@
     (i.e., a pre-test will show the same proficiency)
     but can move much more quickly.
 
-**False negative**<a id="false-negative"></a>
-:   FIXME
-
-**False positive**<a id="false-positive"></a>
-:   FIXME
-
-**Feature boxing**<a id="feature-boxing"></a>
-:   FIXME
-
-**Feature creep**<a id="feature-creep"></a>
-:   FIXME
-
 **Feature request**<a id="feature-request"></a>
-:   FIXME
+:   Is a request to the maintainers or developers of a software program to add 
+a specific functionality (a feature) to that program.
 
 **Filename extension**<a id="filename-extension"></a>
 :   FIXME
@@ -384,62 +243,58 @@
 **Flag variable**<a id="flag-variable"></a>
 :   FIXME
 
-**Flag**<a id="flag"></a>
-:   FIXME
-
 **Folder**<a id="folder"></a>
-:   FIXME
+:   Is a computer storage and organization concept that allows files to be
+organized in a common location, which is the folder or directory. A folder can 
+store both files and other folders.
 
 **Forge**<a id="forge"></a>
 :   FIXME
 
-**Fork**<a id="fork"></a>
+**Frequently Asked Questions**<a id="faq"></a> (FAQ)
 :   FIXME
 
-**Format string**<a id="format-string"></a>
+**Full identifier**<a id="full-identifier-git"></a> (in Git)
 :   FIXME
 
-**Frequently Asked Questions**<a id="faq"></a> (FAQ):
-    FIXME
-
-**Full identifier**<a id="full-identifier-git"></a> (in Git):
-    FIXME
-
-**Fully-qualified name**<a id="fully-qualified-name"></a>
+**Function**<a id="function-make"></a> (in Make)
 :   FIXME
 
-**Function attribute**<a id="function-attribute"></a>
+**GNU Public License**<a id="gpl"></a> (GPL)
 :   FIXME
-
-**Function**<a id="function-make"></a> (in Make):
-    FIXME
-
-**GNU Public License**<a id="gpl"></a> (GPL):
-    FIXME
 
 **Git**<a id="git"></a>
-:   FIXME
+:   Is a software program that formally tracks changes made to a collection
+of files within a specific [folder][folder] (and its subfolders). Technically,
+Git is a "distributed version control system", meaning that each user who has
+a [repository][repository] on their computer also has the entire history of
+changes made to that repository, so that technically there is no central
+repository (e.g. that is only accessible on a server).
 
 **Git branch**<a id="git-branch"></a>
 :   FIXME
 
 **Git clone**<a id="git-clone"></a>
-:   FIXME
+:   Copies, and usually downloads, a Git [remote repository][remote-repository] 
+onto the local computer.
 
 **Git conflict**<a id="git-conflict"></a>
 :   FIXME
 
 **Git fork**<a id="git-fork"></a>
-:   FIXME
+:   Is a concept in GitHub that indicates a GitHub [repository][repository]
+has been [cloned][git-clone] into a new GitHub repository.
 
 **Git merge**<a id="git-merge"></a>
 :   FIXME
 
 **Git pull**<a id="git-pull"></a>
-:   FIXME
+:   Downloads and synchronizes changes between a [remote repository][remote-repository]
+and a local [repository][repository].
 
 **Git push**<a id="git-push"></a>
-:   FIXME
+:   Uploads and synchronizes changes between a local [repository][repository]
+and a [remote repository][remote-repository].
 
 **Git stage**<a id="git-stage"></a>
 :   FIXME
@@ -447,16 +302,7 @@
 **Git**<a id="git"></a>
 :   FIXME
 
-**GitHub Pages**<a id="github-pages"></a>
-:   FIXME
-
-**Globbing**<a id="globbing"></a>
-:   FIXME
-
-**Graphical user interface**<a id="gui"></a> (GUI):
-    FIXME
-
-**HTTP status code**<a id="http-status-code"></a>
+**Graphical user interface**<a id="gui"></a> (GUI)
 :   FIXME
 
 **Hitchhiker**<a id="hitchhiker"></a>
@@ -466,9 +312,6 @@
 :   FIXME
 
 **Governance**<a id="governance"></a>
-:   FIXME
-
-**Hot spot**<a id="hot-spot"></a>
 :   FIXME
 
 **ISO date format**<a id="iso-date-format"></a>
@@ -485,15 +328,6 @@
 
 **In-place operator**<a id="in-place-operator"></a>
 :   FIXME
-
-**Index**<a id="index"></a>
-:   FIXME
-
-**Install**<a id="install"></a>
-:   FIXME
-
-**Integrated Development Environment**<a id="ide"></a> (IDE):
-    FIXME
 
 **Internal error**<a id="internal-error"></a>
 :   FIXME
@@ -514,45 +348,32 @@
 :   FIXME
 
 **Issue tracking system**<a id="issue-tracking-system"></a>
-:   FIXME
+:   Is similar to a [bug tracking system][bug-tracker] in that it tracks "issues"
+made to a [repository][repository], usually in the form of [feature requests][feature-request],
+[bug reports][bug-report], or some other todo item.
 
 **Issue**<a id="issue"></a>
 :   FIXME
 
-**Iteration**<a id="iteration"></a> (in software development):
-    FIXME
-
 **JSON**<a id="json"></a>
 :   FIXME
-
-**Jenny**<a id="jenny"></a> (a repository):
-    FIXME
-
-**Join**<a id="join"></a> (of database tables):
-    FIXME
 
 **Kebab case**<a id="kebab-case"></a>
 :   FIXME
 
-**Key**<a id="key"></a>
+**Label**<a id="issue-label"></a> (in issue tracker)
 :   FIXME
 
-**Label**<a id="issue-label"></a> (in issue tracker):
-    FIXME
+**Label**<a id="issue-label"></a> (in issue tracker)
+:   FIXME
 
-**LaTeX**<a id="latex"></a>:
-    FIXME
-
-**Library**<a id="library"></a>
+**LaTeX**<a id="latex"></a>
 :   FIXME
 
 **Linter**<a id="linter"></a>
 :   FIXME
 
 **List comprehension**<a id="list-comprehension"></a>
-:   FIXME
-
-**Log file**<a id="log-file"></a>
 :   FIXME
 
 **Logging framework**<a id="logging-framework"></a>
@@ -564,28 +385,21 @@
 **Loop body**<a id="loop-body"></a>
 :   FIXME
 
-**Loop**<a id="loop-unix"></a> (in Unix):
-    FIXME
+**Loop**<a id="loop-unix"></a> (in Unix)
+:   FIXME
 
 **Milestone**<a id="milestone"></a>
 :   FIXME
 
 **MIT License**<a id="mit-license"></a>
-:   FIXME
-
-**Macro**<a id="macro"></a>
-:   FIXME
+:   Is a legal license that places very limited restrictions on the re-use of
+software, making it a very permissive license that encourages using, modifying,
+and distributing the software widely.
 
 **Magic number**<a id="magic-number"></a>
 :   FIXME
 
-**Magnitude**<a id="magnitude"></a>
-:   FIXME
-
 **Makefile**<a id="makefile"></a>
-:   FIXME
-
-**Mantissa**<a id="mantissa"></a>
 :   FIXME
 
 **Martha's Rules**<a id="marthas-rules"></a>
@@ -594,24 +408,9 @@
 **Maximum likelihood extimation**<a id="max-like-est"></a>
 :   FIXME
 
-**Memory**<a id="memory"></a>
-:   A physical device on your computer that temporarily stores information for immediate use.
-
 **Mental model**<a id="mental-model"></a>
 :   A simplified representation of the key elements and relationships of some problem domain
     that is good enough to support problem solving.
-
-**Method**<a id="method"></a>
-:   A function that is specific to an object type, based on qualities
-    of that type, e.g. a string method like `upper()` which turns characters
-    in a string to uppercase.
-
-**MIT License**<a id="mit-license"></a>
-:   FIXME
-
-**Namespace**<a id="namespace"></a>
-:   A way of organizing names of related objects, functions, or variables
-    to avoid confusion with (for instance) common names that might well occur in multiple packages.
 
 **Nano**<a id="nano"></a>
 :   FIXME
@@ -619,33 +418,22 @@
 **Ngo**<a id="ngo"></a>
 :   FIXME
 
-**Not Invented Here**<a id="not-invented-here"></a> (NIH):
-    FIXME
-
 **Novice**<a id="novice"></a>
 :   Someone who has not yet built a usable mental model of a domain.
     See also [competent practitioner][competent-practitioner] and [expert][expert].
-
-**ORCID**<a id="orcid"></a>
-:   FIXME
-
-**Object**<a id="object"></a>
-:   An object is a programming language's way of descrbing and storing values,
-    usually labeled with a variable name.
 
 **Object-oriented programming**<a id="oop"></a>
 :   FIXME
 
 **Open license**<a id="open-license"></a>
-:   FIXME
+:   Is a legal license that encourages, rather than restricts, the use, re-use,
+modification, and distribution of a copyrighted material, such as with software
+or written text.
 
 **Open science**<a id="open-science"></a>
 :   FIXME
 
 **Operating system**<a id="operating-system"></a>
-:   FIXME
-
-**Operational test**<a id="operational-test"></a>
 :   FIXME
 
 **Oppression**<a id="oppression"></a>
@@ -660,22 +448,10 @@
 **Overlay configuration**<a id="overlay-configuration"></a>
 :   FIXME
 
-**Overloading**<a id="overloading"></a>
-:   FIXME
-
-**Package**<a id="package"></a>
-:   FIXME
-
 **Pager**<a id="pager"></a>
 :   FIXME
 
-**Pair programming**<a id="pair-programming"></a>
-:   FIXME
-
 **Parent directory**<a id="parent-directory"></a>
-:   FIXME
-
-**Parking lot**<a id="parking-lot"></a>
 :   FIXME
 
 **Patch**<a id="patch"></a>
@@ -687,22 +463,16 @@
 **Path**<a id="path"></a>
 :   FIXME
 
-**Pattern rule**<a id="pattern-rule"></a>
-:   FIXME
-
-**Phony target**<a id="phony-target"></a>
+**Pattern rule**<a id="pattern-rule-make"></a>
 :   FIXME
 
 **Phony target**<a id="phony-target-make"></a>
 :   FIXME
 
-**Pipe**<a id="pipe-unix"></a> (in Unix):
-    FIXME
-
-**Positional argument**<a id="positional-argument"></a>
+**Pipe**<a id="pipe-unix"></a> (in Unix)
 :   FIXME
 
-**Post-mortem**<a id="post-mortem"></a>
+**Positional argument**<a id="positional-argument"></a>
 :   FIXME
 
 **Postcondition**<a id="postcondition"></a>
@@ -714,14 +484,11 @@
 **Power law**<a id="power-law"></a>
 :   FIXME
 
-**Precision**<a id="precision"></a>
-:   FIXME
-
 **Precondition**<a id="precondition"></a>
 :   FIXME
 
-**Prerequisite**<a id="prerequisite-make"></a> (in Make):
-    FIXME
+**Prerequisite**<a id="prerequisite-make"></a> (in Make)
+:   FIXME
 
 **Privilege**<a id="privilege"></a>
 :   FIXME
@@ -744,11 +511,8 @@
 **Provenance**<a id="provenance"></a>
 :   FIXME
 
-**Pseudorandom number generator**<a id="prng"></a> (PRNG):
-    FIXME
-
-**Public domain license**<a id="cc-0"></a> (CC-0):
-    FIXME
+**Public domain license**<a id="cc-0"></a> (CC-0)
+:   FIXME
 
 **Pull request**<a id="pull-request"></a>
 :   FIXME
@@ -762,16 +526,10 @@
 **Raster image**<a id="raster-image"></a>
 :   FIXME
 
-**Rebase**<a id="rebase"></a>
-:   FIXME
-
 **Recursion**<a id="recursion"></a>
 :   FIXME
 
 **Redirection**<a id="redirection"></a>
-:   FIXME
-
-**Refactor**<a id="refactor"></a>
 :   FIXME
 
 **Refactoring**<a id="refactoring"></a>
@@ -789,16 +547,14 @@
 **Relative error**<a id="relative-error"></a>
 :   FIXME
 
-**Relative import**<a id="relative-import"></a>
-:   In Python,
-    the importing of a module relative to the current path
-    and thus likely from within the current package (e.g., `from . import generate`)
-    rather than an import from a globally-defined package (e.g., `from zipfpy import generate`).
-
 **Relative path**<a id="relative-path"></a>
-:   FIXME
+:   Is a reference to a folder or file that begins at the [current working directory][current-working-directory],
+    unlike an [absolute path][absolute-path] that starts with the [root directory][root-directory].
 
 **Remote login**<a id="remote-login"></a>
+:   FIXME
+
+**Remote login server**<a id="remote-login-server"></a>
 :   FIXME
 
 **Remote repository**<a id="remote-repository"></a>
@@ -810,17 +566,19 @@
 **Repository**<a id="repository"></a>
 :   FIXME
 
-**Representation State Transfer**<a id="rest"></a> (REST):
-    FIXME
-
-**Reproducible example**<a id="reprex"></a> (reprex):
-    FIXME
+**Reproducible example**<a id="reprex"></a> (reprex)
+:   A way of showing a code example that demonstrates the usage of the code
+    or to highlight an error or bug that easily allows another user to re-create
+    ("reproduce") the same output or error.
 
 **Reproducible research**<a id="reproducible-research"></a>
-:   FIXME
+:   A central pillar of rigorous research that involves describing and documenting
+    the research results in such a way that another researcher or person can re-run
+    the analysis code on the exact data to obtain the same result, to "reproduce"
+    the findings.
 
-**Research software engineer**<a id="rse"></a> (RSE):
-    FIXME
+**Research software engineer**<a id="rse"></a> (RSE)
+:   FIXME
 
 **Restructured Text (reST)**<a id="restructured-text"></a>
 :   A plain text markup language used by much Python documentation and documentation tooling.
@@ -829,13 +587,22 @@
 :   FIXME
 
 **Root directory**<a id="root-directory"></a>
-:   FIXME
+:   The root folder is the folder that contains all folders and files on the 
+computer. It is the starting point to all files and is essentially referring to
+the hard drive itself. An analogy to the root directory would be that it is
+the trunk of a tree and all other folders are branches from that trunk.
 
 **Rotating file**<a id="rotating-file"></a>
 :   FIXME
 
-**Rule**<a id="rule-make"></a> (in Make):
-    FIXME
+**Rule**<a id="rule-make"></a> (in Make)
+:   FIXME
+
+**Secure Shell**<a id="secure-shell"></a> (SSH)
+:   FIXME
+
+**SSH daemon**<a id="ssh-daemon"></a>
+:   FIXME
 
 **SSH key**<a id="ssh-key"></a>
 :   FIXME
@@ -843,26 +610,17 @@
 **SSH protocol**<a id="ssh-protocol"></a>
 :   FIXME
 
-**Scalable Vector Graphics**<a id="svg"></a> (SVG):
-    FIXME
-
 **Script**<a id="script"></a>
 :   FIXME
 
-**Search path**<a id="search path"></a>
+**Search path**<a id="search-path"></a>
 :   FIXME
-
-**Seed**<a id="prng-seed"></a> (for pseudorandom number generator):
-    FIXME
 
 **Semantic versioning**<a id="semantic-versioning"></a>
 :   FIXME <https://semver.org/>
 
 **Sense vote**<a id="sense-vote"></a>
 :   FIXME
-
-**Set and override**<a id="set-and-override"></a> (pattern):
-    FIXME
 
 **Shebang**<a id="shebang"></a>
 :   FIXME
@@ -873,43 +631,19 @@
 **Short circuit test**<a id="short-circuit-test"></a>
 :   FIXME
 
-**Short identifier**<a id="short-identifier-git"></a> (in Git):
-    FIXME
+**Short identifier**<a id="short-identifier-git"></a> (in Git)
+:   FIXME
 
 **Short option**<a id="short-option"></a>
 :   FIXME
 
-**Side effects**<a id="side-effects"></a>
-:   FIXME
-
-**Sign**<a id="sign"></a>
-:   FIXME
-
-**Silent error**<a id="silent-error"></a>
-:   FIXME
-
-**Silent failure**<a id="silent-failure"></a>
-:   FIXME
-
 **Snake case**<a id="snake-case"></a>
-:   FIXME
-
-**Software development process**<a id="dev-process"></a>
-:   FIXME
-
-**Source code**<a id="source-code"></a>
 :   FIXME
 
 **Source distribution**<a id="source-distribution"></a>
 :   FIXME
 
 **Sprint**<a id="sprint"></a>
-:   FIXME
-
-**Stand-up meeting**<a id="stand-up-meeting"></a>
-:   FIXME
-
-**Standard error**<a id="standard-error"></a>
 :   FIXME
 
 **Standard error**<a id="stderr"></a>
@@ -930,44 +664,17 @@
 **Stop word**<a id="stop-word"></a>
 :   FIXME
 
-**Streaming data**<a id="streaming-data"></a>
-:   FIXME
-
-**Sturdy development**<a id="sturdy"></a>
-:   FIXME
-
 **Subcommand**<a id="subcommand"></a>
 :   FIXME
 
 **Subdirectory**<a id="subdirectory"></a>
 :   FIXME
 
-**Subsampling**<a id="subsampling"></a>
-:   FIXME
-
-**Success**<a id="test-success"></a> (result from a unit test):
-    FIXME
-
-**Sustainability**<a id="sustainability"></a>
-:   FIXME
-
 **Sustainable software**<a id="sustainable-software"></a>
-:   FIXME
-
-**Symbolic debugger**<a id="symbolic-debugger"></a>
-:   FIXME
-
-**Syntax highlighting**<a id="syntax-highlighting"></a>
-:   FIXME
-
-**Synthetic data**<a id="synthetic-data"></a>
 :   FIXME
 
 **Tab completion**<a id="tab-completion"></a>
 :   FIXME
-
-**Tag**<a id="git-tag"></a> (in version control):
-    FIXME
 
 **Tag**<a id="tag"></a>
 :   FIXME
@@ -975,25 +682,13 @@
 **Target**<a id="target"></a>
 :   FIXME
 
-**Target**<a id="target-make"></a> (in Make):
-    FIXME
-
-**Target**<a id="target-oppression"></a> (of oppression):
-    FIXME
-
-**Technical debt**<a id="technical-debt"></a>
+**Target**<a id="target-make"></a> (in Make)
 :   FIXME
 
 **Ternary expression**<a id="ternary-expression"></a>
 :   FIXME
 
-**Test coverage**<a id="test-coverage"></a>
-:   FIXME
-
 **Test framework**<a id="test-framework"></a>
-:   FIXME
-
-**Test isolation**<a id="test-isolation"></a>
 :   FIXME
 
 **Test runner**<a id="test-runner"></a>
@@ -1017,13 +712,7 @@
     (3) there is one table for each kind of variable, and
     (4) if there are multiple tables, each includes a key so that related data can be linked.
 
-**Time boxing**<a id="time-boxing"></a>
-:   FIXME
-
-**Timestamp**<a id="timestamp"></a> (on a file):
-    FIXME
-
-**Tldr**<a id="tldr"></a>
+**Timestamp**<a id="timestamp"></a> (on a file)
 :   FIXME
 
 **Tolerance**<a id="tolerance"></a>
@@ -1035,13 +724,7 @@
 **Triage**<a id="triage"></a>
 :   FIXME
 
-**Tuning**<a id="tuning"></a>
-:   FIXME
-
 **Tuple**<a id="tuple"></a>
-:   FIXME
-
-**Typesetting language**<a id="typesetting-language"></a>
 :   FIXME
 
 **Unit test**<a id="unit-test"></a>
@@ -1050,31 +733,22 @@
 **Unix shell**<a id="unix-shell"></a>
 :   FIXME
 
+**Up-vote**<a id="up-vote"></a>
+:   FIXME
+
 **Update operator**<a id="update-operator"></a>
 :   See [in-place operator][in-place-operator].
-
-**Upvote**<a id="upvote"></a>
-:   FIXME
 
 **Validation**<a id="validation"></a>
 :   FIXME
 
-**Variable**<a id="python-variable"></a> (in Python):
-   A symbolic name that reserves memory to store a value.
-
-**Variable**<a id="variable-make"></a> (in Make):
-    FIXME
-
-**Vector image**<a id="vector-image"></a>
+**Variable**<a id="variable-make"></a> (in Make)
 :   FIXME
 
 **Verification**<a id="verification"></a>
 :   FIXME
 
 **Version control system**<a id="version-control-system"></a>
-:   FIXME
-
-**Violin plot**<a id="violin-plot"></a>
 :   FIXME
 
 **Virtual environment**<a id="virtual-environment"></a>
@@ -1091,26 +765,14 @@
     so we can install new packages or run a completely different operating system
     without affecting the underlying computer.
 
-**What You See Is What You Get**<a id="wysiwyg"></a> (WYSIWYG):
-    FIXME
-
 **Whitespace**<a id="whitespace"></a>
 :   FIXME
 
 **Wildcard**<a id="wildcard"></a>
 :   FIXME
 
-**Working directory**<a id="working-directory"></a>
-:   FIXME
-
 **Working memory**<a id="working-memory"></a>
 :   FIXME
 
 **Wrap code**<a id="wrap-code"></a>
-:   FIXME
-
-**Wrapper**<a id="wrapper"></a>
-:   FIXME
-
-**YAML**<a id="yaml"></a>
 :   FIXME
