@@ -10,7 +10,9 @@
 :   FIXME
 
 **Absolute path**<a id="absolute-path"></a>
-:   FIXME
+:   Refers to the complete listing of folders between the [root][root-directory]
+folder to the last folder, if the path points to a folder, or to the parent
+folder, if the path points to a file.
 
 **Actual result**<a id="actual-result"></a>
 :   FIXME
@@ -34,7 +36,9 @@
     and to work with the same tools and data they would use in real life.
 
 **Auto-completion**<a id="auto-completion"></a>
-:   FIXME
+:   Is a feature that allows the user to finish a word or code quickly through
+the use of hitting the TAB key to list possible words or code that the user can
+select from.
 
 **Automatic variable**<a id="automatic-variable-make"></a> (in Make)
 :   FIXME
@@ -46,10 +50,14 @@
 :   FIXME <https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow>
 
 **Bug report**<a id="bug-report"></a>
-:   FIXME
+:   Is a collection of files, logs, or related information that adequately
+describes either an unexpected output of some code or program or an unexpected
+error or warning. This information is used to help find and fix a bug in the
+program or code.
 
 **Bug tracker**<a id="bug-tracker"></a>
-:   FIXME
+:   Is a system that tracks and manages [reported bugs][bug-report] for a software program,
+to make it easier to address and fix the bugs.
 
 **Build manager**<a id="build-manager"></a>
 :   FIXME <https://en.wikipedia.org/wiki/List_of_build_automation_software>
@@ -61,7 +69,9 @@
 :   FIXME
 
 **Camel case**<a id="camel-case"></a>
-:   FIXME
+:   A style of writing code that involves naming variables and objects with no
+space, underscore (`_`), dot (`.`), or dash (`-`), with each word being capitalized.
+Some examples would be: `CalculateSum`, `findPattern`, `SearchFiles`, or `objectNumber`.
 
 **Catch**<a id="catch"></a> (an exception)
 :   FIXME
@@ -100,7 +110,9 @@
 :   FIXME
 
 **Comment**<a id="comment"></a>
-:   FIXME
+:   Is text written in a script that is not treated as code to be run, but rather
+as text that describes what the code is doing. These are usually short notes,
+often beginning with a `#` (in many programming languages).
 
 **Commit**<a id="commit"></a>
 :   FIXME: define both noun and verb.
@@ -128,7 +140,8 @@
 :   FIXME
 
 **Confirmation bias**<a id="confirmation-bias"></a>
-:   FIXME
+:   Is the tendency to seek out or interpret information that re-affirms or
+supports one's pre-existing knowledge, beliefs, or values.
 
 **Continuation prompt**<a id="continuation-prompt"></a>
 :   FIXME
@@ -143,10 +156,12 @@
 :   FIXME
 
 **Current working directory**<a id="current-working-directory"></a>
-:   FIXME
+:   The folder or directory location that the program is operating in. Any action
+taken by the program occurs relative to this directory.
 
 **Data package**<a id="data-package"></a>
-:   FIXME
+:   A software package that, mostly, contains only data. Is used to make it
+simpler to disseminate data for easier use.
 
 **Default target**<a id="default-target-make"></a> (in Make)
 :   FIXME
@@ -206,7 +221,8 @@
     but can move much more quickly.
 
 **Feature request**<a id="feature-request"></a>
-:   FIXME
+:   Is a request to the maintainers or developers of a software program to add 
+a specific functionality (a feature) to that program.
 
 **Filename extension**<a id="filename-extension"></a>
 :   FIXME
@@ -228,7 +244,9 @@
 :   FIXME
 
 **Folder**<a id="folder"></a>
-:   FIXME
+:   Is a computer storage and organization concept that allows files to be
+organized in a common location, which is the folder or directory. A folder can 
+store both files and other folders.
 
 **Forge**<a id="forge"></a>
 :   FIXME
@@ -246,28 +264,37 @@
 :   FIXME
 
 **Git**<a id="git"></a>
-:   FIXME
+:   Is a software program that formally tracks changes made to a collection
+of files within a specific [folder][folder] (and its subfolders). Technically,
+Git is a "distributed version control system", meaning that each user who has
+a [repository][repository] on their computer also has the entire history of
+changes made to that repository, so that technically there is no central
+repository (e.g. that is only accessible on a server).
 
 **Git branch**<a id="git-branch"></a>
 :   FIXME
 
 **Git clone**<a id="git-clone"></a>
-:   FIXME
+:   Copies, and usually downloads, a Git [remote repository][remote-repository] 
+onto the local computer.
 
 **Git conflict**<a id="git-conflict"></a>
 :   FIXME
 
 **Git fork**<a id="git-fork"></a>
-:   FIXME
+:   Is a concept in GitHub that indicates a GitHub [repository][repository]
+has been [cloned][git-clone] into a new GitHub repository.
 
 **Git merge**<a id="git-merge"></a>
 :   FIXME
 
 **Git pull**<a id="git-pull"></a>
-:   FIXME
+:   Downloads and synchronizes changes between a [remote repository][remote-repository]
+and a local [repository][repository].
 
 **Git push**<a id="git-push"></a>
-:   FIXME
+:   Uploads and synchronizes changes between a local [repository][repository]
+and a [remote repository][remote-repository].
 
 **Git stage**<a id="git-stage"></a>
 :   FIXME
@@ -321,7 +348,9 @@
 :   FIXME
 
 **Issue tracking system**<a id="issue-tracking-system"></a>
-:   FIXME
+:   Is similar to a [bug tracking system][bug-tracker] in that it tracks "issues"
+made to a [repository][repository], usually in the form of [feature requests][feature-request],
+[bug reports][bug-report], or some other todo item.
 
 **Issue**<a id="issue"></a>
 :   FIXME
@@ -330,6 +359,9 @@
 :   FIXME
 
 **Kebab case**<a id="kebab-case"></a>
+:   FIXME
+
+**Label**<a id="issue-label"></a> (in issue tracker)
 :   FIXME
 
 **Label**<a id="issue-label"></a> (in issue tracker)
@@ -360,7 +392,9 @@
 :   FIXME
 
 **MIT License**<a id="mit-license"></a>
-:   FIXME
+:   Is a legal license that places very limited restrictions on the re-use of
+software, making it a very permissive license that encourages using, modifying,
+and distributing the software widely.
 
 **Magic number**<a id="magic-number"></a>
 :   FIXME
@@ -378,9 +412,6 @@
 :   A simplified representation of the key elements and relationships of some problem domain
     that is good enough to support problem solving.
 
-**MIT License**<a id="mit-license"></a>
-:   FIXME
-
 **Nano**<a id="nano"></a>
 :   FIXME
 
@@ -395,7 +426,9 @@
 :   FIXME
 
 **Open license**<a id="open-license"></a>
-:   FIXME
+:   Is a legal license that encourages, rather than restricts, the use, re-use,
+modification, and distribution of a copyrighted material, such as with software
+or written text.
 
 **Open science**<a id="open-science"></a>
 :   FIXME
@@ -515,7 +548,8 @@
 :   FIXME
 
 **Relative path**<a id="relative-path"></a>
-:   FIXME
+:   Is a reference to a folder or file that begins at the [current working directory][current-working-directory],
+    unlike an [absolute path][absolute-path] that starts with the [root directory][root-directory].
 
 **Remote login**<a id="remote-login"></a>
 :   FIXME
@@ -533,10 +567,15 @@
 :   FIXME
 
 **Reproducible example**<a id="reprex"></a> (reprex)
-:   FIXME
+:   A way of showing a code example that demonstrates the usage of the code
+    or to highlight an error or bug that easily allows another user to re-create
+    ("reproduce") the same output or error.
 
 **Reproducible research**<a id="reproducible-research"></a>
-:   FIXME
+:   A central pillar of rigorous research that involves describing and documenting
+    the research results in such a way that another researcher or person can re-run
+    the analysis code on the exact data to obtain the same result, to "reproduce"
+    the findings.
 
 **Research software engineer**<a id="rse"></a> (RSE)
 :   FIXME
@@ -548,7 +587,10 @@
 :   FIXME
 
 **Root directory**<a id="root-directory"></a>
-:   FIXME
+:   The root folder is the folder that contains all folders and files on the 
+computer. It is the starting point to all files and is essentially referring to
+the hard drive itself. An analogy to the root directory would be that it is
+the trunk of a tree and all other folders are branches from that trunk.
 
 **Rotating file**<a id="rotating-file"></a>
 :   FIXME
@@ -602,9 +644,6 @@
 :   FIXME
 
 **Sprint**<a id="sprint"></a>
-:   FIXME
-
-**Standard error**<a id="standard-error"></a>
 :   FIXME
 
 **Standard error**<a id="stderr"></a>

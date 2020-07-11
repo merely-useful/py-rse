@@ -277,7 +277,6 @@
 [ssh-protocol]: glossary.html#ssh-protocol
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
-[standard-error]: glossary.html#standard-error
 [standard-input]: glossary.html#standard-input
 [standard-output]: glossary.html#standard-output
 [stderr]: glossary.html#stderr
