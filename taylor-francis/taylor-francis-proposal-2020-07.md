@@ -1,4 +1,4 @@
-# Building Research Software
+# Research Software Engineering with Python
 
 -   Damien Irving
 -   Kate Hertweck
@@ -17,14 +17,13 @@ focus on developing commercial applications, not on exploring problems whose
 answers aren't yet known.  Our goal is show readers how to do that, both on
 their own and as part of a team.
 
-We believe every researcher should know how to write short programs that clean
-and analyze data in a reproducible way, and how to use version control to keep
-track of what they have done.  But just as some astronomers spend their careers
-designing telescopes, some researchers focus on building the software that makes
-research possible.  People who do this are called *research software engineers*,
-and the aim of this book is to get you ready for this role, i.e., to help you go
-from writing code for yourself to creating tools to help your entire field
-advance.
+We believe every researcher should know how to write short programs that analyze
+data in a reproducible way, and how to use version control to keep track of what
+they have done.  But just as some astronomers spend their careers designing
+telescopes, some researchers focus on building the software that makes research
+possible.  People who do this are called *research software engineers*, and the
+aim of this book is to get you ready for this role, i.e., to help you go from
+writing code for yourself to creating tools to help your entire field advance.
 
 ## 2. Synopsis
 
@@ -80,7 +79,8 @@ breadth.  Other books cover only one topic in more depth than our audience needs
 (e.g., Ray & Ray's *Unix and Linux: Visual QuickStart Guide*), are aimed at
 commercial software developers (any number of books on testing, coding style,
 and dev ops), or go into data science rather than telling readers how to build
-software (e.g., Zhang's upcoming *A Tour of Data Science*).
+software (e.g., Zhang's upcoming
+[*A Tour of Data Science*](https://www.routledge.com/A-Tour-of-Data-Science-Learn-R-and-Python-in-Parallel/Zhang/p/book/9780367895860)).
 
 Our book has broader and deeper coverage, and includes exercises with solutions.
 Our focus on programming best practices (e.g. principles like writing modular,

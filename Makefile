@@ -1,4 +1,4 @@
-.PHONY : all clean chapters commands crossrefs fixme html links nbspref settings tex-packages
+.PHONY : all clean chapters commands crossrefs fixme html links nbspref proposals settings tex-packages
 
 INDEX_HTML=_book/index.html
 ALL_HTML=_book/py-novice/index.html _book/r-novice/index.html _book/py-rse/index.html _book/r-rse/index.html
@@ -230,9 +230,10 @@ exercises :
 nbspref :
 	@bin/nbspref.py ${PY_RSE_FILES} ${COMMON_FILES}
 
-## tex-packages : install required LaTeX packages.
-tex-packages :
-	-tlmgr install $$(cat ./tex-packages.txt)
+## proposals : regenerate PDFs of proposals.
+proposals :
+	pandoc -o manning/manning-proposal-2020-07.pdf manning/manning-proposal-2020-07.md
+	pandoc -o taylor-francis/taylor-francis-proposal-2020-07.pdf taylor-francis/taylor-francis-proposal-2020-07.md
 
 ## settings : echo all variable values.
 settings :
@@ -244,3 +245,7 @@ settings :
 	@echo R_RSE_FILES: ${R_RSE_FILES}
 	@echo COMMON_FILES: ${COMMON_FILES}
 	@echo ALL_FILES: ${ALL_FILES}
+
+## tex-packages : install required LaTeX packages.
+tex-packages :
+	-tlmgr install $$(cat ./tex-packages.txt)

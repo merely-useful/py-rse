@@ -1,4 +1,4 @@
-# Building Research Software
+# Research Software Engineering with Python
 
 -   Damien Irving
 -   Kate Hertweck
@@ -135,8 +135,8 @@ Other books cover only one topic in more depth than our audience needs
 are aimed at commercial software developers
 (any number of books on testing, coding style, and dev ops),
 or go into data science rather than telling readers
-how to build software
-(e.g., Zhang's upcoming *A Tour of Data Science*).
+how to build software (e.g., Zhang's upcoming
+[*A Tour of Data Science*](https://www.routledge.com/A-Tour-of-Data-Science-Learn-R-and-Python-in-Parallel/Zhang/p/book/9780367895860)).
 
 ### How does the proposed book compare to them?
 
