@@ -124,185 +124,200 @@ graphics and 150 code listing.
 
 ## Table of Contents
 
+The current table of contents is given below.
+Please note that we are currently planning to divide the material in Chapter 15 (Publishing)
+among the other chapters
+so that the book will build toward creating and distributing a reusable research software package.
+Please also note that we have started work on a companion volume that uses R instead of Python for examples.
+If this proposal is accepted,
+we expect to be able to complete the second book some time in 2021.
+
 ```
-1 Introduction
-    1.1 What's the big picture?
-    1.2 Who are these lessons for?
-    1.3 Syllabus
-    1.4 Acknowledgments
-2 The Basics of the Unix Shell
-    2.1 Exploring Files and Directories
-    2.2 Moving Around
-    2.3 Creating New Files and Directories
-    2.4 Moving Files and Directories
-    2.5 Copy Files and Directories
-    2.6 Deleting Files and Directories
-    2.7 Wildcards
-    2.8 Reading the Manual
-    2.9 Combining Commands
-    2.10 How Pipes Work
-    2.11 Repeating Commands on Many Files
-    2.12 Variable Names
-    2.13 Redoing Things
-    2.14 Creating New Filenames Automatically
-    2.15 Summary
-    2.16 Exercises
-    2.17 Key Points
-3 Going Further with the Unix Shell
-    3.1 Creating New Commands
-    3.2 Making Scripts More Versatile
-    3.3 Turning Interactive Work into a Script
-    3.4 Finding Things in Files
-    3.5 Finding Files
-    3.6 Configuring the Shell
-    3.7 Summary
-    3.8 Exercises
-    3.9 Key Points
-4 Command Line Programs in Python
-    4.1 Programs and Modules
-    4.2 Handling Command-Line Options
-    4.3 Documentation
-    4.4 Counting Words
-    4.5 Pipelining
-    4.6 Positional and Optional Arguments
-    4.7 Collating Results
-    4.8 Writing Our Own Modules
-    4.9 Plotting
-    4.10 Summary
-    4.11 Exercises
-    4.12 Key Points
-5 Git at the Command Line
-    5.1 Setting Up
-    5.2 Creating a New Repository
-    5.3 Adding Existing Work
-    5.4 Describing Commits
-    5.5 Saving and Tracking Changes
-    5.6 Synchronizing with Other Repositories
-    5.7 Exploring History
-    5.8 Restoring Old Versions of Files
-    5.9 Ignoring Files
-    5.10 Summary
-    5.11 Exercises
-    5.12 Key Points
-6 Advanced Git
-    6.1 What's a Branch?
-    6.2 Creating a Branch
-    6.3 What Curve Should We Fit?
-    6.4 Verifying Zipf's Law
-    6.5 Merging
-    6.6 Handling Conflicts
-    6.7 A Branch-Based Workflow
-    6.8 Using Other People's Work
-    6.9 Pull Requests
-    6.10 Handling Conflicts in Pull Requests
-    6.11 Summary
-    6.12 Exercises
-    6.13 Key Points
-7 Automating Analyses
-    7.1 Updating a Single File
-    7.2 Managing Multiple Files
-    7.3 Updating Files When Programs Change
-    7.4 Reducing Repetition in a Makefile
-    7.5 Automatic Variables
-    7.6 Generic Rules
-    7.7 Defining Sets of Files
-    7.8 Documenting a Makefile?
-    7.9 Automating Entire Analyses
-    7.10 Summary
-    7.11 Exercises
-    7.12 Key Points
-8 Program Configuration
-    8.1 Configuration File Formats
-    8.2 Matplotlib Configuration
-    8.3 The Global Configuration File
-    8.4 The User Configuration File
-    8.5 Adding Command-Line Options
-    8.6 A Job Control File
-    8.7 Summary
-    8.8 Exercises
-    8.9 Key Points
-9 Error Handling
-    9.1 Exceptions
-    9.2 Kinds of Errors
-    9.3 Writing Useful Error Messages
-    9.4 Reporting Errors
-    9.5 Summary
-    9.6 Exercises
-    9.7 Key Points
-10 Working in Teams
-    10.1 Include Everyone
-    10.2 Establish a Code of Conduct
-    10.3 Include a License
-    10.4 Planning
-    10.5 Bug Reports
-    10.6 Labeling Issues
-    10.7 Prioritizing
-    10.8 Meetings
-    10.9 Making Decisions
-    10.10 Handling Conflict
-    10.11 Summary
-    10.12 Exercises
-    10.13 Key Points
-11 Code Style, Review, and Refactoring
-    11.1 Python Style
-    11.2 Order
-    11.3 Checking Style
-    11.4 Refactoring
-    11.5 Code Reviews
-    11.6 Python Features
-    11.7 Summary
-    11.8 Exercises
-    11.9 Key Points
-12 Project Structure
-    12.1 What is a project?
-    12.2 What files should every project contain?
-    12.3 How should I structure the rest of my project?
-    12.4 How should I manage a mix of compiled programs and scripts?
-    12.5 How should I document the software in a project?
-    12.6 What should I document?
-    12.7 How can I create a useful FAQ?
-    12.8 How does documentation for data differ from documentation for code?
-    12.9 How should I document the data in a project?
-    12.10 How can I get started documenting my data?
-    12.11 What data documentation should I create first?
-    12.12 How should I manage data that can't be stored in version control?
-    12.13 Summary
-    12.14 Exercises
-    12.15 Key Points
-13 Testing
-    13.1 Assertions
-    13.2 Unit Testing
-    13.3 Testing Frameworks
-    13.4 Testing Floating-Point Values
-    13.5 Testing Error Handling
-    13.6 Integration Testing
-    13.7 Regression Testing
-    13.8 Test Coverage
-    13.9 Continuous Integration
-    13.10 When to Write Tests
-    13.11 Summary
-    13.12 Exercises
-    13.13 Key Points
-14 Python Packaging
-    14.1 Creating a Python Package
-    14.2 Virtual Environments
-    14.3 Installing a Development Package
-    14.4 What Installation Does
-    14.5 Distributing Packages
-    14.6 Documenting Packages
-    14.7 Hosting Documentation Online
-    14.8 Summary
-    14.9 Exercises
-    14.10 Key Points
-15 Finale
+1) Introduction
+1.1) The Big Picture
+1.2) Audience
+1.3) Syllabus
+1.4) Acknowledgments
+2) The Basics of the Unix Shell
+2.1) Exploring Files and Directories
+2.2) Moving Around
+2.3) Creating New Files and Directories
+2.4) Moving Files and Directories
+2.5) Copy Files and Directories
+2.6) Deleting Files and Directories
+2.7) Wildcards
+2.8) Reading the Manual
+2.9) Combining Commands
+2.10) How Pipes Work
+2.11) Repeating Commands on Many Files
+2.12) Variable Names
+2.13) Redoing Things
+2.14) Creating New Filenames Automatically
+2.15) Summary
+2.16) Exercises
+2.17) Key Points
+3) Going Further with the Unix Shell
+3.1) Creating New Commands
+3.2) Making Scripts More Versatile
+3.3) Turning Interactive Work into a Script
+3.4) Finding Things in Files
+3.5) Finding Files
+3.6) Configuring the Shell
+3.7) Summary
+3.8) Exercises
+3.9) Key Points
+4) Command Line Programs in Python
+4.1) Programs and Modules
+4.2) Handling Command-Line Options
+4.3) Documentation
+4.4) Counting Words
+4.5) Pipelining
+4.6) Positional and Optional Arguments
+4.7) Collating Results
+4.8) Writing Our Own Modules
+4.9) Plotting
+4.10) Summary
+4.11) Exercises
+4.12) Key Points
+5) Git at the Command Line
+5.1) Setting Up
+5.2) Creating a New Repository
+5.3) Adding Existing Work
+5.4) Describing Commits
+5.5) Saving and Tracking Changes
+5.6) Synchronizing with Other Repositories
+5.7) Exploring History
+5.8) Restoring Old Versions of Files
+5.9) Ignoring Files
+5.10) Summary
+5.11) Exercises
+5.12) Key Points
+6) Advanced Git
+6.1) What’s a Branch?
+6.2) Creating a Branch
+6.3) What Curve Should We Fit?
+6.4) Verifying Zipf’s Law
+6.5) Merging
+6.6) Handling Conflicts
+6.7) A Branch-Based Workflow
+6.8) Using Other People’s Work
+6.9) Pull Requests
+6.10) Handling Conflicts in Pull Requests
+6.11) Summary
+6.12) Exercises
+6.13) Key Points
+7) Automating Analyses
+7.1) Updating a Single File
+7.2) Managing Multiple Files
+7.3) Updating Files When Programs Change
+7.4) Reducing Repetition in a Makefile
+7.5) Automatic Variables
+7.6) Generic Rules
+7.7) Defining Sets of Files
+7.8) Documenting a Makefile?
+7.9) Automating Entire Analyses
+7.10) Summary
+7.11) Exercises
+7.12) Key Points
+8) Program Configuration
+8.1) Configuration File Formats
+8.2) Matplotlib Configuration
+8.3) The Global Configuration File
+8.4) The User Configuration File
+8.5) Adding Command-Line Options
+8.6) A Job Control File
+8.7) Summary
+8.8) Exercises
+8.9) Key Points
+9) Error Handling
+9.1) Exceptions
+9.2) Kinds of Errors
+9.3) Writing Useful Error Messages
+9.4) Reporting Errors
+9.5) Summary
+9.6) Exercises
+9.7) Key Points
+10) Working in Teams
+10.1) Include Everyone
+10.2) Establish a Code of Conduct
+10.3) Include a License
+10.4) Planning
+10.5) Bug Reports
+10.6) Labeling Issues
+10.7) Prioritizing
+10.8) Meetings
+10.9) Making Decisions
+10.10) Handling Conflict
+10.11) Summary
+10.12) Exercises
+10.13) Key Points
+11) Code Style, Review, and Refactoring
+11.1) Python Style
+11.2) Order
+11.3) Checking Style
+11.4) Refactoring
+11.5) Code Reviews
+11.6) Python Features
+11.7) Summary
+11.8) Exercises
+11.9) Key Points
+12) Project Structure
+12.1) What is a Project?
+12.2) Standard Information
+12.3) Organizing Project Content
+12.4) Using Compiled Programs
+12.5) Documenting Software
+12.6) What to Document
+12.7) Creating a FAQ
+12.8) Data versus Code
+12.9) Managing External Data
+12.10) Summary
+12.11) Exercises
+12.12) Key Points
+13) Testing
+13.1) Assertions
+13.2) Unit Testing
+13.3) Testing Frameworks
+13.4) Testing Floating-Point Values
+13.5) Testing Error Handling
+13.6) Integration Testing
+13.7) Regression Testing
+13.8) Test Coverage
+13.9) Continuous Integration
+13.10) When to Write Tests
+13.11) Summary
+13.12) Exercises
+13.13) Key Points
+14) Python Packaging
+14.1) Creating a Python Package
+14.2) Virtual Environments
+14.3) Installing a Development Package
+14.4) What Installation Does
+14.5) Distributing Packages
+14.6) Documenting Packages
+14.7) Hosting Documentation Online
+14.8) Summary
+14.9) Exercises
+14.10) Key Points
+15) Publishing
+15.1) Identifying Reports and Authors
+15.2) Where to Publish
+15.3) Publishing Data
+15.4) The FAIR Principles
+15.5) Publishing Software
+15.6) Summary
+15.7) Exercises
+15.8) Key Points
+16) Finale
+A) License
+B) Code of Conduct
+C) Contributing
+D) Glossary
+E) Setting Up
+F) Learning Objectives
+G) Key Points
+H) Solutions
+I) YAML
+J) Working Remotely
 References
-A License
-B Code of Conduct
-C Contributing
-D Glossary
-E Setting Up
-F Key Points
-G Solutions
-H YAML
-I Working Remotely
 ```
