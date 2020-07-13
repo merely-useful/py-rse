@@ -3,7 +3,6 @@
 -   Damien Irving
 -   Kate Hertweck
 -   Luke Johnston
--   Sara Mahallati
 -   Joel Ostblom
 -   Charlotte Wickham
 -   Greg Wilson
@@ -29,9 +28,6 @@ to over 50,000 people worldwide since 2010.
 
 -   Dr. Luke Johnston: post-doctoral researcher in bioinformatics at Aarhus
     University.
-
--   Sara Mahallati: graduate student in biomedical engineering at the University
-    of Toronto.
 
 -   Joel Ostblom: graduate student in biomedical engineering at the University
     of Toronto.
@@ -205,7 +201,6 @@ how to build software (e.g., Zhang's upcoming
 -   Dr. Damien B. Irving
 -   Dr. Kate L. Hertweck
 -   Dr. Luke Johnston
--   Sara Mahallati
 -   Joel Ostblom
 -   Dr. Charlotte Wickham
 -   Dr. Gregory V. Wilson
@@ -215,7 +210,6 @@ how to build software (e.g., Zhang's upcoming
 -   Damien Irving
 -   Kate Hertweck
 -   Luke Johnston
--   Sara Mahallati
 -   Joel Ostblom
 -   Charlotte Wickham
 -   Greg Wilson
@@ -225,7 +219,6 @@ how to build software (e.g., Zhang's upcoming
 -   Damien Irving: https://damienirving.github.io/
 -   Kate Hertweck: http://katehertweck.com/
 -   Luke Johnston: http://lukewjohnston.com/
--   Sara Mahallati: https://scholar.google.ca/citations?user=8zCoa-UAAAAJ
 -   Joel Ostblom: https://joelostblom.com/
 -   Charlotte Wickham: https://www.cwick.co.nz/
 -   Greg Wilson: http://third-bit.com/

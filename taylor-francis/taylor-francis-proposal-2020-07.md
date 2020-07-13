@@ -3,7 +3,6 @@
 -   Damien Irving
 -   Kate Hertweck
 -   Luke Johnston
--   Sara Mahallati
 -   Joel Ostblom
 -   Charlotte Wickham
 -   Greg Wilson
@@ -109,9 +108,6 @@ graphics and 150 code listing.
 
 -   Dr. Luke Johnston: post-doctoral researcher in bioinformatics at Aarhus
     University. http://lukewjohnston.com/
-
--   Sara Mahallati: graduate student in biomedical engineering at the University
-    of Toronto. https://scholar.google.ca/citations?user=8zCoa-UAAAAJ
 
 -   Joel Ostblom: graduate student in biomedical engineering at the University
     of Toronto. https://joelostblom.com/
