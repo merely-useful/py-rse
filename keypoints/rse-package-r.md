@@ -1,9 +1,0 @@
--   Packages allow software to be shared in manageable ways.
--   R packages can be shared through CRAN or GitHub, or managed locally during development.
--   Packages can contain code and data.
--   A package must contain `DESCRIPTION` and `NAMESPACE` files.
--   Use `.Rbuildignore` to control what is and isn't included in a package.
--   Include a README, a license, and a citation file in every package.
--   Use `usethis` and `devtools` to manage package development.
--   Put documentation in the `man` directory and tests in the `tests` directory.
--   Use roxygen2 or Markdown to document the contents of a package.
