@@ -1,15 +1,11 @@
 # Provenance {#provenance}
 
-```{r publish-setup, include=FALSE}
-source(here::here("_common.R"))
-```
-
 We are now at the point where we've developed, automated and tested
 a workflow for plotting the word count distribution for our collection of classic novels.
 In the normal course of events,
 outputs from that workflow (e.g. our figures and \(\alpha\) values)
 would ultimately be included in a report.
-We use the term "report" to include research papers,
+Here we use the term "report" to include research papers,
 summaries for clients,
 or anything else that is shorter than a book
 and aimed at people other than its creators. 
@@ -35,6 +31,24 @@ Publishing it under an open license (Section \@ref(teams-license)) is the first 
 the sections below describe some of the other steps we can take
 to capture the provenance of our data analysis.
 
+> **Identifying Reports and Authors**
+>
+> Before publishing anything,
+> we need to understand how authors and their works are identified.
+> A [Digital Object Identifier][doi] (DOI)
+> is a unique identifier for a particular version of a particular digital artifact
+> such as a report, a dataset, or a piece of software.
+> DOIs are written as `doi:prefix/suffix`,
+> but are often also represented as URLs like `http://dx.doi.org/prefix/suffix`.
+> In order to be allowed to issue a DOI,
+> an academic journal, data archive, or other organiation
+> must guarantee a certain level of security, longevity and access.
+>
+> An [ORCID][orcid] is an Open Researcher and Contributor ID.
+> Anyone can get an ORCID for free,
+> and should include it in publications
+> because people's names and affiliations change over time.
+
 ## Data Provenance {#data-provenance}
 
 The first step in documenting the data associated with a report
@@ -45,11 +59,12 @@ the report simply needs to document where to access the data
 and what version was analyzed:
 it's not necessary to publish a duplicate of the dataset.
 This is the case for our Zipf's Law analysis,
-since the texts we analyze are available at Project Gutenberg.
+since the texts we analyze are available at [Project Gutenberg][project-gutenberg].
 
 It's not strictly necessary to publish intermediate data
-produced during the analysis of a publicly available dataset either,
-so long as readers have access to the original data and the software used to process it.
+produced during the analysis of a publicly available dataset either
+(e.g. our CSV files produced by `countwords.py`),
+so long as readers have access to the original data and the code/software used to process it.
 However,
 making intermediate data available can save people time and effort,
 particularly if it takes a lot of computing power to reproduce it.
@@ -63,91 +78,7 @@ and useful in many research contexts.
 
 If a report involves a new dataset,
 such as observations collected during a field experiment,
-following a few simple rules can make it much more usable:
-
-1.  Always use [tidy data][tidy-data].
-2.  Include keywords describing the data in the project's `README.md`
-    so that they appear on its home page and can easily be found by search engines.
-3.  Give the data a unique identifier (Section \@ref(publish-identifiers)).
-4.  Put the data in an open repository like [Figshare][figshare] or [Zenodo][zenodo].
-5.  Use well-known formats like CSV and HDF5.
-6.  Include an explicit license in every project and every dataset.
-7.  Include units and other metadata.
-
-The last point is often the hardest for people to implement,
-since many researchers have never seen a properly-documented dataset.
-We draw inspiration from the data catalog included in [the repository][womens-pockets-data] for @Dieh2018
-and include a file `./data/README.md` in every project
-that looks like this:
-
-```
--   Infants born to women with HIV receiving an HIV test within two months of birth, 2009-2017
-    -   `Infant_HIV_Testing_2017.xlsx`
-        -   What is this?: Excel spreadsheet with summarized data.
-        -   Source(s): UNICEF, <https://data.unicef.org/resources/dataset/hiv-aids-statistical-tables/>
-        -   Last Modified: July 2018 (according to website)
-        -   Contact: Greg Wilson <greg.wilson@rstudio.com>
-        -   Spatial Applicability: global
-        -   Temporal Applicability: 2009-2017
-    -   `infant_hiv.csv`
-        -   What is this?: CSV export from `Infant_HIV_Testing_2017.xlsx`
-    -   Notes
-        -   Data is not tidy: some rows are descriptive comments,
-            others are blank separators between sections, and column headers are inconsistent.
-        -   Use `tidy_infant_hiv()` to tidy this data.
--   Maternal health indicators disaggregated by age
-    -   `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
-        -   What is this?: Excel spreadsheet with summarized data.
-        -   Source(s): UNICEF, <https://data.unicef.org/resources/dataset/maternal-health-data/>
-        -   Last Modified: July 2018 (according to website)
-        -   Contact: Greg Wilson <greg.wilson@rstudio.com>
-        -   Spatial Applicability: global
-        -   Temporal Applicability: 2000-2014
-    -   `at_health_facilities.csv`
-        -   What is this?: percentage of births at health facilities by country, year, and mother's age
-        -   Source(s): single sheet from `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
-    -   `c_sections.csv`
-        -   What is this?: percentage of Caesarean sections by country, year, and mother's age
-        -   Source(s): single sheet from `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
-    -   `skilled_attendant_at_birth.csv`
-        -   What is this?: percentage of births with skilled attendant present by country, year, and mother's age
-        -   Source(s): single sheet from `maternal_health_adolescents_indicators_April-2016_250d599.xlsx`
-    -   Notes
-        -   Data is not tidy:
-            some rows are descriptive comments,
-            others are blank separators between sections,
-            and column headers are inconsistent.
-        -   Use `tidy_maternal_health_adolescents()` to tidy this data.
-```
-
-The catalog above doesn't include column headers or units
-because the raw data isn't tidy.
-It *does* include the names of the functions used to reformat that data,
-and `./results/README.md` then includes the information that users will want.
-One section of that file is shown below:
-
-```
--   Infants born to women with HIV receiving an HIV test within two months of birth, 2009-2017
-    -   infant_hiv.csv
-      -   What is this?: tidied version of CSV export from spreadsheet.
-      -   Source(s): UNICEF, <https://data.unicef.org/resources/dataset/hiv-aids-statistical-tables/>
-      -   Last Modified: September 2018
-      -   Contact: Greg Wilson <greg.wilson@rstudio.com>
-      -   Spatial Applicability: global
-      -   Temporal Applicability: 2009-2017
-      -   Generated By: scripts/tidy-24.R
-
-| Header   | Datatype | NA    | Description                                 |
-|----------|----------|-------|---------------------------------------------|
-| country  | char     | false | ISO3 country code of country reporting data |
-| year     | integer  | false | year CE for which data reported             |
-| estimate | double   | true  | estimated percentage of measurement         |
-| hi       | double   | true  | high end of range                           |
-| lo       | double   | true  | low end of range                            |
-```
-
-Note that this catalog includes both units
-and whether or not a field can have missing values.
+then they need to be published following the FAIR Principles.
 
 ### The FAIR Principles {#publish-fair}
 
@@ -162,11 +93,11 @@ The first step in using or re-using data is to find it.
 We can tell we've done this if:
 
 1.  (Meta)data is assigned a globally unique and persistent identifier
-    (Section \@ref(publish-identifiers)).
-2.  Data is described with rich metadata (like the catalog shown above).
+    (i.e. a [DOI][doi]).
+2.  Data is described with rich metadata
 3.  Metadata clearly and explicitly includes the identifier of the data it describes.
 4.  (Meta)data is registered or indexed in a searchable resource,
-    such as the data sharing platforms described in Section \@ref(publish-data).
+    such as the data sharing platforms described in Section \@ref(publish-where).
 
 #### Data should be *accessible*.
 
@@ -200,13 +131,41 @@ We can tell we've done this if:
 3.  (Meta)data has detailed [provenance][provenance].
 4.  (Meta)data meets domain-relevant community standards.
 
+### Where to archive data
+
+Small datasets (i.e., anything under 500 MB) can be stored in version control
+using the conventions described in Chapter \@ref(project).
+If the data is being used in several projects,
+it may make sense to create one repository to hold only the data;
+the R community refers to these as [data packages][data-package],
+and they are often accompanied by small scripts to clean up and query the data.
+
+For medium-sized datasets (between 500 MB and 5 GB),
+it's better to put the data on platforms
+like the [Open Science Framework][osf], [Dryad][dryad], and [Figshare][figshare],
+which will give the dataset a DOI.
+Big datasets (i.e., anything more than 5 GB)
+may not be ours in the first place,
+and probably need the attention of a professional archivist.
+
+> **Data Journals**
+>
+> While archiving data at a site like Dryad or Figshare (following the FAIR Principles)
+> is usually the end of the data publishing process,
+> there is the option of publishing a journal paper to describe the dataset in detail.
+> Some research disciplines have journals devoted
+> to describing particular types of data
+> (e.g., the [Geoscience Data Journal][geoscience-data-journal])
+> and there are also generic data journals
+> (e.g., [Scientific Data][scientific-data]).
+
 ## Code provenance {#code-provenance}
 
-Our Zipf's Law analysis represents a typical data science project,
+Our Zipf's Law analysis represents a typical data science project
 in that we've written some code that leverages other pre-existing software packages
-(e.g. Matplotlib, numpy) in order to conduct our analysis.
+(e.g. matplotlib, numpy) to produce the key figures and results.
 In order to document this code and software in an open, transparent and reproducible manner,
-three separate items need to be published:
+three separate items need to be archived:
 
 1.  A detailed description of the analysis software used.
 2.  A copy of any analysis scripts/notebooks used to produce the key results
@@ -227,22 +186,29 @@ from the beginning (i.e. in the installation instructions).
 We should consider the merits of doing that.
 
 In order to document the software packages that were used/leveaged in our analysis,
-the bare minimum requirement is to list the name and version number
-of each software package.
+the bare minimum requirement would be for us to archive a list of
+the names and version numbers of each software package.
 We can get version information for the Python packages we are using by running:
 
 ```shell
-$ pip freeze > requirements.txt
+$ pip freeze
 ```
 
-Other non-Python command line tools will often have an option like `--version` or `--status`
-that you can run to get version information.
+```text
+FIXME: Show output
+```
 
-Such a list means your software environment is now technically reproducible,
-but we have left it up to the reader to figure out how to get all those software packages
-and libraries installed and working together.
-In some cases it might be easy enough for a reader to install the handful of packages we used,
-but in other cases we might want to make life easier.
+Other command line tools will often have an option like `--version` or `--status`
+to access the version information.
+
+Archiving a list of package names and version numbers would mean that our
+software environment is technically reproducible,
+but we would be leaving it up to the reader of the report
+to figure out how to get all those software packages
+installed and working together.
+In some cases this might be relatively straightforward,
+but in other cases we might want to make life easier for the reader
+(and for our future selves looking to re-run our analysis).
 For example,
 a description of a complete `conda` environment can be saved as YAML using:
 
@@ -257,8 +223,9 @@ $ conda env create -f environment.yml
 ```
 
 More complex tools like [Docker][docker]
-can literally install our entire environment (down to the precise version of the operating system)
-on a different computer (ref: https://osf.io/fsd7t/).
+can literally install our entire environment
+(down to the precise version of the operating system)
+on a different computer (@Nust2020).
 However,
 their complexity can be daunting,
 and there is a lot of debate
@@ -266,15 +233,19 @@ about how well (or whether) they actually make research more reproducible in pra
 
 ### Analysis Scripts
 
-The next item we need to publish is a copy of the scripts
-written to execute those software packages.
-Depending on the size or complexity of those scripts and whether we use them in multiple projects,
-we may publish script by script
-or create a zip file or tar file that includes everything.
-In our case,
-the Python scripts we ran
-are located in our `bin/` directory,
-so we can put them all in a zip folder
+Later in the book we will package and release our Zipf's Law code
+so that it can be downloaded, installed and used by the wider research community
+just like any other Python package (Chapter \@ref(packaging)).
+Going through the process of formally packaging your code can be a good option
+if there's a user community out there interested in using and/or building it,
+but often the scripts and notebooks you write
+to produce a particular figure or table in a report
+will not be of broad interest.
+They were written to get a specific job done (i.e. to produce that figure)
+and do not have a wider application.
+In order to fully capture the provenance of the major figures/results in a report,
+these analysis scripts and/or notebooks can simply be collected up into a zip folder
+for archiving.
 
 ```shell
 $ zip scripts.zip bin/*.py
@@ -296,15 +267,15 @@ in our software environment.
 The way in which this information is collected and archived
 depends on the characteristics of the workflow.
 Our Zipf's Law analysis involved executing a series of command line programs,
-so we can generate a record of the command line entries involved in plotting the
-the collated word count distribution, for instance,
-by running `make` with the `-n` option (for a dry run so the commands are not executed)
-and the `-B` option (to run all steps, regardless or whether they need updating or not): 
+and a record of the command line entries we executed
+can be generated using our Makefile (Chapter \@ref(automate)).
+For instance, the sequence of commands involved in plotting
+the collated word count distribution is as follows:
 
-```
+```shell
 $ make all -n -B
 ```
-```
+```text
 python bin/countwords.py data/dracula.txt > results/dracula.csv
 python bin/countwords.py data/time_machine.txt > results/time_machine.csv
 python bin/countwords.py data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
@@ -314,26 +285,30 @@ python bin/countwords.py data/frankenstein.txt > results/frankenstein.csv
 python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
 mkdir -p results
 python bin/collate.py results/time_machine.csv results/moby_dick.csv results/jane_eyre.csv results/dracula.csv results/sense_and_sensibility.csv results/sherlock_holmes.csv results/frankenstein.csv > results/collated.csv
-python bin/plotcounts.py results/collated.csv --outfile results/plotcounts.png
+python bin/plotcounts.py results/collated.csv --outfile results/plotcounts.png --plotparams plotparams.yml
+```
+The `-n` option is for a dry run (i.e. the commands are displayed but not executed)
+and the `-B` option is to run all steps regardless or whether they need updating or not.
+
+We can archive these commands in a text file:
+
+```shell
+$ make all -n -B > commands.txt
 ```
 
-If all of a program's parameters are in a configuration file (Chapter \@ref(config)),
-then that file can be archived.
-Alternatively,
-we can have our program log its configuration parameters
-and then use `grep` or a script to extract them from the logfile
-(Section \@ref(errors-logging)).
+Some of the parameters for `plotcounts.py` are in the `plotparams.yml` configuration file
+(Chapter \@ref(config)),
+so that file also needs to be archived.
 
-### Where to put this information
+### Where to archive code
 
 We have the following files to archive:
 - environment.yml
 - scripts.zip
 - commands.txt
-- rcparams.yml
+- plotparams.yml
 
-
-FIXME: Talk about Figshare.
+FIXME: Talk about Figshare and Zenodo.
 
 ### Inspectability
 
@@ -343,7 +318,6 @@ FIXME: Expand on the ideas in http://ivory.idyll.org/blog/tag/futurepaper.html
 What we do care about is our ability to figure out what was run
 and what the important decisions were -- something that Yolanda Gil refers to as inspectability.
 But exact repeatability has a short shelf-life (and this is ok).
-
 
 ## Summary {#publish-summary}
 
