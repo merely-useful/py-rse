@@ -69,7 +69,7 @@ PY_RSE_FILES=\
   py-rse/project.Rmd \
   py-rse/testing.Rmd \
   py-rse/packaging.Rmd \
-  py-rse/publish.Rmd \
+  py-rse/provenance.Rmd \
   py-rse/finale.Rmd \
   py-rse/install.Rmd \
   py-rse/objectives.Rmd \
