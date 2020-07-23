@@ -162,24 +162,33 @@ and probably need the attention of a professional archivist.
 ## Code Provenance {#code-provenance}
 
 Our Zipf's Law analysis represents a typical data science project
-in that we've written some code that leverages other pre-existing software packages
-(e.g. matplotlib, numpy) in order to produce key figures and results.
-To document this code and software in an open, transparent and reproducible manner,
-three separate items need to be archived:
+in that we've written some code (in the form of a series of Python scripts)
+that leverages other pre-existing software packages (matplotlib, numpy, etc)
+in order to produce the key results of a report (the word distribution plots).
+Documenting the details of a computational workflow like this
+in an open, transparent and reproducible manner
+typically requires that three key items are archived:
 
-1.  A detailed description of our **software environment**
-2.  A copy of any **analysis scripts/notebooks** used to produce the key results
+1.  A copy of any **analysis scripts/notebooks** used to produce the key results
     presented in the report.
+2.  A detailed description of the **software environment** in which those analysis scripts/
+    notebooks were executed.
 3.  A description of the **data processing steps** taken in producing each key result
-    (i.e. a step-by-step account of how the software and scripts were actually used).
+    (i.e. for each key result, a step-by-step account of which scripts were executed
+    and in what order).
 
 Unfortunately,
 librarians, publishers, and regulatory bodies are still trying to determine
 the best way to document and archive material like this,
 so there is not yet anything like the FAIR Principles.
 The best advice we can give is presented below.
+It involves adding information about the software environment
+and data processing steps to a GitHub repository that contains
+the analysis scripts/notebooks,
+before creating a new release of that repository and archiving it (with a DOI)
+with [Zenodo][zenodo].
 
-### Software Description
+### Software Environment {#code-provenance-environment}
 
 FIXME: This section would make more sense if we were using a conda environment
 from the beginning (i.e. in the installation instructions).
@@ -215,26 +224,64 @@ One way to make things easier is to export a description of a complete
 $ conda env export > environment.yml
 ```
 
-That software environment can then be recreated on another computer
-with just one line of code:
+That software environment can be recreated on another computer with one line of code:
 
 ```
 $ conda env create -f environment.yml
 ```
 
-More complex tools like [Docker][docker]
-can literally install our entire environment
-(down to the precise version of the operating system)
-on a different computer @Nust2020.
-However,
-their complexity can be daunting,
-and there is a lot of debate
-about how well (or whether) they actually make research more reproducible in practice.
+We can go ahead and add the `environment.yml` file to our GitHub repository:
 
-### Analysis Scripts
+```shell
+$ git add environment.yml
+$ git commit -m "Adding the conda environment file"
+$ git push origin master
+```
+
+> **Container Images**
+> 
+> More complex tools like [Docker][docker]
+> can literally install our entire environment
+> (down to the precise version of the operating system)
+> on a different computer @Nust2020.
+> However,
+> their complexity can be daunting,
+> and there is a lot of debate
+> about how well (or whether) they actually make research more reproducible in practice.
+
+### Data Processing Steps {#code-provenance-steps}
+
+The second item that needs to be added to our GitHub repository is a description
+of the data processing steps involved in each key result.
+Assuming the author list on our report is Amira Khan and Sami Virtanen (Section \@ref(intro-personas)),
+we could create a new markdown file called `KhanVirtanen2020.md` to describe the steps:
+
+```markdown
+The code in this repository was used in generating the results for the following paper:
+
+Khan A and Virtanen S (2020). Zipf's Law in classic english texts.
+*Journal of Important Research*, 27, 134-139. 
+
+The code was executed in the software environment described by `environment.yml`.
+It can be installed using [conda](https://docs.conda.io/en/latest/):
+$ conda env create -f environment.yml
+
+Figure 1 in the paper was created by running the following at the command line:
+$ make all
+```
+
+This new file can be added to the repository:
+
+```shell
+$ git add KhanVirtanen2020.md
+$ git commit -m "Adding data processing steps for Khan and Virtanen (2020)"
+$ git push origin master
+```
+
+### Analysis Scripts {#code-provenance-scripts}
 
 Later in this book we will package and release our Zipf's Law code
-so that it can be downloaded and installed by the wider research community
+so that it can be downloaded and installed by the wider research community,
 just like any other Python package (Chapter \@ref(packaging)).
 Going through the process of formally packaging your code can be a good option
 if there's a user community out there interested in using and/or building it,
@@ -243,80 +290,27 @@ to produce a particular figure or table
 will not be of broad interest.
 In other words,
 these scripts were written to get a specific job done
-(e.g. to produce Figure 2b in a report)
+(e.g. to produce Figure 1 in a report)
 and do not have a wider application.
 To fully capture the provenance of the results presented in a report,
-these analysis scripts and/or notebooks can simply be collected up into a zip folder
-for archiving.
+these analysis scripts and/or notebooks 
+(along with the details of the associated software environment and data processing steps)
+can be archived with a repository like [Figshare][figshare] or [Zenodo][zenodo],
+which specialize in storing the "long-tail" of research projects
+(i.e. supplementary figures, data and/or code).
+Traditionally that meant uploading a zip file full of analysis scripts to the repository
+(which is still a valid option),
+but more recently the process has been streamlined via direct integration
+between GitHub and Zenodo.
+The process (described in [this tutorial][github-zenodo-tutorial]) involves
+creating a new release of your repository in GitHub (e.g. Figure \@ref(fig:provenance-release)),
+which Zenodo copies and then issues a DOI.
 
-```shell
-$ zip scripts.zip bin/*.py
-```
-```text
-  adding: bin/collate.py (deflated 52%)
-  adding: bin/countwords.py (deflated 54%)
-  adding: bin/plotcounts.py (deflated 58%)
-  adding: bin/test_zipfs.py (deflated 67%)
-  adding: bin/utilities.py (deflated 51%)
-```
-
-### Data Processing Steps
-
-Finally,
-to make our results truly reproducible,
-the reader needs to know exactly how (and in what order) we ran our analysis scripts
-in our software environment.
-The way in which this information is collected and archived
-depends on the characteristics of the workflow.
-Our Zipf's Law analysis involved executing a series of command line programs,
-and a record of the command line entries we executed
-can be generated using our Makefile (Chapter \@ref(automate)).
-For instance, the sequence of commands involved in plotting
-the collated word count distribution is as follows:
-
-```shell
-$ make all -n -B
-```
-```text
-python bin/countwords.py data/dracula.txt > results/dracula.csv
-python bin/countwords.py data/time_machine.txt > results/time_machine.csv
-python bin/countwords.py data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
-python bin/countwords.py data/sherlock_holmes.txt > results/sherlock_holmes.csv
-python bin/countwords.py data/moby_dick.txt > results/moby_dick.csv
-python bin/countwords.py data/frankenstein.txt > results/frankenstein.csv
-python bin/countwords.py data/jane_eyre.txt > results/jane_eyre.csv
-mkdir -p results
-python bin/collate.py results/time_machine.csv results/moby_dick.csv results/jane_eyre.csv results/dracula.csv results/sense_and_sensibility.csv results/sherlock_holmes.csv results/frankenstein.csv > results/collated.csv
-python bin/plotcounts.py results/collated.csv --outfile results/plotcounts.png --plotparams plotparams.yml
-```
-The `-n` option is for a dry run (i.e. the commands are displayed but not executed)
-and the `-B` option is to run all steps regardless or whether they need updating or not.
-
-We can archive these commands in a text file:
-
-```shell
-$ make all -n -B > commands.txt
+```{r provenance-release, echo=FALSE, fig.cap="A new code release in GitHub"}
+knitr::include_graphics("figures/py-rse/provenance/release.png")
 ```
 
-Some of the parameters for `plotcounts.py` are in the `plotparams.yml` configuration file
-(Chapter \@ref(config)),
-so that file also needs to be archived.
-
-### Where to Archive Code
-
-Now that we have generated information to document our
-software environment (`environment.yml`),
-analysis scripts (`scripts.zip`),
-and data processing steps (`commands.txt` and `plotparams.yml`),
-we need to archive them somewhere
-(along with a README file to explain what each file is).
-There are a number online platforms dedicated to archiving (with a DOI)
-the "long-tail" of your research,
-including supplementary figures, data and/or code.
-Two of the most popular platforms for archiving code
-are [Zenodo][zenodo] and [Figshare][figshare].
-
-### Reproducibility Versus Inspectability
+### Reproducibility Versus Inspectability {#provenance-inspectability}
 
 In most cases,
 documenting your software environment, analysis scripts and data processing steps
