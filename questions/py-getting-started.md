@@ -1,3 +1,0 @@
-- How do I run Python code? 
-- What are some basic actions I can do with Python?
-- How do I get help? 

@@ -1,4 +1,0 @@
-- How do I make changes to a file while still saving an original version?
-- How can I recover old versions of a file?
-- How can I work on the same project on multiple computers? 
-- What are the pros and cons of putting my project online? 

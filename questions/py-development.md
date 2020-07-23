@@ -1,4 +1,0 @@
-- What are functions and how can I make my own?
-- How can I make my programs tell me that something has gone wrong?
-- How can I ask for help online?
-- What are packages and how do I install them?

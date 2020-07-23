@@ -1,6 +1,0 @@
--   The brain thinks every difference is significant, so removing unnecessary differences in formatting reduces cognitive load.
--   Python software should always conform to the formatting the rules in PEP 8.
--   Use `name=value` to define a default value for a function parameter.
--   Use `*args` to define a catch-all parameter for functions taking a variable number of unnamed arguments.
--   Use `**kwargs` to define a catch-all parameter for functions taking a variable number of named arguments.
--   Use destructuring to unpack data structures as needed.
