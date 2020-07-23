@@ -1,64 +1,105 @@
-# Development {#py-dev-development}
+# Development {#r-development}
 
-```{r py-development-setup, include=FALSE}
-source(here::here("_common.R"))
+```{r r-development-setup, include=FALSE}
+source("_common.R")
 ```
 
-## Questions {#py-dev-questions}
+## Questions {#r-dev-questions}
 
-```{r child="questions/py-development.md"}
+```{r child="questions/r-development.md"}
 ```
 
-## Functions {#py-dev-functions}
+## Functions {#r-dev-functions}
 
 Functions are like recipes. You give a few ingredients as input to a function,
 and it will generate an output based on these ingredients. Just as when
 following a recipe, both the ingredients and the instructions will influence
 the final result.
 
-In Python, the "ingredients" to a function are called arguments, and the output is
+In R, the "ingredients" to a function are called arguments, and the output is
 referred to as the "return value". A
-function does not technically need to return a value, but often does so.
+function does not technically need to return a value, but often does.
 Functions allow code chunks to be reused in a more readable and reproducible way
 than cutting and pasting several lines of code. E.g. if our data
-analysis code is broken down into functions, we could readily use it with many
+analysis code is broken down into several functions, we could readily use it with many
 different data sets by changing the input argument for the data, while leaving the rest of
 the code the same.
 
 Well chosen function names also clarifies the flow of analysis. For example,
 imagine that you open a file with the following lines of code within it.
 
-```{python, eval=FALSE}
-images = read_in_images(file_paths)
-gray_images = convert_to_grayscale(images)
-brightest_image = find_brightest_image(gray_images)
+```{r, eval=FALSE}
+images <- read_in_images(file_paths)
+gray_images <- convert_to_grayscale(images)
+brightest_image <- find_brightest_image(gray_images)
 ```
 
 Just by looking at the function names, it might be fairly clear what this code is intended
-for and its main flow of operations is immediately visible. Inside each of
-these functions there might be 10-20 lines of code, so if we would not have
+for and its main flow of operations is readily apparent. Inside each of
+these functions there might be 10-20 lines of code, so if we had not 
 modularized the code into separate functions with well chosen names, it
 would take longer to understand its overall purpose since there
 would be 30-60 lines of code to read instead of just three.
 
-### Creating functions {#py-dev-creating-functions}
+### Creating functions {#r-dev-creating-functions}
 
-There are many useful functions already built into Python, and the ability to
-create your own allows you to string together any sequence of operations in
-ways that are tailored to your workflow. The `def` keyword lets us define a
-function with a name of our choice and an arbitrary number of input parameters.
+In R, everything that has an action ("does something") is a function. Functions
+are the engines that move all analyses and programming in R. Creating functions
+are also fairly straightforward (though not always easy to get right).
 
-```{python}
-def sum_two_numbers(num1, num2):
-    return num1 + num2
+When making functions, there is always a fundamental structure to them:
+
+1. Give a name to the function (e.g. `read_png_files()`).
+2. Start the function call with `function()` and assign it to the name with
+`<-`. This tells R that the name is now a function object.
+3. Optionally provide arguments to the function call, for instance
+`function(arg1, arg2, arg3)`. 
+4. Fill out the body of the function with the arguments (if any) contained
+inside and other code that does some action.
+5. Optionally, but strongly encouraged, use `return()` to indicate what you want 
+the function to output.
+
+While there is no minimum or maximum number of arguments you can provide for a
+function (e.g. you could have zero or dozens of arguments), its good practice
+for yourself and for others if you have as few arguments as necessary for your
+code to do what you want it to.
+
+So, the structure is:
+
+```{r function-structure, eval=FALSE}
+name <- function(arg1, arg2) {
+    # body of function
+    ... code ....
+    return(output)
+}
 ```
 
-This function accepts two input parameters, `num1` and `num2`, and returns
+... and a simple example:
+
+```{r create-add-function}
+sum_two_numbers <- function(num1, num2) {
+    added <- num1 + num2
+    return(added)
+}
+```
+
+This function takes two input parameters, `num1` and `num2`, and returns
 their sum. Just as with variable names, function names are preferably written
-in `snake_case` (see the [style guide](#style) for details), and avoid existing
-Python keywords and built-in names (a list of these is available
-[here][so-keywords-builtins], but instead of memorizing that list you can type
-the desired name into the Python interpreter to find out if it already exists).
+in `snake_case` (see the [style guide](#style) for details). Try to avoid 
+using already existing R function names, 
+
+A simple way of doing that is by
+
+You can use the new function by running the above code and writing out your new 
+function, with arguments given to it.
+
+```{r call-function}
+sum_two_numbers(1, 2)
+```
+
+The function name is fairly good... `add_nums` can be read as "add numbers".
+
+
 
 To execute the operations listed in the function, we can call the function
 and pass the two numbers we want to add as the arguments to the function.
@@ -123,7 +164,7 @@ function call (`2` and `5` above) as *arguments*. Although this might sound
 confusing at first, it is a standard followed by many programming languages so
 it is useful to get accustomed to this terminology.
 
-#### Function composition {#py-dev-function-composition}
+#### Function composition {#r-dev-function-composition}
 
 Combining functions is referred to as function composition. This practice
 allows us to write functions that perform one specific task and then combine
@@ -137,7 +178,7 @@ def sum_and_len(list_of_numbers):
     return sum(list_of_numbers), len(list_of_numbers)
 ```
 
-#### Positional and keyword arguments {#py-dev-positional-and-keyword-arguments}
+#### Positional and keyword arguments {#r-dev-positional-and-keyword-arguments}
 
 Up until now, our function calls have included just enough arguments to assign
 one to each of the function parameters. The assignment has been based on the
@@ -156,7 +197,7 @@ that they can be specified in any order.
 sum_two_numbers(num2=5, num1=2)
 ```
 
-#### Defining default values {#py-dev-defining-default-values}
+#### Defining default values {#r-dev-defining-default-values}
 
 Above, we have specified a value for every argument in each function call. This
 is manageable when functions have few parameters, but it can get tedious for
@@ -191,7 +232,7 @@ Since the arguments are given in the same order as in the function definition,
 we could have left out the `return_input=` part and just written `True` in the
 third position.
 
-#### Function documentation {#py-dev-function-documentation}
+#### Function documentation {#r-dev-function-documentation}
 
 Functions might appear self-explanatory when they are being written, but it is
 essential that there is proper documentation describing what the function does
@@ -241,7 +282,7 @@ help(sum_two_numbers)
 This is the same text that is displayed in the Spyder help pane, where it is
 rendered as markdown for rich display with typefaces, headings, etc.
 
-![Rich rendering of the docstring in Spyder](figures/py-development/docstring-spyder.png)
+![Rich rendering of the docstring in Spyder](figures/r-development/docstring-spyder.png)
 
 Spyder includes a convenient function to automatically generate docstring
 templates. Once you have written the function signature and typed out the first
@@ -249,7 +290,7 @@ triple quote for the docstring, there will be a small pop-up window that reads
 "Generate docstring". Click it or press enter and a `numpy` docstring template
 will be created based on the parameters in the function signature.
 
-## How to make programs indicate that something has gone wrong? {#py-dev-how-to-make-programs-indicate-that-something-has-gone-wrong}
+## How to make programs indicate that something has gone wrong? {#r-dev-how-to-make-programs-indicate-that-something-has-gone-wrong}
 
 When performing programmatic data analysis, we need to both ensure that our
 code runs correctly and that it carries out the intended tasks. The Python
@@ -257,7 +298,7 @@ interpreter will help us with the first part; if a part of the code is not
 valid, an error will be raised with a message that helps us trace back what
 part of the code is not correct.
 
-### Ducktyping - relying on Python to detect unexpected behavior {#py-dev-ducktyping-relying-on-Python-to-detect-unexpected-behavior}
+### Ducktyping - relying on Python to detect unexpected behavior {#r-dev-ducktyping-relying-on-Python-to-detect-unexpected-behavior}
 
 In our function `sum_two_numbers()`, we could explicitly check that the input
 arguments are numerical. However, explicitly checking the type of each input
@@ -280,7 +321,7 @@ like the saying
 > If it looks like a duck, swims like a duck, and quacks like a duck, then it
 > probably is a duck.
 
-### Assertions - explicitly checking for unexpected behavior {#py-dev-assertions-explicitly-checking-for-unexpected-behavior}
+### Assertions - explicitly checking for unexpected behavior {#r-dev-assertions-explicitly-checking-for-unexpected-behavior}
 
 Ducktyping is useful to catch anything that raises an error in Python, but
 sometimes we might want to stop the code execution for reasons other than a
@@ -321,9 +362,9 @@ within a `try` and `except` block, or within a conditional statement using
 `if`, `elif`, and `else`, but `assert` is a simple and readable way of allowing
 for manual error checking.
 
-## Packages {#py-dev-packages}
+## Packages {#r-dev-packages}
 
-### Installing Python {#py-dev-installing-Python}
+### Installing Python {#r-dev-installing-Python}
 
 There are several ways of installing Python on your system. One of the most
 robust and cross-platform compatible is to install the Anaconda Python
@@ -332,7 +373,7 @@ Windows](https://www.anaconda.com/distribution/#download-section). Choose to
 download the Python 3 installer unless you need to work with Python 2 for a
 specific reason.
 
-### Using Python {#py-dev-using-Python}
+### Using Python {#r-dev-using-Python}
 
 When the Anaconda installation has finished, Python is accessible by running
 `python` in a terminal (on Windows, use the `Anaconda Prompt`). Anaconda also
@@ -340,12 +381,12 @@ includes graphical interfaces for interacting with Python, which can be invoked
 by running `spyder` or `jupyter-lab` from the command line, these are covered
 more in detail elsewhere in this book.
 
-### What is a package? {#py-dev-what-is-a-package}
+### What is a package? {#r-dev-what-is-a-package}
 
 A package is essentially a few Python scripts in a specific directory structure 
 coupled with installation instructions for the computer. Python packages can 
 come from various sources.  Many that you will use are part of the standard distribution, but packages can be created by anyone and there are thousands of that can be downloaded and installed from online repositories.  Note that you will sometimes hear packages referred 
-to as "modules". These two words are often used interchangeably. Technically, 
+to as "modules". The two words are often used interchangeably. Technically, 
 a package is a folder that contains modules (scripts), which in turn contains functions (code).
 
 Certain functionality that is considered essential for the Python programming language is available wherever Python is installed. This is the Python Standard Library, which is [maintained by the core language team][pep13].  Anything you see within the [Python documentation pages][py-docs] is part of the standard library.  Other highly useful, but often more domain specific functionality can be accessed separately in the
@@ -403,7 +444,7 @@ packages right from your terminal, let's see how we can use them!
    name>`. The [conda forge channel](https://conda-forge.github.io/) channel
    has many of the packages not in the default repositories.
 
-### Importing packages {#py-dev-importing-packages}
+### Importing packages {#r-dev-importing-packages}
 
 Many of the functions that we use regularly, such as `print()` and `len()` are 
 part of Python's Built-in functions. These are the functions that are always avaliable, 
@@ -508,7 +549,7 @@ numpy-folder/
         script-with-the-fftfreq-definition.py
 ```
 
-### Installing packages {#py-dev-installing-packages}
+### Installing packages {#r-dev-installing-packages}
 
 After Anaconda has been installed on your system, you can use the command line
 `conda` package manager or the GUI-driven `anaconda-navigator` to install
@@ -528,7 +569,7 @@ step-by-step instructions to get up and running with `conda` follow.
    name>`. The [conda forge channel](https://conda-forge.github.io/) channel
    has many of the packages not in the default repositories.
 
-## How to get help online {#py-dev-how-to-get-help-online}
+## How to get help online {#r-dev-how-to-get-help-online}
 
 When reading the built-in Python help is not sufficient, there are several
 online resources that can helpful. One of the most commonly used resources for
@@ -556,12 +597,12 @@ exactly which region of the code is failing and the act of explaining the
 problem often reveals a solution before any replies have come in (commonly
 referred to as [rubber duck debugging][wiki-rubber-duck-debugging].
 
-## Key Points {#py-dev-keypoints}
+## Key Points {#r-dev-keypoints}
 
-```{r child="keypoints/py-development.md"}
+```{r child="keypoints/r-development.md"}
 ```
 
-## Exercises {#py-dev-exercises}
+## Exercises {#r-dev-exercises}
 
 1. Write a function that returns the mean of exactly two numbers. Start with
    the code we used to create the function `sum_two_numbers()` above.
@@ -579,3 +620,318 @@ referred to as [rubber duck debugging][wiki-rubber-duck-debugging].
        the length of the string.
     c. Describe the pros and cons of the ducktyping approach in `4a` and the
        explicit assert approach in `4b`.
+
+## Creating functions
+
+
+It's also good practice to add some formal documentation to the function. Use
+the "Insert Roxygen Skeleton" in the "Code" menu list (or by typing
+`Ctrl-Shift-Alt-R`) and you can add template documentation right above the
+function. It looks like:
+
+```{r roxygen-docs-1}
+#' Title
+#'
+#' @param num1 
+#' @param num2 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+add_nums <- function(num1, num2) {
+    added <- num1 + num2
+    return(added)
+}
+```
+
+In the `Title` area, this is where you type out a brief sentence or several words 
+that describe the function. Creating a new paragraph below this line allows you 
+to add a more detailed description. The other items are:
+
+- `@param num` lines are to describe what each argument is for.
+- `@return` describes what output the function provides. Is it a data.frame? A plot? 
+What else does the output give?
+- `@export` tells R that this function should be accessible to the user of your
+package. Delete it for non-package functions.
+- `@examples` lines below this are used to show examples of how to use the function.
+Very useful when making packages, but not really in this case.
+
+```{r roxygen-docs-2}
+#' Add two numbers together.
+#'
+#' This is just an example function to show how to create one.
+#'
+#' @param num1 A number here.
+#' @param num2 A number here.
+#'
+#' @return Returns the sum of the two numbers.
+#'
+add_nums <- function(num1, num2) {
+    added <- num1 + num2
+    return(added)
+}
+```
+
+### Functions to wrangle
+
+Let's get to something you might actually do in a data analysis project. Let's 
+suppose you want to compare the mean and standard deviation of several variables
+by a given categorical variable, such as `SurveyYr` or `Gender`, that you might
+want to include as an exploratory table in a report or document. Without making 
+a function, you would normally run a series of functions for each of the categorical
+variables. For instance:
+
+```{r to-wrangle}
+NHANES %>% 
+    select(Gender, BMI, TotChol, Pulse, BPSysAve, BPDiaAve) %>% 
+    gather(Measurement, Value, -Gender) %>% 
+    na.omit() %>% 
+    group_by(Gender, Measurement) %>% 
+    summarise(Mean = round(mean(Value), 2),
+              SD = round(sd(Value), 2),
+              MeanSD = str_c(Mean, " (", SD, ")")) %>% 
+    select(-Mean, -SD) %>% 
+    spread(Gender, MeanSD)
+```
+
+Nice, but now if we did it for `SurveyYr` instead of `Gender`? We would have to 
+replace all `Gender` variables with `SurveyYr`. Instead, let's create a function.
+First, copy and paste the code above into a function structure.
+
+```{r base-function-template, eval=FALSE}
+mean_sd_by_group <- function() {
+    by_group_output <- NHANES %>% 
+        select(Gender, BMI, TotChol, Pulse, BPSysAve, BPDiaAve) %>% 
+        gather(Measurement, Value, -Gender) %>% 
+        na.omit() %>% 
+        group_by(Gender, Measurement) %>% 
+        summarise(Mean = round(mean(Value), 2),
+                  SD = round(sd(Value), 2),
+                  MeanSD = str_c(Mean, " (", SD, ")")) %>% 
+        select(-Mean, -SD) %>% 
+        spread(Gender, MeanSD)
+    return(by_group_output)
+}
+```
+
+Great, now we need to add in arguments and place the arguments in the correct 
+locations. (I tend to put a `.` before my arguments to differentiate them from 
+other variables.)
+
+```{r add-function-arguments, error=TRUE}
+mean_sd_by_group <- function(.dataset, .groupvar) {
+    by_group_output <- .dataset %>% 
+        select(.groupvar, BMI, TotChol, Pulse, BPSysAve, BPDiaAve) %>% 
+        gather(Measurement, Value, -.groupvar) %>% 
+        na.omit() %>% 
+        group_by(.groupvar, Measurement) %>% 
+        summarise(Mean = round(mean(Value), 2),
+                  SD = round(sd(Value), 2),
+                  MeanSD = str_c(Mean, " (", SD, ")")) %>% 
+        select(-Mean, -SD) %>% 
+        spread(.groupvar, MeanSD)
+    return(by_group_output)
+}
+mean_sd_by_group(NHANES, Gender)
+```
+
+What happened? We had an error. We've encountered a problem due to
+"[non-standard evaluation]" (or NSE). NSE is very commonly used in most tidyverse
+packages as well as throughout base R. It's one of the first things computer 
+scientists complain about when they use R, because it is such a foreign thing
+in other programming languages. But NSE is what allows you to use formulas (e.g.
+`y ~ x + x2` in modelling) or allows you to type out `select(Gender, BMI)`. In
+other programming languages, it would be `select("Gender", "BMI")`. It gives a lot
+of flexibility to use for doing data analysis, but can give some headaches when
+programming in R. So instead we have to use quotes instead and use the `_at()` 
+combined with `vars()` version of dplyr functions. The tidyr functions `gather`
+and `spread` don't require these changes.
+
+[non-standard evaluation]: http://adv-r.had.co.nz/Computing-on-the-language.html
+
+```{r add-function-arguments-error, error=TRUE}
+mean_sd_by_group <- function(.dataset, .groupvar) {
+    by_group_output <- .dataset %>% 
+        select_at(vars(.groupvar, BMI, TotChol, Pulse, BPSysAve, BPDiaAve)) %>% 
+        gather(Measurement, Value, -.groupvar) %>% 
+        na.omit() %>% 
+        group_by_at(vars(.groupvar, Measurement)) %>% 
+        summarise(Mean = round(mean(Value), 2),
+                  SD = round(sd(Value), 2),
+                  MeanSD = str_c(Mean, " (", SD, ")")) %>% 
+        select(-Mean, -SD) %>% 
+        spread(.groupvar, MeanSD)
+    return(by_group_output)
+}
+mean_sd_by_group(NHANES, "Gender")
+```
+
+Now we can also use other categorical variables:
+
+```{r use-other-category-vars}
+mean_sd_by_group(NHANES, "SurveyYr")
+mean_sd_by_group(NHANES, "Diabetes")
+```
+
+Nifty eh? If you want a fancy table when using R Markdown, use the
+`kable::knitr` function.
+
+```{r fancy-table}
+mean_sd_by_group(NHANES, "Diabetes") %>% 
+    knitr::kable(caption = "Mean and SD of some measurements by Diabetes status.")
+```
+
+A massive advantage of using functions is that if you want to make a change to all
+your code, you can very easily do it in the R function and it will change all 
+your other code too!
+
+If you want to make sure that who ever uses your function will not use a wrong 
+argument, you can use "defensive programming" via the `stopifnot()` function.
+This forces the code to only work if `.groupvar` is a character (e.g. `"this"`)
+argument.
+
+```{r add-function-stopifnot}
+mean_sd_by_group <- function(.dataset, .groupvar) {
+    stopifnot(is.character(.groupvar))
+    by_group_output <- .dataset %>% 
+        select_at(vars(.groupvar, BMI, TotChol, Pulse, BPSysAve, BPDiaAve)) %>% 
+        gather(Measurement, Value, -.groupvar) %>% 
+        na.omit() %>% 
+        group_by_at(vars(.groupvar, Measurement)) %>% 
+        summarise(Mean = round(mean(Value), 2),
+                  SD = round(sd(Value), 2),
+                  MeanSD = str_c(Mean, " (", SD, ")")) %>% 
+        select(-Mean, -SD) %>% 
+        spread(.groupvar, MeanSD)
+    return(by_group_output)
+}
+```
+
+A good practice to use after you've created your function is to explicitly indicate 
+which functions come from which package, since you shouldn't use `library` calls
+in your function. We do this by using the `packagename::function_name` format 
+(you don't need to do this for base R functions). Plus, let's add some
+documentation! (`Ctrl-Alt-Shift-R`).
+
+```{r explicit-function-call}
+#' Calculate mean and standard deviation by a grouping variable.
+#'
+#' @param .dataset The dataset
+#' @param .group_variable Variable to group by
+#'
+#' @return Output a data frame.
+#'
+mean_sd_by_group <- function(.dataset, .groupvar) {
+    stopifnot(is.character(.groupvar))
+    by_group_output <- .dataset %>% 
+        dplyr::select_at(dplyr::vars(.groupvar, BMI, 
+                                     TotChol, Pulse, BPSysAve, BPDiaAve)) %>% 
+        tidyr::gather(Measurement, Value, -.groupvar) %>% 
+        na.omit() %>% 
+        dplyr::group_by_at(dplyr::vars(.groupvar, Measurement)) %>% 
+        dplyr::summarise(Mean = round(mean(Value), 2),
+                  SD = round(sd(Value), 2),
+                  MeanSD = stringr::str_c(Mean, " (", SD, ")")) %>% 
+        dplyr::select(-Mean, -SD) %>% 
+        tidyr::spread(.groupvar, MeanSD)
+    return(by_group_output)
+}
+```
+
+### Functions to plot
+
+Let's do this for plots too, since we'll likely be making lots of those! Let's
+say we are doing multiple scatter plots, and we've already made a nice theme. 
+But we want to create several scatter plots. The non-function code:
+
+```{r scatter-plot}
+ggplot(NHANES, aes(x = Height, y = Weight, colour = Gender)) +
+    geom_point(size = 2, alpha = 0.3) +
+    scale_colour_viridis_d(option = "B", begin = 0.2, end = 0.7) +
+    theme_minimal() +
+    theme(text = element_text(colour = "grey40"))
+```
+
+Like before, maybe we want to see the scatter plot by different variables. So let's 
+get it into function form:
+
+```{r plot-function-template, eval=FALSE}
+plot_scatter_by_group <- function() {
+    scatter_plot <- ggplot(NHANES, aes(x = Height, y = Weight, 
+                                       colour = Gender)) +
+        geom_point(size = 2, alpha = 0.3) +
+        scale_colour_viridis_d(option = "B", begin = 0.2, end = 0.7) +
+        theme_minimal() +
+        theme(text = element_text(colour = "grey40"))
+    return(scatter_plot)
+}
+```
+
+Then let's add in the arguments.
+
+```{r plot-function-arguments, eval=FALSE}
+plot_scatter_by_group <- function(.dataset, .xvar, .yvar, .groupvar) {
+    scatter_plot <- ggplot(.dataset, aes(x = .xvar, y = .yvar, 
+                                         colour = .groupvar)) +
+        geom_point(size = 2, alpha = 0.3) +
+        scale_colour_viridis_d(option = "B", begin = 0.2, end = 0.7) +
+        theme_minimal() +
+        theme(text = element_text(colour = "grey40"))
+    return(scatter_plot)
+}
+```
+
+
+Like the dplyr code above, this function won't work because it also uses NSE, so
+ggplot2 will be confused by the `x = .xvar` since it will think you are asking
+for the `.xvar` column in the dataset. So, we need to change `aes()` to
+`aes_string()` to force ggplot2 to read `.xvar` as a character string that is
+the name of the column you want to plot.
+
+```{r plot-function-aes-string}
+plot_scatter_by_group <- function(.dataset, .xvar, .yvar, .groupvar) {
+    scatter_plot <- ggplot(.dataset, aes_string(x = .xvar, y = .yvar, 
+                                                colour = .groupvar)) +
+        geom_point(size = 2, alpha = 0.3) +
+        scale_colour_viridis_d(option = "B", begin = 0.2, end = 0.7) +
+        theme_minimal() +
+        theme(text = element_text(colour = "grey40"))
+    return(scatter_plot)
+}
+plot_scatter_by_group(NHANES, "Height", "Weight", "Gender")
+```
+
+Let's add in the `stopifnot`, `ggplot2::` explicit calls, and the roxygen
+documentation (`Ctrl-Alt-Shift-R`):
+
+```{r plot-function-finish-up}
+#' Create a scatter plot with colouring by categorical variable.
+#'
+#' @param .dataset Data to plot.
+#' @param .xvar Variable for the x axis.
+#' @param .yvar Variable for the y axis.
+#' @param .groupvar The variable to group/color by.
+#'
+#' @return Creates a ggplot.
+#'
+plot_scatter_by_group <- function(.dataset, .xvar, .yvar, .groupvar) {
+    stopifnot(is.character(.xvar), is.character(.yvar), is.character(.groupvar))
+    scatter_plot <- 
+        ggplot2::ggplot(.dataset, ggplot2::aes_string(x = .xvar, y = .yvar, 
+                                                      colour = .groupvar)) +
+        ggplot2::geom_point(size = 2, alpha = 0.3) +
+        ggplot2::scale_colour_viridis_d(option = "B", begin = 0.2, end = 0.7) +
+        ggplot2::theme_minimal() +
+        ggplot2::theme(text = ggplot2::element_text(colour = "grey40"))
+    return(scatter_plot)
+}
+```
+
+Now we can do other plots easily:
+
+```{r use-plot-function-multiple-times}
+plot_scatter_by_group(NHANES, "BMI", "TotChol", "SurveyYr")
+plot_scatter_by_group(NHANES, "Poverty", "BMI", "Education")
+plot_scatter_by_group(NHANES, "BMI", "BPSysAve", "Diabetes")
+```
