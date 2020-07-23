@@ -214,17 +214,230 @@ so that it will be easier to analyze in R.
 
 -   How can I represent and manage missing values?
     -   NA
+    Python Learning Objectives
+    -   Identify missing values (e.g., NaN) in your datasets
+    -   Examine the impact of missing valus on your datasets
+    -   Demonstrate and use commands that process missing values
+    -   Demonstrate how to replace missing values
+
+    Python Lecture Notes (general info) 
+    -   Missing Completely at Random (MCAR)
+    -   Missing at Random (MAR)
+    -   Missing Not at Random (MNAR)
+    -   Missing data at scale (what's a little and what's alot?)
+    -   Imputation and Multiple Imputation 
+    -   When summing the data, missing values will be treated as zero
+    -   If all values are missing, the sum will be equal to NaN
+    -   cumsum() and cumprod() methods ignore missing values but preserve them in the resulting arrays
+    -   .groupby() method *see more in descriptive stats section* 
+        -   Missing values in .groupby() method are excluded (just like in R)
+        -   Another .groupby() fun fact: .groupby() with observed=True includes NaNs for categoricals.
+    -   Many descriptive statistics methods have skipna option to control if missing data should be excluded . This value is set to True by default (unlike R) 
+
+    Python Lecture Notes (useful commands)
+    -   Table: df.method() / description
+    -   dropna() / drop missing observations
+    -   dropna(how='all') / drop observations where all cells are NA
+    -   dropna(axis=1,how='all') / drop coloumn if all values are missing
+    -   dropna(thresh=5) / drop rows that contain less than 5 non-missing values
+    -   fillna(0) / replace missing values with zeros
+    -   isna() returns True if the value is missing
+    -   notna() / Returns True for non-missing values
+
+    T/F Exercises (#Review4Everybody)
+    -   Imputation is really just making up data to artificially inflate results.  It’s better to just drop cases with missing data than to impute.
+    -   (need descriptive stats lesson first) I can just impute the mean for any missing data.  It won’t affect results, and improves power.
+    -   Missing data isn’t really a problem if I’m just doing simple statistics.
+    -   When imputing, it’s important that the imputations be plausible data points.
+
+    Short Answer Exercises (#Review4Everybody)
+    -   What is imputation of missing data?
+    -   How does missing values affect results?
+    -   How do you computationally mark missing values in your dataset?
+    -   How could you handle missing data?
+
 -   How can I get a feel for my data?
-    -   summary statistics
+    -   summary/descrptive statistics
+
+    Python Learning Objectives 
+    -   Recognize the difference between statistics and descriptive statistics
+    -   Define four variable types: nomial, ordinal, interval and ratio
+    -   Describe the types of descriptive statistics: organize data and summarize data
+    -   Demonstrate and use commands that help you describe data 
+
+    Python Lecture Notes (general info)
+    -   Discuss basic probability & statistics overview
+        -   Identify materials available at https://seeing-theory.brown.edu/
+        -   Chapter 1 seems the most relevant at this point
+    -   Descriptive statistics quantitatively describes or summarizes features of a dataset. 
+    -   Descriptive statistics are used by researchers/analysts to report on populations and samples. 
+    -   Descriptive statistics speed up and simplify comprehension of a group’s characteristics
+    -   Variable types 
+        -   Nominal: Unordered categorical variables
+        -   Ordinal: There is an ordering but no implication of equal distance between the different points of the scale.
+        -   Interval: There are equal differences between successive points on the scale but the position of zero is arbitrary.
+        -   Ratio: The relative magnitudes of scores and the differences between them matter. The position of zero is fixed.
+    -   Types of descriptive statistics
+        -   Organize data: tables and graphs
+        -   Summarize data: central tendency and variation
+    -   Tables
+        -  frequency distributions, relative frequency distributions
+    -   Graphs
+        -  bar chart, histogram, boxplot
+    -   Central tendency   
+        - mean, median, mode
+    -   Variation
+        - range, interquartile range, variance, standard deviation
+
+    Python Lecture Notes (useful commands)
+    -   Import python libraries: 
+        -   import pandas as pd
+        -   import seaborn as sns
+    -   Read data into a dataframe (likely review from another section)
+        -   df = pd.read_csv("your-filename.csv") #read a csv file, it better be tidy first!
+        -   Note: you can read data from other file formats like excel, stata and sas
+    -   df.method() / description
+        -   head([n]), tail([n]) / first/last n rows 
+        -   describe() / generate descriptive statistics (for numeric columns only) 
+        -   shape / return a tuple representing the dimensionality of the dataframe
+        -   info() /  prints a dataframe's summary information, e.g., index dtype and column dtypes, non-null values and memory usage
+        -   max(), min() / return max/min values for all numeric columns
+        -   mean(), median() /  return mean/median values for all numeric columns
+        -   std() / standard deviation
+        -   sample([n]) / returns a random sample of the data frame
+    -   .groupby() method
+        -   Splits data into groups based on some criteria you define
+        -   Then you can calculate statistics (or apply a function) to each group 
+        -   A few performance notes:
+            -   It's customary to enact the grouping or splitting of data until it's needed. 
+            -   Creating the groupby object only verifies that you have passed a valid mapping
+            -   By default, the group keys are sorted during the groupby operation. You may want to pass sort=False for potential speedup
+    -   Graphs (Intro to seaborn)
+        -   Seaborn package is built on matplotlib but provides high level interface for drawing attractive statistical graphics 
+        -   It specifically targets statistical data visualization
+        -   Reference: https://seaborn.pydata.org/introduction.html
+        -   import seaborn as sns
+        -   sns.set(): applies the default default seaborn theme, scaling, and color palette
+        -   load dataset: e.g., tips = sns.load_dataset("tips") where tips is a tidy df
+        -   relplot() method: designed to visualize many different statistical relationships
+            -   Example: fmri = sns.load_dataset("fmri") where fmri is a tidy df
+            -   Example: sns.relplot(x="timepoint", y="signal", col="region", hue="event", style="event", kind="line", data=fmri)
+            -   explain each parameter in kind
+        -   catplot() method: helps visualize the relationship between one numeric variable and one (or more) categorical variables
+            -   Example: sns.catplot(x="day", y="total_bill", hue="smoker", kind="swarm", data=tips) 
+            -   kind parameter can be changed to: violin, bar, etc. 
+        -  pairplot() method: shows all pairwise relationships and the marginal distributions, optionally conditioned on a categorical variable
+            -   Example: sns.pairplot(data=iris, hue="species")
+            -   my personal fav when paired w/ .describe() for some initial EDA
+    
+    Live-coding Exercises
+    -   Try to read the first 10, 20, 50 records of your dataframe?
+    -   Can you guess how to view the last few records of your dataframe? 
+    -   Find how many records this data frame has
+    -   How many elements are there?     
+    -   What are the column names?
+    -   What types of columns we have in this data frame?
+    -   Give the summary for the numeric columns in the dataset
+    -   Calculate standard deviation for all numeric columns
+    -   What are the mean values of the first 50 records in the dataset? 
+    -   Calculate the basic statistics for column XXX (XXX refers to a TBD attribute selected lecture/presentation)
+    -   Find how many values in column XXX (hint: use the count method)
+    -   Calculate the average of column XXX
+
 -   How can I create a simple model of my data?
+    Python Learning Objectives 
+    -   Describe clustering and regression
+    -   Define k-means clustering and linear regression analyses
+    -   Demonstrate appropriate applications or uses of k-means clustering analysis
+    -   Demonstrate appropriate applications or uses of linear regression analysis
+    -   State and specify limitations of both analyses
+
+    Lecture Notes (K-means Cluster Analysis)
+    -   Resource: Information to Information Retrieval (https://nlp.stanford.edu/IR-book/information-retrieval-book.html), Chapter 16.
+    -   Clustering: the process of grouping a set of elemens into classes of similar elements
+    -   Clustering is also called unsupervised learning, e.g., "learning" from raw data
+    -   K-means clustering refines goups iteratively where each element belongs to only one group 
+        (a nod to flat algorithm approaches w/ hard clustering practices, if we want to expand in later books)
+    -   Algorithm setup
+        -   Assumes elementss are real-valued vectors
+        -   Clusters based on centroids (or mean) of points in a cluster
+        -   Reassignment of elements to clusters is based on distance to the current cluster centroids.
+    -   Algorithm Pseudocode
+        -   Step 0: Select K random elements {s1, s2,...,sK} as seeds. These are your initial K centroids.
+        -   Step 1: Assign points to closest centroid
+        -   Step 2: Recompute cluster centroids
+        -   Step 3: Goto Step 1
+    -   A Few FYIs
+        -   You (designer/coder/developer) must select K
+        -   K-means always maintains exactly K clusters
+        -   Clusters may be sensitive to initial seed selection
+        -   Execution of K-means algorithm tends to converge quickly
+    
+    Live Coding Experience for K-Means (instructor w/ class)
+        -   run through https://jakevdp.github.io/PythonDataScienceHandbook/05.11-k-means.html
+            - Note: Expectation Maximization terminology is not explicitly mentioned, should we discuss it?
+                    I don't want to be too term-heavy for novices. Thoughts welcomed. 
+                
+    Live Coding Exercises for K-Means (learner on "their own")
+        -   TBD based on at least one of the datasets selected by the group
+
+    Lecture Notes (Linear Regression)
+    -   In science, we frequently measure two or more variables on the same individual (case, object, etc). We do this 
+        to explore the nature of the relationship among these variables.  There are two basic types of relationships.
+    -   Cause-and-effect relationships and functional relationships. Let's consider functional relationships.
+    -   Function: a mathematical relationship enabling us to predict what values of one variable (Y) correspond to given values of another variable (X)
+    -   Y: is referred to as the dependent variable, the response variable or the predicted variable.
+    -   X: is referred to as the independent variable, the explanatory variable or the predictor variable. 
+    -   In each case, the statement can be read as;  Y is a function of X.
+    -   Two kinds of explanatory variables:
+        -   Those we can control    
+        -   Those over which we have little or no control.
+    -   Example: The time needed to fill a soft drink vending machine
+    -   Motivating questions
+        -   What is the association between Y and X?
+        -   How can changes in Y be explained by changes in X?
+        -   What are the functional relationships between Y and X?
+    -   The main formula (ta-da..)
+        -   Y = b_0 + b_1*X where b_0 = intercept and b_1 = slope
+        -   b_0 = tells you the impact of X being set to 0
+        -   b_1 = tells you the magnitude change between X and X+1
+
+    - Steps in regression analysis
+        -   Examine the scatterplot of the data.
+            Does the relationship look linear?
+            Are there points in locations they shouldn’t be?
+            Do we need a transformation?
+        -   Assuming a linear function looks appropriate, estimate the regression parameters.
+            How do we do this? (Method of Least Squares)
+        -   Test whether there really is a statistically significant linear relationship. Just because we assumed a linear function it does not follow that the data support this assumption.
+             How do we test this? (F-test for Variances)
+        -   If there is a significant linear relationship, estimate the response, Y, for the given values of X, and compute the residuals.
+        -   Examine the residuals for systematic inadequacies in the linear model as fit to the data.
+            Is there evidence that a more complicated relationship (say a polynomial) should be considered; are there problems with the regression assumptions? (Residual analysis).
+            Are there specific data points which do not seem to follow the proposed relationship? (Examined using influence measures).
+    
+    Live Coding Experience for Linear Regression (instructor w/ class)
+        -   Seaborn version: https://seaborn.pydata.org/tutorial/regression.html  
+        -   [Optional] Matplotlib version: https://www.geeksforgeeks.org/linear-regression-python-implementation/ (for those who want more theory)
+    
+    Live Coding Exercises for Linear Regression (learners on "their own")
+        -   TBD based on at least one of the datasets selected by the group
+
+    Misc. Notes (remove?)
     -   formulas
-    -   linear regression
-        -   adding a best fit straight line on a scatterplot
-        -   understanding what the error bands on a "best fit" straight line mean
-    -   k-means cluster analysis
     -   frame these as exploratory tools for revealing structure in the data, rather than modelling or inferential tools
+    -   adding a best fit straight line on a scatterplot (linear regression)
+    -   understanding what the error bands on a "best fit" straight line mean (linear regression)
 -   How can I put people at risk?
     -   algorithmic bias
+        -   Watch this video and discuss w/ class (https://www.youtube.com/watch?v=UG_X_7g63rY)
+            How I'm fighting bias in algorithms by Joy Buolamwini 
+                TedTalk Abstract: MIT grad student Joy Buolamwini was working with facial analysis software 
+                when she noticed a problem: the software didn't detect her face -- because the people who 
+                coded the algorithm hadn't taught it to identify a broad range of skin tones and facial 
+                structures. Now she's on a mission to fight bias in machine learning, a phenomenon she calls 
+                the "coded gaze." It's an eye-opening talk about the need for accountability in coding ... as 
+                algorithms take over more and more aspects of our lives.
     -   de-anonymization
 -   What *isn't* included?
     -   statistical tests
