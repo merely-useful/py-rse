@@ -44,7 +44,6 @@ PY_RSE_FILES=\
   py-rse/errors.Rmd \
   py-rse/teams.Rmd \
   py-rse/style.Rmd \
-  py-rse/project.Rmd \
   py-rse/testing.Rmd \
   py-rse/packaging.Rmd \
   py-rse/provenance.Rmd \
