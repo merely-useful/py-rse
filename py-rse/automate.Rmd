@@ -850,10 +850,10 @@ rather than to `stdout`.
 PLOT=bin/plotcounts.py
 
 ## all : regenerate all results.
-all : results/plotcounts.png
+all : results/collated.png
 
-## results/collated.pdf: plot the collated results.
-results/plotcounts.png : results/collated.csv
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv
 	python $(PLOT) $^ --outfile $@
 
 ## settings : show variables' values.
@@ -864,6 +864,22 @@ settings :
 	@echo COLLATE: $(COLLATE)
 	@echo PLOT: $(PLOT)
 	...
+```
+
+Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
+
+```shell
+$ make all
+```
+
+```text
+python bin/collate.py results/time_machine.csv results/moby_dick.csv results/jane_eyre.csv results/dracula.csv results/sense_and_sensibility.csv results/sherlock_holmes.csv results/frankenstein.csv > results/collated.csv
+python bin/plotcounts.py results/collated.csv --outfile results/collated.png
+alpha: 1.1712445413685917
+```
+
+```{r automate-collated, echo=FALSE, fig.cap="Word count distribution for all the books combined."}
+knitr::include_graphics("figures/py-rse/automate/collated.png")
 ```
 
 Finally,
@@ -878,7 +894,7 @@ and forget that these will be cleaned up when you run `make clean`.
 
 ## clean : remove all generated files.
 clean :
-	rm $(RESULTS) results/collated.csv results/plotcounts.png
+	rm $(RESULTS) results/collated.csv results/collated.png
 ```
 
 ## Summary {#automate-summary}

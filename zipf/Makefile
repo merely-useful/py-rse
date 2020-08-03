@@ -7,10 +7,10 @@ DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
 ## all : regenerate all results.
-all : results/plotcounts.png
+all : results/collated.png
 
-## results/plotcounts.png: plot the collated results.
-results/plotcounts.png : results/collated.csv bin/plotparams.yml
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv bin/plotparams.yml
 	python $(PLOT) $^ --outfile $@ --plotparams $(word 2,$^)
 
 ## results/collated.csv : collate all results.
@@ -24,7 +24,7 @@ results/%.csv : data/%.txt $(COUNT)
 
 ## clean : remove all generated files.
 clean :
-	rm $(RESULTS) results/collated.csv results/plotcounts.png
+	rm $(RESULTS) results/collated.csv results/collated.png
 
 ## settings : show variables' values.
 settings :
