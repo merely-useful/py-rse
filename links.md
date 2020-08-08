@@ -142,6 +142,7 @@
 [in-place-operator]: glossary.html#in-place-operator
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
+[inspectability]: glossary.html#inspectability
 [integration-testing]: glossary.html#integration-testing
 [internal-error]: glossary.html#internal-error
 [interpeter]: glossary.html#interpeter
