@@ -1,19 +1,18 @@
 # Provenance {#provenance}
 
-We are now at the point where we've developed, automated and tested
-a workflow for plotting the word count distribution for our collection of classic novels.
+We have now developed, automated, and tested
+a workflow for plotting the word count distribution for classic novels.
 In the normal course of events,
-outputs from that workflow (e.g. our figures and \(\alpha\) values)
-would ultimately be included in a report.
+we would include the outputs from that workflow (e.g., our figures and \(\alpha\) values)
+in a report.
 Here we use the term "report" to include research papers,
 summaries for clients,
 or anything else that is shorter than a book
 and aimed at people other than its creators. 
 
-The first and most important point to make
-is that modern publishing involves much more than producing a printable PDF.
+But modern publishing involves much more than producing a printable PDF.
 It also entails providing the data underpinning the report
-as well as the code used to do the analysis:
+and the code used to do the analysis:
 
 > An article about computational science in a scientific publication
 > is *not* the scholarship itself,
@@ -23,13 +22,12 @@ as well as the code used to do the analysis:
 >
 > --- Jonathan Buckheit and David Donoho, paraphrasing Jon Claerbout, in @Buck1995
 
-While some reports, datasets, software packages and/or analysis scripts
+While some reports, datasets, software packages, and/or analysis scripts
 can't be published without violating personal or commercial confidentiality,
-every researcher's default should be to make all these components
-of their work as widely available as possible.
+every researcher's default should be to make all these as widely available as possible.
 Publishing it under an open license (Section \@ref(teams-license)) is the first step;
-the sections below describe other steps we can take
-to capture the provenance of our data analysis.
+the sections below describe what else we can do to capture
+the [provenance][provenance] of our data analysis.
 
 > **Identifying Reports and Authors**
 >
@@ -55,19 +53,20 @@ The first step in documenting the data associated with a report
 is to determine what (if anything) needs to be published.
 If the report involved the analysis of a publicly available dataset
 that is maintained and documented by a third party,
+it's not necessary to publish a duplicate of the dataset:
 the report simply needs to document where to access the data
-and what version was analyzed:
-it's not necessary to publish a duplicate of the dataset.
+and what version was analyzed.
 This is the case for our Zipf's Law analysis,
 since the texts we analyze are available at [Project Gutenberg][project-gutenberg].
 
 It's not strictly necessary to publish intermediate data
 produced during the analysis of a publicly available dataset either
-(e.g. our CSV files produced by `countwords.py`),
+(e.g., the CSV files produced by `countwords.py`),
 so long as readers have access to the original data and the code/software used to process it.
 However,
 making intermediate data available can save people time and effort,
-particularly if it takes a lot of computing power to reproduce it.
+particularly if it takes a lot of computing power to reproduce it
+(or if installing the required software is complicated).
 For example,
 NASA has published
 the [Goddard Institute for Space Studies Surface Temperature Analysis][gistemp],
@@ -134,7 +133,7 @@ We can tell we've done this if:
 3.  (Meta)data has detailed [provenance][provenance].
 4.  (Meta)data meets domain-relevant community standards.
 
-### Where to Archive Data {#provenance-data-where}
+### Where to archive data {#provenance-data-where}
 
 Small datasets (i.e., anything under 500 MB) can be stored in version control.
 If the data is being used in several projects,
@@ -171,13 +170,13 @@ Documenting the details of a computational workflow like this
 in an open, transparent and reproducible manner
 typically requires that three key items are archived:
 
-1.  A copy of any **analysis scripts/notebooks** used to produce the key results
+1.  A copy of any **analysis scripts or notebooks** used to produce the key results
     presented in the report.
-2.  A detailed description of the **software environment** in which those analysis scripts/
-    notebooks were executed.
-3.  A description of the **data processing steps** taken in producing each key result
-    (i.e. for each key result, a step-by-step account of which scripts were executed
-    and in what order).
+2.  A detailed description of the **software environment**
+    in which those analysis scripts or notebooks ran.
+3.  A description of the **data processing steps** taken in producing each key result,
+    i.e., a step-by-step account of which scripts were executed in what order
+    for each key result.
 
 Unfortunately,
 librarians, publishers, and regulatory bodies are still trying to determine
@@ -190,15 +189,10 @@ the analysis scripts/notebooks,
 before creating a new release of that repository and archiving it (with a DOI)
 with [Zenodo][zenodo].
 
-### Software Environment {#code-provenance-environment}
+### Software environment {#code-provenance-environment}
 
-FIXME: This section would make more sense if we were using a conda environment
-from the beginning (i.e. in the installation instructions).
-We should consider the merits of doing that.
-
-In order to document the software packages that were used in our analysis,
-the bare minimum requirement is to archive a list of
-the names and version numbers of each software package.
+In order to document the software packages used in our analysis,
+we should archive a list of the names and version numbers of each software package.
 We can get version information for the Python packages we are using by running:
 
 ```shell
@@ -206,7 +200,14 @@ $ pip freeze
 ```
 
 ```text
-FIXME: Show output
+alabaster==0.7.12
+anaconda-client==1.7.2
+anaconda-navigator==1.9.12
+anaconda-project==0.8.3
+appnope==0.1.0
+appscript==1.0.1
+asn1crypto==1.0.1
+...
 ```
 
 Other command line tools will often have an option like `--version` or `--status`
@@ -219,11 +220,30 @@ to figure out how to get all those packages installed and working together.
 This might be fine for a small number of packages with very few dependencies,
 but in more complex cases we probably want to make life easier for the reader
 (and for our future selves looking to re-run the analysis).
-One way to make things easier is to export a description of a complete
-`conda` environment, which can be saved as YAML using:
+One way to make things easier is to export a description of
+a complete `conda` environment (Section \@ref(packaging-virtualenv)),
+which can be saved as YAML using:
 
 ```shell
 $ conda env export > environment.yml
+$ cat environment.yml
+```
+```text
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - _ipyw_jlab_nb_ext_conf=0.1.0=py37_0
+  - alabaster=0.7.12=py37_0
+  - anaconda=2019.10=py37_0
+  - anaconda-client=1.7.2=py37_0
+  - anaconda-navigator=1.9.12=py37_0
+  - anaconda-project=0.8.3=py_0
+  - appnope=0.1.0=py37_0
+  - appscript=1.1.0=py37h1de35cc_0
+  - asn1crypto=1.0.1=py37_0
+...
 ```
 
 That software environment can be recreated on another computer with one line of code:
@@ -243,7 +263,7 @@ $ git push origin master
 > **Container Images**
 > 
 > More complex tools like [Docker][docker]
-> can literally install our entire environment
+> can install our entire environment
 > (down to the precise version of the operating system)
 > on a different computer @Nust2020.
 > However,
@@ -251,12 +271,13 @@ $ git push origin master
 > and there is a lot of debate
 > about how well (or whether) they actually make research more reproducible in practice.
 
-### Data Processing Steps {#code-provenance-steps}
+### Data processing steps {#code-provenance-steps}
 
 The second item that needs to be added to our GitHub repository is a description
 of the data processing steps involved in each key result.
 Assuming the author list on our report is Amira Khan and Sami Virtanen (Section \@ref(intro-personas)),
-we could create a new markdown file called `KhanVirtanen2020.md` to describe the steps:
+we could add a new Markdown file called `KhanVirtanen2020.md` to the repository
+to describe the steps:
 
 ```markdown
 The code in this repository was used in generating the results for the following paper:
@@ -272,66 +293,55 @@ Figure 1 in the paper was created by running the following at the command line:
 $ make all
 ```
 
-This new file can be added to the repository:
+We should also add this information as an appendix to the report itself.
 
-```shell
-$ git add KhanVirtanen2020.md
-$ git commit -m "Adding data processing steps for Khan and Virtanen (2020)"
-$ git push origin master
-```
-
-### Analysis Scripts {#code-provenance-scripts}
+### Analysis scripts {#code-provenance-scripts}
 
 Later in this book we will package and release our Zipf's Law code
 so that it can be downloaded and installed by the wider research community,
 just like any other Python package (Chapter \@ref(packaging)).
-Going through the process of formally packaging your code can be a good option
-if there's a user community out there interested in using and/or building it,
-but often the scripts and notebooks we write
-to produce a particular figure or table
-will not be of broad interest.
-In other words,
-these scripts were written to get a specific job done
-(e.g. to produce Figure 1 in a report)
-and do not have a wider application.
+Doing this is especially helpful if other people might be interested in using and/or extending it,
+but often the scripts and notebooks we write to produce a particular figure or table
+are too case-specific to be of broad interest.
 To fully capture the provenance of the results presented in a report,
 these analysis scripts and/or notebooks 
 (along with the details of the associated software environment and data processing steps)
 can be archived with a repository like [Figshare][figshare] or [Zenodo][zenodo],
-which specialize in storing the "long-tail" of research projects
-(i.e. supplementary figures, data and/or code).
-Traditionally that meant uploading a zip file full of analysis scripts to the repository
-(which is still a valid option),
+which specialize in storing the long tail of research projects
+(i.e., supplementary figures, data, and code).
+Uploading a zip file of analysis scripts to the repository is a valid option,
 but more recently the process has been streamlined via direct integration
 between GitHub and Zenodo.
-The process (described in [this tutorial][github-zenodo-tutorial]) involves
-creating a new release of your repository in GitHub (e.g. Figure \@ref(fig:provenance-release)),
-which Zenodo copies and then issues a DOI.
+As described in [this tutorial][github-zenodo-tutorial],
+the process involves creating a new release of our repository in GitHub
+that Zenodo copies and then issues a DOI for (Figure \@ref(fig:provenance-release)).
 
 ```{r provenance-release, echo=FALSE, fig.cap="A new code release in GitHub"}
 knitr::include_graphics("figures/py-rse/provenance/release.png")
 ```
 
-### Reproducibility Versus Inspectability {#provenance-inspectability}
+### Reproducibility versus inspectability {#provenance-inspectability}
 
 In most cases,
-documenting your software environment, analysis scripts and data processing steps
-will ensure that your computational analysis is reproducible/repeatable 
-at the time your report is published.
-But what about five or ten years from now?
+documenting our software environment, analysis scripts, and data processing steps
+will ensure that our computational analysis is reproducible/repeatable 
+at the time our report is published.
+But what about five or ten years later?
 As we have discussed,
 data analysis workflows usually depend on a hierarchy of packages.
-Our Zipf's Law analysis depends on a a collection of Python libraries (numpy, matplotlib, scipy, etc),
+Our Zipf's Law analysis depends on a collection of Python libraries,
 which in turn depend on the Python language itself.
-Some workflows also depend critically on a particular operating system or firmware.
+Some workflows also depend critically on a particular operating system.
 Over time some of these dependencies will inevitably be updated or no longer supported,
-meaning the workflow you have documented will no longer be reproducible.
+meaning our workflow will be documented but not reproducible.
+
 Fortunately,
-most readers are not looking to exactly re-run a decade old analysis.
-They really just want to be able to figure out what was run 
-and what the important decisions were -- something referred to as inspectability (@Gil2016, @Brown2017). 
+most readers are not looking to exactly re-run a decade old analysis:
+they just want to be able to figure out what was run 
+and what the important decisions were,
+which is sometimes referred to as [inspectability][inspectability] (@Gil2016, @Brown2017). 
 While exact repeatability has a short shelf-life,
-inspectability is the enduring legacy of a well documented computational analysis.
+inspectability is the enduring legacy of a well-documented computational analysis.
 
 > **Your Future Self Will Thank You**
 >
