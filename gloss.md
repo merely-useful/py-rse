@@ -329,6 +329,9 @@ and a [remote repository][remote-repository].
 **In-place operator**<a id="in-place-operator"></a>
 :   FIXME
 
+**Inspectability**<a id="inspectability"></a>
+:   FIXME
+
 **Internal error**<a id="internal-error"></a>
 :   FIXME
 
