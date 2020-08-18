@@ -1,0 +1,143 @@
+# Project Tree {#tree}
+
+```
+/zipf
+├── .gitignore
+├── CITATION.md
+├── CONDUCT.md
+├── CONTRIBUTING.md
+├── KhanVirtanen2020.md
+├── LICENSE.md
+├── Makefile
+├── README.rst
+├── environment.yml
+├── requirements.txt
+├── requirements_docs.txt
+├── setup.py
+├── data
+│   ├── README.md
+│   ├── dracula.txt
+│   ├── frankenstein.txt
+│   ├── jane_eyre.txt
+│   ├── moby_dick.txt
+│   ├── sense_and_sensibility.txt
+│   ├── sherlock_holmes.txt
+│   └── time_machine.txt
+├── docs
+│   ├── Makefile
+│   ├── conf.py
+│   ├── index.rst
+│   └── source
+│   │   ├── collate.rst
+│   │   ├── countwords.rst
+│   │   ├── modules.rst
+│   │   ├── plotcounts.rst
+│   │   ├── test_zipfs.rst
+│   │   └── utilities.rst
+├── results
+│   ├── collated.csv
+│   ├── collated.png
+│   ├── dracula.csv
+│   ├── dracula.png 
+│   ├── frankenstein.csv
+│   ├── jane_eyre.csv
+│   ├── jane_eyre.png 
+│   ├── moby_dick.csv
+│   ├── sense_and_sensibility.csv
+│   ├── sherlock_holmes.csv
+│   └── time_machine.csv
+├── test_data
+│   ├── random_words.txt
+│   └── risk.txt
+└── zipf
+    ├── book_summary.sh
+    ├── collate.py
+    ├── countwords.py
+    ├── plotcounts.py
+    ├── plotparams.yml
+    ├── test_zipfs.py
+    └── utilities.py
+```
+
+Each file in the final directory tree (above) was introduced
+and modified in the following sections:
+
+`.gitignore`: Introduced in Section \@ref(git-cmdline-ignore).
+
+`CITATION.md`: Introduced in Section \@ref(packaging-software-journals).
+
+`CONDUCT.md`: Introduced in Section \@ref(teams-coc) and 
+committed to the repository in Exercise \@ref(teams-ex-boilerplate).
+
+`CONTRIBUTING.md`: Introduced in Section \@ref(teams-documentation) and 
+committed to the repository in Exercise \@ref(teams-ex-contributing).
+
+`KhanVirtanen2020.md`: Introduced in Section \@ref(code-provenance-steps).
+
+`LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
+committed to the repository in Exercise \@ref(teams-ex-boilerplate).
+
+`Makefile`: Introduced and updated throughout Chapter \@ref(automate).
+
+`README.rst`: Introduced as a `.md` file in Section \@ref(git-advanced-conflict),
+updated in Section \@ref(git-advanced-fork) and then converted to a `.rst` file
+with further updates in \@ref(packaging-readme).
+
+`environment.yml`: Introduced in Section \@ref(code-provenance-environment).
+
+`requirements.txt`: Introduced in Section \@ref(testing-ci).
+
+`requirements_docs.txt`: Introduced in Section \@ref(packaging-sphinx).
+
+`setup.py`: Introduced and updated throughout Chapter \@ref(packaging).
+
+`data/*` : Downloaded as part of the setup instructions (Appendix \@ref(install)).
+
+`docs/*`: Introduced in Section \@ref(packaging-sphinx).
+
+`results/collated.*`: Generated in Section \@ref(automate-pipeline).
+
+`results/dracula.csv`: Generated in Section \@ref(scripting-collate).
+
+`results/dracula.png`: Generated in Section \@ref(git-cmdline-changes) and updated in Section \@ref(git-advanced-zipf-verify).
+
+`results/jane_eyre.csv`: Generated in Section \@ref(scripting-collate).
+
+`results/jane_eyre.png`: Generated in Section \@ref(scripting-plotting).
+
+`results/moby_dick.csv`: Generated in Section \@ref(scripting-collate).
+
+`results/frankenstein.csv`: Generated in Section \@ref(automate-functions).
+
+`results/sense_and_sensibility.csv`: Generated in Section \@ref(automate-functions).
+
+`results/sherlock_holmes.csv`: Generated in Section \@ref(automate-functions).
+
+`results/time_machine.csv`: Generated in Section \@ref(automate-functions).
+
+`test_data/random_words.txt`: Generated in Section \@ref(testing-integration). 
+
+`test_data/risk.txt`: Introduced in Section \@ref(testing-unit).
+
+`zipf/`: Introduced as `bin/` in Section \@ref(intro-organize) and
+changes name to `/zipf` in Section \@ref(packaging-package).
+
+`zipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
+
+`zipf/collate.py`: Introduced in Section \@ref(scripting-collate) and
+updated in Section \@ref(py-rse-py-scripting-modules),
+throughout Chapter \@ref(errors),
+and in Section \@ref(packaging-package).
+
+`zipf/countwords.py`: Introduced in Section \@ref(scripting-wordcount) and
+updated in Sections \@ref(py-rse-py-scripting-modules) and \@ref(packaging-package).
+
+`zipf/plotcounts.py`: Introduced in Exercise \@ref(scripting-ex-better-plotting) and
+updated throughout Chapters \@ref(git-cmdline), \@ref(git-advanced) and \@ref(config).
+
+`zipf/plotparams.yml`: Introduced in Section \@ref(config-job-file).
+
+`zipf/test_zipfs.py`: Introduced and updated throughout Chapter \@ref(testing).
+
+`zipf/utilities.py`: Introduced in Section \@ref(py-rse-py-scripting-modules).
+

@@ -120,6 +120,7 @@
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
 [git-stage]: glossary.html#git-stage
 [git]: glossary.html#git
+[github-contributors-guide]: https://docs.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors
 [github-gitignore]: https://github.com/github/gitignore
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [github]: https://github.com
