@@ -67,6 +67,7 @@
 [pypi-user-guide]: https://packaging.python.org/guides/using-testpypi/
 [pypi]: https://pypi.org/
 [pytest]: https://pytest.org/
+[python]: https://www.python.org/
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [python-standard-library]: https://docs.python.org/3/library/
@@ -137,8 +138,6 @@
 [command_line_flag]: glossary.html#command_line_flag
 [command_line_option]: glossary.html#command_line_option
 [command_line_switch]: glossary.html#command_line_switch
-[command_shell]: glossary.html#command_shell
-[command_switch]: glossary.html#command_switch
 [comment]: glossary.html#comment
 [commit]: glossary.html#commit
 [commit_message]: glossary.html#commit_message
@@ -181,7 +180,6 @@
 [folder]: glossary.html#folder
 [forge]: glossary.html#forge
 [full_identifier_git]: glossary.html#full_identifier_git
-[function_make]: glossary.html#function_make
 [git]: glossary.html#git
 [git_branch]: glossary.html#git_branch
 [git_clone]: glossary.html#git_clone
@@ -201,7 +199,7 @@
 [impostor_syndrome]: glossary.html#impostor_syndrome
 [in_place_operator]: glossary.html#in_place_operator
 [inspectability]: glossary.html#inspectability
-[integration_testing]: glossary.html#integration_testing
+[integration_test]: glossary.html#integration_test
 [internal_error]: glossary.html#internal_error
 [interpeter]: glossary.html#interpeter
 [interpreted_language]: glossary.html#interpreted_language
@@ -219,11 +217,10 @@
 [logging_framework]: glossary.html#logging_framework
 [long_option]: glossary.html#long_option
 [loop_body]: glossary.html#loop_body
-[loop_unix]: glossary.html#loop_unix
 [magic_number]: glossary.html#magic_number
 [makefile]: glossary.html#makefile
 [marthas_rules]: glossary.html#marthas_rules
-[max_like_est]: glossary.html#max_like_est
+[maximum_likelihood_estimation]: glossary.html#maximum_likelihood_estimation
 [mental_model]: glossary.html#mental_model
 [milestone]: glossary.html#milestone
 [mit_license]: glossary.html#mit_license
@@ -260,13 +257,11 @@
 [prompt]: glossary.html#prompt
 [provenance]: glossary.html#provenance
 [pull_request]: glossary.html#pull_request
-[python]: glossary.html#python
 [raise_exception]: glossary.html#raise_exception
 [raster_image]: glossary.html#raster_image
 [recursion]: glossary.html#recursion
 [redirection]: glossary.html#redirection
 [refactoring]: glossary.html#refactoring
-[regression]: glossary.html#regression
 [regression_testing]: glossary.html#regression_testing
 [regular_expression]: glossary.html#regular_expression
 [relative_error]: glossary.html#relative_error
@@ -283,13 +278,12 @@
 [root_directory]: glossary.html#root_directory
 [rotating_file]: glossary.html#rotating_file
 [rse]: glossary.html#rse
-[rule_make]: glossary.html#rule_make
 [script]: glossary.html#script
 [search_path]: glossary.html#search_path
-[ssh]: glossary.html#ssh
 [semantic_versioning]: glossary.html#semantic_versioning
 [sense_vote]: glossary.html#sense_vote
 [shebang]: glossary.html#shebang
+[shell]: glossary.html#shell
 [shell_script]: glossary.html#shell_script
 [short_circuit_test]: glossary.html#short_circuit_test
 [short_identifier_git]: glossary.html#short_identifier_git
@@ -297,11 +291,10 @@
 [snake_case]: glossary.html#snake_case
 [source_distribution]: glossary.html#source_distribution
 [sprint]: glossary.html#sprint
+[ssh]: glossary.html#ssh
 [ssh_daemon]: glossary.html#ssh_daemon
 [ssh_key]: glossary.html#ssh_key
 [ssh_protocol]: glossary.html#ssh_protocol
-[standard_input]: glossary.html#standard_input
-[standard_output]: glossary.html#standard_output
 [stderr]: glossary.html#stderr
 [stdin]: glossary.html#stdin
 [stdout]: glossary.html#stdout
@@ -311,8 +304,6 @@
 [sustainable_software]: glossary.html#sustainable_software
 [tab_completion]: glossary.html#tab_completion
 [tag]: glossary.html#tag
-[target]: glossary.html#target
-[target_make]: glossary.html#target_make
 [tdd]: glossary.html#tdd
 [ternary_expression]: glossary.html#ternary_expression
 [test_framework]: glossary.html#test_framework
@@ -327,11 +318,9 @@
 [triage]: glossary.html#triage
 [tuple]: glossary.html#tuple
 [unit_test]: glossary.html#unit_test
-[unix_shell]: glossary.html#unix_shell
 [up_vote]: glossary.html#up_vote
 [update_operator]: glossary.html#update_operator
 [validation]: glossary.html#validation
-[variable_make]: glossary.html#variable_make
 [verification]: glossary.html#verification
 [version_control_system]: glossary.html#version_control_system
 [virtual_environment]: glossary.html#virtual_environment
@@ -339,4 +328,3 @@
 [whitespace]: glossary.html#whitespace
 [wildcard]: glossary.html#wildcard
 [working_memory]: glossary.html#working_memory
-[wrap_code]: glossary.html#wrap_code
