@@ -7,7 +7,7 @@
 :   The absolute value of the difference between the observed and the correct value. Absolute error is usually less useful than [relative error](#relative_error). See also: [relative error](#relative_error)
 
 **absolute import**<a id="absolute_import"></a>
-:   FIXME
+:   In Python, an import that specifies the full location of the file to be imported.
 
 **absolute path**<a id="absolute_path"></a>
 :   A path that points to the same location in the filesystem regardless of where it's evaluated. An absolute path is the equivalent of latitude and longitude in geography. See also: [relative path](#relative_path)
@@ -19,7 +19,7 @@
 :   A software development methodology that emphasizes lots of small steps and continuous feedback instead of up-front planning and long-term scheduling. [Exploratory programming](#exploratory_programming) is often agile.
 
 **ally**<a id="ally"></a>
-:   FIXME
+:   Someone who actively promotes and supports inclusivity.
 
 **append mode**<a id="append_mode"></a>
 :   To add data to the end of an existing file instead of overwriting the previous contents of that file.  Overwriting is the default, so most programming languages require programs to be explicit about wanting to append instead.
@@ -28,7 +28,7 @@
 :   A [Boolean](#boolean) expression that must be true at a certain point in a program.  Assertions may be built into the language (e.g., Python's `assert` statement) or provided as functions (e.g., R's `stopifnot`). They are often used in testing, but are also put in [production code](#production_code) to check that it is behaving correctly.
 
 **authentic task**<a id="authentic_task"></a>
-:   FIXME
+:   A task which contains important elements of things that learners would do in real (non-classroom situations).
 
 **auto-completion**<a id="auto_completion"></a>
 :   A feature that allows the user to finish a word or code quickly through the use of hitting the TAB key to list possible words or code that the user can select from.
@@ -61,7 +61,7 @@
 :   The file(s) that a [build rule](#build_rule) will update if they are out of date compared to their [dependencies](#dependency). See also: [Makefile](#makefile)
 
 **byte code**<a id="byte_code"></a>
-:   FIXME
+:   A set of instructions designed to be executed efficiently by an [interpreter](#interpreter).
 
 **call stack**<a id="call_stack"></a>
 :   A data structure that stores information about the active subroutines executed. `cst()` is a useful function provided in the `lobstr` package to visualize a call stack.
@@ -73,25 +73,22 @@
 :   To accept responsibility for handling an error or other unexpected event. R prefers "handling a condition" to "catching an exception".
 
 **checklist**<a id="checklist"></a>
-:   FIXME
+:   A list of things to be checked or completed when doing a task.
 
 **command-line interface**<a id="cli"></a>
-:   FIXME
+:   A user interface that relies solely on text for commands and output, typically running in a [shell](#shell).
 
 **code coverage (in testing)**<a id="code_coverage"></a>
 :   How much of a library or program is executed when tests run. This is normally reported as a percentage of lines of code: for example, if 40 out of 50 lines in a file are run during testing, those tests have 80% code coverage.
 
 **code review**<a id="code_review"></a>
-:   FIXME
+:   To check a program or a change to a program by inspecting its source code.
 
 **cognitive load**<a id="cognitive_load"></a>
-:   FIXME
-
-**command history**<a id="command_history_unix"></a>
-:   FIXME
+:   The amount of working memory needed to accomplish a set of simultaneous tasks.
 
 **command-line argument**<a id="command_line_argument"></a>
-:   FIXME
+:   A filename or control flag given to a command-line program when it is run.
 
 **command line flag**<a id="command_line_flag"></a>
 :   See [command-line argument](#command_line_argument)
@@ -106,31 +103,31 @@
 :   Text written in a script that is not treated as code to be run, but rather as text that describes what the code is doing. These are usually short notes, often beginning with a `#` (in many programming languages).
 
 **commit**<a id="commit"></a>
-:   FIXME: define both noun and verb.
+:   As a verb, the act of saving a set of changes to a database or version control [repository](#repository). As a noun, the changes saved.
 
 **commit message**<a id="commit_message"></a>
-:   FIXME
+:   A comment attached to a [commit](#commit) that explains what was done and why.
 
 **commons**<a id="commons"></a>
-:   FIXME
+:   Something managed jointly by a community according to rules they themselves have evolved and adopted.
 
 **competent practitioner**<a id="competent_practitioner"></a>
 :   Someone who can do normal tasks with normal effort under normal circumstances. See also: [novice](#novice), [expert](#expert)
 
 **compiled language**<a id="compiled_language"></a>
-:   FIXME
+:   Originally, a language such as C or Fortran that is translated into machine instructions for execution. Languages such as Java are also compiled before execution, but into [byte code](#byte_code) instead of machine instructions, while languages like Python are compiled to byte code on the fly.
 
 **compiler**<a id="compiler"></a>
-:   FIXME
+:   An application that translates programs written in some languages into machine instructions or [byte code](#byte_code).
 
 **computational notebook**<a id="computational_notebook"></a>
-:   FIXME
+:   A combination of a document format that allows users to mix prose and code in a single file, and an application that executes that code interactively and in place. The Jupyter Notebook and R Markdown files are both examples of computational notebooks.
 
 **conditional expression**<a id="conditional_expression"></a>
-:   FIXME
+:   A [ternary expression](#ternary_expression) that serves the role of an if/else statement. For example, C and similar languages use the syntax `test : ifTrue ? ifFalse` to mean "choose the value `ifTrue` if `test` is true, or the value `ifFalse` if it is not".
 
 **confirmation bias**<a id="confirmation_bias"></a>
-:   FIXME
+:   The tendency to analyze information or make decisions in ways that reinforce existing beliefs.
 
 **continuation prompt**<a id="continuation_prompt"></a>
 :   FIXME
@@ -169,7 +166,7 @@
 :   FIXME
 
 **entry point**<a id="entry_point"></a>
-:   FIXME
+:   Where a program or function starts executing, or the first commands in a file that run.
 
 **exception**<a id="exception"></a>
 :   An object that stores information about an error or other unusual event in a program. One part of a program will create and [raise an exception](#raise_exception) to signal that something unexpected has happened; another part will [catch](#catch_exception) it.
@@ -181,16 +178,16 @@
 :   Someone who can diagnose and handle unusual situations, knows when the usual rules do not apply, and tends to recognize solutions rather than reasoning to them. See also: [competent practitioner](#competent_practitioner), [novice](#novice)
 
 **explicit relative import**<a id="explicit_relative_import"></a>
-:   FIXME
+:   In Python, an import that specifies a path relative to the current location.
 
 **exploratory programming**<a id="exploratory_programming"></a>
 :   FIXME
 
 **export a variable**<a id="export_variable"></a>
-:   FIXME
+:   To make a variable defined inside a [shell script](#shell_script) available outside that script.
 
 **external error**<a id="external_error"></a>
-:   FIXME
+:   An error caused by something outside a program, such as trying to open a file that doesn't exist.
 
 **false beginner**<a id="false_beginner"></a>
 :   Someone whose previous knowledge allows them to learn (or re-learn) something more quickly.  False beginners start at the same point as true beginners (i.e., a pre-test will show the same proficiency) but can move much more quickly.
@@ -217,13 +214,13 @@
 :   FIXME
 
 **flag variable**<a id="flag_variable"></a>
-:   FIXME
+:   A variable that changes state exactly once to show that something has happened that needs to be dealt with later.
 
 **folder**<a id="folder"></a>
 :   FIXME
 
 **forge**<a id="forge"></a>
-:   FIXME
+:   A website that integrates [version control](#version_control), [issue tracking](#issue_tracking_system), and other tools for software development.
 
 **full identifier (of commit)**<a id="full_identifier_git"></a>
 :   FIXME
@@ -252,11 +249,11 @@
 **Git push**<a id="git_push"></a>
 :   Uploads and synchronizes changes between a local [repository](#repository) and a [remote repository](#remote_repository).
 
-**git stage**<a id="git_stage"></a>
-:   FIXME
+**Git stage**<a id="git_stage"></a>
+:   To put changes in a "holding area" from which they can be [committed](#commit).
 
 **governance**<a id="governance"></a>
-:   FIXME
+:   The process by which an organization manages itself, or the rules used to do so.
 
 **GNU Public License**<a id="gpl"></a>
 :   A license that allows people to re-use software as long as they distribute the source of their changes.
@@ -271,10 +268,10 @@
 :   FIXME
 
 **impact/effort matrix**<a id="impact_effort_matrix"></a>
-:   FIXME
+:   A tool for prioritizing work in which every task is placed according to its importance and the effort required to complete it.
 
 **implicit relative import**<a id="implicit_relative_import"></a>
-:   FIXME
+:   In Python, an import that does not specify a path (and hence may be ambiguous).
 
 **impostor syndrome**<a id="impostor_syndrome"></a>
 :   FIXME
@@ -283,22 +280,22 @@
 :   FIXME
 
 **inspectability**<a id="inspectability"></a>
-:   FIXME
+:   The degree to which a third party can figure out what was done and why. Work can be [reproducible](#reproducibility) without being inspectable.
 
 **integration testing**<a id="integration_testing"></a>
 :   FIXME
 
 **internal error**<a id="internal_error"></a>
-:   FIXME
+:   An error caused by a fault in a program, such as trying to access elements beyond the end of an array.
 
 **interpeter**<a id="interpeter"></a>
 :   FIXME
 
 **interpreted language**<a id="interpreted_language"></a>
-:   FIXME
+:   A high-level language that is not executed directly by the computer, but instead is run by an [interpreter](#interpreter) that translates program instructions into machine commands on the fly.
 
 **interruption bingo**<a id="interruption_bingo"></a>
-:   FIXME
+:   A technique for managing interruptions in meetings. Everyone's name is placed on each row and each column of a grid; each time person A interrupts person B, a mark is added to the appropriate grid cell.
 
 **invariant**<a id="invariant"></a>
 :   FIXME
@@ -339,9 +336,6 @@
 **loop body**<a id="loop_body"></a>
 :   FIXME
 
-**loop**<a id="loop_unix"></a>
-:   FIXME
-
 **magic number**<a id="magic_number"></a>
 :   FIXME
 
@@ -349,9 +343,6 @@
 :   FIXME
 
 **Martha's Rules**<a id="marthas_rules"></a>
-:   FIXME
-
-**maximum likelihood extimation**<a id="max_like_est"></a>
 :   FIXME
 
 **mental model**<a id="mental_model"></a>
@@ -367,7 +358,7 @@
 :   FIXME
 
 **non-governmental organization**<a id="ngo"></a>
-:   FIXME
+:   An organization that is not affiliated with the government, but does the sorts of public service work that governments often do.
 
 **novice**<a id="novice"></a>
 :   Someone who has not yet built a usable mental model of a domain. See also: [competent practitioner](#competent_practitioner), [expert](#expert)
@@ -385,16 +376,16 @@
 :   FIXME
 
 **oppression**<a id="oppression"></a>
-:   FIXME
+:   A form of injustice in which one social group is marginalized or deprived while another is [privileged](#privilege).
 
 **optional argument**<a id="optional_argument"></a>
-:   FIXME
+:   An argument to a function or a command that may be omitted.
 
 **orthogonality**<a id="orthogonality"></a>
 :   FIXME
 
 **overlay configuration**<a id="overlay_configuration"></a>
-:   FIXME
+:   A technique for configuring programs in which several layers of configuration are used, each overriding settings in the ones before.
 
 **pager**<a id="pager"></a>
 :   FIXME
@@ -409,7 +400,7 @@
 :   FIXME
 
 **path coverage**<a id="path_coverage"></a>
-:   FIXME
+:   The fraction of possible execution paths in a piece of software that have been executed by tests. Software can have complete [code coverage](#code_coverage) without having complete path coverage.
 
 **pattern rule**<a id="pattern_rule"></a>
 :   FIXME
@@ -424,22 +415,22 @@
 :   FIXME
 
 **postcondition**<a id="postcondition"></a>
-:   FIXME
+:   Something that is guaranteed to be true after a piece of software finishes executing. See also: [invariant](#invariant), [precondition](#precondition)
 
 **pothole case**<a id="pothole_case"></a>
 :   FIXME
 
 **power law**<a id="power_law"></a>
-:   FIXME
+:   A mathematical relationship in which one quantity changes in proportion to a constant raised to the power of another quantity.
 
 **precondition**<a id="precondition"></a>
-:   FIXME
+:   Something that must be true before a piece of software runs in order for that software to run correctly. See also: [invariant](#invariant), [postcondition](#postcondition)
 
 **prerequisite**<a id="prerequisite"></a>
 :   FIXME
 
 **privilege**<a id="privilege"></a>
-:   FIXME
+:   An unearned advantage, typically as a result of belonging to a dominant social class or group.
 
 **procedural programming**<a id="procedural_programming"></a>
 :   FIXME
@@ -493,7 +484,7 @@
 :   FIXME
 
 **remote login server**<a id="remote_login_server"></a>
-:   FIXME
+:   A process that handles requests to log in to a computer from other computers. See also: [ssh daemon](#ssh_daemon)
 
 **remote repository**<a id="remote_repository"></a>
 :   FIXME
@@ -534,9 +525,6 @@
 **semantic versioning**<a id="semantic_versioning"></a>
 :   FIXME
 
-**sense vote**<a id="sense_vote"></a>
-:   FIXME
-
 **shebang**<a id="shebang"></a>
 :   FIXME
 
@@ -544,7 +532,7 @@
 :   FIXME
 
 **short circuit test**<a id="short_circuit_test"></a>
-:   FIXME
+:   A logical test that only evaluates as many arguments as it needs to. For example, if `A` is false, then most languages never evaluate `B` in the expression `A and B`.
 
 **short identifier (of commit)**<a id="short_identifier_git"></a>
 :   FIXME
@@ -565,13 +553,13 @@
 :   FIXME
 
 **ssh daemon**<a id="ssh_daemon"></a>
-:   FIXME
+:   A [remote login server](#remote_login_server) that handles [SSH](#ssh) connections.
 
 **SSH key**<a id="ssh_key"></a>
 :   FIXME
 
 **SSH protocol**<a id="ssh_protocol"></a>
-:   FIXME
+:   A formal standard for exchanging encrypted messages between computers and for managing [remote logins](#remote_login_server).
 
 **standard error**<a id="stderr"></a>
 :   FIXME
@@ -583,7 +571,7 @@
 :   FIXME
 
 **stop word**<a id="stop_word"></a>
-:   FIXME
+:   Common words that are filtered out of text before processing it, such as "the" and "an".
 
 **subcommand**<a id="subcommand"></a>
 :   FIXME
@@ -592,7 +580,7 @@
 :   FIXME
 
 **sustainable software**<a id="sustainable_software"></a>
-:   FIXME
+:   Software that its users can afford to keep up to date. Sustainability depends on the quality of the software, the skills of the potential maintainers, and how much the community is willing to invest.
 
 **tab completion**<a id="tab_completion"></a>
 :   FIXME
@@ -603,9 +591,6 @@
 **test-driven development**<a id="tdd"></a>
 :   FIXME
 
-**ternary expression**<a id="ternary_expression"></a>
-:   FIXME
-
 **test framework**<a id="test_framework"></a>
 :   See [test runner](#test_runner).
 
@@ -613,7 +598,7 @@
 :   FIXME
 
 **three stickies**<a id="three_stickies"></a>
-:   FIXME
+:   A technique for ensuring that everyone in a meeting gets a chance to speak. Everyone is given three sticky notes (or other tokens).  Each time someone speaks, it costs them a sticky; when they are out of stickies they cannot speak until everyone has used at least one, at which point everyone gets all of their stickies back.
 
 **ticket**<a id="ticket"></a>
 :   FIXME
@@ -649,10 +634,10 @@
 :   See [in-place operator](#in_place_operator).
 
 **validation**<a id="validation"></a>
-:   FIXME
+:   Checking that a piece of software does what its users want, i.e., "are we building the right thing"? See also: [verification](#verification)
 
 **verification**<a id="verification"></a>
-:   FIXME
+:   Checking that a piece of software works as intended, i.e., "did we build the thing right?" See also: [validation](#validation)
 
 **version control system**<a id="version_control_system"></a>
 :   A system for managing changes made to software during its development. See also: [Git](#git)
@@ -670,8 +655,5 @@
 :   FIXME
 
 **working memory**<a id="working_memory"></a>
-:   FIXME
-
-**wrap code**<a id="wrap_code"></a>
-:   FIXME
+:   The part of memory that briefly stores information that can be directly accessed by consciousness.
 
