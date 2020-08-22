@@ -176,7 +176,7 @@ fixme :
 ## glossary : rebuild the Markdown glossary file
 glossary :
 	${GLOSS}/utils/merge.py ${GLOSS}/glossary.yml ./glossary.yml \
-	| bin/glossarize.py glossary-slugs.txt
+	| bin/glossarize.py glossary-slugs.txt > glossary.md
 
 ## images : check that all images are defined and used.
 images :

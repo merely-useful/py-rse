@@ -17,13 +17,12 @@ def main(links_file, gloss_file, source_files):
 
     link_def = get_defined_links(links_file)
     used = read_all_files(source_files, find_uses, remove_code=False)
-    report('Links: undefined', used - link_def)
-    report('Links: unused', link_def - used)
+    report('Undefined Links', used - link_def)
+    sys.exit(0)
 
     gloss_crossref = get_gloss_crossref(links_file)
     gloss_def = get_defined_gloss(gloss_file)
-    report('Glossary: undefined', gloss_crossref - gloss_def)
-    report('Glossary: unused', gloss_def - gloss_crossref)
+    report('Undefined glossary', gloss_crossref - gloss_def)
 
 
 def get_defined_links(links_file):
