@@ -1,3 +1,5 @@
+# Glossary {#glossary}
+
 **abandonware**<a id="abandonware"></a>
 :   Software that is no longer being maintained.
 
