@@ -34,10 +34,8 @@
 [cdd]: glossary.html#cdd
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
 [checklist]: glossary.html#checklist
-[chocolatey]: https://chocolatey.org/
 [choose-license]: https://choosealicense.com/
 [cli]: glossary.html#cli
-[cmdline-provenance]: https://cmdline-provenance.readthedocs.io/en/latest/
 [code-review]: glossary.html#code-review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [cognitive-load]: glossary.html#cognitive-load
@@ -313,6 +311,7 @@
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [tuple]: glossary.html#tuple
 [twine]: https://twine.readthedocs.io/en/latest/
+[ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
 [udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [unit-test]: glossary.html#unit-test
@@ -333,6 +332,7 @@
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
 [working-memory]: glossary.html#working-memory
 [wrap-code]: glossary.html#wrap-code
+[xcode]: https://developer.apple.com/xcode/
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
 [zipf-project-page]: https://test.pypi.org/project/zipf/
