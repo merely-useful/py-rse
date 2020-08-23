@@ -10,7 +10,7 @@ If we try to keep track of this ourselves
 we will inevitably forget some crucial steps
 and it will be hard for other people to pick up our work.
 Instead,
-we should use a [build manager][build-manager]
+we should use a [build manager][build_manager]
 to keep track of what depends on what
 and run our analysis programs automatically.
 These tools were invented to help programmers compile complex software,
@@ -46,13 +46,13 @@ so that every time we add a new book to our data,
 we can create new plots and update our fits with a single command.
 Make works as follows:
 
-1.  Every time the [operating system][operating-system] creates, reads, or changes a file,
+1.  Every time the [operating system][operating_system] creates, reads, or changes a file,
     it updates a [timestamp][timestamp] on the file to show when the operation took place.
     Make can compare these timestamps
     to figure out whether files are newer or older than one another.
 
 2.  A user can describe which files depend on each other
-    by writing [rules][rule-make] in a [Makefile][makefile].
+    by writing [rules][build_rule] in a [Makefile][makefile].
     For example,
     one rule could say that `results/moby_dick.csv` depends on `data/moby_dick.txt`,
     while another could say that the plot `results/comparison.png`
@@ -66,7 +66,7 @@ Make works as follows:
 4.  When the user runs Make,
     the program checks all of the rules in the Makefile
     and runs the commands needed to update any that are out of date.
-    If there are [transitive dependencies][transitive-dependency]---i.e.,
+    If there are [transitive dependencies][transitive_dependency]---i.e.,
     if A depends on B and B depends on C---then Make will trace them through
     and run all of the commands it needs to in the right order.
 
@@ -95,13 +95,13 @@ results/moby_dick.csv : data/moby_dick.txt
 
 As in the shell and many other programming languages,
 `#` indicates that the first line is a comment.
-The second and third lines form a [rule][rule-make]:
-the [target][target-make] of the rule is `results/moby_dick.csv`,
-its single [prerequisite][prerequisite-make] is the file `data/moby_dick.txt`,
+The second and third lines form a [build rule][build_rule]:
+the [target][build_target] of the rule is `results/moby_dick.csv`,
+its single [prerequisite][prerequisite] is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
 
 The target and prerequisite tell Make what depends on what.
-The line below them describes the [recipe][recipe-make]
+The line below them describes the [recipe][build_recipe]
 that will update the target if it is out of date.
 The recipe consists of one or more shell commands,
 each of which *must* be prefixed by a single tab character.
@@ -213,7 +213,7 @@ make: `results/moby_dick.csv' is up to date.
 ```
 
 By default Make only attempts to update the first target it finds in the Makefile,
-which is called the [default target][default-target-make].
+which is called the [default target][default_target].
 In this case,
 the first target is `results/moby_dick.csv`,
 which is already up to date.
@@ -232,7 +232,7 @@ If we have to run `make` once for each result
 we're right back where we started.
 However,
 we can add a rule to our Makefile to update all of our results at once.
-We do this by creating a [phony target][phony-target-make]
+We do this by creating a [phony target][phony_target]
 that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
@@ -362,11 +362,11 @@ If we ever change the name of the program or move it to a different location,
 we will have to find and replace each of those occurrences.
 More importantly,
 this redundancy makes our Makefile harder to understand,
-just as scattering [magic numbers][magic-number] through programs
+just as scattering [magic numbers][magic_number] through programs
 makes them harder to understand.
 
 The solution is the same one we use in programs:
-define and use [variables][variable-make].
+define and use variables.
 Let's create names for the word-counting script and the command used to run it:
 
 ```make
@@ -404,7 +404,7 @@ to use `$(NAME)` and not `$NAME`.
 As in programs,
 variables don't just cut down on typing.
 They also tell readers that several things are always and exactly the same,
-which reduces [cognitive load][cognitive-load].
+which reduces [cognitive load][cognitive_load].
 
 ## Automatic Variables {#automate-autovar}
 
@@ -414,7 +414,7 @@ Instead,
 we can write a generic rule that does what we want for every one of our data files.
 
 To do this,
-we need to understand Make's [automatic variables][automatic-variable-make].
+we need to understand Make's [automatic variables][automatic_variable].
 The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 It lets us turn this:
@@ -475,7 +475,7 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 
 `$< > $@` is even harder to read than `$@` on its own,
 but we can now replace all the rules for generating results files
-with one [pattern rule][pattern-rule-make]
+with one [pattern rule][pattern_rule]
 using the [wildcard][wildcard] `%`,
 which matches zero or more characters in a filename.
 Whatever matches `%` in the target also matches in the prerequisites,
@@ -581,7 +581,7 @@ and Make won't realize that we want to generate it.
 
 What we really want is to generate the list of results files
 based on the list of books in the `data/` directory.
-We can create that list using Make's `wildcard` [function][function-make]:
+We can create that list using Make's `wildcard` function:
 
 ```make
 DATA=$(wildcard data/*.txt)
@@ -653,7 +653,7 @@ RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
 The first argument to `patsubst` is the pattern to look for,
 which in this case is a text file in the `data` directory.
-We use `%` to match the [stem][filename-stem] of the file's name,
+We use `%` to match the [stem][filename_stem] of the file's name,
 which is the part we want to keep.
 
 The second argument is the replacement we want.
