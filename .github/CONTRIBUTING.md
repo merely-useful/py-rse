@@ -123,7 +123,9 @@ Or via RStudio:
 
 1.  Each chapter ends with a list of key points.  These lists are kept in plain
     Markdown files in the `keypoints` folders so that they can be included in
-    both the chapters and the `keypoints.Rmd` appendices.
+    both the chapters and the `keypoints.Rmd` appendices. There are also lists
+    of learning objectives in the `objectives/` directory, but these are now
+    out of date.
 
 1.  The last line in each chapter includes the file `links.md`, which gives
     symbolic names to all the external links used in the book and to all
