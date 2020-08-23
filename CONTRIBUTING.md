@@ -52,7 +52,8 @@ underlines), links with `[linkname][tag]` rather than `[linkname](url)`, and
 fenced code blocks rather than indented blocks.
 
 There are more details for what we recommend for learners in
-[rse-style.Rmd](rse-style.Rmd). Discuss further in [issue #116](https://github.com/merely-useful/merely-useful.github.io/issues/116).
+[rse-style.Rmd](rse-style.Rmd), and some further discussion in
+[issue #116](https://github.com/merely-useful/merely-useful.github.io/issues/116).
 
 Please note that we use Simplified English rather than Traditional English,
 i.e., American rather than British spelling and grammar.
@@ -63,8 +64,8 @@ This book is written in [Bookdown](https://bookdown.org/).
 If you want to preview builds on your own computer, please:
 
 1.  Follow the instructions for installing Bookdown.
-2.  Run `make everything` to recompile everything.
-    -   Run `make` on its own to see a list of targets for rebuilding specific volumes as HTML or PDF.
+2.  Run `make` on its own to see a list of targets for rebuilding specific volumes as HTML or PDF.
+3.  Run `make py-rse` to recompile the Python RSE book.
 
 Please note that Bookdown works best with [TinyTeX](https://yihui.name/tinytex/).
 After installing it, you can run `make tex-packages` to install all the packages this book depends on.
