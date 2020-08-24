@@ -2,10 +2,11 @@ library(commonmark)
 library(tidyverse)
 library(xml2)
 library(glue)
+library(fs)
 
 # Extract chapter info ----------------------------------------------------
 
-chapter_files <- fs::dir_ls("py-rse/")
+chapter_files <- dir_ls("py-rse/")
 
 extract_h1_text <- function(.file) {
   .file %>%
@@ -30,7 +31,7 @@ chapter_df <- tibble(
 
 # Extract keypoint info ---------------------------------------------------
 
-keypoint_files <- fs::dir_ls(c("keypoints/py-rse/", "keypoints/shared-rse/"))
+keypoint_files <- dir_ls(c("keypoints/py-rse/", "keypoints/shared-rse/"))
 
 keypoint_df <- tibble(
   id = keypoint_files %>%
@@ -39,6 +40,16 @@ keypoint_df <- tibble(
   keypoint_files = keypoint_files
 )
 
+# Extract objectives info -------------------------------------------------
+
+objectives_files <- dir_ls(c("objectives/py-rse/", "objectives/shared-rse/"))
+
+objectives_df <- tibble(
+  id = objectives_files %>%
+    str_remove("^.*\\/") %>%
+    str_remove("\\.md$"),
+  objectives_files = objectives_files
+)
 
 # Get chapter order -------------------------------------------------------
 
@@ -56,15 +67,20 @@ order_df <- tibble(
 # Combine, prepare, and paste ---------------------------------------------
 
 # To look it over
-# full_join(chapter_df, keypoint_df, by = "id") %>%
-#   full_join(order_df, by = "id") %>%
-#   View()
+reduce(list(chapter_df, keypoint_df, objectives_df, order_df),
+       full_join,
+       by = "id") %>%
+  View()
 
-keypoint_list_to_paste <- full_join(chapter_df, keypoint_df, by = "id") %>%
-  full_join(order_df, by = "id") %>%
+combined_df <-
+  reduce(list(chapter_df, keypoint_df, objectives_df, order_df),
+         full_join,
+         by = "id") %>%
   arrange(ordering) %>%
   # To get rid of unnecessary info
-  na.omit() %>%
+  na.omit()
+
+keypoint_list_to_paste <- combined_df %>%
   glue_data("
 
   ## {chapter_name}
@@ -77,3 +93,16 @@ keypoint_list_to_paste <- full_join(chapter_df, keypoint_df, by = "id") %>%
 
 # Send to clipboard to paste
 clipr::write_clip(keypoint_list_to_paste)
+
+objective_list_to_paste <- combined_df %>%
+  glue_data("
+
+  ## {chapter_name}
+
+  ```{{r, child='{objectives_files}'}}
+  ```
+
+  ") %>%
+  glue_collapse()
+
+clipr::write_clip(objective_list_to_paste)
