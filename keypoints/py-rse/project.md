@@ -1,7 +1,0 @@
--   Put source code for compilation in `./src/`.
--   Put runnable code in `./bin/`.
--   Put raw data in `./data/`.
--   Put results in `./results/`.
--   Put documentation and manuscripts in `./doc/`.
--   Use file and directory names that are easy to match and include dates for the level under `./data/` and `./results/`.
--   Create README, LICENSE, CONDUCT, and CITATION files in the root directory of the project.
