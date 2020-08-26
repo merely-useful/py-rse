@@ -1,3 +1,6 @@
+[anaconda]: https://www.anaconda.com/
+[anaconda-cloud]: https://anaconda.org/
+[anaconda-docs]: https://docs.anaconda.com/anaconda/
 [argparse]: https://docs.python.org/3/library/argparse.html
 [arxiv]: https://arxiv.org/
 [authorea]: https://authorea.com/
@@ -15,6 +18,8 @@
 [code-review]: glossary.html#code-review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
+[conda-forge]: https://conda-forge.org/
+[conda-forge-instructions]: https://conda-forge.org/#add_recipe
 [conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
 [covenant]: https://www.contributor-covenant.org
 [creative-commons]: https://creativecommons.org/
@@ -35,6 +40,8 @@
 [git-ssh-github]: https://help.github.com/articles/generating-ssh-keys
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
 [github-gitignore]: https://github.com/github/gitignore
+[github-release]:https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository
+[github-release-link]: https://docs.github.com/en/github/administering-a-repository/linking-to-releases
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [github]: https://github.com
 [gitkraken]: https://www.gitkraken.com/
@@ -53,6 +60,7 @@
 [make]: https://www.gnu.org/software/make/
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [merely-useful]: https://github.com/merely-useful/merely-useful.github.io/
+[miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
 [openrefine]: https://openrefine.org/
 [orcid]: https://orcid.org/
@@ -64,6 +72,7 @@
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pip]: https://pypi.org/project/pip/
+[pipenv]: https://docs.pipenv.org/
 [project-gutenberg]: https://www.gutenberg.org/
 [pypi-user-guide]: https://packaging.python.org/guides/using-testpypi/
 [pypi]: https://pypi.org/
@@ -98,7 +107,9 @@
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
 [vanderplas-licensing]: https://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
+[virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
+[windspharm]: https://ajdawson.github.io/windspharm/latest/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
 [working-memory]: glossary.html#working-memory
 [wrap-code]: glossary.html#wrap-code

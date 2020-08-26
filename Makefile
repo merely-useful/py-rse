@@ -26,6 +26,7 @@ PY_RSE_FILES=\
   chapters/objectives.Rmd \
   chapters/keypoints.Rmd \
   chapters/solutions.Rmd \
+  chapters/anaconda.Rmd \
   chapters/tree.Rmd \
   chapters/yaml.Rmd \
   chapters/ssh.Rmd
@@ -41,8 +42,6 @@ COMMON_FILES=\
   links.md \
   book.bib \
   preamble.tex
-
-ALL_FILES=${PY_RSE_FILES} ${COMMON_FILES}
 
 #-------------------------------------------------------------------------------
 
@@ -135,7 +134,6 @@ settings :
 	@echo ALL_PDF: ${ALL_PDF}
 	@echo PY_RSE_FILES: ${PY_RSE_FILES}
 	@echo COMMON_FILES: ${COMMON_FILES}
-	@echo ALL_FILES: ${ALL_FILES}
 
 ## tex-packages : install required LaTeX packages.
 tex-packages :
