@@ -31,7 +31,7 @@ chapter_df <- tibble(
 
 # Extract keypoint info ---------------------------------------------------
 
-keypoint_files <- dir_ls(c("keypoints/py-rse/", "keypoints/shared-rse/"))
+keypoint_files <- dir_ls("keypoints")
 
 keypoint_df <- tibble(
   id = keypoint_files %>%
@@ -42,7 +42,7 @@ keypoint_df <- tibble(
 
 # Extract objectives info -------------------------------------------------
 
-objectives_files <- dir_ls(c("objectives/py-rse/", "objectives/shared-rse/"))
+objectives_files <- dir_ls("objectives")
 
 objectives_df <- tibble(
   id = objectives_files %>%
@@ -53,7 +53,7 @@ objectives_df <- tibble(
 
 # Get chapter order -------------------------------------------------------
 
-chapter_order <- yaml::read_yaml("_py-rse.yml")$rmd_files %>%
+chapter_order <- yaml::read_yaml("_bookdown.yml")$rmd_files %>%
   str_match("py-rse\\/.*") %>%
   na.omit()
 
