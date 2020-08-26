@@ -20,6 +20,7 @@ After the previous chapters,
 our Zipf's Law project should have the following files and directories:
 
 ```text
+zipf/
 ├── bin
 │   └── book_summary.sh
 └── data
@@ -337,13 +338,10 @@ Python formats and displays all of the docstrings for everything in the file. We
 Now that we have a template for command-line Python programs,
 we can use it to check Zipf's Law for our collection of classic English novels.
 We start by moving the template into the directory
-where we store various programs and shell scripts we have created
-so that we can refer to it later for other projects:
-
-FIXME: where do we introduce `~/bin`?
+where we store our runnable programs (Section \@ref(intro-organize)):
 
 ```shell
-$ mv script_template.py ~/bin
+$ mv script_template.py ~/zipf/bin
 ```
 
 Next,
@@ -592,7 +590,7 @@ that,41
 ## Positional and Optional Arguments {#py-rse-py-scripting-positional-optional}
 
 We have met two kinds of command-line arguments while writing `countwords.py`.
-[Optional arguments][optional-argument] are defined using a leading `-` or `--` (or both),
+[Optional arguments][optional_argument] are defined using a leading `-` or `--` (or both),
 which means that all three of the following definitions are valid:
 
 ```python
@@ -601,11 +599,11 @@ parser.add_argument('--num', type=int, help='Limit output')
 parser.add_argument('-n', '--num', type=int, help='Limit output')
 ```
 
-The convention is for `-` to precede a [short][short-option] (single letter) option
-and `--` a [long][long-option] (multi-letter) option.
+The convention is for `-` to precede a [short][short_option] (single letter) option
+and `--` a [long][long_option] (multi-letter) option.
 The user can provide optional arguments at the command line in any order they like.
 
-[Positional arguments][positional-argument] have no leading dashes and are not optional:
+[Positional arguments][positional_argument] have no leading dashes and are not optional:
 the user must provide them at the command line
 in the order in which they are specified to `add_argument`
 (unless `nargs='?'` is provided to say that the value is optional).
@@ -840,8 +838,8 @@ if __name__ == '__main__':
 ```
 
 Any Python source file can be imported by any other.
-This is why Python files should be named using [`snake_case`][snake-case]
-instead of [`kebab-case`][kebab-case]:
+This is why Python files should be named using [`snake_case`][snake_case]
+instead of [`kebab-case`][kebab_case]:
 an expression like `import some-thing` isn't allowed
 because `some-thing` isn't a legal variable name.
 When a file is imported,
@@ -853,7 +851,7 @@ and `thing` is the name of the item.
 > **The `__pycache__` Directory**
 >
 > When we import a file,
-> Python translates the source code into instructions called [byte codes][byte-code]
+> Python translates the source code into instructions called [byte codes][byte_code]
 > that it can execute efficiently.
 > Since the byte codes only change when the source changes,
 > Python saves the byte code in a separate file,
@@ -887,8 +885,10 @@ input_csv = 'results/jane_eyre.csv'
 df = pd.read_csv(input_csv, header=None, names=('word', 'word_frequency'))
 df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
 df['inverse_rank'] = 1 / df['rank']
-df.plot.scatter(x='word_frequency', y='inverse_rank',
-                figsize=[12, 6], grid=True)
+scatplot = df.plot.scatter(x='word_frequency', y='inverse_rank',
+                           figsize=[12, 6], grid=True)
+fig = scatplot.get_figure()
+fig.savefig('results/jane_eyre.png')
 ```
 
 ```{r scripting-repl, echo=FALSE, fig.cap="Word frequency distribution for the book Jane Eyre"}
@@ -935,47 +935,10 @@ $ python -c "print(2+3)"
 
 When and why is this useful?
 
-### Better word identification {#scripting-ex-identify-words}
-
-Look at the output of the word-counting program
-and identify as many mistaken "words" as you can,
-then modify the program so that it handles these correctly.
-
-### Collating while counting {#scripting-ex-collate-count}
-
-1.  Modify the word-counting program so that it can handle multiple input files,
-    i.e.,
-    so that it collates word counts from multiple files in a single pass.
-2.  How could we achieve the same effect using the program we have now?
-    (Hint: think about reading from standard input.)
-
-### Optional output file {#scripting-ex-optional-outfile}
-
-We decided in Section \@ref(scripting-pipeline)
-that our program would always print to standard output,
-and that we would redirect to a file when we needed to save our results.
-Modify the program so that it takes an optional `-o` or `--output` flag
-with a filename
-and writes to that file,
-but still writes to standard output if no file is specified.
-
-### Multiple files and standard input {#scripting-ex-multiple-files}
-
-We have used `nargs='*'` to get `collate.py` to read from zero or more files:
-
-```python
-parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-```
-
-However,
-if no filenames are specified,
-it does *not* read from standard input.
-Modify the argument handling and the `main` function so that it can do this.
-
 ### A better plotting program {#scripting-ex-better-plotting}
 
 Using `script_template.py` as a guide,
-take the plotting code from the final section
+take the plotting code from Section \@ref(scripting-plotting)
 and write a new Python program called `plotcounts.py`.
 The script should:
 
@@ -992,11 +955,12 @@ When you are done,
 generate a plot of the word counts for *Jane Eyre*:
 
 ```shell
-$ python plotcounts.py results/jane_eyre.csv --outfile results/jane_eyre.png
+$ python bin/plotcounts.py results/jane_eyre.csv --outfile results/jane_eyre.png
 ```
 
 Note:
 the solution to this exercise is used in following chapters.
+
 
 ## Key Points {#scripting-keypoints}
 

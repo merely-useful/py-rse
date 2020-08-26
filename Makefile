@@ -4,6 +4,7 @@ INDEX_HTML=_book/index.html
 ALL_HTML=_book/py-novice/index.html _book/r-novice/index.html _book/py-rse/index.html
 ALL_PDF=_book/py-novice/py-novice.pdf _book/r-novice/r-novice.pdf _book/py-rse/py-rse.pdf
 EXTRA=climate-data data src zipf
+GLOSS=${HOME}/glosario
 
 R_NOVICE_FILES=\
   _r-novice.yml \
@@ -52,6 +53,8 @@ PY_RSE_FILES=\
   py-rse/objectives.Rmd \
   py-rse/keypoints.Rmd \
   py-rse/solutions.Rmd \
+  py-rse/anaconda.Rmd \
+  py-rse/tree.Rmd \
   py-rse/yaml.Rmd \
   py-rse/ssh.Rmd
 
@@ -61,7 +64,7 @@ COMMON_FILES=\
   LICENSE.md \
   CONDUCT.md \
   CONTRIBUTING.md \
-  gloss.md \
+  glossary.md \
   references.Rmd \
   links.md \
   book.bib \
@@ -172,13 +175,21 @@ crossrefs :
 fixme :
 	@fgrep FIXME ${PY_RSE_FILES} ${COMMON_FILES}
 
+## glossary : rebuild the Markdown glossary file
+glossary :
+	echo '# Glossary {#glossary}' > glossary.md
+	echo '' >> glossary.md
+	${GLOSS}/utils/merge.py ${GLOSS}/glossary.yml ./glossary.yml \
+	| bin/glossarize.py glossary-slugs.txt \
+	>> glossary.md
+
 ## images : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${PY_RSE_FILES} ${COMMON_FILES}
 
 ## links : check that links and glossary entries are defined and used.
 links :
-	@bin/links.py ./links.md ./gloss.md ${PY_RSE_FILES} ${COMMON_FILES}
+	@bin/links.py ./links.md ./glossary.md ${PY_RSE_FILES} ${COMMON_FILES}
 
 ## exercises : check that exercises have solutions and solutions have exercises.
 exercises :

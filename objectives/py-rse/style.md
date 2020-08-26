@@ -1,6 +1,0 @@
--   Explain why consistent formatting of code is important.
--   Describe standard Python formatting rules and identify cases where code does or doesn't conform to them.
--   Write functions whose parameters have default values.
--   Explain which parameters should have default values and how to select good ones.
--   Write functions that can handle variable numbers of arguments.
--   Explain what problems can most easily be solved by creating functions with variable numbers of arguments.
