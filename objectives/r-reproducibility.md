@@ -1,4 +1,0 @@
--   Use a standard file and folder structure when starting a new project for better project management and organization.
--   Use RStudio to manage projects in a consistent and structured way.
--   Structure data analysis projects to be more reproducible. 
--   Create reproducible documents interwoven with R code that can be easily updated by changing the code or data.

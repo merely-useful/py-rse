@@ -14,7 +14,6 @@
 [buffer]: glossary.html#buffer
 [checkr]: https://cran.r-project.org/web/packages/checkr/index.html
 [chunk-label]: https://yihui.name/knitr/options/#chunk-options
-[climate-api]: https://data.worldbank.org/developers/climate-data-api
 [code-coverage]: glossary.html#code-coverage
 [cookiecutter]: https://drivendata.github.io/cookiecutter-data-science/
 [corpus]: glossary.html#corpus
@@ -69,7 +68,6 @@
 [noller-a-lot-happens]: http://jessenoller.com/blog/2015/9/27/a-lot-happens
 [noller-sequel]: http://jessenoller.com/blog/2015/10/31/community-boundaries
 [numpy-docstring]: https://numpydoc.readthedocs.io/en/latest/format.html
-[nyc-opendata-dogs]: https://data.cityofnewyork.us/Health/NYC-Dog-Licensing-Dataset/nu7n-tubp
 [object]: glossary.html#object
 [operational-test]: glossary.html#operational-test
 [overloading]: glossary.html#overloading
