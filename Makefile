@@ -54,6 +54,7 @@ PY_RSE_FILES=\
   py-rse/keypoints.Rmd \
   py-rse/solutions.Rmd \
   py-rse/anaconda.Rmd \
+  py-rse/tree.Rmd \
   py-rse/yaml.Rmd \
   py-rse/ssh.Rmd
 

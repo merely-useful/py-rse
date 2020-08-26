@@ -12,6 +12,7 @@ We'll be continuing to work in the `zipf` project,
 which after the previous chapter should contain the following files:
 
 ```text
+zipf/
 └── data
     ├── README.md
     ├── dracula.txt
@@ -40,10 +41,13 @@ For historical reasons
 a file full of shell commands is usually called a [shell script][shell_script],
 but it is really just another kind of program.
 
-Let's start by ensuring our working directory is `zipf`:
+Let's start by creating a new directory for our runnable programs called `bin/`,
+consistent with the project structure described in Section \@ref(intro-organize).
 
 ```shell
 $ cd ~/zipf
+$ mkdir bin
+$ cd bin
 ```
 
 Edit a new file called `book_summary.sh` to hold our shell script:
@@ -55,7 +59,7 @@ $ nano book_summary.sh
 and insert this line:
 
 ```text
-head -n 17 data/moby_dick.txt | tail -n 8
+head -n 17 ../data/moby_dick.txt | tail -n 8
 ```
 
 Note that we do *not* put the `$` prompt at the front of the line.
@@ -72,7 +76,7 @@ $ ls
 ```
 
 ```text
-book_summary.sh	  data/
+book_summary.sh
 ```
 
 We can check the contents of the file using `cat book_summary.sh`.
@@ -119,7 +123,7 @@ $ nano book_summary.sh
 and add a search for the word "Author":
 
 ```text
-head -n 17 data/moby_dick.txt | tail -n 8 | grep Author
+head -n 17 ../data/moby_dick.txt | tail -n 8 | grep Author
 ```
 
 Sure enough,
@@ -154,7 +158,7 @@ $ bash book_summary.sh | wc -w
 Getting the name of the author for only one of the books isn't all that useful.
 What we really want is a way to get the name of the author from any of our files.
 Let's edit `book_summary.sh` again
-and replace `data/moby_dick.txt` with a special variable `$1`.
+and replace `../data/moby_dick.txt` with a special variable `$1`.
 Once our change is made,
 `book_summary.sh` should contain:
 
@@ -167,15 +171,15 @@ Inside a shell script,
 If we now run our script like this:
 
 ```shell
-$ bash book_summary.sh data/moby_dick.txt
+$ bash book_summary.sh ../data/moby_dick.txt
 ```
 
-then `$1` is assigned `data/moby_dick.txt`
+then `$1` is assigned `../data/moby_dick.txt`
 and get exactly the same output as before.
 If we give the script a different filename:
 
 ```shell
-$  bash book_summary.sh data/frankenstein.txt
+$  bash book_summary.sh ../data/frankenstein.txt
 ```
 
 we get the name of the author of that book instead:
@@ -223,7 +227,7 @@ which is assigned the value of the second command-line argument we give the scri
 Let's check that it works by asking for *Frankenstein*'s release date:
 
 ```shell
-$ bash book_summary.sh data/frankenstein.txt Release
+$ bash book_summary.sh ../data/frankenstein.txt Release
 ```
 
 ```text
@@ -233,7 +237,29 @@ Release Date: June 17, 2008 [EBook #84]
 ## Turning Interactive Work into a Script {#bash-advanced-capture}
 
 Suppose we have just run a series of commands that did something useful,
-such as summarizing all books in a given directory.
+such as summarizing all books in a given directory:
+
+```shell
+$ for x in ../data/*.txt
+> do 
+>   echo $x
+>   bash book_summary.sh $x Author 
+> done > authors.txt
+$ for x in ../data/*.txt
+> do 
+>   echo $x
+>   bash book_summary.sh $x Release 
+> done > releases.txt
+$ ls
+```
+```text
+authors.txt        book_summary.sh      releases.txt
+```
+```shell
+$ mkdir ../results
+$ mv authors.txt releases.txt ../results
+```
+
 Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
 we can use `history` and redirection to save recent commands to a file.
@@ -246,11 +272,11 @@ $ cat summarize_all_books.sh
 ```
 
 ```text
-297 for x in data/*.txt; do echo $x; bash book_summary.sh $x Author; done > authors.txt
-298 for x in data/*.txt; do echo $x; bash book_summary.sh $x Release Data; done > releases.txt
+297 for x in ../data/*.txt; do echo $x; bash book_summary.sh $x Author; done > authors.txt
+298 for x in ../data/*.txt; do echo $x; bash book_summary.sh $x Release; done > releases.txt
 299 ls
-300 mkdir summaries
-301 mv authors.txt releases.txt summaries
+300 mkdir ../results
+301 mv authors.txt releases.txt ../results
 302 history 6 > summarize_all_books.sh
 ```
 
@@ -280,6 +306,7 @@ Since there are likely to be hundreds of matches,
 we will pipe `grep`'s output to `head` to show only the first few:
 
 ```shell
+$ cd ~/zipf
 $ grep Sherlock data/sherlock_holmes.txt | head -n 5
 ```
 
@@ -526,7 +553,10 @@ we will use the entire contents of our `zipf` directory,
 including files we created earlier in this chapter:
 
 ```text
-├── book_summary.sh
+zipf/
+├── bin
+│   ├── book_summary.sh
+│   ├── summarize_all_books.sh
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
@@ -536,10 +566,9 @@ including files we created earlier in this chapter:
 │   ├── sense_and_sensibility.txt
 │   ├── sherlock_holmes.txt
 │   └── time_machine.txt
-├── summaries
-│   ├── authors.txt
-│   └── releases.txt
-└── summarize_all_books.sh
+└── results
+    ├── authors.txt
+    └── releases.txt 
 ```
 
 For our first command,
@@ -549,16 +578,18 @@ As always,
 which is where we want our search to start.
 
 ```shell
+$ cd ~/zipf
 $ find .
 ```
 
 ```text
 .
-./summarize_all_books.sh
-./book_summary.sh
-./summaries
-./summaries/releases.txt
-./summaries/authors.txt
+./bin
+./bin/summarize_all_books.sh
+./bin/book_summary.sh
+./results
+./results/releases.txt
+./results/authors.txt
 ./data
 ./data/moby_dick.txt
 ./data/sense_and_sensibility.txt
@@ -579,7 +610,8 @@ $ find . -type d
 
 ```text
 .
-./summaries
+./bin
+./results
 ./data
 ```
 
@@ -591,10 +623,10 @@ $ find . -type f
 ```
 
 ```text
-./summarize_all_books.sh
-./book_summary.sh
-./summaries/releases.txt
-./summaries/authors.txt
+./bin/summarize_all_books.sh
+./bin/book_summary.sh
+./results/releases.txt
+./results/authors.txt
 ./data/moby_dick.txt
 ./data/sense_and_sensibility.txt
 ./data/sherlock_holmes.txt
@@ -612,8 +644,8 @@ $ find . -name "*.txt"
 ```
 
 ```text
-./summaries/releases.txt
-./summaries/authors.txt
+./results/releases.txt
+./results/authors.txt
 ./data/moby_dick.txt
 ./data/sense_and_sensibility.txt
 ./data/sherlock_holmes.txt
@@ -654,8 +686,8 @@ $ wc -l $(find . -name "*.txt")
 ```
 
 ```text
-14 ./summaries/releases.txt
-14 ./summaries/authors.txt
+14 ./results/releases.txt
+14 ./results/authors.txt
 22331 ./data/moby_dick.txt
 13028 ./data/sense_and_sensibility.txt
 13053 ./data/sherlock_holmes.txt
@@ -673,7 +705,7 @@ Since the output of `find` is the paths to our text files,
 the shell constructs the command:
 
 ```shell
-$ wc -l ./summaries/releases.txt ./summaries/authors.txt ... ./data/jane_eyre.txt
+$ wc -l ./results/releases.txt ./results/authors.txt ... ./data/jane_eyre.txt
 ```
 
 (We are using `...` in place of six files' names in order to fit things neatly on the printed page.)
@@ -692,13 +724,13 @@ $ grep "Author:" $(find . -name "*.txt")
 ```
 
 ```text
-./summaries/authors.txt:Author: Bram Stoker
-./summaries/authors.txt:Author: Mary Wollstonecraft (Godwin) Shelley
-./summaries/authors.txt:Author: Charlotte Bronte
-./summaries/authors.txt:Author: Herman Melville
-./summaries/authors.txt:Author: Jane Austen
-./summaries/authors.txt:Author: Arthur Conan Doyle
-./summaries/authors.txt:Author: H. G. Wells
+./results/authors.txt:Author: Bram Stoker
+./results/authors.txt:Author: Mary Wollstonecraft (Godwin) Shelley
+./results/authors.txt:Author: Charlotte Bronte
+./results/authors.txt:Author: Herman Melville
+./results/authors.txt:Author: Jane Austen
+./results/authors.txt:Author: Arthur Conan Doyle
+./results/authors.txt:Author: H. G. Wells
 ./data/moby_dick.txt:Author: Herman Melville
 ./data/sense_and_sensibility.txt:Author: Jane Austen
 ./data/sherlock_holmes.txt:Author: Arthur Conan Doyle
@@ -719,8 +751,8 @@ $ find . -name "*.bak"
 ```
 
 ```text
-./summaries/releases.txt.bak
-./summaries/authors.txt.bak
+./results/releases.txt.bak
+./results/authors.txt.bak
 ./data/frankenstein.txt.bak
 ./data/sense_and_sensibility.txt.bak
 ./data/dracula.txt.bak
@@ -1001,13 +1033,13 @@ We can clean them up with the following commands;
 briefly explain what each line does.
 
 ```shell
+$ cd ~/zipf
 $ for file in $(find . -name "*.bak")
 > do
 >   rm $file
 > done
-$ mkdir bin
-$ mv book_summary.sh bin
-$ rm -r summaries
+$ rm bin/summarize_all_books.sh
+$ rm -r results
 ```
 
 ### Variables in shell scripts {#bash-advanced-ex-script-variables}

@@ -11,7 +11,10 @@ and what we should do with them.
 The Zipf's Law project should now include:
 
 ```text
+zipf/
+├── .gitignore
 ├── CONDUCT.md
+├── CONTRIBUTING.md
 ├── LICENSE.md
 ├── Makefile
 ├── README.md
@@ -21,6 +24,7 @@ The Zipf's Law project should now include:
 │   ├── countwords.py
 │   ├── plotcounts.py
 │   ├── plotparams.yml
+│   ├── script_template.py
 │   └── utilities.py
 ├── data
 │   ├── README.md
@@ -434,15 +438,15 @@ Most people write error messages directly in their code:
 
 ```python
 if file_name[-4:] != '.csv':
-    raise OSError(f'{file_name} must end in `.csv`.')
+    raise OSError('The filename must end in `.csv`')
 ```
 
 A better approach is to put all the error messages in a dictionary:
 
 ```python
 ERROR_MESSAGES = {
-    'cannot_read_file' : '{file_name} must end in `.csv`.',
-    'config_corrupted' : 'Configuration file {config_name} corrupted',
+    'cannot_read_file' : 'The filename must end in `.csv`',
+    'config_corrupted' : f'Configuration file {config_name} corrupted',
     # ...more error messages...
 }
 ```
@@ -460,13 +464,13 @@ It also makes it much easier to give messages in the user's preferred language:
 ```python
 ERROR_MESSAGES = {
     'en' : {
-        'cannot_read_file' : '{file_name} must end in `.csv`.',
+        'cannot_read_file' : 'The filename must end in `.csv`',
         'config_corrupted' : 'Configuration file {config_name} corrupted',
         # ...more error messages in English...
     },
     'fr' : {
-        'cannot_read_file' : '{file_name} doit se terminer par `.csv`',
-        'config_corrupted' : 'Fichier de configuration {config_name} corrompu',
+        'cannot_read_file' : 'Le nom du fichier doit se terminer par `.csv`',
+        'config_corrupted' : f'Fichier de configuration {config_name} corrompu',
         # ...more error messages in French...
     }
     # ...other languages...
@@ -498,7 +502,7 @@ which is helpful when our data analysis pipeline has several stages
 and we are trying to figure out which one contains a bug.
 
 To understand how logging frameworks work,
-suppose we want to turn `print` statements in our program on or off
+suppose we want to turn `print` statements in our `collate.py` program on or off
 without editing the program's source code.
 We would probably wind up with code like this:
 
@@ -509,7 +513,7 @@ for file_name in args.infiles:
     if LOG_LEVEL >= 1:
         print(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV file.')
+        raise OSError('The filename must end in `.csv`')
     with open(file_name, 'r') as reader:
         if LOG_LEVEL >= 1:
             print(f'Computing word counts...')
@@ -569,7 +573,7 @@ logging.info('Processing files...')
 for file_name in args.infiles:
     logging.debug(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV file.')
+        raise OSError('The filename must end in `.csv`')
     with open(file_name, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
@@ -681,11 +685,103 @@ can save us and our users a lot of needless work.
 
 ## Exercises {#errors-exercises}
 
-### Checking CSV files {#errors-ex-check-csv}
+In this chapter a number of edits to `collate.py` were suggested,
+such that the script now reads as follows:
 
-Modify `collate.py` so that it checks that its input files are formatted correctly
-and raises an exception if it does not.
-Can you use any functions from the `csv` library to help with this?
+```python
+"""Combine multiple word count CSV-files into a single cumulative count."""
+import csv
+import argparse
+from collections import Counter
+import logging
+import utilities
+
+
+def update_counts(reader, word_counts):
+    """Update word counts with data from another reader/file."""
+    for word, count in csv.reader(reader):
+        word_counts[word] += int(count)
+
+def main(args):
+    """Run the command line program."""
+    word_counts = Counter()
+    logging.info('Processing files...')
+    for file_name in args.infiles:
+        logging.debug(f'Reading in {file_name}...')
+        if file_name[-4:] != '.csv':
+            raise OSError('The filename must end in `.csv`')
+        with open(file_name, 'r') as reader:
+            logging.debug('Computing word counts...')
+            update_counts(reader, word_counts)
+    utilities.collection_to_csv(word_counts, num=args.num)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
+    args = parser.parse_args()
+    main(args)
+```
+
+Some of the following exercises will ask you to make further edits to `collate.py`.
+
+### Set the logging level {#errors-ex-set-level}
+
+Define a new command line flag for `collate.py` called `--verbose` (or `-v`)
+that changes the logging level from `WARNING` (the default)
+to `DEBUG` (the noisiest level).
+
+HINT: The following command changes the logging level to DEBUG.
+```python
+logging.basicConfig(level=logging.DEBUG)
+```
+
+Once finished,
+running `collate.py` with and without the `-v` flag should produce the following output:
+
+```bash
+$ python bin/collate.py results/dracula.csv results/moby_dick.csv -n 5
+```
+```text
+the,22559
+and,12306
+of,10446
+to,9192
+a,7629
+```
+
+```bash
+$ python bin/collate.py results/dracula.csv results/moby_dick.csv -n 5 -v
+```
+```text
+INFO:root:Processing files...
+DEBUG:root:Reading in results/dracula.csv...
+DEBUG:root:Computing word counts...
+DEBUG:root:Reading in results/moby_dick.csv...
+DEBUG:root:Computing word counts...
+the,22559
+and,12306
+of,10446
+to,9192
+a,7629
+```
+
+### Send the logging output to file {#errors-ex-logging-output}
+
+In Exercise \@ref(errors-ex-set-level),
+logging information is printed to the screen when the verbose flag is activated.
+This is problematic if we want to re-direct the output from `collate.py` to a CSV file,
+because the logging information will appear in the CSV file
+as well as the words and their counts.
+
+1. Edit `collate.py` so that the logging information is sent to a log file
+called `collate.log` instead.
+(HINT: `logging.basicConfig` has an argument called `filename`.)
+
+2. Create a new command line option '-l' or '--logfile' so that the user
+can specify a different name for the log file if they don't like
+the default name of `collate.py`.  
 
 ### Handling exceptions {#errors-ex-exceptions}
 
@@ -715,10 +811,7 @@ for formatting error messages that come from a lookup table.
     (Use Google Translate if necessary.)
 3.  Add a command-line flag to allow users to select the language they want to use.
 
-### Set the logging level {#errors-ex-set-level}
 
-Modify the way command-line arguments are handled by `collate.py`
-so that users can adjust the logging level from the command line.
 
 ## Key Points {#errors-keypoints}
 

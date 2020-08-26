@@ -12,9 +12,10 @@
 [carpentries]: https://carpentries.org/
 [caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
-[chocolatey]: https://chocolatey.org/
+[checklist]: glossary.html#checklist
 [choose-license]: https://choosealicense.com/
-[cmdline-provenance]: https://cmdline-provenance.readthedocs.io/en/latest/
+[cli]: glossary.html#cli
+[code-review]: glossary.html#code-review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [conda-forge]: https://conda-forge.org/
@@ -99,6 +100,7 @@
 [travis-ci]: https://travis-ci.org/
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [twine]: https://twine.readthedocs.io/en/latest/
+[ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
 [udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
@@ -107,6 +109,9 @@
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
+[working-memory]: glossary.html#working-memory
+[wrap-code]: glossary.html#wrap-code
+[xcode]: https://developer.apple.com/xcode/
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
 [zipf-project-page]: https://test.pypi.org/project/zipf/
