@@ -1,8 +1,0 @@
--   Identify where version control practices are needed or used in a sample project.
--   Give examples and compare tools or practices that "do" version control. 
--   Identify when a version control tool is using remote storage. 
--   Execute the steps of the version control change cycle. 
--   Find the information identifying a particular commit and view the difference between the current state of the repository and that commit.
--   Update both local and remote copies of repositories from any source. 
--   Identify the first and last steps of a local/remote workflow. 
--   Describe the state of the repository when a conflict occurs and demonstrate the steps needed to resolve it. 

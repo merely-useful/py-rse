@@ -1,4 +1,0 @@
--   Compare and contrast the benefits of running code in the console versus a script. 
--   Answer a question about a function by looking it up in Spyder. 
--   Distinguish between a helpful and less helpful Stack Overflow answer. 
--   Identify which Spyder pane will show you a window of a loaded  table. 

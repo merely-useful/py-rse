@@ -1,4 +1,0 @@
--   Reading tabular data into a program and writing data to files
--   Selecting groups and subsets of data and performing operations on the subsets
--   Reading error messages
--   Combining multiple datasets
