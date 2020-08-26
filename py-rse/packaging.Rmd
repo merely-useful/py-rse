@@ -19,10 +19,15 @@ We will continue with our Zipf's Law project,
 which should include the following files:
 
 ```text
+zipf/
+├── .gitignore
 ├── CONDUCT.md
+├── CONTRIBUTING.md
+├── KhanVirtanen2020.md
 ├── LICENSE.md
 ├── Makefile
 ├── README.md
+├── environment.yml
 ├── requirements.txt
 ├── bin
 │   ├── book_summary.sh
@@ -103,7 +108,7 @@ both `collate.py` and `countwords.py` contains this line:
 import utilities
 ```
 
-This is called an [implicit relative import][implicit-relative-import],
+This is called an [implicit relative import][implicit_relative_import],
 because it is not clear whether we mean
 "import a Python package called `utilities`"
 or
@@ -115,10 +120,10 @@ To remove this ambiguity we need to be explicit and write:
 from zipf import utilities
 ```
 
-This is an [absolute import][absolute-import],
+This is an [absolute import][absolute_import],
 since we are specifying the full location of `utilities` inside the `zipf` package.
 Absolute imports are the preferred way for parts of a package to import other parts,
-but we can also use [explicit relative imports][explicit-relative-import],
+but we can also use [explicit relative imports][explicit_relative_import],
 which require a little less typing
 and can sometimes make it easier to restructure very large projects:
 
@@ -153,7 +158,7 @@ setup(
 ```
 
 The `name` and `author` parameters are self-explanatory.
-Most software projects use [semantic versioning][semantic-versioning] for software releases.
+Most software projects use [semantic versioning][semantic_versioning] for software releases.
 A version number consists of three integers X.Y.Z,
 where X is the major version, Y is the minor version, and Z is the [patch][patch] version.
 Major version zero (0.Y.Z) is for initial development, so we have started with 0.1.0.
@@ -179,7 +184,7 @@ We can add additional information to our package later,
 but this is enough to be able to build it for testing purposes.
 Before we do that,
 though,
-we should create a [virtual environment][virtual-environment]
+we should create a [virtual environment][virtual_environment]
 to test how our package installs
 without breaking anything in our main Python installation.
 
@@ -419,7 +424,7 @@ are no longer accessible directly from the terminal.
 Fortunately,
 the `setuptools` package allows us to install programs along with the package.
 These programs are placed beside those of other packages.
-We tell `setuptools` to do this by defining [entry points][entry-point]:
+We tell `setuptools` to do this by defining [entry points][entry_point]:
 
 ```python
 from setuptools import setup
@@ -587,7 +592,7 @@ Now that our package can be installed,
 we should distribute it so that anyone can run `pip install zipf`
 and start use it.
 To do this,
-we need to use `setuptools` to create a [source distribution][source-distribution]
+we need to use `setuptools` to create a [source distribution][source_distribution]
 (known as an `sdist` in Python packaging jargon):
 
 ```shell
@@ -712,10 +717,147 @@ we can go through the same process to put it on the main [PyPI][pypi] repository
 
 ## Documenting Packages {#packaging-document}
 
-The final step in creating a usable Python package is to document it.
-Good documentation starts with writing a [docstring][docstring] for each function and module
-(Section \@ref(scripting-docstrings)),
-but users also need an introduction to what our package is meant to do,
+An old proverb says, "Trust, but verify."
+The equivalent in programming is, "Be clear, but document."
+No matter how well software is written,
+it always embodies decisions that aren't explicit in the final code
+or accommodates complications that aren't going to be obvious to the next reader.
+Putting it another way,
+the best function names in the world aren't going to answer the questions
+"Why does the software do this?"
+and
+"Why doesn't it do this in a simpler way?"
+
+
+It's important to consider who documentation is for.
+There are three kinds of people in any domain:
+[novices][novice],
+[competent practitioners][competent_practitioner],
+and [experts][expert] @Wils2018.
+A novice doesn't yet have a [mental model][mental_model] of the domain:
+they don't know what the key terms are,
+how they relate,
+what the causes of their problems are,
+or how to tell whether a solution to their problem is appropriate or not.
+
+Competent practitioners know enough to accomplish routine tasks with routine effort:
+they may need to check [Stack Overflow][stack-overflow] every few minutes,
+but they know what to search for and what "done" looks like.
+Finally,
+experts have such a deep and broad understanding of the domain
+that they can solve routine problems at a glance
+and are able to handle the one-in-a-thousand cases
+that would baffle the merely competent.
+
+Each of these three groups needs a different kind of documentation:
+
+-   A novice needs a tutorial that introduces her to key ideas one by one
+    and shows how they fit together.
+
+-   A competent practitioner needs reference guides, cookbooks, and Q&A sites;
+    these give her solutions close enough to what she needs
+    that she can tweak them the rest of the way.
+
+-   Experts need this material as well---nobody's memory is perfect---but
+    they may also paradoxically want tutorials.
+    The difference between them and novices is that experts want tutorials on how things work
+    and why they were designed that way.
+
+The first thing to decide when writing documentation
+is therefore to decide which of these needs we are trying to meet.
+Tutorials like this one should be long-form prose that contain code samples and diagrams.
+They should use [authentic tasks][authentic_task] to motivate ideas,
+i.e.,
+show people things they actually want to do rather than printing the numbers from 1 to 10,
+and should include regular check-ins
+so that learners and instructors alike can tell if they're making progress.
+
+Tutorials help novices build a mental model,
+but competent practitioners and experts will be frustrated by their slow pace and low information density.
+They will want single-point solutions to specific problems like
+how to find cells in a spreadsheet that contain a certain string
+or how to configure the web server to load an access control module.
+They can make use of an alphabetical list of the functions in a library,
+but are much happier if they can search by keyword to find what they need;
+one of the signs that someone is no longer a novice is that
+they're able to compose useful queries and tell if the results are on the right track or not.
+
+> **False Beginners**
+>
+> A [false beginner][false_beginner] is someone who appears not to know anything,
+> but who has enough prior experience in other domains
+> to be able to piece things together much more quickly than a genuine novice.
+> Someone who is proficient with MATLAB, for example,
+> will speed through a tutorial on Python's numerical libraries
+> much more quickly than someone who has never programmed before.
+> Creating documentation for false beginners is especially challenging;
+> if resources permit,
+> the best option is often a translation guide
+> that shows them how they would do a task with the system they know well
+> and then how to do the equivalent task with the new system.
+
+
+In an ideal world,
+we would satisfy these needs with a [chorus of explanations][caulfield-chorus],
+some long and detailed,
+others short and to the point.
+In our world, though,
+time and resources are limited,
+so all but the most popular packages must make do with single explanations.
+The next sections of this chapter will therefore look at:
+
+* Writing good docstrings
+* Using the `README` to provide an overview of the package
+* Automatically generating a reference guide as a webpage
+* Hosting documentation online
+* Leveraging existing solutions to provide an FAQ
+
+### Writing Good Docstrings {#packaging-docstrings}
+
+If we are doing [exploratory programming][exploratory_programming],
+a short [docstring][docstring] to remind ourselves of each function's purpose
+is probably as much documentation as we need.
+(In fact, it's probably better than what most people do.)
+That one- or two-liner should begin with an active verb and describe either
+how inputs are turned into outputs,
+or what side effects the function has;
+as we discuss below,
+if we need to describe both,
+we should probably rewrite our function.
+
+An active verb is something like "extract", "normalize", or "find".
+For example,
+these are all good one-line docstrings:
+
+-   "Create a list of current ages from a list of birth dates."
+-   "Clip signals to lie in [0...1]."
+-   "Reduce the red component of each pixel."
+
+We can tell our one-liners are useful if we can read them aloud in the order the functions are called
+in place of the function's name and parameters.
+
+Once we start writing code for other people (or our future selves)
+our docstrings should include:
+
+1.  The name and purpose of every public class, function, and constant in our code.
+2.  The name, purpose, and default value (if any) of every parameter to every function.
+3.  Any side effects the function has.
+4.  The type of value returned by every function.
+5.  What exceptions those functions can raise and when.
+
+The word "public" in the first rule is important.
+We don't have to write full documentation for helper functions
+that are only used inside our package and aren't meant to be called by users,
+but these should still have at least a comment explaining their purpose.
+We also don't have to document unit testing functions:
+as discussed in Chapter \@ref(testing),
+these should have long names that describe what they're checking
+so that failure reports are easy to scan.
+
+### Including Package Level Documentation in the `README` {#packaging-readme}
+
+When a user first encounters a package, 
+they usually want to know what the package is meant to do,
 instructions on how to install it,
 and examples of how to use it.
 We can include these elements in the `README.md` file we started in Chapter \@ref(git-advanced).
@@ -743,7 +885,7 @@ We could continue to do this,
 but for a Python package we eventually want
 to create a website for our package documentation (Section \@ref(packaging-sphinx)).
 The most popular documentation generator in the Python community
-uses a format called [reStructuredText][restructured-text] (reST),
+uses a format called [reStructuredText][restructured_text] (reST),
 so we will switch to that.
 
 Like Markdown,
@@ -763,24 +905,21 @@ section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented:
 
 ```text
-======
-zipf
-======
-
 The ``zipf`` package tallies the occurrences of words in text files
-and plots each word's rank versus its frequency.
+and plots each word's rank versus its frequency
+together with a line for the theoretical distribution for Zipf's Law.
 
 Motivation
 ----------
 
-Zipf's Law is often stated as an observational pattern seen in the
+Zipf’s Law is often stated as an observational pattern seen in the
 relationship between the frequency and rank of words in a text:
 
-`"...the most frequent word will occur approximately twice as often
+`"…the most frequent word will occur approximately twice as often
 as the second most frequent word,
 three times as often as the third most
-frequent word, etc."` 
-- `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
+frequent word, etc."`  
+— `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
 
 Many books are available to download in plain text format
 from sites such as `Project Gutenberg <https://www.gutenberg.org/>`_,
@@ -1003,7 +1142,7 @@ Sphinx>=1.7.4
 Anyone wanting to build the documentation (including us, on another computer)
 now only needs run `pip install -r requirement_docs.txt`
 
-## Hosting Documentation Online {#packaging-rtd}
+### Hosting Documentation Online {#packaging-rtd}
 
 We can host the documentation for our project in several ways.
 As mentioned above,
@@ -1073,6 +1212,77 @@ and the dependencies for our package (`requirements.txt`).
 If we named our project `zipf-docs`,
 our documentation is now available at `https://zipf-docs.readthedocs.io/en/latest/`.
 
+### Creating a FAQ {#project-faq}
+
+As projects grow,
+documentation within functions alone may be unsufficient for users to apply code to their own problems.
+One strategy to assist other people with understanding a project is with an [FAQ][faq]:
+a list of frequently-asked questions and corresponding answers.
+A good FAQ uses the terms and concepts that people bring to the software
+rather than the vocabulary of its authors;
+putting it another way,
+the questions should be things that people might search for online,
+and the answers should give them enough information to solve their problem.
+
+Creating and maintaining a FAQ is a lot of work,
+and unless the community is large and active,
+a lot of that effort may turn out to be wasted,
+because it's hard for the authors or maintainers of a piece of software
+to anticipate what newcomers will be mystified by.
+A better approach is to leverage sites like [Stack Overflow][stack-overflow],
+which is where most programmers are going to look for answers anyway:
+
+1.  Post every question that someone actually asks us,
+    whether it's online, by email, or in person.
+    Be sure to include the name of the software package in the question
+    so that it's findable.
+
+2.  Answer the question,
+    making sure to mention which version of the software we're talking about
+    (so that people can easily spot and discard stale answers in the future).
+
+[Stack Overflow][stack-overflow]'s guide to [asking a good question][stack-overflow-good-question]
+has been refined over many years,
+and is a good guide for any project:
+
+Write the most specific title we can.
+:   "Why does division sometimes give a different result in Python 2.7 and Python 3.5?"
+    is much better than, "Help! Math in Python!!"
+
+Give context before giving sample code.
+:   A few sentences to explain what are are trying to do and why
+    will help people determine if their question is a close match to ours or not.
+
+Provide a minimal reprex.
+:   Section \@ref(teams-bugs) explains the value of a [reproducible example][reprex],
+    and why reprexes should be as short as possible.
+    Readers will have a much easier time figuring out if this question and its answers are for them
+    if they can see *and understand* a few lines of code.
+
+Tag, tag, tag.
+:   Keywords make everything more findable,
+    from scientific papers to left-handed musical instruments.
+
+Use "I" and question words (how/what/when/where/why).
+:   Writing this way forces us to think more clearly about
+    what someone might actually be thinking when they need help.
+
+Keep each item short.
+:   The "minimal manual" approach to instructional design @Carr2014
+    breaks everything down into single-page steps,
+    with half of that page devoted to troubleshooting.
+    This may feel trivializing to the person doing the writing,
+    but is often as much as a person searching and reading can handle.
+    It also helps writers realize just how much implicit knowledge they are assuming.
+
+Allow for a [chorus of explanations][caulfield-chorus].
+:   As discussed earlier,
+    users are all different from one another,
+    and are therefore best served by a chorus of explanations.
+    Do not be afraid of providing multiple explanations to a single question
+    that suggest different approaches
+    or are written for different prior levels of understanding.
+
 ## Software Journals {#packaging-software-journals}
 
 As a final step to releasing our new package,
@@ -1096,6 +1306,41 @@ relating to how easy the software is to install
 and how well it is documented,
 so the peer review process can be a great way to get critical feedback
 from people who have seen many research software packages come and go over the years.
+
+Once you have obtained a DOI and possibly published with a software journal,
+the last step is to tell users how to cite your new software package.
+This is traditionally done by adding a `CITATION` file to the associated GitHub repository
+(alongside `README`, `LICENSE`, `CONDUCT` and similar files; \@ref(intro-boilerplate)),
+containing a plain text citation that can be copied and pasted into email
+as well as entries formatted for various bibliographic systems like [BibTeX][bibtex].
+
+```shell
+$ cat CITATION.md
+```
+
+```text
+# Citation
+
+If you use the Zipf package for work/research presented in a publication,
+we ask that you please cite:
+
+Khan, A., and Virtanen, S., 2020. Zipf: A Python package for word count analysis.
+*Journal of Important Software*, 5(51), 2317, https://doi.org/10.21105/jois.02317
+
+### BibTeX entry
+
+    @article{Khan2020,
+        title={Zipf: A Python package for word count analysis.},
+        author={Khan, Amira and Virtanen, Sami},
+        journal={Journal of Important Software},
+        volume={5},
+        number={51},
+        eid={2317},
+        year={2020},
+        doi={10.21105/jois.02317},
+       url={https://doi.org/10.21105/jois.02317},
+    }
+```
 
 ## Summary {#packaging-summary}
 
@@ -1134,6 +1379,15 @@ to list packages that are not needed by the package's users,
 but are required for its development and testing.
 Pull `pytest` out of `requirements.txt` and put it in a new `requirements_dev.txt` file,
 using `pip freeze` to find the minimum required version.
+
+### Software review
+
+The [Journal of Open Source Software][theoj] has a
+[checklist](https://joss.readthedocs.io/en/latest/review_checklist.html)
+that reviewers must follow when assessing a submitted software paper.
+Run through the checklist (skipping the criteria related to the software paper)
+and see how your Zipf's Law package would rate on each criteria.
+
 
 ## Key Points {#packaging-keypoints}
 

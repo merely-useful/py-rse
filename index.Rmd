@@ -52,13 +52,13 @@ and everyone whose work is included will be credited in the acknowledgments.
 
 Our approach to research software engineering is based on three related concepts:
 
--   [Open science][open-science]
+-   [Open science][open_science]
     focuses on making data, methods, and results freely available to all
-    by publishing them under [open licenses][open-license].
--   [Reproducible research][reproducible-research]
+    by publishing them under [open licenses][open_license].
+-   [Reproducible research][reproducible_research]
     means ensuring that anyone with access to data and software can feasibly reproduce results,
     both to check them and to build on them.
--   Software is [sustainable][sustainable-software]
+-   Software is [sustainable][sustainable_software]
     if it's easier for people to maintain it and extend it than to replace it.
     However,
     sustainability isn't just a property of the software:
@@ -92,7 +92,7 @@ someone else will use it and publish a result they have come up with themselves.
 This is almost unheard of in practice,
 but that doesn't stop it being used as a scare tactic.
 Other people are afraid of looking foolish or incompetent by sharing code that might contain bugs.
-This isn't just [impostor syndrome][impostor-syndrome]:
+This isn't just [impostor syndrome][impostor_syndrome]:
 members of marginalized groups are frequently judged more harshly than others,
 so being wrong in public is much riskier for them.
 
@@ -130,13 +130,14 @@ Readers should already be using Python regularly for data analysis,
 and should be comfortable reading data from files
 and writing loops, conditionals, and functions.
 
-Learners will need:
+Learners will need a computer with Internet access
+that has the following software installed:
 
--   a personal computer with Internet access;
--   a [Unix shell][unix-shell]
-    (which is available on recent versions of Windows as well as Mac and Linux);
--   [Python 3][python] with [Jupyter][jupyter] and various scientific libraries; and
--   a [GitHub][github] account.
+-   a [Bash shell][shell]
+-   [Git][git]
+-   a text editor
+-   [Python 3][python] (via the Anaconda distribution)
+-   [GNU Make][gnu-make]
 
 Please see Appendix \@ref(install) for instructions on how to set all of this up.
 
@@ -155,26 +156,6 @@ we analyze the distribution of word frequencies
 in a collection of classic English novels
 that are freely available from [Project Gutenberg][project-gutenberg].
 
-Appendix \@ref(install) explains
-how to download the novels and other files you will need.
-When you are done,
-you should have a directory (also called a [folder][folder]) 
-called `zipf`,
-containing a single sub-directory called `data`
-with the following contents:
-
-```text
-└── data
-    ├── README.md
-    ├── dracula.txt
-    ├── frankenstein.txt
-    ├── jane_eyre.txt
-    ├── moby_dick.txt
-    ├── sense_and_sensibility.txt
-    ├── sherlock_holmes.txt
-    └── time_machine.txt
-```
-
 In the process of writing and publishing a Python package to verify Zipf's Law,
 we will show you how to:
 
@@ -191,6 +172,148 @@ we will show you how to:
 -   Organise small and medium-sized data science projects.
 -   Create Python packages that can be installed in standard ways.
 
+## Project Structure {#intro-structure}
+
+Project organization is like a diet:
+everyone has one,
+it's just a question of whether it's healthy or not.
+In the case of a project,
+"healthy" means that people can find what they need and do what they want without becoming frustrated.
+This depends how well organized the project is
+and how familiar people are with that style of organization.
+
+As with coding style (Appendix \@ref(style)),
+small pieces in predictable places with readable names are easier to find and use
+than large chunks that vary from project to project and have names like "stuff".
+We can be messy while we are working and then tidy up later,
+but experience teaches that we will be more productive if we make tidiness a habit.  
+
+In building the Zipf's Law project we'll follow 
+a widely-used template
+for organizing small and medium-sized data analysis projects @Nobl2009.
+The project will live in a directory called `zipf`, 
+which will also be a Git repository stored on GitHub.
+The following is an abbreviated version of the project directory tree
+as it appears towards the end of the book:
+
+```text
+zipf/
+├── .gitignore
+├── CITATION.md
+├── CONDUCT.md
+├── CONTRIBUTING.md   
+├── LICENSE.md   
+├── README.md
+├── Makefile   
+├── bin   
+│   ├── book_summary.sh   
+│   ├── collate.py   
+│   ├── countwords.py   
+|   └── ...    
+├── data
+│   ├── README.md   
+│   ├── dracula.txt  
+│   ├── frankenstein.txt  
+│   └── ...   
+├── docs
+│   └── ...
+├── results
+│   ├── collated.csv
+│   ├── dracula.csv
+│   ├── dracula.png
+|   └── ...
+└── ...
+```
+
+The full, final directory tree is documented in Appendix \@ref(tree).
+
+### Standard Information {#intro-boilerplate}
+
+Our project will contain a few standard files
+that should be present in every research software project,
+open source or otherwise:
+
+-   `README` includes basic information on our project.
+     We'll create it in Chapter \@ref(git-advanced), 
+     and extend it in Chapter \@ref(packaging).
+
+-   `LICENSE` is the project's license. We'll add it in Section \@ref(teams-license).
+
+-   `CONTRIBUTING` explains how to contribute to the project. We'll add it in Section \@ref(teams-documentation).
+
+-   `CONDUCT` is the project's code of conduct. We'll add it in Section \@ref(teams-coc).
+
+-   `CITATION` explains how to cite the software. We'll add it in Section \@ref(packaging-software-journals).
+
+Some projects also include a `CONTRIBUTORS` or `AUTHORS` file that
+lists everyone who has contributed to the project,
+while others include that information in the `README` (we do this in Chapter \@ref(git-advanced))
+or make it a section in `CITATION`.
+
+### Organizing Project Content {#intro-organize}
+
+Following @Nobl2009, 
+the directories in the repository's root are organized according to purpose:
+
+-   Runnable programs go in `bin/`
+    (an old Unix abbreviation for "binary", meaning "not text").
+    This will include both shell scripts, 
+    e.g. `book_summary.sh` developed in Chapter \@ref(bash-advanced), 
+    and Python programs, 
+    e.g. `countwords.py`, developed in Chapter \@ref(scripting).
+
+-   Raw data goes in `data/` 
+    and is never modified after being stored.  
+    You'll set up this directory, 
+    and its contents in Section \@ref(intro-setup).  
+
+-   Results are put in `results/`.
+    This includes cleaned-up data,
+    figures,
+    and everything else created using what's in `bin` and `data`.
+    In this project, 
+    we'll describe exactly how `bin` and `data` are used 
+    with `Makefile` created in Chapter \@ref(automate).
+
+-   Finally, 
+    documentation and manuscripts go in `docs/`.
+    In this project `docs` will contain automatically generated
+    documentation for the Python package, created in 
+    Section \@ref(packaging-sphinx).
+
+This structure works well for many computational research projects and
+we encourage its use beyond just this book. 
+However, there will be some additional folders and files 
+not directly addressed by @Nobl2009, 
+that we'll add as we talk about [Provenance](#provenance), [Testing](#testing) and 
+[Packaging](#packaging). 
+
+### Getting Started {#intro-setup}
+
+Over the course of this book,
+you'll build up the project structure described above.
+Appendix \@ref(install) explains
+how to download the novels in `data/`,
+which are the only files you'll need to get started.
+When you are done,
+you should have a directory (also called a [folder][folder]) 
+called `zipf`,
+containing a single sub-directory called `data`
+with the following contents:
+
+```text
+zipf/
+└── data
+    ├── README.md
+    ├── dracula.txt
+    ├── frankenstein.txt
+    ├── jane_eyre.txt
+    ├── moby_dick.txt
+    ├── sense_and_sensibility.txt
+    ├── sherlock_holmes.txt
+    └── time_machine.txt
+```
+
 ## Acknowledgments {#intro-ack}
 
 This book owes its existence to
@@ -204,7 +327,7 @@ Sara Mahallati,
 Brandeis Marshall,
 and Elizabeth Wickes.
 
--   Many of the explanations and exercises in Chapter \@ref(bash-basics)
+-   Many of the explanations and exercises in Chapters \@ref(bash-basics) and \@ref(bash-advanced)
     have been adapted from Software Carpentry's lesson
     [The Unix Shell](http://swcarpentry.github.io/shell-novice/).
 
