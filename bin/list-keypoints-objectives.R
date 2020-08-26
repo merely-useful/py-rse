@@ -6,7 +6,7 @@ library(fs)
 
 # Extract chapter info ----------------------------------------------------
 
-chapter_files <- dir_ls("py-rse/")
+chapter_files <- dir_ls("chapters/")
 
 extract_h1_text <- function(.file) {
   .file %>%

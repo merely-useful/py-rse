@@ -8,27 +8,27 @@ GLOSS=${HOME}/glosario
 PY_RSE_FILES=\
   _bookdown.yml \
   index.Rmd \
-  py-rse/bash-basics.Rmd \
-  py-rse/bash-advanced.Rmd \
-  py-rse/scripting.Rmd \
-  py-rse/git-cmdline.Rmd \
-  py-rse/git-advanced.Rmd \
-  py-rse/automate.Rmd \
-  py-rse/config.Rmd \
-  py-rse/errors.Rmd \
-  py-rse/teams.Rmd \
-  py-rse/style.Rmd \
-  py-rse/testing.Rmd \
-  py-rse/packaging.Rmd \
-  py-rse/provenance.Rmd \
-  py-rse/finale.Rmd \
-  py-rse/install.Rmd \
-  py-rse/objectives.Rmd \
-  py-rse/keypoints.Rmd \
-  py-rse/solutions.Rmd \
-  py-rse/tree.Rmd \
-  py-rse/yaml.Rmd \
-  py-rse/ssh.Rmd
+  chapters/bash-basics.Rmd \
+  chapters/bash-advanced.Rmd \
+  chapters/scripting.Rmd \
+  chapters/git-cmdline.Rmd \
+  chapters/git-advanced.Rmd \
+  chapters/automate.Rmd \
+  chapters/config.Rmd \
+  chapters/errors.Rmd \
+  chapters/teams.Rmd \
+  chapters/style.Rmd \
+  chapters/testing.Rmd \
+  chapters/packaging.Rmd \
+  chapters/provenance.Rmd \
+  chapters/finale.Rmd \
+  chapters/install.Rmd \
+  chapters/objectives.Rmd \
+  chapters/keypoints.Rmd \
+  chapters/solutions.Rmd \
+  chapters/tree.Rmd \
+  chapters/yaml.Rmd \
+  chapters/ssh.Rmd
 
 COMMON_FILES=\
   _common.R \
@@ -90,7 +90,7 @@ clean :
 
 ## chapters : check consistency of chapters.
 chapters :
-	@make settings | bin/chapters.py _bookdown.yml PY_RSE_FILES py-rse/objectives.Rmd py-rse/keypoints.Rmd
+	@make settings | bin/chapters.py _bookdown.yml PY_RSE_FILES chapters/objectives.Rmd chapters/keypoints.Rmd
 
 ## crossrefs : check cross-references.
 crossrefs :
