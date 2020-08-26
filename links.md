@@ -40,6 +40,8 @@
 [git-ssh-github]: https://help.github.com/articles/generating-ssh-keys
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
 [github-gitignore]: https://github.com/github/gitignore
+[github-release]:https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository
+[github-release-link]: https://docs.github.com/en/github/administering-a-repository/linking-to-releases
 [github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
 [github]: https://github.com
 [gitkraken]: https://www.gitkraken.com/

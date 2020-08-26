@@ -1,0 +1,344 @@
+---
+title: "Research Software Engineering with Python"
+author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
+documentclass: book
+bibliography: book.bib
+csl: jcb.csl
+citation-package: none
+link-citations: yes
+github-repo: merely-useful/merely-useful.github.io
+site: bookdown::bookdown_site
+date: "`r Sys.Date()`"
+lot: yes
+lof: yes
+---
+
+# Introduction {#intro}
+
+```{r intro-setup, include=FALSE}
+source(here::here("_common.R"))
+```
+
+> It's still magic even if you know how it's done.
+>
+> --- Terry Pratchett
+
+Software is now as essential to research as telescopes, test tubes, and reference libraries,
+which means that researchers need need to know how to build, check, use, and share programs.
+However,
+most introductions to programming focus on developing commercial applications,
+not on exploring problems whose answers aren't yet known.
+Our goal is show you how to do that,
+both on your own and as part of a team.
+
+We believe every researcher should know
+how to write short programs that clean and analyze data in a reproducible way
+and how to use version control to keep track of what they have done.
+But just as some astronomers spend their careers designing telescopes,
+some researchers focus on building the software that makes research possible.
+People who do this are called [research software engineers][rse];
+the aim of this book is to get you ready for this role,
+i.e.,
+to help you go from writing code for yourself
+to creating tools to help your entire field advance.
+
+All of this material can be freely re-used
+under the terms of the Creative Commons–Attribution License (CC-BY 4.0);
+please see Appendix \@ref(license) for details.
+The source for the book lives in a public Git repository;
+corrections and additions are very welcome,
+and everyone whose work is included will be credited in the acknowledgments.
+
+## The Big Picture {#intro-big-picture}
+
+Our approach to research software engineering is based on three related concepts:
+
+-   [Open science][open_science]
+    focuses on making data, methods, and results freely available to all
+    by publishing them under [open licenses][open_license].
+-   [Reproducible research][reproducible_research]
+    means ensuring that anyone with access to data and software can feasibly reproduce results,
+    both to check them and to build on them.
+-   Software is [sustainable][sustainable_software]
+    if it's easier for people to maintain it and extend it than to replace it.
+    However,
+    sustainability isn't just a property of the software:
+    it also depends on the skills and culture of its users.
+
+People often conflate these three ideas,
+but they are distinct.
+For example,
+if you share your data and the programs that analyze it,
+but don't document what steps to take in what order,
+your work is open but not reproducible.
+Conversely,
+if you completely automate your analysis,
+but your data is only available to people in your lab,
+your work is reproducible but not open.
+Finally,
+if a software package is being maintained by a couple of post-docs
+who are being paid a fraction of what they could earn in industry
+and have no realistic hope of promotion because their field doesn't value tool building,
+then sooner or later it will become [abandonware][abandonware],
+at which point openness and reproducibility become moot points.
+
+Nobody argues that research should be irreproducible or unsustainable,
+but "not against it" and actively supporting it are very different things.
+Academia doesn't yet know reward people for writing useful software,
+so while you may be thanked,
+the effort you put in may not translate into job security or decent pay.
+
+And some people still worry that if they make their data and code generally available,
+someone else will use it and publish a result they have come up with themselves.
+This is almost unheard of in practice,
+but that doesn't stop it being used as a scare tactic.
+Other people are afraid of looking foolish or incompetent by sharing code that might contain bugs.
+This isn't just [impostor syndrome][impostor_syndrome]:
+members of marginalized groups are frequently judged more harshly than others,
+so being wrong in public is much riskier for them.
+
+## Audience {#intro-personas}
+
+Amira Khan
+:   completed a master's in library science five years ago
+    and has since worked for a small aid organization.
+    She did some statistics during her degree,
+    and has learned some R and Python by doing data science courses online,
+    but has no formal training in programming.
+    Amira would like to tidy up the scripts, data sets, and reports she has created
+    in order to share them with her colleagues.
+    These lessons will show her how to do this and what "done" looks like.
+
+Jun Hsu
+:   completed an [Insight Data Science][insight] fellowship last year after doing a PhD in Geology
+    and now works for a company that does forensic audits.
+    He uses a variety of machine learning and visualization packages,
+    and would now like to turn some of his own work into an open source project.
+    This book will show him how such a project should be organized
+    and how to encourage people to contribute to it.
+
+Sami Virtanen
+:   became a competent programmer during a bachelor's degree in applied math
+    and was then hired by the university's research computing center.
+    The kinds of applications they are being asked to support
+    have shifted from fluid dynamics to data analysis;
+    this guide will teach them how to build and run data pipelines
+    so that they can pass those skills on to their users.
+
+### Prerequisites
+
+Readers should already be using Python regularly for data analysis,
+and should be comfortable reading data from files
+and writing loops, conditionals, and functions.
+
+Learners will need a computer with Internet access
+that has the following software installed:
+
+-   a [Bash shell][shell]
+-   [Git][git]
+-   a text editor
+-   [Python 3][python] (via the Anaconda distribution)
+-   [GNU Make][gnu-make]
+
+Please see Appendix \@ref(install) for instructions on how to set all of this up.
+
+## Syllabus {#intro-syllabus}
+
+This book uses data analysis as a motivating example,
+and assumes that the learner's goal is to answer questions
+rather than deliver commercial software products.
+The data analysis task that we focus on
+relates to a fascinating result in the field of quantitative linguistics.
+[Zipf's Law][zipfs-law] states that the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often, and so on.
+To test Zipf's Law,
+we analyze the distribution of word frequencies
+in a collection of classic English novels
+that are freely available from [Project Gutenberg][project-gutenberg].
+
+In the process of writing and publishing a Python package to verify Zipf's Law,
+we will show you how to:
+
+-   Use the Unix shell to efficiently manage your data and code.
+-   Write Python programs that can be run at the command line.
+-   Write and review code to make it readable as well as correct.
+-   Use Git and GitHub to track and share your work.
+-   Work productively in a small team where everyone is welcome.
+-   Use Make to automate complex workflows.
+-   Enable users to configure your software without modifying it directly.
+-   Find, handle, and fix errors in your code.
+-   Test your software and know which parts have not yet been tested.
+-   Publish your code and research in open and reproducible ways.
+-   Organise small and medium-sized data science projects.
+-   Create Python packages that can be installed in standard ways.
+
+## Project Structure {#intro-structure}
+
+Project organization is like a diet:
+everyone has one,
+it's just a question of whether it's healthy or not.
+In the case of a project,
+"healthy" means that people can find what they need and do what they want without becoming frustrated.
+This depends how well organized the project is
+and how familiar people are with that style of organization.
+
+As with coding style (Appendix \@ref(style)),
+small pieces in predictable places with readable names are easier to find and use
+than large chunks that vary from project to project and have names like "stuff".
+We can be messy while we are working and then tidy up later,
+but experience teaches that we will be more productive if we make tidiness a habit.  
+
+In building the Zipf's Law project we'll follow 
+a widely-used template
+for organizing small and medium-sized data analysis projects @Nobl2009.
+The project will live in a directory called `zipf`, 
+which will also be a Git repository stored on GitHub.
+The following is an abbreviated version of the project directory tree
+as it appears towards the end of the book:
+
+```text
+zipf/
+├── .gitignore
+├── CITATION.md
+├── CONDUCT.md
+├── CONTRIBUTING.md   
+├── LICENSE.md   
+├── README.md
+├── Makefile   
+├── bin   
+│   ├── book_summary.sh   
+│   ├── collate.py   
+│   ├── countwords.py   
+|   └── ...    
+├── data
+│   ├── README.md   
+│   ├── dracula.txt  
+│   ├── frankenstein.txt  
+│   └── ...   
+├── docs
+│   └── ...
+├── results
+│   ├── collated.csv
+│   ├── dracula.csv
+│   ├── dracula.png
+|   └── ...
+└── ...
+```
+
+The full, final directory tree is documented in Appendix \@ref(tree).
+
+### Standard Information {#intro-boilerplate}
+
+Our project will contain a few standard files
+that should be present in every research software project,
+open source or otherwise:
+
+-   `README` includes basic information on our project.
+     We'll create it in Chapter \@ref(git-advanced), 
+     and extend it in Chapter \@ref(packaging).
+
+-   `LICENSE` is the project's license. We'll add it in Section \@ref(teams-license).
+
+-   `CONTRIBUTING` explains how to contribute to the project. We'll add it in Section \@ref(teams-documentation).
+
+-   `CONDUCT` is the project's code of conduct. We'll add it in Section \@ref(teams-coc).
+
+-   `CITATION` explains how to cite the software. We'll add it in Section \@ref(packaging-software-journals).
+
+Some projects also include a `CONTRIBUTORS` or `AUTHORS` file that
+lists everyone who has contributed to the project,
+while others include that information in the `README` (we do this in Chapter \@ref(git-advanced))
+or make it a section in `CITATION`.
+
+### Organizing Project Content {#intro-organize}
+
+Following @Nobl2009, 
+the directories in the repository's root are organized according to purpose:
+
+-   Runnable programs go in `bin/`
+    (an old Unix abbreviation for "binary", meaning "not text").
+    This will include both shell scripts, 
+    e.g. `book_summary.sh` developed in Chapter \@ref(bash-advanced), 
+    and Python programs, 
+    e.g. `countwords.py`, developed in Chapter \@ref(scripting).
+
+-   Raw data goes in `data/` 
+    and is never modified after being stored.  
+    You'll set up this directory, 
+    and its contents in Section \@ref(intro-setup).  
+
+-   Results are put in `results/`.
+    This includes cleaned-up data,
+    figures,
+    and everything else created using what's in `bin` and `data`.
+    In this project, 
+    we'll describe exactly how `bin` and `data` are used 
+    with `Makefile` created in Chapter \@ref(automate).
+
+-   Finally, 
+    documentation and manuscripts go in `docs/`.
+    In this project `docs` will contain automatically generated
+    documentation for the Python package, created in 
+    Section \@ref(packaging-sphinx).
+
+This structure works well for many computational research projects and
+we encourage its use beyond just this book. 
+However, there will be some additional folders and files 
+not directly addressed by @Nobl2009, 
+that we'll add as we talk about [Provenance](#provenance), [Testing](#testing) and 
+[Packaging](#packaging). 
+
+### Getting Started {#intro-setup}
+
+Over the course of this book,
+you'll build up the project structure described above.
+Appendix \@ref(install) explains
+how to download the novels in `data/`,
+which are the only files you'll need to get started.
+When you are done,
+you should have a directory (also called a [folder][folder]) 
+called `zipf`,
+containing a single sub-directory called `data`
+with the following contents:
+
+```text
+zipf/
+└── data
+    ├── README.md
+    ├── dracula.txt
+    ├── frankenstein.txt
+    ├── jane_eyre.txt
+    ├── moby_dick.txt
+    ├── sense_and_sensibility.txt
+    ├── sherlock_holmes.txt
+    └── time_machine.txt
+```
+
+## Acknowledgments {#intro-ack}
+
+This book owes its existence to
+everyone we met through [the Carpentries][carpentries].
+We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work,
+to the authors of [@Nobl2009; @Hadd2010; @Wils2014; @Scop2015; @Tasc2017; @Wils2017; @Brow2018; @Deve2018; @Shol2019; @Wils2019],
+and to everyone who has contributed, including Madeleine Bonsma-Fisher,
+Jonathan Dursi,
+Christina Koch,
+Sara Mahallati,
+Brandeis Marshall,
+and Elizabeth Wickes.
+
+-   Many of the explanations and exercises in Chapters \@ref(bash-basics) and \@ref(bash-advanced)
+    have been adapted from Software Carpentry's lesson
+    [The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+
+-   Chapter \@ref(automate) is based on the [Software Carpentry lesson on Make][swc-make]
+    maintained by [Gerard Capes][capes-gerard]
+    and on [Jonathan Dursi][dursi-jonathan]'s
+    [introduction to pattern rules][dursi-pattern-rules].
+
+-   Chapter \@ref(packaging) is based in part on [Python 102][python-102]
+    by [Ashwin Srinath][srinath-ashwin].
+
+```{r, child="./links.md"}
+```
