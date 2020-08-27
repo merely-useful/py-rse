@@ -23,8 +23,8 @@ zipf/
 ├── .gitignore
 ├── bin
 │   ├── book_summary.sh
-│   ├── collate.py
 │   ├── countwords.py
+│   ├── collate.py
 │   ├── plotcounts.py
 │   ├── script_template.py
 │   └── utilities.py
@@ -79,8 +79,12 @@ that all changes we make will take place in this branch by default.
 In the previous chapter,
 we foreshadowed some experimental changes that we could try and make to `plotcounts.py`.
 
+Making sure our project directory is our working directory,
+we can inspect our current `plotcounts.py`:
+
 ```shell
-$ cat plotcounts.py
+$ cd ~/zipf
+$ cat bin/plotcounts.py
 ```
 
 ```python
@@ -284,7 +288,7 @@ from scipy.optimize import minimize_scalar
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -322,7 +326,7 @@ and \(-1 / \alpha\) the exponent in the power law.
 ## Verifying Zipf's Law {#git-advanced-zipf-verify}
 
 Now that we have defined the functions required to fit a curve to our word count plots,
-we can update `plotcounts.py`:
+we can update `plotcounts.py` so the entire script reads as follows:
 
 ```python
 """Plot word counts."""
@@ -342,7 +346,7 @@ def nlog_likelihood(beta, counts):
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -359,7 +363,7 @@ def set_plot_params(param_file):
         mpl.rcParams[param] = value
 
 
-def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     """
     Plot the power law curve that was fitted to the data.
 
@@ -417,7 +421,7 @@ We can then run the script to obtain the \(\alpha\) value for *Dracula*
 and a new plot with a line fitted.
 
 ```shell
-python plotcounts.py ../results/dracula.csv --outfile ../results/dracula.png
+python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
 ```text
@@ -438,13 +442,13 @@ The script appears to be working as we'd like,
 so we can go ahead and commit our changes to the `fit` development branch:
 
 ```shell
-$ git add plotcounts.py
+$ git add bin/plotcounts.py results/dracula.png
 $ git commit -m "Added fit to word count data"
 ```
 
 ```text
 [fit 3ff8195] Added fit to word count data
- 1 file changed, 61 insertions(+)
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 ```
 
 If we look at the last couple of commits using `git log`,
@@ -456,7 +460,7 @@ $ git log --oneline -n 2
 
 ```text
 3ff8195 Added fit to word count data
-d77bc5c Update dracula plot
+ffb5cee adding ignore file
 ```
 
 (We use `--oneline` and `-n 2` to shorten the log display.)
@@ -480,8 +484,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
+ffb5cee adding ignore file
 d77bc5c Update dracula plot
-b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 We have not lost our work:
@@ -522,14 +526,14 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
 ```
 
 ```shell
-$ git add plotcounts.py
+$ git add bin/plotcounts.py
 $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```
 
@@ -538,7 +542,7 @@ $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
  1 file changed, 14 insertions(+), 1 deletion(-)
 ```
 
-Finaly,
+Finally,
 if we want to see the differences between two branches,
 we can use `git diff` with the same double-dot `..` syntax
 used to view differences between two revisions:
@@ -548,11 +552,11 @@ $ git diff master..fit
 ```
 
 ```text
-diff --git a/plotcounts.py b/plotcounts.py
+diff --git a/bin/plotcounts.py b/bin/plotcounts.py
 index 4501eaf..d57fd63 100644
---- a/plotcounts.py
-+++ b/plotcounts.py
-@@ -1,6 +1,69 @@
+--- a/bin/plotcounts.py
++++ b/bin/plotcounts.py
+@@ -1,15 +1,89 @@
  """Plot word counts."""
  import argparse
 +import numpy as np
@@ -582,7 +586,7 @@ index 4501eaf..d57fd63 100644
 +      https://doi.org/10.1371/journal.pone.0147073
 +    """
 +    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-+                          args=(word_counts), method='brent')
++                          args=word_counts, method='brent')
 +    beta = mle.x
 +    alpha = 1 / (beta - 1)
 +    return alpha
@@ -622,8 +626,10 @@ index 4501eaf..d57fd63 100644
 
 
  def main(args):
-@@ -9,6 +72,17 @@ def main(args):
++    """Run the command line program.""" 
+     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
      df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+-    df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                           figsize=[12, 6], grid=True, xlim=args.xlim)
 +
@@ -638,6 +644,11 @@ index 4501eaf..d57fd63 100644
 +
 +    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
      ax.figure.savefig(args.outfile)
+
+
+diff --git a/results/dracula.png b/results/dracula.png
+index d34c46d..1c42702 100644
+Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
 > **Why Branch?**
@@ -672,8 +683,8 @@ $ git branch
 ```
 
 ```text
-* master
   fit
+* master
 ```
 
 We can now merge the changes in the `fit` branch into our current branch
@@ -686,8 +697,9 @@ $ git merge fit
 ```text
 Updating d77bc5c..db1d03f
 Fast-forward
- plotcounts.py | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ bin/plotcounts.py   |  76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ results/dracula.png | Bin 22351 -> 31378 bytes
+ 2 files changed, 75 insertions(+), 1 deletion(-)
 ```
 
 Merging doesn't change the source branch `fit`,
@@ -701,8 +713,8 @@ $ git log --oneline -n 4
 ```text
 db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
 3ff8195 Added fit to word count data
+ffb5cee adding ignore file
 d77bc5c Update dracula plot
-b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 Note that Git automatically creates a new commit (in this case, `db1d03f`)
@@ -805,7 +817,7 @@ $ git commit -m "Added repository overview"
 
 ```text
 [docs a41a6ea] Added repository overview
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ 1 file changed, 3 insertions(+)
 ```
 
 In order to create a conflict,
@@ -845,7 +857,7 @@ $ git commit -m "Added contributor list"
 
 ```text
 [master a102c83] Added contributor list
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ 1 file changed, 4 insertions(+)
 ```
 
 We now have two branches,
@@ -861,7 +873,7 @@ diff --git a/README.md b/README.md
 index fd3de28..cf317ea 100644
 --- a/README.md
 +++ b/README.md
-@@ -1,5 +1,5 @@
+@@ -1,4 +1,5 @@
  # Zipf's Law
 
 -These Zipf's Law scripts tally the occurrences of words in text files
@@ -951,7 +963,7 @@ Our branch's history now shows a single sequence of commits,
 with the `master` changes on top of the earlier `docs` changes:
 
 ```shell
-$ git log --oneline
+$ git log --oneline -n 4
 ```
 
 ```text
@@ -965,7 +977,7 @@ If we want to see what really happened,
 we can add the `--graph` option to `git log`:
 
 ```shell
-$ git log --oneline --graph
+$ git log --oneline --graph -n 4
 ```
 
 ```text
