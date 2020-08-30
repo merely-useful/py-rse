@@ -59,6 +59,7 @@
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 [make]: https://www.gnu.org/software/make/
+[make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [merely-useful]: https://github.com/merely-useful/merely-useful.github.io/
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html

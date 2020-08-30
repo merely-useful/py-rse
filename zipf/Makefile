@@ -11,7 +11,7 @@ all : results/collated.png
 
 ## results/collated.png: plot the collated results.
 results/collated.png : results/collated.csv bin/plotparams.yml
-	python $(PLOT) $^ --outfile $@ --plotparams $(word 2,$^)
+	python $(PLOT) $< --outfile $@ --plotparams $(word 2,$^)
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
