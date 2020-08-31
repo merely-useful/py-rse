@@ -1,3 +1,8 @@
--   Explain the advantages of using a logging library rather than `print` statements in data science pipelines.
+-   Write `try`/`except` blocks to catch and handle errors.
+-   Explain what is meant by the error handling philosophy "throw low, catch high".
+-   Describe the most common built-in exception types and how they relate to each other.
+-   Explain what makes a useful error message.
+-   Define a dictionary that contains some commonly used error messages.
+-   Explain the advantages of using a logging library rather than `print` statements.
 -   Describe the intent of the five standard logging levels.
 -   Create and configure a simple logger.
