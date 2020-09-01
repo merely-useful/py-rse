@@ -1,9 +1,10 @@
--   Explain why someone would use [Git][git] at the command line.
--   Configure `git` the first time it is used on a computer.
+-   Explain the advantages and disadvantages of using [Git][git] at the command line.
+-   Demonstrate how to configure Git on a new computer.
 -   Create a local Git repository at the command line.
--   Go through the modify-add-commit cycle for one or more files.
--   Synchronize a local repository with [GitHub][github].
--   Explain what the HEAD of a repository is and how to use it.
--   Identify and use Git commit numbers.
--   Compare various versions of tracked files.
--   Restore old versions of files.
+-   Demonstrate the modify-add-commit cycle for one or more files.
+-   Synchronize a local repository with a [remote repository][remote_repository].
+-   Explain what the `HEAD` of a repository is and demonstrate how to use it in commands.
+-   Identify and use Git commit identifiers.
+-   Demonstrate how to compare revisions to files in a repository.
+-   Restore old versions of files in a repository.
+-   Explain how to use `.gitignore` to ignore files and identify files that are being ignored.

@@ -1,6 +1,6 @@
--   Explain why [branches][git_branch] can be useful.
--   Create a branch, make some changes, then merge those changes back into the master branch.
--   Create and resolve a [conflict][git_conflict].
+-   Explain why [branches][git_branch] are useful.
+-   Demonstrate how to create a branch, make changes on that branch, and [merge][git_merge] those changes back into the original branch.
+-   Explain what [conflicts][git_conflict] are and demonstrate how to resolve them.
 -   Explain what is meant by a [branch-per-feature][branch_per_feature] workflow.
--   Define the terms [fork][git_fork], [clone][git_clone], [remote][remote_repository] and [pull request][pull_request].
--   Fork a repository, make some changes, then submit a pull request.
+-   Define the terms [fork][git_fork], [clone][git_clone], [remote][remote_repository], and [pull request][pull_request].
+-   Demonstrate how to fork a repository and submit a pull request to the original repository.

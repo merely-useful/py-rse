@@ -1,6 +1,6 @@
--   Explain the different options for testing code.
--   Add [assertions][assertion] to a script. 
--   Write and run a series of unit tests, integration tests, and regression tests using `pytest`.
--   Check the test [coverage][code_coverage] using the `coverage` library.
+-   Explain three different goals for testing software.
+-   Add [assertions][assertion] to a program to check that it is operating correctly.
+-   Write and run unit tests using `pytest`.
+-   Determine the [coverage][code_coverage] of those tests and identify untested portions of code.
 -   Explain [continuous integration][continuous_integration] and implement it using [Travis CI][travis-ci].
--   Explain and contrast [test-driven development][tdd] and "checking-driven development".
+-   Describe and contrast [test-driven development][tdd] and checking-driven development.

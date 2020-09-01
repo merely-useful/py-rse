@@ -1,8 +1,7 @@
--   Explain the benefits of turning your Python code into a script that
-    can be executed at the command line.
--   Structure a new Python script by following a simple template.
--   Use the [argparse][argparse] library to manage command-line arguments in a program.
--   Write [docstrings][docstring] for new functions and scripts.
--   Explain the difference between [optional arguments][optional_argument]
-    and [positional arguments][positional_argument].
--   Create a new module containing functions used across multiple scripts.
+-   Explain the benefits of writing Python programs that can be executed at the command line.
+-   Create a command-line Python program that respects [Unix shell][shell] conventions for reading input and writing output.
+-   Use the [`argparse`][argparse] library to handle command-line arguments in a program.
+-   Explain how to tell if a module is being run directly or being loaded by another program.
+-   Write [docstrings][docstring] for programs and functions.
+-   Explain the difference between [optional arguments][optional_argument] and [positional arguments][positional_argument].
+-   Create a module that contains functions used by multiple programs and import that module.
