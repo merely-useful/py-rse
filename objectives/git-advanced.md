@@ -1,4 +1,6 @@
--   Explain why branches can be useful.
--   Merge branches back into the master branch.
--   Define the terms fork, clone, origin, remote.
--   Understand how to make a pull request and explain what they are useful for.
+-   Explain why [branches][git_branch] can be useful.
+-   Create a branch, make some changes, then merge those changes back into the master branch.
+-   Create and resolve a [conflict][git_conflict].
+-   Explain what is meant by a [branch-per-feature][branch_per_feature] workflow.
+-   Define the terms [fork][git_fork], [clone][git_clone], [remote][remote_repository] and [pull request][pull_request].
+-   Fork a repository, make some changes, then submit a pull request.
