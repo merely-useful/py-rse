@@ -1,15 +1,15 @@
--   Use `git config` with the `--global` option to configure a user name,
+-   Use `git config` with the `--global` option to configure your user name,
     email address, and other preferences once per machine.
--   `git init` initializes a repository.
--   Git stores all of its repository data in the `.git` directory.
+-   `git init` initializes a [repository][repository].
+-   Git stores all repository management data in the `.git` subdirectory of the repository's root directory.
 -   `git status` shows the status of a repository.
--   `git add` puts files in the staging area.
+-   `git add` puts files in the repository's staging area.
 -   `git commit` saves the staged content as a new commit in the local repository.
--   `git log` shows a listing of previous commits.
+-   `git log` lists previous commits.
 -   `git diff` shows the difference between two versions of the repository.
--   Synchronize your local repository with a [remote][remote_repository]
-    hosting service such as [GitHub][github].
--   `git remote` manages remote repositories.
+-   Synchronize your local repository with a [remote repository][remote_repository]
+    on a [forge][forge] such as [GitHub][github].
+-   `git remote` manages bookmarks pointing at remote repositories.
 -   `git push` copies changes from a local repository to a remote repository.
 -   `git pull` copies changes from a remote repository to a local repository.
 -   `git checkout` recovers old versions of files.
