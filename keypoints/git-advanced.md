@@ -8,7 +8,6 @@
 -   Use a [branch-per-feature][branch_per_feature] workflow.
 -   [Fork][git_fork] a repository that you would like to make changes to (if you don't have write access).
 -   `git clone` copies a remote repository to create a local repository.
--   `git remote` manages remote repositories.
 -   Create a new remote called `upstream` to point at the repository a fork was derived from.
 -   Create a [pull request][pull_request] to ask that the changes in your fork
     be merged into the upstream repository.
