@@ -1,4 +1,4 @@
 -   Describe the four levels of configuration typically used by robust software.
--   Explain what an overlay configuration is.
--   Explain why nested configuration options are usually not a good idea.
--   Add flat overlay configuration to a small application.
+-   Explain what an [overlay configuration][overlay_configuration] is.
+-   Explore the configuration options for plots generated using matplotlib.
+-   Create a configuration file using [YAML][yaml].
