@@ -1,22 +1,18 @@
 -   Explain how the shell relates to the keyboard, the screen, the operating system, and users' programs.
--   Explain when and why command-line interfaces should be used instead of graphical interfaces.
--   Explain the steps in the shell's read-run-print cycle.
+-   Explain when and why a [command-line interface][cli] should be used instead of [graphical user interfaces][gui].
+-   Explain the steps in the shell's [read-evaluate-print loop][repl].
 -   Identify the actual command, options, and filenames in a command-line call.
--   Demonstrate the use of tab completion and explain its advantages.
 -   Explain the similarities and differences between a file and a directory.
 -   Translate an absolute path into a relative path and vice versa.
 -   Construct absolute and relative paths that identify specific files and directories.
--   Create a directory hierarchy that matches a given diagram.
--   Create files in that hierarchy using an editor or by copying and renaming existing files.
 -   Delete, copy and move specified files and/or directories.
 -   Redirect a command's output to a file.
 -   Process a file instead of keyboard input using redirection.
--   Construct command pipelines with two or more stages.
+-   Construct command [pipelines][pipe_shell] with two or more stages.
 -   Explain what usually happens if a program or pipeline isn't given any input to process.
 -   Explain Unix's 'small pieces, loosely joined' philosophy.
 -   Write a loop that applies one or more commands separately to each file in a set of files.
 -   Trace the values taken on by a loop variable during execution of the loop.
 -   Explain the difference between a variable's name and its value.
--   Explain why spaces and some punctuation characters shouldn't be used in file names.
 -   Demonstrate how to see what commands have recently been executed.
 -   Re-run recently executed commands without retyping them.
