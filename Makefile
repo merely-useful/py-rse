@@ -6,7 +6,7 @@ PDF=_book/py-rse.pdf
 
 CHAPTERS=_bookdown.yml index.Rmd $(wildcard chapters/*.Rmd)
 
-OBJECTIVES_KEYpoints=$(wildcard objectives/*.Rmd) $(wildcard keypoints/*.Rmd)
+OBJECTIVES_KEYPOINTS=$(wildcard objectives/*.Rmd) $(wildcard keypoints/*.Rmd)
 
 COMMON_FILES=\
   _common.R \
