@@ -1,7 +1,7 @@
--   Modern publishing involves a written report *as well as* the associated data and code.
--   A [DOI][doi] is a unique identifier for a particular dataset, report, or software release.
--   An [ORCID][orcid] is a unique personal identifier that you can use to identify your work.
--   Data should be findable, accessible, interoperable, and reusable ([FAIR][go-fair]).
--   Include small datasets in version control repositories; store large ones on data sharing sites.
--   Provide information about your software environment, analysis scripts, and data processing steps.  
--   [Inspectability][inspectability] is the enduring legacy of a well-documented computational analysis.  
+-   Publish data and code as well as papers.
+-   Use [DOIs][doi] to identify reports, datasets, or software release.
+-   Use an [ORCID][orcid] to identify yourself as an author of a report, dataset, or software release.
+-   Data should be [FAIR][go-fair]: findable, accessible, interoperable, and reusable.
+-   Put small datasets in version control repositories; store large ones on data sharing sites.
+-   Describe your software environment, analysis scripts, and data processing steps in [reproducible][reproducible_research] ways.
+-   Make your analyses [inspectable][inspectability] as well as reproducible.

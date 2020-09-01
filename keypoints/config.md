@@ -1,7 +1,8 @@
--   [Overlay configuration][overlay_configuration] involves four layers,
-    each of which overrides the layers above it.
--   Use a system-wide configuration file for general settings (layer 1).
--   Use a user-specific configuration file for personal preferences (layer 2).
--   Use a job-specific configuration file with settings for a particular run (layer 3).
--   Use command-line options to change things that commonly change (layer 4).
--   Format configuration files using [YAML][yaml].
+-   [Overlay configuration][overlay_configuration] specifies settings for a program in layers,
+    each of which overrides previous layers.
+-   Use a system-wide configuration file for general settings.
+-   Use a user-specific configuration file for personal preferences.
+-   Use a job-specific configuration file with settings for a particular run.
+-   Use command-line options to change things that commonly change.
+-   Use [YAML][yaml] or some other standard syntax to write configuration files.
+-   Save configuration information to make your research [reproducible][reproducible_research].

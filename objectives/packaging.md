@@ -1,10 +1,10 @@
--   Install and distribute a Python package using [pip][pip] and [setuptools][setuptools].
--   Create and use a [virtual environment][virtual_environment] for the installation.
--   Distribute the package to [TestPyPI][testpypi].
+-   Create a Python package using [setuptools][setuptools].
+-   Distribute that package via [TestPyPI][testpypi].
+-   Install that package and others using [pip][pip].
+-   Create and use a [virtual environment][virtual_environment] to manage Python package installations.
 -   Write a README file for a Python package.
--   Explain the different potential audiences for package documentation.
--   Use [Sphinx][sphinx] to create and preview a documentation website. 
--   Explain where a documentation website could be hosted for free.
--   Create a GitHub release for a Python package (using [semantic versioning][semantic_versioning]).
--   Explain where/how a [DOI][doi] can be obtained for a software release.
--   List a number of academic journals that publish software papers.
+-   Explain the different kinds of audiences for package documentation.
+-   Use [Sphinx][sphinx] to create and preview documentation for a package.
+-   Create a GitHub release for a Python package using [semantic versioning][semantic_versioning].
+-   Explain where and how to obtain a [DOI][doi] for a software release.
+-   Describe some academic journals that publish software papers.

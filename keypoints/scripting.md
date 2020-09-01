@@ -1,12 +1,9 @@
--   Turn your Python code into a standalone program (a "Python [script][script]")
-    that can be run in the Unix shell just like other command-line tools.
--   Most Python scripts have a similar structure that can be used as a template.
--   Libraries such as [argparse][argparse] can be used to efficiently handle command line arguments.
+-   Write command-line Python programs that can be run in the [Unix shell][shell] like other command-line tools.
+-   If the user does not specify any input files, read from [standard input][stdin].
+-   If the user does not specify any output files, write to [standard output][stdout].
+-   Place all `import` statements at the start of a module.
+-   Use the value of `__name__` to determine if a file is being run directly or being loaded as a module.
+-   Use [`argparse`][argparse] to handle command-line arguments in standard ways.
+-   Use [short options][short_option] for common controls and [long options][long_option] for less common or more complicated ones.
 -   Use [docstrings][docstring] to document functions and scripts.
--   Functions used across multiple scripts should be placed
-    in a separate file that can be imported as a module.
- 
- 
- 
- 
- 
+-   Place functions that are used across multiple scripts in a separate file that those scripts can import.

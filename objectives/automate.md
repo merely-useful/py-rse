@@ -1,11 +1,11 @@
 -   Explain what a [build manager][build_manager] is and how they aid reproducible research.
--   Describe and identify the three parts of a Make rule.
+-   Name and describe the three parts of a [build rule][build_rule].
 -   Write a Makefile that re-runs a multi-stage data analysis.
 -   Explain and trace how Make chooses an order in which to execute rules.
 -   Explain what [phony targets][phony_target] are and define a phony target.
--   Explain what [automatic variables][automatic_variable] are and correctly identify three commonly-used automatic variables.
--   Rewrite Make rules to use automatic variables.
--   Explain why and how to write a [pattern rules][pattern_rule] in a Makefile.
--   Rewrite Make rules to use patterns.
+-   Explain what [automatic variables][automatic_variable] are and identify three commonly-used automatic variables.
+-   Write Make rules that use automatic variables.
+-   Explain why and how to write [pattern rules][pattern_rule] in a Makefile.
+-   Write Make rules that use patterns.
 -   Define variables in a Makefile explicitly and by using functions.
 -   Make a self-documenting Makefile.

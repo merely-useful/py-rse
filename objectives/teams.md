@@ -1,15 +1,12 @@
--   Explain steps a project lead can take to be a good [ally][ally].
--   Explain the purpose of a Code of Conduct and the essential features an effective one must have.
--   Add a Code of Conduct to a project.
--   Explain why adding licensing information to a repository is important.
--   Explain differences in licensing and social expectations.
--   Choose an appropriate license.
--   Explain where and how to communicate licensing.
+-   Explain how a project lead can be a good [ally][ally].
+-   Explain the purpose of a Code of Conduct and add one to a project.
+-   Explain why every project should include a license and add one to a project.
+-   Describe different kinds of licenses for software and written material.
 -   Explain what an [issue tracking system][issue_tracking_system] does and what it should be used for.
--   Describe the information a well-written issue should contain.
--   Explain how to use [labels][issue_label] on issues to manage work.
--   Submit an issue on a project.
+-   Describe what a well-written issue should contain.
+-   Explain how to [label][issue_label] issues to manage work.
+-   Submit an issue to a project.
 -   Describe common approaches to prioritizing tasks.
 -   Describe some common-sense rules for running meetings.
--   Add a CONTRIBUTING file to a project to explain how newcomers can contribute.
--   Describe some approaches to dealing with conflicts between participants. 
+-   Explain why every project should include contribution guidelines and add some to a project.
+-   Explain how to handle conflict between project participants. 
