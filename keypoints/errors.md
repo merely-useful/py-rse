@@ -1,6 +1,9 @@
--   Use `logging` instead of `print` to report program activity.
--   Separate  messages into `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` levels.
+-   Signal errors by [raising exceptions][raise_exception].
+-   Use `try`/`except` blocks to [catch][catch_exception] and handle exceptions.
+-   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
+-   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
+-   Write error messages that help users figure out what to do to fix the problem.
+-   Store error messages in a lookup table to ensure consistency.
+-   Use a [logging framework][logging_framework] instead of `print` statements to report program activity.
+-   Separate logging messages into `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` levels.
 -   Use `logging.basicConfig` to define basic logging parameters.
--   Always provide timestamps using YYYY-MM-DDTTHH:MM:SS format.
--   Use standard input and standard output for normal input and output, and send log messages to a file.
--   Use `tail -f` to monitor log files.

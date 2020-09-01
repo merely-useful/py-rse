@@ -1,4 +1,8 @@
--   Read a system-wide configuration file, then a user configuration file, then a job configuration file.
--   Format configuration files using YAML.
--   Dump all configuration values in the same format used for input on request.
--   Include the software version number in the dumped configuration.
+-   [Overlay configuration][overlay_configuration] specifies settings for a program in layers,
+    each of which overrides previous layers.
+-   Use a system-wide configuration file for general settings.
+-   Use a user-specific configuration file for personal preferences.
+-   Use a job-specific configuration file with settings for a particular run.
+-   Use command-line options to change things that commonly change.
+-   Use [YAML][yaml] or some other standard syntax to write configuration files.
+-   Save configuration information to make your research [reproducible][reproducible_research].

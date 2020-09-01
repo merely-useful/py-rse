@@ -1,8 +1,7 @@
--   Write a shell script that runs a command or series of commands for a fixed set of files.
--   Run a shell script from the command line.
--   Write a shell script that operates on a set of files defined by the user on the command line.
--   Create pipelines that include shell scripts you, and others, have written.
+-   Write a [shell script][shell_script] that uses command-line arguments.
+-   Create pipelines that include shell scripts as well as built-in commands.
+-   Create and use variables in shell scripts with correct quoting.
 -   Use `grep` to select lines from text files that match simple patterns.
 -   Use `find` to find files whose names match simple patterns.
--   Use the output of one command as the command-line argument(s) to another command.
--   Explain what is meant by 'text' and 'binary' files, and why many common tools don't handle the latter well.
+-   Edit the `.bashrc` file to change default shell variables.
+-   Create aliases for commonly-used commands.

@@ -1,11 +1,11 @@
--   A build tool re-runs commands so all files and their dependencies are up-to-date with each other.
--   Make is a widely-used build tool that uses files' timestamps to find out-of-date prerequisites.
--   A Make rule has targets, prerequisites, and actions.
--   A target can correspond to a file or be a phony target (used simply to trigger actions).
--   When a target is out of date with respect to its prerequisites, Make executes the actions associated with its rule.
--   Make executes as many rules as it needs to when updating files, but always respect prerequisite order.
--   Make defines the automatic variables `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
--   Pattern rules can use `%` as a placeholder for parts of filenames.
+-   [Make][make] is a widely-used build manager.
+-   A [build manager][build_manager] re-runs commands to update files that are out of date.
+-   A [build rule][build_rule] has [targets][build_target], [prerequisites][prerequisite], and a [recipe][build_recipe].
+-   A target can be a file or a [phony target][phony_target] that simply triggers an action.
+-   When a target is out of date with respect to its prerequisites, Make executes the recipe associated with its rule.
+-   Make executes as many rules as it needs to when updating files, but always respects prerequisite order.
+-   Make defines [automatic variables][automatic_variable] such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
+-   [Pattern rules][pattern_rule] can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
 -   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
--   Specially-formatted comments can be used to make Makefiles self-documenting.
+-   Use specially-formatted comments to create self-documenting Makefiles.

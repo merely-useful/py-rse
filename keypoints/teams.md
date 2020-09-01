@@ -1,11 +1,10 @@
--   Be proactive about welcoming and nurturing community members.
--   Create an explicit Code of Conduct for your project modelled on the Contributor Covenant.
--   Every project should include an explicit license to make clear who can do what with the material.
--   Create issues for bugs, enhancement requests, and discussions.
--   Labels issues submitted to your project to identify their purpose.
--   Prioritize tasks for your project strategically and group issues into milestones to track their progress.
--   Include contributing guidelines for a project that specify the workflow and associated expectations for participants.
--   Decisions about what tasks are most important are a part of project governance.
--   Communicate and enforce common-sense rules for running meetings to keep the project proceeding smoothly.
--   Encourage equity among participant input in meetings to support an inclusive culture.
--   Equip yourself with a strategy to handle conflict of various forms when it arises among participants.
+-   Welcome and nurture community members proactively.
+-   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
+-   Include a license in your project so that it's clear who can do what with the material.
+-   Create [issues][issue] for bugs, enhancement requests, and discussions.
+-   [Label issues][issue_label] to identify their purpose.
+-   [Triage][triage issues regularly and group them into [milestones][milestone] to track progress.
+-   Include contribution guidelines in your project that specify its workflow and its expectations of participants.
+-   Make rules about [governance][governance] explicit.
+-   Use common-sense rules to make project meetings fair and productive.
+-   Manage conflict between participants rather than hoping it will take care of itself.
