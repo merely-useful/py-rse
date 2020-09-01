@@ -1,5 +1,5 @@
 -   Be proactive about welcoming and nurturing community members.
--   Create an explicit Code of Conduct for your project modelled on the Contributor Covenant.
+-   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
 -   Every project should include an explicit license to make clear who can do what with the material.
 -   Create issues for bugs, enhancement requests, and discussions.
 -   Labels issues submitted to your project to identify their purpose.
