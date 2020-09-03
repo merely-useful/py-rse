@@ -41,7 +41,7 @@ of the website.
 
 1.  Install R (we recommend that you also install and use the RStudio IDE).
 
-1.  Open RStudio by clicking on the `merely-useful.github.io.Rproj` file (if not
+1.  Open RStudio by clicking on the `py-rse.Rproj` file (if not
     through RStudio, then open an R console in the location of the Merely Useful
     repo) and install the dependencies by typing in the console:
 
@@ -197,7 +197,7 @@ that apply to both R and Python.
 Travis needs to know what packages to install to build the website:
 
 -   For R packages, it is very easy. When in the Merely Useful R Project (by
-    opening the `merely-useful.github.io.Rproj` file), type
+    opening the `py-rse.Rproj` file), type
     `usethis::use_package("packagename")` in the R Console. This will add the
     package dependency to the `DESCRIPTION` file under the imports section.
 
