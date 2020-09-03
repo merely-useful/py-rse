@@ -9,7 +9,7 @@ The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
 just like other command-line tools [@Tasc2017].
 
-In this chapter we will develop a command-line Python program
+In this chapter we will develop a command-line Python program\index{Python!command line}
 that handles input and output in the same way as other shell commands,
 can be controlled by several option flags,
 and provides useful information when things go wrong.
@@ -36,7 +36,7 @@ zipf/
 
 ## Programs and Modules {#scripting-main}
 
-To create a Python program that can run from the command line,
+To create a Python program that can run from the command line,\index{Python!program vs.\ module}
 the first thing we do is to add the following to the bottom of the file:
 
 ```python
@@ -47,7 +47,7 @@ This strange-looking check tells us
 whether the file is running as a standalone program
 or whether it is being imported as a module by some other program.
 When we import a Python file as a module in another program,
-the `__name__` variable is automatically set to the name of the file.
+the `__name__` variable is automatically set to the name of the file.\index{\_\_name\_\_ variable (in Python)}\index{Python!\_\_name\_\_ variable}
 When we run a Python file as a standalone program,
 on the other hand,
 `__name__` is always set to the special string `"__main__"`.
@@ -119,7 +119,7 @@ but we can use whatever name we want.
 ## Handling Command-Line Options {#scripting-options}
 
 The first thing the main function usually does
-is parse any options the user gave the program on the command line.
+is parse any options the user gave the program on the command line.\index{option (of Python program)}\index{Python!option}
 The most commonly used library for doing this in Python is [`argparse`][argparse],
 which can handle options with or without arguments,
 convert arguments from strings to numbers or other types,
@@ -219,7 +219,7 @@ Our template is a good starting point,
 but we can make one improvement right away.
 To start,
 let's write a function that doubles a number,
-but add a bit of documentation:
+but add a bit of documentation:\index{Python!documenting}
 
 ```python
 def double(num):
@@ -230,7 +230,7 @@ def double(num):
 The first line of this function is a string
 that isn't assigned to a variable.
 Such a string is called a documentation string,
-or [docstring][docstring] for short.
+or [docstring][docstring] for short.\index{docstring (in Python)}\index{Python!docstring}
 If we call our function it does what we expect:
 
 ```python
@@ -243,7 +243,7 @@ double(3)
 
 However,
 we can also ask for the function's documentation,
-which is stored in `double.__doc__`:
+which is stored in `double.__doc__`:\index{\_\_doc\_\_ variable (in Python)}
 
 ```python
 double.__doc__
@@ -286,7 +286,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-Note that docstrings are usually written using triple-quoted strings,
+Note that docstrings are usually written using triple-quoted strings,\index{Python!triple-quoted strings}
 since these can span multiple lines.
 Note also how we pass `description=__doc__` to `argparse.ArgumentParser`.
 This saves us from typing the same information twice,
@@ -331,7 +331,8 @@ FILE
 
 As this example shows,
 if we ask for help on the module,
-Python formats and displays all of the docstrings for everything in the file. We'll talk more about what to put in a docstring in Section \@ref(packaging-docstrings).
+Python formats and displays all of the docstrings for everything in the file.
+We'll talk more about what to put in a docstring in Section \@ref(packaging-docstrings).
 
 ## Counting Words {#scripting-wordcount}
 
@@ -521,13 +522,13 @@ it,2141
 
 Most of the Unix commands we have seen so far follow a useful convention:
 if the user doesn't specify the names of any input files,
-they read from standard input.
+they read from standard input.\index{standard input!in Python}
 Similarly,
 if no output file is specified,
 the command sends its results to standard output.
 This makes it easy to use the command in a pipeline.
 
-Our program always sends its output to standard output;
+Our program always sends its output to standard output;\index{standard output!in Python}
 as noted above,
 we can always redirect it to a file with `>`.
 If we want it to read from standard input,
@@ -590,7 +591,8 @@ that,41
 ## Positional and Optional Arguments {#py-rse-py-scripting-positional-optional}
 
 We have met two kinds of command-line arguments while writing `countwords.py`.
-[Optional arguments][optional_argument] are defined using a leading `-` or `--` (or both),
+[Optional arguments][optional_argument]\index{option (of shell command)!optional}
+are defined using a leading `-` or `--` (or both),
 which means that all three of the following definitions are valid:
 
 ```python
@@ -599,11 +601,13 @@ parser.add_argument('--num', type=int, help='Limit output')
 parser.add_argument('-n', '--num', type=int, help='Limit output')
 ```
 
-The convention is for `-` to precede a [short][short_option] (single letter) option
-and `--` a [long][long_option] (multi-letter) option.
+The convention is for `-` to precede
+a [short][short_option] (single letter) option\index{option (of shell command)!short}
+and `--` a [long][long_option] (multi-letter) option.\index{option (of shell command)!long}
 The user can provide optional arguments at the command line in any order they like.
 
-[Positional arguments][positional_argument] have no leading dashes and are not optional:
+[Positional arguments][positional_argument]\index{positional argument (of program)}
+have no leading dashes and are not optional:
 the user must provide them at the command line
 in the order in which they are specified to `add_argument`
 (unless `nargs='?'` is provided to say that the value is optional).
@@ -727,7 +731,7 @@ if we want to improve it or fix a bug,
 we have to find and change every single script that contains a copy.
 
 The solution is to put the shared functions in a separate file
-and load that file as a module.
+and load that file as a module.\index{Python!module}\index{module (in Python)}
 Let's create a file called `utilities.py` in the `bin` directory
 that looks like this:
 
@@ -838,8 +842,8 @@ if __name__ == '__main__':
 ```
 
 Any Python source file can be imported by any other.
-This is why Python files should be named using [`snake_case`][snake_case]
-instead of [`kebab-case`][kebab_case]:
+This is why Python files should be named using [`snake_case`][snake_case]\index{snake case}\index{naming conventions!snake case}
+instead of [`kebab-case`][kebab_case]:\index{kebab case}\index{naming conventions!kebab case}
 an expression like `import some-thing` isn't allowed
 because `some-thing` isn't a legal variable name.
 When a file is imported,
@@ -851,7 +855,7 @@ and `thing` is the name of the item.
 > **The `__pycache__` Directory**
 >
 > When we import a file,
-> Python translates the source code into instructions called [byte codes][byte_code]
+> Python translates the source code into instructions called [byte codes][byte_code]\index{byte code}
 > that it can execute efficiently.
 > Since the byte codes only change when the source changes,
 > Python saves the byte code in a separate file,
@@ -860,7 +864,7 @@ and `thing` is the name of the item.
 > (unless the file has changed,
 > in which case Python starts from the beginning).
 >
-> Python creates a subdirectory called `__pycache__`
+> Python creates a subdirectory called `__pycache__`\index{\_\_pycache\_\_ directory}
 > that holds the byte code for the files imported from that directory.
 > We typically don't want to put the files in `__pycache__` in version control,
 > so we normally tell Git to ignore it as discussed in Section \@ref(git-cmdline-ignore).
