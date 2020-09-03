@@ -70,7 +70,7 @@ clean :
 
 ## chapters : check consistency of chapters.
 chapters :
-	@make settings | bin/chapters.py _bookdown.yml CHAPTERS chapters/objectives.Rmd chapters/keypoints.Rmd
+	@make settings | bin/chapters.py _bookdown.yml CHAPTERS
 
 ## crossrefs : check cross-references.
 crossrefs :
