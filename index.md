@@ -15077,15 +15077,13 @@ we'll have some minimal documentation in a familiar looking form (Figure \@ref(
 If we look under `modules` we will
 see the documentation for the individual modules (Figure \@ref(fig:packaging-sphinx-module-countwords)).
 
-<div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/module-index.png" alt="The module index at `file:///Users/amira/zipf/docs/_build/html/py-modindex.html`"  />
-<p class="caption">(\#fig:packaging-sphinx-module-list)The module index at `file:///Users/amira/zipf/docs/_build/html/py-modindex.html`</p>
-</div>
+```{r packaging-sphinx-module-list, echo=FALSE, fig.cap="The module index"} <!-- at file:///Users/amira/zipf/docs/_build/html/py-modindex.html -->
+knitr::include_graphics("figures/py-rse/packaging/module-index.png")
+```
 
-<div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/module-countwords.png" alt="The countwords documentation at `file:///Users/z3526123/Desktop/zipf/docs/_build/html/source/countwords.html#module-countwords"  />
-<p class="caption">(\#fig:packaging-sphinx-module-countwords)The countwords documentation at `file:///Users/z3526123/Desktop/zipf/docs/_build/html/source/countwords.html#module-countwords</p>
-</div>
+```{r packaging-sphinx-module-countwords, echo=FALSE, fig.cap="The countwords documentation"} <!-- at `file:///Users/z3526123/Desktop/zipf/docs/_build/html/source/countwords.html#module-countwords -->
+knitr::include_graphics("figures/py-rse/packaging/module-countwords.png")
+```
 
 The landing page for the website is the perfect place for the content of our README file,
 so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file to insert it:
@@ -15112,10 +15110,9 @@ If we re-run `make html`,
 we now get an updated set of web pages that
 re-uses our README as the introduction to the documentation (Figure \@ref(fig:packaging-sphinx-landing-page)).
 
-<div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/landing-page.png" alt="The landing page at `file:///Users/amira/zipf/docs/_build/html/index.html`"  />
-<p class="caption">(\#fig:packaging-sphinx-landing-page)The landing page at `file:///Users/amira/zipf/docs/_build/html/index.html`</p>
-</div>
+```{r packaging-sphinx-landing-page, echo=FALSE, fig.cap="The landing page"} <!-- at `file:///Users/amira/zipf/docs/_build/html/index.html` -->
+knitr::include_graphics("figures/py-rse/packaging/landing-page.png")
+```
 
 Before going on,
 note that Sphinx is not included in the installation requirements in `requirements.txt` (Section \@ref(testing-ci)).
