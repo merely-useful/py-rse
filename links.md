@@ -166,7 +166,7 @@
 [continuation_prompt]: glossary.html#continuation_prompt
 [continuous_integration]: glossary.html#continuous_integration
 [current_working_directory]: glossary.html#current_working_directory
-[data-files]: FIXME/path/to/data/files
+[data-files]: FIXME/data/zipf.zip
 [data_package]: glossary.html#data_package
 [default_value]: glossary.html#default_value
 [default_target]: glossary.html#default_target
