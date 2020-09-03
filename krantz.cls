@@ -1171,7 +1171,7 @@
 \newlength\section@toc@skip
 \section@toc@skip1.5em
 \newlength\SectionTOCWidth
-\SectionTOCWidth2.3em
+\SectionTOCWidth2.8em
 \def\l@section#1#2{%
   \toc@draw
   \gdef\toc@draw{\draw@section{#1}{#2}}}
