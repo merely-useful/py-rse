@@ -72,6 +72,10 @@ clean :
 chapters :
 	@make settings | bin/chapters.py _bookdown.yml CHAPTERS chapters/objectives.Rmd chapters/keypoints.Rmd
 
+## citations : check bibliography citations.
+citations :
+	@bin/citations.py book.bib ${CHAPTERS}
+
 ## crossrefs : check cross-references.
 crossrefs :
 	@bin/crossrefs.py "RSE PY" ${SOURCE}
