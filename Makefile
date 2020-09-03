@@ -84,7 +84,7 @@ fixme :
 glossary :
 	echo '# Glossary {#glossary}' > glossary.md
 	echo '' >> glossary.md
-	${GLOSS}/utils/merge.py ${GLOSS}/glossary.yml ./glossary.yml \
+	bin/glossary-merge.py ${GLOSS}/glossary.yml ./glossary.yml \
 	| bin/glossarize.py glossary-slugs.txt \
 	>> glossary.md
 
