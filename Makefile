@@ -4,11 +4,14 @@ HTML=_book/index.html
 
 PDF=_book/py-rse.pdf
 
-CHAPTERS=_bookdown.yml index.Rmd $(wildcard chapters/*.Rmd)
+CHAPTERS=index.Rmd $(wildcard chapters/*.Rmd)
 
-OBJECTIVES_KEYPOINTS=$(wildcard objectives/*.Rmd) $(wildcard keypoints/*.Rmd)
+OBJECTIVES_KEYPOINTS=$(wildcard objectives/*.md) $(wildcard keypoints/*.md)
 
 COMMON_FILES=\
+  krantz.cls \
+  _bookdown.yml \
+  _output.yml \
   _common.R \
   appendix.Rmd \
   LICENSE.md \
@@ -17,8 +20,7 @@ COMMON_FILES=\
   glossary.md \
   references.Rmd \
   links.md \
-  book.bib \
-  preamble.tex
+  book.bib
 
 SOURCE=${CHAPTERS} ${OBJECTIVES_KEYPOINTS} ${COMMON_FILES}
 
