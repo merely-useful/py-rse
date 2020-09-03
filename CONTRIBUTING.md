@@ -53,7 +53,7 @@ fenced code blocks rather than indented blocks.
 
 There are more details for what we recommend for learners in
 [rse-style.Rmd](rse-style.Rmd), and some further discussion in
-[issue #116](https://github.com/merely-useful/merely-useful.github.io/issues/116).
+[issue #116](https://github.com/merely-useful/py-rse/issues/116).
 
 Please note that we use Simplified English rather than Traditional English,
 i.e., American rather than British spelling and grammar.
