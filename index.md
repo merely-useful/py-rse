@@ -173,11 +173,6 @@ we will show you how to:
 -   Organise small and medium-sized data science projects.
 -   Create Python packages that can be installed in standard ways.
 
-Each chapter concludes with some exercises,
-whose solutions are discussed in Appendix \@ref(solutions).
-Early chapters have many small exercises;
-later chapters have fewer but larger exercises.
-
 ## Project Structure {#intro-structure}
 
 Project organization is like a diet:
