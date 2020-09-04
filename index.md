@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-03"
+date: "2020-09-04"
 documentclass: krantz
 bibliography: book.bib
 csl: jcb.csl
@@ -9,7 +9,6 @@ citation-package: none
 link-citations: yes
 github-repo: merely-useful/py-rse
 site: bookdown::bookdown_site
-lot: yes
 lof: yes
 ---
 
@@ -22,7 +21,7 @@ lof: yes
 
 > It's still magic even if you know how it's done.
 >
-> --- Terry Pratchett
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 Software is now as essential to research as telescopes, test tubes, and reference libraries,
 which means that researchers need need to know how to build, check, use, and share programs.
@@ -321,7 +320,7 @@ zipf/
 This book owes its existence to
 everyone we met through [the Carpentries][carpentries].
 We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work,
-to the authors of [@Nobl2009; @Hadd2010; @Wils2014; @Scop2015; @Tasc2017; @Wils2017; @Brow2018; @Deve2018; @Shol2019; @Wils2019],
+to the authors of @Nobl2009; @Hadd2010; @Wils2014; @Scop2015; @Tasc2017; @Wils2017; @Brow2018; @Deve2018; @Shol2019; @Wils2019,
 and to everyone who has contributed, including Madeleine Bonsma-Fisher,
 Jonathan Dursi,
 Christina Koch,
@@ -332,6 +331,12 @@ and Elizabeth Wickes.
 -   Many of the explanations and exercises in Chapters \@ref(bash-basics) and \@ref(bash-advanced)
     have been adapted from Software Carpentry's lesson
     [The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+
+-   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
+    have been adapted from Software Carpentry's lesson
+    [Version Control with Git](http://swcarpentry.github.io/git-novice/) and an
+    [adaptation/extension of that lesson][uwm-git-lesson] maintained by
+    the University of Wisconsin-Madison Data Science Hub.
 
 -   Chapter \@ref(automate) is based on the [Software Carpentry lesson on Make][swc-make]
     maintained by [Gerard Capes][capes-gerard]
@@ -359,12 +364,13 @@ and Elizabeth Wickes.
 [checklist]: glossary.html#checklist
 [choose-license]: https://choosealicense.com/
 [cli]: glossary.html#cli
-[code-review]: glossary.html#code-review
+[code_review]: glossary.html#code_review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [conda-forge]: https://conda-forge.org/
 [conda-forge-instructions]: https://conda-forge.org/#add_recipe
 [conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
+[configparser]: https://docs.python.org/3/library/configparser.html
 [covenant]: https://www.contributor-covenant.org
 [creative-commons]: https://creativecommons.org/
 [desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
@@ -383,6 +389,7 @@ and Elizabeth Wickes.
 [git-ssh-bitbucket]: https://confluence.atlassian.com/bitbucket/set-up-ssh-for-git-728138079.html
 [git-ssh-github]: https://help.github.com/articles/generating-ssh-keys
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
+[github-contributors-guide]: https://docs.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors
 [github-gitignore]: https://github.com/github/gitignore
 [github-release]:https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository
 [github-release-link]: https://docs.github.com/en/github/administering-a-repository/linking-to-releases
@@ -455,8 +462,6 @@ and Elizabeth Wickes.
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
-[working-memory]: glossary.html#working-memory
-[wrap-code]: glossary.html#wrap-code
 [xcode]: https://developer.apple.com/xcode/
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
@@ -511,7 +516,9 @@ and Elizabeth Wickes.
 [continuation_prompt]: glossary.html#continuation_prompt
 [continuous_integration]: glossary.html#continuous_integration
 [current_working_directory]: glossary.html#current_working_directory
+[data-files]: FIXME/data/zipf.zip
 [data_package]: glossary.html#data_package
+[default_value]: glossary.html#default_value
 [default_target]: glossary.html#default_target
 [defensive_programming]: glossary.html#defensive_programming
 [destructuring_assignment]: glossary.html#destructuring_assignment
@@ -548,6 +555,7 @@ and Elizabeth Wickes.
 [git_merge]: glossary.html#git_merge
 [git_pull]: glossary.html#git_pull
 [git_push]: glossary.html#git_push
+[git_remote]: glossary.html#git_remote
 [git_stage]: glossary.html#git_stage
 [governance]: glossary.html#governance
 [gpl]: glossary.html#gpl
@@ -571,10 +579,12 @@ and Elizabeth Wickes.
 [issue_tracking_system]: glossary.html#issue_tracking_system
 [json]: glossary.html#json
 [kebab_case]: glossary.html#kebab_case
+[keyword_arguments]: glossary.html#keyword_arguments
 [latex]: glossary.html#latex
 [linter]: glossary.html#linter
 [list_comprehension]: glossary.html#list_comprehension
 [logging_framework]: glossary.html#logging_framework
+[logging_level]: glossary.html#logging_level
 [long_option]: glossary.html#long_option
 [loop_body]: glossary.html#loop_body
 [magic_number]: glossary.html#magic_number
@@ -645,10 +655,12 @@ and Elizabeth Wickes.
 [shebang]: glossary.html#shebang
 [shell]: glossary.html#shell
 [shell_script]: glossary.html#shell_script
+[shell_variable]: glossary.html#shell_variable
 [short_circuit_test]: glossary.html#short_circuit_test
 [short_identifier_git]: glossary.html#short_identifier_git
 [short_option]: glossary.html#short_option
 [snake_case]: glossary.html#snake_case
+[software_distribution]: glossary.html#software_distribution
 [source_distribution]: glossary.html#source_distribution
 [sprint]: glossary.html#sprint
 [ssh]: glossary.html#ssh
@@ -681,6 +693,7 @@ and Elizabeth Wickes.
 [up_vote]: glossary.html#up_vote
 [update_operator]: glossary.html#update_operator
 [validation]: glossary.html#validation
+[variable_arguments]: glossary.html#variable_arguments
 [verification]: glossary.html#verification
 [version_control_system]: glossary.html#version_control_system
 [virtual_environment]: glossary.html#virtual_environment
@@ -707,7 +720,7 @@ GUIs are easy to learn but hard to automate,
 and don't create a record of what we did.
 
 In contrast,
-when we use a [command-line interface][cli] (CLI)
+when we use a [command-line interface][cli] (CLI)\index{command-line interface}\index{CLI (command-line interface)}
 we communicate with the computer by typing commands,
 and the computer responds by displaying text.
 CLIs existed long before GUIs;
@@ -715,7 +728,7 @@ they have survived because they are efficient,
 easy to automate,
 and automatically record what we have done.
 
-The heart of every CLI is a [read-evaluate-print loop][repl] (REPL).
+The heart of every CLI is a [read-evaluate-print loop][repl] (REPL).\index{read-eval-print loop}\index{REPL (read-eval-print loop)}
 When we type a command and press <kbd>Return</kbd> (also called <kbd>Enter</kbd>)
 the CLI <strong>r</strong>eads the command,
 <strong>e</strong>valuates it (i.e., executes it),
@@ -726,7 +739,7 @@ you have already used a simple CLI.
 
 This lesson introduces another CLI that lets us interact with our computer's operating system.
 It is called a "command shell",
-or just [shell][shell] for short,
+or just [shell][shell] for short,\index{Unix shell}
 and in essence is a program that runs other programs on our behalf
 (Figure \@ref(fig:bash-basics-repl)).
 Those "other programs" can do things as simple as telling us the time
@@ -758,7 +771,7 @@ makes life easier even when working on small problems.
 >
 > Programmers have written many different shells over the last forty years,
 > just as they have created many different text editors and plotting packages.
-> The most popular shell today is called Bash
+> The most popular shell today is called Bash\index{Bash}\index{Unix shell!Bash}
 > (an acronym of <strong>B</strong>ourne <strong>A</strong>gain <strong>SH</strong>ell,
 > and a weak pun on the name of its predecessor,
 > the Bourne shell).
@@ -773,7 +786,7 @@ on how to launch the shell on your computer.
 
 ## Exploring Files and Directories {#bash-basics-explore}
 
-When Bash runs it presents us with a [prompt][prompt] to indicate that it is waiting for input.
+When Bash runs it presents us with a [prompt][prompt]\index{prompt (in Unix shell)} to indicate that it is waiting for input.
 By default,
 this prompt is a simple dollar sign:
 
@@ -816,13 +829,13 @@ amira
 Now that we know who we are,
 we can explore where we are and what we have.
 The part of the operating system that manages files and directories (also called [folders][folder])
-is called the [filesystem][filesystem].
+is called the [filesystem][filesystem].\index{filesystem}
 Some of the most commonly-used commands in the shell create, inspect, rename, and delete files and directories.
-Let's start exploring them by running the command `pwd`,
+Let's start exploring them by running the command `pwd`,\index{Unix commands!pwd}
 which stands for <strong>p</strong>rint <strong>w</strong>orking <strong>d</strong>irectory.
 The "print" part of its name is straightforward;
 the "working directory" part refers to the fact that
-the shell keeps track of our [current working directory][current_working_directory] at all times.
+the shell keeps track of our [current working directory][current_working_directory] at all times.\index{current working directory}
 Most commands read and write files in the current working directory
 unless we tell them to do something else,
 so knowing where we are before running a command is important.
@@ -839,7 +852,7 @@ Here,
 the computer's response is `/Users/amira`,
 which tells us that we are in a directory called `amira`
 that is contained in a top-level directory called `Users`.
-This directory is Amira's [home directory][home_directory];
+This directory is Amira's [home directory][home_directory];\index{home directory}
 to understand what that means,
 we must first understand how the filesystem is organized.
 On Amira's computer
@@ -850,7 +863,7 @@ it looks like Figure \@ref(fig:bash-basics-filesystem).
 <p class="caption">(\#fig:bash-basics-filesystem)Sample Filesystem</p>
 </div>
 
-At the top is the [root directory][root_directory] that holds everything else,
+At the top is the [root directory][root_directory] that holds everything else,\index{root directory}
 which we can refer to using a slash character, `/` on its own.
 Inside that directory are several other directories,
 including `bin` (where some built-in programs are stored),
@@ -860,7 +873,7 @@ and `Users` (where users' personal directories are located).
 We know that `/Users` is stored inside the root directory `/` because its name begins with `/`,
 and that our current working directory `/Users/amira` is stored inside `/Users`
 because `/Users` is the first part of its name.
-A name like this is called a [path][path] because it tells us
+A name like this is called a [path][path] because it tells us\index{path}
 how to get from one place in the filesystem (e.g., the root directory)
 to another (e.g., Amira's home directory).
 
@@ -890,7 +903,7 @@ the shell puts us in the directory that holds our files.
 > Our examples show what we would see on MacOS.
 
 Now that we know where we are,
-let's see what we have using the command `ls`
+let's see what we have using the command `ls`\index{Unix commands!ls}
 (short for "listing"),
 which prints the names of the files and directories in the current directory:
 
@@ -907,7 +920,7 @@ Again,
 our results may be different depending on our operating system
 and what files or directories we have.
 
-We can make the output of `ls` more informative using the `-F` [option][command_line_option]
+We can make the output of `ls` more informative using the `-F` [option][command_line_option]\index{option (of shell command)}\index{command-line option}
 (also sometimes called a [switch][command_line_switch] or a [flag][command_line_flag]).
 Options are exactly like arguments to a function in R or Python;
 in this case,
@@ -927,7 +940,7 @@ Desktop/      Downloads/    Movies/       Pictures/     zipf/
 ```
 
 Here,
-we can see that almost everything in our home directory is a [subdirectory][subdirectory];
+we can see that almost everything in our home directory is a [subdirectory][subdirectory];\index{subdirectory}
 the only thing that isn't is a file called `todo.txt`.
 
 > **Spaces Matter**
@@ -953,7 +966,7 @@ $ ls /Users
 amira   jun     sami
 ```
 
-We often call the file and directory names that we give to commands [arguments][command_line_argument]
+We often call the file and directory names that we give to commands [arguments][command_line_argument]\index{argument (of shell command)}
 to distinguish them from the built-in options.
 We can combine options and arguments:
 
@@ -1021,11 +1034,11 @@ data/
 ```
 
 Notice that `zipf` doesn't have a leading slash before its name.
-This absence tells the shell that it is a [relative path][relative_path],
+This absence tells the shell that it is a [relative path][relative_path],\index{relative path}\index{path!relative}
 i.e.,
 that it identifies something starting from our current working directory.
 In contrast,
-a path like `/Users/amira` is an [absolute path][absolute_path]:
+a path like `/Users/amira` is an [absolute path][absolute_path]:\index{absolute path}\index{path!absolute}
 it is always interpreted from the root directory down,
 so it always refers to the same thing.
 Using a relative path is like telling someone to go two kilometers north and then half a kilometer east;
@@ -1035,7 +1048,7 @@ We can use whichever kind of path is easiest to type,
 but if we are going to do a lot of work with the data in the `zipf` directory,
 the easiest thing would be to change our current working directory
 so that we don't have to type `zipf` over and over again.
-The command to do this is `cd`,
+The command to do this is `cd`,\index{Unix commands!cd}
 which stands for <strong>c</strong>hange <strong>d</strong>irectory.
 This name is a bit misleading because the command doesn't change the directory;
 instead, it changes the shell's idea of what directory we are in.
@@ -1116,9 +1129,9 @@ we can either use an absolute path:
 $ cd /Users/amira
 ```
 
-or a special relative path called `..` (two periods in a row with no spaces),
+or a special relative path called `..` (two periods in a row with no spaces),\index{.. (parent directory)}\index{path!..}
 which always means "the directory that contains the current one".
-The directory that contains the one we are in is called the [parent directory][parent_directory],
+The directory that contains the one we are in is called the [parent directory][parent_directory],\index{parent directory}
 and sure enough,
 `..` gets us there:
 
@@ -1146,7 +1159,7 @@ $ ls -F -a
 ../             Desktop/        Downloads/      Movies/         Pictures/       zipf/
 ```
 
-The output also shows another special directory called `.` (a single period),
+The output also shows another special directory called `.` (a single period),\index{path!.}\index{. (current working directory)}
 which refers to the current working directory.
 It may seem redundant to have a name for it,
 but we'll see some uses for it soon.
@@ -1219,7 +1232,7 @@ $ pwd
 
 No matter where we are,
 `cd` on its own always returns us to our home directory.
-We can achieve the same thing using the special directory name `~`,
+We can achieve the same thing using the special directory name `~`,\index{\char`\~\ (home directory)}\index{home directory!\char`\~\ (alias for)}
 which is a shortcut for our home directory:
 
 ```shell
@@ -1260,7 +1273,7 @@ data/
 ```
 
 To create a new directory,
-we use the command `mkdir` (short for <strong>m</strong>a<strong>k</strong>e <strong>d</strong>irectory):
+we use the command `mkdir` (short for <strong>m</strong>a<strong>k</strong>e <strong>d</strong>irectory):\index{Unix commands!mkdir}
 
 ```shell
 $ mkdir analysis
@@ -1288,7 +1301,7 @@ the files and directories themselves are the same.
 > **Naming Files and Directories**
 >
 > Complicated names of files and directories can make our life painful.
-> Following a few simple rules can save a lot of headaches:
+> Following a few simple rules can save a lot of headaches:\index{filesystem!naming conventions}\index{naming conventions!filesystem}
 >
 > 1. **Don't use spaces.**
 >    Spaces can make a name easier to read,
@@ -1317,7 +1330,7 @@ $ ls -F analysis
 ```
 
 Let's change our working directory to `analysis` using `cd`,
-then use a very simple text editor called [Nano][nano_editor] to create a file called `draft.txt`
+then use a very simple text editor called [Nano][nano_editor] to create a file called `draft.txt`\index{Nano editor}
 (Figure \@ref(fig:bash-basics-nano)):
 
 ```shell
@@ -1396,7 +1409,7 @@ draft.txt
 > However,
 > both people and programs use two-part names to help them tell different kinds of files apart.
 > The part of the filename after the dot
-> is called the [filename extension][filename_extension]
+> is called the [filename extension][filename_extension]\index{filename extension}
 > and indicates what type of data the file holds:
 > `.txt` for plain text,
 > `.pdf` for a PDF document,
@@ -1417,7 +1430,7 @@ cd ~/zipf
 
 The `analysis` directory contains a file called `draft.txt`.
 That isn't a particularly informative name,
-so let's change it using `mv` (short for <strong>m</strong>o<strong>v</strong>e):
+so let's change it using `mv` (short for <strong>m</strong>o<strong>v</strong>e):\index{Unix commands!mv}
 
 ```shell
 $ mv analysis/draft.txt analysis/prior-work.txt
@@ -1484,7 +1497,7 @@ prior-work.txt
 
 ## Copy Files and Directories {#bash-basics-copy}
 
-The `cp` command <strong>c</strong>o<strong>p</strong>ies files.
+The `cp` command <strong>c</strong>o<strong>p</strong>ies files.\index{Unix commands!cp}
 It works like `mv` except it creates a file instead of moving an existing one
 (and no, we don't know why the creators of Unix seemed to be allergic to vowels):
 
@@ -1556,7 +1569,7 @@ section-1.txt
 ## Deleting Files and Directories {#bash-basics-rm}
 
 Let's tidy up by removing the `prior-work.txt` file we created in our `zipf` directory.
-The command to do this is `rm` (for <strong>r</strong>e<strong>m</strong>ove):
+The command to do this is `rm` (for <strong>r</strong>e<strong>m</strong>ove):\index{Unix commands!rm}
 
 ```shell
 $ rm prior-work.txt
@@ -1624,7 +1637,7 @@ frankenstein.txt  sherlock_holmes.txt
 jane_eyre.txt     time_machine.txt
 ```
 
-The `wc` command (short for <strong>w</strong>ord <strong>c</strong>ount)
+The `wc` command (short for <strong>w</strong>ord <strong>c</strong>ount)\index{Unix commands!wc}
 tells us how many lines, words, and letters there are in one file:
 
 ```shell
@@ -1655,7 +1668,7 @@ wc: data: read: Is a directory
 ```
 
 Instead,
-we can use [wildcards][wildcard] to specify a set of files at once.
+we can use [wildcards][wildcard] to specify a set of files at once.\index{wildcard!in Unix shell}
 The most commonly-used wildcard is `*` (a single asterisk).
 It matches zero or more characters,
 so `data/*.txt` matches all of the text files in the `data` directory:
@@ -1740,7 +1753,7 @@ $ wc -l data/s*.txt
 ```
 
 `wc` has other options as well.
-We can use the `man` command (short for <strong>man</strong>ual)
+We can use the `man` command (short for <strong>man</strong>ual)\index{Unix commands!man}\index{Unix shell!manual}
 to find out what they are:
 
 ```shell
@@ -1750,7 +1763,8 @@ $ man wc
 > **Paging Through the Manual**
 >
 > If our screen is too small to display an entire manual page at once,
-> the shell will use a [paging program][pager] called `less` to show it piece by piece.
+> the shell will use a [paging program][pager] called `less` to show it
+> piece by piece.\index{Unix shell!paging program}\index{paging program (in Unix shell)}
 > We can use <kbd>↑</kbd> and <kbd>↓</kbd> to move line-by-line
 > or <kbd>Ctrl</kbd>+<kbd>Spacebar</kbd> and <kbd>Spacebar</kbd>
 > to skip up and down one page at a time.
@@ -1846,7 +1860,7 @@ $ wc -l *.txt > lengths.txt
 ```
 
 The greater-than symbol `>` tells the shell
-to [redirect][redirection] the command's output to a file instead of printing it.
+to [redirect][redirection] the command's output to a file instead of printing it.\index{redirection (in Unix shell)}\index{Unix shell!redirection}
 Nothing appears on the screen;
 instead,
 everything that would have appeared has gone into the file `lengths.txt`.
@@ -1862,7 +1876,7 @@ $ ls lengths.txt
 lengths.txt
 ```
 
-We can print the contents of `lengths.txt` using `cat`,
+We can print the contents of `lengths.txt` using `cat`,\index{Unix commands!cat}
 which is short for con<strong>cat</strong>enate
 (because if we give it the names of several files
 it will print them all in order):
@@ -1939,7 +1953,7 @@ rm lengths.txt sorted-lengths.txt
 ```
 
 We can produce the same result more safely and with less typing
-using a [pipe][pipe_shell]:
+using a [pipe][pipe_shell]:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
 
 ```shell
 $ wc -l *.txt | sort -n
@@ -1977,7 +1991,7 @@ it reads the output of the upstream command
 
 We can use `|` to build pipes of any length.
 For example,
-we can use the command `head` to get just the first three lines of sorted data,
+we can use the command `head` to get just the first three lines of sorted data,\index{Unix commands!head}
 which shows us the three shortest books:
 
 ```shell
@@ -2024,10 +2038,10 @@ so a very common sequence is:
 
 In order to use pipes and redirection effectively,
 we need to know a little about how they work.
-When a computer runs a program---any program---it creates a [process][process] in memory
+When a computer runs a program---any program---it creates a [process][process] in memory\index{process}
 to hold the program's instructions and data.
-Every process in Unix has an input channel called [standard input][stdin]
-and an output channel called [standard output][stdin].
+Every process in Unix has an input channel called [standard input][stdin]\index{standard input}\index{stdin}
+and an output channel called [standard output][stdout].\index{standard output}\index{stdout}
 (By now you may be surprised that their names are so memorable,
 but don't worry:
 most Unix programmers call them "stdin" and "stdout",
@@ -2126,7 +2140,7 @@ it just knows that it has to read, sort, and print.
 > or are trying to connect to a website that isn't responding.
 
 Just as we can redirect standard output with `>`,
-we can connect standard input to a file using `<`.
+we can connect standard input to a file using `<`.\index{redirection (in Unix shell)}
 In the case of a single file,
 this has the same effect as providing the file's name to the command:
 
@@ -2171,7 +2185,7 @@ cat: all.txt: No such file or directory
 
 Instead,
 every process has a second output channel called [standard error][stderr]
-(or [stderr][stderr]).
+(or [stderr][stderr]).\index{standard error}\index{stderr}
 Programs use it for error messages
 so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
 There are ways to redirect standard error,
@@ -2179,7 +2193,7 @@ but doing so is almost always a bad idea.
 
 ## Repeating Commands on Many Files {#bash-basics-loops}
 
-A loop is a way to repeat a set of commands for each item in a list.
+A loop is a way to repeat a set of commands for each item in a list.\index{loop (in Unix shell)}
 We can use them to build complex workflows out of simple pieces,
 and (like wildcards)
 they reduce the typing we have to do and the number of mistakes we might make.
@@ -2311,7 +2325,7 @@ so we will break it down into pieces:
 1.  The keywords `for`, `in`, `do`, and `done` create the loop,
     and must always appear in that order.
 
-2.  `filename` is a variable just like a variable in R or Python.
+2.  `filename` is a variable just like a variable in R or Python.\index{variable (in Unix shell)}\index{shell variable}
     At any moment it contains a value,
     but that value can change over time.
 
@@ -2322,7 +2336,7 @@ so we will break it down into pieces:
     the first time around the loop
     and `sherlock_holmes.txt` the second time.
 
-4.  The commands that the loop executes are called the [body][loop_body] of the loop
+4.  The commands that the loop executes are called the [body][loop_body] of the loop\index{loop (in Unix shell)!loop body}
     and appear between the keywords `do` and `done`.
     Those commands use the current value of the variable `filename`,
     but to get it,
@@ -2332,7 +2346,8 @@ so we will break it down into pieces:
     that is actually called `filename`.
 
 5.  The shell prompt changes from `$`
-    to a [continuation prompt][continuation_prompt] `>` as we type in our loop
+    to a [continuation prompt][continuation_prompt] `>`
+    as we type in our loop\index{continuation prompt}\index{prompt (in Unix shell)!continuation}
     to remind us that we haven't finished typing a complete command yet.
     We don't type the `>`,
     just as we don't type the `$`.
@@ -2408,7 +2423,7 @@ but if we have already run commands,
 we can still repeat.
 One way is to use <kbd>↑</kbd> and <kbd>↓</kbd>
 to go up and down in our command history as described earlier.
-Another is to use `history`
+Another is to use `history`\index{history (in Unix shell)}\index{Unix commands!history}
 to get a list of the last few hundred commands we have run:
 
 ```shell
@@ -2923,7 +2938,7 @@ science fiction
 ```
 
 Why do you think `uniq` only removes *adjacent* duplicated lines?
-(Hint: think about very large data sets.) What other command could
+(Hint: think about very large datasets.) What other command could
 you combine with it in a pipe to remove all duplicated lines?
 
 ### Pipe reading comprehension {#bash-basics-ex-reading-pipes}
@@ -3178,7 +3193,7 @@ to do all of the things we can do with a GUI,
 and how to combine commands in new ways using pipes and redirection.
 This chapter extends those ideas to show
 how we can create new tools by saving commands in files
-and how to use a more powerful version of [wildcards][wildcard]
+and how to use a more powerful version of [wildcards][wildcard]\index{regular expression!relation to wildcard}
 to extract data from files.
 
 We'll be continuing to work in the `zipf` project,
@@ -3211,7 +3226,7 @@ Loops let us run the same commands many times,
 but we can go further and save commands in files
 so that we can repeat complex operations with a few keystrokes.
 For historical reasons
-a file full of shell commands is usually called a [shell script][shell_script],
+a file full of shell commands is usually called a [shell script][shell_script],\index{shell script}
 but it is really just another kind of program.
 
 Let's start by creating a new directory for our runnable programs called `bin/`,
@@ -3285,7 +3300,7 @@ $ bash book_summary.sh | wc -l
 ```
 
 What if we want our script to print the name of the book's author?
-The command `grep` finds and prints lines that match a pattern.
+The command `grep`\index{grep}\index{Unix commands!grep} finds and prints lines that match a pattern.
 We'll learn more about `grep` in Section \@ref(bash-advanced-grep),
 but for now we can edit the script:
 
@@ -3331,7 +3346,8 @@ $ bash book_summary.sh | wc -w
 Getting the name of the author for only one of the books isn't all that useful.
 What we really want is a way to get the name of the author from any of our files.
 Let's edit `book_summary.sh` again
-and replace `../data/moby_dick.txt` with a special variable `$1`.
+and replace `../data/moby_dick.txt` with
+a special variable `$1`.\index{shell script!arguments}\index{\$1, \$2, etc. (in shell script)}\index{arguments (of shell script)}
 Once our change is made,
 `book_summary.sh` should contain:
 
@@ -3363,7 +3379,7 @@ Author: Mary Wollstonecraft (Godwin) Shelley
 
 Our small script is now doing something useful,
 but it may take the next person who reads it a moment to figure out exactly what.
-We can improve our script by adding [comments][comment] at the top:
+We can improve our script by adding [comments][comment] at the top:\index{comments!in shell script}
 
 ```text
 # Get author information from a Project Gutenberg eBook.
@@ -3435,7 +3451,7 @@ $ mv authors.txt releases.txt ../results
 
 Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
-we can use `history` and redirection to save recent commands to a file.
+we can use `history` and redirection to save recent commands to a file.\index{shell script!using history to create}
 For example,
 we can save the last six commands to `summarize_all_books.sh`:
 
@@ -3465,8 +3481,8 @@ then save our recent history to a file and turn that into a reusable script.
 
 We can use `head` and `tail` to select lines from a file by position,
 but we also often want to select lines that contain certain values.
-This is called [filtering][filter],
-and we usually do it in the shell with the command `grep`
+This is called [filtering][filter],\index{filter (in Unix shell)}
+and we usually do it in the shell with the command `grep`\index{grep}\index{Unix commands!grep}
 that we briefly met in Section \@ref(bash-advanced-script).
 Its name is an acronym of "global regular expression print",
 which was a common sequence of operations in early Unix text editors.
@@ -3682,7 +3698,7 @@ $ grep -w -r pain data | wc -l
 ```
 
 `grep` becomes even more powerful
-when we start using [regular expressions][regular_expression],
+when we start using [regular expressions][regular_expression],\index{regular expression}
 which are sets of letters, numbers, and symbols that define complex patterns.
 For example,
 this command finds lines that start with the letter 'T':
@@ -3717,7 +3733,7 @@ and @Goyv2012 is a useful companion if you need to go further.
 ## Finding Files {#bash-advanced-find}
 
 While `grep` finds things in files,
-the `find` command finds files themselves.
+the `find` command finds files themselves.\index{find}\index{Unix commands!find}
 It also has a lot of options,
 but unlike most Unix commands they are written as full words
 rather than single-letter abbreviations.
@@ -3872,7 +3888,7 @@ $ wc -l $(find . -name "*.txt")
 ```
 
 When the shell executes our command,
-it runs whatever is inside `$(...)`
+it runs whatever is inside `$(...)`\index{Unix shell!command expansion}\index{command expansion (in Unix shell)}\index{\$(...) in Unix shell}
 and then replaces `$(...)` with that command's output.
 Since the output of `find` is the paths to our text files,
 the shell constructs the command:
@@ -3890,7 +3906,7 @@ We will often use `find` and `grep` together.
 The first command finds files whose names match a pattern,
 while the second looks for lines inside those files that match another pattern.
 For example,
-we can look for Authors in all our text files:
+we can look for `Authors` in all our text files:
 
 ```shell
 $ grep "Author:" $(find . -name "*.txt")
@@ -3913,7 +3929,7 @@ $ grep "Author:" $(find . -name "*.txt")
 ./data/jane_eyre.txt:Author: Charlotte Bronte
 ```
 
-We can also use `$(...)` expansion to create a list of filenames to use in a loop:
+We can also use `$(...)` expansion to create a list of filenames to use in a loop:\index{loop (in Unix shell)!using command expansion}
 
 ```shell
 $ for file in $(find . -name "*.txt")
@@ -3944,7 +3960,7 @@ Some of those variables control the shell's operations;
 by changing their values
 we can change how the shell and other programs behave.
 
-Let's run the command `set`
+Let's run the command `set`\index{set (in Unix shell)}\index{Unix commands!set}
 and look at some of the variables the shell defines:
 
 ```shell
@@ -3975,7 +3991,7 @@ but if we don't give it any arguments,
 the command might as well show us things we *could* set.
 
 By convention,
-shell variables that are always present have upper-case names.
+[shell variables][shell_variable]\index{variable (in Unix shell)}\index{shell variable} that are always present have upper-case names.
 All shell variables' values are strings,
 even those (such as `UID`) that look like numbers.
 It's up to programs to convert these strings to other types when necessary.
@@ -3983,7 +3999,7 @@ For example,
 if a program wanted to find out how many processors the computer had,
 it would convert the value of `NUMBER_OF_PROCESSORS` from a string to an integer.
 
-Similarly, some variables (like `PATH`) store lists of values.
+Similarly, some variables (like `PATH`) store lists of values.\index{PATH variable (in Unix shell)}\index{Unix shell!PATH variable}
 In this case, the convention is to use a colon ':' as a separator.
 If a program wants the individual elements of such a list,
 it must split the variable's value into pieces.
@@ -4029,7 +4045,7 @@ as `./analyze` if we are in `/Users/amira`).
 If we want to see a variable's value,
 we can print it using the `echo` command
 introduced at the end of Section \@ref(bash-basics-history).
-Let's look at the value of the variable `HOME`,
+Let's look at the value of the variable `HOME`,\index{HOME variable (in Unix shell)}\index{Unix shell!HOME variable}
 which keeps track of our home directory:
 
 ```shell
@@ -4062,7 +4078,7 @@ Thus,
 `echo $HOME` becomes `echo /Users/amira`,
 which displays the right thing.
 
-Creating a variable is easy:
+Creating a variable is easy:\index{shell variable!creating}
 we assign a value to a name using "=",
 putting quotes around the value if it contains spaces or special characters:
 
@@ -4087,7 +4103,7 @@ Information Science
 ```
 
 If we want to set some variables automatically every time we run a shell,
-we can put commands to do this in a file called `.bashrc` in our home directory.
+we can put commands to do this in a file called `.bashrc` in our home directory.\index{.bashrc file (in Unix shell)}\index{Unix shell!.bashrc file}
 For example,
 here are two lines in `/Users/amira/.bashrc`:
 
@@ -4100,7 +4116,7 @@ export BACKUP_DIR=$TEMP_DIR/backup
 These three lines create the variables `DEPARTMENT`,
 `TEMP_DIR`,
 and `BACKUP_DIR`,
-and [export][export_variable] them so that any programs the shell runs can see them as well.
+and [export][export_variable]\index{shell variable!exporting} them so that any programs the shell runs can see them as well.
 Notice that `BACKUP_DIR`'s definition relies on the value of `TEMP_DIR`,
 so that if we change where we put temporary files,
 our backups will be relocated automatically.
@@ -4118,7 +4134,7 @@ because `.bashrc` is only executed when the shell starts up.
 > and is now just a convention everyone follows without understanding why.
 
 While we're here,
-it's also common to use the `alias` command
+it's also common to use the `alias` command\index{Unix commands!alias}\index{alias (Unix command)}
 to create shortcuts for things we frequently type.
 For example,
 we can define the alias `backup`
@@ -4152,7 +4168,7 @@ While searching for additional aliases,
 you're likely to encounter references to other common shell features to customize,
 such as the color of your shell's background and text.
 As mentioned in \@ref(bash-basics),
-another important feature to consider customizing is your shell prompt.
+another important feature to consider customizing is your shell prompt.\index{prompt (in Unix shell)}\index{Unix shell!prompt}
 In addition to a standard symbol (like `$`),
 your computer may include other information as well,
 such as the working directory, username, and/or date/time.
@@ -4388,7 +4404,7 @@ The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
 just like other command-line tools [@Tasc2017].
 
-In this chapter we will develop a command-line Python program
+In this chapter we will develop a command-line Python program\index{Python!command line}
 that handles input and output in the same way as other shell commands,
 can be controlled by several option flags,
 and provides useful information when things go wrong.
@@ -4415,7 +4431,7 @@ zipf/
 
 ## Programs and Modules {#scripting-main}
 
-To create a Python program that can run from the command line,
+To create a Python program that can run from the command line,\index{Python!program vs.\ module}
 the first thing we do is to add the following to the bottom of the file:
 
 ```python
@@ -4426,7 +4442,7 @@ This strange-looking check tells us
 whether the file is running as a standalone program
 or whether it is being imported as a module by some other program.
 When we import a Python file as a module in another program,
-the `__name__` variable is automatically set to the name of the file.
+the `__name__` variable is automatically set to the name of the file.\index{\_\_name\_\_ variable (in Python)}\index{Python!\_\_name\_\_ variable}
 When we run a Python file as a standalone program,
 on the other hand,
 `__name__` is always set to the special string `"__main__"`.
@@ -4498,7 +4514,7 @@ but we can use whatever name we want.
 ## Handling Command-Line Options {#scripting-options}
 
 The first thing the main function usually does
-is parse any options the user gave the program on the command line.
+is parse any options the user gave the program on the command line.\index{option (of Python program)}\index{Python!option}
 The most commonly used library for doing this in Python is [`argparse`][argparse],
 which can handle options with or without arguments,
 convert arguments from strings to numbers or other types,
@@ -4598,7 +4614,7 @@ Our template is a good starting point,
 but we can make one improvement right away.
 To start,
 let's write a function that doubles a number,
-but add a bit of documentation:
+but add a bit of documentation:\index{Python!documenting}
 
 ```python
 def double(num):
@@ -4609,7 +4625,7 @@ def double(num):
 The first line of this function is a string
 that isn't assigned to a variable.
 Such a string is called a documentation string,
-or [docstring][docstring] for short.
+or [docstring][docstring] for short.\index{docstring (in Python)}\index{Python!docstring}
 If we call our function it does what we expect:
 
 ```python
@@ -4622,7 +4638,7 @@ double(3)
 
 However,
 we can also ask for the function's documentation,
-which is stored in `double.__doc__`:
+which is stored in `double.__doc__`:\index{\_\_doc\_\_ variable (in Python)}
 
 ```python
 double.__doc__
@@ -4665,7 +4681,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-Note that docstrings are usually written using triple-quoted strings,
+Note that docstrings are usually written using triple-quoted strings,\index{Python!triple-quoted strings}
 since these can span multiple lines.
 Note also how we pass `description=__doc__` to `argparse.ArgumentParser`.
 This saves us from typing the same information twice,
@@ -4710,7 +4726,8 @@ FILE
 
 As this example shows,
 if we ask for help on the module,
-Python formats and displays all of the docstrings for everything in the file. We'll talk more about what to put in a docstring in Section \@ref(packaging-docstrings).
+Python formats and displays all of the docstrings for everything in the file.
+We'll talk more about what to put in a docstring in Section \@ref(packaging-docstrings).
 
 ## Counting Words {#scripting-wordcount}
 
@@ -4900,13 +4917,13 @@ it,2141
 
 Most of the Unix commands we have seen so far follow a useful convention:
 if the user doesn't specify the names of any input files,
-they read from standard input.
+they read from standard input.\index{standard input!in Python}
 Similarly,
 if no output file is specified,
 the command sends its results to standard output.
 This makes it easy to use the command in a pipeline.
 
-Our program always sends its output to standard output;
+Our program always sends its output to standard output;\index{standard output!in Python}
 as noted above,
 we can always redirect it to a file with `>`.
 If we want it to read from standard input,
@@ -4969,7 +4986,8 @@ that,41
 ## Positional and Optional Arguments {#py-rse-py-scripting-positional-optional}
 
 We have met two kinds of command-line arguments while writing `countwords.py`.
-[Optional arguments][optional_argument] are defined using a leading `-` or `--` (or both),
+[Optional arguments][optional_argument]\index{option (of shell command)!optional}
+are defined using a leading `-` or `--` (or both),
 which means that all three of the following definitions are valid:
 
 ```python
@@ -4978,11 +4996,13 @@ parser.add_argument('--num', type=int, help='Limit output')
 parser.add_argument('-n', '--num', type=int, help='Limit output')
 ```
 
-The convention is for `-` to precede a [short][short_option] (single letter) option
-and `--` a [long][long_option] (multi-letter) option.
+The convention is for `-` to precede
+a [short][short_option] (single letter) option\index{option (of shell command)!short}
+and `--` a [long][long_option] (multi-letter) option.\index{option (of shell command)!long}
 The user can provide optional arguments at the command line in any order they like.
 
-[Positional arguments][positional_argument] have no leading dashes and are not optional:
+[Positional arguments][positional_argument]\index{positional argument (of program)}
+have no leading dashes and are not optional:
 the user must provide them at the command line
 in the order in which they are specified to `add_argument`
 (unless `nargs='?'` is provided to say that the value is optional).
@@ -5106,7 +5126,7 @@ if we want to improve it or fix a bug,
 we have to find and change every single script that contains a copy.
 
 The solution is to put the shared functions in a separate file
-and load that file as a module.
+and load that file as a module.\index{Python!module}\index{module (in Python)}
 Let's create a file called `utilities.py` in the `bin` directory
 that looks like this:
 
@@ -5217,8 +5237,8 @@ if __name__ == '__main__':
 ```
 
 Any Python source file can be imported by any other.
-This is why Python files should be named using [`snake_case`][snake_case]
-instead of [`kebab-case`][kebab_case]:
+This is why Python files should be named using [`snake_case`][snake_case]\index{snake case}\index{naming conventions!snake case}
+instead of [`kebab-case`][kebab_case]:\index{kebab case}\index{naming conventions!kebab case}
 an expression like `import some-thing` isn't allowed
 because `some-thing` isn't a legal variable name.
 When a file is imported,
@@ -5230,7 +5250,7 @@ and `thing` is the name of the item.
 > **The `__pycache__` Directory**
 >
 > When we import a file,
-> Python translates the source code into instructions called [byte codes][byte_code]
+> Python translates the source code into instructions called [byte codes][byte_code]\index{byte code}
 > that it can execute efficiently.
 > Since the byte codes only change when the source changes,
 > Python saves the byte code in a separate file,
@@ -5239,7 +5259,7 @@ and `thing` is the name of the item.
 > (unless the file has changed,
 > in which case Python starts from the beginning).
 >
-> Python creates a subdirectory called `__pycache__`
+> Python creates a subdirectory called `__pycache__`\index{\_\_pycache\_\_ directory}
 > that holds the byte code for the files imported from that directory.
 > We typically don't want to put the files in `__pycache__` in version control,
 > so we normally tell Git to ignore it as discussed in Section \@ref(git-cmdline-ignore).
@@ -5360,18 +5380,18 @@ the solution to this exercise is used in following chapters.
 
 # Git at the Command Line {#git-cmdline}
 
-A [version control system][version_control_system] records changes to files
+A [version control system][version_control_system] records changes to files\index{version control}
 and helps people share their work with each other.
 These things can be done by emailing files to colleagues
 or by using "track changes" in Microsoft Word and Google Docs,
 but version control does both more accurately and efficiently.
 Originally developed to support software development,
 over the past fifteen years it has become the cornerstone
-of [reproducible research][reproducible_research].
+of [reproducible research][reproducible_research].\index{reproducible research!version control}
 
 A version control system stores a master copy of your code in a repository,
 which you can't edit directly.
-Instead, you checkout a working copy of the code,
+Instead, you check out a working copy of the code,
 edit that code, then commit changes back to the repository.
 In this way, the system records a complete revision history (i.e. of every commit),
 so that you can retrieve and compare previous versions at any time.
@@ -5406,8 +5426,8 @@ Our project directory should currently include:
 zipf/
 ├── bin
 │   ├── book_summary.sh
-│   ├── countwords.py
 │   ├── collate.py
+│   ├── countwords.py
 │   ├── plotcounts.py
 │   ├── script_template.py
 │   └── utilities.py
@@ -5463,7 +5483,7 @@ We write Git commands as <code>git <em>verb</em> <em>options</em></code>,
 where the [subcommand][subcommand] <code><em>verb</em></code> tells Git what we want to do
 and <code><em>options</em></code> provide whatever additional information that subcommand needs.
 Using this syntax,
-the first thing we need to do is configure Git:
+the first thing we need to do is configure Git:\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
 
 ```shell
 $ git config --global user.name "Amira Khan"
@@ -5533,7 +5553,7 @@ $ ls
  bin       data      results
 ```
 
-We want to make this directory a [repository][repository],
+We want to make this directory a [repository][repository],\index{repository (version control)}\index{Git commands!init}
 i.e.,
 a place where Git can store versions of our files.
 We do this using the `init` command with `.` to mean "the current directory":
@@ -5557,7 +5577,7 @@ bin     data    results
 ```
 
 But if we add the `-a` flag to show everything,
-we can see that Git has created a hidden directory within `zipf` called `.git`:
+we can see that Git has created a hidden directory within `zipf` called `.git`:\index{Git!.git directory}
 
 ```shell
 $ ls -a
@@ -5598,12 +5618,26 @@ while "Untracked files" means Git has noticed that
 there are things in `bin/`, `data/` and `results/`
 that it is not yet keeping track of.
 
+> **Hints from Git**
+>
+> After executing Git commands,
+> you may see messages output that differ slightly from what is printed here.
+> For example, 
+> you may see a reference to `git restore` after executing the command above.
+> This is because newer versions of Git (>=2.23.0) 
+> include commands that streamline some common tasks. 
+> The commands presented here will still work,
+> and you can consider any deviation you see to be a reminder
+> to continue checking the documentation (e.g., `git restore --help`) 
+> to learn how new features can help your workflow.
+
+
 ## Adding Existing Work {#git-cmdline-add-existing}
 
 Now that our project is a repository,
 we can tell Git to start recording its history.
 To do this,
-we add things to the list of things Git is tracking using `git add`.
+we add things to the list of things Git is tracking using `git add`.\index{Git commands!add}
 We can do this for single files:
 
 ```shell
@@ -5660,9 +5694,9 @@ Changes to be committed:
 Adding all of our existing files this way is easy,
 but we can accidentally add things that should never be in version control,
 such as files containing passwords or other sensitive information.
-The output of `git status` tells us that
+The output of `git status` tells us that\index{Git commands!status}
 we can remove such files from the list of things to be saved
-using `git rm --cached`;
+using `git rm --cached`;\index{Git commands!rm}
 we will practice this in Exercise \@ref(git-cmdline-ex-unsave).
 
 > **What to Save**
@@ -5683,7 +5717,7 @@ we will practice this in Exercise \@ref(git-cmdline-ex-unsave).
 > We will explore this issue further in Chapter \@ref(provenance).
 
 We no longer have any untracked files,
-but the tracked files haven't been [committed][commit]
+but the tracked files haven't been [committed][commit]\index{Git commands!commit}\index{commit!to version control}
 (i.e., saved permanently in our project's history).
 We can do this using `git commit`:
 
@@ -5716,10 +5750,10 @@ $ git commit -m "Add scripts, novels, word counts, and word rank plot"
 
 `git commit` takes everything we have told Git to save using `git add`
 and stores a copy permanently inside the repository's `.git` directory.
-This permanent copy is called a [commit][commit] or a [revision][revision].
+This permanent copy is called a [commit][commit] or a [revision][revision].\index{commit!set of files}
 Git gives is a unique identifier,
 and the first line of output from `git commit` displays
-its [short identifier][short_identifier_git] `31a216a`,
+its [short identifier][short_identifier_git] `31a216a`,\index{Git!short identifier}\index{short identifier (in Git)}
 which is the first few characters of that unique label.
 
 We use the `-m` option (short for <strong>m</strong>essage)
@@ -5751,7 +5785,7 @@ rather than after we have done some work.
 
 If we run `git commit` *without* the `-m` option,
 Git opens a text editor
-so that we can write a longer [commit message][commit_message].
+so that we can write a longer [commit message][commit_message].\index{Git!commit message}\index{commit!message}
 In this message,
 the first line is referred to as the "subject"
 and the rest as the "body",
@@ -5785,7 +5819,6 @@ Following [these guidelines][desc-cmt-msgs] will help:
 > but no one has ever claimed that its interface is intuitive.
 > ("How do I exit the Vim editor?"
 > is one of the most frequently read questions on Stack Overflow.)
-FIXME: This section doesn't exist
 > Section \@ref(install-git-nano) explains
 > how to configure Git to use the `nano` editor
 > introduced in Chapter \@ref(bash-basics) instead.
@@ -5843,7 +5876,7 @@ $ git commit -m "Add plot of word counts for 'Dracula'"
 ```
 
 If we want to know what we've done recently,
-we can display the project's history using `git log`:
+we can display the project's history using `git log`:\index{Git commands!log}
 
 ```shell
 $ git log
@@ -5865,7 +5898,7 @@ Date:   Wed Feb 19 15:39:04 2020 -0800
 
 `git log` lists all commits made to a repository in reverse chronological order.
 The listing for each commit includes
-the commit's [full identifier][full_identifier_git]
+the commit's [full identifier][full_identifier_git]\index{Git!full identifier}\index{full identifier (in Git)}
 (which starts with the same characters as the short identifier printed by `git commit`),
 the commit's author,
 when it was created,
@@ -5921,7 +5954,7 @@ To save those changes in the repository's history,
 we must `git add` and then `git commit`.
 Before we do,
 though,
-let's review the changes using `git diff`.
+let's review the changes using `git diff`.\index{Git commands!diff}\index{diff (in Git)}
 This command shows us the differences between the current state of our repository
 and the most recently saved version:
 
@@ -6032,7 +6065,8 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 > We might want to commit those additions
 > but not commit the changes to `conclusion.tex` (which we haven't finished writing yet).
 > To allow for this,
-> Git has a special [staging area][git_stage] where it keeps track of things
+> Git has a special [staging area][git_stage]\index{staging area (in Git)}\index{Git!staging area}
+> where it keeps track of things
 > that have been added to the current changeset but not yet committed
 > (Figure \@ref(fig:git-cmdline-staging-area)).
 
@@ -6120,6 +6154,12 @@ we will probably want to collaborate with others,
 which we can do by linking our local repository
 to one stored on a hosting service such as [GitHub][github].
 
+> **Where's My Repository?**
+> So far we've worked with repositories located on your own computer,
+> which we'll also refer to as local or desktop repositories.
+> The alternative is hosting repositories on GitHub or another server,
+> which we'll refer to as a remote or GitHub repository.
+
 The first steps are to create an account on GitHub,
 and then to create a new repository to synchronize with.
 The remote repository doesn't have to have the same name as the local one,
@@ -6128,7 +6168,8 @@ so the repository we create on GitHub will also be called `zipf`.
 
 Next,
 we need to connect our desktop repository with the one on GitHub.
-We do this by making the GitHub repository a [remote][remote_repository] of the local repository.
+We do this by making the GitHub repository a [remote][remote_repository]\index{Git!remote}\index{remote (in Git)}
+of the local repository.
 The home page of the repository on GitHub includes the string we need to identify it
 (Figure \@ref(fig:git-cmdline-repo-link)).
 
@@ -6154,13 +6195,13 @@ let's go into the local `zipf` repository and run this command:
 
 ```shell
 $ cd ~/zipf
-$ git remote add origin https://github.com/amira/zipf.git
+$ git remote add origin https://github.com/amira-khan/zipf.git
 ```
 
 Make sure to use the URL for your repository instead of the one shown:
-the only difference should be that it includes your username instead of `amira`.
+the only difference should be that it includes your username instead of `amira-khan`.
 
-A Git remote is like a bookmark:
+A Git remote is like a bookmark:\index{Git!remote}\index{Git commands!remote}\index{remote (in Git)}
 it gives a short name to a URL.
 In this case the remote's name is `origin`;
 we could use anything we want,
@@ -6174,8 +6215,8 @@ $ git remote -v
 ```
 
 ```text
-origin	https://github.com/amira/zipf.git (fetch)
-origin	https://github.com/amira/zipf.git (push)
+origin	https://github.com/amira-khan/zipf.git (fetch)
+origin	https://github.com/amira-khan/zipf.git (push)
 ```
 
 Git displays two lines because it's actually possible to set up a remote
@@ -6184,7 +6225,8 @@ Sensible people don't do this,
 so we won't explore this possibility any further.
 
 Now that we have configured a remote,
-we can [push][git_push] the work we have done so far to the repository on GitHub:
+we can [push][git_push] the work we have done so far\index{Git commands!push}\index{push (in Git)}
+to the repository on GitHub:
 
 ```shell
 $ git push origin master
@@ -6202,7 +6244,7 @@ Compressing objects: 100% (33/33), done.
 Writing objects: 100% (33/33), 2.12 MiB | 799.00 KiB/s, done.
 Total 33 (delta 5), reused 0 (delta 0)
 remote: Resolving deltas: 100% (5/5), done.
-To https://github.com/amira/zipf.git
+To https://github.com/amira-khan/zipf.git
  * [new branch]      master -> master
 Branch 'master' set up to track remote branch 'master' from 'origin'.
 ```
@@ -6216,14 +6258,15 @@ along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline
 <p class="caption">(\#fig:git-cmdline-history)Repository history on GitHub</p>
 </div>
 
-We can also [pull][git_pull] changes from the remote repository to the local one:
+We can also [pull][git_pull] changes\index{Git commands!pull}\index{pull (in Git)}
+from the remote repository to the local one:
 
 ```shell
 $ git pull origin master
 ```
 
 ```text
-From https://github.com/amira/zipf
+From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
 Already up-to-date.
 ```
@@ -6249,7 +6292,7 @@ The "absolute" version is the unique identifier that Git gives to each commit.
 These identifiers are 40 characters long,
 but in most situations Git will let us use just the first half dozen characters or so.
 For example,
-if we run `git log` right now,
+if we run `git log`\index{Git commands!log} right now,
 it shows us something like this:
 
 ```text
@@ -6310,7 +6353,7 @@ Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
 Alternatively,
-we can use `git diff` directly
+we can use `git diff` directly\index{Git commands!diff}
 to examine the differences between files at any stage in the repository's history.
 Let's explore this with the `plotcounts.py` file.
 We no longer need the line of code in `plotcounts.py`
@@ -6369,11 +6412,11 @@ since Git may have assigned your commit a different unique identifier.
 Note also that we have *not* committed this change:
 we will look at ways of undoing it in the next section.
 
-The "relative" version of history relies on a special identifier called `HEAD`,
+The "relative" version of history relies on a special identifier called `HEAD`,\index{Git!HEAD}\index{HEAD (in Git)}
 which always refers to the most recent version in the repository.
 `git diff HEAD` therefore shows the same thing as `git diff`,
 but instead of typing in a version identifier to back up one commit,
-we can use `HEAD~1` (where `~` is the tilde symbol).
+we can use `HEAD~1` (where `~` is the tilde symbol).\index{Git!relative revision}
 This shorthand is read "HEAD minus one",
 and gives us the difference to the previous saved version.
 `git diff HEAD~2` goes back two revisions and so on.
@@ -6400,7 +6443,7 @@ index a6005cd..13e7f38 100644
 ```
 
 If we want to see the changes made in a particular commit,
-we can use `git show`
+we can use `git show`\index{Git commands!show}
 with an identifier and a file joined by a colon:
 
 ```shell
@@ -6431,11 +6474,11 @@ index 13e7f38..a6005cd 100644
 ## Restoring Old Versions of Files {#git-cmdline-restore}
 
 We can see what we changed,
-but how can we restore it?
+but how can we restore it?\index{Git!restore old versions}
 Suppose we change our mind about the last update to `bin/plotcounts.py`
 before we add it or commit it.
 `git status` tells us that the file has been changed,
-but those changes haven't been [staged][git_stage]:
+but those changes haven't been [staged][git_stage]:\index{Git!staging area}
 
 ```shell
 $ git status
@@ -6454,7 +6497,7 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-We can put things back the way they were in the last saved revision using `git checkout`:
+We can put things back the way they were in the last saved revision using `git checkout`:\index{Git commands!checkout}
 
 ```shell
 $ git checkout HEAD bin/plotcounts.py
@@ -6551,9 +6594,9 @@ we might want to track text files with names ending in `.txt`
 but not data files with names ending in `.dat`.
 
 To stop Git from telling us about these files every time we call `git status`,
-we can create a file in the root directory of our project called `.gitignore`.
+we can create a file in the root directory of our project called `.gitignore`.\index{Git!ignoring files}\index{.gitignore file (in Git)}
 This file can contain filenames like `thesis.pdf`
-or [wildcard][wildcard] patterns like `*.dat`.
+or [wildcard][wildcard] patterns like `*.dat`.\index{wildcard!in .gitignore}
 Each must be on a line of its own,
 and Git will ignore anything that matches any of these lines.
 For now we only need one entry in our `.gitignore` file,
@@ -6562,7 +6605,7 @@ For now we only need one entry in our `.gitignore` file,
 __pycache__
 ```
 
-which tells Git to ignore any `__pycache__` directory created by Python
+which tells Git to ignore any `__pycache__` directory created by Python\index{\_\_pycache\_\_ directory!ignoring in Git}
 (Section \@ref(py-rse-py-scripting-modules)).
 
 > **Remember to Ignore**
@@ -6609,9 +6652,9 @@ using `git rm --cached`.
 Try this out:
 
 1.  Create a new file in the repository called `example.txt`.
-2.  Use `git add` to add this file.
+2.  Use `git add example.txt` to add this file.
 3.  Use `git status` to check that Git has noticed it.
-4.  Use `git rm --cached` to remove it from the list of things to be saved.
+4.  Use `git rm --cached example.txt` to remove it from the list of things to be saved.
 
 What does `git status` now show?
 What (if anything) has happened to the file?
@@ -6736,24 +6779,27 @@ $ git checkout HEAD motivation.txt
 $ cat motivation.txt
 ```
 
-1. ```text
-   Zipf's Law describes the relationship between the frequency and rarity of words.
-   ```
+1. 
+```
+    Zipf's Law describes the relationship between the frequency and rarity of words.
+```
 
-2. ```
-   Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
-   ```
+2. 
+```
+    Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
+```
 
-3. ```
+3. 
+```
    Zipf's Law describes the relationship between the frequency and rarity of words.
    Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
-   ```
+```
 
 4. An error message because we have changed `motivation.txt` without committing first.
 
 ### Understanding `git diff` {#git-cmdline-ex-diff}
 
-1.   What will the command `git diff HEAD~9 bin/plotcounts.py` do if we run it?
+1.  What will the command `git diff HEAD~2 bin/plotcounts.py` do if we run it?
 2.  What does it actually do?
 3.  What does `git diff HEAD bin/plotcounts.py` do?
 
@@ -6764,7 +6810,7 @@ but will it also work for changes that have been staged but not committed?
 To find out:
 
 1.  Change `bin/plotcounts.py`.
-2.  `git add` that change.
+2.  Use `git add` on those changes to `bin/plotcounts.py`.
 3.  Use `git checkout` to see if you can remove your change.
 
 Does it work?
@@ -6812,11 +6858,6 @@ they allow us to go through the write-review-revise cycle
 familiar to anyone who has ever written a journal paper
 in hours rather than weeks.
 
-> This lesson is derived in part from one created at
-> [the University of Wisconsin-Madison][uwm-git-lesson].
-> We are grateful to its authors for using an open license
-> so that we could reuse their work.
-
 Your `zipf` project directory should now include:
 
 ```text
@@ -6854,12 +6895,12 @@ and *only* on the one before.
 However,
 there are times when we want to try things out
 without disrupting our main work.
-To do this, we can use branches to work on separate tasks in parallel.
+To do this, we can use [branches][git_branch] to work on separate tasks in parallel.\index{branch (in Git)}\index{Git!branch}
 Each branch is a parallel timeline;
 changes made on the branch only affect that branch
 unless and until we explicitly combine them with work done in another branch.
 
-We can see what branches exist in a repository using this command:
+We can see what branches exist in a repository using this command:\index{Git commands!branch}
 
 ```shell
 $ git branch
@@ -6870,7 +6911,7 @@ $ git branch
 ```
 
 When we initialize a repository,
-Git automatically creates a branch called `master`.
+Git automatically creates a branch called `master`.\index{Git!master branch}
 It is often considered the "official" version of the repository.
 The asterisk `*` indicates that it is currently active,
 i.e.,
@@ -6880,8 +6921,12 @@ that all changes we make will take place in this branch by default.
 In the previous chapter,
 we foreshadowed some experimental changes that we could try and make to `plotcounts.py`.
 
+Making sure our project directory is our working directory,
+we can inspect our current `plotcounts.py`:
+
 ```shell
-$ cat plotcounts.py
+$ cd ~/zipf
+$ cat bin/plotcounts.py
 ```
 
 ```python
@@ -6961,7 +7006,7 @@ On branch master
 nothing to commit, working directory clean
 ```
 
-To switch to our new branch we can use the `checkout` command
+To switch to our new branch we can use the `checkout` command\index{Git commands!checkout}
 that we first saw in Section \@ref(git-cmdline-restore):
 
 ```shell
@@ -6981,18 +7026,12 @@ switch it from one saved state to another.
 We should choose the name to signal the purpose of the branch,
 just as we choose the names of files and variables to indicate what they are for.
 We haven't made any changes since switching to the `fit` branch,
-so at this point `master` and `fit` are two names for the same repository state
-(Figure \@ref(fig:git-advanced-repo-state)).
+so at this point `master` and `fit` are at the same point in the repository's history.
 Commands like `ls` and `git log` therefore show that the files and history haven't changed.
-
-<div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Repository State"  />
-<p class="caption">(\#fig:git-advanced-repo-state)Repository State</p>
-</div>
 
 > **Where Are Branches Saved?**
 >
-> Git saves every version of every file in the `.git` directory
+> Git saves every version of every file in the `.git` directory\index{Git!.git directory}
 > that it creates in the project's root directory.
 > When we switch from one branch to another,
 > it replaces the files we see with
@@ -7022,7 +7061,7 @@ becomes clear if we include it in a modified version of the earlier definition:
 > as often as the second most frequent word,
 > \(3^\alpha\) times as often as the third most frequent word, and so on.
 
-This mathematical expression for Zipf's Law is an example of a [power law][power_law].
+This mathematical expression for Zipf's Law is an example of a [power law][power_law].\index{power law}
 In general, when two variables \(x\) and \(y\)
 are related through a power law, so that \[
 y = ax^b
@@ -7049,7 +7088,7 @@ Our goal is to estimate the value of \(\alpha\);
 we'll see later that \(c\) is completely defined.
 
 In order to determine the best method for estimating \(\alpha\) we turn to [@Moreno2016],
-which suggests using a method called [maximum likelihood estimation][maximum_likelihood_estimation].
+which suggests using a method called [maximum likelihood estimation][maximum_likelihood_estimation].\index{maximum likelihood estimation}
 The likelihood function is the probability of our observed data
 as a function of the parameters in the statistical model that we assume generated it.
 We estimate the parameters in the model by choosing them to maximize this likelihood;
@@ -7086,7 +7125,7 @@ from scipy.optimize import minimize_scalar
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -7124,7 +7163,7 @@ and \(-1 / \alpha\) the exponent in the power law.
 ## Verifying Zipf's Law {#git-advanced-zipf-verify}
 
 Now that we have defined the functions required to fit a curve to our word count plots,
-we can update `plotcounts.py`:
+we can update `plotcounts.py` so the entire script reads as follows:
 
 ```python
 """Plot word counts."""
@@ -7144,7 +7183,7 @@ def nlog_likelihood(beta, counts):
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -7161,7 +7200,7 @@ def set_plot_params(param_file):
         mpl.rcParams[param] = value
 
 
-def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     """
     Plot the power law curve that was fitted to the data.
 
@@ -7219,7 +7258,7 @@ We can then run the script to obtain the \(\alpha\) value for *Dracula*
 and a new plot with a line fitted.
 
 ```shell
-python plotcounts.py ../results/dracula.csv --outfile ../results/dracula.png
+python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
 ```text
@@ -7241,13 +7280,13 @@ The script appears to be working as we'd like,
 so we can go ahead and commit our changes to the `fit` development branch:
 
 ```shell
-$ git add plotcounts.py
+$ git add bin/plotcounts.py results/dracula.png
 $ git commit -m "Added fit to word count data"
 ```
 
 ```text
 [fit 3ff8195] Added fit to word count data
- 1 file changed, 61 insertions(+)
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 ```
 
 If we look at the last couple of commits using `git log`,
@@ -7259,7 +7298,7 @@ $ git log --oneline -n 2
 
 ```text
 3ff8195 Added fit to word count data
-d77bc5c Update dracula plot
+ffb5cee adding ignore file
 ```
 
 (We use `--oneline` and `-n 2` to shorten the log display.)
@@ -7283,8 +7322,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
+ffb5cee adding ignore file
 d77bc5c Update dracula plot
-b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 We have not lost our work:
@@ -7325,14 +7364,14 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
 ```
 
 ```shell
-$ git add plotcounts.py
+$ git add bin/plotcounts.py
 $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```
 
@@ -7341,9 +7380,9 @@ $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
  1 file changed, 14 insertions(+), 1 deletion(-)
 ```
 
-Finaly,
+Finally,
 if we want to see the differences between two branches,
-we can use `git diff` with the same double-dot `..` syntax
+we can use `git diff` with the same double-dot `..` syntax\index{Git commands!diff}
 used to view differences between two revisions:
 
 ```shell
@@ -7351,11 +7390,11 @@ $ git diff master..fit
 ```
 
 ```text
-diff --git a/plotcounts.py b/plotcounts.py
+diff --git a/bin/plotcounts.py b/bin/plotcounts.py
 index 4501eaf..d57fd63 100644
---- a/plotcounts.py
-+++ b/plotcounts.py
-@@ -1,6 +1,69 @@
+--- a/bin/plotcounts.py
++++ b/bin/plotcounts.py
+@@ -1,15 +1,89 @@
  """Plot word counts."""
  import argparse
 +import numpy as np
@@ -7385,7 +7424,7 @@ index 4501eaf..d57fd63 100644
 +      https://doi.org/10.1371/journal.pone.0147073
 +    """
 +    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-+                          args=(word_counts), method='brent')
++                          args=word_counts, method='brent')
 +    beta = mle.x
 +    alpha = 1 / (beta - 1)
 +    return alpha
@@ -7425,8 +7464,10 @@ index 4501eaf..d57fd63 100644
 
 
  def main(args):
-@@ -9,6 +72,17 @@ def main(args):
++    """Run the command line program.""" 
+     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
      df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+-    df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                           figsize=[12, 6], grid=True, xlim=args.xlim)
 +
@@ -7441,6 +7482,11 @@ index 4501eaf..d57fd63 100644
 +
 +    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
      ax.figure.savefig(args.outfile)
+
+
+diff --git a/results/dracula.png b/results/dracula.png
+index d34c46d..1c42702 100644
+Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
 > **Why Branch?**
@@ -7465,7 +7511,7 @@ Now that we are happy with our curve fitting we have three options:
 
 The first option is tedious and error-prone;
 the second will lead to a bewildering proliferation of branches,
-but the third option is simple, fast, and reliable.
+but the third option is simple, fast, and reliable.\index{Git commands!merge}\index{merge (in Git)}
 To start,
 let's make sure we're in the `master` branch:
 
@@ -7475,8 +7521,8 @@ $ git branch
 ```
 
 ```text
-* master
   fit
+* master
 ```
 
 We can now merge the changes in the `fit` branch into our current branch
@@ -7489,8 +7535,9 @@ $ git merge fit
 ```text
 Updating d77bc5c..db1d03f
 Fast-forward
- plotcounts.py | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ bin/plotcounts.py   |  76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ results/dracula.png | Bin 22351 -> 31378 bytes
+ 2 files changed, 75 insertions(+), 1 deletion(-)
 ```
 
 Merging doesn't change the source branch `fit`,
@@ -7504,8 +7551,8 @@ $ git log --oneline -n 4
 ```text
 db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
 3ff8195 Added fit to word count data
+ffb5cee adding ignore file
 d77bc5c Update dracula plot
-b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 Note that Git automatically creates a new commit (in this case, `db1d03f`)
@@ -7537,8 +7584,8 @@ Deleted branch fit (was db1d03f).
 
 ## Handling Conflicts {#git-advanced-conflict}
 
-A [conflict][git_conflict] occurs when
-a line has been changed in different ways in two separate branches
+A [conflict][git_conflict] occurs\index{Git!conflict}\index{conflict!in Git}
+when a line has been changed in different ways in two separate branches
 or when a file has been deleted in one branch but edited in the other.
 Merging `fit` into `master` went smoothly
 because there were no conflicts between the two branches,
@@ -7608,7 +7655,7 @@ $ git commit -m "Added repository overview"
 
 ```text
 [docs a41a6ea] Added repository overview
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ 1 file changed, 3 insertions(+)
 ```
 
 In order to create a conflict,
@@ -7648,7 +7695,7 @@ $ git commit -m "Added contributor list"
 
 ```text
 [master a102c83] Added contributor list
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ 1 file changed, 4 insertions(+)
 ```
 
 We now have two branches,
@@ -7664,7 +7711,7 @@ diff --git a/README.md b/README.md
 index fd3de28..cf317ea 100644
 --- a/README.md
 +++ b/README.md
-@@ -1,5 +1,5 @@
+@@ -1,4 +1,5 @@
  # Zipf's Law
 
 -These Zipf's Law scripts tally the occurrences of words in text files
@@ -7713,7 +7760,7 @@ while the lines from there to `>>>>>>> docs` show what was in `docs`.
 If there were several conflicting regions in the same file,
 Git would mark each one this way.
 
-We have to decide what to do next:
+We have to decide what to do next:\index{Git!resolve conflict}\index{resolve conflict (in Git)}
 keep the `master` changes,
 keep those from `docs`,
 edit this part of the file to combine them,
@@ -7754,7 +7801,7 @@ Our branch's history now shows a single sequence of commits,
 with the `master` changes on top of the earlier `docs` changes:
 
 ```shell
-$ git log --oneline
+$ git log --oneline -n 4
 ```
 
 ```text
@@ -7768,7 +7815,7 @@ If we want to see what really happened,
 we can add the `--graph` option to `git log`:
 
 ```shell
-$ git log --oneline --graph
+$ git log --oneline --graph -n 4
 ```
 
 ```text
@@ -7838,7 +7885,8 @@ this workflow will help us keep track of what we are doing:
     We should not have any conflicts,
     and all of our tests should pass.
 
-Most experienced developers use this [branch-per-feature][branch_per_feature] workflow,
+Most experienced developers use this
+[branch-per-feature][branch_per_feature] workflow,\index{branch-per-feature workflow (in Git)\index{Git!branch-per-feature workflow}
 but what exactly is a "feature"?
 These rules make sense for small projects:
 
@@ -7880,7 +7928,7 @@ We can do this in two ways:
 
 2.  Everyone can read from the project's main repository,
     but only a few people can commit changes to it.
-    The project's other contributors [fork][git_fork] the main repository
+    The project's other contributors [fork][git_fork] the main repository\index{Git!fork a repository}\index{fork (in Git)}
     to create one that they own,
     do their work in that,
     and then submit their changes to the main repository.
@@ -7905,7 +7953,7 @@ Sami can go to that URL and click on the "Fork" button in the upper right corner
 GitHub immediately creates a copy of Amira's repository within Sami's account on GitHub's own servers.
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Forking"  />
+<img src="figures/py-rse/git-advanced/fork-button.png" alt="Forking"  />
 <p class="caption">(\#fig:git-advanced-fork-button)Forking</p>
 </div>
 
@@ -7917,28 +7965,28 @@ When Sami explores its history,
 they see that it contains all of the changes Amira made.
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="After Forking"  />
+<img src="figures/py-rse/git-advanced/after-fork.png" alt="After Forking"  />
 <p class="caption">(\#fig:git-advanced-after-fork)After Forking</p>
 </div>
 
-A copy of a repository is called a [clone][git_clone].
+A copy of a repository is called a [clone][git_clone].\index{Git!clone a repository}\index{clone (in Git)}
 In order to start working on the project,
 Sami needs a clone of *their* repository (not Amira's) on their own computer.
 We will modify Sami's prompt to include their desktop user ID (`sami`)
 and working directory (initially `~`)
-to make it easier to follow what's happening:
+to make it easier to follow what's happening:\index{Git commands!clone}
 
 ```shell
-sami:~ $ git clone https://github.com/sami/zipf.git
+sami:~ $ git clone https://github.com/sami-virtanen/zipf.git
 ```
 
 ```text
 Cloning into 'zipf'...
-remote: Enumerating objects: 32, done.
-remote: Counting objects: 100% (32/32), done.
-remote: Compressing objects: 100% (16/16), done.
-remote: Total 32 (delta 5), reused 32 (delta 5), pack-reused 0
-Unpacking objects: 100% (32/32), done.
+remote: Enumerating objects: 60, done.
+remote: Counting objects: 100% (60/60), done.
+remote: Compressing objects: 100% (42/42), done.
+remote: Total 60 (delta 17), reused 59 (delta 16), pack-reused 0
+Unpacking objects: 100% (60/60), done.
 ```
 
 This command creates a new directory with the same name as the project,
@@ -7962,11 +8010,11 @@ sami:~/zipf $ git log --oneline -n 4
 ```text
 4ffeaa4 (HEAD -> master) Merging README additions
 a102c83 Added contributors list
-a41a6ea (docs) Added repository overview
+a41a6ea Added repository overview
 b07c14a Initial commit of README file
 ```
 
-Sami also sees that Git has automatically created a remote for their repository
+Sami also sees that Git has automatically created a [remote][git_remote] for their repository\index{Git!remote}\index{remote (in Git)}
 that points back at their repository on GitHub:
 
 ```shell
@@ -7974,8 +8022,8 @@ sami:~/zipf $ git remote -v
 ```
 
 ```text
-origin  https://github.com/sami/zipf.git (fetch)
-origin  https://github.com/sami/zipf.git (push)
+origin  https://github.com/sami-virtanen/zipf.git (fetch)
+origin  https://github.com/sami-virtanen/zipf.git (push)
 ```
 
 Sami can pull changes from their fork and push work back there,
@@ -7987,13 +8035,14 @@ sami:~/zipf $ git remote -v
 ```
 
 ```text
-origin      https://github.com/sami/zipf.git (fetch)
-origin      https://github.com/sami/zipf.git (push)
+origin      https://github.com/sami-virtanen/zipf.git (fetch)
+origin      https://github.com/sami-virtanen/zipf.git (push)
 upstream    https://github.com/amira-khan/zipf.git (fetch)
 upstream    https://github.com/amira-khan/zipf.git (push)
 ```
 
-Sami has called their new remote `upstream` because it points at the repository theirs are derived from.
+Sami has called their new remote `upstream` because it points at the repository
+theirs is derived from.\index{Git!upstream repository}\index{upstream repository (in Git)}
 They could use any name,
 but `upstream` is a nearly universal convention.
 
@@ -8032,12 +8081,12 @@ and plot each word's rank versus its frequency.
 Amira commits her changes and pushes them to *her* repository on GitHub:
 
 ```shell
-amira:~/zipf $ git commit -m "Adding Sami as a contributor"
+amira:~/zipf $ git commit -a -m "Adding Sami as a contributor"
 ```
 
 ```text
 [master 766c2cd] Adding Sami as a contributor
- 1 file changed, 6 insertions(+)
+ 1 file changed, 1 insertion(+)
 ```
 
 ```shell
@@ -8045,18 +8094,19 @@ amira:~/zipf $ git push origin master
 ```
 
 ```text
-Counting objects: 3, done.
-Delta compression using up to 4 threads.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 340 bytes | 340.00 KiB/s, done.
-Total 3 (delta 1), reused 0 (delta 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 To https://github.com/amira-khan/zipf.git
    b0c3fc6..766c2cd  master -> master
 ```
 
 Amira's changes are now on her desktop and in her GitHub repository
-but not in either of Sami's repositories.
+but not in either of Sami's repositories (local or remote).
 Since Sami has created a remote that points at Amira's GitHub repository,
 though,
 they can easily pull those changes to their desktop:
@@ -8068,16 +8118,16 @@ sami:~/zipf $ git pull upstream master
 ```text
 remote: Enumerating objects: 5, done.
 remote: Counting objects: 100% (5/5), done.
-remote: Compressing objects: 100% (2/2), done.
-remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 3 (delta 2), reused 3 (delta 2), pack-reused 0
 Unpacking objects: 100% (3/3), done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
  * [new branch]      master     -> upstream/master
-Updating b0c3fc6..766c2cd
+Updating 1c63b8b..893fc9f
 Fast-forward
- README.md | 6 ++++++
- 1 file changed, 6 insertions(+)
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
 ```
 
 Pulling from a repository owned by someone else
@@ -8099,7 +8149,7 @@ and periodically pull in Sami's changes,
 but that would lead to chaos,
 since we could never be sure that everyone's work was in any one place at the same time.
 Instead,
-almost everyone uses [pull requests][pull_request].
+almost everyone uses [pull requests][pull_request].\index{pull request (in Git)}\index{Git!pull request}
 They aren't part of Git itself,
 but are supported by all major online [forges][forge].
 
@@ -8154,15 +8204,15 @@ diff --git a/README.md b/README.md
 index a55a9bb..eb24a3f 100644
 --- a/README.md
 +++ b/README.md
-@@ -3,4 +3,4 @@
-## Contributors
-
+@@ -6,4 +6,4 @@ and plot each word's rank versus its frequency.
+ ## Contributors
+ 
  - Amira Khan <amira@zipf.org>
 -- Sami Virtanen
 +- Sami Virtanen <sami@zipf.org>
 ```
 
-Sami's changes are only in their desktop repository.
+Sami's changes are only in their local repository.
 They cannot create a pull request until those changes are on GitHub,
 so they push their new branch to their repository on GitHub:
 
@@ -8171,17 +8221,18 @@ sami:~/zipf $ git push origin adding-email
 ```
 
 ```text
-Counting objects: 3, done.
-Delta compression using up to 4 threads.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 307 bytes | 307.00 KiB/s, done.
+Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
 Total 3 (delta 2), reused 0 (delta 0)
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-remote:
+remote: 
 remote: Create a pull request for 'adding-email' on GitHub by visiting:
-remote:      https://github.com/sami/zipf/pull/new/adding-email
-remote:
-To https://github.com/sami/zipf.git
+remote:      https://github.com/sami-virtanen/zipf/pull/new/adding-email
+remote: 
+To https://github.com/sami-virtanen/zipf.git
  * [new branch]      adding-email -> adding-email
 ```
 
@@ -8190,10 +8241,8 @@ GitHub notices that they have just pushed a new branch
 and asks them if they want to create a pull request
 (Figure \@ref(fig:git-advanced-after-sami-pushes)).
 
-FIXME: re-do this figure showing Sami instead of Jean Jennings
-
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="After Sami Pushes"  />
+<img src="figures/py-rse/git-advanced/after-sami-pushes.png" alt="After Sami Pushes"  />
 <p class="caption">(\#fig:git-advanced-after-sami-pushes)After Sami Pushes</p>
 </div>
 
@@ -8203,7 +8252,7 @@ and a pair of editable boxes for the pull request's title and a longer comment
 (Figure \@ref(fig:git-advanced-pull-request-start)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Starting Pull Request"  />
+<img src="figures/py-rse/git-advanced/open-pull-request.png" alt="Starting Pull Request"  />
 <p class="caption">(\#fig:git-advanced-pull-request-start)Starting Pull Request</p>
 </div>
 
@@ -8212,12 +8261,13 @@ Sami can see a summary of the changes that will be in the pull request
 (Figure \@ref(fig:git-advanced-pull-request-summary)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Summary of Pull Request"  />
+<img src="figures/py-rse/git-advanced/open-pull-request-detail.png" alt="Summary of Pull Request"  />
 <p class="caption">(\#fig:git-advanced-pull-request-summary)Summary of Pull Request</p>
 </div>
 
-They fill in the top two boxes
-and click on "Create Pull Request"
+The top (title) box is autofilled with the previous commit message,
+so Sami adds an extended explanation to provide additional context
+before clicking on "Create Pull Request"
 (Figure \@ref(fig:git-advanced-pull-request-fill-in)).
 When they do,
 GitHub displays a page showing the new pull request,
@@ -8227,12 +8277,12 @@ Note that this pull request is displayed in Amira's repository rather than Sami'
 since it is Amira's repository that will be affected if the pull request is merged.
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Filling In Pull Request"  />
+<img src="figures/py-rse/git-advanced/fill-in-pull-request.png" alt="Filling In Pull Request"  />
 <p class="caption">(\#fig:git-advanced-pull-request-fill-in)Filling In Pull Request</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="New Pull Request"  />
+<img src="figures/py-rse/git-advanced/new-pull-request.png" alt="New Pull Request"  />
 <p class="caption">(\#fig:git-advanced-pull-request-new)New Pull Request</p>
 </div>
 
@@ -8242,20 +8292,22 @@ Amira checks her repository and sees that there is a pull request
 Clicking on the "Pull requests" tab brings up a list of PRs
 (Figure \@ref(fig:git-advanced-pull-request-list))
 and clicking on the pull request link itself displays its details
-(Figure \@ref(fig:git-advanced-pull-request-details)).
+(Figure \@ref(fig:git-advanced-pull-request-details)),
+Which appears identical to the details seen by .
+
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Viewing Pull Request"  />
+<img src="figures/py-rse/git-advanced/viewing-new-pull-request.png" alt="Viewing Pull Request"  />
 <p class="caption">(\#fig:git-advanced-pull-request-viewing)Viewing Pull Request</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Listing Pull Requests"  />
+<img src="figures/py-rse/git-advanced/pr-list.png" alt="Listing Pull Requests"  />
 <p class="caption">(\#fig:git-advanced-pull-request-list)Listing Pull Requests</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Pull Request Details"  />
+<img src="figures/py-rse/git-advanced/pr-details.png" alt="Pull Request Details"  />
 <p class="caption">(\#fig:git-advanced-pull-request-details)Pull Request Details</p>
 </div>
 
@@ -8267,11 +8319,11 @@ she clicks on the "Files changed" tab to see what Sami has changed
 (Figure \@ref(fig:git-advanced-pull-request-changes)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Files Changed"  />
+<img src="figures/py-rse/git-advanced/pr-changes.png" alt="Files Changed"  />
 <p class="caption">(\#fig:git-advanced-pull-request-changes)Files Changed</p>
 </div>
 
-If she moves her mouse over particular lines,
+If she moves her mouse over particular lines,\index{Git!pull request!reviewing}\index{reviewing (Git pull request})\index{code review!pull request}
 a white-on-blue cross appears near the numbers to indicate that she can add comments
 (Figure \@ref(fig:git-advanced-pull-request-comment-marker)).
 She clicks on the marker beside her own name and writes a comment:
@@ -8282,28 +8334,28 @@ GitHub redisplays the page with her remarks inserted
 (Figure \@ref(fig:git-advanced-pull-request-pr-with-comment)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Comment Marker"  />
+<img src="figures/py-rse/git-advanced/pr-comment-marker.png" alt="Comment Marker"  />
 <p class="caption">(\#fig:git-advanced-pull-request-comment-marker)Comment Marker</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Writing Comment"  />
+<img src="figures/py-rse/git-advanced/pr-writing-comment.png" alt="Writing Comment"  />
 <p class="caption">(\#fig:git-advanced-pull-request-write-comment)Writing Comment</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Pull Request With Comment"  />
+<img src="figures/py-rse/git-advanced/pr-with-comment.png" alt="Pull Request With Comment"  />
 <p class="caption">(\#fig:git-advanced-pull-request-pr-with-comment)Pull Request With Comment</p>
 </div>
 
-While all of this has been doing on,
+While Amira is working,
 GitHub has been emailing notifications to both Sami and Amira.
-When Sami clicks on the link in theirs,
+When Sami clicks on the link in their email notification,
 it takes them to the PR and shows Amira's comment.
 Sami changes `README.md`,
 commits,
 and pushes,
-but does *not* create a new pull request or do anything to the existing one.
+but does *not* create a new pull request or do anything to the existing one.\index{Git!pull request!updating}
 As explained above,
 a PR is a note asking that two branches be merged,
 so if either end of the merge changes,
@@ -8318,12 +8370,12 @@ The icon at the top of the PR's page changes text and color to show that the mer
 (Figure \@ref(fig:git-advanced-pull-request-successful-merge)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Pull Request With Fix"  />
+<img src="figures/py-rse/git-advanced/pr-with-fix.png" alt="Pull Request With Fix"  />
 <p class="caption">(\#fig:git-advanced-pull-request-pr-with-fix)Pull Request With Fix</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Successful Merge"  />
+<img src="figures/py-rse/git-advanced/pr-successful-merge.png" alt="Successful Merge"  />
 <p class="caption">(\#fig:git-advanced-pull-request-successful-merge)Successful Merge</p>
 </div>
 
@@ -8338,12 +8390,11 @@ amira:~/zipf $ git pull origin master
 remote: Enumerating objects: 9, done.
 remote: Counting objects: 100% (9/9), done.
 remote: Compressing objects: 100% (5/5), done.
-remote: Total 7 (delta 3), reused 5 (delta 2), pack-reused 0
+remote: Total 7 (delta 4), reused 4 (delta 2), pack-reused 0
 Unpacking objects: 100% (7/7), done.
 From https://github.com/amira-khan/zipf
- * branch            master     -> FETCH_HEAD
-   766c2cd..984b116  master     -> origin/master
-Updating 766c2cd..984b116
+   893fc9f..4bf4b68  master     -> origin/master
+Updating 893fc9f..4bf4b68
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
@@ -8371,14 +8422,15 @@ sami:~/zipf $ git pull upstream master
 ```
 
 ```text
-remote: Enumerating objects: 1, done.
-remote: Counting objects: 100% (1/1), done.
-remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
-Unpacking objects: 100% (1/1), done.
+remote: Enumerating objects: 8, done.
+remote: Counting objects: 100% (8/8), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 4 (delta 2), reused 3 (delta 2), pack-reused 0
+Unpacking objects: 100% (4/4), done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
-   766c2cd..984b116  master     -> upstream/master
-Updating 766c2cd..984b116
+   893fc9f..4bf4b68  master     -> upstream/master
+Updating 893fc9f..4bf4b68
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
@@ -8389,14 +8441,19 @@ All four repositories are now synchronized.
 ## Handling Conflicts in Pull Requests {#git-advanced-pr-conflict}
 
 Finally,
-suppose that Sami makes a change to `README.md`
-and merges it into `master` on GitHub
-while Amira is making a conflicting change to the same file.
+suppose that Amira and Sami have decided to collaborate more extensively on this project.
+Amira has added Sami as a collaborator to the GitHub repository.
+Now Sami can make contributions directly to the repository,
+rather than via a pull request from a forked repository. 
+
+Sami makes a change to `README.md` in the `master` branch on GitHub.
+Meanwhile, Amira is making a conflicting change to the same file in a different branch.\index{Git!pull request!conflict}
+When Amira creates her pull request,
 GitHub will detect the conflict and report that the PR cannot be merged automatically
 (Figure \@ref(fig:git-advanced-pr-conflict)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="Conflict in a Pull Request"  />
+<img src="figures/py-rse/git-advanced/pr-conflict.png" alt="Conflict in a Pull Request"  />
 <p class="caption">(\#fig:git-advanced-pr-conflict)Conflict in a Pull Request</p>
 </div>
 
@@ -8404,7 +8461,7 @@ Amira can solve this problem with the tools she already has.
 If she has made her changes in a branch called `editing-readme`,
 the steps are:
 
-1.  Pull the changes Sami merged into the `master` branch of the main repository on GitHub
+1.  Pull Sami's on the `master` branch of the GitHub repository
     into the `master` branch of her desktop repository.
 
 2.  Merge *from* the `master` branch of her desktop repository
@@ -8541,7 +8598,8 @@ and introduce a few ways to manage projects and teams as they develop.
 Our recommendations draw on @Foge2005,
 which describes how good open source software projects are run,
 and on @Boll2014,
-which explains what a [commons][commons] is and when it's the right model to use.
+which explains what a [commons][commons] is\index{commons}
+and when it's the right model to use.
 
 At this point,
 the Zipf's Law project should include:
@@ -8566,7 +8624,6 @@ zipf/
     ├── dracula.png
     └── ...
 ```
-
 
 ## What is a Project? {#teams-scope}
 
@@ -8593,7 +8650,7 @@ Some examples are:
     a Markdown file full of terms and definitions,
     and a Makefile with targets to check cross-references, compile packages, and so on.
 
-Some common criteria for creating projects are one per publication,
+Some common criteria for creating projects are one per publication,\index{project!scope}
 one per deliverable piece of software,
 or one per team.
 The first tends to be too small:
@@ -8625,7 +8682,7 @@ In order to leverage a group's expertise,
 though,
 a project must do more than *allow* people to contribute:
 its leaders must communicate that the project *wants* contributions,
-and that newcomers are welcome and valued @Shol2019.
+and that newcomers are welcome and valued @Shol2019.\index{project!inclusivity}\index{inclusivity}
 
 But saying "the door is open" is not enough,
 since many potential contributors have painful personal experience of being less welcome than others.
@@ -8639,8 +8696,8 @@ it is the right thing to do.
 
 > **Terminology**
 >
-> [Privilege][privilege] is an unearned advantage given to some people but not all,
-> while [oppression][oppression] is systemic inequality that benefits the privileged
+> [Privilege][privilege] is an unearned advantage given to some people but not all,\index{privilege}
+> while [oppression][oppression] is systemic inequality that benefits the privileged\index{oppression}
 > and harms those without privilege @Auro2019.
 > In Europe, the Americas, Australia, and New Zealand,
 > a straight, white, affluent, physically able male
@@ -8659,7 +8716,7 @@ it is the right thing to do.
 > but targets don't choose to be marginalized:
 > people with privilege marginalize them.
 > Finally,
-> an [ally][ally] is a member of a privileged group
+> an [ally][ally] is a member of a privileged group\index{ally}
 > who is working to understand their own privilege and end oppression.
 
 Encouraging inclusivity is a shared responsibility.
@@ -8672,7 +8729,7 @@ and to ensure an inclusive culture @Lee1962.
 
 ## Establish a Code of Conduct {#teams-coc}
 
-A Code of Conduct has four purposes:
+A Code of Conduct has four purposes:\index{Code of Conduct (for project)}\index{project!Code of Conduct}
 
 1.  To promote fairness within a group.
 2.  To reassure members of marginalized groups
@@ -8694,7 +8751,7 @@ that will probably make the project run more smoothly.
 
 By convention,
 we can add a Code of Conduct to our project
-by creating a file called `CONDUCT.md` in the project's root directory.
+by creating a file called `CONDUCT.md` in the project's root directory.\index{project files!CONDUCT}
 Writing a Code of Conduct that is both comprehensive and readable is hard.
 We therefore recommend using one that other groups have drafted, refined, and tested.
 The [Contributor Covenant][covenant] is relevant for projects being developed online,
@@ -8859,7 +8916,7 @@ since rules are meaningless without a method to enforce them;
 While a Code of Conduct describes how contributors should interact with each other,
 a license dictates how project materials can be used and redistributed.
 If the license or a publication agreement makes it difficult for people to contribute,
-the project is less likely to attract new members,
+the project is less likely to attract new members,\index{project!license}
 so the choice of license is crucial to the project's long-term sustainability.
 
 > **Open Except...**
@@ -8928,17 +8985,20 @@ but it's often hard to understand the interactions between multiple licenses
 on different kinds of material @Alme2017.
 
 Just as the project's Code of Conduct is usually placed in a root-level file called `CONDUCT.md`,
-its license is usually put in a file called `LICENSE.md` that is also in the project's root directory.
+its license is usually put in a file called `LICENSE.md`\index{project files!LICENSE}
+that is also in the project's root directory.
 
 ### Software {#teams-license-software}
 
 Before choosing a license for our software,
 we need to understand the difference between
-the two main kinds of license.
-The [MIT License][mit_license] (and its close sibling the BSD License)
+the two main kinds of license.\index{open source license}
+The [MIT License][mit_license]\index{MIT License}\index{open source license!MIT License}
+(and its close sibling the BSD License)\index{BSD License}\index{open source license!BSD License}
 say that people can do whatever they want to with the software as long as they cite the original source,
 and that the authors accept no responsibility if things go wrong.
-The [GNU Public License][gpl] (GPL) gives people similar rights,
+The [GNU Public License][gpl] (GPL)\index{GNU Public License (GPL)}\index{GPL (GNU Public License)}\index{open source license!GPL}
+gives people similar rights,
 but requires them to share their own work on the same terms:
 
 > You may copy, distribute and modify the software as long as you track changes/dates in source files.
@@ -8990,7 +9050,8 @@ SOFTWARE.
 
 > **First, Do No Harm**
 >
-> The [Hippocratic License][hippocratic-license] is a newer license
+> The [Hippocratic License][hippocratic-license]\index{Hippocratic License}\index{open source license!Hippocratic License}
+> is a newer license
 > that is quickly becoming popular.
 > Where the GPL requires people to share their work,
 > the Hippocratic License requires them to do no harm.
@@ -9004,10 +9065,11 @@ SOFTWARE.
 
 The MIT license, the GPL, and the Hippocratic License are intended for use with software.
 When it comes to data and reports,
-the most widely used family of licenses are those produced by [Creative Commons][creative-commons].
+the most widely used family of licenses are those produced
+by [Creative Commons][creative-commons].\index{Creative Commons}
 These have been written and checked by lawyers and are well understood by the community.
 
-The most liberal option is referred to as [CC-0][cc_license],
+The most liberal option is referred to as [CC-0][cc_license],\index{Creative Commons!CC-0 license}\index{public domain}
 where the "0" stands for "zero restrictions".
 This puts work in the public domain,
 i.e.,
@@ -9018,7 +9080,7 @@ It does not negate the scholarly tradition and requirement of citing sources;
 it just doesn't make it a legal requirement.
 
 The next step up from CC-0 is the Creative Commons--Attribution license,
-usually referred to as [CC-BY][cc_license].
+usually referred to as [CC-BY][cc_license].\index{Creative Commons!CC-BY license}\index{CC-BY license}
 This allows people to do whatever they want to with the work
 as long as they cite the original source.
 This is the best license to use for manuscripts:
@@ -9052,14 +9114,13 @@ but after reflection,
 we decide to choose CC-BY for our papers
 so that everyone can read them (and cite them).
 
-
 ## Planning {#teams-planning}
 
 Whether we are working by ourselves or with a group of people,
 we should use an [issue tracking system][issue_tracking_system]
 to keep track of tasks we need to complete or problems we need to fix.
-[Issues][issue] are sometimes called [tickets][ticket],
-so issue tracking systems are sometimes called [ticketing systems][ticketing_system].
+[Issues][issue] are sometimes called [tickets][ticket],\index{project!issue}\index{issue (in project)}
+so issue tracking systems are sometimes called [ticketing systems][ticketing_system].\index{issue tracking system}
 They are also often called [bug trackers][bug_tracker],
 but they can be used to manage any kind of work,
 and are often a convenient way to manage discussions as well.
@@ -9101,9 +9162,9 @@ Every issue can hold:
 Broadly speaking,
 people create three kinds of issues:
 
-1.  [Bug reports][bug_report] to describe problems they have encountered.
+1.  [Bug reports][bug_report] to describe problems they have encountered.\index{bug report}
 
-2.  [Feature requests][feature_request]
+2.  [Feature requests][feature_request]\index{feature request}
     describing what could be done next,
     such as "add this function to this package" or "add a menu to the website".
 
@@ -9127,7 +9188,7 @@ people create three kinds of issues:
 
 ## Bug Reports {#teams-bugs}
 
-A well-written bug report is more likely to get a fast response,
+A well-written [bug report][bug_report] is more likely to get a fast response,\index{bug report!style}
 and is more likely to get a response actually addresses the issue @Bett2008.
 To write a good bug report:
 
@@ -9138,7 +9199,8 @@ To write a good bug report:
     or ask someone else on our team to check our logic,
     we could well fix the problem ourselves.
 
-2.  Try to come up with a [reproducible example][reprex] or "reprex"
+2.  Try to come up with a [reproducible example][reprex]
+    or "reprex"\index{reproducible example (reprex)}\index{reprex (reproducible example)}
     that includes only the steps needed to make the problem happen,
     and that (if possible) uses simplified data rather than a complete dataset.
     Again,
@@ -9200,13 +9262,14 @@ remember and complete documentation about bug reports.
 Sometimes the person creating the issue may not know or have the right answer for some of these things,
 and will be doing their best with limited information about the error.
 Responding with kindness and encouragement is important to maintain a healthy community,
-and should be enforced by the project's Code of Conduct (Section \@ref(teams-coc)).
+and should be enforced by the project's Code of Conduct\index{Code of Conduct (for project)}
+(Section \@ref(teams-coc)).
 
 ## Labeling Issues {#teams-labels}
 
-Issue trackers let project members add [labels][issue_label] to issues
+Issue trackers let project members add [labels][issue_label] to issues\index{issue (in project)!label}
 to make things easier to search and organize.
-Labels are also often called [tags][tag];
+Labels are also often called [tags][tag];\index{tags (for issues in project)}
 whatever term is used,
 each one is just a descriptive word or two.
 
@@ -9245,10 +9308,14 @@ A separate set of labels can be used to indicate the state of an issue:
 
 -   *Urgent*: work needs to be done right away.
     (This label is typically reserved for security fixes).
+
 -   *Current*: this issue is included in the current round of work.
+
 -   *Next*: this issue is (probably) going to be included in the next round.
+
 -   *Eventually*: someone has looked at the issue and believes it needs to be tackled,
     but there's no immediate plan to do it.
+
 -   *Won't Fix*: someone has decided that the issue isn't going to be addressed,
     either because it's out of scope or because it's not actually a bug.
     Once an issue has been marked this way,
@@ -9256,6 +9323,7 @@ A separate set of labels can be used to indicate the state of an issue:
     When this happens,
     send the issue's creator a note explaining why the issue won't be addressed
     and encourage them to continue working with the project.
+
 -   *Duplicate*: this issue is a duplicate of one that's already in the system.
     Issues marked this way are usually also then closed;
     this is another opportunity to encourage people to stay involved.
@@ -9266,7 +9334,7 @@ This approach works well in the short-term,
 but becomes unwieldy as labels with names like `sprint-2020-08-01` and `spring-2020-08-16` pile up.
 
 Instead,
-a project team will usually create a [milestones][milestone],
+a project team will usually create a [milestone][milestone],\index{milestone (in project)}\index{project!milestone}
 which is a set of issues and pull requests in a single project repository.
 GitHub milestones can have a due date
 and display aggregate progress toward completion,
@@ -9311,7 +9379,7 @@ without having to wait for someone to respond to email
 
 ## Prioritizing {#teams-prioritize}
 
-Labeling issues helps with [triage][triage],
+Labeling issues helps with [triage][triage],\index{triage (issues of project)}\index{project!triage (issues)}
 which is the process of deciding what is a priority and what isn't.
 This is never an easy job for software projects
 that need to balance fixing bugs with creating new features,
@@ -9321,9 +9389,10 @@ or whose team members are widely distributed
 or do not all work for the same institution.
 
 Many commercial and open source teams have adopted
-[agile development][agile] as a solution to these problems.
+[agile development][agile] as a solution to these problems.\index{agile development}
 Instead of carefully formulating long-term plans that could be derailed by changing circumstances,
-agile development uses a sequence of short development [sprints][sprint],
+agile development uses a sequence of short development
+[sprints][sprint],\index{sprint (of agile development)}\index{agile development!sprint}
 each typically one or two weeks long.
 Each sprint starts with a planning session lasting one or two hours
 in which the successes and failures of the previous sprint are reviewed
@@ -9336,7 +9405,7 @@ with smaller items,
 it's easier to see how much headway is being made.)
 
 To decide which issues to work on in the next sprint,
-a team can construct an [impact/effort matrix][impact_effort_matrix]
+a team can construct an [impact/effort matrix][impact_effort_matrix]\index{impact/effort matrix}
 (Figure \@ref(fig:teams-impact-effort)).
 Impact measures how important the issue is to reaching the team's goals,
 and is typically measured on a low--medium--high scale.
@@ -9366,8 +9435,8 @@ The team must still make hard decisions, though:
 Each team has to answer these questions for each sprint,
 but that begs the question of exactly who has the final say in answering them.
 In a large project,
-a [product manager][product_manager] decides how important items are,
-while a [project manager][project_manager] is responsible for estimating effort
+a [product manager][product_manager] decides how important items are,\index{product manager}\index{project!product manager}
+while a [project manager][project_manager] is responsible for estimating effort\index{project manager}\index{project!project manager}
 and tracking progress.
 In a typical research software projects,
 the principal investigator either makes the decision
@@ -9375,7 +9444,8 @@ or delegates that responsibility (and authority) to the lead developer.
 
 Regardless of who is ultimately responsible,
 it is essential to include project participants in the planning and decision making.
-This may be as simple as having them add [up-votes][up_vote] and [down-votes][down_vote] to issues
+This may be as simple as having them add [up-votes][up_vote]\index{up-vote}
+and [down-votes][down_vote]\index{down-vote} to issues
 to indicate their opinions on importance,
 or as complex as asking them to propose
 a multi-sprint breakdown of a particularly complex feature.
@@ -9389,7 +9459,8 @@ since everyone knows something that someone else doesn't.
 Pull requests and GitHub issues are good tools for asynchronous work,
 but team meetings are often a more efficient way to make decisions,
 and help build a sense of community.
-Knowing how to run a meeting well is as important as knowing how to use version control;
+Knowing how to run a meeting well\index{project!meetings}\index{meetings!how to run}
+is as important as knowing how to use version control;
 the rules doing so are simple but rarely followed:
 
 Decide if there actually needs to be a meeting.
@@ -9464,7 +9535,7 @@ End early.
     aim to end at 10:50 to give people a break before whatever they're doing next.
 
 As soon as the meeting is over,
-circulate the minutes by emailing them to everyone
+circulate the minutes by emailing them to everyone\index{project!meeting minutes}\index{meetings!minutes}
 or adding a text file to the project's repository:
 
 People who weren't at the meeting can keep track of what's going on.
@@ -9498,7 +9569,7 @@ People can be held accountable at subsequent meetings.
 One of the problem in a synchronous meeting
 is the tendency of some people to speak far more than others.
 Other meeting members may be so accustomed to this
-that they don't speak up even when they have valuable points to make.
+that they don't speak up even when they have valuable points to make.\index{meetings!how to run}
 
 One way to combat this is to give everyone [three sticky notes][three_stickies]
 at the start of the meeting.
@@ -9527,7 +9598,7 @@ is often enough to get them to throttle back.
 
 ### Online Meetings {#teams-online}
 
-Online meetings provide special challenges,
+Online meetings provide special challenges,\index{meetings!online}
 both in the context of regulating how often individuals speak,
 as well as running meetings in general.
 [This discussion][troy-meetings] of why online meetings are often frustrating and unproductive
@@ -9561,9 +9632,9 @@ groups need to spell out
 who has the authority to make which decisions
 and how to achieve consensus.
 In short,
-they need explicit [governance][governance].
+they need explicit [governance][governance].\index{governance!project}\index{project!governance}
 
-[Martha's Rules][marthas_rules] are a practical way to do this
+[Martha's Rules][marthas_rules] are a practical way to do this\index{Martha's Rules}\index{governance!Martha's Rules}
 in groups of up to a few dozen members @Mina1986:
 
 1.  Before each meeting, anyone who wishes may sponsor a proposal.
@@ -9630,10 +9701,10 @@ how to get items on a meeting agenda, or
 how'll you'll make decisions, 
 take the time to document this for newcomers.
 
-This information may be included as sections in the existing `README` file 
+This information may be included as sections in the existing `README` file\index{project files!README}
 or put into files of their own:
 
--   `CONTRIBUTING`
+-   `CONTRIBUTING`\index{project files!CONTRIBUTING}
     explains how to contribute,
     i.e.,
     what naming conventions to use for functions,
@@ -9644,7 +9715,7 @@ or put into files of their own:
     remember that the easier it is for people to get set up and contribute,
     the more likely they are to do so @Stei2014.
 
--   `GOVERNANCE`
+-   `GOVERNANCE`\index{project files!GOVERNANCE}
     explains how the project is run (Section \@ref(teams-martha)).
     It is still uncommon for this to be in a file of its own---it is more often included
     in `README` or `CONTRIBUTING`---but open communities have learned the hard way
@@ -9668,7 +9739,7 @@ well, he didn't deliver at all---again.
 If something doesn't change,
 it might be time to look for a new project.
 
-Situations like this come up all the time.
+Conflicts like this come up all the time.\index{conflict!in teams}
 Broadly speaking, there are four ways we can deal with them:
 
 1.  Cross our fingers and hope that things will get better on their own,
@@ -9846,26 +9917,24 @@ Use the [Contributor Covenant][covenant] Code of Conduct template and modify the
 places that need updating (e.g. who to contact).
 Be sure to edit the contact information in both before committing the files.
 
-### Add a License to your project {#teams-ex-boilerplate-license}
+### Add a license to your project {#teams-ex-boilerplate-license}
 
 Add either an MIT or a GPL `LICENSE.md` file to your Zipf's Law project
 repository.
 Modify the contents to include your full name and year.
 
-### Adding a CONTRIBUTING file {#teams-ex-contributing}
+### Adding contribution guidelines {#teams-ex-contributing}
 
-Add a `CONTRIBUTING.md` file in the Zipf's Law project
-to describe how other people can contribute to it.
+1.  Add a section to the `README.md` file in the Zipf's Law project
+    to tell people where to find out more about contributing.
+
+2.  Add a `CONTRIBUTING.md` file in the Zipf's Law project
+    to describe how other people can contribute to it.
 
 Be sure to add it to the root directory of your Git repository,
 so that when someone opens a pull request or creates an issue on GitHub,
 they will be presented with a link to the CONTRIBUTING file
 (see the [GitHub contributors guide][github-contributors-guide] for details).
-
-### Adding material to README {#teams-ex-readme}
-
-Add a section to the `README.md` file in the Zipf's Law project
-to describe how other people can contribute to it.
 
 ### File an issue {#teams-ex-file-issue}
 
@@ -9888,7 +9957,7 @@ Several other members of your team have come to you privately
 to say that they find this distracting.
 What steps would you take?
 
-### Crediting invisible contributions {#teams-ex-contributions}
+### Crediting invisible contributions {#teams-ex-invisible}
 
 Your team has a rule:
 if someone's name appears in the Git history for a project,
@@ -9976,7 +10045,7 @@ How would you address this issue?
 -   Include a license in your project so that it's clear who can do what with the material.
 -   Create [issues][issue] for bugs, enhancement requests, and discussions.
 -   [Label issues][issue_label] to identify their purpose.
--   [Triage][triage issues regularly and group them into [milestones][milestone] to track progress.
+-   [Triage][triage] issues regularly and group them into [milestones][milestone] to track progress.
 -   Include contribution guidelines in your project that specify its workflow and its expectations of participants.
 -   Make rules about [governance][governance] explicit.
 -   Use common-sense rules to make project meetings fair and productive.
@@ -9997,7 +10066,7 @@ If we try to keep track of this ourselves
 we will inevitably forget some crucial steps
 and it will be hard for other people to pick up our work.
 Instead,
-we should use a [build manager][build_manager]
+we should use a [build manager][build_manager]\index{build manager}
 to keep track of what depends on what
 and run our analysis programs automatically.
 These tools were invented to help programmers compile complex software,
@@ -10032,18 +10101,18 @@ zipf/
 
 Now that the project's main building blocks are in place,
 we're ready to atomate our analysis using a build manager.
-We will use a program called [Make][make] to do this
+We will use a program called [Make][make]\index{Make} to do this
 so that every time we add a new book to our data,
 we can create new plots and update our fits with a single command.
 Make works as follows:
 
 1.  Every time the [operating system][operating_system] creates, reads, or changes a file,
-    it updates a [timestamp][timestamp] on the file to show when the operation took place.
+    it updates a [timestamp][timestamp]\index{timestamp} on the file to show when the operation took place.
     Make can compare these timestamps
     to figure out whether files are newer or older than one another.
 
 2.  A user can describe which files depend on each other
-    by writing [rules][build_rule] in a [Makefile][makefile].
+    by writing [rules][build_rule]\index{build rule} in a [Makefile][makefile].
     For example,
     one rule could say that `results/moby_dick.csv` depends on `data/moby_dick.txt`,
     while another could say that the plot `results/comparison.png`
@@ -10057,7 +10126,7 @@ Make works as follows:
 4.  When the user runs Make,
     the program checks all of the rules in the Makefile
     and runs the commands needed to update any that are out of date.
-    If there are [transitive dependencies][transitive_dependency]---i.e.,
+    If there are [transitive dependencies][transitive_dependency]---i.e.,\index{build dependency}\index{dependency!in build}
     if A depends on B and B depends on C---then Make will trace them through
     and run all of the commands it needs to in the right order.
 
@@ -10086,13 +10155,13 @@ results/moby_dick.csv : data/moby_dick.txt
 
 As in the shell and many other programming languages,
 `#` indicates that the first line is a comment.
-The second and third lines form a [build rule][build_rule]:
-the [target][build_target] of the rule is `results/moby_dick.csv`,
+The second and third lines form a [build rule][build_rule]:\index{build rule}
+the [target][build_target]\index{build target} of the rule is `results/moby_dick.csv`,
 its single [prerequisite][prerequisite] is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
 
 The target and prerequisite tell Make what depends on what.
-The line below them describes the [recipe][build_recipe]
+The line below them describes the [recipe][build_recipe]\index{build recipe}
 that will update the target if it is out of date.
 The recipe consists of one or more shell commands,
 each of which *must* be prefixed by a single tab character.
@@ -10204,7 +10273,7 @@ make: `results/moby_dick.csv' is up to date.
 ```
 
 By default Make only attempts to update the first target it finds in the Makefile,
-which is called the [default target][default_target].
+which is called the [default target][default_target].\index{build target!default}
 In this case,
 the first target is `results/moby_dick.csv`,
 which is already up to date.
@@ -10223,7 +10292,7 @@ If we have to run `make` once for each result
 we're right back where we started.
 However,
 we can add a rule to our Makefile to update all of our results at once.
-We do this by creating a [phony target][phony_target]
+We do this by creating a [phony target][phony_target]\index{build target!phony}
 that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
@@ -10251,7 +10320,7 @@ We can use phony targets to automate and document other steps in our workflow.
 For example,
 let's add another target to our Makefile to delete all of the result files we have generated
 so that we can start afresh.
-By convention this target is called `clean`,
+By convention this target is called `clean`,\index{build target!clean}
 and ours looks like this:
 
 ```make
@@ -10406,7 +10475,8 @@ Instead,
 we can write a generic rule that does what we want for every one of our data files.
 
 To do this,
-we need to understand Make's [automatic variables][automatic_variable].
+we need to understand Make's
+[automatic variables][automatic_variable].\index{automatic variables (in Make)}\index{Make!automatic variables}
 The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 It lets us turn this:
@@ -10467,8 +10537,8 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 
 `$< > $@` is even harder to read than `$@` on its own,
 but we can now replace all the rules for generating results files
-with one [pattern rule][pattern_rule]
-using the [wildcard][wildcard] `%`,
+with one [pattern rule][pattern_rule]\index{pattern rule}
+using the [wildcard][wildcard]\index{wildcard!in Make} `%`,
 which matches zero or more characters in a filename.
 Whatever matches `%` in the target also matches in the prerequisites,
 so the rule:
@@ -10573,7 +10643,7 @@ and Make won't realize that we want to generate it.
 
 What we really want is to generate the list of results files
 based on the list of books in the `data/` directory.
-We can create that list using Make's `wildcard` function:
+We can create that list using Make's `wildcard` function:\index{functions (in Make)}
 
 ```make
 DATA=$(wildcard data/*.txt)
@@ -10645,7 +10715,7 @@ RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
 The first argument to `patsubst` is the pattern to look for,
 which in this case is a text file in the `data` directory.
-We use `%` to match the [stem][filename_stem] of the file's name,
+We use `%` to match the [stem][filename_stem]\index{filename stem}\index{stem (of filename)} of the file's name,
 which is the part we want to keep.
 
 The second argument is the replacement we want.
@@ -10983,8 +11053,8 @@ explain what every part of this recipe does.
 
 # Program Configuration {#config}
 
-In previous chapters we have used command-line options to control our scripts.
-If our programs are more complex,
+In previous chapters we used command-line options to control our scripts and programs.
+If they are more complex,\index{shell script!configuring}\index{Python!configuring program}
 we may want to use up to four layers of configuration:
 
 1.  A system-wide configuration file for general settings.
@@ -10992,7 +11062,7 @@ we may want to use up to four layers of configuration:
 3.  A job-specific file with settings for a particular run.
 4.  Command-line options to change things that commonly change.
 
-This is sometimes called [overlay configuration][overlay_configuration]
+This is sometimes called [overlay configuration][overlay_configuration]\index{overlay configuration}\index{configuration!overlay}
 because each level overrides the ones above it:
 the user's configuration file overrides the system settings,
 the job configuration overrides the user's defaults,
@@ -11047,7 +11117,7 @@ and load it as if it was a library.
 This is clever,
 but means that tools in other languages can't process it.
 
-A second option is [Windows INI format][ini-format],
+A second option is [Windows INI format][ini-format],\index{Windows INI format}
 which is laid out like this:
 
 ```text
@@ -11061,7 +11131,7 @@ key_4=value_4
 ```
 
 INI files are simple to read and write,
-but the format is slowly falling out of use in favor of [YAML][yaml].
+but the format is slowly falling out of use in favor of [YAML][yaml].\index{YAML!configuration files}
 A simple YAML configuration file looks like this:
 
 ```yaml
@@ -11099,7 +11169,7 @@ if we want to include the figure in a slideshow or report.
 We could use any of the overlay options described above
 to change the size of the labels:
 
--  Edit the system-wide Matplotlib configuration file
+-  Edit the system-wide Matplotlib configuration file\index{Matplotlib!configuration}
    (which would affect everyone using this computer).
 -  Create a user-specific Matplotlib style sheet.
 -  Create a job-specific configuration file to set plotting options in `plotcounts.py`.
@@ -11109,7 +11179,7 @@ Let's consider these options one by one.
 
 ## The Global Configuration File {#config-global}
 
-Our first option is to edit the system-wide Matplotlib runtime configuration file,
+Our first option is to edit the system-wide Matplotlib runtime configuration file,\index{configuration!global}
 which is called `matplotlibrc`.
 When we import Matplotlib,
 it uses this file to set the default characteristics of the plot.
@@ -11176,7 +11246,7 @@ a one-line change in `matplotlibrc` can prevent a lot of failed jobs.
 
 ## The User Configuration File {#config-user}
 
-Matplotlib defines several carefully-designed styles for plots:
+Matplotlib defines several carefully-designed styles for plots:\index{configuration!user}
 
 ```python
 import matplotlib.pyplot as plt
@@ -11231,7 +11301,7 @@ it doesn't solve the problem of ensuring that other people can reproduce our plo
 
 ## Adding Command-Line Options {#config-command-line}
 
-The third way to change the plot's properties
+The third way to change the plot's properties\index{configuration!command-line option}
 is to add some new command-line arguments to `plotcounts.py`.
 The `choices` parameter of `add_argument` lets us tell `argparse`
 that the user is only allowed to specify a value from a predefined list:
@@ -11279,7 +11349,7 @@ if we want to tweak other aspects of the plot.
 ## A Job Control File {#config-job-file}
 
 The final option---the one we will actually adopt in this case--- is
-to pass a YAML file full of Matplotlib parameters to `plotcounts.py`.
+to pass a YAML file full of Matplotlib parameters to `plotcounts.py`.\index{configuration!file}
 First,
 we save the parameters we want to change in a file inside our project directory.
 We can call it anything,
@@ -11419,8 +11489,11 @@ but knowing what it entails allows us to make a conscious, thoughtful choice.
 
 ## Exercises {#config-exercises}
 
-TODO: An exercise to add the new `--plotparams` option to the `Makefile` developed in the
-automation chapter.
+### Building with plotting parameters {#config-ex-build-plotparams}
+
+1.  Add the new `--plotparams` option to the `Makefile` developed in Chapter \@ref(automate).
+2.  Rewrite the rules in the `Makefile` so that
+    the appropriate commands will be re-run if plotting parameters change.
 
 ### Making plots more accessible {#config-ex-accessible}
 
@@ -11433,16 +11506,41 @@ plt.style.use('tableau-colorblind10')
 
 How can we make this the default for all of our plots?
 
-### Saving configurations {#config-ex-debug}
+### Saving configurations {#config-ex-saveload}
 
 1.  Add an option `--saveconfig filename` to `plotcounts.py`
-    that writes all of its settings to a file
-    (or to standard output if the filename is `-`).
+    that writes all of the configuration for `plotcounts.py` to a file
+    (or to standard output if the filename given is `-`).
     Make sure this option saves *all* of the configuration,
     including any defaults that the user hasn't changed.
 2.  Add an option `--loadconfig filename` to `plotcounts.py`
-    that reads settings from a file.
+    that reads settings from a file like the one created in the previous step.
 3.  How would you use these two options when debugging?
+
+### Tracing configuration {#config-ex-trace}
+
+One drawback of overlay configuration is
+the difficulty of figuring out where particular parameters are set.
+Modify the functions written in this chapter
+so that they keep track of where parameters' values come from.
+(Hint: create a second dictionary whose keys match those in the dictionary holding configuration values,
+but whose values are a list of the places where that configuration parameter was set.)
+
+### Using INI syntax {#config-ex-ini}
+
+Read the documentation for Python's [`configparser`][configparser] module,
+then rewrite the configuration loader in this chapter to use INI syntax rather than YAML.
+Which do you find easier to read?
+What factors other than readability should influence your choice of a configuration file syntax?
+
+### Configuration consistency {#config-ex-consistency}
+
+In order for a data processing pipeline to work correctly,
+some of the configuration parameters for Program A and Program B must be the same.
+However,
+the programs were written by different teams,
+and each has its own configuration file.
+What steps could you take to ensure the required consistency?
 
 ## Key Points {#config-keypoints}
 
@@ -11499,7 +11597,7 @@ zipf/
 
 ## Exceptions {#errors-exceptions}
 
-Most modern programming languages use [exceptions][exception] for error handling.
+Most modern programming languages use [exceptions][exception] for error handling.\index{exception}
 As the name suggests,
 an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
@@ -11538,7 +11636,7 @@ it skips directly to the code under `except`.
 We often want to know exactly what went wrong,
 so Python and other languages store information about the error
 in an object (which is also called an exception).
-We can [catch][catch_exception] an exception and inspect it as follows:
+We can [catch][catch_exception] an exception and inspect it as follows:\index{exception!catch}\index{catch exception}
 
 ```python
 for denom in [-5, 0, 5]:
@@ -11583,7 +11681,7 @@ for i in [0, 1, 2, 3]:
 index 3 out of range
 ```
 
-Exceptions are organized in a hierarchy:
+Exceptions are organized in a hierarchy:\index{exception!hierarchy}
 for example,
 `FloatingPointError`, `OverflowError`, and `ZeroDivisionError`
 are all special cases of `ArithmeticError`,
@@ -11604,7 +11702,7 @@ the ones that people handle most often are:
     and so on.
 
 So where do exceptions come from?
-The answer is that programmers can [raise][raise_exception] them explicitly:
+The answer is that programmers can [raise][raise_exception] them explicitly:\index{exception!raise}\index{raise exception}
 
 ```python
 for number in [1, 0, -1]:
@@ -11631,7 +11729,7 @@ In fact,
 their greatest strength is that they allow long-range error handling.
 If an exception occurs inside a function and there is no `except` for it there,
 Python checks to see if whoever called the function is willing to handle the error.
-It keeps working its way up through the [call stack][call_stack]
+It keeps working its way up through the [call stack][call_stack]\index{call stack}
 until it finds a matching `except`.
 If there isn't one,
 Python takes care of the exception itself.
@@ -11776,7 +11874,7 @@ so there should always be an `except` somewhere
 to deal with unexpected cases.
 
 Generally speaking,
-we should distinguish between [internal errors][internal_error],
+we should distinguish between [internal errors][internal_error],\index{error!internal}\index{internal error}
 such as calling a function with `None` instead of a list,
 and [external errors][external_error],
 such as trying to read a file that doesn't exist.
@@ -11792,7 +11890,7 @@ We can try to guess what the problem is and take corrective action,
 but our guess will often be wrong
 and our attempt to correct the problem might actually make things worse.
 
-External errors,
+External errors,\index{error!external}\index{external error}
 on the other hand,
 are usually caused by interactions between the program and the outside world:
 a user may mis-type a filename,
@@ -11816,7 +11914,7 @@ the more useful those checks will be.
 
 ## Writing Useful Error Messages {#errors-messages}
 
-The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:
+The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:\index{error message!writing helpful}
 
 <div class="figure" style="text-align: center">
 <img src="figures/py-rse/scripting/error-message.png" alt="An Unhelpful Error Message" width="60%" />
@@ -11896,7 +11994,7 @@ What research there is gives us the following rules @Beck2016:
     This rule can be hard to enforce when error messages are written by several different people,
     but putting them all in one module makes review easier.
 
-That last suggestion deserves a little elaboration.
+That last suggestion deserves a little elaboration.\index{error message!lookup table}
 Most people write error messages directly in their code:
 
 ```python
@@ -11950,13 +12048,13 @@ where `user_language` is a two-letter code for the user's preferred language.
 
 ## Reporting Errors {#errors-logging}
 
-Programs should report things that go wrong;
+Programs should report things that go wrong;\index{error message!reporting}
 they should also sometimes report things that go right
 so that people can monitor their progress.
 Adding `print` statements is a common approach,
 but removing them or commenting them out when the code goes into production is tedious and error-prone.
 
-A better approach is to use a [logging framework][logging_framework],
+A better approach is to use a [logging framework][logging_framework],\index{logging framework}
 such as Python's `logging` library.
 This lets us leave debugging statements in our code
 and turn them on or off at will.
@@ -11991,7 +12089,7 @@ but the other two only in case the user has requested more details
 by setting `LOG_LEVEL` higher than zero.
 
 A logging framework combines the `if` and `print` statements in a single function call
-and defines standard names for the logging levels.
+and defines standard names for the [logging levels][logging_level].\index{logging level}
 In order of increasing severity,
 the usual levels are:
 
@@ -12005,7 +12103,7 @@ Each of these has a corresponding function:
 we can use `logging.debug`, `logging.info`, etc. to write messages at these levels.
 By default,
 only `WARNING` and above are displayed;
-messages appear on [standard error][stderr]
+messages appear on [standard error][stderr]\index{standard error}
 so that the flow of data in pipes isn't affected.
 The logging framework also displays the source of the message,
 which is called `root` by default.
@@ -12042,7 +12140,7 @@ for file_name in args.infiles:
         update_counts(reader, word_counts)
 ```
 
-We can also configure logging to send messages to a file instead of standard error
+We can also configure logging to send messages to a file instead of standard error\index{configuration!logging}\index{logging configuration}
 using `logging.basicConfig`.
 (This has to be done before we make any logging calls---it's not retroactive.)
 We can also use that function to set the logging level:
@@ -12070,7 +12168,7 @@ CRITICAL:root:Something went seriously wrong.
 ```
 
 By default,
-`basicConfig` re-opens the file we specify in [append mode][append_mode];
+`basicConfig` re-opens the file we specify in [append mode][append_mode];\index{append mode}
 we can use `filemode='w'` to overwrite the existing log data.
 Overwriting is useful during debugging,
 but we should think twice before doing in production,
@@ -12106,7 +12204,7 @@ Libraries like `logging` can send messages to many destinations;
 in production,
 we might send them to a centralized logging server
 that collates logs from many different systems.
-We might also use [rotating files][rotating_file]
+We might also use [rotating files][rotating_file]\index{logging framework!rotating file}
 so that the system always has messages from the last few hours
 but doesn't fill up the disk.
 We don't need any of these when we start,
@@ -12344,8 +12442,8 @@ zipf/
 
 The first step in building confidence in our programs
 is to assume that mistakes will happen and guard against them.
-This is called [defensive programming][defensive_programming],
-and the most common way to do it is to add [assertions][assertion] to our code
+This is called [defensive programming][defensive_programming],\index{defensive programming}
+and the most common way to do it is to add [assertions][assertion] to our code\index{assertion}\index{Python!assertion}
 so that it checks itself as it runs.
 An assertion is a statement that something must be true at a certain point in a program.
 When Python sees an assertion, it checks the assertion's condition.
@@ -12380,20 +12478,23 @@ Programs intended for widespread use are full of assertions:
 10-20% of the code they contain are there to check that the other 80-90% are working correctly.
 Broadly speaking, assertions fall into three categories:
 
--   A [precondition][precondition] is something that must be true at the start of a function
+-   A [precondition][precondition]\index{precondition (in program)}\index{assertion!precondition}
+    is something that must be true at the start of a function
     in order for it to work correctly.
     For example,
     a function might check that the list it has been given has at least two elements
     and that all of its elements are integers.
 
--   A [postcondition][postcondition] is something that the function guarantees is true
+-   A [postcondition][postcondition]\index{postcondition (in program)}\index{assertion!postcondition}
+    is something that the function guarantees is true
     when it finishes.
     For example,
     a function could check that the value being returned is an integer
     that is greater than zero,
     but less than the length of the input list.
 
--   An [invariant][invariant] is something that is true for every iteration in a loop.
+-   An [invariant][invariant]\index{invariant (in program)}\index{assertion!invariant}
+    is something that is true for every iteration in a loop.
     The invariant might be a property of the data (as in the example above),
     or it might be something like,
     "the value of `highest` is less than or equal to the current loop index".
@@ -12435,7 +12536,8 @@ def get_power_law_params(word_counts):
 ## Unit Testing {#testing-unit}
 
 As the name suggests,
-a [unit test][unit_test] checks the correctness of a single unit of software.
+a [unit test][unit_test]\index{unit test}\index{testing!unit test}
+checks the correctness of a single unit of software.
 Exactly what constitutes a "unit" is subjective,
 but it typically means the behavior of a single function in one situation.
 In our Zipf's Law software,
@@ -12454,12 +12556,12 @@ def count_words(reader):
 
 A single unit test will typically have:
 
--   a [fixture][fixture],
+-   a [fixture][fixture],\index{testing!fixture}\index{fixture (of test)}
     which is the thing being tested (e.g., an array of numbers);
--   an [actual result][actual_result],
+-   an [actual result][actual_result],\index{testing!actual result}\index{actual result (of test)}
     which is what the code produces when given the fixture;
     and
--   an [expected result][expected_result]
+-   an [expected result][expected_result]\index{testing!expected result}\index{expected result (of test)}
     that the actual result is compared to.
 
 The fixture is typically a subset or smaller version of the data
@@ -12517,7 +12619,8 @@ which means the assertion (and test) passed.
 Writing one unit test is easy enough,
 but we should check other cases as well.
 To manage them,
-we can use a [test framework][test_framework] (also called a [test runner][test_runner]).
+we can use a [test framework][test_framework]\index{test framework}\index{testing!framework}
+(also called a [test runner][test_runner]).
 The most widely-used test framework for Python is called [`pytest`][pytest],
 which structures tests as follows:
 
@@ -12713,7 +12816,7 @@ the `actual_alpha` value of 0.9951524579316625 was very close to the expected va
 After a bit of thought,
 we decide that this isn't actually a failure:
 the value produced by `get_power_law_params` is an estimate,
-and being off by half a percent is good enough.
+and being off by half a percent is good enough.\index{testing!floating-point calculations}
 
 This example shows that testing scientific software
 almost always requires us to make the same kind of judgment calls
@@ -12734,10 +12837,10 @@ so that other people can tell what we actually did.
 
 So how should we write tests when we don't know precisely what the right answer is?
 The best approach is to write tests that check
-if the actual value is within some [tolerance][tolerance] of the expected value.
-The tolerance can be expressed as the [absolute error][absolute_error],
+if the actual value is within some [tolerance][tolerance] of the expected value.\index{testing!tolerance}\index{tolerance (of test)}
+The tolerance can be expressed as the [absolute error][absolute_error],\index{absolute error}\index{error!absolute}
 which is the absolute value of the difference between two,
-or the [relative error][relative_error],
+or the [relative error][relative_error],\index{relative error}\index{error!relative}
 which the ratio of the absolute error to the value we're approximating.
 For example,
 if we add 9+1 and get 11,
@@ -12822,7 +12925,7 @@ An alarm isn't much use if it doesn't go off when it's supposed to.
 Equally,
 if a function doesn't raise an exception when it should (Section \@ref(errors-exceptions)),
 errors can easily slip past us.
-If we want to check that a function called `func` raises an `ExpectedError` exception
+If we want to check that a function called `func` raises an `ExpectedError` exception\index{testing!error handling}\index{exception!testing}
 we can use the following template:
 
 ```python
@@ -12880,7 +12983,7 @@ counting the words in a text
 and estimating the \(\alpha\) parameter from the word count.
 Our unit tests give us some confidence that these components work in isolation,
 but do they work correctly together?
-Checking that is called [integration testing][integration_test].
+Checking that is called [integration testing][integration_test].\index{testing!integration test}\index{integration test}
 
 Integration tests are structured the same way as unit tests:
 a fixture is used to produce an actual result
@@ -12965,7 +13068,8 @@ we don't know the expected result:
 it's not practical to count the words in *Dracula* by hand,
 and even if we tried,
 the odds are good that we'd make a mistake.
-For this kind of situation we can use [regression testing][regression_testing].
+For this kind of situation we can use
+[regression testing][regression_testing].\index{testing!regression test}\index{regression test}
 Rather than assuming that the test author knows what the expected result should be,
 regression tests compares today's answer with a previous one.
 This doesn't guarantee that the answer is right---if the original answer is wrong,
@@ -13007,7 +13111,7 @@ bin/test_zipfs.py ....                                                   [100%]
 
 How much of our code do the tests we have written so far actually check?
 To find out,
-we can use a tool to check their [code coverage][code_coverage].
+we can use a tool to check their [code coverage][code_coverage].\index{code coverage (of testing)}\index{testing!code coverage}
 Most Python programmers use the `coverage` library,
 which we can once again install using `pip`:
 
@@ -13117,7 +13221,7 @@ it's probably enough to check that it handles table with:
 -   rows having keys that are supposed to be unique, but aren't
 -   rows that contain nothing but missing values
 
-Some projects develop [checklists][checklist] like this one
+Some projects develop [checklists][checklist] like this one\index{testing!checklist}
 to remind programmers what they ought to test.
 These checklists can be a bit daunting for newcomers,
 but they are a great way to pass on hard-earned experience.
@@ -13132,8 +13236,8 @@ or if we are making changes over weeks or months,
 we might forget to run the tests
 or it might be difficult to identify which change is responsible for a test failure.
 
-The solution is [continuous integration][continuous_integration] (CI),
-which runs tests automatically whenever a change is made.
+The solution is [continuous integration][continuous_integration] (CI),\index{continuous integration}\index{CI (continuous integration)}
+which runs tests automatically whenever a change is made.\index{testing!continuous integration}
 CI tells developers immediately if changes have caused problems,
 which makes them much easier to fix.
 CI can also be set up to run tests with several different configurations of the software
@@ -13142,7 +13246,8 @@ so that a programmer using Windows
 can be warned that a change breaks things for Mac users and vice versa.
 
 One popular CI tool is [Travis CI][travis-ci],
-which integrates well with [GitHub][github].
+which integrates well with
+[GitHub][github].\index{continuous integration!use with version control}\index{version control!and continuous integration}
 If Travis CI has been set up,
 then every time a change is committed to a GitHub repository,
 Travis CI creates a fresh environment,
@@ -13207,7 +13312,7 @@ script:
 ```
 
 The `language` key tells Travis CI which programming language to use,
-so that it knows which of its standard [virtual machines][virtual_machine] to use
+so that it knows which of its standard [virtual machines][virtual_machine] to use\index{continuous integration!use of virtual machines}
 as a starting point for the project.
 The `python` key specifies the version or versions of Python to use, 
 while the `script` key lists the commands to run---in this case, `pytest`.
@@ -13338,7 +13443,8 @@ At what point in the code development process should we write these?
 The answer depends on who you ask.
 
 Many programmers are passionate advocates of a practice called
-[test-driven development][tdd] (TDD).
+[test-driven development][tdd]
+(TDD).\index{test-driven development}\index{testing!test-driven development}\index{TDD (test-driven development)}
 Rather than writing code and then writing tests,
 they write the tests first and then write just enough code to make those tests pass.
 Once the code is working,
@@ -13460,6 +13566,11 @@ Travis CI display status logo.
 Follow [these instructions](https://docs.travis-ci.com/user/status-images/) to include
 the status display in the REAMDE for this Zipf's Law project.
 
+### Testing configuration {#testing-ex-config}
+
+Suppose your program uses a configuration file of the kind described in Chapter \@ref(config).
+How would you test that different parameters were having the correct effect?
+
 ## Key Points {#testing-keypoints}
 
 
@@ -13490,7 +13601,7 @@ and aimed at people other than its creators.
 
 But modern publishing involves much more than producing a printable PDF.
 It also entails providing the data underpinning the report
-and the code used to do the analysis:
+and the code used to do the analysis:\index{reproducible research}
 
 > An article about computational science in a scientific publication
 > is *not* the scholarship itself,
@@ -13505,7 +13616,7 @@ can't be published without violating personal or commercial confidentiality,
 every researcher's default should be to make all these as widely available as possible.
 Publishing it under an open license (Section \@ref(teams-license)) is the first step;
 the sections below describe what else we can do to capture
-the [provenance][provenance] of our data analysis.
+the [provenance][provenance] of our data analysis.\index{provenance}
 
 Our Zipf's Law project files are structured as they were at the end of the previous chapter:
 
@@ -13544,7 +13655,7 @@ zipf/
 >
 > Before publishing anything,
 > we need to understand how authors and their works are identified.
-> A [Digital Object Identifier][doi] (DOI)
+> A [Digital Object Identifier][doi] (DOI)\index{Digital Object Identifier (DOI)}\index{DOI (Digital Object Identifier)}
 > is a unique identifier for a particular version of a particular digital artifact
 > such as a report, a dataset, or a piece of software.
 > DOIs are written as `doi:prefix/suffix`,
@@ -13553,7 +13664,8 @@ zipf/
 > an academic journal, data archive, or other organiation
 > must guarantee a certain level of security, longevity and access.
 >
-> An [ORCID][orcid] is an Open Researcher and Contributor ID.
+> An [ORCID][orcid]\index{ORCID (Open Researcher and Contributor ID)}
+> is an Open Researcher and Contributor ID.
 > Anyone can get an ORCID for free,
 > and should include it in publications
 > because people's names and affiliations change over time.
@@ -13561,7 +13673,7 @@ zipf/
 ## Data Provenance {#provenance-data}
 
 The first step in documenting the data associated with a report
-is to determine what (if anything) needs to be published.
+is to determine what (if anything) needs to be published.\index{publishing!data}
 If the report involved the analysis of a publicly available dataset
 that is maintained and documented by a third party,
 it's not necessary to publish a duplicate of the dataset:
@@ -13595,7 +13707,7 @@ should follow the FAIR Principles.
 
 ### The FAIR Principles {#provenance-data-fair}
 
-The [FAIR Principles][go-fair] describe what research data should look like.
+The [FAIR Principles][go-fair] describe what research data should look like.\index{FAIR Principles}\index{publishing!FAIR Principles}
 They are still aspirational for most researchers @Broc2019,
 but tell us what to aim for.
 The most immediately important elements of the FAIR Principles are outlined below.
@@ -13646,10 +13758,10 @@ We can tell we've done this if:
 
 ### Where to archive data {#provenance-data-where}
 
-Small datasets (i.e., anything under 500 MB) can be stored in version control.
+Small datasets (i.e., anything under 500 MB) can be stored in version control.\index{publishing!data!archiving}
 If the data is being used in several projects,
 it may make sense to create one repository to hold only the data;
-the R community refers to these as [data packages][data_package],
+the R community refers to these as [data packages][data_package],\index{data package (in R)}\index{publishing!data!package}
 and they are often accompanied by small scripts to clean up and query the data.
 
 For medium-sized datasets (between 500 MB and 5 GB),
@@ -13664,7 +13776,7 @@ and probably need the attention of a professional archivist.
 >
 > While archiving data at a site like Dryad or Figshare (following the FAIR Principles)
 > is usually the end of the data publishing process,
-> there is the option of publishing a journal paper to describe the dataset in detail.
+> there is the option of publishing a journal paper to describe the dataset in detail.\index{publishing!data journal}
 > Some research disciplines have journals devoted
 > to describing particular types of data
 > (e.g., the [Geoscience Data Journal][geoscience-data-journal])
@@ -13676,7 +13788,7 @@ and probably need the attention of a professional archivist.
 Our Zipf's Law analysis represents a typical data science project
 in that we've written some code (in the form of a series of Python scripts)
 that leverages other pre-existing software packages (matplotlib, numpy, etc)
-in order to produce the key results of a report (the word distribution plots).
+in order to produce the key results of a report (the word distribution plots).\index{publishing!software}
 Documenting the details of a computational workflow like this
 in an open, transparent and reproducible manner
 typically requires that three key items are archived:
@@ -13786,7 +13898,7 @@ $ git push origin master
 ### Data processing steps {#provenance-code-steps}
 
 The second item that needs to be added to our GitHub repository is a description
-of the data processing steps involved in each key result.
+of the data processing steps involved in each key result.\index{publishing!description of workflow}
 Assuming the author list on our report is Amira Khan and Sami Virtanen (Section \@ref(intro-personas)),
 we could add a new Markdown file called `KhanVirtanen2020.md` to the repository
 to describe the steps:
@@ -13838,7 +13950,7 @@ that Zenodo copies and then issues a DOI for (Figure \@ref(fig:provenance-releas
 In most cases,
 documenting our software environment, analysis scripts, and data processing steps
 will ensure that our computational analysis is reproducible/repeatable 
-at the time our report is published.
+at the time our report is published.\index{reproducible research}
 But what about five or ten years later?
 As we have discussed,
 data analysis workflows usually depend on a hierarchy of packages.
@@ -13852,7 +13964,8 @@ Fortunately,
 most readers are not looking to exactly re-run a decade old analysis:
 they just want to be able to figure out what was run 
 and what the important decisions were,
-which is sometimes referred to as [inspectability][inspectability] (@Gil2016, @Brown2017). 
+which is sometimes referred to as [inspectability][inspectability]\index{inspectability}
+(@Gil2016, @Brown2017). 
 While exact repeatability has a short shelf-life,
 inspectability is the enduring legacy of a well-documented computational analysis.
 
@@ -13989,7 +14102,7 @@ How would you go about publishing the code associated with that project
 > It meant that in times of danger you spent the day sitting very quietly
 > in a building with very thick walls.
 >
-> --- Terry Pratchett
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 The more software we write,
 the more we think of a programming language as a way to build and combine libraries.
@@ -14035,7 +14148,7 @@ zipf/
 
 ## Creating a Python Package {#packaging-package}
 
-A package consists of one or more Python source files
+A package consists of one or more Python source files\index{Python package!structure}
 in a specific directory structure
 combined with installation instructions for the computer.
 Python packages can come from various sources:
@@ -14045,7 +14158,7 @@ and there are thousands that can be downloaded and installed from online reposit
 
 > **Terminology**
 >
-> People sometimes refer to packages as modules.
+> People sometimes refer to packages as modules.\index{Python package vs.\ module}
 > Strictly speaking,
 > a module is a single source file,
 > while a package is a directory structure that contains one or more modules.
@@ -14072,7 +14185,8 @@ by renaming `zipf/bin` to `zipf`.
 
 > **`__init__.py`**
 >
-> Python packages often contain a file with a special name: `__init__.py`
+> Python packages often contain a file with a special name:
+> `__init__.py`\index{\_\_init\_\_.py file (in Python package)}\index{Python package!\_\_init\_\_.py file}
 > (two underscores before and after `init`).
 > Just as importing a module file executes the code in the module,
 > importing a package executes the code in `__init__.py`.
@@ -14081,32 +14195,48 @@ by renaming `zipf/bin` to `zipf`.
 > but since Python 3.3 it is only needed
 > if we want to run some code as the package is being imported.
 
-To make the modules in the Zipf's Law project work as a Python package,
+To make the Zipf's Law project work as a Python package,
 we only need to make one important change to the code itself:
-changing the syntax for how we import `utilities`.
+changing the syntax for how we import our own modules.
 Currently,
-both `collate.py` and `countwords.py` contains this line:
+both `collate.py` and `countwords.py` contains this line,
 
 ```python
 import utilities
 ```
 
-This is called an [implicit relative import][implicit_relative_import],
+while `test_zipfs.py` contains:
+
+```python
+import plotcounts
+import countwords
+```
+
+These are called
+[implicit relative imports][implicit_relative_import],\index{Python!import!implicit relative}\index{implicit relative import (in Python)}
 because it is not clear whether we mean
 "import a Python package called `utilities`"
 or
 "import a file in our local directory called `utilities.py`"
 (which is what we want).
-To remove this ambiguity we need to be explicit and write:
+To remove this ambiguity we need to be explicit and write,
 
 ```python
 from zipf import utilities
 ```
+and
 
-This is an [absolute import][absolute_import],
-since we are specifying the full location of `utilities` inside the `zipf` package.
+```python
+from zipf import plotcounts
+from zipf import countwords
+```
+
+These are [absolute imports][absolute_import]\index{Python!import!absolute}\index{absolute import (in Python)}
+since we are specifying the full location of `utilities`, `plotcounts` and `countwords`
+inside the `zipf` package.
 Absolute imports are the preferred way for parts of a package to import other parts,
-but we can also use [explicit relative imports][explicit_relative_import],
+but we can also use
+[explicit relative imports][explicit_relative_import],\index{Python!import!explicit relative}\index{explicit relative import (in Python)}
 which require a little less typing
 and can sometimes make it easier to restructure very large projects:
 
@@ -14117,8 +14247,8 @@ from . import utilities
 Here,
 the `.` signals that `utilities` exists in the current directory.
 
-Python has several ways to build an installable package.
-We will show how to use [setuptools][setuptools],
+Python has several ways to build an installable package.\index{Python package!building}
+We will show how to use [setuptools][setuptools],\index{setuptools (in Python)}\index{Python!setuptools}
 which is the lowest common denominator
 and will allow everyone,
 regardless of what Python distribution they have,
@@ -14141,9 +14271,12 @@ setup(
 ```
 
 The `name` and `author` parameters are self-explanatory.
-Most software projects use [semantic versioning][semantic_versioning] for software releases.
+Most software projects use [semantic versioning][semantic_versioning]\index{semantic versioning}\index{Python package!semantic versioning}
+for software releases.
 A version number consists of three integers X.Y.Z,
-where X is the major version, Y is the minor version, and Z is the [patch][patch] version.
+where X is the major version,\index{software version number}
+Y is the minor version,
+and Z is the [patch][patch] version.\index{patch (of software version)}
 Major version zero (0.Y.Z) is for initial development, so we have started with 0.1.0.
 The first stable public release would be version 1.0.0,
 and in general, the version number is incremented as follows:
@@ -14167,7 +14300,7 @@ We can add additional information to our package later,
 but this is enough to be able to build it for testing purposes.
 Before we do that,
 though,
-we should create a [virtual environment][virtual_environment]
+we should create a [virtual environment][virtual_environment]\index{virtual environment (in Python)}\index{Python!virtual environment}
 to test how our package installs
 without breaking anything in our main Python installation.
 
@@ -14187,7 +14320,7 @@ Virtual environments also help with package development:
     we can ensure that we're not accidentally relying on other packages being installed.
 
 We can manage virtual environments using [conda][conda] (Appendix \@ref(anaconda)).
-To create a new virtual environment called `zipf` we run `conda create`,
+To create a new virtual environment called `zipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
 and listing `python` as the base to build on:
 
@@ -14228,7 +14361,7 @@ such as `bin` and `lib`.
 It also creates `~/anaconda3/envs/zipf/bin/python`,
 which checks for packages in these directories before checking the main installation.
 
-We can switch to the `zipf` environment by running:
+We can switch to the `zipf` environment by running:\index{virtual environment (in Python)!switching}
 
 ```shell
 $ conda activate zipf
@@ -14273,7 +14406,7 @@ $ which python
 
 ## Installing a Development Package {#packaging-installing}
 
-Let's install our package inside this virtual environment.
+Let's install our package inside this virtual environment.\index{Python package!installation}
 First we re-activate it:
 
 ```shell
@@ -14334,7 +14467,7 @@ setup(
 ```
 
 We don't have to list `numpy` explicitly
-because it will be installed as a dependency for `pandas` and `scipy`.
+because it will be installed as a dependency for `pandas` and `scipy`.\index{dependency!package}
 
 > **Versioning Dependencies**
 >
@@ -14401,9 +14534,10 @@ However,
 the useful command-line scripts that we used to count and plot word counts
 are no longer accessible directly from the terminal.
 Fortunately,
-the `setuptools` package allows us to install programs along with the package.
+the `setuptools` package allows us to install programs along with the package.\index{Python package!installing programs}
 These programs are placed beside those of other packages.
-We tell `setuptools` to do this by defining [entry points][entry_point]:
+We tell `setuptools` to do this by defining
+[entry points][entry_point]:\index{entry point (in Python package)}\index{Python package!entry point}
 
 ```python
 from setuptools import setup
@@ -14530,7 +14664,7 @@ of,3738
 ## What Installation Does {#packaging-installation}
 
 Now that we have created and installed a Python package,
-let's explore what actually happens during installation.
+let's explore what actually happens during installation.\index{Python package!installation}
 The short version is that
 the contents of the package are copied into a directory that Python will search
 when it imports things.
@@ -14539,7 +14673,7 @@ but it's much more efficient and safer to use a tool specifically made for this 
 such as `conda` or `pip`.
 
 Most of the time,
-these tools copy packages into the Python installation's `site-packages` directory,
+these tools copy packages into the Python installation's `site-packages` directory,\index{Python!site-packages directory}
 but this is not the only place Python searches.
 Just as the `PATH` environment in the shell contains a list of directories
 that the shell searches for programs it can execute (Section \@ref(bash-advanced-vars)),
@@ -14568,10 +14702,11 @@ and will vary from computer to computer.
 ## Distributing Packages {#packaging-distribute}
 
 Now that our package can be installed,
-we should distribute it so that anyone can run `pip install zipf`
+we should distribute it so that anyone can run `pip install zipf`\index{Python package!distribution}
 and start use it.
 To do this,
-we need to use `setuptools` to create a [source distribution][source_distribution]
+we need to use `setuptools` to create
+a [source distribution][source_distribution]\index{source distribution (of Python package)}\index{Python package!source distribution}
 (known as an `sdist` in Python packaging jargon):
 
 ```shell
@@ -14621,7 +14756,7 @@ the standard repository for Python packages.
 Before doing that,
 though,
 we can put `zipf` on [TestPyPI][testpypi],
-which lets us test distribution of our package
+which lets us test distribution of our package\index{Python package!testing distribution}
 without having things appear in the main PyPI repository.
 We must have an account,
 but they are free to create.
@@ -14692,7 +14827,7 @@ Once again,
 `pip` takes advantage of the fact that some packages already existing on our system
 and doesn't download them again.
 Once we are happy with how our package appears in TestPyPI
-(including its [project page][zipf-project-page]),
+(including its [project page][zipf-project-page]),\index{Python package!project page}\index{project page (of Python package)}
 we can go through the same process to put it on the main [PyPI][pypi] repository.
 
 > **conda installation packages**
@@ -14803,7 +14938,7 @@ The next sections of this chapter will therefore look at:
 ### Writing Good Docstrings {#packaging-docstrings}
 
 If we are doing [exploratory programming][exploratory_programming],
-a short [docstring][docstring] to remind ourselves of each function's purpose
+a short [docstring][docstring] to remind ourselves of each function's purpose\index{docstring (in Python)}\index{Python!docstring}
 is probably as much documentation as we need.
 (In fact, it's probably better than what most people do.)
 That one- or two-liner should begin with an active verb and describe either
@@ -14844,7 +14979,7 @@ so that failure reports are easy to scan.
 
 ### Including Package Level Documentation in the `README` {#packaging-readme}
 
-When a user first encounters a package, 
+When a user first encounters a package,\index{Python package!documentation}
 they usually want to know what the package is meant to do,
 instructions on how to install it,
 and examples of how to use it.
@@ -14867,13 +15002,13 @@ and plot each word's rank versus its frequency.
 - Sami Virtanen <sami@zipf.org>
 ```
 
-This file is currently written in [Markdown][markdown]
+This file is currently written in [Markdown][markdown]\index{Markdown}
 because GitHub recognises files ending in `.md` and displays them nicely.
 We could continue to do this,
 but for a Python package we eventually want
 to create a website for our package documentation (Section \@ref(packaging-sphinx)).
 The most popular documentation generator in the Python community
-uses a format called [reStructuredText][restructured_text] (reST),
+uses a format called [reStructuredText][restructured_text] (reST),\index{reST (reStructured Text)}\index{reStructured Text (reST)}
 so we will switch to that.
 
 Like Markdown,
@@ -14958,8 +15093,8 @@ references between functions,
 and search functionality.
 
 The online documentation for most large Python packages
-is generated using a tool called [Sphinx][sphinx],
-which is often used in combination with [Read The Docs][readthedocs],
+is generated using a tool called [Sphinx][sphinx],\index{Python package!documentation!Sphinx}
+which is often used in combination with [Read The Docs][readthedocs],\index{Read The Docs (for Python documentation)}
 a free service for hosting online documentation.
 Let's install Sphinx and create a `docs/` directory at the top of our repository:
 
@@ -15073,17 +15208,24 @@ Creating file source/modules.rst.
 We are finally ready to generate our webpage.
 The `docs` sub-directory contains a Makefile that was generated by `sphinx-quickstart`.
 If we run `make html` and open `docs/_build/index.html` in a web broswer
-we'll have some minimal documentation in a familiar looking form (Figure \@ref(fig:packaging-sphinx-module-list)).
-If we look under `modules` we will
-see the documentation for the individual modules (Figure \@ref(fig:packaging-sphinx-module-countwords)).
+we'll have a website landing page with minimal documentation (Figure \@ref(fig:packaging-sphinx-landing-page-original)).
+If we click on the `Module Index` link we can access the documentation for the individual modules
+(Figures \@ref(fig:packaging-sphinx-module-list) and \@ref(fig:packaging-sphinx-module-countwords)).
 
-```{r packaging-sphinx-module-list, echo=FALSE, fig.cap="The module index"} <!-- at file:///Users/amira/zipf/docs/_build/html/py-modindex.html -->
-knitr::include_graphics("figures/py-rse/packaging/module-index.png")
-```
+<div class="figure" style="text-align: center">
+<img src="figures/py-rse/packaging/landing-page-original.png" alt="The default website landing page"  />
+<p class="caption">(\#fig:packaging-sphinx-landing-page-original)The default website landing page</p>
+</div>
 
-```{r packaging-sphinx-module-countwords, echo=FALSE, fig.cap="The countwords documentation"} <!-- at `file:///Users/z3526123/Desktop/zipf/docs/_build/html/source/countwords.html#module-countwords -->
-knitr::include_graphics("figures/py-rse/packaging/module-countwords.png")
-```
+<div class="figure" style="text-align: center">
+<img src="figures/py-rse/packaging/module-index.png" alt="The module index"  />
+<p class="caption">(\#fig:packaging-sphinx-module-list)The module index</p>
+</div>
+
+<div class="figure" style="text-align: center">
+<img src="figures/py-rse/packaging/module-countwords.png" alt="The countwords documentation"  />
+<p class="caption">(\#fig:packaging-sphinx-module-countwords)The countwords documentation</p>
+</div>
 
 The landing page for the website is the perfect place for the content of our README file,
 so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file to insert it:
@@ -15110,9 +15252,10 @@ If we re-run `make html`,
 we now get an updated set of web pages that
 re-uses our README as the introduction to the documentation (Figure \@ref(fig:packaging-sphinx-landing-page)).
 
-```{r packaging-sphinx-landing-page, echo=FALSE, fig.cap="The landing page"} <!-- at `file:///Users/amira/zipf/docs/_build/html/index.html` -->
-knitr::include_graphics("figures/py-rse/packaging/landing-page.png")
-```
+<div class="figure" style="text-align: center">
+<img src="figures/py-rse/packaging/landing-page.png" alt="The new landing page showing the contents of `README.rst`"  />
+<p class="caption">(\#fig:packaging-sphinx-landing-page)The new landing page showing the contents of `README.rst`</p>
+</div>
 
 Before going on,
 note that Sphinx is not included in the installation requirements in `requirements.txt` (Section \@ref(testing-ci)).
@@ -15134,21 +15277,17 @@ now only needs run `pip install -r requirement_docs.txt`
 
 We can host the documentation for our project in several ways.
 As mentioned above,
-A very common option for Python projects is [Read The Docs][readthedocs],
+A very common option for Python projects is [Read The Docs][readthedocs],\index{Read The Docs (for Python documentation)}
 a community-supported site that hosts software documentation free of charge.
 
 Just as continuous integration systems automatically re-test things (Section \@ref(testing-ci)),
 Read The Docs integrates with GitHub
 so that documentation is automatically re-built
-every time updates are pushed to the project's GitHub repository.
+every time updates are pushed to the project's GitHub repository.\index{continuous integration!for documentation}
 If we register for Read The Docs with our GitHub account,
 we can import a project from our GitHub repository.
 Read The Docs will then build the documentation using `make html`
 and host the resulting files.
-
-> FIXME: there was a note saying "We may need to add the line `master_doc = 'index'`
-> to `docs/conf.py` if it isn't already there."
-> This needs to be expanded.
 
 For this to work,
 all of the source files
@@ -15193,7 +15332,7 @@ python:
     - requirements: requirements.txt
 ```
 
-The configuration file uses the now-familiar [YAML][yaml] format
+The configuration file uses the now-familiar [YAML][yaml] format\index{YAML}
 (Section \@ref(config-formats) and Appendix \@ref(yaml))
 to specify the location of the Sphinx configuration script (`docs/conf.py`)
 and the dependencies for our package (`requirements.txt`).
@@ -15204,7 +15343,8 @@ our documentation is now available at `https://zipf-docs.readthedocs.io/en/lates
 
 As projects grow,
 documentation within functions alone may be unsufficient for users to apply code to their own problems.
-One strategy to assist other people with understanding a project is with an [FAQ][faq]:
+One strategy to assist other people with understanding a project is with
+an [FAQ][faq]:\index{FAQ (Frequency Asked Questions)}\index{Python package!FAQ}
 a list of frequently-asked questions and corresponding answers.
 A good FAQ uses the terms and concepts that people bring to the software
 rather than the vocabulary of its authors;
@@ -15247,7 +15387,7 @@ Provide a minimal reprex.
     Readers will have a much easier time figuring out if this question and its answers are for them
     if they can see *and understand* a few lines of code.
 
-Tag, tag, tag.
+Tag, tag, tag.\index{tags (for documentation)}
 :   Keywords make everything more findable,
     from scientific papers to left-handed musical instruments.
 
@@ -15274,7 +15414,8 @@ Allow for a [chorus of explanations][caulfield-chorus].
 ## Software Journals {#packaging-software-journals}
 
 As a final step to releasing our new package,
-we might want to give it a [DOI][doi] so that it can be cited by researchers.
+we might want to give it a [DOI][doi]\index{DOI (Digital Object Identifier)}\index{Digital Object Identifier (DOI)}
+so that it can be cited by researchers.
 As we saw in Section \@ref(provenance-code-scripts),
 GitHub [integrates with Zenodo][github-zenodo-tutorial]
 for precisely this purpose.
@@ -15297,8 +15438,9 @@ from people who have seen many research software packages come and go over the y
 
 Once you have obtained a DOI and possibly published with a software journal,
 the last step is to tell users how to cite your new software package.
-This is traditionally done by adding a `CITATION` file to the associated GitHub repository
-(alongside `README`, `LICENSE`, `CONDUCT` and similar files; \@ref(intro-boilerplate)),
+This is traditionally done by adding a `CITATION` file\index{CITATION file}\index{project files!CITATION}
+to the associated GitHub repository
+(alongside `README`, `LICENSE`, `CONDUCT` and similar files discussed in \@ref(intro-boilerplate)),
 containing a plain text citation that can be copied and pasted into email
 as well as entries formatted for various bibliographic systems like [BibTeX][bibtex].
 
@@ -15358,14 +15500,45 @@ but are required for its development and testing.
 Pull `pytest` out of `requirements.txt` and put it in a new `requirements_dev.txt` file,
 using `pip freeze` to find the minimum required version.
 
-### Software review
+### Software review {#packaging-ex-software-review}
 
 The [Journal of Open Source Software][theoj] has a
 [checklist](https://joss.readthedocs.io/en/latest/review_checklist.html)
 that reviewers must follow when assessing a submitted software paper.
 Run through the checklist (skipping the criteria related to the software paper)
-and see how your Zipf's Law package would rate on each criteria.
+and see how the Zipf's Law package would rate on each criteria.
 
+### Data packages {#packaging-ex-data}
+
+R provides many [data packages][data_package]
+that can be loaded like any other library but provide a dataset instead of
+(or as well as)
+runnable code.
+Create a Python package called `collated` that provides a single function `getData`,
+so that:
+
+```python
+import collated
+counts = collated.getData()
+```
+
+assigns a dictionary of word frequencies to the variable `counts`
+using the data from the Zipf project's `collated.csv`.
+Do *not* copy the data into a Python file;
+instead,
+have `getData` read the data from a copy of the CSV file distributed as part of the package.
+(Hint: the special variable `collated.__path__`
+holds the directory containing the installed `collated` package.)
+
+### Staying up to date {#packaging-ex-up-to-date}
+
+1.  Run `pip list` to get a list of the Python packages you have installed.
+    How many are there?
+
+2.  Run `pip list -o` to get a list of packages that are out of date.
+    (This may take a few seconds.)
+    How many are there,
+    and how can you update them?
 
 ## Key Points {#packaging-keypoints}
 
@@ -15395,7 +15568,7 @@ and see how your Zipf's Law package would rate on each criteria.
 
 > So much universe, and so little time.
 >
-> --- Terry Pratchett
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 We have come a long way since we first met Amira, Jun, and Sami in Section \@ref(intro-personas).
 Shell scripts,
@@ -15763,6 +15936,9 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **default target**<a id="default_target"></a>
 :   The [build target](#build_target) that is used when none is specified explicitly.
 
+**default value**<a id="default_value"></a>
+:   A value assigned to a function parameter when the caller does not specify a value. Default values are specified as part of the function's definition.
+
 **defensive programming**<a id="defensive_programming"></a>
 :   A set of programming practices that assumes mistakes will happen and either report or correct them, such as inserting [assertions](#assertion) to report situations that aren't ever supposed to occur.
 
@@ -15868,6 +16044,9 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **Git push**<a id="git_push"></a>
 :   Uploads and synchronizes changes between a local [repository](#repository) and a [remote repository](#remote_repository).
 
+**Git remote**<a id="git_remote"></a>
+:   A short name for a [remote repository](#remote_repository) (like a bookmark).
+
 **Git stage**<a id="git_stage"></a>
 :   To put changes in a "holding area" from which they can be [committed](#commit).
 
@@ -15937,6 +16116,9 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **kebab case**<a id="kebab_case"></a>
 :   A naming convention in which the parts of a name are separated with dashes, as in `first-second-third`. See also: [camel case](#camel_case), [pothole case](#pothole_case)
 
+**keyword arguments**<a id="keyword_arguments"></a>
+:   Extra arguments given to a function as key-value pairs. See also: [variable arguments](#variable_arguments)
+
 **LaTeX**<a id="latex"></a>
 :   The FORTRAN of scientific publishing.
 
@@ -15948,6 +16130,9 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 
 **logging framework**<a id="logging_framework"></a>
 :   A software library that managing internal reporting for programs.
+
+**logging level**<a id="logging_level"></a>
+:   A setting that controls how much information is generated by a [logging framework](#logging_framework). Typical logging levels include `DEBUG`, `WARNING`, and `ERROR`.
 
 **long option**<a id="long_option"></a>
 :   A full-word identifier for a [command line argument](#command_line_argument).  While most common flags are a single letter preceded by a dash, such as `-v`, long options typically use two dashes and a readable name, such as `--verbose`.
@@ -15965,7 +16150,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   A simple set of rules for making decisions in small groups.
 
 **maximum likelihood estimation**<a id="maximum_likelihood_estimation"></a>
-:   FIXME
+:   To choose the parameters for a [probability distribution](#probability_distribution) in order to maximize the likelihood of obtaining observed data.
 
 **mental model**<a id="mental_model"></a>
 :   A simplified representation of the key elements and relationships of some problem domain that is good enough to support problem solving.
@@ -15989,7 +16174,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   A style of programming in which functions and data are bound together in objects that only interact with each other through well-defined interfaces.
 
 **open license**<a id="open_license"></a>
-:   A license that permits general re-use, such as the [MIT License][mit_license] or [GPL][gpl].
+:   A license that permits general re-use, such as the [MIT License](#mit_license) or [GPL](#gpl).
 
 **open science**<a id="open_science"></a>
 :   A generic term for making scientific software, data, and publications generally available.
@@ -16154,10 +16339,13 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   In Unix, a character sequence such as `#!python` in the first line of a runnable file that tells the [shell](#shell) what program to use to run that file.
 
 **shell**<a id="shell"></a>
-:   FIXME
+:   A [command-line interface](#cli) that allows a user to interact with the operating system, such as Bash (for Unix) or PowerShell (for Windows).
 
 **shell script**<a id="shell_script"></a>
 :   A set of commands for the [shell](#shell) stored in a file so that they can be re-executed. A shell script is effectively a program.
+
+**shell variable**<a id="shell_variable"></a>
+:   A variable set and used in the [Unix shell](#shell). Commonly-used shell variables include `HOME` (the user's home directory) and `PATH` (their [search path](#search_path)).
 
 **short circuit test**<a id="short_circuit_test"></a>
 :   A logical test that only evaluates as many arguments as it needs to. For example, if `A` is false, then most languages never evaluate `B` in the expression `A and B`.
@@ -16171,8 +16359,11 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **snake case**<a id="snake_case"></a>
 :   See [pothole case](#pothole_case).
 
+**software distribution**<a id="software_distribution"></a>
+:   A set of programs that are built, tested, and distributed as a collection so that they can run together.
+
 **source distribution**<a id="source_distribution"></a>
-:   A software distribution that includes the source code, typically so that programs can be recompiled on the target computer when they are installed.
+:   A [software distribution](#software_distribution) that includes the source code, typically so that programs can be recompiled on the target computer when they are installed.
 
 **sprint**<a id="sprint"></a>
 :   A short, intense period of work on a project.
@@ -16267,6 +16458,9 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **validation**<a id="validation"></a>
 :   Checking that a piece of software does what its users want, i.e., "are we building the right thing"? See also: [verification](#verification)
 
+**variable arguments**<a id="variable_arguments"></a>
+:   In a function, the ability to take any number of arguments.  R uses `...` to capture the "extra" arguments. See also: [keyword arguments](#keyword_arguments)
+
 **verification**<a id="verification"></a>
 :   Checking that a piece of software works as intended, i.e., "did we build the thing right?" See also: [validation](#validation)
 
@@ -16294,7 +16488,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 
 # Setting Up {#install}
 
-## Software {#intall-software}
+## Software {#install-software}
 
 In order to complete the activities in this book,
 the following software is required:
@@ -16325,6 +16519,15 @@ If Make is not already installed on your computer (type `make -v` into the Bash 
 > you’ll need to open the Anaconda Prompt program (via the Windows start menu)
 > and run the command `conda init bash` (this only needs to be done once).
 > After that, your shell will be configured to use conda going forward.
+
+## Configuring Git to use Nano {#install-git-nano}
+
+To make Git use the Nano editor for writing commit messages,
+run the following command:
+
+```shell
+git config --global core.editor "nano -w"
+```
   
 ## Data {#install-data}
 
@@ -16349,8 +16552,6 @@ zipf/
 ```
 
 See `data/README.md` for information about the data.
-
-[data-files]: data/zipf.zip
 
 <!--chapter:end:chapters/install.Rmd-->
 
@@ -16630,7 +16831,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Include a license in your project so that it's clear who can do what with the material.
 -   Create [issues][issue] for bugs, enhancement requests, and discussions.
 -   [Label issues][issue_label] to identify their purpose.
--   [Triage][triage issues regularly and group them into [milestones][milestone] to track progress.
+-   [Triage][triage] issues regularly and group them into [milestones][milestone] to track progress.
 -   Include contribution guidelines in your project that specify its workflow and its expectations of participants.
 -   Make rules about [governance][governance] explicit.
 -   Use common-sense rules to make project meetings fair and productive.
@@ -17240,11 +17441,25 @@ or both.
 
 ### Exercise \@ref(git-cmdline-ex-unsave) {-}
 
-FIXME
+- `git status` now shows:
+
+    ```bash
+    On branch book
+    Untracked files:
+      (use "git add <file>..." to include in what will be committed)
+    
+            example.txt
+    
+    nothing added to commit but untracked files present (use "git add" to track)
+    ```
+
+- Nothing has happened to the file, it still exists but Git no longer has it in
+the staging area.
 
 ### Exercise \@ref(git-cmdline-ex-word-diff) {-}
 
-FIXME
+Using `git diff --word-diff` might be easier since it shows exactly what has been
+changed.
 
 ### Exercise \@ref(git-cmdline-ex-commit) {-}
 
@@ -17403,15 +17618,25 @@ ENIAC was the world's first general-purpose electronic computer.
 
 ### Exercise \@ref(git-cmdline-ex-diff) {-}
 
-FIXME: solution for exercise on git diff
+1. `git diff HEAD~9 bin/plotcounts.py` compares what has changed between the 
+current `bin/plotcounts.py` and the same file 9 commits ago.
+2.  The previous git command takes the state of the file at each point and then
+compares them.
+3.  `git diff HEAD bin/plotcounts.py` compares what has been changed in
+`bin/plotcounts.py` with the previous commit.
 
 ### Exercise \@ref(git-cmdline-ex-unstage) {-}
 
-FIXME: solution for exercise on git unstage
+Using `git checkout` on a staged file does not unstage it. That's 
+because the changes are in the staging area and checkout would affect
+the working directory.
 
 ### Exercise \@ref(git-cmdline-ex-blame) {-}
 
-FIXME: solution for exercise on git blame
+1. Each line of output corresponds to a line in the file, who was last
+to modify the line, when that change was made, and what the file name was
+or is called.
+2. FIXME: I don't see any `^` when I use it on a random file in the book repo.
 
 ## Chapter \@ref(git-advanced)
 
@@ -17441,37 +17666,17 @@ FIXME
 
 ## Chapter \@ref(teams)
 
-### Exercise \@ref(teams-ex-scavenger-hunt)
+### Exercise \@ref(teams-ex-scavenger-hunt) {-}
 
 - Licensing is found at: https://github.com/merely-useful/py-rse/blob/book/LICENSE.md
 - Contributing is found at: https://github.com/merely-useful/py-rse/blob/book/.github/CONTRIBUTING.md
 FIXME: Should really only have one CONTRIBUTING file.
 
-### Exercise \@ref(teams-ex-boilerplate-coc)
+### Exercise \@ref(teams-ex-boilerplate-coc) {-}
 
 The `CONDUCT.md` file should have contents that mimic those given in Section \@ref(teams-coc).
 
-### Exercise \@ref(teams-ex-contributing)
-
-Your `CONTRIBUTING.md` file might look something like the following:
-
-```text
-# Contributing
-
-Thank you for your interest in contributing to the Zipf's Law package!
-
-If you are new to the package and/or collaborative code development on GitHub,
-feel free to discuss any suggested changes via issue or email.
-We can then walk you through the pull request process if need be.
-As the project grows,
-we intend to develop more detailed guidelines for submitting
-bug reports and feature requests.
-
-We also have a code of conduct (see [`CONDUCT.md`](CONDUCT.md)).
-Please follow it in all your interactions with the project.
-```
-
-### Exercise \@ref(teams-ex-boilerplate-license)
+### Exercise \@ref(teams-ex-boilerplate-license) {-}
 
 The newly created `LICENSE.md` should have something like this 
 (if MIT was chosen):
@@ -17500,7 +17705,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### Exercise \@ref(teams-ex-contributing)
+### Exercise \@ref(teams-ex-contributing) {-}
+
+The text in the `README.md` might look something like:
+
+```text
+## Contributing
+
+Interested in contributing? Check out the [CONTRIBUTING.md](CONTRIBUTING.md)
+file for guidelines on how to contribute. Please note that this project
+is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By
+contributing to this project, you agree to abide by its terms.
+```
 
 Your `CONTRIBUTING.md` file might look something like the following:
 
@@ -17520,20 +17736,15 @@ We also have a code of conduct (see [`CONDUCT.md`](CONDUCT.md)).
 Please follow it in all your interactions with the project.
 ```
 
-### Exercise \@ref(teams-ex-readme)
+### Exercise \@ref(teams-ex-file-issue) {-}
 
-The text in the `README.md` might look something like:
+FIXME
 
-```text
-## Contributing
+### Exercise \@ref(teams-ex-label) {-}
 
-Interested in contributing? Check out the [CONTRIBUTING.md](CONTRIBUTING.md)
-file for guidelines on how to contribute. Please note that this project
-is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By
-contributing to this project, you agree to abide by its terms.
-```
+FIXME
 
-### Exercise \@ref(teams-ex-balancing)
+### Exercise \@ref(teams-ex-balancing) {-}
 
 Some solutions could be:
 
@@ -17543,7 +17754,7 @@ Some solutions could be:
 office space and have the team member with the attention disorder work
 in the regular office.
 
-### Exercise \@ref(teams-ex-contributions)
+### Exercise \@ref(teams-ex-invisible) {-}
 
 Possible solutions:
 
@@ -17552,7 +17763,7 @@ gets included as a co-author.
 - Update the rule to include a contributor list on all projects with descriptions
 of duties, roles, and tasks the contributor provided for the project.
 
-### Exercise \@ref(teams-ex-members)
+### Exercise \@ref(teams-ex-members) {-}
 
 FIXME
 
@@ -17594,17 +17805,33 @@ FIXME
 
 ## Chapter \@ref(config)
 
-### Exercise \@ref(config-ex-accessible)
+### Exercise \@ref(config-ex-build-plotparams) {-}
 
 FIXME
 
-### Exercise \@ref(config-ex-debug)
+### Exercise \@ref(config-ex-accessible) {-}
+
+FIXME
+
+### Exercise \@ref(config-ex-saveload) {-}
+
+FIXME: GVW to write solution
+
+### Exercise \@ref(config-ex-trace) {-}
+
+FIXME
+
+### Exercise \@ref(config-ex-ini) {-}
+
+FIXME
+
+### Exercise \@ref(config-ex-consistency) {-}
 
 FIXME
 
 ## Chapter \@ref(errors)
 
-### Exercise \@ref(errors-ex-set-level)
+### Exercise \@ref(errors-ex-set-level) {-}
 
 The `collate.py` script should now read as follows:
 
@@ -17648,7 +17875,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-### Exercise \@ref(errors-ex-logging-output)
+### Exercise \@ref(errors-ex-logging-output) {-}
 
 The `collate.py` script should now read as follows:
 
@@ -17694,23 +17921,21 @@ if __name__ == '__main__':
     main(args)
 ```
 
-### Exercise \@ref(errors-ex-exceptions)
+### Exercise \@ref(errors-ex-exceptions) {-}
 
 FIXME
 
-### Exercise \@ref(errors-ex-format)
+### Exercise \@ref(errors-ex-format) {-}
 
 FIXME
 
-### Exercise \@ref(errors-ex-catalog)
+### Exercise \@ref(errors-ex-catalog) {-}
 
 FIXME
-
-
 
 ## Chapter \@ref(testing)
 
-### Exercise \@ref(testing-ex-explain-assertions)
+### Exercise \@ref(testing-ex-explain-assertions) {-}
 
 -   The first assertion checks that the input sequence `values` is not empty.
     An empty sequence such as `[]` will make it fail.
@@ -17721,15 +17946,25 @@ FIXME
 -   The third assertion checks that the total of the list is greater than 0.
     Input such as `[-10, 2, 3]` will make it fail.
 
-### Exercise \@ref(testing-ex-test-assert)
+### Exercise \@ref(testing-ex-test-assert) {-}
 
 FIXME
 
-### Exercise \@ref(testing-ex-ci-status-readme)
+### Exercise \@ref(testing-ex-ci-status-readme) {-}
+
+FIXME
+
+### Exercise \@ref(testing-ex-config) {-}
 
 FIXME
 
 ## Chapter \@ref(provenance)
+
+### Exercise \@ref(provenance-ex-get-orcid) {-}
+
+FIXME
+
+### Exercise \@ref(provenance-ex-fair-test) {-}
 
 FIXME
 
@@ -17757,7 +17992,7 @@ FIXME
         The Boston College Law Review article at <https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr>
         has the same two problems of different data and no dataset citation.
 
-Searching more broadly through Meili's work, we can find this article: <br/>
+Searching more broadly through Meili's work, we can find this article:
 
 > Stephen Meili: "Do Human Rights Treaties Help Asylum-Seekers?: Lessons from the United Kingdom"
 > (October 1, 2015).
@@ -17784,18 +18019,34 @@ To re-create the `conda` environment you would need the file, `my_environment.ym
 
 <https://web.archive.org/web/20191105173924/https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf>
 
-### Exercise \@ref(#provenance-ex-release) {-} 
+### Exercise \@ref(provenance-ex-release) {-} 
 
 You'll know you've completed this exercise when you have a URL that
 points to ZIP archive for a specific release of your repository on GitHub, e.g. `https://github.com/DamienIrving/zipf/archive/KhanVirtanen2020.zip`
 
-## Chapter \@ref(packaging)
-
-### Exercise \@ref(packaging-ex-fixing-warnings)
+### Exercise \@ref(provenance-ex-publish-code) {-}
 
 FIXME
 
-### Exercise \@ref(packaging-ex-separating-requirements)
+## Chapter \@ref(packaging)
+
+### Exercise \@ref(packaging-ex-fixing-warnings) {-}
+
+FIXME
+
+### Exercise \@ref(packaging-ex-separating-requirements) {-}
+
+FIXME
+
+### Exercise \@ref(packaging-ex-software-review) {-}
+
+FIXME
+
+### Exercise \@ref(packaging-ex-data) {-}
+
+FIXME
+
+### Exercise \@ref(packaging-ex-up-to-date) {-}
 
 FIXME
 
@@ -17805,20 +18056,21 @@ FIXME
 # Anaconda {#anaconda}
 
 When people first started using Python for data science,
-installing the relevant libraries could be difficult.
-The main problem was that the Python package installer ([pip][pip])
+installing the relevant libraries could be difficult.\index{package installation}
+The main problem was that the Python package installer ([pip][pip])\index{pip}
 only worked for libraries written in pure Python.
 Many scientific Python libraries have C and/or Fortran dependencies,
 so it was left up to data scientists
 (who often do not have a background in system administration)
 to figure out how to install those dependencies themselves.
 To overcome this problem,
-a number of scientific Python “distributions” have been released over the years.
+a number of scientific Python [distributions][software_distribution]\index{Python distribution}
+have been released over the years.
 These come with the most popular data science libraries and their dependencies pre-installed,
 and some also come with a package manager to assist
 with installing additional libraries that weren’t pre-installed.
-Today the most popular distribution for data science is [Anaconda][anaconda],
-which comes with a package (and environment) manager called [conda][conda].
+Today the most popular distribution for data science is [Anaconda][anaconda],\index{Anaconda}
+which comes with a package (and environment) manager called [conda][conda].\index{conda}
 
 ## Package management with conda {#anaconda-conda-package-management}
 
@@ -17830,7 +18082,7 @@ A package manager like conda greatly simplifies the software installation proces
 by identifying and installing compatible versions of software and all required dependencies.
 It also handles the process of updating software as more recent versions become available.
 If you don’t want to install the entire Anaconda distribution,
-you can install [Miniconda][miniconda] instead.
+you can install [Miniconda][miniconda]\index{miniconda} instead.
 It essentially comes with conda and nothing else.
 
 ### Anaconda cloud {#anaconda-cloud}
@@ -17897,7 +18149,7 @@ installing all the libraries you need in the same place
 This is especially true if the projects rely on different versions of the same package,
 or if you are developing a new package and need to try new things.
 The way to avoid these issues is to create different
-[virtual environments][virtual_environment] for different projects/tasks.
+[virtual environments][virtual_environment]\index{virtual environment (in Python)} for different projects/tasks.
 The original environment manager for Python development was [virtualenv][virtualenv],
 which has been more recently superseded by [pipenv][pipenv].
 The advantage that conda has over these options is that it is language agnostic
@@ -17984,7 +18236,7 @@ in the following chapters, sections and exercises:
 `CITATION.md`: Introduced in Section \@ref(packaging-software-journals).
 
 `CONDUCT.md`: Introduced in Section \@ref(teams-coc) and 
-committed to the repository in Exercise \@ref(teams-ex-boilerplate).
+committed to the repository in Exercise \@ref(teams-ex-boilerplate-coc).
 
 `CONTRIBUTING.md`: Introduced in Section \@ref(teams-documentation) and 
 committed to the repository in Exercise \@ref(teams-ex-contributing).
@@ -17992,7 +18244,7 @@ committed to the repository in Exercise \@ref(teams-ex-contributing).
 `KhanVirtanen2020.md`: Introduced in Section \@ref(provenance-code-steps).
 
 `LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
-committed to the repository in Exercise \@ref(teams-ex-boilerplate).
+committed to the repository in Exercise \@ref(teams-ex-boilerplate-license).
 
 `Makefile`: Introduced and updated throughout Chapter \@ref(automate).
 
@@ -18076,14 +18328,14 @@ but people do if they are to create, debug, and extend them.
 Throughout this book we have written code to analyze word counts in classic novels
 using good Python style.
 In this appendix we will discuss the style choices we made,
-present guidelines for good Python programming style,
+present guidelines for good Python programming style,\index{Python!style}
 and introduce some language features that can make programs more flexible and more readable.
 
 ## Python Style {#style-pep8}
 
 The single most important rule of style is to be consistent,
 both internally and with other programs @Kern1999.
-Python's standard style is called [PEP-8][pep-8];
+Python's standard style is called [PEP-8][pep-8];\index{Python!PEP-8}\index{PEP-8 (Python style)}
 the acronym "PEP" is short for "Python Enhancement Proposal",
 and PEP-8 lays out the rules that Python's own libraries use.
 Some of its rules are listed below,
@@ -18192,7 +18444,7 @@ though the fact that functions always start in the first column helps as well.
 
 **Use `ALL_CAPS_WITH_UNDERSCORES` for global variables.**
 
-This convention is inherited from C,
+This convention is inherited from C,\index{Python!style!variable naming}
 which was used to write the first version of Python.
 In that language,
 upper case was used to indicate a constant whose value couldn't be modified;
@@ -18240,9 +18492,9 @@ we can always get it back from version control
 
 ## Order {#style-order}
 
-The order of items in each file should be:
+The order of items in each file should be:\index{Python!style!order in file}
 
--   The [shebang][shebang] line (because it has to be first to work).
+-   The [shebang][shebang] line (because it has to be first to work).\index{shebang (in shell script)}
 -   The file's documentation string (Section \@ref(scripting-docstrings)).
 -   All of the `import` statements, one per line.
 -   Global variable definitions
@@ -18307,7 +18559,7 @@ but collating felt like something we might want to do separately.
 Checking that code conforms to guidelines like PEP-8 would be time consuming
 if we had to do it manually,
 but most languages have tools that will check style rules for us.
-These tools are often called [linters][linter],
+These tools are often called [linters][linter],\index{lint (style checking tool)}\index{Python!style!checking}
 after an early tool called [`lint`][lint] that found lint (or fluff) in C code.
 
 Python's linter used to be called `pep8` and is now called `pycodestyle`.
@@ -18397,7 +18649,8 @@ print('number', n)
 
 Once a program gets a clean bill of health from `pycodestyle`,
 it's worth having a human being look it over and suggest improvements.
-To [refactor][refactoring] code means to change its structure without changing what it does,
+To [refactor][refactoring] code\index{refactoring (software)}
+means to change its structure without changing what it does,
 like simplifying an equation.
 It is just as much a part of programming as writing code in the first place:
 nobody gets things right the first time @Bran1995,
@@ -18922,7 +19175,7 @@ if __name__ == '__main__':
 ```
 
 Reading code in order to find bugs and suggest improvements like these
-is called [code review][code_review].
+is called [code review][code_review].\index{code review}
 Multiple studies over more than 40 years have shown that
 code review is the most effective way to find bugs in software
 @Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
@@ -19068,7 +19321,7 @@ for i in range(5):
     matrix.append(row)
 ```
 
-Another is to use a nested [list comprehension][list_comprehension]:
+Another is to use a nested [list comprehension][list_comprehension]:\index{list comprehension (in Python)}\index{Python!list comprehension}
 
 ```python
 [[i+j for j in range(5)] for i in range(5)]
@@ -19086,7 +19339,7 @@ One solution is to bundle parameters together so that (for example)
 people pass three `point` objects instead of nine separate `x`, `y`, and `z` values.
 
 A second approach (which can be combined with the previous one)
-is to specify default values for some of the parameters.
+is to specify default values for some of the parameters.\index{default value (for parameter)}\index{Python!default values for parameters}
 Doing this gives users control over everything
 while also allowing them to ignore details;
 it also indicates what we consider "normal" for the function.
@@ -19158,7 +19411,8 @@ def collect(new_value, accumulator=None):
 
 ### Handle a variable number of arguments.
 
-We can often make programs simpler by writing functions that take a variable number of arguments,
+We can often make programs simpler by writing functions that take
+[a variable number of arguments][variable_arguments],\index{Python!variable arguments}
 just like `print` and `max`.
 One way to to require user to stuff those arguments into a list,
 e.g.,
@@ -19166,7 +19420,7 @@ to write `find_limits([a, b, c, d])`.
 However,
 Python can do this for us.
 If we declare a single argument whose name starts with a single `*`,
-Python will put all "extra" arguments into a [tuple][tuple]
+Python will put all "extra" arguments into a [tuple][tuple]\index{tuple (in Python)}\index{Python!tuple}
 and pass that as the argument.
 By convention,
 this argument is called `args`:
@@ -19202,7 +19456,7 @@ print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
 
 An equivalent special form exists for named arguments:
 the catch-all variable's name is prefixed with `**` (i.e., two asterisks instead of one),
-and it is conventionally called `kwargs` (for "keyword arguments").
+and it is conventionally called `kwargs` (for "keyword arguments").\index{Python!keyword arguments}\index{keyword arguments (in Python)}
 When this is used,
 the function is given a [dictionary][dictionary] of names and values
 rather than a list:
@@ -19250,7 +19504,8 @@ some matrix with lower bound and upper bound
 
 ### Use destructuring to assign multiple values at once.
 
-One last feature of Python is [destructuring assignment][destructuring_assignment].
+One last feature of Python is
+[destructuring assignment][destructuring_assignment].\index{Python!destructuring assignment}\index{destructuring assignment (in Python)}
 Suppose we have a nested list such as `[1, [2, 3]]`,
 and we want to assign its numbers to three variables
 called `first`, `second`, and `third`.
@@ -19304,7 +19559,7 @@ but there are probably fewer of them than you think.
 
 # YAML {#yaml}
 
-[YAML][yaml] is a way to write nested data structures in plain text
+[YAML][yaml]\index{YAML} is a way to write nested data structures in plain text
 that is often used to specify configuration options for software.
 The acronym stands for "YAML Ain't Markup Language",
 but that's a lie:
@@ -19329,7 +19584,7 @@ since most YAML implementations try to guess the type of data.
 
 If we want to create a list of values without keys,
 we can write it either using square brackets (like a Python array)
-or dashed items (like a Markdown list),
+or dashed items (like a Markdown\index{Markdown} list),
 so:
 
 ```yaml
@@ -19862,12 +20117,13 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [checklist]: glossary.html#checklist
 [choose-license]: https://choosealicense.com/
 [cli]: glossary.html#cli
-[code-review]: glossary.html#code-review
+[code_review]: glossary.html#code_review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [conda-forge]: https://conda-forge.org/
 [conda-forge-instructions]: https://conda-forge.org/#add_recipe
 [conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
+[configparser]: https://docs.python.org/3/library/configparser.html
 [covenant]: https://www.contributor-covenant.org
 [creative-commons]: https://creativecommons.org/
 [desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
@@ -19886,6 +20142,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [git-ssh-bitbucket]: https://confluence.atlassian.com/bitbucket/set-up-ssh-for-git-728138079.html
 [git-ssh-github]: https://help.github.com/articles/generating-ssh-keys
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
+[github-contributors-guide]: https://docs.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors
 [github-gitignore]: https://github.com/github/gitignore
 [github-release]:https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository
 [github-release-link]: https://docs.github.com/en/github/administering-a-repository/linking-to-releases
@@ -19958,8 +20215,6 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
-[working-memory]: glossary.html#working-memory
-[wrap-code]: glossary.html#wrap-code
 [xcode]: https://developer.apple.com/xcode/
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
@@ -20014,7 +20269,9 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [continuation_prompt]: glossary.html#continuation_prompt
 [continuous_integration]: glossary.html#continuous_integration
 [current_working_directory]: glossary.html#current_working_directory
+[data-files]: FIXME/data/zipf.zip
 [data_package]: glossary.html#data_package
+[default_value]: glossary.html#default_value
 [default_target]: glossary.html#default_target
 [defensive_programming]: glossary.html#defensive_programming
 [destructuring_assignment]: glossary.html#destructuring_assignment
@@ -20051,6 +20308,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [git_merge]: glossary.html#git_merge
 [git_pull]: glossary.html#git_pull
 [git_push]: glossary.html#git_push
+[git_remote]: glossary.html#git_remote
 [git_stage]: glossary.html#git_stage
 [governance]: glossary.html#governance
 [gpl]: glossary.html#gpl
@@ -20074,10 +20332,12 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [issue_tracking_system]: glossary.html#issue_tracking_system
 [json]: glossary.html#json
 [kebab_case]: glossary.html#kebab_case
+[keyword_arguments]: glossary.html#keyword_arguments
 [latex]: glossary.html#latex
 [linter]: glossary.html#linter
 [list_comprehension]: glossary.html#list_comprehension
 [logging_framework]: glossary.html#logging_framework
+[logging_level]: glossary.html#logging_level
 [long_option]: glossary.html#long_option
 [loop_body]: glossary.html#loop_body
 [magic_number]: glossary.html#magic_number
@@ -20148,10 +20408,12 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [shebang]: glossary.html#shebang
 [shell]: glossary.html#shell
 [shell_script]: glossary.html#shell_script
+[shell_variable]: glossary.html#shell_variable
 [short_circuit_test]: glossary.html#short_circuit_test
 [short_identifier_git]: glossary.html#short_identifier_git
 [short_option]: glossary.html#short_option
 [snake_case]: glossary.html#snake_case
+[software_distribution]: glossary.html#software_distribution
 [source_distribution]: glossary.html#source_distribution
 [sprint]: glossary.html#sprint
 [ssh]: glossary.html#ssh
@@ -20184,6 +20446,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [up_vote]: glossary.html#up_vote
 [update_operator]: glossary.html#update_operator
 [validation]: glossary.html#validation
+[variable_arguments]: glossary.html#variable_arguments
 [verification]: glossary.html#verification
 [version_control_system]: glossary.html#version_control_system
 [virtual_environment]: glossary.html#virtual_environment
