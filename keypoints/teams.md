@@ -3,7 +3,7 @@
 -   Include a license in your project so that it's clear who can do what with the material.
 -   Create [issues][issue] for bugs, enhancement requests, and discussions.
 -   [Label issues][issue_label] to identify their purpose.
--   [Triage][triage issues regularly and group them into [milestones][milestone] to track progress.
+-   [Triage][triage] issues regularly and group them into [milestones][milestone] to track progress.
 -   Include contribution guidelines in your project that specify its workflow and its expectations of participants.
 -   Make rules about [governance][governance] explicit.
 -   Use common-sense rules to make project meetings fair and productive.

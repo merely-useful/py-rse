@@ -15,7 +15,7 @@
 [checklist]: glossary.html#checklist
 [choose-license]: https://choosealicense.com/
 [cli]: glossary.html#cli
-[code-review]: glossary.html#code-review
+[code_review]: glossary.html#code_review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [conda-forge]: https://conda-forge.org/
@@ -40,6 +40,7 @@
 [git-ssh-bitbucket]: https://confluence.atlassian.com/bitbucket/set-up-ssh-for-git-728138079.html
 [git-ssh-github]: https://help.github.com/articles/generating-ssh-keys
 [git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
+[github-contributors-guide]: https://docs.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors
 [github-gitignore]: https://github.com/github/gitignore
 [github-release]:https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository
 [github-release-link]: https://docs.github.com/en/github/administering-a-repository/linking-to-releases
@@ -112,8 +113,6 @@
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
 [womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
-[working-memory]: glossary.html#working-memory
-[wrap-code]: glossary.html#wrap-code
 [xcode]: https://developer.apple.com/xcode/
 [yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
@@ -168,7 +167,9 @@
 [continuation_prompt]: glossary.html#continuation_prompt
 [continuous_integration]: glossary.html#continuous_integration
 [current_working_directory]: glossary.html#current_working_directory
+[data-files]: FIXME/data/zipf.zip
 [data_package]: glossary.html#data_package
+[default_value]: glossary.html#default_value
 [default_target]: glossary.html#default_target
 [defensive_programming]: glossary.html#defensive_programming
 [destructuring_assignment]: glossary.html#destructuring_assignment
@@ -205,6 +206,7 @@
 [git_merge]: glossary.html#git_merge
 [git_pull]: glossary.html#git_pull
 [git_push]: glossary.html#git_push
+[git_remote]: glossary.html#git_remote
 [git_stage]: glossary.html#git_stage
 [governance]: glossary.html#governance
 [gpl]: glossary.html#gpl
@@ -228,10 +230,12 @@
 [issue_tracking_system]: glossary.html#issue_tracking_system
 [json]: glossary.html#json
 [kebab_case]: glossary.html#kebab_case
+[keyword_arguments]: glossary.html#keyword_arguments
 [latex]: glossary.html#latex
 [linter]: glossary.html#linter
 [list_comprehension]: glossary.html#list_comprehension
 [logging_framework]: glossary.html#logging_framework
+[logging_level]: glossary.html#logging_level
 [long_option]: glossary.html#long_option
 [loop_body]: glossary.html#loop_body
 [magic_number]: glossary.html#magic_number
@@ -302,10 +306,12 @@
 [shebang]: glossary.html#shebang
 [shell]: glossary.html#shell
 [shell_script]: glossary.html#shell_script
+[shell_variable]: glossary.html#shell_variable
 [short_circuit_test]: glossary.html#short_circuit_test
 [short_identifier_git]: glossary.html#short_identifier_git
 [short_option]: glossary.html#short_option
 [snake_case]: glossary.html#snake_case
+[software_distribution]: glossary.html#software_distribution
 [source_distribution]: glossary.html#source_distribution
 [sprint]: glossary.html#sprint
 [ssh]: glossary.html#ssh
@@ -338,6 +344,7 @@
 [up_vote]: glossary.html#up_vote
 [update_operator]: glossary.html#update_operator
 [validation]: glossary.html#validation
+[variable_arguments]: glossary.html#variable_arguments
 [verification]: glossary.html#verification
 [version_control_system]: glossary.html#version_control_system
 [virtual_environment]: glossary.html#virtual_environment
