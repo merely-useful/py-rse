@@ -173,6 +173,11 @@ we will show you how to:
 -   Organise small and medium-sized data science projects.
 -   Create Python packages that can be installed in standard ways.
 
+Each chapter concludes with some exercises,
+whose solutions are discussed in Appendix \@ref(solutions).
+Early chapters have many small exercises;
+later chapters have fewer but larger exercises.
+
 ## Project Structure {#intro-structure}
 
 Project organization is like a diet:
@@ -6618,10 +6623,10 @@ which tells Git to ignore any `__pycache__` directory created by Python\index{\_
 The biggest benefit of version control for individual research is that
 we can always go back to the precise set of files
 that we used to produce a particular result.
-Being able to back up our changes on sites like GitHub
-with just a few keystrokes
-is a close second,
-but some of Git's advanced features make it even more powerful.
+While Git is complex @Pere2013,
+being able to back up our changes on sites like GitHub
+with just a few keystrokes can save us a lot of pain,
+and some of Git's advanced features make it even more powerful.
 We will explore these in the next chapter.
 
 ## Exercises {#git-cmdline-exercises}
@@ -11067,7 +11072,7 @@ because each level overrides the ones above it:
 the user's configuration file overrides the system settings,
 the job configuration overrides the user's defaults,
 and the command-line options overrides that.
-This is more complex than most research software needs initially,
+This is more complex than most research software needs initially @Xu2015,
 but being able to read a complete set of options from a file
 is a big boost to reproducibility.
 
@@ -12841,7 +12846,7 @@ if the actual value is within some [tolerance][tolerance] of the expected value.
 The tolerance can be expressed as the [absolute error][absolute_error],\index{absolute error}\index{error!absolute}
 which is the absolute value of the difference between two,
 or the [relative error][relative_error],\index{relative error}\index{error!relative}
-which the ratio of the absolute error to the value we're approximating.
+which the ratio of the absolute error to the value we're approximating @Gold1991.
 For example,
 if we add 9+1 and get 11,
 the absolute error is 1 (i.e., 11-10),
@@ -13463,7 +13468,7 @@ TDD's advocates claim that this leads to better code because:
 
 These arguments are plausible.
 However,
-studies such as @Fucc2016 don't support them:
+studies such as @Fucc2016,@Fucc2017 don't support them:
 in practice,
 writing tests first or last doesn't appear to affect productivity.
 What *does* have an impact is working in small, interleaved increments,
@@ -13708,8 +13713,8 @@ should follow the FAIR Principles.
 ### The FAIR Principles {#provenance-data-fair}
 
 The [FAIR Principles][go-fair] describe what research data should look like.\index{FAIR Principles}\index{publishing!FAIR Principles}
-They are still aspirational for most researchers @Broc2019,
-but tell us what to aim for.
+They are still aspirational for most researchers,
+but tell us what to aim for @Good2014,@Mich2015,@Hart2016,@Broc2019,@Tier2020.
 The most immediately important elements of the FAIR Principles are outlined below.
 
 #### Data should be *findable*.
