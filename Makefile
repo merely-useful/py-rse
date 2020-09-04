@@ -46,7 +46,7 @@ everything : ${HTML} ${PDF}
 ## html : build all HTML versions.
 html : _book/index.html
 
-_book/index.html : ${SOURCE}
+_book/index.html : ${SOURCE} glossary-html.lua
 	rm -f py-rse.Rmd
 	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook'); warnings()"
 	cp -r ${EXTRA} _book
@@ -92,13 +92,17 @@ glossary :
 	| bin/glossarize.py glossary-slugs.txt \
 	>> glossary.md
 
+## glosscheck : check that glossary entries are defined and used.
+glosscheck :
+	@bin/glosscheck.py ./glossary.md ${CHAPTERS}
+
 ## images : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${SOURCE}
 
-## links : check that links and glossary entries are defined and used.
-links :
-	@bin/links.py ./links.md ./glossary.md ${SOURCE}
+## linkcheck : check that links are defined and used.
+linkcheck :
+	@bin/linkcheck.py ./links.md ${CHAPTERS}
 
 ## exercises : check that exercises have solutions and solutions have exercises.
 exercises :

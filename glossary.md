@@ -120,12 +120,6 @@
 **competent practitioner**<a id="competent_practitioner"></a>
 :   Someone who can do normal tasks with normal effort under normal circumstances. See also: [novice](#novice), [expert](#expert)
 
-**compiled language**<a id="compiled_language"></a>
-:   Originally, a language such as C or Fortran that is translated into machine instructions for execution. Languages such as Java are also compiled before execution, but into [byte code](#byte_code) instead of machine instructions, while languages like Python are compiled to byte code on the fly.
-
-**compiler**<a id="compiler"></a>
-:   An application that translates programs written in some languages into machine instructions or [byte code](#byte_code).
-
 **computational notebook**<a id="computational_notebook"></a>
 :   A combination of a document format that allows users to mix prose and code in a single file, and an application that executes that code interactively and in place. The Jupyter Notebook and R Markdown files are both examples of computational notebooks.
 
@@ -169,7 +163,7 @@
 :   A software tool that extracts specially-formatted comments or [dostrings](#docstring) from code and generates cross-referenced developer documentation.
 
 **Digital Object Identifier**<a id="doi"></a>
-:   A unique persistent identifier for a book, paper, report, software release, or other digital artefact.
+:   A unique persistent identifier for a book, paper, report, software release, or other digital artefact. See also: [ORCID](#orcid)
 
 **down-vote**<a id="down_vote"></a>
 :   A vote against something. See also: [up-vote](#up_vote)
@@ -300,20 +294,11 @@
 **internal error**<a id="internal_error"></a>
 :   An error caused by a fault in a program, such as trying to access elements beyond the end of an array.
 
-**interpeter**<a id="interpeter"></a>
-:   A program that runs other programs interactively.
-
-**interpreted language**<a id="interpreted_language"></a>
-:   A high-level language that is not executed directly by the computer, but instead is run by an [interpreter](#interpreter) that translates program instructions into machine commands on the fly.
-
 **interruption bingo**<a id="interruption_bingo"></a>
 :   A technique for managing interruptions in meetings. Everyone's name is placed on each row and each column of a grid; each time person A interrupts person B, a mark is added to the appropriate grid cell.
 
 **invariant**<a id="invariant"></a>
 :   Something that is guaranteed to be true at some point in a program. Invariants are often expressed using [assertions](#assertion).
-
-**ISO date format**<a id="iso_date_format"></a>
-:   An international for formatting dates. While the full standard is complex, the most common form is `YYYY-MM-DD`, i.e., a four-digit year, a two-digit month, and a two-digit day separated by hyphens.
 
 **issue**<a id="issue"></a>
 :   A [bug report](#bug_report), feature request, or other to-do item associated with a project. Also called a [ticket](#ticket).
@@ -325,7 +310,7 @@
 :   Is similar to a [bug tracking system](#bug_tracker) in that it tracks "issues" made to a [repository](#repository), usually in the form of [feature requests](#feature_request), [bug reports](#bug_report), or some other todo item.
 
 **JavaScript Object Notation**<a id="json"></a>
-:   A way to represent data by combining basic values like numbers and character strings in lists and name/value structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like [XML](#xml), it is unencumbered by a syntax for comments or ways to define a [schema](#schema).
+:   A way to represent data by combining basic values like numbers and character strings in lists and name/value structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like [XML](#xml), it is unencumbered by a syntax for comments or ways to define a [schema](#schema). See also: [YAML](#yaml)
 
 **kebab case**<a id="kebab_case"></a>
 :   A naming convention in which the parts of a name are separated with dashes, as in `first-second-third`. See also: [camel case](#camel_case), [pothole case](#pothole_case)
@@ -388,7 +373,7 @@
 :   A style of programming in which functions and data are bound together in objects that only interact with each other through well-defined interfaces.
 
 **open license**<a id="open_license"></a>
-:   A license that permits general re-use, such as the [MIT License](#mit_license) or [GPL](#gpl).
+:   A license that permits general re-use, such as the [MIT License](#mit_license) or [GPL](#gpl) for software and [CC-BY](#cc_by) or [CC-0](#cc_0) for data, prose, or other creative outputs.
 
 **open science**<a id="open_science"></a>
 :   A generic term for making scientific software, data, and publications generally available.
@@ -401,6 +386,9 @@
 
 **optional argument**<a id="optional_argument"></a>
 :   An argument to a function or a command that may be omitted.
+
+**ORCID**<a id="orcid"></a>
+:   An Open Researcher and Contributor ID that uniquely and persistently identifies an author of scholarly works. ORCIDs are for people what [DOIs](#doi) are for documents.
 
 **orthogonality**<a id="orthogonality"></a>
 :   The ability to use various features of software in any combination. Orthogonal systems tend to be easier to understand, since features can be combined without worrying about unexpected interactions.
@@ -615,9 +603,6 @@
 **sustainable software**<a id="sustainable_software"></a>
 :   Software that its users can afford to keep up to date. Sustainability depends on the quality of the software, the skills of the potential maintainers, and how much the community is willing to invest.
 
-**tab completion**<a id="tab_completion"></a>
-:   A technique implemented by most [REPLs](#repl), [shells](#shell), and programming editors that completes a command, variable name, filename, or other text when the tab key is pressed.
-
 **tag (in version control)**<a id="tag"></a>
 :   A readable label attached to a specific [commit](#commit) so that it can easily be referred to later.
 
@@ -641,9 +626,6 @@
 
 **ticketing system**<a id="ticketing_system"></a>
 :   See [issue tracking system](#issue_tracking_system).
-
-**tidy data**<a id="tidy_data"></a>
-:   Tabular data that satisfies [three conditions](https://vita.had.co.nz/papers/tidy-data.pdf) that facilitate initial cleaning, and later exploration and analysis: (1) each variable forms a column, (2) each observation forms a row, and (3) each type of observation unit forms a table.
 
 **timestamp**<a id="timestamp"></a>
 :   A digital identifier showing the time at which something was created or accessed. Timestamps should use [ISO date format](#iso_date_format) for portability.
@@ -695,4 +677,7 @@
 
 **working memory**<a id="working_memory"></a>
 :   The part of memory that briefly stores information that can be directly accessed by consciousness.
+
+**YAML**<a id="yaml"></a>
+:   Short for "YAML Ain't Markup Language", a way to represent nested data using indentation rather than the parentheses and commas of [JSON](#json). YAML is often used in configuration files and to define parameters for various flavors of [Markdown](#markdown) documents.
 
