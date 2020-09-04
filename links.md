@@ -21,6 +21,7 @@
 [conda-forge]: https://conda-forge.org/
 [conda-forge-instructions]: https://conda-forge.org/#add_recipe
 [conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
+[configparser]: https://docs.python.org/3/library/configparser.html
 [covenant]: https://www.contributor-covenant.org
 [creative-commons]: https://creativecommons.org/
 [desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
