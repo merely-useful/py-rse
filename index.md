@@ -512,7 +512,7 @@ the shell can run them without having to know what language they are written in
 or how they do what they do.
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/bash-basics/the-shell.png" alt="The Shell"  />
+<img src="figures/bash-basics/the-shell.png" alt="The Shell" width="100%" />
 <p class="caption">(\#fig:bash-basics-repl)The Shell</p>
 </div>
 
@@ -622,7 +622,7 @@ On Amira's computer
 it looks like Figure \@ref(fig:bash-basics-filesystem).
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/bash-basics/sample-filesystem.png" alt="Sample Filesystem" width="70%" />
+<img src="figures/bash-basics/sample-filesystem.png" alt="Sample Filesystem" width="70%" />
 <p class="caption">(\#fig:bash-basics-filesystem)Sample Filesystem</p>
 </div>
 
@@ -1102,7 +1102,7 @@ $ nano draft.txt
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/bash-basics/nano-editor.png" alt="The Nano Editor"  />
+<img src="figures/bash-basics/nano-editor.png" alt="The Nano Editor" width="100%" />
 <p class="caption">(\#fig:bash-basics-nano)The Nano Editor</p>
 </div>
 
@@ -1545,7 +1545,7 @@ includes excerpts from the manual on your screen,
 and highlights a few of features useful for beginners.
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/bash-basics/man-callouts.png" alt="Manual highlights"  />
+<img src="figures/bash-basics/man-callouts.png" alt="Manual highlights" width="100%" />
 <p class="caption">(\#fig:bash-basics-manual)Manual highlights</p>
 </div>
 
@@ -1748,7 +1748,7 @@ it reads the output of the upstream command
 (Figure \@ref(fig:bash-basics-pipe)b).
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/bash-basics/pipe.png" alt="Piping commands" width="80%" />
+<img src="figures/bash-basics/pipe.png" alt="Piping commands" width="80%" />
 <p class="caption">(\#fig:bash-basics-pipe)Piping commands</p>
 </div>
 
@@ -1823,7 +1823,7 @@ and temporarily reconnects the keyboard and stream
 to that process's standard input and output (Figure \@ref(fig:bash-basics-stdio)b).
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/bash-basics/standard-io.png" alt="Standard I/O"  />
+<img src="figures/bash-basics/standard-io.png" alt="Standard I/O" width="100%" />
 <p class="caption">(\#fig:bash-basics-stdio)Standard I/O</p>
 </div>
 
@@ -2416,7 +2416,7 @@ what will `ls -F ../backup` display?
 4.  `data/ analysis/ doc/`
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/bash-basics/exercise-filesystem.png" alt="Exercise Filesystem"  />
+<img src="figures/bash-basics/exercise-filesystem.png" alt="Exercise Filesystem" width="100%" />
 <p class="caption">(\#fig:bash-basics-ex-rel-path)Exercise Filesystem</p>
 </div>
 
@@ -5054,7 +5054,7 @@ fig.savefig('results/jane_eyre.png')
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/scripting/jane-eyre.png" alt="Word frequency distribution for the book Jane Eyre"  />
+<img src="figures/scripting/jane-eyre.png" alt="Word frequency distribution for the book Jane Eyre" width="100%" />
 <p class="caption">(\#fig:scripting-repl)Word frequency distribution for the book Jane Eyre</p>
 </div>
 
@@ -5165,7 +5165,7 @@ It's also useful from a collaboration viewpoint,
 because the system keeps a record of who made what changes and when.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-cmdline/phd-comics.png" alt="Without a version control system, managing different versions of the same file can get messy."  />
+<img src="figures/git-cmdline/phd-comics.png" alt="Without a version control system, managing different versions of the same file can get messy." width="100%" />
 <p class="caption">(\#fig:git-cmdline-phdcomics)Without a version control system, managing different versions of the same file can get messy.</p>
 </div>
 
@@ -5673,7 +5673,7 @@ most of the visual space is devoted to a few very common words,
 which makes it hard to see what is happening with the other ten thousand or so words.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for Dracula"  />
+<img src="figures/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for Dracula" width="100%" />
 <p class="caption">(\#fig:git-cmdline-initial-plot)Inverse rank versus word frequency for Dracula</p>
 </div>
 
@@ -5834,7 +5834,7 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 > (Figure \@ref(fig:git-cmdline-staging-area)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-cmdline/staging-area.svg" alt="The staging area."  />
+<img src="figures/git-cmdline/staging-area.svg" alt="The staging area." width="100%" />
 <p class="caption">(\#fig:git-cmdline-staging-area)The staging area.</p>
 </div>
 
@@ -5845,7 +5845,7 @@ python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-cmdline/plot-loglog.png" alt="Rank versus word frequency, on log-log axes, for Dracula"  />
+<img src="figures/git-cmdline/plot-loglog.png" alt="Rank versus word frequency, on log-log axes, for Dracula" width="100%" />
 <p class="caption">(\#fig:git-cmdline-loglog-plot)Rank versus word frequency, on log-log axes, for Dracula</p>
 </div>
 
@@ -5937,7 +5937,7 @@ The home page of the repository on GitHub includes the string we need to identif
 (Figure \@ref(fig:git-cmdline-repo-link)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-cmdline/repo-link.png" alt="Where to Find the Repository Link"  />
+<img src="figures/git-cmdline/repo-link.png" alt="Where to Find the Repository Link" width="100%" />
 <p class="caption">(\#fig:git-cmdline-repo-link)Where to Find the Repository Link</p>
 </div>
 
@@ -6017,7 +6017,7 @@ it now includes all of our project files,
 along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline-history)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-cmdline/repo-history.png" alt="Repository history on GitHub"  />
+<img src="figures/git-cmdline/repo-history.png" alt="Repository history on GitHub" width="100%" />
 <p class="caption">(\#fig:git-cmdline-history)Repository history on GitHub</p>
 </div>
 
@@ -6038,7 +6038,7 @@ Pulling has no effect in this case
 because the two repositories are already synchronized.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-cmdline/git-remote.png" alt="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?"  />
+<img src="figures/git-cmdline/git-remote.png" alt="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?" width="100%" />
 <p class="caption">(\#fig:git-cmdline-remote)FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?</p>
 </div>
 
@@ -7034,7 +7034,7 @@ as often as the second most frequent word,
 Figure \@ref(fig:git-advanced-dracula-fit) shows the plot.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/dracula-fit.png" alt="Word frequency distribution for the book *Dracula*"  />
+<img src="figures/git-advanced/dracula-fit.png" alt="Word frequency distribution for the book *Dracula*" width="100%" />
 <p class="caption">(\#fig:git-advanced-dracula-fit)Word frequency distribution for the book *Dracula*</p>
 </div>
 
@@ -7715,7 +7715,7 @@ Sami can go to that URL and click on the "Fork" button in the upper right corner
 GitHub immediately creates a copy of Amira's repository within Sami's account on GitHub's own servers.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/fork-button.png" alt="Forking"  />
+<img src="figures/git-advanced/fork-button.png" alt="Forking" width="100%" />
 <p class="caption">(\#fig:git-advanced-fork-button)Forking</p>
 </div>
 
@@ -7727,7 +7727,7 @@ When Sami explores its history,
 they see that it contains all of the changes Amira made.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/after-fork.png" alt="After Forking"  />
+<img src="figures/git-advanced/after-fork.png" alt="After Forking" width="100%" />
 <p class="caption">(\#fig:git-advanced-after-fork)After Forking</p>
 </div>
 
@@ -8004,7 +8004,7 @@ and asks them if they want to create a pull request
 (Figure \@ref(fig:git-advanced-after-sami-pushes)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/after-sami-pushes.png" alt="After Sami Pushes"  />
+<img src="figures/git-advanced/after-sami-pushes.png" alt="After Sami Pushes" width="100%" />
 <p class="caption">(\#fig:git-advanced-after-sami-pushes)After Sami Pushes</p>
 </div>
 
@@ -8014,7 +8014,7 @@ and a pair of editable boxes for the pull request's title and a longer comment
 (Figure \@ref(fig:git-advanced-pull-request-start)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/open-pull-request.png" alt="Starting Pull Request"  />
+<img src="figures/git-advanced/open-pull-request.png" alt="Starting Pull Request" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-start)Starting Pull Request</p>
 </div>
 
@@ -8023,7 +8023,7 @@ Sami can see a summary of the changes that will be in the pull request
 (Figure \@ref(fig:git-advanced-pull-request-summary)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/open-pull-request-detail.png" alt="Summary of Pull Request"  />
+<img src="figures/git-advanced/open-pull-request-detail.png" alt="Summary of Pull Request" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-summary)Summary of Pull Request</p>
 </div>
 
@@ -8039,12 +8039,12 @@ Note that this pull request is displayed in Amira's repository rather than Sami'
 since it is Amira's repository that will be affected if the pull request is merged.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/fill-in-pull-request.png" alt="Filling In Pull Request"  />
+<img src="figures/git-advanced/fill-in-pull-request.png" alt="Filling In Pull Request" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-fill-in)Filling In Pull Request</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/new-pull-request.png" alt="New Pull Request"  />
+<img src="figures/git-advanced/new-pull-request.png" alt="New Pull Request" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-new)New Pull Request</p>
 </div>
 
@@ -8059,17 +8059,17 @@ Which appears identical to the details seen by .
 
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/viewing-new-pull-request.png" alt="Viewing Pull Request"  />
+<img src="figures/git-advanced/viewing-new-pull-request.png" alt="Viewing Pull Request" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-viewing)Viewing Pull Request</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-list.png" alt="Listing Pull Requests"  />
+<img src="figures/git-advanced/pr-list.png" alt="Listing Pull Requests" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-list)Listing Pull Requests</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-details.png" alt="Pull Request Details"  />
+<img src="figures/git-advanced/pr-details.png" alt="Pull Request Details" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-details)Pull Request Details</p>
 </div>
 
@@ -8081,7 +8081,7 @@ she clicks on the "Files changed" tab to see what Sami has changed
 (Figure \@ref(fig:git-advanced-pull-request-changes)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-changes.png" alt="Files Changed"  />
+<img src="figures/git-advanced/pr-changes.png" alt="Files Changed" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-changes)Files Changed</p>
 </div>
 
@@ -8096,17 +8096,17 @@ GitHub redisplays the page with her remarks inserted
 (Figure \@ref(fig:git-advanced-pull-request-pr-with-comment)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-comment-marker.png" alt="Comment Marker"  />
+<img src="figures/git-advanced/pr-comment-marker.png" alt="Comment Marker" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-comment-marker)Comment Marker</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-writing-comment.png" alt="Writing Comment"  />
+<img src="figures/git-advanced/pr-writing-comment.png" alt="Writing Comment" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-write-comment)Writing Comment</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-with-comment.png" alt="Pull Request With Comment"  />
+<img src="figures/git-advanced/pr-with-comment.png" alt="Pull Request With Comment" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-pr-with-comment)Pull Request With Comment</p>
 </div>
 
@@ -8132,12 +8132,12 @@ The icon at the top of the PR's page changes text and color to show that the mer
 (Figure \@ref(fig:git-advanced-pull-request-successful-merge)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-with-fix.png" alt="Pull Request With Fix"  />
+<img src="figures/git-advanced/pr-with-fix.png" alt="Pull Request With Fix" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-pr-with-fix)Pull Request With Fix</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-successful-merge.png" alt="Successful Merge"  />
+<img src="figures/git-advanced/pr-successful-merge.png" alt="Successful Merge" width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-successful-merge)Successful Merge</p>
 </div>
 
@@ -8215,7 +8215,7 @@ GitHub will detect the conflict and report that the PR cannot be merged automati
 (Figure \@ref(fig:git-advanced-pr-conflict)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/git-advanced/pr-conflict.png" alt="Conflict in a Pull Request"  />
+<img src="figures/git-advanced/pr-conflict.png" alt="Conflict in a Pull Request" width="100%" />
 <p class="caption">(\#fig:git-advanced-pr-conflict)Conflict in a Pull Request</p>
 </div>
 
@@ -9113,7 +9113,7 @@ and who can change those labels,
 let us define a workflow like the one shown in Figure \@ref(fig:teams-lifecycle).
 
 <div class="figure" style="text-align: center">
-<img src="figures/shared-rse/teams/lifecycle.svg" alt="FIXME Issue Lifecycle (diagram needs updating)"  />
+<img src="figures/teams/lifecycle.svg" alt="FIXME Issue Lifecycle (diagram needs updating)" width="100%" />
 <p class="caption">(\#fig:teams-lifecycle)FIXME Issue Lifecycle (diagram needs updating)</p>
 </div>
 
@@ -9181,7 +9181,7 @@ anything that's likely to take longer than multiple days should be broken down
 so that planning and progress tracking can be more accurate.
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="An Impact/Effort Matrix"  />
+<img src="figures/FIXME.png" alt="An Impact/Effort Matrix" width="100%" />
 <p class="caption">(\#fig:teams-impact-effort)An Impact/Effort Matrix</p>
 </div>
 
@@ -10069,7 +10069,7 @@ Make finds everything that `all` depends on,
 then brings each of those prerequisites up to date (Figure \@ref(fig:automate-all)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/automate/make-dependency-graph.png" alt="Making Everything" width="60%" />
+<img src="figures/automate/make-dependency-graph.png" alt="Making Everything" width="60%" />
 <p class="caption">(\#fig:automate-all)Making Everything</p>
 </div>
 
@@ -10703,7 +10703,7 @@ alpha: 1.1712445413685917
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/automate/collated.png" alt="Word count distribution for all the books combined."  />
+<img src="figures/automate/collated.png" alt="Word count distribution for all the books combined." width="100%" />
 <p class="caption">(\#fig:automate-collated)Word count distribution for all the books combined.</p>
 </div>
 
@@ -10924,7 +10924,7 @@ but they will need to be bigger
 if we want to include the figure in a slideshow or report.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/config/jane-eyre-default.png" alt="Word frequency distribution for the book Jane Eyre with default label sizes."  />
+<img src="figures/config/jane-eyre-default.png" alt="Word frequency distribution for the book Jane Eyre with default label sizes." width="100%" />
 <p class="caption">(\#fig:configuration-jane-eyre-default)Word frequency distribution for the book Jane Eyre with default label sizes.</p>
 </div>
 
@@ -10986,7 +10986,7 @@ $ python bin/plotcounts.py data/jane_eyre.csv --outfile results/jane_eyre.png
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/config/jane-eyre-big-labels.png" alt="Word frequency distribution for the book Jane Eyre with larger label sizes."  />
+<img src="figures/config/jane-eyre-big-labels.png" alt="Word frequency distribution for the book Jane Eyre with larger label sizes." width="100%" />
 <p class="caption">(\#fig:configuration-jane-eyre-big-labels)Word frequency distribution for the book Jane Eyre with larger label sizes.</p>
 </div>
 
@@ -11391,7 +11391,7 @@ as soon as Python tries to calculate `1/denom`,
 it skips directly to the code under `except`.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/errors/exceptions.png" alt="Exception Control Flow"  />
+<img src="figures/errors/exceptions.png" alt="Exception Control Flow" width="40%" />
 <p class="caption">(\#fig:errors-control-flow)Exception Control Flow</p>
 </div>
 
@@ -11679,7 +11679,7 @@ the more useful those checks will be.
 The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:\index{error message!writing helpful}
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/scripting/error-message.png" alt="An Unhelpful Error Message" width="60%" />
+<img src="figures/scripting/error-message.png" alt="An Unhelpful Error Message" width="60%" />
 <p class="caption">(\#fig:errors-error-message)An Unhelpful Error Message</p>
 </div>
 
@@ -12939,7 +12939,7 @@ Clicking on the name of our `countwords.py` script, for instance,
 produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/testing/python-coverage.png" alt="Coverage report"  />
+<img src="figures/testing/python-coverage.png" alt="Coverage report" width="100%" />
 <p class="caption">(\#fig:python-coverage)Coverage report</p>
 </div>
 
@@ -13035,7 +13035,7 @@ by clicking the "+" next to the "My Repositories" link
 on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI" width="50%" />
+<img src="figures/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI" width="50%" />
 <p class="caption">(\#fig:testing-add-repo)Click to add a new GitHub repository to Travis CI</p>
 </div>
 
@@ -13049,7 +13049,7 @@ If it still doesn't appear,
 the repository may belong to someone else or be private.
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/testing/travis-list-repos.png" alt="Find your Zipf's Law repository and switch it on" width="50%" />
+<img src="figures/testing/travis-list-repos.png" alt="Find your Zipf's Law repository and switch it on" width="50%" />
 <p class="caption">(\#fig:testing-list-repos)Find your Zipf's Law repository and switch it on</p>
 </div>
 
@@ -13121,7 +13121,7 @@ In this case,
 we can see that the build failed (Figure \@ref(fig:testing-build-fail)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/testing/travis-build-fail.png" alt="Travis Build Overview"  />
+<img src="figures/testing/travis-build-fail.png" alt="Travis Build Overview" width="100%" />
 <p class="caption">(\#fig:testing-build-fail)Travis Build Overview</p>
 </div>
 
@@ -13190,7 +13190,7 @@ This time our tests pass and the build completes successfully
 (Figure \@ref(fig:testing-build-pass)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/testing/travis-build-pass.png" alt="Travis Build Overview"  />
+<img src="figures/testing/travis-build-pass.png" alt="Travis Build Overview" width="100%" />
 <p class="caption">(\#fig:testing-build-pass)Travis Build Overview</p>
 </div>
 
@@ -13703,7 +13703,7 @@ the process involves creating a new release of our repository in GitHub
 that Zenodo copies and then issues a DOI for (Figure \@ref(fig:provenance-release)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/provenance/release.png" alt="A new code release in GitHub"  />
+<img src="figures/provenance/release.png" alt="A new code release in GitHub" width="100%" />
 <p class="caption">(\#fig:provenance-release)A new code release in GitHub</p>
 </div>
 
@@ -14547,7 +14547,7 @@ https://test.pypi.org/project/zipf/0.1/
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/testpypi.png" alt="Our new project at `https://test.pypi.org/project/zipf/0.1/`"  />
+<img src="figures/packaging/testpypi.png" alt="Our new project at `https://test.pypi.org/project/zipf/0.1/`" width="100%" />
 <p class="caption">(\#fig:packaging-testpypi)Our new project at `https://test.pypi.org/project/zipf/0.1/`</p>
 </div>
 
@@ -14976,17 +14976,17 @@ If we click on the `Module Index` link we can access the documentation for the i
 (Figures \@ref(fig:packaging-sphinx-module-list) and \@ref(fig:packaging-sphinx-module-countwords)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/landing-page-original.png" alt="The default website landing page"  />
+<img src="figures/packaging/landing-page-original.png" alt="The default website landing page" width="100%" />
 <p class="caption">(\#fig:packaging-sphinx-landing-page-original)The default website landing page</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/module-index.png" alt="The module index"  />
+<img src="figures/packaging/module-index.png" alt="The module index" width="100%" />
 <p class="caption">(\#fig:packaging-sphinx-module-list)The module index</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/module-countwords.png" alt="The countwords documentation"  />
+<img src="figures/packaging/module-countwords.png" alt="The countwords documentation" width="100%" />
 <p class="caption">(\#fig:packaging-sphinx-module-countwords)The countwords documentation</p>
 </div>
 
@@ -15016,7 +15016,7 @@ we now get an updated set of web pages that
 re-uses our README as the introduction to the documentation (Figure \@ref(fig:packaging-sphinx-landing-page)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/packaging/landing-page.png" alt="The new landing page showing the contents of `README.rst`"  />
+<img src="figures/packaging/landing-page.png" alt="The new landing page showing the contents of `README.rst`" width="100%" />
 <p class="caption">(\#fig:packaging-sphinx-landing-page)The new landing page showing the contents of `README.rst`</p>
 </div>
 
@@ -17859,7 +17859,7 @@ $ conda install -c ajdawson windspharm
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/anaconda/cloud-windspharm-ajdawson.png" alt="Andrew Dawson's conda installation package for windspharm on Anaconda Cloud"  />
+<img src="figures/anaconda/cloud-windspharm-ajdawson.png" alt="Andrew Dawson's conda installation package for windspharm on Anaconda Cloud" width="100%" />
 <p class="caption">(\#fig:anaconda-windspharm-ajdawson)Andrew Dawson's conda installation package for windspharm on Anaconda Cloud</p>
 </div>
 
@@ -17882,7 +17882,7 @@ $ conda config --add channels conda-forge
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/py-rse/anaconda/cloud-windspharm-search.png" alt="Search results for the windspharm package on Anaconda Cloud"  />
+<img src="figures/anaconda/cloud-windspharm-search.png" alt="Search results for the windspharm package on Anaconda Cloud" width="100%" />
 <p class="caption">(\#fig:anaconda-windspharm-search)Search results for the windspharm package on Anaconda Cloud</p>
 </div>
 
