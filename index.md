@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-04"
+date: "2020-09-05"
 documentclass: krantz
 bibliography: book.bib
 csl: jcb.csl
@@ -36,7 +36,7 @@ how to write short programs that clean and analyze data in a reproducible way
 and how to use version control to keep track of what they have done.
 But just as some astronomers spend their careers designing telescopes,
 some researchers focus on building the software that makes research possible.
-People who do this are called [research software engineers][rse];
+People who do this are called \gref{research software engineers}{rse};
 the aim of this book is to get you ready for this role,
 i.e.,
 to help you go from writing code for yourself
@@ -53,17 +53,17 @@ and everyone whose work is included will be credited in the acknowledgments.
 
 Our approach to research software engineering is based on three related concepts:
 
--   [Open science][open_science]
-    focuses on making data, methods, and results freely available to all
-    by publishing them under [open licenses][open_license].
--   [Reproducible research][reproducible_research]
-    means ensuring that anyone with access to data and software can feasibly reproduce results,
-    both to check them and to build on them.
--   Software is [sustainable][sustainable_software]
-    if it's easier for people to maintain it and extend it than to replace it.
-    However,
-    sustainability isn't just a property of the software:
-    it also depends on the skills and culture of its users.
+-   \gref{Open science}{open_science} focuses on making data, methods, and results
+    freely available to all by publishing them under \gref{open
+    licenses}{open_license}.
+
+-   \gref{Reproducible research}{reproducible_research} means ensuring that anyone
+    with access to data and software can feasibly reproduce results, both to
+    check them and to build on them.  - Software is
+    \gref{sustainable}{sustainable_software} if it's easier for people to
+    maintain it and extend it than to replace it.  However, sustainability isn't
+    just a property of the software: it also depends on the skills and culture
+    of its users.
 
 People often conflate these three ideas,
 but they are distinct.
@@ -79,7 +79,7 @@ Finally,
 if a software package is being maintained by a couple of post-docs
 who are being paid a fraction of what they could earn in industry
 and have no realistic hope of promotion because their field doesn't value tool building,
-then sooner or later it will become [abandonware][abandonware],
+then sooner or later it will become \gref{abandonware}{abandonware},
 at which point openness and reproducibility become moot points.
 
 Nobody argues that research should be irreproducible or unsustainable,
@@ -93,7 +93,7 @@ someone else will use it and publish a result they have come up with themselves.
 This is almost unheard of in practice,
 but that doesn't stop it being used as a scare tactic.
 Other people are afraid of looking foolish or incompetent by sharing code that might contain bugs.
-This isn't just [impostor syndrome][impostor_syndrome]:
+This isn't just \gref{impostor syndrome}{impostor_syndrome}:
 members of marginalized groups are frequently judged more harshly than others,
 so being wrong in public is much riskier for them.
 
@@ -134,8 +134,8 @@ and writing loops, conditionals, and functions.
 Learners will need a computer with Internet access
 that has the following software installed:
 
--   a [Bash shell][shell]
--   [Git][git]
+-   a \gref{Bash shell}{shell}
+-   \gref{Git}{git}
 -   a text editor
 -   [Python 3][python] (via the Anaconda distribution)
 -   [GNU Make][gnu-make]
@@ -172,6 +172,11 @@ we will show you how to:
 -   Publish your code and research in open and reproducible ways.
 -   Organise small and medium-sized data science projects.
 -   Create Python packages that can be installed in standard ways.
+
+Each chapter concludes with some exercises,
+whose solutions are discussed in Appendix \@ref(solutions).
+Early chapters have many small exercises;
+later chapters have fewer but larger exercises.
 
 ## Project Structure {#intro-structure}
 
@@ -250,6 +255,8 @@ Some projects also include a `CONTRIBUTORS` or `AUTHORS` file that
 lists everyone who has contributed to the project,
 while others include that information in the `README` (we do this in Chapter \@ref(git-advanced))
 or make it a section in `CITATION`.
+These files are often called \gref{boilerplate}{boilerplate},
+meaning they are copied without change from one use to the next.
 
 ### Organizing Project Content {#intro-organize}
 
@@ -284,10 +291,10 @@ the directories in the repository's root are organized according to purpose:
 
 This structure works well for many computational research projects and
 we encourage its use beyond just this book. 
-However, there will be some additional folders and files 
-not directly addressed by @Nobl2009, 
-that we'll add as we talk about [Provenance](#provenance), [Testing](#testing) and 
-[Packaging](#packaging). 
+We will add some more folders and files  not directly addressed by @Nobl2009
+when we talk about provenance (Chapter \@ref(provenance)),
+testing (Chapter \@ref(testing),
+and packaging (Chapter \@ref(packaging)).
 
 ### Getting Started {#intro-setup}
 
@@ -297,7 +304,7 @@ Appendix \@ref(install) explains
 how to download the novels in `data/`,
 which are the only files you'll need to get started.
 When you are done,
-you should have a directory (also called a [folder][folder]) 
+you should have a directory (also called a \gref{folder}{folder}) 
 called `zipf`,
 containing a single sub-directory called `data`
 with the following contents:
@@ -320,7 +327,7 @@ zipf/
 This book owes its existence to
 everyone we met through [the Carpentries][carpentries].
 We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work,
-to the authors of @Nobl2009; @Hadd2010; @Wils2014; @Scop2015; @Tasc2017; @Wils2017; @Brow2018; @Deve2018; @Shol2019; @Wils2019,
+to the authors of @Nobl2009,@Hadd2010,@Wils2014,@Scop2015,@Tasc2017,@Wils2017,@Brow2018,@Deve2018,@Shol2019,@Wils2019,
 and to everyone who has contributed, including Madeleine Bonsma-Fisher,
 Jonathan Dursi,
 Christina Koch,
@@ -352,19 +359,16 @@ and Elizabeth Wickes.
 [anaconda-docs]: https://docs.anaconda.com/anaconda/
 [argparse]: https://docs.python.org/3/library/argparse.html
 [arxiv]: https://arxiv.org/
-[authorea]: https://authorea.com/
 [bibtex]: http://www.bibtex.org/
 [biorxiv]: https://www.biorxiv.org/
 [bitbucket]: https://bitbucket.org/
+[book-repo]: https://github.com/merely-useful/py-rse/
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
-[checklist]: glossary.html#checklist
 [choose-license]: https://choosealicense.com/
-[cli]: glossary.html#cli
-[code_review]: glossary.html#code_review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [conda-forge]: https://conda-forge.org/
@@ -410,16 +414,12 @@ and Elizabeth Wickes.
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 [make]: https://www.gnu.org/software/make/
 [markdown]: https://en.wikipedia.org/wiki/Markdown
-[merely-useful]: https://github.com/merely-useful/merely-useful.github.io/
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
-[openrefine]: https://openrefine.org/
-[orcid]: https://orcid.org/
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
 [our-research]: http://ourresearch.org/
-[overleaf]: https://authorea.com/
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pip]: https://pypi.org/project/pip/
@@ -434,7 +434,6 @@ and Elizabeth Wickes.
 [python-standard-library]: https://docs.python.org/3/library/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
-[recipe-make]: https://www.gnu.org/software/make/manual/html_node/Rule-Introduction.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
@@ -446,6 +445,7 @@ and Elizabeth Wickes.
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-make]: https://github.com/swcarpentry/make-novice
+[swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
 [theoj]: https://joss.theoj.org/
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
@@ -461,246 +461,9 @@ and Elizabeth Wickes.
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
-[womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
-[xcode]: https://developer.apple.com/xcode/
-[yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
 [zipf-project-page]: https://test.pypi.org/project/zipf/
 [zipfs-law]: https://en.wikipedia.org/wiki/Zipf%27s_law
-
-[abandonware]: glossary.html#abandonware
-[absolute_error]: glossary.html#absolute_error
-[absolute_import]: glossary.html#absolute_import
-[absolute_path]: glossary.html#absolute_path
-[actual_result]: glossary.html#actual_result
-[agile]: glossary.html#agile
-[ally]: glossary.html#ally
-[append_mode]: glossary.html#append_mode
-[assertion]: glossary.html#assertion
-[authentic_task]: glossary.html#authentic_task
-[auto_completion]: glossary.html#auto_completion
-[automatic_variable]: glossary.html#automatic_variable
-[boilerplate]: glossary.html#boilerplate
-[branch_per_feature]: glossary.html#branch_per_feature_workflow
-[bug_report]: glossary.html#bug_report
-[bug_tracker]: glossary.html#bug_tracker
-[build_manager]: glossary.html#build_manager
-[build_recipe]: glossary.html#build_recipe
-[build_rule]: glossary.html#build_rule
-[build_target]: glossary.html#build_target
-[byte_code]: glossary.html#byte_code
-[call_stack]: glossary.html#call_stack
-[camel_case]: glossary.html#camel_case
-[catch_exception]: glossary.html#catch_exception
-[cc_license]: glossary.html#cc_license
-[checklist]: glossary.html#checklist
-[cli]: glossary.html#cli
-[code_coverage]: glossary.html#code_coverage
-[code_review]: glossary.html#code_review
-[cognitive_load]: glossary.html#cognitive_load
-[command_history]: glossary.html#command_history
-[command_line_argument]: glossary.html#command_line_argument
-[command_line_flag]: glossary.html#command_line_flag
-[command_line_option]: glossary.html#command_line_option
-[command_line_switch]: glossary.html#command_line_switch
-[comment]: glossary.html#comment
-[commit]: glossary.html#commit
-[commit_message]: glossary.html#commit_message
-[commons]: glossary.html#commons
-[competent_practitioner]: glossary.html#competent_practitioner
-[compiled_language]: glossary.html#compiled_language
-[compiler]: glossary.html#compiler
-[computational_notebook]: glossary.html#computational_notebook
-[conditional_expression]: glossary.html#conditional_expression
-[confirmation_bias]: glossary.html#confirmation_bias
-[continuation_prompt]: glossary.html#continuation_prompt
-[continuous_integration]: glossary.html#continuous_integration
-[current_working_directory]: glossary.html#current_working_directory
-[data-files]: FIXME/data/zipf.zip
-[data_package]: glossary.html#data_package
-[default_value]: glossary.html#default_value
-[default_target]: glossary.html#default_target
-[defensive_programming]: glossary.html#defensive_programming
-[destructuring_assignment]: glossary.html#destructuring_assignment
-[dictionary]: glossary.html#dictionary
-[docstring]: glossary.html#docstring
-[documentation_generator]: glossary.html#documentation_generator
-[doi]: glossary.html#doi
-[down_vote]: glossary.html#down_vote
-[entry_point]: glossary.html#entry_point
-[exception]: glossary.html#exception
-[expected_result]: glossary.html#expected_result
-[expert]: glossary.html#expert
-[explicit_relative_import]: glossary.html#explicit_relative_import
-[exploratory_programming]: glossary.html#exploratory_programming
-[export_variable]: glossary.html#export_variable
-[external_error]: glossary.html#external_error
-[false_beginner]: glossary.html#false_beginner
-[faq]: glossary.html#faq
-[feature_request]: glossary.html#feature_request
-[filename_extension]: glossary.html#filename_extension
-[filename_stem]: glossary.html#filename_stem
-[filesystem]: glossary.html#filesystem
-[filter]: glossary.html#filter
-[fixture]: glossary.html#fixture
-[flag_variable]: glossary.html#flag_variable
-[folder]: glossary.html#folder
-[forge]: glossary.html#forge
-[full_identifier_git]: glossary.html#full_identifier_git
-[git]: glossary.html#git
-[git_branch]: glossary.html#git_branch
-[git_clone]: glossary.html#git_clone
-[git_conflict]: glossary.html#git_conflict
-[git_fork]: glossary.html#git_fork
-[git_merge]: glossary.html#git_merge
-[git_pull]: glossary.html#git_pull
-[git_push]: glossary.html#git_push
-[git_remote]: glossary.html#git_remote
-[git_stage]: glossary.html#git_stage
-[governance]: glossary.html#governance
-[gpl]: glossary.html#gpl
-[gui]: glossary.html#gui
-[hitchhiker]: glossary.html#hitchhiker
-[home_directory]: glossary.html#home_directory
-[impact_effort_matrix]: glossary.html#impact_effort_matrix
-[implicit_relative_import]: glossary.html#implicit_relative_import
-[impostor_syndrome]: glossary.html#impostor_syndrome
-[in_place_operator]: glossary.html#in_place_operator
-[inspectability]: glossary.html#inspectability
-[integration_test]: glossary.html#integration_test
-[internal_error]: glossary.html#internal_error
-[interpeter]: glossary.html#interpeter
-[interpreted_language]: glossary.html#interpreted_language
-[interruption_bingo]: glossary.html#interruption_bingo
-[invariant]: glossary.html#invariant
-[iso_date_format]: glossary.html#iso_date_format
-[issue]: glossary.html#issue
-[issue_label]: glossary.html#issue_label
-[issue_tracking_system]: glossary.html#issue_tracking_system
-[json]: glossary.html#json
-[kebab_case]: glossary.html#kebab_case
-[keyword_arguments]: glossary.html#keyword_arguments
-[latex]: glossary.html#latex
-[linter]: glossary.html#linter
-[list_comprehension]: glossary.html#list_comprehension
-[logging_framework]: glossary.html#logging_framework
-[logging_level]: glossary.html#logging_level
-[long_option]: glossary.html#long_option
-[loop_body]: glossary.html#loop_body
-[magic_number]: glossary.html#magic_number
-[makefile]: glossary.html#makefile
-[marthas_rules]: glossary.html#marthas_rules
-[maximum_likelihood_estimation]: glossary.html#maximum_likelihood_estimation
-[mental_model]: glossary.html#mental_model
-[milestone]: glossary.html#milestone
-[mit_license]: glossary.html#mit_license
-[nano_editor]: glossary.html#nano_editor
-[ngo]: glossary.html#ngo
-[novice]: glossary.html#novice
-[oop]: glossary.html#oop
-[open_license]: glossary.html#open_license
-[open_science]: glossary.html#open_science
-[operating_system]: glossary.html#operating_system
-[oppression]: glossary.html#oppression
-[optional_argument]: glossary.html#optional_argument
-[orthogonality]: glossary.html#orthogonality
-[overlay_configuration]: glossary.html#overlay_configuration
-[pager]: glossary.html#pager
-[parent_directory]: glossary.html#parent_directory
-[patch]: glossary.html#patch
-[path]: glossary.html#path
-[path_coverage]: glossary.html#path_coverage
-[pattern_rule]: glossary.html#pattern_rule
-[phony_target]: glossary.html#phony_target
-[pipe_shell]: glossary.html#pipe_shell
-[positional_argument]: glossary.html#positional_argument
-[postcondition]: glossary.html#postcondition
-[pothole_case]: glossary.html#pothole_case
-[power_law]: glossary.html#power_law
-[precondition]: glossary.html#precondition
-[prerequisite]: glossary.html#prerequisite
-[privilege]: glossary.html#privilege
-[procedural_programming]: glossary.html#procedural_programming
-[process]: glossary.html#process
-[product_manager]: glossary.html#product_manager
-[project_manager]: glossary.html#project_manager
-[prompt]: glossary.html#prompt
-[provenance]: glossary.html#provenance
-[pull_request]: glossary.html#pull_request
-[raise_exception]: glossary.html#raise_exception
-[raster_image]: glossary.html#raster_image
-[recursion]: glossary.html#recursion
-[redirection]: glossary.html#redirection
-[refactoring]: glossary.html#refactoring
-[regression_testing]: glossary.html#regression_testing
-[regular_expression]: glossary.html#regular_expression
-[relative_error]: glossary.html#relative_error
-[relative_path]: glossary.html#relative_path
-[remote_login]: glossary.html#remote_login
-[remote_login_server]: glossary.html#remote_login_server
-[remote_repository]: glossary.html#remote_repository
-[repl]: glossary.html#repl
-[repository]: glossary.html#repository
-[reprex]: glossary.html#reprex
-[reproducible_research]: glossary.html#reproducible_research
-[restructured_text]: glossary.html#restructured_text
-[revision]: glossary.html#revision
-[root_directory]: glossary.html#root_directory
-[rotating_file]: glossary.html#rotating_file
-[rse]: glossary.html#rse
-[script]: glossary.html#script
-[search_path]: glossary.html#search_path
-[semantic_versioning]: glossary.html#semantic_versioning
-[sense_vote]: glossary.html#sense_vote
-[shebang]: glossary.html#shebang
-[shell]: glossary.html#shell
-[shell_script]: glossary.html#shell_script
-[shell_variable]: glossary.html#shell_variable
-[short_circuit_test]: glossary.html#short_circuit_test
-[short_identifier_git]: glossary.html#short_identifier_git
-[short_option]: glossary.html#short_option
-[snake_case]: glossary.html#snake_case
-[software_distribution]: glossary.html#software_distribution
-[source_distribution]: glossary.html#source_distribution
-[sprint]: glossary.html#sprint
-[ssh]: glossary.html#ssh
-[ssh_daemon]: glossary.html#ssh_daemon
-[ssh_key]: glossary.html#ssh_key
-[ssh_protocol]: glossary.html#ssh_protocol
-[stderr]: glossary.html#stderr
-[stdin]: glossary.html#stdin
-[stdout]: glossary.html#stdout
-[stop_word]: glossary.html#stop_word
-[subcommand]: glossary.html#subcommand
-[subdirectory]: glossary.html#subdirectory
-[sustainable_software]: glossary.html#sustainable_software
-[tab_completion]: glossary.html#tab_completion
-[tag]: glossary.html#tag
-[tdd]: glossary.html#tdd
-[ternary_expression]: glossary.html#ternary_expression
-[test_framework]: glossary.html#test_framework
-[test_runner]: glossary.html#test_runner
-[three_stickies]: glossary.html#three_stickies
-[ticket]: glossary.html#ticket
-[ticketing_system]: glossary.html#ticketing_system
-[tidy_data]: glossary.html#tidy_data
-[timestamp]: glossary.html#timestamp
-[tolerance]: glossary.html#tolerance
-[transitive_dependency]: glossary.html#transitive_dependency
-[triage]: glossary.html#triage
-[tuple]: glossary.html#tuple
-[unit_test]: glossary.html#unit_test
-[up_vote]: glossary.html#up_vote
-[update_operator]: glossary.html#update_operator
-[validation]: glossary.html#validation
-[variable_arguments]: glossary.html#variable_arguments
-[verification]: glossary.html#verification
-[version_control_system]: glossary.html#version_control_system
-[virtual_environment]: glossary.html#virtual_environment
-[virtual_machine]: glossary.html#virtual_machine
-[whitespace]: glossary.html#whitespace
-[wildcard]: glossary.html#wildcard
-[working_memory]: glossary.html#working_memory
 
 <!--chapter:end:index.Rmd-->
 
@@ -713,14 +476,14 @@ run programs,
 talk with each other,
 and interact with people.
 They do the last of these in many different ways,
-of which [graphical user interfaces][gui] (GUI) are the most widely used.
+of which \gref{graphical user interfaces}{gui} (GUI) are the most widely used.
 The computer displays icons to show our files and programs,
 and we tell it to copy or run those by clicking with a mouse.
 GUIs are easy to learn but hard to automate,
 and don't create a record of what we did.
 
 In contrast,
-when we use a [command-line interface][cli] (CLI)\index{command-line interface}\index{CLI (command-line interface)}
+when we use a \gref{command-line interface}{cli} (CLI)\index{command-line interface}\index{CLI (command-line interface)}
 we communicate with the computer by typing commands,
 and the computer responds by displaying text.
 CLIs existed long before GUIs;
@@ -728,7 +491,7 @@ they have survived because they are efficient,
 easy to automate,
 and automatically record what we have done.
 
-The heart of every CLI is a [read-evaluate-print loop][repl] (REPL).\index{read-eval-print loop}\index{REPL (read-eval-print loop)}
+The heart of every CLI is a \gref{read-evaluate-print loop}{repl} (REPL).\index{read-eval-print loop}\index{REPL (read-eval-print loop)}
 When we type a command and press <kbd>Return</kbd> (also called <kbd>Enter</kbd>)
 the CLI <strong>r</strong>eads the command,
 <strong>e</strong>valuates it (i.e., executes it),
@@ -739,7 +502,7 @@ you have already used a simple CLI.
 
 This lesson introduces another CLI that lets us interact with our computer's operating system.
 It is called a "command shell",
-or just [shell][shell] for short,\index{Unix shell}
+or just \gref{shell}{shell} for short,\index{Unix shell}
 and in essence is a program that runs other programs on our behalf
 (Figure \@ref(fig:bash-basics-repl)).
 Those "other programs" can do things as simple as telling us the time
@@ -756,7 +519,7 @@ or how they do what they do.
 The shell's greatest strength is that
 it lets us combine programs to create pipelines
 that can handle large volumes of data.
-Sequences of commands can be saved in a [script][script],
+Sequences of commands can be saved in a \gref{script}{script},
 just as commands for R or Python can be saved in programs,
 which makes our workflows more reproducible.
 Finally,
@@ -786,7 +549,7 @@ on how to launch the shell on your computer.
 
 ## Exploring Files and Directories {#bash-basics-explore}
 
-When Bash runs it presents us with a [prompt][prompt]\index{prompt (in Unix shell)} to indicate that it is waiting for input.
+When Bash runs it presents us with a \gref{prompt}{prompt}\index{prompt (in Unix shell)} to indicate that it is waiting for input.
 By default,
 this prompt is a simple dollar sign:
 
@@ -828,14 +591,14 @@ amira
 
 Now that we know who we are,
 we can explore where we are and what we have.
-The part of the operating system that manages files and directories (also called [folders][folder])
-is called the [filesystem][filesystem].\index{filesystem}
+The part of the operating system that manages files and directories (also called \gref{folders}{folder})
+is called the \gref{filesystem}{filesystem}.\index{filesystem}
 Some of the most commonly-used commands in the shell create, inspect, rename, and delete files and directories.
 Let's start exploring them by running the command `pwd`,\index{Unix commands!pwd}
 which stands for <strong>p</strong>rint <strong>w</strong>orking <strong>d</strong>irectory.
 The "print" part of its name is straightforward;
 the "working directory" part refers to the fact that
-the shell keeps track of our [current working directory][current_working_directory] at all times.\index{current working directory}
+the shell keeps track of our \gref{current working directory}{current_working_directory} at all times.\index{current working directory}
 Most commands read and write files in the current working directory
 unless we tell them to do something else,
 so knowing where we are before running a command is important.
@@ -852,7 +615,7 @@ Here,
 the computer's response is `/Users/amira`,
 which tells us that we are in a directory called `amira`
 that is contained in a top-level directory called `Users`.
-This directory is Amira's [home directory][home_directory];\index{home directory}
+This directory is Amira's \gref{home directory}{home_directory};\index{home directory}
 to understand what that means,
 we must first understand how the filesystem is organized.
 On Amira's computer
@@ -863,7 +626,7 @@ it looks like Figure \@ref(fig:bash-basics-filesystem).
 <p class="caption">(\#fig:bash-basics-filesystem)Sample Filesystem</p>
 </div>
 
-At the top is the [root directory][root_directory] that holds everything else,\index{root directory}
+At the top is the \gref{root directory}{root_directory} that holds everything else,\index{root directory}
 which we can refer to using a slash character, `/` on its own.
 Inside that directory are several other directories,
 including `bin` (where some built-in programs are stored),
@@ -873,7 +636,7 @@ and `Users` (where users' personal directories are located).
 We know that `/Users` is stored inside the root directory `/` because its name begins with `/`,
 and that our current working directory `/Users/amira` is stored inside `/Users`
 because `/Users` is the first part of its name.
-A name like this is called a [path][path] because it tells us\index{path}
+A name like this is called a \gref{path}{path} because it tells us\index{path}
 how to get from one place in the filesystem (e.g., the root directory)
 to another (e.g., Amira's home directory).
 
@@ -920,8 +683,8 @@ Again,
 our results may be different depending on our operating system
 and what files or directories we have.
 
-We can make the output of `ls` more informative using the `-F` [option][command_line_option]\index{option (of shell command)}\index{command-line option}
-(also sometimes called a [switch][command_line_switch] or a [flag][command_line_flag]).
+We can make the output of `ls` more informative using the `-F` \gref{option}{command_line_option}\index{option (of shell command)}\index{command-line option}
+(also sometimes called a \gref{switch}{command_line_switch} or a \gref{flag}{command_line_flag}).
 Options are exactly like arguments to a function in R or Python;
 in this case,
 `-F` tells `ls` to decorate its output to show what things are.
@@ -940,7 +703,7 @@ Desktop/      Downloads/    Movies/       Pictures/     zipf/
 ```
 
 Here,
-we can see that almost everything in our home directory is a [subdirectory][subdirectory];\index{subdirectory}
+we can see that almost everything in our home directory is a \gref{subdirectory}{subdirectory};\index{subdirectory}
 the only thing that isn't is a file called `todo.txt`.
 
 > **Spaces Matter**
@@ -966,7 +729,7 @@ $ ls /Users
 amira   jun     sami
 ```
 
-We often call the file and directory names that we give to commands [arguments][command_line_argument]\index{argument (of shell command)}
+We often call the file and directory names that we give to commands \gref{arguments}{command_line_argument}\index{argument (of shell command)}
 to distinguish them from the built-in options.
 We can combine options and arguments:
 
@@ -1034,11 +797,11 @@ data/
 ```
 
 Notice that `zipf` doesn't have a leading slash before its name.
-This absence tells the shell that it is a [relative path][relative_path],\index{relative path}\index{path!relative}
+This absence tells the shell that it is a \gref{relative path}{relative_path},\index{relative path}\index{path!relative}
 i.e.,
 that it identifies something starting from our current working directory.
 In contrast,
-a path like `/Users/amira` is an [absolute path][absolute_path]:\index{absolute path}\index{path!absolute}
+a path like `/Users/amira` is an \gref{absolute path}{absolute_path}:\index{absolute path}\index{path!absolute}
 it is always interpreted from the root directory down,
 so it always refers to the same thing.
 Using a relative path is like telling someone to go two kilometers north and then half a kilometer east;
@@ -1131,7 +894,7 @@ $ cd /Users/amira
 
 or a special relative path called `..` (two periods in a row with no spaces),\index{.. (parent directory)}\index{path!..}
 which always means "the directory that contains the current one".
-The directory that contains the one we are in is called the [parent directory][parent_directory],\index{parent directory}
+The directory that contains the one we are in is called the \gref{parent directory}{parent_directory},\index{parent directory}
 and sure enough,
 `..` gets us there:
 
@@ -1178,7 +941,7 @@ but we'll see some uses for it soon.
 > This command is synonymous with the previous example.
 > While you may see commands written like this,
 > we don't recommend you use this approach in your own work.
-> This is because some commands take [long options][long_option]
+> This is because some commands take \gref{long options}{long_option}
 > with multi-letter names,
 > and it's very easy to mistake `--no` (meaning "answer 'no' to all questions")
 > with `-no` (meaning `-n -o`).
@@ -1189,7 +952,7 @@ For example,
 if we are in `/Users/amira/zipf`,
 then `ls ..` will display a listing of `/Users/amira`.
 When the meanings of the parts are the same no matter how they're combined,
-programmers say they are [orthogonal][orthogonality].
+programmers say they are \gref{orthogonal}{orthogonality}.
 Orthogonal systems tend to be easier for people to learn
 because there are fewer special cases to remember.
 
@@ -1330,7 +1093,7 @@ $ ls -F analysis
 ```
 
 Let's change our working directory to `analysis` using `cd`,
-then use a very simple text editor called [Nano][nano_editor] to create a file called `draft.txt`\index{Nano editor}
+then use a very simple text editor called \gref{Nano}{nano_editor} to create a file called `draft.txt`\index{Nano editor}
 (Figure \@ref(fig:bash-basics-nano)):
 
 ```shell
@@ -1409,7 +1172,7 @@ draft.txt
 > However,
 > both people and programs use two-part names to help them tell different kinds of files apart.
 > The part of the filename after the dot
-> is called the [filename extension][filename_extension]\index{filename extension}
+> is called the \gref{filename extension}{filename_extension}\index{filename extension}
 > and indicates what type of data the file holds:
 > `.txt` for plain text,
 > `.pdf` for a PDF document,
@@ -1546,7 +1309,7 @@ cp: analysis is a directory (not copied).
 ```
 
 If we really want to copy everything,
-we must give `cp` the `-r` option (meaning [<strong>r</strong>ecursive][recursion]:
+we must give `cp` the `-r` option (meaning \gref{recursive}{recursion}:
 
 ```shell
 $ cp -r analysis backup
@@ -1668,7 +1431,7 @@ wc: data: read: Is a directory
 ```
 
 Instead,
-we can use [wildcards][wildcard] to specify a set of files at once.\index{wildcard!in Unix shell}
+we can use \gref{wildcards}{wildcard} to specify a set of files at once.\index{wildcard!in Unix shell}
 The most commonly-used wildcard is `*` (a single asterisk).
 It matches zero or more characters,
 so `data/*.txt` matches all of the text files in the `data` directory:
@@ -1763,7 +1526,7 @@ $ man wc
 > **Paging Through the Manual**
 >
 > If our screen is too small to display an entire manual page at once,
-> the shell will use a [paging program][pager] called `less` to show it
+> the shell will use a \gref{paging program}{pager} called `less` to show it
 > piece by piece.\index{Unix shell!paging program}\index{paging program (in Unix shell)}
 > We can use <kbd>↑</kbd> and <kbd>↓</kbd> to move line-by-line
 > or <kbd>Ctrl</kbd>+<kbd>Spacebar</kbd> and <kbd>Spacebar</kbd>
@@ -1860,7 +1623,7 @@ $ wc -l *.txt > lengths.txt
 ```
 
 The greater-than symbol `>` tells the shell
-to [redirect][redirection] the command's output to a file instead of printing it.\index{redirection (in Unix shell)}\index{Unix shell!redirection}
+to \gref{redirect}{redirection} the command's output to a file instead of printing it.\index{redirection (in Unix shell)}\index{Unix shell!redirection}
 Nothing appears on the screen;
 instead,
 everything that would have appeared has gone into the file `lengths.txt`.
@@ -1953,7 +1716,7 @@ rm lengths.txt sorted-lengths.txt
 ```
 
 We can produce the same result more safely and with less typing
-using a [pipe][pipe_shell]:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
+using a \gref{pipe}{pipe_shell}:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
 
 ```shell
 $ wc -l *.txt | sort -n
@@ -2022,7 +1785,7 @@ just as we have:
 by starting with a single command and adding others one by one,
 checking the output after each change.
 The shell makes this easy
-by letting us move up and down in our [command history][command_history]
+by letting us move up and down in our \gref{command history}{command_history}
 with the <kbd>↑</kbd> and <kbd>↓</kbd> keys.
 We can also edit old commands to create new ones,
 so a very common sequence is:
@@ -2038,10 +1801,10 @@ so a very common sequence is:
 
 In order to use pipes and redirection effectively,
 we need to know a little about how they work.
-When a computer runs a program---any program---it creates a [process][process] in memory\index{process}
+When a computer runs a program---any program---it creates a \gref{process}{process} in memory\index{process}
 to hold the program's instructions and data.
-Every process in Unix has an input channel called [standard input][stdin]\index{standard input}\index{stdin}
-and an output channel called [standard output][stdout].\index{standard output}\index{stdout}
+Every process in Unix has an input channel called \gref{standard input}{stdin}\index{standard input}\index{stdin}
+and an output channel called \gref{standard output}{stdout}.\index{standard output}\index{stdout}
 (By now you may be surprised that their names are so memorable,
 but don't worry:
 most Unix programmers call them "stdin" and "stdout",
@@ -2184,8 +1947,8 @@ cat: all.txt: No such file or directory
 ```
 
 Instead,
-every process has a second output channel called [standard error][stderr]
-(or [stderr][stderr]).\index{standard error}\index{stderr}
+every process has a second output channel called \gref{standard error}{stderr}
+(or \gref{stderr}{stderr}).\index{standard error}\index{stderr}
 Programs use it for error messages
 so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
 There are ways to redirect standard error,
@@ -2336,7 +2099,7 @@ so we will break it down into pieces:
     the first time around the loop
     and `sherlock_holmes.txt` the second time.
 
-4.  The commands that the loop executes are called the [body][loop_body] of the loop\index{loop (in Unix shell)!loop body}
+4.  The commands that the loop executes are called the \gref{body}{loop_body} of the loop\index{loop (in Unix shell)!loop body}
     and appear between the keywords `do` and `done`.
     Those commands use the current value of the variable `filename`,
     but to get it,
@@ -2346,7 +2109,7 @@ so we will break it down into pieces:
     that is actually called `filename`.
 
 5.  The shell prompt changes from `$`
-    to a [continuation prompt][continuation_prompt] `>`
+    to a \gref{continuation prompt}{continuation_prompt} `>`
     as we type in our loop\index{continuation prompt}\index{prompt (in Unix shell)!continuation}
     to remind us that we haven't finished typing a complete command yet.
     We don't type the `>`,
@@ -3193,7 +2956,7 @@ to do all of the things we can do with a GUI,
 and how to combine commands in new ways using pipes and redirection.
 This chapter extends those ideas to show
 how we can create new tools by saving commands in files
-and how to use a more powerful version of [wildcards][wildcard]\index{regular expression!relation to wildcard}
+and how to use a more powerful version of \gref{wildcards}{wildcard}\index{regular expression!relation to wildcard}
 to extract data from files.
 
 We'll be continuing to work in the `zipf` project,
@@ -3226,7 +2989,7 @@ Loops let us run the same commands many times,
 but we can go further and save commands in files
 so that we can repeat complex operations with a few keystrokes.
 For historical reasons
-a file full of shell commands is usually called a [shell script][shell_script],\index{shell script}
+a file full of shell commands is usually called a \gref{shell script}{shell_script},\index{shell script}
 but it is really just another kind of program.
 
 Let's start by creating a new directory for our runnable programs called `bin/`,
@@ -3379,7 +3142,7 @@ Author: Mary Wollstonecraft (Godwin) Shelley
 
 Our small script is now doing something useful,
 but it may take the next person who reads it a moment to figure out exactly what.
-We can improve our script by adding [comments][comment] at the top:\index{comments!in shell script}
+We can improve our script by adding \gref{comments}{comment} at the top:\index{comments!in shell script}
 
 ```text
 # Get author information from a Project Gutenberg eBook.
@@ -3481,7 +3244,7 @@ then save our recent history to a file and turn that into a reusable script.
 
 We can use `head` and `tail` to select lines from a file by position,
 but we also often want to select lines that contain certain values.
-This is called [filtering][filter],\index{filter (in Unix shell)}
+This is called \gref{filtering}{filter},\index{filter (in Unix shell)}
 and we usually do it in the shell with the command `grep`\index{grep}\index{Unix commands!grep}
 that we briefly met in Section \@ref(bash-advanced-script).
 Its name is an acronym of "global regular expression print",
@@ -3698,7 +3461,7 @@ $ grep -w -r pain data | wc -l
 ```
 
 `grep` becomes even more powerful
-when we start using [regular expressions][regular_expression],\index{regular expression}
+when we start using \gref{regular expressions}{regular_expression},\index{regular expression}
 which are sets of letters, numbers, and symbols that define complex patterns.
 For example,
 this command finds lines that start with the letter 'T':
@@ -3991,7 +3754,7 @@ but if we don't give it any arguments,
 the command might as well show us things we *could* set.
 
 By convention,
-[shell variables][shell_variable]\index{variable (in Unix shell)}\index{shell variable} that are always present have upper-case names.
+\gref{shell variables}{shell_variable}\index{variable (in Unix shell)}\index{shell variable} that are always present have upper-case names.
 All shell variables' values are strings,
 even those (such as `UID`) that look like numbers.
 It's up to programs to convert these strings to other types when necessary.
@@ -4005,7 +3768,7 @@ If a program wants the individual elements of such a list,
 it must split the variable's value into pieces.
 
 Let's have a closer look at `PATH`.
-Its value defines the shell's [search path][search_path],
+Its value defines the shell's \gref{search path}{search_path},
 which is the list of directories that the shell looks in for programs
 when we type in a command name without specifying exactly where it is.
 For example,
@@ -4116,7 +3879,7 @@ export BACKUP_DIR=$TEMP_DIR/backup
 These three lines create the variables `DEPARTMENT`,
 `TEMP_DIR`,
 and `BACKUP_DIR`,
-and [export][export_variable]\index{shell variable!exporting} them so that any programs the shell runs can see them as well.
+and \gref{export}{export_variable}\index{shell variable!exporting} them so that any programs the shell runs can see them as well.
 Notice that `BACKUP_DIR`'s definition relies on the value of `TEMP_DIR`,
 so that if we change where we put temporary files,
 our backups will be relocated automatically.
@@ -4201,13 +3964,13 @@ specifying package installation directories to managing database login credentia
 And while `grep` and `find` may take some getting used to,
 they and their cousins can handle enormous datasets very efficiently.
 If you would like to go further,
-[@Ray2014] is an excellent general introduction,
-while [@Jans2014] looks specifically at how to process data on the command line.
+@Ray2014 is an excellent general introduction,
+while @Jans2014 looks specifically at how to process data on the command line.
 
 ## Exercises {#bash-advanced-exercises}
 
 Many of the exercises below have been adapted from Software Carpentry's lesson
-[The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+[The Unix Shell][swc-shell-novice].
 As with the previous chapter,
 extra files and directories created during these exercises
 may need to be removed when you are done. 
@@ -4395,14 +4158,14 @@ Explain why the value for `-mtime` needs to be negative.
 
 # Command Line Programs in Python {#scripting}
 
-The Jupyter Notebook, PyCharm, and other graphical interfaces
+The [Jupyter Notebook][jupyter], PyCharm, and other graphical interfaces
 are great for prototyping code and exploring data,
 but eventually we may need to apply our code to thousands of data files,
 run it with many different parameters,
 or combine it with other programs as part of a data analysis pipeline.
 The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
-just like other command-line tools [@Tasc2017].
+just like other command-line tools @Tasc2017.
 
 In this chapter we will develop a command-line Python program\index{Python!command line}
 that handles input and output in the same way as other shell commands,
@@ -4625,7 +4388,7 @@ def double(num):
 The first line of this function is a string
 that isn't assigned to a variable.
 Such a string is called a documentation string,
-or [docstring][docstring] for short.\index{docstring (in Python)}\index{Python!docstring}
+or \gref{docstring}{docstring} for short.\index{docstring (in Python)}\index{Python!docstring}
 If we call our function it does what we expect:
 
 ```python
@@ -4742,7 +4505,7 @@ $ mv script_template.py ~/zipf/bin
 
 Next,
 let's write a function that counts how often words appear in a file.
-Our function splits the text on [whitespace][whitespace] characters
+Our function splits the text on \gref{whitespace}{whitespace} characters
 (which is the default behavior of the string object's `split` method),
 then strips leading and trailing punctuation.
 This isn't completely correct---if two words are joined by a long dash
@@ -4986,7 +4749,7 @@ that,41
 ## Positional and Optional Arguments {#py-rse-py-scripting-positional-optional}
 
 We have met two kinds of command-line arguments while writing `countwords.py`.
-[Optional arguments][optional_argument]\index{option (of shell command)!optional}
+\gref{Optional arguments}{optional_argument}\index{option (of shell command)!optional}
 are defined using a leading `-` or `--` (or both),
 which means that all three of the following definitions are valid:
 
@@ -4997,11 +4760,11 @@ parser.add_argument('-n', '--num', type=int, help='Limit output')
 ```
 
 The convention is for `-` to precede
-a [short][short_option] (single letter) option\index{option (of shell command)!short}
-and `--` a [long][long_option] (multi-letter) option.\index{option (of shell command)!long}
+a \gref{short}{short_option} (single letter) option\index{option (of shell command)!short}
+and `--` a \gref{long}{long_option} (multi-letter) option.\index{option (of shell command)!long}
 The user can provide optional arguments at the command line in any order they like.
 
-[Positional arguments][positional_argument]\index{positional argument (of program)}
+\gref{Positional arguments}{positional_argument}\index{positional argument (of program)}
 have no leading dashes and are not optional:
 the user must provide them at the command line
 in the order in which they are specified to `add_argument`
@@ -5237,8 +5000,8 @@ if __name__ == '__main__':
 ```
 
 Any Python source file can be imported by any other.
-This is why Python files should be named using [`snake_case`][snake_case]\index{snake case}\index{naming conventions!snake case}
-instead of [`kebab-case`][kebab_case]:\index{kebab case}\index{naming conventions!kebab case}
+This is why Python files should be named using \gref{`snake_case`}{snake_case}\index{snake case}\index{naming conventions!snake case}
+instead of \gref{`kebab-case`}{kebab_case}:\index{kebab case}\index{naming conventions!kebab case}
 an expression like `import some-thing` isn't allowed
 because `some-thing` isn't a legal variable name.
 When a file is imported,
@@ -5250,7 +5013,7 @@ and `thing` is the name of the item.
 > **The `__pycache__` Directory**
 >
 > When we import a file,
-> Python translates the source code into instructions called [byte codes][byte_code]\index{byte code}
+> Python translates the source code into instructions called \gref{byte codes}{byte_code}\index{byte code}
 > that it can execute efficiently.
 > Since the byte codes only change when the source changes,
 > Python saves the byte code in a separate file,
@@ -5380,14 +5143,14 @@ the solution to this exercise is used in following chapters.
 
 # Git at the Command Line {#git-cmdline}
 
-A [version control system][version_control_system] records changes to files\index{version control}
+A \gref{version control system}{version_control_system} records changes to files\index{version control}
 and helps people share their work with each other.
 These things can be done by emailing files to colleagues
 or by using "track changes" in Microsoft Word and Google Docs,
 but version control does both more accurately and efficiently.
 Originally developed to support software development,
 over the past fifteen years it has become the cornerstone
-of [reproducible research][reproducible_research].\index{reproducible research!version control}
+of \gref{reproducible research}{reproducible_research}.\index{reproducible research!version control}
 
 A version control system stores a master copy of your code in a repository,
 which you can't edit directly.
@@ -5408,7 +5171,7 @@ because the system keeps a record of who made what changes and when.
 
 There are many different version control systems,
 such as CVS, Subversion, and Mercurial,
-but the most widely used version control system today is [Git][git].
+but the most widely used version control system today is \gref{Git}{git}.
 Many people first encounter it through a GUI like [GitKraken][gitkraken]
 or [the RStudio IDE][rstudio-ide].
 However,
@@ -5480,7 +5243,7 @@ if __name__ == '__main__':
 ## Setting Up {#git-cmdline-setup}
 
 We write Git commands as <code>git <em>verb</em> <em>options</em></code>,
-where the [subcommand][subcommand] <code><em>verb</em></code> tells Git what we want to do
+where the \gref{subcommand}{subcommand} <code><em>verb</em></code> tells Git what we want to do
 and <code><em>options</em></code> provide whatever additional information that subcommand needs.
 Using this syntax,
 the first thing we need to do is configure Git:\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
@@ -5553,7 +5316,7 @@ $ ls
  bin       data      results
 ```
 
-We want to make this directory a [repository][repository],\index{repository (version control)}\index{Git commands!init}
+We want to make this directory a \gref{repository}{repository},\index{repository (version control)}\index{Git commands!init}
 i.e.,
 a place where Git can store versions of our files.
 We do this using the `init` command with `.` to mean "the current directory":
@@ -5717,7 +5480,7 @@ we will practice this in Exercise \@ref(git-cmdline-ex-unsave).
 > We will explore this issue further in Chapter \@ref(provenance).
 
 We no longer have any untracked files,
-but the tracked files haven't been [committed][commit]\index{Git commands!commit}\index{commit!to version control}
+but the tracked files haven't been \gref{committed}{commit}\index{Git commands!commit}\index{commit!to version control}
 (i.e., saved permanently in our project's history).
 We can do this using `git commit`:
 
@@ -5750,10 +5513,10 @@ $ git commit -m "Add scripts, novels, word counts, and word rank plot"
 
 `git commit` takes everything we have told Git to save using `git add`
 and stores a copy permanently inside the repository's `.git` directory.
-This permanent copy is called a [commit][commit] or a [revision][revision].\index{commit!set of files}
+This permanent copy is called a \gref{commit}{commit} or a \gref{revision}{revision}.\index{commit!set of files}
 Git gives is a unique identifier,
 and the first line of output from `git commit` displays
-its [short identifier][short_identifier_git] `31a216a`,\index{Git!short identifier}\index{short identifier (in Git)}
+its \gref{short identifier}{short_identifier_git} `31a216a`,\index{Git!short identifier}\index{short identifier (in Git)}
 which is the first few characters of that unique label.
 
 We use the `-m` option (short for <strong>m</strong>essage)
@@ -5785,7 +5548,7 @@ rather than after we have done some work.
 
 If we run `git commit` *without* the `-m` option,
 Git opens a text editor
-so that we can write a longer [commit message][commit_message].\index{Git!commit message}\index{commit!message}
+so that we can write a longer \gref{commit message}{commit_message}.\index{Git!commit message}\index{commit!message}
 In this message,
 the first line is referred to as the "subject"
 and the rest as the "body",
@@ -5898,7 +5661,7 @@ Date:   Wed Feb 19 15:39:04 2020 -0800
 
 `git log` lists all commits made to a repository in reverse chronological order.
 The listing for each commit includes
-the commit's [full identifier][full_identifier_git]\index{Git!full identifier}\index{full identifier (in Git)}
+the commit's \gref{full identifier}{full_identifier_git}\index{Git!full identifier}\index{full identifier (in Git)}
 (which starts with the same characters as the short identifier printed by `git commit`),
 the commit's author,
 when it was created,
@@ -6065,7 +5828,7 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 > We might want to commit those additions
 > but not commit the changes to `conclusion.tex` (which we haven't finished writing yet).
 > To allow for this,
-> Git has a special [staging area][git_stage]\index{staging area (in Git)}\index{Git!staging area}
+> Git has a special \gref{staging area}{git_stage}\index{staging area (in Git)}\index{Git!staging area}
 > where it keeps track of things
 > that have been added to the current changeset but not yet committed
 > (Figure \@ref(fig:git-cmdline-staging-area)).
@@ -6168,7 +5931,7 @@ so the repository we create on GitHub will also be called `zipf`.
 
 Next,
 we need to connect our desktop repository with the one on GitHub.
-We do this by making the GitHub repository a [remote][remote_repository]\index{Git!remote}\index{remote (in Git)}
+We do this by making the GitHub repository a \gref{remote}{remote_repository}\index{Git!remote}\index{remote (in Git)}
 of the local repository.
 The home page of the repository on GitHub includes the string we need to identify it
 (Figure \@ref(fig:git-cmdline-repo-link)).
@@ -6225,7 +5988,7 @@ Sensible people don't do this,
 so we won't explore this possibility any further.
 
 Now that we have configured a remote,
-we can [push][git_push] the work we have done so far\index{Git commands!push}\index{push (in Git)}
+we can \gref{push}{git_push} the work we have done so far\index{Git commands!push}\index{push (in Git)}
 to the repository on GitHub:
 
 ```shell
@@ -6258,7 +6021,7 @@ along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline
 <p class="caption">(\#fig:git-cmdline-history)Repository history on GitHub</p>
 </div>
 
-We can also [pull][git_pull] changes\index{Git commands!pull}\index{pull (in Git)}
+We can also \gref{pull}{git_pull} changes\index{Git commands!pull}\index{pull (in Git)}
 from the remote repository to the local one:
 
 ```shell
@@ -6287,7 +6050,7 @@ In order to do these things,
 we need to identify the versions we want.
 
 The two ways to do this
-are analogous to [absolute][absolute_path] and [relative][relative_path] paths.
+are analogous to \gref{absolute}{absolute_path} and \gref{relative}{relative_path} paths.
 The "absolute" version is the unique identifier that Git gives to each commit.
 These identifiers are 40 characters long,
 but in most situations Git will let us use just the first half dozen characters or so.
@@ -6478,7 +6241,7 @@ but how can we restore it?\index{Git!restore old versions}
 Suppose we change our mind about the last update to `bin/plotcounts.py`
 before we add it or commit it.
 `git status` tells us that the file has been changed,
-but those changes haven't been [staged][git_stage]:\index{Git!staging area}
+but those changes haven't been \gref{staged}{git_stage}:\index{Git!staging area}
 
 ```shell
 $ git status
@@ -6596,7 +6359,7 @@ but not data files with names ending in `.dat`.
 To stop Git from telling us about these files every time we call `git status`,
 we can create a file in the root directory of our project called `.gitignore`.\index{Git!ignoring files}\index{.gitignore file (in Git)}
 This file can contain filenames like `thesis.pdf`
-or [wildcard][wildcard] patterns like `*.dat`.\index{wildcard!in .gitignore}
+or \gref{wildcard}{wildcard} patterns like `*.dat`.\index{wildcard!in .gitignore}
 Each must be on a line of its own,
 and Git will ignore anything that matches any of these lines.
 For now we only need one entry in our `.gitignore` file,
@@ -6629,8 +6392,7 @@ We will explore these in the next chapter.
 ### Places to create Git repositories {#git-cmdline-ex-places}
 
 Along with information about the Zipf's Law project,
-Amira would also like to keep some notes on
-[Heaps' Law][heaps-law].
+Amira would also like to keep some notes on [Heaps' Law][heaps-law].
 Despite her colleagues' concerns,
 Amira creates a `heaps-law` project inside her `zipf` project as follows:
 
@@ -6849,8 +6611,8 @@ Run the command `git blame bin/plotcounts.py`.
 
 Git would be worth using if all it did was keep track of our work,
 but two of its more advanced features allow us to do much more.
-[Branches][git_branch] let us work on multiple things simultaneously in a single repository;
-[pull requests][pull_request] (PRs) let us submit our work for review,
+\gref{Branches}{git_branch} let us work on multiple things simultaneously in a single repository;
+\gref{pull requests}{pull_request} (PRs) let us submit our work for review,
 get feedback,
 and make updates.
 Used together,
@@ -6895,7 +6657,7 @@ and *only* on the one before.
 However,
 there are times when we want to try things out
 without disrupting our main work.
-To do this, we can use [branches][git_branch] to work on separate tasks in parallel.\index{branch (in Git)}\index{Git!branch}
+To do this, we can use \gref{branches}{git_branch} to work on separate tasks in parallel.\index{branch (in Git)}\index{Git!branch}
 Each branch is a parallel timeline;
 changes made on the branch only affect that branch
 unless and until we explicitly combine them with work done in another branch.
@@ -6916,7 +6678,7 @@ It is often considered the "official" version of the repository.
 The asterisk `*` indicates that it is currently active,
 i.e.,
 that all changes we make will take place in this branch by default.
-(The active branch is like the [current working directory][current_working_directory] in the shell.)
+(The active branch is like the \gref{current working directory}{current_working_directory} in the shell.)
 
 In the previous chapter,
 we foreshadowed some experimental changes that we could try and make to `plotcounts.py`.
@@ -7061,7 +6823,7 @@ becomes clear if we include it in a modified version of the earlier definition:
 > as often as the second most frequent word,
 > \(3^\alpha\) times as often as the third most frequent word, and so on.
 
-This mathematical expression for Zipf's Law is an example of a [power law][power_law].\index{power law}
+This mathematical expression for Zipf's Law is an example of a \gref{power law}{power_law}.\index{power law}
 In general, when two variables \(x\) and \(y\)
 are related through a power law, so that \[
 y = ax^b
@@ -7087,14 +6849,14 @@ and intercept \(\log(c)\).
 Our goal is to estimate the value of \(\alpha\);
 we'll see later that \(c\) is completely defined.
 
-In order to determine the best method for estimating \(\alpha\) we turn to [@Moreno2016],
-which suggests using a method called [maximum likelihood estimation][maximum_likelihood_estimation].\index{maximum likelihood estimation}
+In order to determine the best method for estimating \(\alpha\) we turn to @Moreno2016,
+which suggests using a method called \gref{maximum likelihood estimation}{maximum_likelihood_estimation}.\index{maximum likelihood estimation}
 The likelihood function is the probability of our observed data
 as a function of the parameters in the statistical model that we assume generated it.
 We estimate the parameters in the model by choosing them to maximize this likelihood;
 computationally,
 it is often easier to minimize the negative log likelihood function.
-[@Moreno2016] define the likelihood using a parameter \(\beta\),
+@Moreno2016 define the likelihood using a parameter \(\beta\),
 which is related to the \(\alpha\) parameter in our definition of Zipf's Law
 through \(\alpha = \tfrac{1}{\beta-1}\).
 Under their model,
@@ -7116,7 +6878,7 @@ def nlog_likelihood(beta, counts):
 Obtaining an estimate of \(\beta\) (and thus \(\alpha\))
 then becomes a numerical optimization problem,
 for which we can use the `scipy.optimize` library.
-Again following [@Moreno2016],
+Again following @Moreno2016,
 we use Brent's Method with \(1 < \beta \leq 4\).
 
 ```python
@@ -7507,7 +7269,7 @@ Now that we are happy with our curve fitting we have three options:
 
 1.  Add our changes to `plotcounts.py` once again in the `master` branch.
 2.  Stop working in `master` and start using the `fit` branch for future development.
-3.  [Merge][git_merge] the `fit` and `master` branches.
+3.  \gref{Merge}{git_merge} the `fit` and `master` branches.
 
 The first option is tedious and error-prone;
 the second will lead to a bewildering proliferation of branches,
@@ -7584,7 +7346,7 @@ Deleted branch fit (was db1d03f).
 
 ## Handling Conflicts {#git-advanced-conflict}
 
-A [conflict][git_conflict] occurs\index{Git!conflict}\index{conflict!in Git}
+A \gref{conflict}{git_conflict} occurs\index{Git!conflict}\index{conflict!in Git}
 when a line has been changed in different ways in two separate branches
 or when a file has been deleted in one branch but edited in the other.
 Merging `fit` into `master` went smoothly
@@ -7886,7 +7648,7 @@ this workflow will help us keep track of what we are doing:
     and all of our tests should pass.
 
 Most experienced developers use this
-[branch-per-feature][branch_per_feature] workflow,\index{branch-per-feature workflow (in Git)\index{Git!branch-per-feature workflow}
+\gref{branch-per-feature workflow}{branch_per_feature_workflow},\index{branch-per-feature workflow (in Git)\index{Git!branch-per-feature workflow}
 but what exactly is a "feature"?
 These rules make sense for small projects:
 
@@ -7928,7 +7690,7 @@ We can do this in two ways:
 
 2.  Everyone can read from the project's main repository,
     but only a few people can commit changes to it.
-    The project's other contributors [fork][git_fork] the main repository\index{Git!fork a repository}\index{fork (in Git)}
+    The project's other contributors \gref{fork}{git_fork} the main repository\index{Git!fork a repository}\index{fork (in Git)}
     to create one that they own,
     do their work in that,
     and then submit their changes to the main repository.
@@ -7940,7 +7702,7 @@ or if contributors are worried that they might make a mess in the `master` branc
 the second approach is safer.
 
 Git itself doesn't have any notion of a "main repository",
-but [forges][forge] like [GitHub][github],
+but \gref{forges}{forge} like [GitHub][github],
 [GitLab][gitlab],
 and [BitBucket][bitbucket] all encourage people
 to use Git in ways that effectively create one.
@@ -7969,7 +7731,7 @@ they see that it contains all of the changes Amira made.
 <p class="caption">(\#fig:git-advanced-after-fork)After Forking</p>
 </div>
 
-A copy of a repository is called a [clone][git_clone].\index{Git!clone a repository}\index{clone (in Git)}
+A copy of a repository is called a \gref{clone}{git_clone}.\index{Git!clone a repository}\index{clone (in Git)}
 In order to start working on the project,
 Sami needs a clone of *their* repository (not Amira's) on their own computer.
 We will modify Sami's prompt to include their desktop user ID (`sami`)
@@ -8014,7 +7776,7 @@ a41a6ea Added repository overview
 b07c14a Initial commit of README file
 ```
 
-Sami also sees that Git has automatically created a [remote][git_remote] for their repository\index{Git!remote}\index{remote (in Git)}
+Sami also sees that Git has automatically created a \gref{remote}{git_remote} for their repository\index{Git!remote}\index{remote (in Git)}
 that points back at their repository on GitHub:
 
 ```shell
@@ -8149,9 +7911,9 @@ and periodically pull in Sami's changes,
 but that would lead to chaos,
 since we could never be sure that everyone's work was in any one place at the same time.
 Instead,
-almost everyone uses [pull requests][pull_request].\index{pull request (in Git)}\index{Git!pull request}
+almost everyone uses \gref{pull requests}{pull_request}.\index{pull request (in Git)}\index{Git!pull request}
 They aren't part of Git itself,
-but are supported by all major online [forges][forge].
+but are supported by all major online \gref{forges}{forge}.
 
 A pull request is essentially a note saying,
 "Someone would like to merge branch A of repository B into branch X of repository Y".
@@ -8598,7 +8360,7 @@ and introduce a few ways to manage projects and teams as they develop.
 Our recommendations draw on @Foge2005,
 which describes how good open source software projects are run,
 and on @Boll2014,
-which explains what a [commons][commons] is\index{commons}
+which explains what a \gref{commons}{commons} is\index{commons}
 and when it's the right model to use.
 
 At this point,
@@ -8635,9 +8397,9 @@ Some examples are:
     the programs used to tidy that data,
     the tidied data,
     the extra files needed to make the dataset a package,
-    and a few text files describing the data's authors, license, and [provenance][provenance].
+    and a few text files describing the data's authors, license, and \gref{provenance}{provenance}.
 
--   A set of annual reports written for an [NGO][ngo].
+-   A set of annual reports written for an \gref{NGO}{ngo}.
     The project includes several Jupyter notebooks,
     some supporting Python libraries used by those notebooks,
     copies of the HTML and PDF versions of the reports,
@@ -8696,8 +8458,8 @@ it is the right thing to do.
 
 > **Terminology**
 >
-> [Privilege][privilege] is an unearned advantage given to some people but not all,\index{privilege}
-> while [oppression][oppression] is systemic inequality that benefits the privileged\index{oppression}
+> \gref{Privilege}{privilege} is an unearned advantage given to some people but not all,\index{privilege}
+> while \gref{oppression}{oppression} is systemic inequality that benefits the privileged\index{oppression}
 > and harms those without privilege @Auro2019.
 > In Europe, the Americas, Australia, and New Zealand,
 > a straight, white, affluent, physically able male
@@ -8716,7 +8478,7 @@ it is the right thing to do.
 > but targets don't choose to be marginalized:
 > people with privilege marginalize them.
 > Finally,
-> an [ally][ally] is a member of a privileged group\index{ally}
+> an \gref{ally}{ally} is a member of a privileged group\index{ally}
 > who is working to understand their own privilege and end oppression.
 
 Encouraging inclusivity is a shared responsibility.
@@ -8993,11 +8755,11 @@ that is also in the project's root directory.
 Before choosing a license for our software,
 we need to understand the difference between
 the two main kinds of license.\index{open source license}
-The [MIT License][mit_license]\index{MIT License}\index{open source license!MIT License}
+The \gref{MIT License}{mit_license}\index{MIT License}\index{open source license!MIT License}
 (and its close sibling the BSD License)\index{BSD License}\index{open source license!BSD License}
 say that people can do whatever they want to with the software as long as they cite the original source,
 and that the authors accept no responsibility if things go wrong.
-The [GNU Public License][gpl] (GPL)\index{GNU Public License (GPL)}\index{GPL (GNU Public License)}\index{open source license!GPL}
+The \gref{GNU Public License}{gpl} (GPL)\index{GNU Public License (GPL)}\index{GPL (GNU Public License)}\index{open source license!GPL}
 gives people similar rights,
 but requires them to share their own work on the same terms:
 
@@ -9069,7 +8831,7 @@ the most widely used family of licenses are those produced
 by [Creative Commons][creative-commons].\index{Creative Commons}
 These have been written and checked by lawyers and are well understood by the community.
 
-The most liberal option is referred to as [CC-0][cc_license],\index{Creative Commons!CC-0 license}\index{public domain}
+The most liberal option is referred to as \gref{CC-0}{cc_license},\index{Creative Commons!CC-0 license}\index{public domain}
 where the "0" stands for "zero restrictions".
 This puts work in the public domain,
 i.e.,
@@ -9080,7 +8842,7 @@ It does not negate the scholarly tradition and requirement of citing sources;
 it just doesn't make it a legal requirement.
 
 The next step up from CC-0 is the Creative Commons--Attribution license,
-usually referred to as [CC-BY][cc_license].\index{Creative Commons!CC-BY license}\index{CC-BY license}
+usually referred to as \gref{CC-BY}{cc_license}.\index{Creative Commons!CC-BY license}\index{CC-BY license}
 This allows people to do whatever they want to with the work
 as long as they cite the original source.
 This is the best license to use for manuscripts:
@@ -9117,15 +8879,15 @@ so that everyone can read them (and cite them).
 ## Planning {#teams-planning}
 
 Whether we are working by ourselves or with a group of people,
-we should use an [issue tracking system][issue_tracking_system]
+we should use an \gref{issue tracking system}{issue_tracking_system}
 to keep track of tasks we need to complete or problems we need to fix.
-[Issues][issue] are sometimes called [tickets][ticket],\index{project!issue}\index{issue (in project)}
-so issue tracking systems are sometimes called [ticketing systems][ticketing_system].\index{issue tracking system}
-They are also often called [bug trackers][bug_tracker],
+\gref{Issues}{issue} are sometimes called \gref{tickets}{ticket},\index{project!issue}\index{issue (in project)}
+so issue tracking systems are sometimes called \gref{ticketing systems}{ticketing_system}.\index{issue tracking system}
+They are also often called \gref{bug trackers}{bug_tracker},
 but they can be used to manage any kind of work,
 and are often a convenient way to manage discussions as well.
 
-Like other [forges][forge],
+Like other \gref{forges}{forge},
 GitHub allows participants to create issues for a project,
 comment on existing issues,
 and search all available issues.
@@ -9133,7 +8895,7 @@ Every issue can hold:
 
 -   A unique ID, such as `#123`, which is also part of its URL.
     This makes issues easy to find and refer to:
-    GitHub automatically turns the expression `#123` in a [commit message][commit_message]
+    GitHub automatically turns the expression `#123` in a \gref{commit message}{commit_message}
     into a link to that issue.
 
 -   A one-line title to aid browsing and search.
@@ -9162,9 +8924,9 @@ Every issue can hold:
 Broadly speaking,
 people create three kinds of issues:
 
-1.  [Bug reports][bug_report] to describe problems they have encountered.\index{bug report}
+1.  \gref{Bug reports}{bug_report} to describe problems they have encountered.\index{bug report}
 
-2.  [Feature requests][feature_request]\index{feature request}
+2.  \gref{Feature requests}{feature_request}\index{feature request}
     describing what could be done next,
     such as "add this function to this package" or "add a menu to the website".
 
@@ -9188,7 +8950,7 @@ people create three kinds of issues:
 
 ## Bug Reports {#teams-bugs}
 
-A well-written [bug report][bug_report] is more likely to get a fast response,\index{bug report!style}
+A well-written \gref{bug report}{bug_report} is more likely to get a fast response,\index{bug report!style}
 and is more likely to get a response actually addresses the issue @Bett2008.
 To write a good bug report:
 
@@ -9199,7 +8961,7 @@ To write a good bug report:
     or ask someone else on our team to check our logic,
     we could well fix the problem ourselves.
 
-2.  Try to come up with a [reproducible example][reprex]
+2.  Try to come up with a \gref{reproducible example}{reprex}
     or "reprex"\index{reproducible example (reprex)}\index{reprex (reproducible example)}
     that includes only the steps needed to make the problem happen,
     and that (if possible) uses simplified data rather than a complete dataset.
@@ -9267,9 +9029,9 @@ and should be enforced by the project's Code of Conduct\index{Code of Conduct (f
 
 ## Labeling Issues {#teams-labels}
 
-Issue trackers let project members add [labels][issue_label] to issues\index{issue (in project)!label}
+Issue trackers let project members add \gref{labels}{issue_label} to issues\index{issue (in project)!label}
 to make things easier to search and organize.
-Labels are also often called [tags][tag];\index{tags (for issues in project)}
+Labels are also often called \gref{tags}{tag};\index{tags (for issues in project)}
 whatever term is used,
 each one is just a descriptive word or two.
 
@@ -9334,7 +9096,7 @@ This approach works well in the short-term,
 but becomes unwieldy as labels with names like `sprint-2020-08-01` and `spring-2020-08-16` pile up.
 
 Instead,
-a project team will usually create a [milestone][milestone],\index{milestone (in project)}\index{project!milestone}
+a project team will usually create a \gref{milestone}{milestone},\index{milestone (in project)}\index{project!milestone}
 which is a set of issues and pull requests in a single project repository.
 GitHub milestones can have a due date
 and display aggregate progress toward completion,
@@ -9379,7 +9141,7 @@ without having to wait for someone to respond to email
 
 ## Prioritizing {#teams-prioritize}
 
-Labeling issues helps with [triage][triage],\index{triage (issues of project)}\index{project!triage (issues)}
+Labeling issues helps with \gref{triage}{triage},\index{triage (issues of project)}\index{project!triage (issues)}
 which is the process of deciding what is a priority and what isn't.
 This is never an easy job for software projects
 that need to balance fixing bugs with creating new features,
@@ -9389,10 +9151,10 @@ or whose team members are widely distributed
 or do not all work for the same institution.
 
 Many commercial and open source teams have adopted
-[agile development][agile] as a solution to these problems.\index{agile development}
+\gref{agile development}{agile} as a solution to these problems.\index{agile development}
 Instead of carefully formulating long-term plans that could be derailed by changing circumstances,
 agile development uses a sequence of short development
-[sprints][sprint],\index{sprint (of agile development)}\index{agile development!sprint}
+\gref{sprints}{sprint},\index{sprint (of agile development)}\index{agile development!sprint}
 each typically one or two weeks long.
 Each sprint starts with a planning session lasting one or two hours
 in which the successes and failures of the previous sprint are reviewed
@@ -9405,7 +9167,7 @@ with smaller items,
 it's easier to see how much headway is being made.)
 
 To decide which issues to work on in the next sprint,
-a team can construct an [impact/effort matrix][impact_effort_matrix]\index{impact/effort matrix}
+a team can construct an \gref{impact/effort matrix}{impact_effort_matrix}\index{impact/effort matrix}
 (Figure \@ref(fig:teams-impact-effort)).
 Impact measures how important the issue is to reaching the team's goals,
 and is typically measured on a low--medium--high scale.
@@ -9435,8 +9197,8 @@ The team must still make hard decisions, though:
 Each team has to answer these questions for each sprint,
 but that begs the question of exactly who has the final say in answering them.
 In a large project,
-a [product manager][product_manager] decides how important items are,\index{product manager}\index{project!product manager}
-while a [project manager][project_manager] is responsible for estimating effort\index{project manager}\index{project!project manager}
+a \gref{product manager}{product_manager} decides how important items are,\index{product manager}\index{project!product manager}
+while a \gref{project manager}{project_manager} is responsible for estimating effort\index{project manager}\index{project!project manager}
 and tracking progress.
 In a typical research software projects,
 the principal investigator either makes the decision
@@ -9444,8 +9206,8 @@ or delegates that responsibility (and authority) to the lead developer.
 
 Regardless of who is ultimately responsible,
 it is essential to include project participants in the planning and decision making.
-This may be as simple as having them add [up-votes][up_vote]\index{up-vote}
-and [down-votes][down_vote]\index{down-vote} to issues
+This may be as simple as having them add \gref{up-votes}{up_vote}\index{up-vote}
+and \gref{down-votes}{down_vote}\index{down-vote} to issues
 to indicate their opinions on importance,
 or as complex as asking them to propose
 a multi-sprint breakdown of a particularly complex feature.
@@ -9571,7 +9333,7 @@ is the tendency of some people to speak far more than others.
 Other meeting members may be so accustomed to this
 that they don't speak up even when they have valuable points to make.\index{meetings!how to run}
 
-One way to combat this is to give everyone [three sticky notes][three_stickies]
+One way to combat this is to give everyone \gref{three sticky notes}{three_stickies}
 at the start of the meeting.
 Every time they speak,
 they have to give up one sticky note.
@@ -9585,7 +9347,7 @@ People who have given up trying to be heard
 suddenly have space to contribute,
 and the overly-frequent speakers realize how unfair they have been.
 
-Another useful technique is called [interruption bingo][interruption_bingo].
+Another useful technique is called \gref{interruption bingo}{interruption_bingo}.
 Draw a grid and label the rows and columns with the participants' names.
 Each time one person interrupts another,
 add a tally mark to the appropriate cell;
@@ -9632,9 +9394,9 @@ groups need to spell out
 who has the authority to make which decisions
 and how to achieve consensus.
 In short,
-they need explicit [governance][governance].\index{governance!project}\index{project!governance}
+they need explicit \gref{governance}{governance}.\index{governance!project}\index{project!governance}
 
-[Martha's Rules][marthas_rules] are a practical way to do this\index{Martha's Rules}\index{governance!Martha's Rules}
+\gref{Martha's Rules}{marthas_rules} are a practical way to do this\index{Martha's Rules}\index{governance!Martha's Rules}
 in groups of up to a few dozen members @Mina1986:
 
 1.  Before each meeting, anyone who wishes may sponsor a proposal.
@@ -9653,7 +9415,7 @@ in groups of up to a few dozen members @Mina1986:
     The sponsor is also responsible for presenting the item to the group.
 
 4.  After the sponsor presents the proposal,
-    a [sense vote][sense_vote] is cast for the proposal prior to any discussion:
+    a \gref{sense vote}{sense_vote} is cast for the proposal prior to any discussion:
     -   Who likes the proposal?
     -   Who can live with the proposal?
     -   Who is uncomfortable with the proposal?
@@ -9836,7 +9598,7 @@ and ask the supervisor to arrange a meeting to resolve the issue.
 
 > **Hitchhikers**
 >
-> [Hitchhikers][hitchhiker] who show up but never actually do anything
+> \gref{Hitchhikers}{hitchhiker} who show up but never actually do anything
 > are particularly difficult to manage,
 > in part because they are usually very good at appearing reasonable.
 > They will nod as we present our case,
@@ -9907,7 +9669,7 @@ will help other things you do as well.
 
 ### Finding information {#teams-ex-scavenger-hunt}
 
-Take a look at [the GitHub repository for this book][merely-useful].
+Take a look at [the GitHub repository for this book][book-repo].
 Where is the information for licensing and contributing?
 
 ### Add a Code of Conduct to your project {#teams-ex-boilerplate-coc}
@@ -10066,7 +9828,7 @@ If we try to keep track of this ourselves
 we will inevitably forget some crucial steps
 and it will be hard for other people to pick up our work.
 Instead,
-we should use a [build manager][build_manager]\index{build manager}
+we should use a \gref{build manager}{build_manager}\index{build manager}
 to keep track of what depends on what
 and run our analysis programs automatically.
 These tools were invented to help programmers compile complex software,
@@ -10106,13 +9868,13 @@ so that every time we add a new book to our data,
 we can create new plots and update our fits with a single command.
 Make works as follows:
 
-1.  Every time the [operating system][operating_system] creates, reads, or changes a file,
-    it updates a [timestamp][timestamp]\index{timestamp} on the file to show when the operation took place.
+1.  Every time the \gref{operating system}{operating_system} creates, reads, or changes a file,
+    it updates a \gref{timestamp}{timestamp}\index{timestamp} on the file to show when the operation took place.
     Make can compare these timestamps
     to figure out whether files are newer or older than one another.
 
 2.  A user can describe which files depend on each other
-    by writing [rules][build_rule]\index{build rule} in a [Makefile][makefile].
+    by writing \gref{rules}{build_rule}\index{build rule} in a \gref{Makefile}{makefile}.
     For example,
     one rule could say that `results/moby_dick.csv` depends on `data/moby_dick.txt`,
     while another could say that the plot `results/comparison.png`
@@ -10126,7 +9888,7 @@ Make works as follows:
 4.  When the user runs Make,
     the program checks all of the rules in the Makefile
     and runs the commands needed to update any that are out of date.
-    If there are [transitive dependencies][transitive_dependency]---i.e.,\index{build dependency}\index{dependency!in build}
+    If there are \gref{transitive dependencies}{transitive_dependency}---i.e.,\index{build dependency}\index{dependency!in build}
     if A depends on B and B depends on C---then Make will trace them through
     and run all of the commands it needs to in the right order.
 
@@ -10155,13 +9917,13 @@ results/moby_dick.csv : data/moby_dick.txt
 
 As in the shell and many other programming languages,
 `#` indicates that the first line is a comment.
-The second and third lines form a [build rule][build_rule]:\index{build rule}
-the [target][build_target]\index{build target} of the rule is `results/moby_dick.csv`,
-its single [prerequisite][prerequisite] is the file `data/moby_dick.txt`,
+The second and third lines form a \gref{build rule}{build_rule}:\index{build rule}
+the \gref{target}{build_target}\index{build target} of the rule is `results/moby_dick.csv`,
+its single \gref{prerequisite}{prerequisite} is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
 
 The target and prerequisite tell Make what depends on what.
-The line below them describes the [recipe][build_recipe]\index{build recipe}
+The line below them describes the \gref{recipe}{build_recipe}\index{build recipe}
 that will update the target if it is out of date.
 The recipe consists of one or more shell commands,
 each of which *must* be prefixed by a single tab character.
@@ -10199,7 +9961,7 @@ one of three things will happen:
 In the first two cases,
 Make prints the commands it runs
 along with anything those command prints to the screen
-via [standard output][stdout] or [standard error][stderr].
+via \gref{standard output}{stdout} or \gref{standard error}{stderr}.
 There is no screen output in this case,
 so we only see the command.
 
@@ -10273,7 +10035,7 @@ make: `results/moby_dick.csv' is up to date.
 ```
 
 By default Make only attempts to update the first target it finds in the Makefile,
-which is called the [default target][default_target].\index{build target!default}
+which is called the \gref{default target}{default_target}.\index{build target!default}
 In this case,
 the first target is `results/moby_dick.csv`,
 which is already up to date.
@@ -10292,7 +10054,7 @@ If we have to run `make` once for each result
 we're right back where we started.
 However,
 we can add a rule to our Makefile to update all of our results at once.
-We do this by creating a [phony target][phony_target]\index{build target!phony}
+We do this by creating a \gref{phony target}{phony_target}\index{build target!phony}
 that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
@@ -10423,7 +10185,7 @@ If we ever change the name of the program or move it to a different location,
 we will have to find and replace each of those occurrences.
 More importantly,
 this redundancy makes our Makefile harder to understand,
-just as scattering [magic numbers][magic_number] through programs
+just as scattering \gref{magic numbers}{magic_number} through programs
 makes them harder to understand.
 
 The solution is the same one we use in programs:
@@ -10465,7 +10227,7 @@ to use `$(NAME)` and not `$NAME`.
 As in programs,
 variables don't just cut down on typing.
 They also tell readers that several things are always and exactly the same,
-which reduces [cognitive load][cognitive_load].
+which reduces \gref{cognitive load}{cognitive_load}.
 
 ## Automatic Variables {#automate-autovar}
 
@@ -10476,7 +10238,7 @@ we can write a generic rule that does what we want for every one of our data fil
 
 To do this,
 we need to understand Make's
-[automatic variables][automatic_variable].\index{automatic variables (in Make)}\index{Make!automatic variables}
+\gref{automatic variables}{automatic_variable}.\index{automatic variables (in Make)}\index{Make!automatic variables}
 The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 It lets us turn this:
@@ -10537,8 +10299,8 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 
 `$< > $@` is even harder to read than `$@` on its own,
 but we can now replace all the rules for generating results files
-with one [pattern rule][pattern_rule]\index{pattern rule}
-using the [wildcard][wildcard]\index{wildcard!in Make} `%`,
+with one \gref{pattern rule}{pattern_rule}\index{pattern rule}
+using the \gref{wildcard}{wildcard}\index{wildcard!in Make} `%`,
 which matches zero or more characters in a filename.
 Whatever matches `%` in the target also matches in the prerequisites,
 so the rule:
@@ -10715,7 +10477,7 @@ RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
 The first argument to `patsubst` is the pattern to look for,
 which in this case is a text file in the `data` directory.
-We use `%` to match the [stem][filename_stem]\index{filename stem}\index{stem (of filename)} of the file's name,
+We use `%` to match the \gref{stem}{filename_stem}\index{filename stem}\index{stem (of filename)} of the file's name,
 which is the part we want to keep.
 
 The second argument is the replacement we want.
@@ -10781,7 +10543,7 @@ particularly as we start to add more steps like merging data files and generatin
 
 ## Documenting a Makefile? {#automate-doc}
 
-Every well-behaved program should tell people how to use it [@Tasc2017].
+Every well-behaved program should tell people how to use it @Tasc2017.
 If we run `make --help`,
 we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
@@ -10977,7 +10739,7 @@ If you would like to explore them,
 check out [Snakemake][snakemake] (for Python)
 and [drake][drake] (for R).
 If you want to go deeper,
-[@Smit2011] describes the design and implementation of several build managers.
+@Smit2011 describes the design and implementation of several build managers.
 
 ## Exercises {#automate-exercises}
 
@@ -11062,7 +10824,7 @@ we may want to use up to four layers of configuration:
 3.  A job-specific file with settings for a particular run.
 4.  Command-line options to change things that commonly change.
 
-This is sometimes called [overlay configuration][overlay_configuration]\index{overlay configuration}\index{configuration!overlay}
+This is sometimes called \gref{overlay configuration}{overlay_configuration}\index{overlay configuration}\index{configuration!overlay}
 because each level overrides the ones above it:
 the user's configuration file overrides the system settings,
 the job configuration overrides the user's defaults,
@@ -11131,7 +10893,7 @@ key_4=value_4
 ```
 
 INI files are simple to read and write,
-but the format is slowly falling out of use in favor of [YAML][yaml].\index{YAML!configuration files}
+but the format is slowly falling out of use in favor of \gref{YAML}{yaml}.\index{YAML!configuration files}
 A simple YAML configuration file looks like this:
 
 ```yaml
@@ -11240,7 +11002,7 @@ and we don't have access to the one on their computer,
 so this solution isn't as reproducible as others.
 
 A global options file *is* useful, though.
-If we are using Matplotlib with [LaTeX][latex] to generate reports
+If we are using Matplotlib with \gref{LaTeX}{latex} to generate reports
 and the latter is installed in an unusual place on our computing cluster,
 a one-line change in `matplotlibrc` can prevent a lot of failed jobs.
 
@@ -11597,7 +11359,7 @@ zipf/
 
 ## Exceptions {#errors-exceptions}
 
-Most modern programming languages use [exceptions][exception] for error handling.\index{exception}
+Most modern programming languages use \gref{exceptions}{exception} for error handling.\index{exception}
 As the name suggests,
 an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
@@ -11636,7 +11398,7 @@ it skips directly to the code under `except`.
 We often want to know exactly what went wrong,
 so Python and other languages store information about the error
 in an object (which is also called an exception).
-We can [catch][catch_exception] an exception and inspect it as follows:\index{exception!catch}\index{catch exception}
+We can \gref{catch}{catch_exception} an exception and inspect it as follows:\index{exception!catch}\index{catch exception}
 
 ```python
 for denom in [-5, 0, 5]:
@@ -11688,7 +11450,7 @@ are all special cases of `ArithmeticError`,
 so an `except` that catches the latter will catch all three of the former,
 but an `except` that catches an `OverflowError`
 *won't* catch a `ZeroDivisionError`.
-The Python documentation describes all of[the built-in exception types][python-exceptions];
+The Python documentation describes all of [the built-in exception types][python-exceptions];
 in practice,
 the ones that people handle most often are:
 
@@ -11702,7 +11464,7 @@ the ones that people handle most often are:
     and so on.
 
 So where do exceptions come from?
-The answer is that programmers can [raise][raise_exception] them explicitly:\index{exception!raise}\index{raise exception}
+The answer is that programmers can \gref{raise}{raise_exception} them explicitly:\index{exception!raise}\index{raise exception}
 
 ```python
 for number in [1, 0, -1]:
@@ -11729,7 +11491,7 @@ In fact,
 their greatest strength is that they allow long-range error handling.
 If an exception occurs inside a function and there is no `except` for it there,
 Python checks to see if whoever called the function is willing to handle the error.
-It keeps working its way up through the [call stack][call_stack]\index{call stack}
+It keeps working its way up through the \gref{call stack}{call_stack}\index{call stack}
 until it finds a matching `except`.
 If there isn't one,
 Python takes care of the exception itself.
@@ -11874,9 +11636,9 @@ so there should always be an `except` somewhere
 to deal with unexpected cases.
 
 Generally speaking,
-we should distinguish between [internal errors][internal_error],\index{error!internal}\index{internal error}
+we should distinguish between \gref{internal errors}{internal_error},\index{error!internal}\index{internal error}
 such as calling a function with `None` instead of a list,
-and [external errors][external_error],
+and \gref{external errors}{external_error},
 such as trying to read a file that doesn't exist.
 Internal errors should be prevented by doing unit testing (Chapter \@ref(testing)),
 but software is always used in new ways in the real world,
@@ -12054,7 +11816,7 @@ so that people can monitor their progress.
 Adding `print` statements is a common approach,
 but removing them or commenting them out when the code goes into production is tedious and error-prone.
 
-A better approach is to use a [logging framework][logging_framework],\index{logging framework}
+A better approach is to use a \gref{logging framework}{logging_framework},\index{logging framework}
 such as Python's `logging` library.
 This lets us leave debugging statements in our code
 and turn them on or off at will.
@@ -12089,7 +11851,7 @@ but the other two only in case the user has requested more details
 by setting `LOG_LEVEL` higher than zero.
 
 A logging framework combines the `if` and `print` statements in a single function call
-and defines standard names for the [logging levels][logging_level].\index{logging level}
+and defines standard names for the \gref{logging levels}{logging_level}.\index{logging level}
 In order of increasing severity,
 the usual levels are:
 
@@ -12103,7 +11865,7 @@ Each of these has a corresponding function:
 we can use `logging.debug`, `logging.info`, etc. to write messages at these levels.
 By default,
 only `WARNING` and above are displayed;
-messages appear on [standard error][stderr]\index{standard error}
+messages appear on \gref{standard error}{stderr}\index{standard error}
 so that the flow of data in pipes isn't affected.
 The logging framework also displays the source of the message,
 which is called `root` by default.
@@ -12168,7 +11930,7 @@ CRITICAL:root:Something went seriously wrong.
 ```
 
 By default,
-`basicConfig` re-opens the file we specify in [append mode][append_mode];\index{append mode}
+`basicConfig` re-opens the file we specify in \gref{append mode}{append_mode};\index{append mode}
 we can use `filemode='w'` to overwrite the existing log data.
 Overwriting is useful during debugging,
 but we should think twice before doing in production,
@@ -12204,7 +11966,7 @@ Libraries like `logging` can send messages to many destinations;
 in production,
 we might send them to a centralized logging server
 that collates logs from many different systems.
-We might also use [rotating files][rotating_file]\index{logging framework!rotating file}
+We might also use \gref{rotating files}{rotating_file}\index{logging framework!rotating file}
 so that the system always has messages from the last few hours
 but doesn't fill up the disk.
 We don't need any of these when we start,
@@ -12223,7 +11985,7 @@ because it allows them to set things up the way they want with very little work.
 > 1.  Write the configuration values into the log one at a time.
 >
 > 2.  Save the configuration as a single record in the log
->     (e.g., as a single entry containing [JSON][json]).
+>     (e.g., as a single entry containing \gref{JSON}{json}).
 >
 > 3.  Write the configuration to a separate file
 >     and save the filename in the log.
@@ -12442,8 +12204,8 @@ zipf/
 
 The first step in building confidence in our programs
 is to assume that mistakes will happen and guard against them.
-This is called [defensive programming][defensive_programming],\index{defensive programming}
-and the most common way to do it is to add [assertions][assertion] to our code\index{assertion}\index{Python!assertion}
+This is called \gref{defensive programming}{defensive_programming},\index{defensive programming}
+and the most common way to do it is to add \gref{assertions}{assertion} to our code\index{assertion}\index{Python!assertion}
 so that it checks itself as it runs.
 An assertion is a statement that something must be true at a certain point in a program.
 When Python sees an assertion, it checks the assertion's condition.
@@ -12478,14 +12240,14 @@ Programs intended for widespread use are full of assertions:
 10-20% of the code they contain are there to check that the other 80-90% are working correctly.
 Broadly speaking, assertions fall into three categories:
 
--   A [precondition][precondition]\index{precondition (in program)}\index{assertion!precondition}
+-   A \gref{precondition}{precondition}\index{precondition (in program)}\index{assertion!precondition}
     is something that must be true at the start of a function
     in order for it to work correctly.
     For example,
     a function might check that the list it has been given has at least two elements
     and that all of its elements are integers.
 
--   A [postcondition][postcondition]\index{postcondition (in program)}\index{assertion!postcondition}
+-   A \gref{postcondition}{postcondition}\index{postcondition (in program)}\index{assertion!postcondition}
     is something that the function guarantees is true
     when it finishes.
     For example,
@@ -12493,7 +12255,7 @@ Broadly speaking, assertions fall into three categories:
     that is greater than zero,
     but less than the length of the input list.
 
--   An [invariant][invariant]\index{invariant (in program)}\index{assertion!invariant}
+-   An \gref{invariant}{invariant}\index{invariant (in program)}\index{assertion!invariant}
     is something that is true for every iteration in a loop.
     The invariant might be a property of the data (as in the example above),
     or it might be something like,
@@ -12536,7 +12298,7 @@ def get_power_law_params(word_counts):
 ## Unit Testing {#testing-unit}
 
 As the name suggests,
-a [unit test][unit_test]\index{unit test}\index{testing!unit test}
+a \gref{unit test}{unit_test}\index{unit test}\index{testing!unit test}
 checks the correctness of a single unit of software.
 Exactly what constitutes a "unit" is subjective,
 but it typically means the behavior of a single function in one situation.
@@ -12556,12 +12318,12 @@ def count_words(reader):
 
 A single unit test will typically have:
 
--   a [fixture][fixture],\index{testing!fixture}\index{fixture (of test)}
+-   a \gref{fixture}{fixture},\index{testing!fixture}\index{fixture (of test)}
     which is the thing being tested (e.g., an array of numbers);
--   an [actual result][actual_result],\index{testing!actual result}\index{actual result (of test)}
+-   an \gref{actual result}{actual_result},\index{testing!actual result}\index{actual result (of test)}
     which is what the code produces when given the fixture;
     and
--   an [expected result][expected_result]\index{testing!expected result}\index{expected result (of test)}
+-   an \gref{expected result}{expected_result}\index{testing!expected result}\index{expected result (of test)}
     that the actual result is compared to.
 
 The fixture is typically a subset or smaller version of the data
@@ -12619,8 +12381,8 @@ which means the assertion (and test) passed.
 Writing one unit test is easy enough,
 but we should check other cases as well.
 To manage them,
-we can use a [test framework][test_framework]\index{test framework}\index{testing!framework}
-(also called a [test runner][test_runner]).
+we can use a \gref{test framework}{test_framework}\index{test framework}\index{testing!framework}
+(also called a \gref{test runner}{test_runner}).
 The most widely-used test framework for Python is called [`pytest`][pytest],
 which structures tests as follows:
 
@@ -12837,10 +12599,10 @@ so that other people can tell what we actually did.
 
 So how should we write tests when we don't know precisely what the right answer is?
 The best approach is to write tests that check
-if the actual value is within some [tolerance][tolerance] of the expected value.\index{testing!tolerance}\index{tolerance (of test)}
-The tolerance can be expressed as the [absolute error][absolute_error],\index{absolute error}\index{error!absolute}
+if the actual value is within some \gref{tolerance}{tolerance} of the expected value.\index{testing!tolerance}\index{tolerance (of test)}
+The tolerance can be expressed as the \gref{absolute error}{absolute_error},\index{absolute error}\index{error!absolute}
 which is the absolute value of the difference between two,
-or the [relative error][relative_error],\index{relative error}\index{error!relative}
+or the \gref{relative error}{relative_error},\index{relative error}\index{error!relative}
 which the ratio of the absolute error to the value we're approximating @Gold1991.
 For example,
 if we add 9+1 and get 11,
@@ -12910,7 +12672,7 @@ bin/test_zipfs.py ..                                                     [100%]
 > Testing visualizations is hard:
 > any change to the dimension of the plot,
 > however small,
-> can change many pixels in a [raster image][raster_image],
+> can change many pixels in a \gref{raster image}{raster_image},
 > and cosmetic changes such as moving the legend up a couple of pixels
 > will cause all of our tests to fail.
 >
@@ -12983,7 +12745,7 @@ counting the words in a text
 and estimating the \(\alpha\) parameter from the word count.
 Our unit tests give us some confidence that these components work in isolation,
 but do they work correctly together?
-Checking that is called [integration testing][integration_test].\index{testing!integration test}\index{integration test}
+Checking that is called \gref{integration testing}{integration_test}.\index{testing!integration test}\index{integration test}
 
 Integration tests are structured the same way as unit tests:
 a fixture is used to produce an actual result
@@ -13069,7 +12831,7 @@ it's not practical to count the words in *Dracula* by hand,
 and even if we tried,
 the odds are good that we'd make a mistake.
 For this kind of situation we can use
-[regression testing][regression_testing].\index{testing!regression test}\index{regression test}
+\gref{regression testing}{regression_testing}.\index{testing!regression test}\index{regression test}
 Rather than assuming that the test author knows what the expected result should be,
 regression tests compares today's answer with a previous one.
 This doesn't guarantee that the answer is right---if the original answer is wrong,
@@ -13111,7 +12873,7 @@ bin/test_zipfs.py ....                                                   [100%]
 
 How much of our code do the tests we have written so far actually check?
 To find out,
-we can use a tool to check their [code coverage][code_coverage].\index{code coverage (of testing)}\index{testing!code coverage}
+we can use a tool to check their \gref{code coverage}{code_coverage}.\index{code coverage (of testing)}\index{testing!code coverage}
 Most Python programmers use the `coverage` library,
 which we can once again install using `pip`:
 
@@ -13191,7 +12953,7 @@ we should aim for 100% code coverage,
 i.e.,
 every single line in the application should be tested.
 In fact,
-we should probably go further and aim for 100% [path coverage][path_coverage]
+we should probably go further and aim for 100% \gref{path coverage}{path_coverage}
 to ensure that every possible path through the code has been checked.
 Similarly,
 if the software has become popular and is being used by thousands of researchers all over the world,
@@ -13221,7 +12983,7 @@ it's probably enough to check that it handles table with:
 -   rows having keys that are supposed to be unique, but aren't
 -   rows that contain nothing but missing values
 
-Some projects develop [checklists][checklist] like this one\index{testing!checklist}
+Some projects develop \gref{checklists}{checklist} like this one\index{testing!checklist}
 to remind programmers what they ought to test.
 These checklists can be a bit daunting for newcomers,
 but they are a great way to pass on hard-earned experience.
@@ -13236,7 +12998,7 @@ or if we are making changes over weeks or months,
 we might forget to run the tests
 or it might be difficult to identify which change is responsible for a test failure.
 
-The solution is [continuous integration][continuous_integration] (CI),\index{continuous integration}\index{CI (continuous integration)}
+The solution is \gref{continuous integration}{continuous_integration} (CI),\index{continuous integration}\index{CI (continuous integration)}
 which runs tests automatically whenever a change is made.\index{testing!continuous integration}
 CI tells developers immediately if changes have caused problems,
 which makes them much easier to fix.
@@ -13296,7 +13058,7 @@ by creating a file called `.travis.yml`.
 (The leading `.` in the name hides the file from casual listings on Mac or Linux,
 but not on Windows.)
 This file must be in the root directory of the repository,
-and is written in [YAML][yaml]
+and is written in \gref{YAML}{yaml}
 (Section \@ref(config-formats) and Appendix \@ref(yaml)).
 For our project,
 we add the following lines:
@@ -13312,7 +13074,7 @@ script:
 ```
 
 The `language` key tells Travis CI which programming language to use,
-so that it knows which of its standard [virtual machines][virtual_machine] to use\index{continuous integration!use of virtual machines}
+so that it knows which of its standard \gref{virtual machines}{virtual_machine} to use\index{continuous integration!use of virtual machines}
 as a starting point for the project.
 The `python` key specifies the version or versions of Python to use, 
 while the `script` key lists the commands to run---in this case, `pytest`.
@@ -13443,7 +13205,7 @@ At what point in the code development process should we write these?
 The answer depends on who you ask.
 
 Many programmers are passionate advocates of a practice called
-[test-driven development][tdd]
+\gref{test-driven development}{tdd}
 (TDD).\index{test-driven development}\index{testing!test-driven development}\index{TDD (test-driven development)}
 Rather than writing code and then writing tests,
 they write the tests first and then write just enough code to make those tests pass.
@@ -13453,7 +13215,7 @@ TDD's advocates claim that this leads to better code because:
 
 1.  Writing tests clarifies what the code is actually supposed to do.
 
-2.  It eliminates [confirmation bias][confirmation_bias].
+2.  It eliminates \gref{confirmation bias}{confirmation_bias}.
     If someone has just written a function,
     they are predisposed to want it to be right,
     so they will bias their tests towards proving that it is correct
@@ -13494,7 +13256,7 @@ and gets the same result that we did,
 then our computation is reproducible,
 but that doesn't mean they can understand it.
 Comments help
-(either in the code or as blocks of prose in a [computational notebook][computational_notebook]),
+(either in the code or as blocks of prose in a \gref{computational notebook}{computational_notebook}),
 but they won't check that assumptions and invariants hold.
 And unlike comments,
 runnable assertions can't fall out of step with what the code is actually doing.
@@ -13505,9 +13267,9 @@ Testing data analysis pipelines is often harder than testing mainstream software
 since data analysts often don't know what the right answer is @Brai2018.
 (If we did,
 we would have submitted our report and moved on to the next problem already.)
-The key distinction is the difference between [validation][validation],
+The key distinction is the difference between \gref{validation}{validation},
 which asks whether the specification is correct,
-and [verification][verification],
+and \gref{verification}{verification},
 which asks whether we have met that specification.
 The difference between them is the difference between
 building the right thing and building something right;
@@ -13599,7 +13361,8 @@ summaries for clients,
 or anything else that is shorter than a book
 and aimed at people other than its creators. 
 
-But modern publishing involves much more than producing a printable PDF.
+But modern publishing involves much more than producing a printable PDF
+and making it available on a preprint server such as [arXiv][arxiv] or [bioRxiv][biorxiv].
 It also entails providing the data underpinning the report
 and the code used to do the analysis:\index{reproducible research}
 
@@ -13616,7 +13379,7 @@ can't be published without violating personal or commercial confidentiality,
 every researcher's default should be to make all these as widely available as possible.
 Publishing it under an open license (Section \@ref(teams-license)) is the first step;
 the sections below describe what else we can do to capture
-the [provenance][provenance] of our data analysis.\index{provenance}
+the \gref{provenance}{provenance} of our data analysis.\index{provenance}
 
 Our Zipf's Law project files are structured as they were at the end of the previous chapter:
 
@@ -13650,12 +13413,11 @@ zipf/
     └── risk.txt
 ```
 
-
 > **Identifying Reports and Authors**
 >
 > Before publishing anything,
 > we need to understand how authors and their works are identified.
-> A [Digital Object Identifier][doi] (DOI)\index{Digital Object Identifier (DOI)}\index{DOI (Digital Object Identifier)}
+> A \gref{Digital Object Identifier}{doi} (DOI)\index{Digital Object Identifier (DOI)}\index{DOI (Digital Object Identifier)}
 > is a unique identifier for a particular version of a particular digital artifact
 > such as a report, a dataset, or a piece of software.
 > DOIs are written as `doi:prefix/suffix`,
@@ -13664,7 +13426,7 @@ zipf/
 > an academic journal, data archive, or other organiation
 > must guarantee a certain level of security, longevity and access.
 >
-> An [ORCID][orcid]\index{ORCID (Open Researcher and Contributor ID)}
+> An \gref{ORCID}{orcid}\index{ORCID (Open Researcher and Contributor ID)}
 > is an Open Researcher and Contributor ID.
 > Anyone can get an ORCID for free,
 > and should include it in publications
@@ -13718,7 +13480,7 @@ The first step in using or re-using data is to find it.
 We can tell we've done this if:
 
 1.  (Meta)data is assigned a globally unique and persistent identifier
-    (i.e. a [DOI][doi]).
+    (i.e. a \gref{DOI}{doi}).
 2.  Data is described with rich metadata
 3.  Metadata clearly and explicitly includes the identifier of the data it describes.
 4.  (Meta)data is registered or indexed in a searchable resource,
@@ -13753,7 +13515,7 @@ We can tell we've done this if:
 
 1.  Meta(data) is described with accurate and relevant attributes.
 2.  (Meta)data is released with a clear and accessible data usage license.
-3.  (Meta)data has detailed [provenance][provenance].
+3.  (Meta)data has detailed \gref{provenance}{provenance}.
 4.  (Meta)data meets domain-relevant community standards.
 
 ### Where to archive data {#provenance-data-where}
@@ -13761,7 +13523,7 @@ We can tell we've done this if:
 Small datasets (i.e., anything under 500 MB) can be stored in version control.\index{publishing!data!archiving}
 If the data is being used in several projects,
 it may make sense to create one repository to hold only the data;
-the R community refers to these as [data packages][data_package],\index{data package (in R)}\index{publishing!data!package}
+the R community refers to these as \gref{data packages}{data_package},\index{data package (in R)}\index{publishing!data!package}
 and they are often accompanied by small scripts to clean up and query the data.
 
 For medium-sized datasets (between 500 MB and 5 GB),
@@ -13964,7 +13726,7 @@ Fortunately,
 most readers are not looking to exactly re-run a decade old analysis:
 they just want to be able to figure out what was run 
 and what the important decisions were,
-which is sometimes referred to as [inspectability][inspectability]\index{inspectability}
+which is sometimes referred to as \gref{inspectability}{inspectability}\index{inspectability}
 (@Gil2016, @Brown2017). 
 While exact repeatability has a short shelf-life,
 inspectability is the enduring legacy of a well-documented computational analysis.
@@ -14006,7 +13768,7 @@ we help ensure that everyone can pursue their ideas as we did.
 
 ### ORCID {#provenance-ex-get-orcid}
 
-If you don't already have an [ORCID][orcid],
+If you don't already have an \gref{ORCID}{orcid},
 go to the website and register now.
 If you do have an ORCID,
 log in and make sure that your details and publication record are up-to-date.
@@ -14213,7 +13975,7 @@ import countwords
 ```
 
 These are called
-[implicit relative imports][implicit_relative_import],\index{Python!import!implicit relative}\index{implicit relative import (in Python)}
+\gref{implicit relative imports}{implicit_relative_import},\index{Python!import!implicit relative}\index{implicit relative import (in Python)}
 because it is not clear whether we mean
 "import a Python package called `utilities`"
 or
@@ -14231,12 +13993,12 @@ from zipf import plotcounts
 from zipf import countwords
 ```
 
-These are [absolute imports][absolute_import]\index{Python!import!absolute}\index{absolute import (in Python)}
+These are \gref{absolute imports}{absolute_import}\index{Python!import!absolute}\index{absolute import (in Python)}
 since we are specifying the full location of `utilities`, `plotcounts` and `countwords`
 inside the `zipf` package.
 Absolute imports are the preferred way for parts of a package to import other parts,
 but we can also use
-[explicit relative imports][explicit_relative_import],\index{Python!import!explicit relative}\index{explicit relative import (in Python)}
+\gref{explicit relative imports}{explicit_relative_import},\index{Python!import!explicit relative}\index{explicit relative import (in Python)}
 which require a little less typing
 and can sometimes make it easier to restructure very large projects:
 
@@ -14271,12 +14033,12 @@ setup(
 ```
 
 The `name` and `author` parameters are self-explanatory.
-Most software projects use [semantic versioning][semantic_versioning]\index{semantic versioning}\index{Python package!semantic versioning}
+Most software projects use \gref{semantic versioning}{semantic_versioning}\index{semantic versioning}\index{Python package!semantic versioning}
 for software releases.
 A version number consists of three integers X.Y.Z,
 where X is the major version,\index{software version number}
 Y is the minor version,
-and Z is the [patch][patch] version.\index{patch (of software version)}
+and Z is the \gref{patch}{patch} version.\index{patch (of software version)}
 Major version zero (0.Y.Z) is for initial development, so we have started with 0.1.0.
 The first stable public release would be version 1.0.0,
 and in general, the version number is incremented as follows:
@@ -14300,7 +14062,7 @@ We can add additional information to our package later,
 but this is enough to be able to build it for testing purposes.
 Before we do that,
 though,
-we should create a [virtual environment][virtual_environment]\index{virtual environment (in Python)}\index{Python!virtual environment}
+we should create a \gref{virtual environment}{virtual_environment}\index{virtual environment (in Python)}\index{Python!virtual environment}
 to test how our package installs
 without breaking anything in our main Python installation.
 
@@ -14517,7 +14279,7 @@ Successfully installed cycler-0.10.0 kiwisolver-1.2.0 matplotlib-3.2.1 numpy-1.1
 (The precise output of this command will change
 depending on which versions of our dependencies get installed.)
 
-We can now import our package in a script or a Jupyter notebook
+We can now import our package in a script or a [Jupyter notebook][jupyter]
 just as we would any other package.
 For example,
 to use the function in `utilities`,
@@ -14537,7 +14299,7 @@ Fortunately,
 the `setuptools` package allows us to install programs along with the package.\index{Python package!installing programs}
 These programs are placed beside those of other packages.
 We tell `setuptools` to do this by defining
-[entry points][entry_point]:\index{entry point (in Python package)}\index{Python package!entry point}
+\gref{entry points}{entry_point}:\index{entry point (in Python package)}\index{Python package!entry point}
 
 ```python
 from setuptools import setup
@@ -14706,7 +14468,7 @@ we should distribute it so that anyone can run `pip install zipf`\index{Python p
 and start use it.
 To do this,
 we need to use `setuptools` to create
-a [source distribution][source_distribution]\index{source distribution (of Python package)}\index{Python package!source distribution}
+a \gref{source distribution}{source_distribution}\index{source distribution (of Python package)}\index{Python package!source distribution}
 (known as an `sdist` in Python packaging jargon):
 
 ```shell
@@ -14854,10 +14616,10 @@ and
 
 It's important to consider who documentation is for.
 There are three kinds of people in any domain:
-[novices][novice],
-[competent practitioners][competent_practitioner],
-and [experts][expert] @Wils2018.
-A novice doesn't yet have a [mental model][mental_model] of the domain:
+\gref{novices}{novice},
+\gref{competent practitioners}{competent_practitioner},
+and \gref{experts}{expert} @Wils2018.
+A novice doesn't yet have a \gref{mental model}{mental_model} of the domain:
 they don't know what the key terms are,
 how they relate,
 what the causes of their problems are,
@@ -14889,7 +14651,7 @@ Each of these three groups needs a different kind of documentation:
 The first thing to decide when writing documentation
 is therefore to decide which of these needs we are trying to meet.
 Tutorials like this one should be long-form prose that contain code samples and diagrams.
-They should use [authentic tasks][authentic_task] to motivate ideas,
+They should use \gref{authentic tasks}{authentic_task} to motivate ideas,
 i.e.,
 show people things they actually want to do rather than printing the numbers from 1 to 10,
 and should include regular check-ins
@@ -14907,7 +14669,7 @@ they're able to compose useful queries and tell if the results are on the right 
 
 > **False Beginners**
 >
-> A [false beginner][false_beginner] is someone who appears not to know anything,
+> A \gref{false beginner}{false_beginner} is someone who appears not to know anything,
 > but who has enough prior experience in other domains
 > to be able to piece things together much more quickly than a genuine novice.
 > Someone who is proficient with MATLAB, for example,
@@ -14937,8 +14699,8 @@ The next sections of this chapter will therefore look at:
 
 ### Writing Good Docstrings {#packaging-docstrings}
 
-If we are doing [exploratory programming][exploratory_programming],
-a short [docstring][docstring] to remind ourselves of each function's purpose\index{docstring (in Python)}\index{Python!docstring}
+If we are doing \gref{exploratory programming}{exploratory_programming},
+a short \gref{docstring}{docstring} to remind ourselves of each function's purpose\index{docstring (in Python)}\index{Python!docstring}
 is probably as much documentation as we need.
 (In fact, it's probably better than what most people do.)
 That one- or two-liner should begin with an active verb and describe either
@@ -15008,7 +14770,7 @@ We could continue to do this,
 but for a Python package we eventually want
 to create a website for our package documentation (Section \@ref(packaging-sphinx)).
 The most popular documentation generator in the Python community
-uses a format called [reStructuredText][restructured_text] (reST),\index{reST (reStructured Text)}\index{reStructured Text (reST)}
+uses a format called \gref{reStructuredText}{restructured_text} (reST),\index{reST (reStructured Text)}\index{reStructured Text (reST)}
 so we will switch to that.
 
 Like Markdown,
@@ -15093,7 +14855,8 @@ references between functions,
 and search functionality.
 
 The online documentation for most large Python packages
-is generated using a tool called [Sphinx][sphinx],\index{Python package!documentation!Sphinx}
+is generated using a \gref{documentation generator}{documentation_generator}
+called [Sphinx][sphinx],\index{Python package!documentation!Sphinx}
 which is often used in combination with [Read The Docs][readthedocs],\index{Read The Docs (for Python documentation)}
 a free service for hosting online documentation.
 Let's install Sphinx and create a `docs/` directory at the top of our repository:
@@ -15332,7 +15095,7 @@ python:
     - requirements: requirements.txt
 ```
 
-The configuration file uses the now-familiar [YAML][yaml] format\index{YAML}
+The configuration file uses the now-familiar \gref{YAML}{yaml} format\index{YAML}
 (Section \@ref(config-formats) and Appendix \@ref(yaml))
 to specify the location of the Sphinx configuration script (`docs/conf.py`)
 and the dependencies for our package (`requirements.txt`).
@@ -15344,7 +15107,7 @@ our documentation is now available at `https://zipf-docs.readthedocs.io/en/lates
 As projects grow,
 documentation within functions alone may be unsufficient for users to apply code to their own problems.
 One strategy to assist other people with understanding a project is with
-an [FAQ][faq]:\index{FAQ (Frequency Asked Questions)}\index{Python package!FAQ}
+an \gref{FAQ}{faq}:\index{FAQ (Frequency Asked Questions)}\index{Python package!FAQ}
 a list of frequently-asked questions and corresponding answers.
 A good FAQ uses the terms and concepts that people bring to the software
 rather than the vocabulary of its authors;
@@ -15382,7 +15145,7 @@ Give context before giving sample code.
     will help people determine if their question is a close match to ours or not.
 
 Provide a minimal reprex.
-:   Section \@ref(teams-bugs) explains the value of a [reproducible example][reprex],
+:   Section \@ref(teams-bugs) explains the value of a \gref{reproducible example}{reprex},
     and why reprexes should be as short as possible.
     Readers will have a much easier time figuring out if this question and its answers are for them
     if they can see *and understand* a few lines of code.
@@ -15414,7 +15177,7 @@ Allow for a [chorus of explanations][caulfield-chorus].
 ## Software Journals {#packaging-software-journals}
 
 As a final step to releasing our new package,
-we might want to give it a [DOI][doi]\index{DOI (Digital Object Identifier)}\index{Digital Object Identifier (DOI)}
+we might want to give it a \gref{DOI}{doi}\index{DOI (Digital Object Identifier)}\index{Digital Object Identifier (DOI)}
 so that it can be cited by researchers.
 As we saw in Section \@ref(provenance-code-scripts),
 GitHub [integrates with Zenodo][github-zenodo-tutorial]
@@ -15510,7 +15273,7 @@ and see how the Zipf's Law package would rate on each criteria.
 
 ### Data packages {#packaging-ex-data}
 
-R provides many [data packages][data_package]
+R provides many \gref{data packages}{data_package}
 that can be loaded like any other library but provide a dataset instead of
 (or as well as)
 runnable code.
@@ -15906,12 +15669,6 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **competent practitioner**<a id="competent_practitioner"></a>
 :   Someone who can do normal tasks with normal effort under normal circumstances. See also: [novice](#novice), [expert](#expert)
 
-**compiled language**<a id="compiled_language"></a>
-:   Originally, a language such as C or Fortran that is translated into machine instructions for execution. Languages such as Java are also compiled before execution, but into [byte code](#byte_code) instead of machine instructions, while languages like Python are compiled to byte code on the fly.
-
-**compiler**<a id="compiler"></a>
-:   An application that translates programs written in some languages into machine instructions or [byte code](#byte_code).
-
 **computational notebook**<a id="computational_notebook"></a>
 :   A combination of a document format that allows users to mix prose and code in a single file, and an application that executes that code interactively and in place. The Jupyter Notebook and R Markdown files are both examples of computational notebooks.
 
@@ -15955,7 +15712,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   A software tool that extracts specially-formatted comments or [dostrings](#docstring) from code and generates cross-referenced developer documentation.
 
 **Digital Object Identifier**<a id="doi"></a>
-:   A unique persistent identifier for a book, paper, report, software release, or other digital artefact.
+:   A unique persistent identifier for a book, paper, report, software release, or other digital artefact. See also: [ORCID](#orcid)
 
 **down-vote**<a id="down_vote"></a>
 :   A vote against something. See also: [up-vote](#up_vote)
@@ -16086,20 +15843,11 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **internal error**<a id="internal_error"></a>
 :   An error caused by a fault in a program, such as trying to access elements beyond the end of an array.
 
-**interpeter**<a id="interpeter"></a>
-:   A program that runs other programs interactively.
-
-**interpreted language**<a id="interpreted_language"></a>
-:   A high-level language that is not executed directly by the computer, but instead is run by an [interpreter](#interpreter) that translates program instructions into machine commands on the fly.
-
 **interruption bingo**<a id="interruption_bingo"></a>
 :   A technique for managing interruptions in meetings. Everyone's name is placed on each row and each column of a grid; each time person A interrupts person B, a mark is added to the appropriate grid cell.
 
 **invariant**<a id="invariant"></a>
 :   Something that is guaranteed to be true at some point in a program. Invariants are often expressed using [assertions](#assertion).
-
-**ISO date format**<a id="iso_date_format"></a>
-:   An international for formatting dates. While the full standard is complex, the most common form is `YYYY-MM-DD`, i.e., a four-digit year, a two-digit month, and a two-digit day separated by hyphens.
 
 **issue**<a id="issue"></a>
 :   A [bug report](#bug_report), feature request, or other to-do item associated with a project. Also called a [ticket](#ticket).
@@ -16111,7 +15859,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   Is similar to a [bug tracking system](#bug_tracker) in that it tracks "issues" made to a [repository](#repository), usually in the form of [feature requests](#feature_request), [bug reports](#bug_report), or some other todo item.
 
 **JavaScript Object Notation**<a id="json"></a>
-:   A way to represent data by combining basic values like numbers and character strings in lists and name/value structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like [XML](#xml), it is unencumbered by a syntax for comments or ways to define a [schema](#schema).
+:   A way to represent data by combining basic values like numbers and character strings in lists and name/value structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like [XML](#xml), it is unencumbered by a syntax for comments or ways to define a [schema](#schema). See also: [YAML](#yaml)
 
 **kebab case**<a id="kebab_case"></a>
 :   A naming convention in which the parts of a name are separated with dashes, as in `first-second-third`. See also: [camel case](#camel_case), [pothole case](#pothole_case)
@@ -16174,7 +15922,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   A style of programming in which functions and data are bound together in objects that only interact with each other through well-defined interfaces.
 
 **open license**<a id="open_license"></a>
-:   A license that permits general re-use, such as the [MIT License](#mit_license) or [GPL](#gpl).
+:   A license that permits general re-use, such as the [MIT License](#mit_license) or [GPL](#gpl) for software and [CC-BY](#cc_by) or [CC-0](#cc_0) for data, prose, or other creative outputs.
 
 **open science**<a id="open_science"></a>
 :   A generic term for making scientific software, data, and publications generally available.
@@ -16187,6 +15935,9 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 
 **optional argument**<a id="optional_argument"></a>
 :   An argument to a function or a command that may be omitted.
+
+**ORCID**<a id="orcid"></a>
+:   An Open Researcher and Contributor ID that uniquely and persistently identifies an author of scholarly works. ORCIDs are for people what [DOIs](#doi) are for documents.
 
 **orthogonality**<a id="orthogonality"></a>
 :   The ability to use various features of software in any combination. Orthogonal systems tend to be easier to understand, since features can be combined without worrying about unexpected interactions.
@@ -16401,9 +16152,6 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **sustainable software**<a id="sustainable_software"></a>
 :   Software that its users can afford to keep up to date. Sustainability depends on the quality of the software, the skills of the potential maintainers, and how much the community is willing to invest.
 
-**tab completion**<a id="tab_completion"></a>
-:   A technique implemented by most [REPLs](#repl), [shells](#shell), and programming editors that completes a command, variable name, filename, or other text when the tab key is pressed.
-
 **tag (in version control)**<a id="tag"></a>
 :   A readable label attached to a specific [commit](#commit) so that it can easily be referred to later.
 
@@ -16427,9 +16175,6 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 
 **ticketing system**<a id="ticketing_system"></a>
 :   See [issue tracking system](#issue_tracking_system).
-
-**tidy data**<a id="tidy_data"></a>
-:   Tabular data that satisfies [three conditions](https://vita.had.co.nz/papers/tidy-data.pdf) that facilitate initial cleaning, and later exploration and analysis: (1) each variable forms a column, (2) each observation forms a row, and (3) each type of observation unit forms a table.
 
 **timestamp**<a id="timestamp"></a>
 :   A digital identifier showing the time at which something was created or accessed. Timestamps should use [ISO date format](#iso_date_format) for portability.
@@ -16482,6 +16227,9 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 **working memory**<a id="working_memory"></a>
 :   The part of memory that briefly stores information that can be directly accessed by consciousness.
 
+**YAML**<a id="yaml"></a>
+:   Short for "YAML Ain't Markup Language", a way to represent nested data using indentation rather than the parentheses and commas of [JSON](#json). YAML is often used in configuration files and to define parameters for various flavors of [Markdown](#markdown) documents.
+
 
 <!--chapter:end:glossary.md-->
 
@@ -16493,8 +16241,8 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 In order to complete the activities in this book,
 the following software is required:
 
-1. a [Bash shell][shell]
-2. [Git][git]
+1. a \gref{Bash shell}{shell}
+2. \gref{Git}{git}
 3. a text editor
 4. [Python 3][python] (via the Anaconda distribution)
 5. [GNU Make][gnu-make]
@@ -16502,7 +16250,7 @@ the following software is required:
 Software installation instructions for Windows, Mac and Linux operating systems
 (with video tutorials) are maintained by [The Carpentries][carpentries]
 as part of their workshop website template:
-[https://carpentries.github.io/workshop-template/#setup](https://carpentries.github.io/workshop-template/#setup)
+<https://carpentries.github.io/workshop-template/#setup>.
 
 Follow those instructions to install the bash shell, Git, a text editor and Anaconda.
 
@@ -18064,7 +17812,7 @@ so it was left up to data scientists
 (who often do not have a background in system administration)
 to figure out how to install those dependencies themselves.
 To overcome this problem,
-a number of scientific Python [distributions][software_distribution]\index{Python distribution}
+a number of scientific Python \gref{distributions}{software_distribution}\index{Python distribution}
 have been released over the years.
 These come with the most popular data science libraries and their dependencies pre-installed,
 and some also come with a package manager to assist
@@ -18149,7 +17897,7 @@ installing all the libraries you need in the same place
 This is especially true if the projects rely on different versions of the same package,
 or if you are developing a new package and need to try new things.
 The way to avoid these issues is to create different
-[virtual environments][virtual_environment]\index{virtual environment (in Python)} for different projects/tasks.
+\gref{virtual environments}{virtual_environment}\index{virtual environment (in Python)} for different projects/tasks.
 The original environment manager for Python development was [virtualenv][virtualenv],
 which has been more recently superseded by [pipenv][pipenv].
 The advantage that conda has over these options is that it is language agnostic
@@ -18456,8 +18204,8 @@ some things shouldn't be messed with.
 
 Research on naming conventions has produced mixed results @Bink2012,@Scha2018,
 but Python has (mostly) settled on underscored names for most things.
-This style is called [snake case][snake_case] or [pothole case][pothole_case];
-we should only use [`CamelCase`][camel_case] for classes,
+This style is called \gref{snake case}{snake_case} or \gref{pothole case}{pothole_case};
+we should only use \gref{CamelCase}{camel_case} for classes,
 which are outside the scope of this lesson.
 
 **Avoid abbreviations in function and variable names.**
@@ -18466,7 +18214,7 @@ Abbreviations and acronyms can be ambiguous
 (does `xcl` mean "Excel", "exclude", or "excellent"?),
 and can be be hard for non-native speakers to understand.
 Following this rule doesn't necessarily require more typing:
-a good programming editor will [auto-complete][auto_completion] names for us.
+a good programming editor will \gref{auto-complete}{auto_completion} names for us.
 
 **Use short names for short-lived local variables and longer names for things with wider scope.**
 
@@ -18494,7 +18242,7 @@ we can always get it back from version control
 
 The order of items in each file should be:\index{Python!style!order in file}
 
--   The [shebang][shebang] line (because it has to be first to work).\index{shebang (in shell script)}
+-   The \gref{shebang}{shebang} line (because it has to be first to work).\index{shebang (in shell script)}
 -   The file's documentation string (Section \@ref(scripting-docstrings)).
 -   All of the `import` statements, one per line.
 -   Global variable definitions
@@ -18559,13 +18307,13 @@ but collating felt like something we might want to do separately.
 Checking that code conforms to guidelines like PEP-8 would be time consuming
 if we had to do it manually,
 but most languages have tools that will check style rules for us.
-These tools are often called [linters][linter],\index{lint (style checking tool)}\index{Python!style!checking}
+These tools are often called \gref{linters}{linter},\index{lint (style checking tool)}\index{Python!style!checking}
 after an early tool called [`lint`][lint] that found lint (or fluff) in C code.
 
 Python's linter used to be called `pep8` and is now called `pycodestyle`.
 To see how it works,
 let's look at this program,
-which is supposed to count the number of [stop words][stop_word] in a document:
+which is supposed to count the number of \gref{stop words}{stop_word} in a document:
 
 ```python
 stops = ['a', 'A', 'the', 'The', 'and']
@@ -18649,15 +18397,15 @@ print('number', n)
 
 Once a program gets a clean bill of health from `pycodestyle`,
 it's worth having a human being look it over and suggest improvements.
-To [refactor][refactoring] code\index{refactoring (software)}
+To \gref{refactor}{refactoring} code\index{refactoring (software)}
 means to change its structure without changing what it does,
 like simplifying an equation.
 It is just as much a part of programming as writing code in the first place:
 nobody gets things right the first time @Bran1995,
 and needs or insights can change over time.
 
-Most discussions of refactoring focus on [object-oriented programming][oop],
-but many patterns can and should be used to clean up [procedural][procedural_programming] code.
+Most discussions of refactoring focus on \gref{object-oriented programming}{oop},
+but many patterns can and should be used to clean up \gref{procedural}{procedural_programming} code.
 Knowing a few of these patterns helps us create better software
 and makes it easier to communicate with our peers.
 
@@ -18752,7 +18500,7 @@ that always produces the same result as `if was_greater`.
 Similarly,
 the equality tests in `if was_greater == False` is redundant:
 the expression can simply be written `if not was_greater`.
-Creating and using a [flag][flag_variable] instead of repeating the test
+Creating and using a \gref{flag}{flag_variable} instead of repeating the test
 is therefore like moving a calculation out of a loop:
 even if that value is only used once,
 it makes our intention clearer.
@@ -18785,8 +18533,8 @@ since the test only appears in one place and its result is given a name.
 
 ### Use in-place operators to avoid duplicating expression.
 
-An [in-place operator][in_place_operator],
-sometimes called an [update operator][update_operator],
+An \gref{in-place operator}{in_place_operator},
+sometimes called an \gref{update operator}{update_operator},
 does a calculation with two values
 and overwrites one of the values.
 For example,
@@ -18840,7 +18588,7 @@ for least_factor in all_factors:
 
 ### Handle special cases first.
 
-A [short circuit test][short_circuit_test] is a quick check to handle a special case,
+A \gref{short circuit test}{short_circuit_test} is a quick check to handle a special case,
 such as checking the length of a list of values
 and returning `math.nan` for the average if the list is empty.
 "Place short circuits early" tells us to put short-circuit tests near the start of functions
@@ -18919,7 +18667,7 @@ if configuration['threshold'] > UPPER_BOUND: scale = 0.8
 ```
 
 Some programmers take this even further
-and use a [conditional expression][conditional_expression]:
+and use a \gref{conditional expression}{conditional_expression}:
 
 ```python
 scale = 0.8 if configuration['threshold'] > UPPER_BOUND else 1.0
@@ -18931,7 +18679,7 @@ which is less clear.
 
 > **A Little Jargon**
 >
-> `X if test else Y` is called a [ternary expression][ternary_expression].
+> `X if test else Y` is called a \gref{ternary expression}{ternary_expression}.
 > Just as a binary expression like `A + B` has two parts,
 > a ternary expression has three.
 > Conditional expressions are the only ternary expression in most programming languages.
@@ -18939,7 +18687,7 @@ which is less clear.
 ### Use functions to make code more comprehensible.
 
 Functions were created so that programmers could re-use common operations,
-but moving code into functions also reduces [cognitive load][cognitive_load]
+but moving code into functions also reduces \gref{cognitive load}{cognitive_load}
 by reducing the number of things that have to be understood simultaneously.
 
 A common rule of thumb is that
@@ -19175,7 +18923,7 @@ if __name__ == '__main__':
 ```
 
 Reading code in order to find bugs and suggest improvements like these
-is called [code review][code_review].\index{code review}
+is called \gref{code review}{code_review}.\index{code review}
 Multiple studies over more than 40 years have shown that
 code review is the most effective way to find bugs in software
 @Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
@@ -19287,7 +19035,7 @@ Don't let people break these rules just because they're frequent contributors or
 
 ## Python Features {#style-features}
 
-[Working memory][working_memory] can only hold a few items at once:
+\gref{Working memory}{working_memory} can only hold a few items at once:
 initial estimates in the 1950s put the number at 7±2 @Mill1956,
 and more recent estimates put it as low as 4 or 5.
 High-level languages from FORTRAN to Python
@@ -19321,7 +19069,7 @@ for i in range(5):
     matrix.append(row)
 ```
 
-Another is to use a nested [list comprehension][list_comprehension]:\index{list comprehension (in Python)}\index{Python!list comprehension}
+Another is to use a nested \gref{list comprehension}{list_comprehension}:\index{list comprehension (in Python)}\index{Python!list comprehension}
 
 ```python
 [[i+j for j in range(5)] for i in range(5)]
@@ -19339,7 +19087,7 @@ One solution is to bundle parameters together so that (for example)
 people pass three `point` objects instead of nine separate `x`, `y`, and `z` values.
 
 A second approach (which can be combined with the previous one)
-is to specify default values for some of the parameters.\index{default value (for parameter)}\index{Python!default values for parameters}
+is to specify \gref{default values}{default_value} for some of the parameters.\index{default value (for parameter)}\index{Python!default values for parameters}
 Doing this gives users control over everything
 while also allowing them to ignore details;
 it also indicates what we consider "normal" for the function.
@@ -19412,7 +19160,7 @@ def collect(new_value, accumulator=None):
 ### Handle a variable number of arguments.
 
 We can often make programs simpler by writing functions that take
-[a variable number of arguments][variable_arguments],\index{Python!variable arguments}
+\gref{a variable number of arguments}{variable_arguments},\index{Python!variable arguments}
 just like `print` and `max`.
 One way to to require user to stuff those arguments into a list,
 e.g.,
@@ -19420,7 +19168,7 @@ to write `find_limits([a, b, c, d])`.
 However,
 Python can do this for us.
 If we declare a single argument whose name starts with a single `*`,
-Python will put all "extra" arguments into a [tuple][tuple]\index{tuple (in Python)}\index{Python!tuple}
+Python will put all "extra" arguments into a \gref{tuple}{tuple}\index{tuple (in Python)}\index{Python!tuple}
 and pass that as the argument.
 By convention,
 this argument is called `args`:
@@ -19454,11 +19202,11 @@ print(select_outside(0, 1.0, 0.3, -0.2, -0.5, 0.4, 1.7))
 [-0.2, -0.5, 1.7]
 ```
 
-An equivalent special form exists for named arguments:
+An equivalent special form exists for \gref{keyword arguments}{keyword_arguments}:
 the catch-all variable's name is prefixed with `**` (i.e., two asterisks instead of one),
 and it is conventionally called `kwargs` (for "keyword arguments").\index{Python!keyword arguments}\index{keyword arguments (in Python)}
 When this is used,
-the function is given a [dictionary][dictionary] of names and values
+the function is given a \gref{dictionary}{dictionary} of names and values
 rather than a list:
 
 ```python
@@ -19505,7 +19253,7 @@ some matrix with lower bound and upper bound
 ### Use destructuring to assign multiple values at once.
 
 One last feature of Python is
-[destructuring assignment][destructuring_assignment].\index{Python!destructuring assignment}\index{destructuring assignment (in Python)}
+\gref{destructuring assignment}{destructuring_assignment}.\index{Python!destructuring assignment}\index{destructuring assignment (in Python)}
 Suppose we have a nested list such as `[1, [2, 3]]`,
 and we want to assign its numbers to three variables
 called `first`, `second`, and `third`.
@@ -19559,7 +19307,7 @@ but there are probably fewer of them than you think.
 
 # YAML {#yaml}
 
-[YAML][yaml]\index{YAML} is a way to write nested data structures in plain text
+\gref{YAML}{yaml}\index{YAML} is a way to write nested data structures in plain text
 that is often used to specify configuration options for software.
 The acronym stands for "YAML Ain't Markup Language",
 but that's a lie:
@@ -19662,7 +19410,7 @@ When the Internet was young,
 people didn't encrypt anything except the most sensitive information when sending it over a network.
 However,
 this meant that villains could steal usernames and passwords.
-The [SSH protocol][ssh_protocol]
+The \gref{SSH protocol}{ssh_protocol}
 was invented to prevent this (or at least slow it down).
 It uses several sophisticated (and heavily tested) encryption protocols
 to ensure that outsiders can't see what's in the messages
@@ -19685,12 +19433,12 @@ and then executes the command and displays its output (if any).
 If we want to run commands on another machine,
 such as the server in the basement that manages our database of experimental results,
 we have to log in to that machine so that our commands will go to it instead of to our laptop.
-We call this a [remote login][remote_login].
+We call this a \gref{remote login}{remote_login}.
 
 ## Logging In {#ssh-login}
 
 In order for us to be able to login,
-the remote computer must run a [remote login server][remote_login_server]
+the remote computer must run a \gref{remote login server}{remote_login_server}
 and we must run a program that can talk to that server.
 The client program passes our login credentials to the remote login server;
 if we are allowed to login,
@@ -19706,8 +19454,8 @@ just as a local shell would,
 then sends back output, via the server, to our client, for our computer to display.
 
 The remote login server which accepts connections from client programs
-is known as the [SSH daemon][ssh_daemon], or `sshd`.
-The client program we use to login remotely is the [secure shell][ssh],
+is known as the \gref{SSH daemon}{ssh_daemon}, or `sshd`.
+The client program we use to login remotely is the \gref{secure shell}{ssh},
 or `ssh`.
 It has a companion program called `scp`
 that allows us to copy files to or from a remote computer using the same kind of encrypted connection.
@@ -19869,7 +19617,7 @@ and sends the output back to our local shell for display.
 Typing our password over and over again is annoying,
 especially if the commands we want to run remotely are in a loop.
 To remove the need to do this,
-we can create an [SSH key][ssh_key]
+we can create an \gref{SSH key}{ssh_key}
 to tell the remote machine
 that it should always trust us.
 
@@ -20105,19 +19853,16 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [anaconda-docs]: https://docs.anaconda.com/anaconda/
 [argparse]: https://docs.python.org/3/library/argparse.html
 [arxiv]: https://arxiv.org/
-[authorea]: https://authorea.com/
 [bibtex]: http://www.bibtex.org/
 [biorxiv]: https://www.biorxiv.org/
 [bitbucket]: https://bitbucket.org/
+[book-repo]: https://github.com/merely-useful/py-rse/
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
-[checklist]: glossary.html#checklist
 [choose-license]: https://choosealicense.com/
-[cli]: glossary.html#cli
-[code_review]: glossary.html#code_review
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
 [conda]: https://conda.io/
 [conda-forge]: https://conda-forge.org/
@@ -20163,16 +19908,12 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 [make]: https://www.gnu.org/software/make/
 [markdown]: https://en.wikipedia.org/wiki/Markdown
-[merely-useful]: https://github.com/merely-useful/merely-useful.github.io/
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
-[openrefine]: https://openrefine.org/
-[orcid]: https://orcid.org/
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
 [our-research]: http://ourresearch.org/
-[overleaf]: https://authorea.com/
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pip]: https://pypi.org/project/pip/
@@ -20187,7 +19928,6 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [python-standard-library]: https://docs.python.org/3/library/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
-[recipe-make]: https://www.gnu.org/software/make/manual/html_node/Rule-Introduction.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
@@ -20199,6 +19939,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-make]: https://github.com/swcarpentry/make-novice
+[swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
 [theoj]: https://joss.theoj.org/
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
@@ -20214,246 +19955,9 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
-[womens-pockets-data]: https://github.com/the-pudding/data/blob/master/pockets/README.md
-[xcode]: https://developer.apple.com/xcode/
-[yaml]: https://bookdown.org/yihui/rmarkdown/html-document.html
 [zenodo]: https://zenodo.org/
 [zipf-project-page]: https://test.pypi.org/project/zipf/
 [zipfs-law]: https://en.wikipedia.org/wiki/Zipf%27s_law
-
-[abandonware]: glossary.html#abandonware
-[absolute_error]: glossary.html#absolute_error
-[absolute_import]: glossary.html#absolute_import
-[absolute_path]: glossary.html#absolute_path
-[actual_result]: glossary.html#actual_result
-[agile]: glossary.html#agile
-[ally]: glossary.html#ally
-[append_mode]: glossary.html#append_mode
-[assertion]: glossary.html#assertion
-[authentic_task]: glossary.html#authentic_task
-[auto_completion]: glossary.html#auto_completion
-[automatic_variable]: glossary.html#automatic_variable
-[boilerplate]: glossary.html#boilerplate
-[branch_per_feature]: glossary.html#branch_per_feature_workflow
-[bug_report]: glossary.html#bug_report
-[bug_tracker]: glossary.html#bug_tracker
-[build_manager]: glossary.html#build_manager
-[build_recipe]: glossary.html#build_recipe
-[build_rule]: glossary.html#build_rule
-[build_target]: glossary.html#build_target
-[byte_code]: glossary.html#byte_code
-[call_stack]: glossary.html#call_stack
-[camel_case]: glossary.html#camel_case
-[catch_exception]: glossary.html#catch_exception
-[cc_license]: glossary.html#cc_license
-[checklist]: glossary.html#checklist
-[cli]: glossary.html#cli
-[code_coverage]: glossary.html#code_coverage
-[code_review]: glossary.html#code_review
-[cognitive_load]: glossary.html#cognitive_load
-[command_history]: glossary.html#command_history
-[command_line_argument]: glossary.html#command_line_argument
-[command_line_flag]: glossary.html#command_line_flag
-[command_line_option]: glossary.html#command_line_option
-[command_line_switch]: glossary.html#command_line_switch
-[comment]: glossary.html#comment
-[commit]: glossary.html#commit
-[commit_message]: glossary.html#commit_message
-[commons]: glossary.html#commons
-[competent_practitioner]: glossary.html#competent_practitioner
-[compiled_language]: glossary.html#compiled_language
-[compiler]: glossary.html#compiler
-[computational_notebook]: glossary.html#computational_notebook
-[conditional_expression]: glossary.html#conditional_expression
-[confirmation_bias]: glossary.html#confirmation_bias
-[continuation_prompt]: glossary.html#continuation_prompt
-[continuous_integration]: glossary.html#continuous_integration
-[current_working_directory]: glossary.html#current_working_directory
-[data-files]: FIXME/data/zipf.zip
-[data_package]: glossary.html#data_package
-[default_value]: glossary.html#default_value
-[default_target]: glossary.html#default_target
-[defensive_programming]: glossary.html#defensive_programming
-[destructuring_assignment]: glossary.html#destructuring_assignment
-[dictionary]: glossary.html#dictionary
-[docstring]: glossary.html#docstring
-[documentation_generator]: glossary.html#documentation_generator
-[doi]: glossary.html#doi
-[down_vote]: glossary.html#down_vote
-[entry_point]: glossary.html#entry_point
-[exception]: glossary.html#exception
-[expected_result]: glossary.html#expected_result
-[expert]: glossary.html#expert
-[explicit_relative_import]: glossary.html#explicit_relative_import
-[exploratory_programming]: glossary.html#exploratory_programming
-[export_variable]: glossary.html#export_variable
-[external_error]: glossary.html#external_error
-[false_beginner]: glossary.html#false_beginner
-[faq]: glossary.html#faq
-[feature_request]: glossary.html#feature_request
-[filename_extension]: glossary.html#filename_extension
-[filename_stem]: glossary.html#filename_stem
-[filesystem]: glossary.html#filesystem
-[filter]: glossary.html#filter
-[fixture]: glossary.html#fixture
-[flag_variable]: glossary.html#flag_variable
-[folder]: glossary.html#folder
-[forge]: glossary.html#forge
-[full_identifier_git]: glossary.html#full_identifier_git
-[git]: glossary.html#git
-[git_branch]: glossary.html#git_branch
-[git_clone]: glossary.html#git_clone
-[git_conflict]: glossary.html#git_conflict
-[git_fork]: glossary.html#git_fork
-[git_merge]: glossary.html#git_merge
-[git_pull]: glossary.html#git_pull
-[git_push]: glossary.html#git_push
-[git_remote]: glossary.html#git_remote
-[git_stage]: glossary.html#git_stage
-[governance]: glossary.html#governance
-[gpl]: glossary.html#gpl
-[gui]: glossary.html#gui
-[hitchhiker]: glossary.html#hitchhiker
-[home_directory]: glossary.html#home_directory
-[impact_effort_matrix]: glossary.html#impact_effort_matrix
-[implicit_relative_import]: glossary.html#implicit_relative_import
-[impostor_syndrome]: glossary.html#impostor_syndrome
-[in_place_operator]: glossary.html#in_place_operator
-[inspectability]: glossary.html#inspectability
-[integration_test]: glossary.html#integration_test
-[internal_error]: glossary.html#internal_error
-[interpeter]: glossary.html#interpeter
-[interpreted_language]: glossary.html#interpreted_language
-[interruption_bingo]: glossary.html#interruption_bingo
-[invariant]: glossary.html#invariant
-[iso_date_format]: glossary.html#iso_date_format
-[issue]: glossary.html#issue
-[issue_label]: glossary.html#issue_label
-[issue_tracking_system]: glossary.html#issue_tracking_system
-[json]: glossary.html#json
-[kebab_case]: glossary.html#kebab_case
-[keyword_arguments]: glossary.html#keyword_arguments
-[latex]: glossary.html#latex
-[linter]: glossary.html#linter
-[list_comprehension]: glossary.html#list_comprehension
-[logging_framework]: glossary.html#logging_framework
-[logging_level]: glossary.html#logging_level
-[long_option]: glossary.html#long_option
-[loop_body]: glossary.html#loop_body
-[magic_number]: glossary.html#magic_number
-[makefile]: glossary.html#makefile
-[marthas_rules]: glossary.html#marthas_rules
-[maximum_likelihood_estimation]: glossary.html#maximum_likelihood_estimation
-[mental_model]: glossary.html#mental_model
-[milestone]: glossary.html#milestone
-[mit_license]: glossary.html#mit_license
-[nano_editor]: glossary.html#nano_editor
-[ngo]: glossary.html#ngo
-[novice]: glossary.html#novice
-[oop]: glossary.html#oop
-[open_license]: glossary.html#open_license
-[open_science]: glossary.html#open_science
-[operating_system]: glossary.html#operating_system
-[oppression]: glossary.html#oppression
-[optional_argument]: glossary.html#optional_argument
-[orthogonality]: glossary.html#orthogonality
-[overlay_configuration]: glossary.html#overlay_configuration
-[pager]: glossary.html#pager
-[parent_directory]: glossary.html#parent_directory
-[patch]: glossary.html#patch
-[path]: glossary.html#path
-[path_coverage]: glossary.html#path_coverage
-[pattern_rule]: glossary.html#pattern_rule
-[phony_target]: glossary.html#phony_target
-[pipe_shell]: glossary.html#pipe_shell
-[positional_argument]: glossary.html#positional_argument
-[postcondition]: glossary.html#postcondition
-[pothole_case]: glossary.html#pothole_case
-[power_law]: glossary.html#power_law
-[precondition]: glossary.html#precondition
-[prerequisite]: glossary.html#prerequisite
-[privilege]: glossary.html#privilege
-[procedural_programming]: glossary.html#procedural_programming
-[process]: glossary.html#process
-[product_manager]: glossary.html#product_manager
-[project_manager]: glossary.html#project_manager
-[prompt]: glossary.html#prompt
-[provenance]: glossary.html#provenance
-[pull_request]: glossary.html#pull_request
-[raise_exception]: glossary.html#raise_exception
-[raster_image]: glossary.html#raster_image
-[recursion]: glossary.html#recursion
-[redirection]: glossary.html#redirection
-[refactoring]: glossary.html#refactoring
-[regression_testing]: glossary.html#regression_testing
-[regular_expression]: glossary.html#regular_expression
-[relative_error]: glossary.html#relative_error
-[relative_path]: glossary.html#relative_path
-[remote_login]: glossary.html#remote_login
-[remote_login_server]: glossary.html#remote_login_server
-[remote_repository]: glossary.html#remote_repository
-[repl]: glossary.html#repl
-[repository]: glossary.html#repository
-[reprex]: glossary.html#reprex
-[reproducible_research]: glossary.html#reproducible_research
-[restructured_text]: glossary.html#restructured_text
-[revision]: glossary.html#revision
-[root_directory]: glossary.html#root_directory
-[rotating_file]: glossary.html#rotating_file
-[rse]: glossary.html#rse
-[script]: glossary.html#script
-[search_path]: glossary.html#search_path
-[semantic_versioning]: glossary.html#semantic_versioning
-[sense_vote]: glossary.html#sense_vote
-[shebang]: glossary.html#shebang
-[shell]: glossary.html#shell
-[shell_script]: glossary.html#shell_script
-[shell_variable]: glossary.html#shell_variable
-[short_circuit_test]: glossary.html#short_circuit_test
-[short_identifier_git]: glossary.html#short_identifier_git
-[short_option]: glossary.html#short_option
-[snake_case]: glossary.html#snake_case
-[software_distribution]: glossary.html#software_distribution
-[source_distribution]: glossary.html#source_distribution
-[sprint]: glossary.html#sprint
-[ssh]: glossary.html#ssh
-[ssh_daemon]: glossary.html#ssh_daemon
-[ssh_key]: glossary.html#ssh_key
-[ssh_protocol]: glossary.html#ssh_protocol
-[stderr]: glossary.html#stderr
-[stdin]: glossary.html#stdin
-[stdout]: glossary.html#stdout
-[stop_word]: glossary.html#stop_word
-[subcommand]: glossary.html#subcommand
-[subdirectory]: glossary.html#subdirectory
-[sustainable_software]: glossary.html#sustainable_software
-[tab_completion]: glossary.html#tab_completion
-[tag]: glossary.html#tag
-[tdd]: glossary.html#tdd
-[ternary_expression]: glossary.html#ternary_expression
-[test_framework]: glossary.html#test_framework
-[test_runner]: glossary.html#test_runner
-[three_stickies]: glossary.html#three_stickies
-[ticket]: glossary.html#ticket
-[ticketing_system]: glossary.html#ticketing_system
-[tidy_data]: glossary.html#tidy_data
-[timestamp]: glossary.html#timestamp
-[tolerance]: glossary.html#tolerance
-[transitive_dependency]: glossary.html#transitive_dependency
-[triage]: glossary.html#triage
-[tuple]: glossary.html#tuple
-[unit_test]: glossary.html#unit_test
-[up_vote]: glossary.html#up_vote
-[update_operator]: glossary.html#update_operator
-[validation]: glossary.html#validation
-[variable_arguments]: glossary.html#variable_arguments
-[verification]: glossary.html#verification
-[version_control_system]: glossary.html#version_control_system
-[virtual_environment]: glossary.html#virtual_environment
-[virtual_machine]: glossary.html#virtual_machine
-[whitespace]: glossary.html#whitespace
-[wildcard]: glossary.html#wildcard
-[working_memory]: glossary.html#working_memory
 
 <!--chapter:end:links.md-->
 
