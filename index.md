@@ -19841,9 +19841,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 <!--chapter:end:chapters/ssh.Rmd-->
 
 
-
-# References {-}
-
+# References
 
 <!--chapter:end:references.Rmd-->
 
