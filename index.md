@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-05"
+date: "2020-09-06"
 documentclass: krantz
 bibliography: book.bib
 csl: jcb.csl
@@ -493,10 +493,10 @@ and automatically record what we have done.
 
 The heart of every CLI is a \gref{read-evaluate-print loop}{repl} (REPL).\index{read-eval-print loop}\index{REPL (read-eval-print loop)}
 When we type a command and press <kbd>Return</kbd> (also called <kbd>Enter</kbd>)
-the CLI <strong>r</strong>eads the command,
-<strong>e</strong>valuates it (i.e., executes it),
-<strong>p</strong>rints the command's output,
-and <strong>l</strong>oops around to wait for another command.
+the CLI **r**eads the command,
+**e**valuates it (i.e., executes it),
+**p**rints the command's output,
+and **l**oops around to wait for another command.
 If you have used an interactive console for R or Python,
 you have already used a simple CLI.
 
@@ -535,7 +535,7 @@ makes life easier even when working on small problems.
 > Programmers have written many different shells over the last forty years,
 > just as they have created many different text editors and plotting packages.
 > The most popular shell today is called Bash\index{Bash}\index{Unix shell!Bash}
-> (an acronym of <strong>B</strong>ourne <strong>A</strong>gain <strong>SH</strong>ell,
+> (an acronym of **B**ourne **A**gain **SH**ell,
 > and a weak pun on the name of its predecessor,
 > the Bourne shell).
 > Other shells may differ from Bash in minor ways,
@@ -595,7 +595,7 @@ The part of the operating system that manages files and directories (also called
 is called the \gref{filesystem}{filesystem}.\index{filesystem}
 Some of the most commonly-used commands in the shell create, inspect, rename, and delete files and directories.
 Let's start exploring them by running the command `pwd`,\index{Unix commands!pwd}
-which stands for <strong>p</strong>rint <strong>w</strong>orking <strong>d</strong>irectory.
+which stands for **p**rint **w**orking **d**irectory.
 The "print" part of its name is straightforward;
 the "working directory" part refers to the fact that
 the shell keeps track of our \gref{current working directory}{current_working_directory} at all times.\index{current working directory}
@@ -812,7 +812,7 @@ but if we are going to do a lot of work with the data in the `zipf` directory,
 the easiest thing would be to change our current working directory
 so that we don't have to type `zipf` over and over again.
 The command to do this is `cd`,\index{Unix commands!cd}
-which stands for <strong>c</strong>hange <strong>d</strong>irectory.
+which stands for **c**hange **d**irectory.
 This name is a bit misleading because the command doesn't change the directory;
 instead, it changes the shell's idea of what directory we are in.
 Let's try it out:
@@ -1036,7 +1036,7 @@ data/
 ```
 
 To create a new directory,
-we use the command `mkdir` (short for <strong>m</strong>a<strong>k</strong>e <strong>d</strong>irectory):\index{Unix commands!mkdir}
+we use the command `mkdir` (short for **m**a**k**e **d**irectory):\index{Unix commands!mkdir}
 
 ```shell
 $ mkdir analysis
@@ -1193,7 +1193,7 @@ cd ~/zipf
 
 The `analysis` directory contains a file called `draft.txt`.
 That isn't a particularly informative name,
-so let's change it using `mv` (short for <strong>m</strong>o<strong>v</strong>e):\index{Unix commands!mv}
+so let's change it using `mv` (short for **m**o**v**e):\index{Unix commands!mv}
 
 ```shell
 $ mv analysis/draft.txt analysis/prior-work.txt
@@ -1260,7 +1260,7 @@ prior-work.txt
 
 ## Copy Files and Directories {#bash-basics-copy}
 
-The `cp` command <strong>c</strong>o<strong>p</strong>ies files.\index{Unix commands!cp}
+The `cp` command **c**o**p**ies files.\index{Unix commands!cp}
 It works like `mv` except it creates a file instead of moving an existing one
 (and no, we don't know why the creators of Unix seemed to be allergic to vowels):
 
@@ -1332,7 +1332,7 @@ section-1.txt
 ## Deleting Files and Directories {#bash-basics-rm}
 
 Let's tidy up by removing the `prior-work.txt` file we created in our `zipf` directory.
-The command to do this is `rm` (for <strong>r</strong>e<strong>m</strong>ove):\index{Unix commands!rm}
+The command to do this is `rm` (for **r**e**m**ove):\index{Unix commands!rm}
 
 ```shell
 $ rm prior-work.txt
@@ -1377,10 +1377,10 @@ $ rm -r analysis
 
 `rm -r` should be used with great caution:
 in most cases,
-it's safest to add the `-i` option (for <strong>i</strong>nteractive)
+it's safest to add the `-i` option (for **i**nteractive)
 to get `rm` to ask us to confirm each deletion.
 As a halfway measure,
-we can use `-v` (for <strong>v</strong>erbose)
+we can use `-v` (for **v**erbose)
 to get `rm` to print a message for each file it deletes.
 This options works the same way with `mv` and `cp`.
 
@@ -1400,7 +1400,7 @@ frankenstein.txt  sherlock_holmes.txt
 jane_eyre.txt     time_machine.txt
 ```
 
-The `wc` command (short for <strong>w</strong>ord <strong>c</strong>ount)\index{Unix commands!wc}
+The `wc` command (short for **w**ord **c**ount)\index{Unix commands!wc}
 tells us how many lines, words, and letters there are in one file:
 
 ```shell
@@ -1516,7 +1516,7 @@ $ wc -l data/s*.txt
 ```
 
 `wc` has other options as well.
-We can use the `man` command (short for <strong>man</strong>ual)\index{Unix commands!man}\index{Unix shell!manual}
+We can use the `man` command (short for **man**ual)\index{Unix commands!man}\index{Unix shell!manual}
 to find out what they are:
 
 ```shell
@@ -1640,7 +1640,7 @@ lengths.txt
 ```
 
 We can print the contents of `lengths.txt` using `cat`,\index{Unix commands!cat}
-which is short for con<strong>cat</strong>enate
+which is short for con**cat**enate
 (because if we give it the names of several files
 it will print them all in order):
 
@@ -2231,7 +2231,7 @@ that the shell gives us several ways to do it:
 
 -   `!head` re-runs the most recent command starting with `head`,
     while `!wc` re-runs the most recent starting with `wc`.
--   If we type <kbd>Ctrl</kbd>+<kbd>R</kbd> (for <strong>r</strong>everse search)
+-   If we type <kbd>Ctrl</kbd>+<kbd>R</kbd> (for **r**everse search)
     the shell searches backward through its history for whatever we type next.
     If we don't like the first thing it finds,
     we can type <kbd>Ctrl</kbd>+<kbd>R</kbd> again to go further back.
@@ -5242,9 +5242,9 @@ if __name__ == '__main__':
 
 ## Setting Up {#git-cmdline-setup}
 
-We write Git commands as <code>git <em>verb</em> <em>options</em></code>,
-where the \gref{subcommand}{subcommand} <code><em>verb</em></code> tells Git what we want to do
-and <code><em>options</em></code> provide whatever additional information that subcommand needs.
+We write Git commands as `git VERB [options]`,
+where the \gref{subcommand}{subcommand} `VERB` tells Git what we want to do
+and `[options]` provide whatever additional information that subcommand needs.
 Using this syntax,
 the first thing we need to do is configure Git:\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
 
@@ -5519,7 +5519,7 @@ and the first line of output from `git commit` displays
 its \gref{short identifier}{short_identifier_git} `31a216a`,\index{Git!short identifier}\index{short identifier (in Git)}
 which is the first few characters of that unique label.
 
-We use the `-m` option (short for <strong>m</strong>essage)
+We use the `-m` option (short for **m**essage)
 to record a short comment with the commit
 to remind us later what we did and why.
 (Once again,
@@ -5971,7 +5971,7 @@ we could use anything we want,
 but `origin` is Git's default,
 so we will stick with it.
 We can check that the command has worked by running `git remote -v`
-(where the `-v` option is short for <strong>v</strong>erbose):
+(where the `-v` option is short for **v**erbose):
 
 ```shell
 $ git remote -v
@@ -6090,7 +6090,7 @@ but we can use `b5176bf` to reference it in almost all situations.
 
 While `git log` includes the commit message,
 it doesn't tell us exactly what changes were made in each commit.
-If we add the `-p` option (short for <strong>p</strong>atch),
+If we add the `-p` option (short for **p**atch),
 we get the same kind of details `git diff` provides
 to describe the changes in each commit:
 
@@ -10469,7 +10469,7 @@ DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.t
 We now have the names of our input files.
 To create a list of corresponding output files,
 we use Make's `patsubst` function
-(short for <strong>pat</strong>tern <strong>subst</strong>itution):
+(short for **pat**tern **subst**itution):
 
 ```
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
@@ -13113,9 +13113,9 @@ To create this report, Travis CI has:
 1.  Created a new Linux virtual machine.
 1.  Installed the desired version of Python.
 1.  Ran the commands below the `script` key.
-1.  Reported the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
-    where <code><em>user/repo</em></code>
-    identifies the repository.
+1.  Reported the results at `https://travis-ci.org/USER/REPO`,
+    where `USER/REPO`
+    identifies the repository for a given user.
 
 In this case,
 we can see that the build failed (Figure \@ref(fig:testing-build-fail)).
@@ -17268,13 +17268,13 @@ In the shell,
 The middle button shows all of the changes that were made in that particular commit;
 green shaded lines indicate additions and red lines indicate removals.
 We can show the same thing in the shell using `git diff`
-or <code>git diff <em>from</em>..<em>to</em></code>
-(where <code><em>from</em></code> and <code><em>to</em></code> are commit identifiers).
+or `git diff FROM..TO`
+(where `FROM` and `TO` are commit identifiers).
 
 The right button lets us view all of the files in the repository at the time of that commit.
 To do this in the shell,
 we would need to check out the repository as it was at that commit
-using <code>git checkout <em>id</em></code>.
+using `git checkout ID`, where `ID` is the tag, branch name, or commit identifier.
 If we do this,
 we need to remember to put the repository back to the right state afterward.
 
@@ -18132,9 +18132,9 @@ but the legacy of those ancient times lives on.
 
 **Do not put spaces inside parentheses.**
 
-Write <code>(1+2)</code> instead of <code>( 1+2 )</code>.
+Write `(1+2)` instead of `( 1+2 )`.
 This applies to function calls as well:
-write `max(a, b)` rather than <code>max( a, b )</code>.
+write `max(a, b)` rather than `max( a, b )`.
 (We will see a related rule when we discussed default parameter values
 in Section \@ref(style-features).)
 
