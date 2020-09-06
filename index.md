@@ -410,6 +410,7 @@ and Elizabeth Wickes.
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
+[make]: https://www.gnu.org/software/make/
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
@@ -2909,17 +2910,17 @@ explain in plain language what files the expression `novel-????-[ab]*.{txt,pdf}`
 ## Key Points {#bash-basics-keypoints}
 
 
--   A \gref{shell}{shell} is a program that reads commands and runs other programs.
--   The \gref{filesystem}{filesystem} manages information stored on disk.
+-   A [shell][shell] is a program that reads commands and runs other programs.
+-   The [filesystem][filesystem] manages information stored on disk.
 -   Information is stored in files, which are located in directories (folders).
 -   Directories can also store other directories, which forms a directory tree.
--   `pwd` prints the user's \gref{current working directory}{current_working_directory}.
--   `/` on its own is the \gref{root directory}{root_directory} of the whole filesystem.
+-   `pwd` prints the user's [current working directory][current_working_directory].
+-   `/` on its own is the [root directory][root_directory] of the whole filesystem.
 -   `ls` prints a list of files and directories.
--   An \gref{absolute path}{absolute_path} specifies a location from the root of the filesystem.
--   A \gref{relative path}{relative_path} specifies a location in the filesystem starting from the current directory.
+-   An [absolute path][absolute_path] specifies a location from the root of the filesystem.
+-   A [relative path][relative_path] specifies a location in the filesystem starting from the current directory.
 -   `cd` changes the current working directory.
--   `..` means the \gref{parent directory}{parent_directory}; `.` on its own means the current directory.
+-   `..` means the [parent directory][parent_directory]; `.` on its own means the current directory.
 -   `mkdir` creates a new directory.
 -   `cp` copies a file.
 -   `rm` removes (deletes) a file.
@@ -2928,22 +2929,22 @@ explain in plain language what files the expression `novel-????-[ab]*.{txt,pdf}`
 -   `?` matches any single character in a filename.
 -   `wc` counts lines, words, and characters in its inputs.
 -   `man` displays the manual page for a given command; some commands also have a `--help` option.
--   Every process in Unix has an input channel called \gref{standard input}{stdin}
-    and an output channel called \gref{standard output}{stdin}.
+-   Every process in Unix has an input channel called [standard input][stdin]
+    and an output channel called [standard output][stdin].
 -   `>` redirects a command's output to a file, overwriting any existing content.
 -   `>>` appends a command's output to a file.
 -   `<` operator redirects input to a command
--   A \gref{pipe}{pipe_shell} `|` sends the output of the command on the left to the input of the command on the right.
+-   A [pipe][pipe_shell] `|` sends the output of the command on the left to the input of the command on the right.
 -   `cat` displays the contents of its inputs.
 -   `head` displays the first few lines of its input.
 -   `tail` displays the last few lines of its input.
 -   `sort` sorts its inputs.
 -   A `for` loop repeats commands once for every thing in a list.
 -   Every `for` loop  must have a variable to refer to the thing it is currently operating on
-    and a \gref{body}{loop_body} containing commands to execute.
+    and a [body][loop_body] containing commands to execute.
 -   Use `$name` or `${name}` to get the value of a variable.
 -   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
--   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
+-   Use [`history`][command_history] to display recent commands and `!number` to repeat a command by number.
 
 <!--chapter:end:chapters/bash-basics.Rmd-->
 
@@ -4141,7 +4142,7 @@ Explain why the value for `-mtime` needs to be negative.
 ## Key Points {#bash-advanced-keypoints}
 
 
--   Save commands in files (usually called \gref{shell scripts}{shell_script}) for re-use.
+-   Save commands in files (usually called [shell scripts][shell_script]) for re-use.
 -   `bash filename` runs the commands saved in a file.
 -   `$@` refers to all of a shell script's command-line arguments.
 -   `$1`, `$2`, etc., refer to the first command-line argument, the second command-line argument, etc.
@@ -5127,14 +5128,14 @@ the solution to this exercise is used in following chapters.
 ## Key Points {#scripting-keypoints}
 
 
--   Write command-line Python programs that can be run in the \gref{Unix shell}{shell} like other command-line tools.
--   If the user does not specify any input files, read from \gref{standard input}{stdin}.
--   If the user does not specify any output files, write to \gref{standard output}{stdout}.
+-   Write command-line Python programs that can be run in the [Unix shell][shell] like other command-line tools.
+-   If the user does not specify any input files, read from [standard input][stdin].
+-   If the user does not specify any output files, write to [standard output][stdout].
 -   Place all `import` statements at the start of a module.
 -   Use the value of `__name__` to determine if a file is being run directly or being loaded as a module.
 -   Use [`argparse`][argparse] to handle command-line arguments in standard ways.
--   Use \gref{short options}{short_option} for common controls and \gref{long options}{long_option} for less common or more complicated ones.
--   Use \gref{docstrings}{docstring} to document functions and scripts.
+-   Use [short options][short_option] for common controls and [long options][long_option] for less common or more complicated ones.
+-   Use [docstrings][docstring] to document functions and scripts.
 -   Place functions that are used across multiple scripts in a separate file that those scripts can import.
 
 <!--chapter:end:chapters/scripting.Rmd-->
@@ -6588,15 +6589,15 @@ Run the command `git blame bin/plotcounts.py`.
 
 -   Use `git config` with the `--global` option to configure your user name,
     email address, and other preferences once per machine.
--   `git init` initializes a \gref{repository}{repository}.
+-   `git init` initializes a [repository][repository].
 -   Git stores all repository management data in the `.git` subdirectory of the repository's root directory.
 -   `git status` shows the status of a repository.
 -   `git add` puts files in the repository's staging area.
 -   `git commit` saves the staged content as a new commit in the local repository.
 -   `git log` lists previous commits.
 -   `git diff` shows the difference between two versions of the repository.
--   Synchronize your local repository with a \gref{remote repository}{remote_repository}
-    on a \gref{forge}{forge} such as [GitHub][github].
+-   Synchronize your local repository with a [remote repository][remote_repository]
+    on a [forge][forge] such as [GitHub][github].
 -   `git remote` manages bookmarks pointing at remote repositories.
 -   `git push` copies changes from a local repository to a remote repository.
 -   `git pull` copies changes from a remote repository to a local repository.
@@ -8332,17 +8333,17 @@ Describe what is in each of the four repositories involved after each of the ste
 ## Key Points {#git-advanced-keypoints}
 
 
--   Use a \gref{branch-per-feature}{branch_per_feature} workflow to develop new features while leaving the master branch in working order.
+-   Use a [branch-per-feature][branch_per_feature] workflow to develop new features while leaving the master branch in working order.
 -   `git branch` creates a new branch. 
 -   `git checkout` switches between branches.
--   `git merge` \gref{merges}{git_merge} changes from another branch into the current branch.
--   \gref{Conflicts}{git_conflict} occur when files or parts of files are changed in different ways on different branches.
+-   `git merge` [merges][git_merge] changes from another branch into the current branch.
+-   [Conflicts][git_conflict] occur when files or parts of files are changed in different ways on different branches.
 -   Version control systems do not allow people to overwrite changes silently;
     instead, they highlight conflicts that need to be resolved.
--   \gref{Forking}{git_fork} a repository makes a copy of it on a server.
--   \gref{Cloning}{git_clone} a repository with `git clone` creates a local copy of a remote repository.
+-   [Forking][git_fork] a repository makes a copy of it on a server.
+-   [Cloning][git_clone] a repository with `git clone` creates a local copy of a remote repository.
 -   Create a remote called `upstream` to point to the repository a fork was derived from.
--   Create \gref{pull requests}{pull_request} to submit changes from your fork to the upstream repository.
+-   Create [pull requests][pull_request] to submit changes from your fork to the upstream repository.
 
 <!--chapter:end:chapters/git-advanced.Rmd-->
 
@@ -9804,11 +9805,11 @@ How would you address this issue?
 -   Welcome and nurture community members proactively.
 -   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
 -   Include a license in your project so that it's clear who can do what with the material.
--   Create \gref{issues}{issue} for bugs, enhancement requests, and discussions.
--   \gref{Label issues}{issue_label} to identify their purpose.
--   \gref{Triage}{triage} issues regularly and group them into \gref{milestones}{milestone} to track progress.
+-   Create [issues][issue] for bugs, enhancement requests, and discussions.
+-   [Label issues][issue_label] to identify their purpose.
+-   [Triage][triage] issues regularly and group them into [milestones][milestone] to track progress.
 -   Include contribution guidelines in your project that specify its workflow and its expectations of participants.
--   Make rules about \gref{governance}{governance} explicit.
+-   Make rules about [governance][governance] explicit.
 -   Use common-sense rules to make project meetings fair and productive.
 -   Manage conflict between participants rather than hoping it will take care of itself.
 
@@ -9862,7 +9863,7 @@ zipf/
 
 Now that the project's main building blocks are in place,
 we're ready to atomate our analysis using a build manager.
-We will use a program called [Make][gnu-make]\index{Make} to do this
+We will use a program called [Make][make]\index{Make} to do this
 so that every time we add a new book to our data,
 we can create new plots and update our fits with a single command.
 Make works as follows:
@@ -10797,14 +10798,14 @@ explain what every part of this recipe does.
 ## Key Points {#automate-keypoints}
 
 
--   [Make][gnu-make] is a widely-used build manager.
--   A \gref{build manager}{build_manager} re-runs commands to update files that are out of date.
--   A \gref{build rule}{build_rule} has \gref{targets}{build_target}, \gref{prerequisites}{prerequisite}, and a \gref{recipe}{build_recipe}.
--   A target can be a file or a \gref{phony target}{phony_target} that simply triggers an action.
+-   [Make][make] is a widely-used build manager.
+-   A [build manager][build_manager] re-runs commands to update files that are out of date.
+-   A [build rule][build_rule] has [targets][build_target], [prerequisites][prerequisite], and a [recipe][build_recipe].
+-   A target can be a file or a [phony target][phony_target] that simply triggers an action.
 -   When a target is out of date with respect to its prerequisites, Make executes the recipe associated with its rule.
 -   Make executes as many rules as it needs to when updating files, but always respects prerequisite order.
--   Make defines \gref{automatic variables}{automatic_variable} such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
--   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
+-   Make defines [automatic variables][automatic_variable] such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
+-   [Pattern rules][pattern_rule] can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
 -   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
 -   Use specially-formatted comments to create self-documenting Makefiles.
@@ -11306,14 +11307,14 @@ What steps could you take to ensure the required consistency?
 ## Key Points {#config-keypoints}
 
 
--   \gref{Overlay configuration}{overlay_configuration} specifies settings for a program in layers,
+-   [Overlay configuration][overlay_configuration] specifies settings for a program in layers,
     each of which overrides previous layers.
 -   Use a system-wide configuration file for general settings.
 -   Use a user-specific configuration file for personal preferences.
 -   Use a job-specific configuration file with settings for a particular run.
 -   Use command-line options to change things that commonly change.
--   Use \gref{YAML}{yaml} or some other standard syntax to write configuration files.
--   Save configuration information to make your research \gref{reproducible}{reproducible_research}.
+-   Use [YAML][yaml] or some other standard syntax to write configuration files.
+-   Save configuration information to make your research [reproducible][reproducible_research].
 
 <!--chapter:end:chapters/config.Rmd-->
 
@@ -12138,13 +12139,13 @@ for formatting error messages that come from a lookup table.
 ## Key Points {#errors-keypoints}
 
 
--   Signal errors by \gref{raising exceptions}{raise_exception}.
--   Use `try`/`except` blocks to \gref{catch}{catch_exception} and handle exceptions.
+-   Signal errors by [raising exceptions][raise_exception].
+-   Use `try`/`except` blocks to [catch][catch_exception] and handle exceptions.
 -   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
 -   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
 -   Write error messages that help users figure out what to do to fix the problem.
 -   Store error messages in a lookup table to ensure consistency.
--   Use a \gref{logging framework}{logging_framework} instead of `print` statements to report program activity.
+-   Use a [logging framework][logging_framework] instead of `print` statements to report program activity.
 -   Separate logging messages into `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` levels.
 -   Use `logging.basicConfig` to define basic logging parameters.
 
@@ -13337,13 +13338,13 @@ How would you test that different parameters were having the correct effect?
 
 -   Test software to convince people (including yourself) that software is correct enough
     and to make tolerances on "enough" explicit.
--   Add \gref{assertions}{assertion} to code so that it checks itself as it runs.
--   Write \gref{unit tests}{unit_test} to check indivdiual pieces of code.
--   Write \gref{integration tests}{integration_test} to check that those pieces work together correctly.
--   Write \gref{regression tests}{regression_testing} to check if things that used to work no longer do.
--   A \gref{test framework}{test_framework} finds and runs tests written in a prescribed fashion and reports their results.
--   Test \gref{coverage}{code_coverage} is the fraction of lines of code that are executed by a set of tests.
--   \gref{Continuous integration}{continuous_integration} re-builds and/or re-tests software every time something changes.
+-   Add [assertions][assertion] to code so that it checks itself as it runs.
+-   Write [unit tests][unit_test] to check indivdiual pieces of code.
+-   Write [integration tests][integration_test] to check that those pieces work together correctly.
+-   Write [regression tests][regression_testing] to check if things that used to work no longer do.
+-   A [test framework][test_framework] finds and runs tests written in a prescribed fashion and reports their results.
+-   Test [coverage][code_coverage] is the fraction of lines of code that are executed by a set of tests.
+-   [Continuous integration][continuous_integration] re-builds and/or re-tests software every time something changes.
 
 <!--chapter:end:chapters/testing.Rmd-->
 
@@ -13845,12 +13846,12 @@ How would you go about publishing the code associated with that project
 
 
 -   Publish data and code as well as papers.
--   Use \gref{DOIs}{doi} to identify reports, datasets, or software release.
--   Use an \gref{ORCID}{orcid} to identify yourself as an author of a report, dataset, or software release.
+-   Use [DOIs][doi] to identify reports, datasets, or software release.
+-   Use an [ORCID][orcid] to identify yourself as an author of a report, dataset, or software release.
 -   Data should be [FAIR][go-fair]: findable, accessible, interoperable, and reusable.
 -   Put small datasets in version control repositories; store large ones on data sharing sites.
--   Describe your software environment, analysis scripts, and data processing steps in \gref{reproducible}{reproducible_research} ways.
--   Make your analyses \gref{inspectable}{inspectability} as well as reproducible.
+-   Describe your software environment, analysis scripts, and data processing steps in [reproducible][reproducible_research] ways.
+-   Make your analyses [inspectable][inspectability] as well as reproducible.
 
 <!--chapter:end:chapters/provenance.Rmd-->
 
@@ -15308,19 +15309,19 @@ holds the directory containing the installed `collated` package.)
 -   Use [setuptools][setuptools] to build and distribute Python packages.
 -   Create a directory named `mypackage` containing a `setup.py` script
     as well as a subdirectory also called `mypackage` containing the package's source files.
--   Use \gref{semantic versioning}{semantic_versioning} for software releases.
--   Use a \gref{virtual environment}{virtual_environment} to test how your package installs
+-   Use [semantic versioning][semantic_versioning] for software releases.
+-   Use a [virtual environment][virtual_environment] to test how your package installs
     without disrupting your main Python installation.  
 -   Use [`pip`][pip] to install Python packages.
 -   The default respository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
--   Decide whether your documentation is for \gref{novices}{novice},
-    \gref{competent practitioners}{competent_practitioner}, and/or \gref{experts}{expert}.
--   Use \gref{docstrings}{docstring} to document modules and functions.
+-   Decide whether your documentation is for [novices][novice],
+    [competent practitioners][competent_practitioner], and/or [experts][expert].
+-   Use [docstrings][docstring] to document modules and functions.
 -   Use a README file for package-level documentation.
 -   Use [Sphinx][sphinx] to generate documentation for a package.
 -   Use [Read The Docs][readthedocs] to host package documentation online.
--   Create a \gref{DOI}{doi} for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
+-   Create a [DOI][doi] for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
 -   Publish the details of your package in a software journal so that others can cite it.
 
 <!--chapter:end:chapters/packaging.Rmd-->
@@ -16230,7 +16231,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   Short for "YAML Ain't Markup Language", a way to represent nested data using indentation rather than the parentheses and commas of [JSON](#json). YAML is often used in configuration files and to define parameters for various flavors of [Markdown](#markdown) documents.
 
 
-<!--chapter:end:glossary/glossary.md-->
+<!--chapter:end:glossary.md-->
 
 
 # Setting Up {#install}
@@ -16314,16 +16315,16 @@ and is intended to help instructors who want to use this curriculum.
 
 
 -   Explain how the shell relates to the keyboard, the screen, the operating system, and users' programs.
--   Explain when and why a \gref{command-line interface}{cli} should be used instead of \gref{graphical user interfaces}{gui}.
--   Explain the steps in the shell's \gref{read-evaluate-print loop}{repl}.
+-   Explain when and why a [command-line interface][cli] should be used instead of [graphical user interfaces][gui].
+-   Explain the steps in the shell's [read-evaluate-print loop][repl].
 -   Identify the command, options, and filenames in a command-line call.
 -   Explain the similarities and differences between files and directories.
--   Translate an \gref{absolute path}{absolute_path} into a \gref{relative path}{relative_path} and vice versa.
+-   Translate an [absolute path][absolute_path] into a [relative path][relative_path] and vice versa.
 -   Construct absolute and relative paths that identify specific files and directories.
 -   Delete, copy, and move files and directories.
--   \gref{Redirect}{redirection} a command's output to a file.
+-   [Redirect][redirection] a command's output to a file.
 -   Use redirection to process a file instead of keyboard input.
--   Construct \gref{pipelines}{pipe_shell} with two or more stages.
+-   Construct [pipelines][pipe_shell] with two or more stages.
 -   Explain Unix's "small pieces, loosely joined" philosophy.
 -   Write a loop that applies one or more commands separately to each file in a set of files.
 -   Trace the values taken on by a loop variable during execution of the loop.
@@ -16334,7 +16335,7 @@ and is intended to help instructors who want to use this curriculum.
 ## Going Further with the Unix Shell
 
 
--   Write a \gref{shell script}{shell_script} that uses command-line arguments.
+-   Write a [shell script][shell_script] that uses command-line arguments.
 -   Create pipelines that include shell scripts as well as built-in commands.
 -   Create and use variables in shell scripts with correct quoting.
 -   Use `grep` to select lines from text files that match simple patterns.
@@ -16346,21 +16347,21 @@ and is intended to help instructors who want to use this curriculum.
 
 
 -   Explain the benefits of writing Python programs that can be executed at the command line.
--   Create a command-line Python program that respects \gref{Unix shell}{shell} conventions for reading input and writing output.
+-   Create a command-line Python program that respects [Unix shell][shell] conventions for reading input and writing output.
 -   Use the [`argparse`][argparse] library to handle command-line arguments in a program.
 -   Explain how to tell if a module is being run directly or being loaded by another program.
--   Write \gref{docstrings}{docstring} for programs and functions.
--   Explain the difference between \gref{optional arguments}{optional_argument} and \gref{positional arguments}{positional_argument}.
+-   Write [docstrings][docstring] for programs and functions.
+-   Explain the difference between [optional arguments][optional_argument] and [positional arguments][positional_argument].
 -   Create a module that contains functions used by multiple programs and import that module.
 
 ## Git at the Command Line
 
 
--   Explain the advantages and disadvantages of using \gref{Git}{git} at the command line.
+-   Explain the advantages and disadvantages of using [Git][git] at the command line.
 -   Demonstrate how to configure Git on a new computer.
 -   Create a local Git repository at the command line.
 -   Demonstrate the modify-add-commit cycle for one or more files.
--   Synchronize a local repository with a \gref{remote repository}{remote_repository}.
+-   Synchronize a local repository with a [remote repository][remote_repository].
 -   Explain what the `HEAD` of a repository is and demonstrate how to use it in commands.
 -   Identify and use Git commit identifiers.
 -   Demonstrate how to compare revisions to files in a repository.
@@ -16370,23 +16371,23 @@ and is intended to help instructors who want to use this curriculum.
 ## Advanced Git
 
 
--   Explain why \gref{branches}{git_branch} are useful.
--   Demonstrate how to create a branch, make changes on that branch, and \gref{merge}{git_merge} those changes back into the original branch.
--   Explain what \gref{conflicts}{git_conflict} are and demonstrate how to resolve them.
--   Explain what is meant by a \gref{branch-per-feature}{branch_per_feature} workflow.
--   Define the terms \gref{fork}{git_fork}, \gref{clone}{git_clone}, \gref{remote}{remote_repository}, and \gref{pull request}{pull_request}.
+-   Explain why [branches][git_branch] are useful.
+-   Demonstrate how to create a branch, make changes on that branch, and [merge][git_merge] those changes back into the original branch.
+-   Explain what [conflicts][git_conflict] are and demonstrate how to resolve them.
+-   Explain what is meant by a [branch-per-feature][branch_per_feature] workflow.
+-   Define the terms [fork][git_fork], [clone][git_clone], [remote][remote_repository], and [pull request][pull_request].
 -   Demonstrate how to fork a repository and submit a pull request to the original repository.
 
 ## Working in Teams
 
 
--   Explain how a project lead can be a good \gref{ally}{ally}.
+-   Explain how a project lead can be a good [ally][ally].
 -   Explain the purpose of a Code of Conduct and add one to a project.
 -   Explain why every project should include a license and add one to a project.
 -   Describe different kinds of licenses for software and written material.
--   Explain what an \gref{issue tracking system}{issue_tracking_system} does and what it should be used for.
+-   Explain what an [issue tracking system][issue_tracking_system] does and what it should be used for.
 -   Describe what a well-written issue should contain.
--   Explain how to \gref{label}{issue_label} issues to manage work.
+-   Explain how to [label][issue_label] issues to manage work.
 -   Submit an issue to a project.
 -   Describe common approaches to prioritizing tasks.
 -   Describe some common-sense rules for running meetings.
@@ -16396,14 +16397,14 @@ and is intended to help instructors who want to use this curriculum.
 ## Automating Analyses
 
 
--   Explain what a \gref{build manager}{build_manager} is and how they aid reproducible research.
--   Name and describe the three parts of a \gref{build rule}{build_rule}.
+-   Explain what a [build manager][build_manager] is and how they aid reproducible research.
+-   Name and describe the three parts of a [build rule][build_rule].
 -   Write a Makefile that re-runs a multi-stage data analysis.
 -   Explain and trace how Make chooses an order in which to execute rules.
--   Explain what \gref{phony targets}{phony_target} are and define a phony target.
--   Explain what \gref{automatic variables}{automatic_variable} are and identify three commonly-used automatic variables.
+-   Explain what [phony targets][phony_target] are and define a phony target.
+-   Explain what [automatic variables][automatic_variable] are and identify three commonly-used automatic variables.
 -   Write Make rules that use automatic variables.
--   Explain why and how to write \gref{pattern rules}{pattern_rule} in a Makefile.
+-   Explain why and how to write [pattern rules][pattern_rule] in a Makefile.
 -   Write Make rules that use patterns.
 -   Define variables in a Makefile explicitly and by using functions.
 -   Make a self-documenting Makefile.
@@ -16411,20 +16412,20 @@ and is intended to help instructors who want to use this curriculum.
 ## Program Configuration
 
 
--   Explain what \gref{overlay configuration}{overlay_configuration} is.
+-   Explain what [overlay configuration][overlay_configuration] is.
 -   Describe the four levels of configuration typically used by robust software.
--   Create a configuration file using \gref{YAML}{yaml}.
+-   Create a configuration file using [YAML][yaml].
 
 ## Error Handling
 
 
 -   Explain how to use exceptions to signal and handle errors in programs.
--   Write `try`/`except` blocks to \gref{raise}{raise_exception} and \gref{catch}{catch_exception} exceptions.
+-   Write `try`/`except` blocks to [raise][raise_exception] and [catch][catch_exception] exceptions.
 -   Explain what is meant by "throw low, catch high".
 -   Describe the most common built-in exception types in Python and how they relate to each other.
 -   Explain what makes a useful error message.
 -   Create and use a lookup table for common error messages.
--   Explain the advantages of using a \gref{logging framework}{logging_framework} rather than `print` statements.
+-   Explain the advantages of using a [logging framework][logging_framework] rather than `print` statements.
 -   Describe the five standard logging levels and explain what each should be used for.
 -   Create, configure, and use a simple logger.
 
@@ -16432,21 +16433,21 @@ and is intended to help instructors who want to use this curriculum.
 
 
 -   Explain three different goals for testing software.
--   Add \gref{assertions}{assertion} to a program to check that it is operating correctly.
+-   Add [assertions][assertion] to a program to check that it is operating correctly.
 -   Write and run unit tests using `pytest`.
--   Determine the \gref{coverage}{code_coverage} of those tests and identify untested portions of code.
--   Explain \gref{continuous integration}{continuous_integration} and implement it using [Travis CI][travis-ci].
--   Describe and contrast \gref{test-driven development}{tdd} and checking-driven development.
+-   Determine the [coverage][code_coverage] of those tests and identify untested portions of code.
+-   Explain [continuous integration][continuous_integration] and implement it using [Travis CI][travis-ci].
+-   Describe and contrast [test-driven development][tdd] and checking-driven development.
 
 ## Provenance
 
 
--   Explain what a \gref{DOI}{doi} is and how to get one.
--   Explain what an \gref{ORCID}{orcid} is and get one.
+-   Explain what a [DOI][doi] is and how to get one.
+-   Explain what an [ORCID][orcid] is and get one.
 -   Describe the [FAIR Principles][go-fair] and determine whether a dataset conforms to them.
 -   Explain where to archive small, medium, and large datasets.
 -   Describe good practices for archiving analysis code and determine whether a report conforms to them.
--   Explain the difference between \gref{reproducibility}{reproducible_research} and \gref{inspectability}{inspectability}.
+-   Explain the difference between [reproducibility][reproducible_research] and [inspectability][inspectability].
 
 ## Python Packaging
 
@@ -16454,12 +16455,12 @@ and is intended to help instructors who want to use this curriculum.
 -   Create a Python package using [setuptools][setuptools].
 -   Distribute that package via [TestPyPI][testpypi].
 -   Install that package and others using [pip][pip].
--   Create and use a \gref{virtual environment}{virtual_environment} to manage Python package installations.
+-   Create and use a [virtual environment][virtual_environment] to manage Python package installations.
 -   Write a README file for a Python package.
 -   Explain the different kinds of audiences for package documentation.
 -   Use [Sphinx][sphinx] to create and preview documentation for a package.
--   Create a GitHub release for a Python package using \gref{semantic versioning}{semantic_versioning}.
--   Explain where and how to obtain a \gref{DOI}{doi} for a software release.
+-   Create a GitHub release for a Python package using [semantic versioning][semantic_versioning].
+-   Explain where and how to obtain a [DOI][doi] for a software release.
 -   Describe some academic journals that publish software papers.
 
 <!--chapter:end:chapters/objectives.Rmd-->
@@ -16472,17 +16473,17 @@ and is intended to help instructors who want to use this curriculum.
 ## The Basics of the Unix Shell
 
 
--   A \gref{shell}{shell} is a program that reads commands and runs other programs.
--   The \gref{filesystem}{filesystem} manages information stored on disk.
+-   A [shell][shell] is a program that reads commands and runs other programs.
+-   The [filesystem][filesystem] manages information stored on disk.
 -   Information is stored in files, which are located in directories (folders).
 -   Directories can also store other directories, which forms a directory tree.
--   `pwd` prints the user's \gref{current working directory}{current_working_directory}.
--   `/` on its own is the \gref{root directory}{root_directory} of the whole filesystem.
+-   `pwd` prints the user's [current working directory][current_working_directory].
+-   `/` on its own is the [root directory][root_directory] of the whole filesystem.
 -   `ls` prints a list of files and directories.
--   An \gref{absolute path}{absolute_path} specifies a location from the root of the filesystem.
--   A \gref{relative path}{relative_path} specifies a location in the filesystem starting from the current directory.
+-   An [absolute path][absolute_path] specifies a location from the root of the filesystem.
+-   A [relative path][relative_path] specifies a location in the filesystem starting from the current directory.
 -   `cd` changes the current working directory.
--   `..` means the \gref{parent directory}{parent_directory}; `.` on its own means the current directory.
+-   `..` means the [parent directory][parent_directory]; `.` on its own means the current directory.
 -   `mkdir` creates a new directory.
 -   `cp` copies a file.
 -   `rm` removes (deletes) a file.
@@ -16491,27 +16492,27 @@ and is intended to help instructors who want to use this curriculum.
 -   `?` matches any single character in a filename.
 -   `wc` counts lines, words, and characters in its inputs.
 -   `man` displays the manual page for a given command; some commands also have a `--help` option.
--   Every process in Unix has an input channel called \gref{standard input}{stdin}
-    and an output channel called \gref{standard output}{stdin}.
+-   Every process in Unix has an input channel called [standard input][stdin]
+    and an output channel called [standard output][stdin].
 -   `>` redirects a command's output to a file, overwriting any existing content.
 -   `>>` appends a command's output to a file.
 -   `<` operator redirects input to a command
--   A \gref{pipe}{pipe_shell} `|` sends the output of the command on the left to the input of the command on the right.
+-   A [pipe][pipe_shell] `|` sends the output of the command on the left to the input of the command on the right.
 -   `cat` displays the contents of its inputs.
 -   `head` displays the first few lines of its input.
 -   `tail` displays the last few lines of its input.
 -   `sort` sorts its inputs.
 -   A `for` loop repeats commands once for every thing in a list.
 -   Every `for` loop  must have a variable to refer to the thing it is currently operating on
-    and a \gref{body}{loop_body} containing commands to execute.
+    and a [body][loop_body] containing commands to execute.
 -   Use `$name` or `${name}` to get the value of a variable.
 -   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
--   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
+-   Use [`history`][command_history] to display recent commands and `!number` to repeat a command by number.
 
 ## Going Further with the Unix Shell
 
 
--   Save commands in files (usually called \gref{shell scripts}{shell_script}) for re-use.
+-   Save commands in files (usually called [shell scripts][shell_script]) for re-use.
 -   `bash filename` runs the commands saved in a file.
 -   `$@` refers to all of a shell script's command-line arguments.
 -   `$1`, `$2`, etc., refer to the first command-line argument, the second command-line argument, etc.
@@ -16525,14 +16526,14 @@ and is intended to help instructors who want to use this curriculum.
 ## Command Line Programs in Python
 
 
--   Write command-line Python programs that can be run in the \gref{Unix shell}{shell} like other command-line tools.
--   If the user does not specify any input files, read from \gref{standard input}{stdin}.
--   If the user does not specify any output files, write to \gref{standard output}{stdout}.
+-   Write command-line Python programs that can be run in the [Unix shell][shell] like other command-line tools.
+-   If the user does not specify any input files, read from [standard input][stdin].
+-   If the user does not specify any output files, write to [standard output][stdout].
 -   Place all `import` statements at the start of a module.
 -   Use the value of `__name__` to determine if a file is being run directly or being loaded as a module.
 -   Use [`argparse`][argparse] to handle command-line arguments in standard ways.
--   Use \gref{short options}{short_option} for common controls and \gref{long options}{long_option} for less common or more complicated ones.
--   Use \gref{docstrings}{docstring} to document functions and scripts.
+-   Use [short options][short_option] for common controls and [long options][long_option] for less common or more complicated ones.
+-   Use [docstrings][docstring] to document functions and scripts.
 -   Place functions that are used across multiple scripts in a separate file that those scripts can import.
 
 ## Git at the Command Line
@@ -16540,15 +16541,15 @@ and is intended to help instructors who want to use this curriculum.
 
 -   Use `git config` with the `--global` option to configure your user name,
     email address, and other preferences once per machine.
--   `git init` initializes a \gref{repository}{repository}.
+-   `git init` initializes a [repository][repository].
 -   Git stores all repository management data in the `.git` subdirectory of the repository's root directory.
 -   `git status` shows the status of a repository.
 -   `git add` puts files in the repository's staging area.
 -   `git commit` saves the staged content as a new commit in the local repository.
 -   `git log` lists previous commits.
 -   `git diff` shows the difference between two versions of the repository.
--   Synchronize your local repository with a \gref{remote repository}{remote_repository}
-    on a \gref{forge}{forge} such as [GitHub][github].
+-   Synchronize your local repository with a [remote repository][remote_repository]
+    on a [forge][forge] such as [GitHub][github].
 -   `git remote` manages bookmarks pointing at remote repositories.
 -   `git push` copies changes from a local repository to a remote repository.
 -   `git pull` copies changes from a remote repository to a local repository.
@@ -16558,17 +16559,17 @@ and is intended to help instructors who want to use this curriculum.
 ## Advanced Git
 
 
--   Use a \gref{branch-per-feature}{branch_per_feature} workflow to develop new features while leaving the master branch in working order.
+-   Use a [branch-per-feature][branch_per_feature] workflow to develop new features while leaving the master branch in working order.
 -   `git branch` creates a new branch. 
 -   `git checkout` switches between branches.
--   `git merge` \gref{merges}{git_merge} changes from another branch into the current branch.
--   \gref{Conflicts}{git_conflict} occur when files or parts of files are changed in different ways on different branches.
+-   `git merge` [merges][git_merge] changes from another branch into the current branch.
+-   [Conflicts][git_conflict] occur when files or parts of files are changed in different ways on different branches.
 -   Version control systems do not allow people to overwrite changes silently;
     instead, they highlight conflicts that need to be resolved.
--   \gref{Forking}{git_fork} a repository makes a copy of it on a server.
--   \gref{Cloning}{git_clone} a repository with `git clone` creates a local copy of a remote repository.
+-   [Forking][git_fork] a repository makes a copy of it on a server.
+-   [Cloning][git_clone] a repository with `git clone` creates a local copy of a remote repository.
 -   Create a remote called `upstream` to point to the repository a fork was derived from.
--   Create \gref{pull requests}{pull_request} to submit changes from your fork to the upstream repository.
+-   Create [pull requests][pull_request] to submit changes from your fork to the upstream repository.
 
 ## Working in Teams
 
@@ -16576,25 +16577,25 @@ and is intended to help instructors who want to use this curriculum.
 -   Welcome and nurture community members proactively.
 -   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
 -   Include a license in your project so that it's clear who can do what with the material.
--   Create \gref{issues}{issue} for bugs, enhancement requests, and discussions.
--   \gref{Label issues}{issue_label} to identify their purpose.
--   \gref{Triage}{triage} issues regularly and group them into \gref{milestones}{milestone} to track progress.
+-   Create [issues][issue] for bugs, enhancement requests, and discussions.
+-   [Label issues][issue_label] to identify their purpose.
+-   [Triage][triage] issues regularly and group them into [milestones][milestone] to track progress.
 -   Include contribution guidelines in your project that specify its workflow and its expectations of participants.
--   Make rules about \gref{governance}{governance} explicit.
+-   Make rules about [governance][governance] explicit.
 -   Use common-sense rules to make project meetings fair and productive.
 -   Manage conflict between participants rather than hoping it will take care of itself.
 
 ## Automating Analyses
 
 
--   [Make][gnu-make] is a widely-used build manager.
--   A \gref{build manager}{build_manager} re-runs commands to update files that are out of date.
--   A \gref{build rule}{build_rule} has \gref{targets}{build_target}, \gref{prerequisites}{prerequisite}, and a \gref{recipe}{build_recipe}.
--   A target can be a file or a \gref{phony target}{phony_target} that simply triggers an action.
+-   [Make][make] is a widely-used build manager.
+-   A [build manager][build_manager] re-runs commands to update files that are out of date.
+-   A [build rule][build_rule] has [targets][build_target], [prerequisites][prerequisite], and a [recipe][build_recipe].
+-   A target can be a file or a [phony target][phony_target] that simply triggers an action.
 -   When a target is out of date with respect to its prerequisites, Make executes the recipe associated with its rule.
 -   Make executes as many rules as it needs to when updating files, but always respects prerequisite order.
--   Make defines \gref{automatic variables}{automatic_variable} such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
--   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
+-   Make defines [automatic variables][automatic_variable] such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
+-   [Pattern rules][pattern_rule] can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
 -   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
 -   Use specially-formatted comments to create self-documenting Makefiles.
@@ -16602,25 +16603,25 @@ and is intended to help instructors who want to use this curriculum.
 ## Program Configuration
 
 
--   \gref{Overlay configuration}{overlay_configuration} specifies settings for a program in layers,
+-   [Overlay configuration][overlay_configuration] specifies settings for a program in layers,
     each of which overrides previous layers.
 -   Use a system-wide configuration file for general settings.
 -   Use a user-specific configuration file for personal preferences.
 -   Use a job-specific configuration file with settings for a particular run.
 -   Use command-line options to change things that commonly change.
--   Use \gref{YAML}{yaml} or some other standard syntax to write configuration files.
--   Save configuration information to make your research \gref{reproducible}{reproducible_research}.
+-   Use [YAML][yaml] or some other standard syntax to write configuration files.
+-   Save configuration information to make your research [reproducible][reproducible_research].
 
 ## Error Handling
 
 
--   Signal errors by \gref{raising exceptions}{raise_exception}.
--   Use `try`/`except` blocks to \gref{catch}{catch_exception} and handle exceptions.
+-   Signal errors by [raising exceptions][raise_exception].
+-   Use `try`/`except` blocks to [catch][catch_exception] and handle exceptions.
 -   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
 -   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
 -   Write error messages that help users figure out what to do to fix the problem.
 -   Store error messages in a lookup table to ensure consistency.
--   Use a \gref{logging framework}{logging_framework} instead of `print` statements to report program activity.
+-   Use a [logging framework][logging_framework] instead of `print` statements to report program activity.
 -   Separate logging messages into `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` levels.
 -   Use `logging.basicConfig` to define basic logging parameters.
 
@@ -16629,24 +16630,24 @@ and is intended to help instructors who want to use this curriculum.
 
 -   Test software to convince people (including yourself) that software is correct enough
     and to make tolerances on "enough" explicit.
--   Add \gref{assertions}{assertion} to code so that it checks itself as it runs.
--   Write \gref{unit tests}{unit_test} to check indivdiual pieces of code.
--   Write \gref{integration tests}{integration_test} to check that those pieces work together correctly.
--   Write \gref{regression tests}{regression_testing} to check if things that used to work no longer do.
--   A \gref{test framework}{test_framework} finds and runs tests written in a prescribed fashion and reports their results.
--   Test \gref{coverage}{code_coverage} is the fraction of lines of code that are executed by a set of tests.
--   \gref{Continuous integration}{continuous_integration} re-builds and/or re-tests software every time something changes.
+-   Add [assertions][assertion] to code so that it checks itself as it runs.
+-   Write [unit tests][unit_test] to check indivdiual pieces of code.
+-   Write [integration tests][integration_test] to check that those pieces work together correctly.
+-   Write [regression tests][regression_testing] to check if things that used to work no longer do.
+-   A [test framework][test_framework] finds and runs tests written in a prescribed fashion and reports their results.
+-   Test [coverage][code_coverage] is the fraction of lines of code that are executed by a set of tests.
+-   [Continuous integration][continuous_integration] re-builds and/or re-tests software every time something changes.
 
 ## Provenance
 
 
 -   Publish data and code as well as papers.
--   Use \gref{DOIs}{doi} to identify reports, datasets, or software release.
--   Use an \gref{ORCID}{orcid} to identify yourself as an author of a report, dataset, or software release.
+-   Use [DOIs][doi] to identify reports, datasets, or software release.
+-   Use an [ORCID][orcid] to identify yourself as an author of a report, dataset, or software release.
 -   Data should be [FAIR][go-fair]: findable, accessible, interoperable, and reusable.
 -   Put small datasets in version control repositories; store large ones on data sharing sites.
--   Describe your software environment, analysis scripts, and data processing steps in \gref{reproducible}{reproducible_research} ways.
--   Make your analyses \gref{inspectable}{inspectability} as well as reproducible.
+-   Describe your software environment, analysis scripts, and data processing steps in [reproducible][reproducible_research] ways.
+-   Make your analyses [inspectable][inspectability] as well as reproducible.
 
 ## Python Packaging
 
@@ -16654,19 +16655,19 @@ and is intended to help instructors who want to use this curriculum.
 -   Use [setuptools][setuptools] to build and distribute Python packages.
 -   Create a directory named `mypackage` containing a `setup.py` script
     as well as a subdirectory also called `mypackage` containing the package's source files.
--   Use \gref{semantic versioning}{semantic_versioning} for software releases.
--   Use a \gref{virtual environment}{virtual_environment} to test how your package installs
+-   Use [semantic versioning][semantic_versioning] for software releases.
+-   Use a [virtual environment][virtual_environment] to test how your package installs
     without disrupting your main Python installation.  
 -   Use [`pip`][pip] to install Python packages.
 -   The default respository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
--   Decide whether your documentation is for \gref{novices}{novice},
-    \gref{competent practitioners}{competent_practitioner}, and/or \gref{experts}{expert}.
--   Use \gref{docstrings}{docstring} to document modules and functions.
+-   Decide whether your documentation is for [novices][novice],
+    [competent practitioners][competent_practitioner], and/or [experts][expert].
+-   Use [docstrings][docstring] to document modules and functions.
 -   Use a README file for package-level documentation.
 -   Use [Sphinx][sphinx] to generate documentation for a package.
 -   Use [Read The Docs][readthedocs] to host package documentation online.
--   Create a \gref{DOI}{doi} for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
+-   Create a [DOI][doi] for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
 -   Publish the details of your package in a software journal so that others can cite it.
 
 <!--chapter:end:chapters/keypoints.Rmd-->
@@ -19905,6 +19906,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
+[make]: https://www.gnu.org/software/make/
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
