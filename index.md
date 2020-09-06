@@ -4,8 +4,6 @@ author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wi
 date: "2020-09-06"
 documentclass: krantz
 bibliography: book.bib
-csl: jcb.csl
-citation-package: none
 link-citations: yes
 github-repo: merely-useful/py-rse
 site: bookdown::bookdown_site
@@ -231,7 +229,7 @@ zipf/
 └── ...
 ```
 
-The full, final directory tree is documented in Appendix \@ref(tree).
+The full, final directory tree is documented in Appendix \@ref(tree).
 
 ### Standard Information {#intro-boilerplate}
 
@@ -245,7 +243,7 @@ open source or otherwise:
 
 -   `LICENSE` is the project's license. We'll add it in Section \@ref(teams-license).
 
--   `CONTRIBUTING` explains how to contribute to the project. We'll add it in Section \@ref(teams-documentation).
+-   `CONTRIBUTING` explains how to contribute to the project. We'll add it in Section \@ref(teams-documentation).
 
 -   `CONDUCT` is the project's code of conduct. We'll add it in Section \@ref(teams-coc).
 
@@ -335,11 +333,11 @@ Sara Mahallati,
 Brandeis Marshall,
 and Elizabeth Wickes.
 
--   Many of the explanations and exercises in Chapters \@ref(bash-basics) and \@ref(bash-advanced)
+-   Many of the explanations and exercises in Chapters \@ref(bash-basics) and \@ref(bash-advanced)
     have been adapted from Software Carpentry's lesson
     [The Unix Shell](http://swcarpentry.github.io/shell-novice/).
 
--   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
+-   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
     have been adapted from Software Carpentry's lesson
     [Version Control with Git](http://swcarpentry.github.io/git-novice/) and an
     [adaptation/extension of that lesson][uwm-git-lesson] maintained by
@@ -448,9 +446,11 @@ and Elizabeth Wickes.
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
 [theoj]: https://joss.theoj.org/
+[theoj-checklist]: https://joss.readthedocs.io/en/latest/review_checklist.html
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
 [travis-ci]: https://travis-ci.org/
+[travis-status-images]: https://docs.travis-ci.com/user/status-images/
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
@@ -2993,7 +2993,7 @@ a file full of shell commands is usually called a \gref{shell script}{shell_scri
 but it is really just another kind of program.
 
 Let's start by creating a new directory for our runnable programs called `bin/`,
-consistent with the project structure described in Section \@ref(intro-organize).
+consistent with the project structure described in Section \@ref(intro-organize).
 
 ```shell
 $ cd ~/zipf
@@ -3930,7 +3930,7 @@ by searching online for "sample bashrc".
 While searching for additional aliases,
 you're likely to encounter references to other common shell features to customize,
 such as the color of your shell's background and text.
-As mentioned in \@ref(bash-basics),
+As mentioned in Chapter \@ref(bash-basics),
 another important feature to consider customizing is your shell prompt.\index{prompt (in Unix shell)}\index{Unix shell!prompt}
 In addition to a standard symbol (like `$`),
 your computer may include other information as well,
@@ -4497,7 +4497,7 @@ We'll talk more about what to put in a docstring in Section \@ref(packaging-doc
 Now that we have a template for command-line Python programs,
 we can use it to check Zipf's Law for our collection of classic English novels.
 We start by moving the template into the directory
-where we store our runnable programs (Section \@ref(intro-organize)):
+where we store our runnable programs (Section \@ref(intro-organize)):
 
 ```shell
 $ mv script_template.py ~/zipf/bin
@@ -5101,7 +5101,7 @@ When and why is this useful?
 ### A better plotting program {#scripting-ex-better-plotting}
 
 Using `script_template.py` as a guide,
-take the plotting code from Section \@ref(scripting-plotting)
+take the plotting code from Section \@ref(scripting-plotting)
 and write a new Python program called `plotcounts.py`.
 The script should:
 
@@ -8728,7 +8728,7 @@ so different users may wind up operating under different licensing structures.
 
 To make license selection for code as easy as possible,
 GitHub allows us to select one of several common software licenses when creating a repository.
-The Open Source Initiative maintains [a list of licenses][osi-license-list],
+The Open Source Initiative maintains [a list][osi-license-list] of \gref{open licenses}{open_license},
 and [choosealicense.com][choose-license] will help us find a license that suits our needs.
 Some of the things we need to think about are:
 
@@ -10690,7 +10690,7 @@ settings :
 	...
 ```
 
-Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
+Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
 
 ```shell
 $ make all
@@ -12092,7 +12092,7 @@ a,7629
 
 ### Send the logging output to file {#errors-ex-logging-output}
 
-In Exercise \@ref(errors-ex-set-level),
+In Exercise \@ref(errors-ex-set-level),
 logging information is printed to the screen when the verbose flag is activated.
 This is problematic if we want to re-direct the output from `collate.py` to a CSV file,
 because the logging information will appear in the CSV file
@@ -13277,7 +13277,7 @@ the practices introduced in this chapter will help with both.
 
 ## Exercises {#testing-exercises}
 
-TODO: Need more exercises (including one exploring `pytest.raises`).
+FIXME: Need more exercises (including one exploring `pytest.raises`).
 
 ### Explaining assertions {#testing-ex-explain-assertions}
 
@@ -13325,7 +13325,7 @@ FIXME
 
 You'll notice that the README file in many GitHub repositories includes a little
 Travis CI display status logo.
-Follow [these instructions](https://docs.travis-ci.com/user/status-images/) to include
+Follow [these instructions][travis-status-images] to include
 the status display in the REAMDE for this Zipf's Law project.
 
 ### Testing configuration {#testing-ex-config}
@@ -13377,7 +13377,7 @@ and the code used to do the analysis:\index{reproducible research}
 While some reports, datasets, software packages, and/or analysis scripts
 can't be published without violating personal or commercial confidentiality,
 every researcher's default should be to make all these as widely available as possible.
-Publishing it under an open license (Section \@ref(teams-license)) is the first step;
+Publishing it under an open license (Section \@ref(teams-license)) is the first step;
 the sections below describe what else we can do to capture
 the \gref{provenance}{provenance} of our data analysis.\index{provenance}
 
@@ -13607,7 +13607,7 @@ but in more complex cases we probably want to make life easier for the reader
 (and for our future selves looking to re-run the analysis).
 One way to make things easier is to export a description of
 a complete conda environment (Section \@ref(packaging-virtualenv);
-Appendix \@ref(anaconda-environments)),
+Appendix \@ref(anaconda-environments)),
 which can be saved as YAML using:
 
 ```shell
@@ -13661,7 +13661,7 @@ $ git push origin master
 
 The second item that needs to be added to our GitHub repository is a description
 of the data processing steps involved in each key result.\index{publishing!description of workflow}
-Assuming the author list on our report is Amira Khan and Sami Virtanen (Section \@ref(intro-personas)),
+Assuming the author list on our report is Amira Khan and Sami Virtanen (Section \@ref(intro-personas)),
 we could add a new Markdown file called `KhanVirtanen2020.md` to the repository
 to describe the steps:
 
@@ -13685,7 +13685,7 @@ We should also add this information as an appendix to the report itself.
 
 Later in this book we will package and release our Zipf's Law code
 so that it can be downloaded and installed by the wider research community,
-just like any other Python package (Chapter \@ref(packaging)).
+just like any other Python package (Chapter \@ref(packaging)).
 Doing this is especially helpful if other people might be interested in using and/or extending it,
 but often the scripts and notebooks we write to produce a particular figure or table
 are too case-specific to be of broad interest.
@@ -13700,7 +13700,7 @@ but more recently the process has been streamlined via direct integration
 between GitHub and Zenodo.
 As described in [this tutorial][github-zenodo-tutorial],
 the process involves creating a new release of our repository in GitHub
-that Zenodo copies and then issues a DOI for (Figure \@ref(fig:provenance-release)).
+that Zenodo copies and then issues a DOI for (Figure \@ref(fig:provenance-release)).
 
 <div class="figure" style="text-align: center">
 <img src="figures/provenance/release.png" alt="A new code release in GitHub" width="100%" />
@@ -13783,7 +13783,7 @@ Take the questionnaire for a dataset you have published or that you use often.
 ### Evaluate a project's data provenance {#provenance-ex-understand-project}
 
 *This exercise is modified from @Wick2016 and explore the dataset from @Meil2015.
-Go to the dataset's page (http://doi.org/10.3886/E17507V2) and download the files.
+Go to the dataset's page <http://doi.org/10.3886/E17507V2> and download the files.
 You will need to make an ICPSER account and agree to their data agreement before you can download.*
 
 Review the dataset's main page to get a sense of the study,
@@ -13797,13 +13797,14 @@ then review the spreadsheet file and the coded response file.
 
 ### Evaluate a project's code provenance {#provenance-ex-eval-code}
 
-The GitHub repository https://github.com/borstlab/reversephi_paper/ provides the code and data for the paper @leonhardt2017.  Browse the repository and answer the following questions:
+The GitHub repository <https://github.com/borstlab/reversephi_paper/> provides the code and data for the paper @Leon2017.
+Browse the repository and answer the following questions:
 
 1. Where is the software environment described? What files would you need to recreate the software environment? 
 2. Where are the data processing steps described? How could you re-create the results included in the manuscript?
 3. How are the scripts and data archived?  I.e. Where can you download the version of the code and data as it was when the manuscript was published?
 
-To get a feel for the different approaches to code provenance, repeat steps 1-3 for... [TODO: List a few more papers.] 
+To get a feel for the different approaches to code provenance, repeat steps 1-3 for... FIXME: List a few more papers. 
 
 ### Making permanent links {#provenance-ex-permanent-links}
 
@@ -14081,7 +14082,7 @@ Virtual environments also help with package development:
     By installing and running our package in a completely empty environment,
     we can ensure that we're not accidentally relying on other packages being installed.
 
-We can manage virtual environments using [conda][conda] (Appendix \@ref(anaconda)).
+We can manage virtual environments using [conda][conda] (Appendix \@ref(anaconda)).
 To create a new virtual environment called `zipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
 and listing `python` as the base to build on:
@@ -14973,7 +14974,7 @@ The `docs` sub-directory contains a Makefile that was generated by `sphinx-quick
 If we run `make html` and open `docs/_build/index.html` in a web broswer
 we'll have a website landing page with minimal documentation (Figure \@ref(fig:packaging-sphinx-landing-page-original)).
 If we click on the `Module Index` link we can access the documentation for the individual modules
-(Figures \@ref(fig:packaging-sphinx-module-list) and \@ref(fig:packaging-sphinx-module-countwords)).
+(Figures \@ref(fig:packaging-sphinx-module-list) and \@ref(fig:packaging-sphinx-module-countwords)).
 
 <div class="figure" style="text-align: center">
 <img src="figures/packaging/landing-page-original.png" alt="The default website landing page" width="100%" />
@@ -15179,7 +15180,7 @@ Allow for a [chorus of explanations][caulfield-chorus].
 As a final step to releasing our new package,
 we might want to give it a \gref{DOI}{doi}\index{DOI (Digital Object Identifier)}\index{Digital Object Identifier (DOI)}
 so that it can be cited by researchers.
-As we saw in Section \@ref(provenance-code-scripts),
+As we saw in Section \@ref(provenance-code-scripts),
 GitHub [integrates with Zenodo][github-zenodo-tutorial]
 for precisely this purpose.
 
@@ -15203,7 +15204,7 @@ Once you have obtained a DOI and possibly published with a software journal,
 the last step is to tell users how to cite your new software package.
 This is traditionally done by adding a `CITATION` file\index{CITATION file}\index{project files!CITATION}
 to the associated GitHub repository
-(alongside `README`, `LICENSE`, `CONDUCT` and similar files discussed in \@ref(intro-boilerplate)),
+(alongside `README`, `LICENSE`, `CONDUCT` and similar files discussed in Section \@ref(intro-boilerplate)),
 containing a plain text citation that can be copied and pasted into email
 as well as entries formatted for various bibliographic systems like [BibTeX][bibtex].
 
@@ -15265,8 +15266,7 @@ using `pip freeze` to find the minimum required version.
 
 ### Software review {#packaging-ex-software-review}
 
-The [Journal of Open Source Software][theoj] has a
-[checklist](https://joss.readthedocs.io/en/latest/review_checklist.html)
+The [Journal of Open Source Software][theoj] has a [checklist][theoj-checklist]
 that reviewers must follow when assessing a submitted software paper.
 Run through the checklist (skipping the criteria related to the software paper)
 and see how the Zipf's Law package would rate on each criteria.
@@ -16231,7 +16231,7 @@ You do _not_ need to do this if you are only building and previewing the HTML ve
 :   Short for "YAML Ain't Markup Language", a way to represent nested data using indentation rather than the parentheses and commas of [JSON](#json). YAML is often used in configuration files and to define parameters for various flavors of [Markdown](#markdown) documents.
 
 
-<!--chapter:end:glossary.md-->
+<!--chapter:end:glossary/glossary.md-->
 
 
 # Setting Up {#install}
@@ -17422,7 +17422,7 @@ FIXME: Should really only have one CONTRIBUTING file.
 
 ### Exercise \@ref(teams-ex-boilerplate-coc) {-}
 
-The `CONDUCT.md` file should have contents that mimic those given in Section \@ref(teams-coc).
+The `CONDUCT.md` file should have contents that mimic those given in Section \@ref(teams-coc).
 
 ### Exercise \@ref(teams-ex-boilerplate-license) {-}
 
@@ -17453,7 +17453,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### Exercise \@ref(teams-ex-contributing) {-}
+### Exercise \@ref(teams-ex-contributing) {-}
 
 The text in the `README.md` might look something like:
 
@@ -17623,7 +17623,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-### Exercise \@ref(errors-ex-logging-output) {-}
+### Exercise \@ref(errors-ex-logging-output) {-}
 
 The `collate.py` script should now read as follows:
 
@@ -17761,7 +17761,9 @@ To re-create the `conda` environment you would need the file, `my_environment.ym
 
 2.  Like `zipf` the data processing and analysis steps are documented in a `Makefile`.  The `README` includes instructions for re-creating the results using `make all`.
 
-3.  There doesn't seem to be a DOI for the archived code and data, but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)".  A zip file of this release could be downloaded with the link https://github.com/borstlab/reversephi_paper/archive/v1.0.zip.
+3.  There doesn't seem to be a DOI for the archived code and data,
+    but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)".
+    A zip file of this release could be downloaded with the link <https://github.com/borstlab/reversephi_paper/archive/v1.0.zip>.
 
 ### Exercise \@ref(provenance-ex-permanent-links) {-}
 
@@ -17851,7 +17853,7 @@ atmospheric science is a relatively small field and thus the windspharm package
 will never have a big enough user base to make the list of
 popular data science packages supported by Anaconda.
 Andrew has therefore posted a conda installation package to Anaconda Cloud
-(Figure \@ref(fig:anaconda-windspharm-ajdawson))
+(Figure \@ref(fig:anaconda-windspharm-ajdawson))
 so that users can install windspharm using conda:
 
 ```shell 
@@ -17865,12 +17867,12 @@ $ conda install -c ajdawson windspharm
 
 The conda documentation has [instructions][conda-skeleton-pypi] for quickly building
 a conda package for a Python module that is already available on [PyPI][pypi]
-(Section \@ref(packaging-distribute)).
+(Section \@ref(packaging-distribute)).
 
 ### conda-forge
 
 It turns out there are often multiple installation packages for the same library
-up on Anaconda Cloud (e.g. Figure \@ref(fig:anaconda-windspharm-search)). 
+up on Anaconda Cloud (e.g. Figure \@ref(fig:anaconda-windspharm-search)). 
 To try and address this duplication problem [conda-forge][conda-forge] was launched,
 which aims to be a central repository that contains just a single, up-to-date (and working)
 version of each installation package on Anaconda Cloud.
@@ -17905,9 +17907,9 @@ The advantage that conda has over these options is that it is language agnostic
 supports binary packages (i.e. you don't need to compile the source code after installing),
 so it has become the environment manager of choice in data science.
 In this book conda is used to export the details of an environment
-when documenting the computational methodology for a report (Section \@ref(provenance-code))
+when documenting the computational methodology for a report (Section \@ref(provenance-code))
 and to test how a new package installs without disturbing anything
-in our main Python installation (Section \@ref(packaging-virtualenv)).
+in our main Python installation (Section \@ref(packaging-virtualenv)).
 
 <!--chapter:end:chapters/anaconda.Rmd-->
 
@@ -17979,86 +17981,86 @@ zipf/
 Each file was introduced and subsequently modified
 in the following chapters, sections and exercises:
 
-`.gitignore`: Introduced in Section \@ref(git-cmdline-ignore).
+`.gitignore`: Introduced in Section \@ref(git-cmdline-ignore).
 
-`CITATION.md`: Introduced in Section \@ref(packaging-software-journals).
+`CITATION.md`: Introduced in Section \@ref(packaging-software-journals).
 
-`CONDUCT.md`: Introduced in Section \@ref(teams-coc) and 
-committed to the repository in Exercise \@ref(teams-ex-boilerplate-coc).
+`CONDUCT.md`: Introduced in Section \@ref(teams-coc) and 
+committed to the repository in Exercise \@ref(teams-ex-boilerplate-coc).
 
-`CONTRIBUTING.md`: Introduced in Section \@ref(teams-documentation) and 
-committed to the repository in Exercise \@ref(teams-ex-contributing).
+`CONTRIBUTING.md`: Introduced in Section \@ref(teams-documentation) and 
+committed to the repository in Exercise \@ref(teams-ex-contributing).
 
-`KhanVirtanen2020.md`: Introduced in Section \@ref(provenance-code-steps).
+`KhanVirtanen2020.md`: Introduced in Section \@ref(provenance-code-steps).
 
-`LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
-committed to the repository in Exercise \@ref(teams-ex-boilerplate-license).
+`LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
+committed to the repository in Exercise \@ref(teams-ex-boilerplate-license).
 
-`Makefile`: Introduced and updated throughout Chapter \@ref(automate).
+`Makefile`: Introduced and updated throughout Chapter \@ref(automate).
 
-`README.rst`: Introduced as a `.md` file in Section \@ref(git-advanced-conflict),
-updated in Section \@ref(git-advanced-fork) and then converted to a `.rst` file
-with further updates in \@ref(packaging-readme).
+`README.rst`: Introduced as a `.md` file in Section \@ref(git-advanced-conflict),
+updated in Section \@ref(git-advanced-fork) and then converted to a `.rst` file
+with further updates in Section \@ref(packaging-readme).
 
-`environment.yml`: Introduced in Section \@ref(provenance-code-environment).
+`environment.yml`: Introduced in Section \@ref(provenance-code-environment).
 
-`requirements.txt`: Introduced in Section \@ref(testing-ci).
+`requirements.txt`: Introduced in Section \@ref(testing-ci).
 
-`requirements_docs.txt`: Introduced in Section \@ref(packaging-sphinx).
+`requirements_docs.txt`: Introduced in Section \@ref(packaging-sphinx).
 
-`setup.py`: Introduced and updated throughout Chapter \@ref(packaging).
+`setup.py`: Introduced and updated throughout Chapter \@ref(packaging).
 
-`data/*` : Downloaded as part of the setup instructions (Appendix \@ref(install)).
+`data/*` : Downloaded as part of the setup instructions (Appendix \@ref(install)).
 
-`docs/*`: Introduced in Section \@ref(packaging-sphinx).
+`docs/*`: Introduced in Section \@ref(packaging-sphinx).
 
-`results/collated.*`: Generated in Section \@ref(automate-pipeline).
+`results/collated.*`: Generated in Section \@ref(automate-pipeline).
 
-`results/dracula.csv`: Generated in Section \@ref(scripting-collate).
+`results/dracula.csv`: Generated in Section \@ref(scripting-collate).
 
-`results/dracula.png`: Generated in Section \@ref(git-cmdline-changes) and updated in Section \@ref(git-advanced-zipf-verify).
+`results/dracula.png`: Generated in Section \@ref(git-cmdline-changes) and updated in Section \@ref(git-advanced-zipf-verify).
 
-`results/jane_eyre.csv`: Generated in Section \@ref(scripting-collate).
+`results/jane_eyre.csv`: Generated in Section \@ref(scripting-collate).
 
-`results/jane_eyre.png`: Generated in Section \@ref(scripting-plotting).
+`results/jane_eyre.png`: Generated in Section \@ref(scripting-plotting).
 
-`results/moby_dick.csv`: Generated in Section \@ref(scripting-collate).
+`results/moby_dick.csv`: Generated in Section \@ref(scripting-collate).
 
-`results/frankenstein.csv`: Generated in Section \@ref(automate-functions).
+`results/frankenstein.csv`: Generated in Section \@ref(automate-functions).
 
-`results/sense_and_sensibility.csv`: Generated in Section \@ref(automate-functions).
+`results/sense_and_sensibility.csv`: Generated in Section \@ref(automate-functions).
 
-`results/sherlock_holmes.csv`: Generated in Section \@ref(automate-functions).
+`results/sherlock_holmes.csv`: Generated in Section \@ref(automate-functions).
 
-`results/time_machine.csv`: Generated in Section \@ref(automate-functions).
+`results/time_machine.csv`: Generated in Section \@ref(automate-functions).
 
-`test_data/random_words.txt`: Generated in Section \@ref(testing-integration). 
+`test_data/random_words.txt`: Generated in Section \@ref(testing-integration). 
 
-`test_data/risk.txt`: Introduced in Section \@ref(testing-unit).
+`test_data/risk.txt`: Introduced in Section \@ref(testing-unit).
 
-`zipf/`: Introduced as `bin/` in Section \@ref(intro-organize) and
-changes name to `zipf/` in Section \@ref(packaging-package).
+`zipf/`: Introduced as `bin/` in Section \@ref(intro-organize) and
+changes name to `zipf/` in Section \@ref(packaging-package).
 
-`zipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
+`zipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
 
-`zipf/collate.py`: Introduced in Section \@ref(scripting-collate) and
-updated in Section \@ref(py-rse-py-scripting-modules),
-throughout Chapter \@ref(errors) and in Section \@ref(packaging-package).
+`zipf/collate.py`: Introduced in Section \@ref(scripting-collate) and
+updated in Section \@ref(py-rse-py-scripting-modules),
+throughout Chapter \@ref(errors) and in Section \@ref(packaging-package).
 
-`zipf/countwords.py`: Introduced in Section \@ref(scripting-wordcount) and
-updated in Sections \@ref(py-rse-py-scripting-modules) and \@ref(packaging-package).
+`zipf/countwords.py`: Introduced in Section \@ref(scripting-wordcount) and
+updated in Sections \@ref(py-rse-py-scripting-modules) and \@ref(packaging-package).
 
-`zipf/plotcounts.py`: Introduced in Exercise \@ref(scripting-ex-better-plotting) and
-updated throughout Chapters \@ref(git-cmdline), \@ref(git-advanced) and \@ref(config).
+`zipf/plotcounts.py`: Introduced in Exercise \@ref(scripting-ex-better-plotting) and
+updated throughout Chapters \@ref(git-cmdline), \@ref(git-advanced) and \@ref(config).
 
-`zipf/plotparams.yml`: Introduced in Section \@ref(config-job-file).
+`zipf/plotparams.yml`: Introduced in Section \@ref(config-job-file).
 
-`zipf/script_template.py`: Introduced in Section \@ref(scripting-options) and
-updated in Section \@ref(scripting-docstrings).
+`zipf/script_template.py`: Introduced in Section \@ref(scripting-options) and
+updated in Section \@ref(scripting-docstrings).
 
-`zipf/test_zipfs.py`: Introduced and updated throughout Chapter \@ref(testing).
+`zipf/test_zipfs.py`: Introduced and updated throughout Chapter \@ref(testing).
 
-`zipf/utilities.py`: Introduced in Section \@ref(py-rse-py-scripting-modules).
+`zipf/utilities.py`: Introduced in Section \@ref(py-rse-py-scripting-modules).
 
 
 <!--chapter:end:chapters/tree.Rmd-->
@@ -19940,9 +19942,11 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
 [theoj]: https://joss.theoj.org/
+[theoj-checklist]: https://joss.readthedocs.io/en/latest/review_checklist.html
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
 [travis-ci]: https://travis-ci.org/
+[travis-status-images]: https://docs.travis-ci.com/user/status-images/
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
