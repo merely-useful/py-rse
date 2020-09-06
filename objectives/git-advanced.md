@@ -1,6 +1,6 @@
--   Explain why [branches][git_branch] are useful.
--   Demonstrate how to create a branch, make changes on that branch, and [merge][git_merge] those changes back into the original branch.
--   Explain what [conflicts][git_conflict] are and demonstrate how to resolve them.
--   Explain what is meant by a [branch-per-feature][branch_per_feature] workflow.
--   Define the terms [fork][git_fork], [clone][git_clone], [remote][remote_repository], and [pull request][pull_request].
+-   Explain why \gref{branches}{git_branch} are useful.
+-   Demonstrate how to create a branch, make changes on that branch, and \gref{merge}{git_merge} those changes back into the original branch.
+-   Explain what \gref{conflicts}{git_conflict} are and demonstrate how to resolve them.
+-   Explain what is meant by a \gref{branch-per-feature}{branch_per_feature} workflow.
+-   Define the terms \gref{fork}{git_fork}, \gref{clone}{git_clone}, \gref{remote}{remote_repository}, and \gref{pull request}{pull_request}.
 -   Demonstrate how to fork a repository and submit a pull request to the original repository.

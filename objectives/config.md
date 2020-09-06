@@ -1,3 +1,3 @@
--   Explain what [overlay configuration][overlay_configuration] is.
+-   Explain what \gref{overlay configuration}{overlay_configuration} is.
 -   Describe the four levels of configuration typically used by robust software.
--   Create a configuration file using [YAML][yaml].
+-   Create a configuration file using \gref{YAML}{yaml}.

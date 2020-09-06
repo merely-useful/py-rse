@@ -1,14 +1,14 @@
 -   Explain how the shell relates to the keyboard, the screen, the operating system, and users' programs.
--   Explain when and why a [command-line interface][cli] should be used instead of [graphical user interfaces][gui].
--   Explain the steps in the shell's [read-evaluate-print loop][repl].
+-   Explain when and why a \gref{command-line interface}{cli} should be used instead of \gref{graphical user interfaces}{gui}.
+-   Explain the steps in the shell's \gref{read-evaluate-print loop}{repl}.
 -   Identify the command, options, and filenames in a command-line call.
 -   Explain the similarities and differences between files and directories.
--   Translate an [absolute path][absolute_path] into a [relative path][relative_path] and vice versa.
+-   Translate an \gref{absolute path}{absolute_path} into a \gref{relative path}{relative_path} and vice versa.
 -   Construct absolute and relative paths that identify specific files and directories.
 -   Delete, copy, and move files and directories.
--   [Redirect][redirection] a command's output to a file.
+-   \gref{Redirect}{redirection} a command's output to a file.
 -   Use redirection to process a file instead of keyboard input.
--   Construct [pipelines][pipe_shell] with two or more stages.
+-   Construct \gref{pipelines}{pipe_shell} with two or more stages.
 -   Explain Unix's "small pieces, loosely joined" philosophy.
 -   Write a loop that applies one or more commands separately to each file in a set of files.
 -   Trace the values taken on by a loop variable during execution of the loop.
