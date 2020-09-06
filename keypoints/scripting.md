@@ -1,9 +1,9 @@
--   Write command-line Python programs that can be run in the [Unix shell][shell] like other command-line tools.
--   If the user does not specify any input files, read from [standard input][stdin].
--   If the user does not specify any output files, write to [standard output][stdout].
+-   Write command-line Python programs that can be run in the \gref{Unix shell}{shell} like other command-line tools.
+-   If the user does not specify any input files, read from \gref{standard input}{stdin}.
+-   If the user does not specify any output files, write to \gref{standard output}{stdout}.
 -   Place all `import` statements at the start of a module.
 -   Use the value of `__name__` to determine if a file is being run directly or being loaded as a module.
 -   Use [`argparse`][argparse] to handle command-line arguments in standard ways.
--   Use [short options][short_option] for common controls and [long options][long_option] for less common or more complicated ones.
--   Use [docstrings][docstring] to document functions and scripts.
+-   Use \gref{short options}{short_option} for common controls and \gref{long options}{long_option} for less common or more complicated ones.
+-   Use \gref{docstrings}{docstring} to document functions and scripts.
 -   Place functions that are used across multiple scripts in a separate file that those scripts can import.

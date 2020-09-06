@@ -56,7 +56,6 @@
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
-[make]: https://www.gnu.org/software/make/
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
