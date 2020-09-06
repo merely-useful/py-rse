@@ -9181,7 +9181,7 @@ anything that's likely to take longer than multiple days should be broken down
 so that planning and progress tracking can be more accurate.
 
 <div class="figure" style="text-align: center">
-<img src="figures/FIXME.png" alt="An Impact/Effort Matrix" width="100%" />
+<img src="figures/teams/effort-impact-matrix.svg" alt="An Impact/Effort Matrix" width="100%" />
 <p class="caption">(\#fig:teams-impact-effort)An Impact/Effort Matrix</p>
 </div>
 
