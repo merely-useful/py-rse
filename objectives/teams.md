@@ -1,10 +1,10 @@
--   Explain how a project lead can be a good [ally][ally].
+-   Explain how a project lead can be a good \gref{ally}{ally}.
 -   Explain the purpose of a Code of Conduct and add one to a project.
 -   Explain why every project should include a license and add one to a project.
 -   Describe different kinds of licenses for software and written material.
--   Explain what an [issue tracking system][issue_tracking_system] does and what it should be used for.
+-   Explain what an \gref{issue tracking system}{issue_tracking_system} does and what it should be used for.
 -   Describe what a well-written issue should contain.
--   Explain how to [label][issue_label] issues to manage work.
+-   Explain how to \gref{label}{issue_label} issues to manage work.
 -   Submit an issue to a project.
 -   Describe common approaches to prioritizing tasks.
 -   Describe some common-sense rules for running meetings.

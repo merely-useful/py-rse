@@ -1,8 +1,8 @@
--   Explain the advantages and disadvantages of using [Git][git] at the command line.
+-   Explain the advantages and disadvantages of using \gref{Git}{git} at the command line.
 -   Demonstrate how to configure Git on a new computer.
 -   Create a local Git repository at the command line.
 -   Demonstrate the modify-add-commit cycle for one or more files.
--   Synchronize a local repository with a [remote repository][remote_repository].
+-   Synchronize a local repository with a \gref{remote repository}{remote_repository}.
 -   Explain what the `HEAD` of a repository is and demonstrate how to use it in commands.
 -   Identify and use Git commit identifiers.
 -   Demonstrate how to compare revisions to files in a repository.

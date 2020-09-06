@@ -1,10 +1,10 @@
 -   Welcome and nurture community members proactively.
 -   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
 -   Include a license in your project so that it's clear who can do what with the material.
--   Create [issues][issue] for bugs, enhancement requests, and discussions.
--   [Label issues][issue_label] to identify their purpose.
--   [Triage][triage] issues regularly and group them into [milestones][milestone] to track progress.
+-   Create \gref{issues}{issue} for bugs, enhancement requests, and discussions.
+-   \gref{Label issues}{issue_label} to identify their purpose.
+-   \gref{Triage}{triage} issues regularly and group them into \gref{milestones}{milestone} to track progress.
 -   Include contribution guidelines in your project that specify its workflow and its expectations of participants.
--   Make rules about [governance][governance] explicit.
+-   Make rules about \gref{governance}{governance} explicit.
 -   Use common-sense rules to make project meetings fair and productive.
 -   Manage conflict between participants rather than hoping it will take care of itself.
