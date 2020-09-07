@@ -38,7 +38,7 @@ zipf/
 
 ## Exceptions {#errors-exceptions}
 
-Most modern programming languages use [exceptions][exception] for error handling.
+Most modern programming languages use \gref{exceptions}{exception} for error handling.\index{exception}
 As the name suggests,
 an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
@@ -69,14 +69,14 @@ This is why the `print` statement inside the `try` doesn't run when `denom` is 0
 as soon as Python tries to calculate `1/denom`,
 it skips directly to the code under `except`.
 
-```{r errors-control-flow, echo=FALSE, fig.cap="Exception Control Flow"}
-knitr::include_graphics("figures/py-rse/errors/exceptions.png")
+```{r errors-control-flow, echo=FALSE, fig.cap="Exception Control Flow", out.width="40%"}
+knitr::include_graphics("figures/errors/exceptions.png")
 ```
 
 We often want to know exactly what went wrong,
 so Python and other languages store information about the error
 in an object (which is also called an exception).
-We can [catch][catch_exception] an exception and inspect it as follows:
+We can \gref{catch}{catch_exception} an exception and inspect it as follows:\index{exception!catch}\index{catch exception}
 
 ```python
 for denom in [-5, 0, 5]:
@@ -121,14 +121,14 @@ for i in [0, 1, 2, 3]:
 index 3 out of range
 ```
 
-Exceptions are organized in a hierarchy:
+Exceptions are organized in a hierarchy:\index{exception!hierarchy}
 for example,
 `FloatingPointError`, `OverflowError`, and `ZeroDivisionError`
 are all special cases of `ArithmeticError`,
 so an `except` that catches the latter will catch all three of the former,
 but an `except` that catches an `OverflowError`
 *won't* catch a `ZeroDivisionError`.
-The Python documentation describes all of[the built-in exception types][python-exceptions];
+The Python documentation describes all of [the built-in exception types][python-exceptions];
 in practice,
 the ones that people handle most often are:
 
@@ -142,7 +142,7 @@ the ones that people handle most often are:
     and so on.
 
 So where do exceptions come from?
-The answer is that programmers can [raise][raise_exception] them explicitly:
+The answer is that programmers can \gref{raise}{raise_exception} them explicitly:\index{exception!raise}\index{raise exception}
 
 ```python
 for number in [1, 0, -1]:
@@ -169,7 +169,7 @@ In fact,
 their greatest strength is that they allow long-range error handling.
 If an exception occurs inside a function and there is no `except` for it there,
 Python checks to see if whoever called the function is willing to handle the error.
-It keeps working its way up through the [call stack][call_stack]
+It keeps working its way up through the \gref{call stack}{call_stack}\index{call stack}
 until it finds a matching `except`.
 If there isn't one,
 Python takes care of the exception itself.
@@ -314,9 +314,9 @@ so there should always be an `except` somewhere
 to deal with unexpected cases.
 
 Generally speaking,
-we should distinguish between [internal errors][internal_error],
+we should distinguish between \gref{internal errors}{internal_error},\index{error!internal}\index{internal error}
 such as calling a function with `None` instead of a list,
-and [external errors][external_error],
+and \gref{external errors}{external_error},
 such as trying to read a file that doesn't exist.
 Internal errors should be prevented by doing unit testing (Chapter \@ref(testing)),
 but software is always used in new ways in the real world,
@@ -330,7 +330,7 @@ We can try to guess what the problem is and take corrective action,
 but our guess will often be wrong
 and our attempt to correct the problem might actually make things worse.
 
-External errors,
+External errors,\index{error!external}\index{external error}
 on the other hand,
 are usually caused by interactions between the program and the outside world:
 a user may mis-type a filename,
@@ -354,10 +354,10 @@ the more useful those checks will be.
 
 ## Writing Useful Error Messages {#errors-messages}
 
-The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:
+The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:\index{error message!writing helpful}
 
 ```{r errors-error-message, echo=FALSE, fig.cap="An Unhelpful Error Message", out.width="60%"}
-knitr::include_graphics("figures/py-rse/scripting/error-message.png")
+knitr::include_graphics("figures/scripting/error-message.png")
 ```
 
 Having `collate.py` print the message below would be equally unfriendly:
@@ -433,7 +433,7 @@ What research there is gives us the following rules @Beck2016:
     This rule can be hard to enforce when error messages are written by several different people,
     but putting them all in one module makes review easier.
 
-That last suggestion deserves a little elaboration.
+That last suggestion deserves a little elaboration.\index{error message!lookup table}
 Most people write error messages directly in their code:
 
 ```python
@@ -487,13 +487,13 @@ where `user_language` is a two-letter code for the user's preferred language.
 
 ## Reporting Errors {#errors-logging}
 
-Programs should report things that go wrong;
+Programs should report things that go wrong;\index{error message!reporting}
 they should also sometimes report things that go right
 so that people can monitor their progress.
 Adding `print` statements is a common approach,
 but removing them or commenting them out when the code goes into production is tedious and error-prone.
 
-A better approach is to use a [logging framework][logging_framework],
+A better approach is to use a \gref{logging framework}{logging_framework},\index{logging framework}
 such as Python's `logging` library.
 This lets us leave debugging statements in our code
 and turn them on or off at will.
@@ -528,7 +528,7 @@ but the other two only in case the user has requested more details
 by setting `LOG_LEVEL` higher than zero.
 
 A logging framework combines the `if` and `print` statements in a single function call
-and defines standard names for the logging levels.
+and defines standard names for the \gref{logging levels}{logging_level}.\index{logging level}
 In order of increasing severity,
 the usual levels are:
 
@@ -542,7 +542,7 @@ Each of these has a corresponding function:
 we can use `logging.debug`, `logging.info`, etc. to write messages at these levels.
 By default,
 only `WARNING` and above are displayed;
-messages appear on [standard error][stderr]
+messages appear on \gref{standard error}{stderr}\index{standard error}
 so that the flow of data in pipes isn't affected.
 The logging framework also displays the source of the message,
 which is called `root` by default.
@@ -579,7 +579,7 @@ for file_name in args.infiles:
         update_counts(reader, word_counts)
 ```
 
-We can also configure logging to send messages to a file instead of standard error
+We can also configure logging to send messages to a file instead of standard error\index{configuration!logging}\index{logging configuration}
 using `logging.basicConfig`.
 (This has to be done before we make any logging calls---it's not retroactive.)
 We can also use that function to set the logging level:
@@ -607,7 +607,7 @@ CRITICAL:root:Something went seriously wrong.
 ```
 
 By default,
-`basicConfig` re-opens the file we specify in [append mode][append_mode];
+`basicConfig` re-opens the file we specify in \gref{append mode}{append_mode};\index{append mode}
 we can use `filemode='w'` to overwrite the existing log data.
 Overwriting is useful during debugging,
 but we should think twice before doing in production,
@@ -643,7 +643,7 @@ Libraries like `logging` can send messages to many destinations;
 in production,
 we might send them to a centralized logging server
 that collates logs from many different systems.
-We might also use [rotating files][rotating_file]
+We might also use \gref{rotating files}{rotating_file}\index{logging framework!rotating file}
 so that the system always has messages from the last few hours
 but doesn't fill up the disk.
 We don't need any of these when we start,
@@ -662,7 +662,7 @@ because it allows them to set things up the way they want with very little work.
 > 1.  Write the configuration values into the log one at a time.
 >
 > 2.  Save the configuration as a single record in the log
->     (e.g., as a single entry containing [JSON][json]).
+>     (e.g., as a single entry containing \gref{JSON}{json}).
 >
 > 3.  Write the configuration to a separate file
 >     and save the filename in the log.
@@ -769,7 +769,7 @@ a,7629
 
 ### Send the logging output to file {#errors-ex-logging-output}
 
-In Exercise \@ref(errors-ex-set-level),
+In Exercise \@ref(errors-ex-set-level),
 logging information is printed to the screen when the verbose flag is activated.
 This is problematic if we want to re-direct the output from `collate.py` to a CSV file,
 because the logging information will appear in the CSV file

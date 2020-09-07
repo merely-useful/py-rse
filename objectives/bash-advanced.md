@@ -1,4 +1,4 @@
--   Write a [shell script][shell_script] that uses command-line arguments.
+-   Write a \gref{shell script}{shell_script} that uses command-line arguments.
 -   Create pipelines that include shell scripts as well as built-in commands.
 -   Create and use variables in shell scripts with correct quoting.
 -   Use `grep` to select lines from text files that match simple patterns.

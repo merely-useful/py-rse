@@ -1,6 +1,6 @@
--   Explain what a [DOI][doi] is and how to get one.
--   Explain what an [ORCID][orcid] is and get one.
+-   Explain what a \gref{DOI}{doi} is and how to get one.
+-   Explain what an \gref{ORCID}{orcid} is and get one.
 -   Describe the [FAIR Principles][go-fair] and determine whether a dataset conforms to them.
 -   Explain where to archive small, medium, and large datasets.
 -   Describe good practices for archiving analysis code and determine whether a report conforms to them.
--   Explain the difference between [reproducibility][reproducible_research] and [inspectability][inspectability].
+-   Explain the difference between \gref{reproducibility}{reproducible_research} and \gref{inspectability}{inspectability}.

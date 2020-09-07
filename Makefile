@@ -8,6 +8,9 @@ CHAPTERS=index.Rmd $(wildcard chapters/*.Rmd)
 
 OBJECTIVES_KEYPOINTS=$(wildcard objectives/*.md) $(wildcard keypoints/*.md)
 
+GLOSSARY=glossary/glossary.md
+GLOSARIO=${HOME}/glosario
+
 COMMON_FILES=\
   krantz.cls \
   _bookdown.yml \
@@ -17,7 +20,7 @@ COMMON_FILES=\
   LICENSE.md \
   CONDUCT.md \
   CONTRIBUTING.md \
-  glossary.md \
+  ${GLOSSARY} \
   references.Rmd \
   links.md \
   book.bib
@@ -27,8 +30,6 @@ SOURCE=${CHAPTERS} ${OBJECTIVES_KEYPOINTS} ${COMMON_FILES}
 EXTRA=\
   src\
   zipf
-
-GLOSS=${HOME}/glosario
 
 #-------------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ everything : ${HTML} ${PDF}
 ## html : build all HTML versions.
 html : _book/index.html
 
-_book/index.html : ${SOURCE}
+_book/index.html : ${SOURCE} glossary/glossary-html.lua
 	rm -f py-rse.Rmd
 	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook'); warnings()"
 	cp -r ${EXTRA} _book
@@ -72,6 +73,10 @@ clean :
 chapters :
 	@make settings | bin/chapters.py _bookdown.yml CHAPTERS
 
+## citations : check bibliography citations.
+citations :
+	@bin/citations.py book.bib ${CHAPTERS}
+
 ## crossrefs : check cross-references.
 crossrefs :
 	@bin/crossrefs.py "RSE PY" ${SOURCE}
@@ -80,21 +85,26 @@ crossrefs :
 fixme :
 	@fgrep FIXME ${SOURCE}
 
-## glossary : rebuild the Markdown glossary file
-glossary :
-	echo '# Glossary {#glossary}' > glossary.md
-	echo '' >> glossary.md
-	${GLOSS}/utils/merge.py ${GLOSS}/glossary.yml ./glossary.yml \
-	| bin/glossarize.py glossary-slugs.txt \
-	>> glossary.md
+## gloss : rebuild the Markdown glossary file.
+# Target cannot be called 'glossary' because there is a directory with that name.
+gloss :
+	echo '# Glossary {#glossary}' > ${GLOSSARY}
+	echo '' >> ${GLOSSARY}
+	bin/glossary-merge.py ${GLOSARIO}/glossary.yml glossary/glossary.yml \
+	| bin/glossarize.py glossary/glossary-slugs.txt \
+	>> ${GLOSSARY}
+
+## glosscheck : check that glossary entries are defined and used.
+glosscheck :
+	@bin/glosscheck.py ${GLOSSARY} ${CHAPTERS}
 
 ## images : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${SOURCE}
 
-## links : check that links and glossary entries are defined and used.
-links :
-	@bin/links.py ./links.md ./glossary.md ${SOURCE}
+## linkcheck : check that links are defined and used.
+linkcheck :
+	@bin/linkcheck.py ./links.md ${CHAPTERS}
 
 ## exercises : check that exercises have solutions and solutions have exercises.
 exercises :

@@ -10,6 +10,6 @@
 
 This repository contains material for a semester-long course on computing skills for researchers.
 Please see <https://merely-useful.github.io/py-rse> for the rendered version,
-and <https://merely-useful.github.io/py-rseconduct.html> for our Code of Conduct.
+and <https://merely-useful.github.io/py-rse/conduct.html> for our Code of Conduct.
 
 For contributors, please follow our [contributing guidelines](.github/CONTRIBUTING.md).

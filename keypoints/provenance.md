@@ -1,7 +1,7 @@
 -   Publish data and code as well as papers.
--   Use [DOIs][doi] to identify reports, datasets, or software release.
--   Use an [ORCID][orcid] to identify yourself as an author of a report, dataset, or software release.
+-   Use \gref{DOIs}{doi} to identify reports, datasets, or software release.
+-   Use an \gref{ORCID}{orcid} to identify yourself as an author of a report, dataset, or software release.
 -   Data should be [FAIR][go-fair]: findable, accessible, interoperable, and reusable.
 -   Put small datasets in version control repositories; store large ones on data sharing sites.
--   Describe your software environment, analysis scripts, and data processing steps in [reproducible][reproducible_research] ways.
--   Make your analyses [inspectable][inspectability] as well as reproducible.
+-   Describe your software environment, analysis scripts, and data processing steps in \gref{reproducible}{reproducible_research} ways.
+-   Make your analyses \gref{inspectable}{inspectability} as well as reproducible.
