@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-06"
+date: "2020-09-08"
 documentclass: krantz
 bibliography: book.bib
 link-citations: yes
@@ -468,6 +468,10 @@ and Elizabeth Wickes.
 
 
 # The Basics of the Unix Shell {#bash-basics}
+
+> Ninety percent of most magic merely consists of knowing one extra fact.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 Computers do four basic things:
 store data,
@@ -2950,6 +2954,10 @@ explain in plain language what files the expression `novel-????-[ab]*.{txt,pdf}`
 
 # Going Further with the Unix Shell {#bash-advanced}
 
+> There isn't a way things should be. There's just what happens, and what we do.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 The previous chapter explained how we can use the command line
 to do all of the things we can do with a GUI,
 and how to combine commands in new ways using pipes and redirection.
@@ -4157,6 +4165,10 @@ Explain why the value for `-mtime` needs to be negative.
 
 # Command Line Programs in Python {#scripting}
 
+> Multiple exclamation marks are a sure sign of a diseased mind.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 The [Jupyter Notebook][jupyter], PyCharm, and other graphical interfaces
 are great for prototyping code and exploring data,
 but eventually we may need to apply our code to thousands of data files,
@@ -5141,6 +5153,10 @@ the solution to this exercise is used in following chapters.
 
 
 # Git at the Command Line {#git-cmdline}
+
+> +++ Divide By Cucumber Error. Please Reinstall Universe And Reboot +++
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 A \gref{version control system}{version_control_system} records changes to files\index{version control}
 and helps people share their work with each other.
@@ -6607,6 +6623,10 @@ Run the command `git blame bin/plotcounts.py`.
 
 
 # Advanced Git {#git-advanced}
+
+> It's got three keyboards and a hundred extra knobs, including twelve with '?' on them.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 Git would be worth using if all it did was keep track of our work,
 but two of its more advanced features allow us to do much more.
@@ -8349,6 +8369,10 @@ Describe what is in each of the four repositories involved after each of the ste
 
 # Working in Teams {#teams}
 
+> Evil begins when you begin to treat people as things.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 Projects can run for years with poorly-written code,
 but none will survive for long if people are confused,
 pulling in different directions,
@@ -9817,6 +9841,13 @@ How would you address this issue?
 
 # Automating Analyses {#automate}
 
+> The three rules of the Librarians of Time and Space are:
+> 1) Silence;
+> 2) Books must be returned no later than the last date shown; and
+> 3) Do not interfere with the nature of causality.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 It's easy to run one program to process a single data file,
 but what happens when our analysis depends on many files,
 or when we need to re-do the analysis every time new data arrives?
@@ -10814,6 +10845,10 @@ explain what every part of this recipe does.
 
 # Program Configuration {#config}
 
+> Always be wary of any helpful item that weighs less than its operating manual.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 In previous chapters we used command-line options to control our scripts and programs.
 If they are more complex,\index{shell script!configuring}\index{Python!configuring program}
 we may want to use up to four layers of configuration:
@@ -11319,6 +11354,10 @@ What steps could you take to ensure the required consistency?
 
 
 # Error Handling {#errors}
+
+> "When Mister Safety Catch Is Not On, Mister Crossbow Is Not Your Friend."
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 We live in an imperfect world.
 People will give our programs options that aren't supported
@@ -12152,6 +12191,10 @@ for formatting error messages that come from a lookup table.
 
 
 # Testing {#testing}
+
+> Opera happens because a large number of things amazingly fail to go wrong.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 We have written software to count and analyze the words in classic texts,
 but how can we be sure it's producing reliable results?
@@ -13349,6 +13392,11 @@ How would you test that different parameters were having the correct effect?
 
 
 # Provenance {#provenance}
+
+> The most important problem is that we are trying to understand the fundamental workings of the universe
+> via a language devised for telling one another when the best fruit is.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 We have now developed, automated, and tested
 a workflow for plotting the word count distribution for classic novels.
