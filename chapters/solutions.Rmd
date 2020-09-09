@@ -62,6 +62,18 @@ The files/directories in each directory are sorted by time of last change.
     efficiently generate a blank text file to be used by such
     programs.
 
+### Exercise \@ref(bash-basics-ex-safe-rm) {-}
+
+```shell
+$ rm: remove regular file 'thesis_backup/quotations.txt'? y
+```
+
+The `-i` option will prompt before (every) removal
+(use <kbd>Y</kbd> to confirm deletion or <kbd>N</kbd> to keep the file).
+The Unix shell doesn't have a trash bin, so all the files removed will disappear forever.
+By using the `-i` option, we have the chance to check that we are deleting
+only the files that we want to remove.
+
 ### Exercise \@ref(bash-basics-ex-move-dot) {-}
 
 ```shell
@@ -95,18 +107,6 @@ So, the only thing that will show using ls (in `/Users/jamie/data`) is the recom
 2. Yes
 3. No, see explanation above.  `proteins.dat` is located at `/Users/jamie/data/recombine`
 4. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
-
-### Exercise \@ref(bash-basics-ex-safe-rm) {-}
-
-```shell
-$ rm: remove regular file 'thesis_backup/quotations.txt'? y
-```
-
-The `-i` option will prompt before (every) removal
-(use <kbd>Y</kbd> to confirm deletion or <kbd>N</kbd> to keep the file).
-The Unix shell doesn't have a trash bin, so all the files removed will disappear forever.
-By using the `-i` option, we have the chance to check that we are deleting
-only the files that we want to remove.
 
 ### Exercise \@ref(bash-basics-ex-copy-multi) {-}
 
@@ -206,15 +206,22 @@ The file should contain the following lines:
 
 ### Exercise \@ref(bash-basics-ex-pipe-construction) {-}
 
-```shell
-$ cut -d , -f 2 animals.txt | sort | uniq
-```
+`cut` selects substrings from a line by:
+
+-   breaking the string into pieces wherever it finds a separator (`-d ,`) and
+-   keeping one or more of the resulting fields (`-f 2`).
+
+Any single character can be used as a separator,
+but there is no way to escape characters:
+for example, if the string `a,"b,c",d` is split on commas,
+all three commas take effect.
 
 ### Exercise \@ref(bash-basics-ex-which-pipe) {-}
 
-Option 4. is the correct answer.
-If you have difficulty understanding why, try running the commands, or sub-sections of
-the pipelines (make sure you are in the `data-shell/data` directory).
+Option 4 is the correct answer.
+If you have difficulty understanding why,
+try running the commands or sub-sections of the pipelines
+(make sure you are in the `data-shell/data` directory).
 
 ### Exercise \@ref(bash-basics-ex-wildcard-expressions) {-}
 
@@ -399,6 +406,7 @@ Script 2 would print the contents of the first 3 files with a `.pdb` file extens
 Script 3 would print all the arguments to the script (i.e. all the `.pdb` files),
 followed by `.pdb`.
 `$@` refers to *all* the arguments given to a shell script.
+
 ```text
 cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
 ```
@@ -410,7 +418,12 @@ The other options will also match "of" when part of another word.
 
 ### Exercise \@ref(bash-advanced-ex-year-script) {-}
 
-FIXME
+```text
+for filename in $*
+do
+  
+done
+```
 
 ### Exercise \@ref(bash-advanced-ex-sense-sensibility) {-}
 
@@ -465,7 +478,15 @@ $ find ./ -type f -mtime -1 -user ahmed
 
 ### Exercise \@ref(scripting-ex-command-line) {-}
 
-FIXME
+Running Python statement directly from the command line is useful as a basic calculator
+and for simple string operations.
+Since anything more complicated than that usually requires more than one statement,
+it is often convenient to separate commands with semi-colons, as in:
+
+```python
+$ python -c "import math; print(math.log(123))"
+```
+
 
 ### Exercise \@ref(scripting-ex-better-plotting) {-}
 
@@ -706,36 +727,116 @@ the working directory.
 
 ### Exercise \@ref(git-cmdline-ex-blame) {-}
 
-1. Each line of output corresponds to a line in the file, who was last
+Each line of output corresponds to a line in the file, who was last
 to modify the line, when that change was made, and what the file name was
 or is called.
-2. FIXME: I don't see any `^` when I use it on a random file in the book repo.
 
 ## Chapter \@ref(git-advanced)
 
 ### Exercise \@ref(git-advanced-ex-explain-options) {-}
 
-FIXME
+1.  `--oneline` shows each commit on a single line
+    with the \gref{short identifier}{short_identifier_git} at the start
+    and the title of the commit beside it.
+    `-n NUMBER` limits the number of commits to show.
+
+2.  `--since` and `--after` can be used to show commits
+    in a range of dates or times;
+    `--author` can be used to show commits by a particular person;
+    and `-w` tells Git to ignore whitespace when comparing commits.
 
 ### Exercise \@ref(git-advanced-ex-modify-prompt) {-}
 
-FIXME
+An online search for "show Git branch in Bash prompt" turns up several approaches,
+one of the simplest of which is to add this line to our `~/.bashrc` file:
+
+```text
+export PS1="\\w + \$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \$ "
+```
+
+Breaking it down:
+
+1.  Setting the `PS1` variable defines the primary shell \gref{prompt}{prompt}.
+
+1.  `\\w` in a shell prompt string means "the current directory".
+
+1.  The `+` is a literal `+` sign between the current directory and the Git branch name.
+
+1.  The command that gets the name of the current Git branch is in `$(...)`.
+    (We need to escape the `$` as `\$` so Bash doesn't just run it once
+    when defining the string.)
+
+1.  The `git branch` command shows *all* the branches,
+    so we pipe that to `grep` and select the one marked with a `*`.
+
+1.  Finally, we remove the first column (i.e., the one containing the `*`)
+    to leave just the branch name.
+
+So what's `2>/dev/null` about?
+That redirects any error messages to `/dev/null`,
+a special "file" that consumes input without saving it.
+We need that because sometimes we will be in a directory
+that isn't inside a Git repository,
+and we don't want error messages showing up in our shell prompt.
+
+*None of this is obvious,*
+and we didn't figure it out ourselves.
+Instead,
+we did a search and pasted various answers into [explainshell.com][explainshell]
+until we had something we understood and trusted.
 
 ### Exercise \@ref(git-advanced-ex-ignoring-files) {-}
 
-FIXME
+<https://github.com/github/gitignore/blob/master/Python.gitignore>
+ignores 76 files or patterns.
+Of those,
+we recognized less than half.
+Searching online for some of these,
+like `"*.pot file"`,
+turns up useful explanations.
+Searching for others like `var/` does not;
+in that case,
+we have to look at the category (in this case, "Python distribution")
+and set aside time to do more reading.
 
 ### Exercise \@ref(git-advanced-ex-create-twice) {-}
 
-FIXME
+1.  `git diff master..same` does not print anything
+    because there are no differences between the two branches.
+
+2.  `git merge same master` prints `merging`
+    because Git combines histories even when the files themselves do not differ.
+    After running this command,
+    `git history` shows a commit for the merge.
 
 ### Exercise \@ref(git-advanced-ex-delete-unmerged) {-}
 
-FIXME
+1.  Git refuses to delete a branch with unmerged commits
+    because it doesn't want to destroy our work.
+
+2.  Using the `-D` (capital-D) option to `git branch` will delete the branch anyway.
+    This is dangerous because any content that exists only in that branch will be lost.
+
+3.  Even with `-D`, `git branch` will not delete the branch we are currently on.
 
 ### Exercise \@ref(git-advanced-ex-trace-changes) {-}
 
-FIXME
+1.  Chartreuse has repositories on GitHub and their desktop
+    containing identical copies of `README.md` and nothing else.
+2.  Fuchsia has repositories on GitHub and their desktop
+    with exactly the same content as Chartreuse's repositories.
+3.  `fuchsia.txt` is in both of Fuchsia's repositories
+    but not in Chartreuse's repositories.
+4.  `fuchsia.txt` is still in both of Fuchsia's repositories
+    but still not in Chartreuse's repositories.
+5.  `chartreuse.txt` is in both of Chartreuse's repositories
+    but not yet in either of Fuchsia's repositories.
+6.  `chartreuse.txt` is in Fuchsia's desktop repository
+    but not yet in their GitHub repository.
+7.  `chartreuse.txt is in boht of Fuchsia's repositories.
+8.  `fuchsia.txt` is in Chartreuse's GitHub repository
+    but not in their desktop repository.
+9.  All four repositories contain both `fuchsia.txt` and `chartreuse.txt`.
 
 ## Chapter \@ref(teams)
 

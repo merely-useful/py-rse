@@ -27,6 +27,7 @@
 [dryad]: https://datadryad.org/
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
+[explainshell]: http://explainshell.com
 [fair-questionnaire]: https://www.ands-nectar-rds.org.au/fair-tool
 [figshare]: https://figshare.com/
 [find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages

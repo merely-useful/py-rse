@@ -108,7 +108,7 @@ linkcheck :
 
 ## exercises : check that exercises have solutions and solutions have exercises.
 exercises :
-	@bin/exercises.py ${CHAPTERS}
+	@bin/exercises.py chapters/solutions.Rmd ${CHAPTERS}
 
 ## nbspref : check that all cross-references are prefixed with a non-breaking space.
 nbspref :
