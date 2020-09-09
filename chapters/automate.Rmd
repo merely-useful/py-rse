@@ -729,7 +729,7 @@ add a data file and run Make.
 This is a big improvement over running things manually,
 particularly as we start to add more steps like merging data files and generating plots.
 
-## Documenting a Makefile? {#automate-doc}
+## Documenting a Makefile {#automate-doc}
 
 Every well-behaved program should tell people how to use it @Tasc2017.
 If we run `make --help`,
@@ -930,27 +930,32 @@ If you want to go deeper,
 
 ## Exercises {#automate-exercises}
 
-### Create a summary results file {#automate-ex-create-summary-results}
+### Create all results {#automate-ex-all-results}
 
--   Add a rule to Makefile to create a summary CSV file from all of the book CSV files.
--   Be careful about writing the prerequisites so that it doesn't depend on itself.
+The default target of our final `Makefile` re-creates `results/collated.csv`.
+Add a target to `Makefile`
+so that `make results` creates or updates any result files that are missing or out of date,
+but does *not* regenerate `results/collated.csv`.
+
+### Make sure the output directory exists {#automate-ex-mkdir}
+
+Several of our \gref{build recipes}{build_recipe} include `mkdir -p`.
+What does this do and why is it useful?
 
 ### Generate a plot for the top N words {#automate-ex-plot-top-n}
 
 -   Make it depend on the summary.
 
-### Make sure the output directory exists {#automate-ex-mkdir}
-
--   Why is `mkdir -p` useful?
-
 ### Report results that would change {#automate-ex-report-change}
 
--   Write a rule to report which result files would actually change.
--   Hint: use `diff`.
+How can you get `make` to show the commands it would run
+without actually running them?
+(Hint: look at the manual page.)
 
-### Create more readable help {#automate-ex-readable-help}
+### Useful options {#automate-ex-useful-options}
 
--   Modify the command in the `help` recipe to remove the leading '##' markers from the output.
+1.  What does Make's `-B` option do and when is it useful?
+1.  What about the `-C` option?
 
 ### The perils of shell wildcards {#automate-ex-wildcard-perils}
 
@@ -961,7 +966,8 @@ results/collated.csv : results/*.csv
 	python $(COLLATE) $^ > $@
 ```
 
-Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
+(The fact that the result no longer depends on the program used to create it
+isn't the biggest problem.)
 
 ### Making documentation more readable {#automate-ex-readable-docs}
 
@@ -975,12 +981,6 @@ help :
 
 Using `man` and online search,
 explain what every part of this recipe does.
-
-### Useful options {#automate-ex-useful-options}
-
-1.  What does the `-n` option to Make do and when is it useful?
-2.  What does the `-B` option do and when is it useful?
-3.  What about the `-C` option?
 
 ## Key Points {#automate-keypoints}
 

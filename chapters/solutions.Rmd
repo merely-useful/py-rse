@@ -842,35 +842,70 @@ FIXME
 
 ## Chapter \@ref(automate)
 
-### Exercise \@ref(automate-ex-create-summary-results) {-}
+### Exercise \@ref(automate-ex-all-results) {-}
 
-FIXME
+Since we already have a variable `RESULTS` that contains all of the results files,
+all we need is a phony target that depends on them:
+
+```make
+.PHONY: results # and all the other phony targets
+
+results : ${RESULTS}
+```
+
+### Exercise \@ref(automate-ex-mkdir) {-}
+
+`mkdir -p some/path` makes one or more nested directories if they don't exist,
+and does nothing (without complaining) if they already exist.
+It is useful for creating the output directories for build rules.
 
 ### Exercise \@ref(automate-ex-plot-top-n) {-}
 
 FIXME
 
-### Exercise \@ref(automate-ex-mkdir) {-}
-
-FIXME
-
 ### Exercise \@ref(automate-ex-report-change) {-}
 
-FIXME
+`make -n target` will show commands without running them.
 
-### Exercise \@ref(automate-ex-readable-help) {-}
+### Useful options {#automate-ex-useful-options}
 
-FIXME
+1.  The `-B` option makes everything, even files that aren't out of date.
+
+2.  The `-C` option tells Make to change directories before executing,
+    so that `make -C ~/myproject` runs Make in `~/myproject`
+    regardless of the directory it is invoked from.
 
 ### Exercise \@ref(automate-ex-wildcard-perils) {-}
 
-What is wrong with writing the rule for `results/collated.csv` like this:
+If we use a shell \gref{wildcard}{wildcard} in a rule like this:
 
-FIXME
+```make
+results/collated.csv : results/*.csv
+	python $(COLLATE) $^ > $@
+```
+
+then if `results/collated.csv` already exists,
+the rule tells Make that the file depends on itself.
 
 ### Exercise \@ref(automate-ex-readable-docs) {-}
 
-FIXME
+Our rule is:
+
+```make
+help :
+        @grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
+```
+
+-   The `-h` option to `grep` tells it *not* to print filenames,
+    while the `-E` option tells it to interprets `^##` as a pattern.
+
+-   `MAKEFILE_LIST` is an automatically-defined variable
+    with the names of all the Makefiles in play.
+    (There might be more than one because Makefiles can include other Makefiles.)
+
+-   `sed` can be used to do string substitution.
+
+-   `column` formats text nicely in columns.
 
 ### Exercise \@ref(automate-ex-useful-options) {-}
 
