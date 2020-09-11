@@ -1,11 +1,15 @@
 # Going Further with the Unix Shell {#bash-advanced}
 
+> There isn't a way things should be. There's just what happens, and what we do.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 The previous chapter explained how we can use the command line
 to do all of the things we can do with a GUI,
 and how to combine commands in new ways using pipes and redirection.
 This chapter extends those ideas to show
 how we can create new tools by saving commands in files
-and how to use a more powerful version of [wildcards][wildcard]
+and how to use a more powerful version of \gref{wildcards}{wildcard}\index{regular expression!relation to wildcard}
 to extract data from files.
 
 We'll be continuing to work in the `zipf` project,
@@ -38,11 +42,11 @@ Loops let us run the same commands many times,
 but we can go further and save commands in files
 so that we can repeat complex operations with a few keystrokes.
 For historical reasons
-a file full of shell commands is usually called a [shell script][shell_script],
+a file full of shell commands is usually called a \gref{shell script}{shell_script},\index{shell script}
 but it is really just another kind of program.
 
 Let's start by creating a new directory for our runnable programs called `bin/`,
-consistent with the project structure described in Section \@ref(intro-organize).
+consistent with the project structure described in Section \@ref(intro-organize).
 
 ```shell
 $ cd ~/zipf
@@ -112,7 +116,7 @@ $ bash book_summary.sh | wc -l
 ```
 
 What if we want our script to print the name of the book's author?
-The command `grep` finds and prints lines that match a pattern.
+The command `grep`\index{grep}\index{Unix commands!grep} finds and prints lines that match a pattern.
 We'll learn more about `grep` in Section \@ref(bash-advanced-grep),
 but for now we can edit the script:
 
@@ -158,7 +162,8 @@ $ bash book_summary.sh | wc -w
 Getting the name of the author for only one of the books isn't all that useful.
 What we really want is a way to get the name of the author from any of our files.
 Let's edit `book_summary.sh` again
-and replace `../data/moby_dick.txt` with a special variable `$1`.
+and replace `../data/moby_dick.txt` with
+a special variable `$1`.\index{shell script!arguments}\index{\$1, \$2, etc. (in shell script)}\index{arguments (of shell script)}
 Once our change is made,
 `book_summary.sh` should contain:
 
@@ -190,7 +195,7 @@ Author: Mary Wollstonecraft (Godwin) Shelley
 
 Our small script is now doing something useful,
 but it may take the next person who reads it a moment to figure out exactly what.
-We can improve our script by adding [comments][comment] at the top:
+We can improve our script by adding \gref{comments}{comment} at the top:\index{comments!in shell script}
 
 ```text
 # Get author information from a Project Gutenberg eBook.
@@ -262,7 +267,7 @@ $ mv authors.txt releases.txt ../results
 
 Instead of typing those commands into a file in an editor
 (and potentially getting them wrong)
-we can use `history` and redirection to save recent commands to a file.
+we can use `history` and redirection to save recent commands to a file.\index{shell script!using history to create}
 For example,
 we can save the last six commands to `summarize_all_books.sh`:
 
@@ -292,8 +297,8 @@ then save our recent history to a file and turn that into a reusable script.
 
 We can use `head` and `tail` to select lines from a file by position,
 but we also often want to select lines that contain certain values.
-This is called [filtering][filter],
-and we usually do it in the shell with the command `grep`
+This is called \gref{filtering}{filter},\index{filter (in Unix shell)}
+and we usually do it in the shell with the command `grep`\index{grep}\index{Unix commands!grep}
 that we briefly met in Section \@ref(bash-advanced-script).
 Its name is an acronym of "global regular expression print",
 which was a common sequence of operations in early Unix text editors.
@@ -509,7 +514,7 @@ $ grep -w -r pain data | wc -l
 ```
 
 `grep` becomes even more powerful
-when we start using [regular expressions][regular_expression],
+when we start using \gref{regular expressions}{regular_expression},\index{regular expression}
 which are sets of letters, numbers, and symbols that define complex patterns.
 For example,
 this command finds lines that start with the letter 'T':
@@ -544,7 +549,7 @@ and @Goyv2012 is a useful companion if you need to go further.
 ## Finding Files {#bash-advanced-find}
 
 While `grep` finds things in files,
-the `find` command finds files themselves.
+the `find` command finds files themselves.\index{find}\index{Unix commands!find}
 It also has a lot of options,
 but unlike most Unix commands they are written as full words
 rather than single-letter abbreviations.
@@ -699,7 +704,7 @@ $ wc -l $(find . -name "*.txt")
 ```
 
 When the shell executes our command,
-it runs whatever is inside `$(...)`
+it runs whatever is inside `$(...)`\index{Unix shell!command expansion}\index{command expansion (in Unix shell)}\index{\$(...) in Unix shell}
 and then replaces `$(...)` with that command's output.
 Since the output of `find` is the paths to our text files,
 the shell constructs the command:
@@ -717,7 +722,7 @@ We will often use `find` and `grep` together.
 The first command finds files whose names match a pattern,
 while the second looks for lines inside those files that match another pattern.
 For example,
-we can look for Authors in all our text files:
+we can look for `Authors` in all our text files:
 
 ```shell
 $ grep "Author:" $(find . -name "*.txt")
@@ -740,7 +745,7 @@ $ grep "Author:" $(find . -name "*.txt")
 ./data/jane_eyre.txt:Author: Charlotte Bronte
 ```
 
-We can also use `$(...)` expansion to create a list of filenames to use in a loop:
+We can also use `$(...)` expansion to create a list of filenames to use in a loop:\index{loop (in Unix shell)!using command expansion}
 
 ```shell
 $ for file in $(find . -name "*.txt")
@@ -771,7 +776,7 @@ Some of those variables control the shell's operations;
 by changing their values
 we can change how the shell and other programs behave.
 
-Let's run the command `set`
+Let's run the command `set`\index{set (in Unix shell)}\index{Unix commands!set}
 and look at some of the variables the shell defines:
 
 ```shell
@@ -802,7 +807,7 @@ but if we don't give it any arguments,
 the command might as well show us things we *could* set.
 
 By convention,
-shell variables that are always present have upper-case names.
+\gref{shell variables}{shell_variable}\index{variable (in Unix shell)}\index{shell variable} that are always present have upper-case names.
 All shell variables' values are strings,
 even those (such as `UID`) that look like numbers.
 It's up to programs to convert these strings to other types when necessary.
@@ -810,13 +815,13 @@ For example,
 if a program wanted to find out how many processors the computer had,
 it would convert the value of `NUMBER_OF_PROCESSORS` from a string to an integer.
 
-Similarly, some variables (like `PATH`) store lists of values.
+Similarly, some variables (like `PATH`) store lists of values.\index{PATH variable (in Unix shell)}\index{Unix shell!PATH variable}
 In this case, the convention is to use a colon ':' as a separator.
 If a program wants the individual elements of such a list,
 it must split the variable's value into pieces.
 
 Let's have a closer look at `PATH`.
-Its value defines the shell's [search path][search_path],
+Its value defines the shell's \gref{search path}{search_path},
 which is the list of directories that the shell looks in for programs
 when we type in a command name without specifying exactly where it is.
 For example,
@@ -856,7 +861,7 @@ as `./analyze` if we are in `/Users/amira`).
 If we want to see a variable's value,
 we can print it using the `echo` command
 introduced at the end of Section \@ref(bash-basics-history).
-Let's look at the value of the variable `HOME`,
+Let's look at the value of the variable `HOME`,\index{HOME variable (in Unix shell)}\index{Unix shell!HOME variable}
 which keeps track of our home directory:
 
 ```shell
@@ -889,7 +894,7 @@ Thus,
 `echo $HOME` becomes `echo /Users/amira`,
 which displays the right thing.
 
-Creating a variable is easy:
+Creating a variable is easy:\index{shell variable!creating}
 we assign a value to a name using "=",
 putting quotes around the value if it contains spaces or special characters:
 
@@ -914,7 +919,7 @@ Information Science
 ```
 
 If we want to set some variables automatically every time we run a shell,
-we can put commands to do this in a file called `.bashrc` in our home directory.
+we can put commands to do this in a file called `.bashrc` in our home directory.\index{.bashrc file (in Unix shell)}\index{Unix shell!.bashrc file}
 For example,
 here are two lines in `/Users/amira/.bashrc`:
 
@@ -927,7 +932,7 @@ export BACKUP_DIR=$TEMP_DIR/backup
 These three lines create the variables `DEPARTMENT`,
 `TEMP_DIR`,
 and `BACKUP_DIR`,
-and [export][export_variable] them so that any programs the shell runs can see them as well.
+and \gref{export}{export_variable}\index{shell variable!exporting} them so that any programs the shell runs can see them as well.
 Notice that `BACKUP_DIR`'s definition relies on the value of `TEMP_DIR`,
 so that if we change where we put temporary files,
 our backups will be relocated automatically.
@@ -945,7 +950,7 @@ because `.bashrc` is only executed when the shell starts up.
 > and is now just a convention everyone follows without understanding why.
 
 While we're here,
-it's also common to use the `alias` command
+it's also common to use the `alias` command\index{Unix commands!alias}\index{alias (Unix command)}
 to create shortcuts for things we frequently type.
 For example,
 we can define the alias `backup`
@@ -978,8 +983,8 @@ by searching online for "sample bashrc".
 While searching for additional aliases,
 you're likely to encounter references to other common shell features to customize,
 such as the color of your shell's background and text.
-As mentioned in \@ref(bash-basics),
-another important feature to consider customizing is your shell prompt.
+As mentioned in Chapter \@ref(bash-basics),
+another important feature to consider customizing is your shell prompt.\index{prompt (in Unix shell)}\index{Unix shell!prompt}
 In addition to a standard symbol (like `$`),
 your computer may include other information as well,
 such as the working directory, username, and/or date/time.
@@ -1012,13 +1017,13 @@ specifying package installation directories to managing database login credentia
 And while `grep` and `find` may take some getting used to,
 they and their cousins can handle enormous datasets very efficiently.
 If you would like to go further,
-[@Ray2014] is an excellent general introduction,
-while [@Jans2014] looks specifically at how to process data on the command line.
+@Ray2014 is an excellent general introduction,
+while @Jans2014 looks specifically at how to process data on the command line.
 
 ## Exercises {#bash-advanced-exercises}
 
 Many of the exercises below have been adapted from Software Carpentry's lesson
-[The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+[The Unix Shell][swc-shell-novice].
 As with the previous chapter,
 extra files and directories created during these exercises
 may need to be removed when you are done. 

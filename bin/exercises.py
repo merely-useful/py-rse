@@ -26,7 +26,8 @@ def scan(filenames):
     for f in filenames:
         with open(f, 'r') as reader:
             text = reader.read()
-            exercise |= set(PAT_EXERCISE.findall(text))
+            defs = PAT_EXERCISE.findall(text)
+            exercise |= set([d for d in defs if '-ex-' in d])
             solution |= set(PAT_SOLUTION.findall(text))
     return exercise, solution
 

@@ -1,2 +1,7 @@
--   Use the argparse library to manage command-line arguments in a program.
--   Structure Python scripts according to a simple template.
+-   Explain the benefits of writing Python programs that can be executed at the command line.
+-   Create a command-line Python program that respects \gref{Unix shell}{shell} conventions for reading input and writing output.
+-   Use the [`argparse`][argparse] library to handle command-line arguments in a program.
+-   Explain how to tell if a module is being run directly or being loaded by another program.
+-   Write \gref{docstrings}{docstring} for programs and functions.
+-   Explain the difference between \gref{optional arguments}{optional_argument} and \gref{positional arguments}{positional_argument}.
+-   Create a module that contains functions used by multiple programs and import that module.

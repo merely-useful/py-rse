@@ -1,8 +1,6 @@
--   Explain the different options for testing code
--   Write and run tests using `pytest`
--   Automate testing using Travis CI
--   Explain what continuous integration is, how it works, and why it's useful.
--   Configure continuous integration for small Python software projects.
--   Examine and explain output of continuous integration builds.
--   Add additional settings to the continuous integration configuration.
--   Introduce other uses of continuous integration.
+-   Explain three different goals for testing software.
+-   Add \gref{assertions}{assertion} to a program to check that it is operating correctly.
+-   Write and run unit tests using `pytest`.
+-   Determine the \gref{coverage}{code_coverage} of those tests and identify untested portions of code.
+-   Explain \gref{continuous integration}{continuous_integration} and implement it using [Travis CI][travis-ci].
+-   Describe and contrast \gref{test-driven development}{tdd} and checking-driven development.

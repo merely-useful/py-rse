@@ -1,20 +1,19 @@
 # Advanced Git {#git-advanced}
 
+> It's got three keyboards and a hundred extra knobs, including twelve with '?' on them.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 Git would be worth using if all it did was keep track of our work,
 but two of its more advanced features allow us to do much more.
-[Branches][git_branch] let us work on multiple things simultaneously in a single repository;
-[pull requests][pull_request] (PRs) let us submit our work for review,
+\gref{Branches}{git_branch} let us work on multiple things simultaneously in a single repository;
+\gref{pull requests}{pull_request} (PRs) let us submit our work for review,
 get feedback,
 and make updates.
 Used together,
 they allow us to go through the write-review-revise cycle
 familiar to anyone who has ever written a journal paper
 in hours rather than weeks.
-
-> This lesson is derived in part from one created at
-> [the University of Wisconsin-Madison][uwm-git-lesson].
-> We are grateful to its authors for using an open license
-> so that we could reuse their work.
 
 Your `zipf` project directory should now include:
 
@@ -53,12 +52,12 @@ and *only* on the one before.
 However,
 there are times when we want to try things out
 without disrupting our main work.
-To do this, we can use branches to work on separate tasks in parallel.
+To do this, we can use \gref{branches}{git_branch} to work on separate tasks in parallel.\index{branch (in Git)}\index{Git!branch}
 Each branch is a parallel timeline;
 changes made on the branch only affect that branch
 unless and until we explicitly combine them with work done in another branch.
 
-We can see what branches exist in a repository using this command:
+We can see what branches exist in a repository using this command:\index{Git commands!branch}
 
 ```shell
 $ git branch
@@ -69,18 +68,22 @@ $ git branch
 ```
 
 When we initialize a repository,
-Git automatically creates a branch called `master`.
+Git automatically creates a branch called `master`.\index{Git!master branch}
 It is often considered the "official" version of the repository.
 The asterisk `*` indicates that it is currently active,
 i.e.,
 that all changes we make will take place in this branch by default.
-(The active branch is like the [current working directory][current_working_directory] in the shell.)
+(The active branch is like the \gref{current working directory}{current_working_directory} in the shell.)
 
 In the previous chapter,
 we foreshadowed some experimental changes that we could try and make to `plotcounts.py`.
 
+Making sure our project directory is our working directory,
+we can inspect our current `plotcounts.py`:
+
 ```shell
-$ cat plotcounts.py
+$ cd ~/zipf
+$ cat bin/plotcounts.py
 ```
 
 ```python
@@ -160,7 +163,7 @@ On branch master
 nothing to commit, working directory clean
 ```
 
-To switch to our new branch we can use the `checkout` command
+To switch to our new branch we can use the `checkout` command\index{Git commands!checkout}
 that we first saw in Section \@ref(git-cmdline-restore):
 
 ```shell
@@ -180,17 +183,12 @@ switch it from one saved state to another.
 We should choose the name to signal the purpose of the branch,
 just as we choose the names of files and variables to indicate what they are for.
 We haven't made any changes since switching to the `fit` branch,
-so at this point `master` and `fit` are two names for the same repository state
-(Figure \@ref(fig:git-advanced-repo-state)).
+so at this point `master` and `fit` are at the same point in the repository's history.
 Commands like `ls` and `git log` therefore show that the files and history haven't changed.
-
-```{r git-advanced-repo-state, echo=FALSE, fig.cap="Repository State"}
-knitr::include_graphics("figures/FIXME.png")
-```
 
 > **Where Are Branches Saved?**
 >
-> Git saves every version of every file in the `.git` directory
+> Git saves every version of every file in the `.git` directory\index{Git!.git directory}
 > that it creates in the project's root directory.
 > When we switch from one branch to another,
 > it replaces the files we see with
@@ -220,7 +218,7 @@ becomes clear if we include it in a modified version of the earlier definition:
 > as often as the second most frequent word,
 > \(3^\alpha\) times as often as the third most frequent word, and so on.
 
-This mathematical expression for Zipf's Law is an example of a [power law][power_law].
+This mathematical expression for Zipf's Law is an example of a \gref{power law}{power_law}.\index{power law}
 In general, when two variables \(x\) and \(y\)
 are related through a power law, so that \[
 y = ax^b
@@ -246,14 +244,14 @@ and intercept \(\log(c)\).
 Our goal is to estimate the value of \(\alpha\);
 we'll see later that \(c\) is completely defined.
 
-In order to determine the best method for estimating \(\alpha\) we turn to [@Moreno2016],
-which suggests using a method called [maximum likelihood estimation][maximum_likelihood_estimation].
+In order to determine the best method for estimating \(\alpha\) we turn to @Moreno2016,
+which suggests using a method called \gref{maximum likelihood estimation}{maximum_likelihood_estimation}.\index{maximum likelihood estimation}
 The likelihood function is the probability of our observed data
 as a function of the parameters in the statistical model that we assume generated it.
 We estimate the parameters in the model by choosing them to maximize this likelihood;
 computationally,
 it is often easier to minimize the negative log likelihood function.
-[@Moreno2016] define the likelihood using a parameter \(\beta\),
+@Moreno2016 define the likelihood using a parameter \(\beta\),
 which is related to the \(\alpha\) parameter in our definition of Zipf's Law
 through \(\alpha = \tfrac{1}{\beta-1}\).
 Under their model,
@@ -275,7 +273,7 @@ def nlog_likelihood(beta, counts):
 Obtaining an estimate of \(\beta\) (and thus \(\alpha\))
 then becomes a numerical optimization problem,
 for which we can use the `scipy.optimize` library.
-Again following [@Moreno2016],
+Again following @Moreno2016,
 we use Brent's Method with \(1 < \beta \leq 4\).
 
 ```python
@@ -284,7 +282,7 @@ from scipy.optimize import minimize_scalar
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -322,7 +320,7 @@ and \(-1 / \alpha\) the exponent in the power law.
 ## Verifying Zipf's Law {#git-advanced-zipf-verify}
 
 Now that we have defined the functions required to fit a curve to our word count plots,
-we can update `plotcounts.py`:
+we can update `plotcounts.py` so the entire script reads as follows:
 
 ```python
 """Plot word counts."""
@@ -342,7 +340,7 @@ def nlog_likelihood(beta, counts):
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -359,7 +357,7 @@ def set_plot_params(param_file):
         mpl.rcParams[param] = value
 
 
-def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
+def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     """
     Plot the power law curve that was fitted to the data.
 
@@ -417,7 +415,7 @@ We can then run the script to obtain the \(\alpha\) value for *Dracula*
 and a new plot with a line fitted.
 
 ```shell
-python plotcounts.py ../results/dracula.csv --outfile ../results/dracula.png
+python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
 ```text
@@ -431,20 +429,20 @@ as often as the second most frequent word,
 Figure \@ref(fig:git-advanced-dracula-fit) shows the plot.
 
 ```{r git-advanced-dracula-fit, echo=FALSE, fig.cap="Word frequency distribution for the book *Dracula*"}
-knitr::include_graphics("figures/py-rse/git-advanced/dracula-fit.png")
+knitr::include_graphics("figures/git-advanced/dracula-fit.png")
 ```
 
 The script appears to be working as we'd like,
 so we can go ahead and commit our changes to the `fit` development branch:
 
 ```shell
-$ git add plotcounts.py
+$ git add bin/plotcounts.py results/dracula.png
 $ git commit -m "Added fit to word count data"
 ```
 
 ```text
 [fit 3ff8195] Added fit to word count data
- 1 file changed, 61 insertions(+)
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 ```
 
 If we look at the last couple of commits using `git log`,
@@ -456,7 +454,7 @@ $ git log --oneline -n 2
 
 ```text
 3ff8195 Added fit to word count data
-d77bc5c Update dracula plot
+ffb5cee adding ignore file
 ```
 
 (We use `--oneline` and `-n 2` to shorten the log display.)
@@ -480,8 +478,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
+ffb5cee adding ignore file
 d77bc5c Update dracula plot
-b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 We have not lost our work:
@@ -522,14 +520,14 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+                          args=word_counts, method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
 ```
 
 ```shell
-$ git add plotcounts.py
+$ git add bin/plotcounts.py
 $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```
 
@@ -538,9 +536,9 @@ $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
  1 file changed, 14 insertions(+), 1 deletion(-)
 ```
 
-Finaly,
+Finally,
 if we want to see the differences between two branches,
-we can use `git diff` with the same double-dot `..` syntax
+we can use `git diff` with the same double-dot `..` syntax\index{Git commands!diff}
 used to view differences between two revisions:
 
 ```shell
@@ -548,11 +546,11 @@ $ git diff master..fit
 ```
 
 ```text
-diff --git a/plotcounts.py b/plotcounts.py
+diff --git a/bin/plotcounts.py b/bin/plotcounts.py
 index 4501eaf..d57fd63 100644
---- a/plotcounts.py
-+++ b/plotcounts.py
-@@ -1,6 +1,69 @@
+--- a/bin/plotcounts.py
++++ b/bin/plotcounts.py
+@@ -1,15 +1,89 @@
  """Plot word counts."""
  import argparse
 +import numpy as np
@@ -582,7 +580,7 @@ index 4501eaf..d57fd63 100644
 +      https://doi.org/10.1371/journal.pone.0147073
 +    """
 +    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-+                          args=(word_counts), method='brent')
++                          args=word_counts, method='brent')
 +    beta = mle.x
 +    alpha = 1 / (beta - 1)
 +    return alpha
@@ -622,8 +620,10 @@ index 4501eaf..d57fd63 100644
 
 
  def main(args):
-@@ -9,6 +72,17 @@ def main(args):
++    """Run the command line program.""" 
+     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
      df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+-    df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                           figsize=[12, 6], grid=True, xlim=args.xlim)
 +
@@ -638,6 +638,11 @@ index 4501eaf..d57fd63 100644
 +
 +    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
      ax.figure.savefig(args.outfile)
+
+
+diff --git a/results/dracula.png b/results/dracula.png
+index d34c46d..1c42702 100644
+Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
 > **Why Branch?**
@@ -658,11 +663,11 @@ Now that we are happy with our curve fitting we have three options:
 
 1.  Add our changes to `plotcounts.py` once again in the `master` branch.
 2.  Stop working in `master` and start using the `fit` branch for future development.
-3.  [Merge][git_merge] the `fit` and `master` branches.
+3.  \gref{Merge}{git_merge} the `fit` and `master` branches.
 
 The first option is tedious and error-prone;
 the second will lead to a bewildering proliferation of branches,
-but the third option is simple, fast, and reliable.
+but the third option is simple, fast, and reliable.\index{Git commands!merge}\index{merge (in Git)}
 To start,
 let's make sure we're in the `master` branch:
 
@@ -672,8 +677,8 @@ $ git branch
 ```
 
 ```text
-* master
   fit
+* master
 ```
 
 We can now merge the changes in the `fit` branch into our current branch
@@ -686,8 +691,9 @@ $ git merge fit
 ```text
 Updating d77bc5c..db1d03f
 Fast-forward
- plotcounts.py | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ bin/plotcounts.py   |  76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ results/dracula.png | Bin 22351 -> 31378 bytes
+ 2 files changed, 75 insertions(+), 1 deletion(-)
 ```
 
 Merging doesn't change the source branch `fit`,
@@ -701,8 +707,8 @@ $ git log --oneline -n 4
 ```text
 db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
 3ff8195 Added fit to word count data
+ffb5cee adding ignore file
 d77bc5c Update dracula plot
-b5176bf Edit to plot frequency against rank on log-log axes
 ```
 
 Note that Git automatically creates a new commit (in this case, `db1d03f`)
@@ -734,8 +740,8 @@ Deleted branch fit (was db1d03f).
 
 ## Handling Conflicts {#git-advanced-conflict}
 
-A [conflict][git_conflict] occurs when
-a line has been changed in different ways in two separate branches
+A \gref{conflict}{git_conflict} occurs\index{Git!conflict}\index{conflict!in Git}
+when a line has been changed in different ways in two separate branches
 or when a file has been deleted in one branch but edited in the other.
 Merging `fit` into `master` went smoothly
 because there were no conflicts between the two branches,
@@ -805,7 +811,7 @@ $ git commit -m "Added repository overview"
 
 ```text
 [docs a41a6ea] Added repository overview
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ 1 file changed, 3 insertions(+)
 ```
 
 In order to create a conflict,
@@ -845,7 +851,7 @@ $ git commit -m "Added contributor list"
 
 ```text
 [master a102c83] Added contributor list
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ 1 file changed, 4 insertions(+)
 ```
 
 We now have two branches,
@@ -861,7 +867,7 @@ diff --git a/README.md b/README.md
 index fd3de28..cf317ea 100644
 --- a/README.md
 +++ b/README.md
-@@ -1,5 +1,5 @@
+@@ -1,4 +1,5 @@
  # Zipf's Law
 
 -These Zipf's Law scripts tally the occurrences of words in text files
@@ -910,7 +916,7 @@ while the lines from there to `>>>>>>> docs` show what was in `docs`.
 If there were several conflicting regions in the same file,
 Git would mark each one this way.
 
-We have to decide what to do next:
+We have to decide what to do next:\index{Git!resolve conflict}\index{resolve conflict (in Git)}
 keep the `master` changes,
 keep those from `docs`,
 edit this part of the file to combine them,
@@ -951,7 +957,7 @@ Our branch's history now shows a single sequence of commits,
 with the `master` changes on top of the earlier `docs` changes:
 
 ```shell
-$ git log --oneline
+$ git log --oneline -n 4
 ```
 
 ```text
@@ -965,7 +971,7 @@ If we want to see what really happened,
 we can add the `--graph` option to `git log`:
 
 ```shell
-$ git log --oneline --graph
+$ git log --oneline --graph -n 4
 ```
 
 ```text
@@ -1035,7 +1041,8 @@ this workflow will help us keep track of what we are doing:
     We should not have any conflicts,
     and all of our tests should pass.
 
-Most experienced developers use this [branch-per-feature][branch_per_feature] workflow,
+Most experienced developers use this
+\gref{branch-per-feature workflow}{branch_per_feature_workflow},\index{branch-per-feature workflow (in Git)\index{Git!branch-per-feature workflow}
 but what exactly is a "feature"?
 These rules make sense for small projects:
 
@@ -1077,7 +1084,7 @@ We can do this in two ways:
 
 2.  Everyone can read from the project's main repository,
     but only a few people can commit changes to it.
-    The project's other contributors [fork][git_fork] the main repository
+    The project's other contributors \gref{fork}{git_fork} the main repository\index{Git!fork a repository}\index{fork (in Git)}
     to create one that they own,
     do their work in that,
     and then submit their changes to the main repository.
@@ -1089,7 +1096,7 @@ or if contributors are worried that they might make a mess in the `master` branc
 the second approach is safer.
 
 Git itself doesn't have any notion of a "main repository",
-but [forges][forge] like [GitHub][github],
+but \gref{forges}{forge} like [GitHub][github],
 [GitLab][gitlab],
 and [BitBucket][bitbucket] all encourage people
 to use Git in ways that effectively create one.
@@ -1102,7 +1109,7 @@ Sami can go to that URL and click on the "Fork" button in the upper right corner
 GitHub immediately creates a copy of Amira's repository within Sami's account on GitHub's own servers.
 
 ```{r git-advanced-fork-button, echo=FALSE, fig.cap="Forking"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/fork-button.png")
 ```
 
 When the command completes,
@@ -1113,27 +1120,27 @@ When Sami explores its history,
 they see that it contains all of the changes Amira made.
 
 ```{r git-advanced-after-fork, echo=FALSE, fig.cap="After Forking"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/after-fork.png")
 ```
 
-A copy of a repository is called a [clone][git_clone].
+A copy of a repository is called a \gref{clone}{git_clone}.\index{Git!clone a repository}\index{clone (in Git)}
 In order to start working on the project,
 Sami needs a clone of *their* repository (not Amira's) on their own computer.
 We will modify Sami's prompt to include their desktop user ID (`sami`)
 and working directory (initially `~`)
-to make it easier to follow what's happening:
+to make it easier to follow what's happening:\index{Git commands!clone}
 
 ```shell
-sami:~ $ git clone https://github.com/sami/zipf.git
+sami:~ $ git clone https://github.com/sami-virtanen/zipf.git
 ```
 
 ```text
 Cloning into 'zipf'...
-remote: Enumerating objects: 32, done.
-remote: Counting objects: 100% (32/32), done.
-remote: Compressing objects: 100% (16/16), done.
-remote: Total 32 (delta 5), reused 32 (delta 5), pack-reused 0
-Unpacking objects: 100% (32/32), done.
+remote: Enumerating objects: 60, done.
+remote: Counting objects: 100% (60/60), done.
+remote: Compressing objects: 100% (42/42), done.
+remote: Total 60 (delta 17), reused 59 (delta 16), pack-reused 0
+Unpacking objects: 100% (60/60), done.
 ```
 
 This command creates a new directory with the same name as the project,
@@ -1157,11 +1164,11 @@ sami:~/zipf $ git log --oneline -n 4
 ```text
 4ffeaa4 (HEAD -> master) Merging README additions
 a102c83 Added contributors list
-a41a6ea (docs) Added repository overview
+a41a6ea Added repository overview
 b07c14a Initial commit of README file
 ```
 
-Sami also sees that Git has automatically created a remote for their repository
+Sami also sees that Git has automatically created a \gref{remote}{git_remote} for their repository\index{Git!remote}\index{remote (in Git)}
 that points back at their repository on GitHub:
 
 ```shell
@@ -1169,8 +1176,8 @@ sami:~/zipf $ git remote -v
 ```
 
 ```text
-origin  https://github.com/sami/zipf.git (fetch)
-origin  https://github.com/sami/zipf.git (push)
+origin  https://github.com/sami-virtanen/zipf.git (fetch)
+origin  https://github.com/sami-virtanen/zipf.git (push)
 ```
 
 Sami can pull changes from their fork and push work back there,
@@ -1182,13 +1189,14 @@ sami:~/zipf $ git remote -v
 ```
 
 ```text
-origin      https://github.com/sami/zipf.git (fetch)
-origin      https://github.com/sami/zipf.git (push)
+origin      https://github.com/sami-virtanen/zipf.git (fetch)
+origin      https://github.com/sami-virtanen/zipf.git (push)
 upstream    https://github.com/amira-khan/zipf.git (fetch)
 upstream    https://github.com/amira-khan/zipf.git (push)
 ```
 
-Sami has called their new remote `upstream` because it points at the repository theirs are derived from.
+Sami has called their new remote `upstream` because it points at the repository
+theirs is derived from.\index{Git!upstream repository}\index{upstream repository (in Git)}
 They could use any name,
 but `upstream` is a nearly universal convention.
 
@@ -1227,12 +1235,12 @@ and plot each word's rank versus its frequency.
 Amira commits her changes and pushes them to *her* repository on GitHub:
 
 ```shell
-amira:~/zipf $ git commit -m "Adding Sami as a contributor"
+amira:~/zipf $ git commit -a -m "Adding Sami as a contributor"
 ```
 
 ```text
 [master 766c2cd] Adding Sami as a contributor
- 1 file changed, 6 insertions(+)
+ 1 file changed, 1 insertion(+)
 ```
 
 ```shell
@@ -1240,18 +1248,19 @@ amira:~/zipf $ git push origin master
 ```
 
 ```text
-Counting objects: 3, done.
-Delta compression using up to 4 threads.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 340 bytes | 340.00 KiB/s, done.
-Total 3 (delta 1), reused 0 (delta 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 To https://github.com/amira-khan/zipf.git
    b0c3fc6..766c2cd  master -> master
 ```
 
 Amira's changes are now on her desktop and in her GitHub repository
-but not in either of Sami's repositories.
+but not in either of Sami's repositories (local or remote).
 Since Sami has created a remote that points at Amira's GitHub repository,
 though,
 they can easily pull those changes to their desktop:
@@ -1263,16 +1272,16 @@ sami:~/zipf $ git pull upstream master
 ```text
 remote: Enumerating objects: 5, done.
 remote: Counting objects: 100% (5/5), done.
-remote: Compressing objects: 100% (2/2), done.
-remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 3 (delta 2), reused 3 (delta 2), pack-reused 0
 Unpacking objects: 100% (3/3), done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
  * [new branch]      master     -> upstream/master
-Updating b0c3fc6..766c2cd
+Updating 1c63b8b..893fc9f
 Fast-forward
- README.md | 6 ++++++
- 1 file changed, 6 insertions(+)
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
 ```
 
 Pulling from a repository owned by someone else
@@ -1294,9 +1303,9 @@ and periodically pull in Sami's changes,
 but that would lead to chaos,
 since we could never be sure that everyone's work was in any one place at the same time.
 Instead,
-almost everyone uses [pull requests][pull_request].
+almost everyone uses \gref{pull requests}{pull_request}.\index{pull request (in Git)}\index{Git!pull request}
 They aren't part of Git itself,
-but are supported by all major online [forges][forge].
+but are supported by all major online \gref{forges}{forge}.
 
 A pull request is essentially a note saying,
 "Someone would like to merge branch A of repository B into branch X of repository Y".
@@ -1349,15 +1358,15 @@ diff --git a/README.md b/README.md
 index a55a9bb..eb24a3f 100644
 --- a/README.md
 +++ b/README.md
-@@ -3,4 +3,4 @@
-## Contributors
-
+@@ -6,4 +6,4 @@ and plot each word's rank versus its frequency.
+ ## Contributors
+ 
  - Amira Khan <amira@zipf.org>
 -- Sami Virtanen
 +- Sami Virtanen <sami@zipf.org>
 ```
 
-Sami's changes are only in their desktop repository.
+Sami's changes are only in their local repository.
 They cannot create a pull request until those changes are on GitHub,
 so they push their new branch to their repository on GitHub:
 
@@ -1366,17 +1375,18 @@ sami:~/zipf $ git push origin adding-email
 ```
 
 ```text
-Counting objects: 3, done.
-Delta compression using up to 4 threads.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 307 bytes | 307.00 KiB/s, done.
+Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
 Total 3 (delta 2), reused 0 (delta 0)
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-remote:
+remote: 
 remote: Create a pull request for 'adding-email' on GitHub by visiting:
-remote:      https://github.com/sami/zipf/pull/new/adding-email
-remote:
-To https://github.com/sami/zipf.git
+remote:      https://github.com/sami-virtanen/zipf/pull/new/adding-email
+remote: 
+To https://github.com/sami-virtanen/zipf.git
  * [new branch]      adding-email -> adding-email
 ```
 
@@ -1385,10 +1395,8 @@ GitHub notices that they have just pushed a new branch
 and asks them if they want to create a pull request
 (Figure \@ref(fig:git-advanced-after-sami-pushes)).
 
-FIXME: re-do this figure showing Sami instead of Jean Jennings
-
 ```{r git-advanced-after-sami-pushes, echo=FALSE, fig.cap="After Sami Pushes"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/after-sami-pushes.png")
 ```
 
 When Sami clicks on the button,
@@ -1397,7 +1405,7 @@ and a pair of editable boxes for the pull request's title and a longer comment
 (Figure \@ref(fig:git-advanced-pull-request-start)).
 
 ```{r git-advanced-pull-request-start, echo=FALSE, fig.cap="Starting Pull Request"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/open-pull-request.png")
 ```
 
 If they scroll down,
@@ -1405,11 +1413,12 @@ Sami can see a summary of the changes that will be in the pull request
 (Figure \@ref(fig:git-advanced-pull-request-summary)).
 
 ```{r git-advanced-pull-request-summary, echo=FALSE, fig.cap="Summary of Pull Request"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/open-pull-request-detail.png")
 ```
 
-They fill in the top two boxes
-and click on "Create Pull Request"
+The top (title) box is autofilled with the previous commit message,
+so Sami adds an extended explanation to provide additional context
+before clicking on "Create Pull Request"
 (Figure \@ref(fig:git-advanced-pull-request-fill-in)).
 When they do,
 GitHub displays a page showing the new pull request,
@@ -1419,11 +1428,11 @@ Note that this pull request is displayed in Amira's repository rather than Sami'
 since it is Amira's repository that will be affected if the pull request is merged.
 
 ```{r git-advanced-pull-request-fill-in, echo=FALSE, fig.cap="Filling In Pull Request"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/fill-in-pull-request.png")
 ```
 
 ```{r git-advanced-pull-request-new, echo=FALSE, fig.cap="New Pull Request"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/new-pull-request.png")
 ```
 
 Some time later,
@@ -1432,18 +1441,20 @@ Amira checks her repository and sees that there is a pull request
 Clicking on the "Pull requests" tab brings up a list of PRs
 (Figure \@ref(fig:git-advanced-pull-request-list))
 and clicking on the pull request link itself displays its details
-(Figure \@ref(fig:git-advanced-pull-request-details)).
+(Figure \@ref(fig:git-advanced-pull-request-details)),
+Which appears identical to the details seen by .
+
 
 ```{r git-advanced-pull-request-viewing, echo=FALSE, fig.cap="Viewing Pull Request"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/viewing-new-pull-request.png")
 ```
 
 ```{r git-advanced-pull-request-list, echo=FALSE, fig.cap="Listing Pull Requests"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-list.png")
 ```
 
 ```{r git-advanced-pull-request-details, echo=FALSE, fig.cap="Pull Request Details"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-details.png")
 ```
 
 Since there are no conflicts,
@@ -1454,10 +1465,10 @@ she clicks on the "Files changed" tab to see what Sami has changed
 (Figure \@ref(fig:git-advanced-pull-request-changes)).
 
 ```{r git-advanced-pull-request-changes, echo=FALSE, fig.cap="Files Changed"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-changes.png")
 ```
 
-If she moves her mouse over particular lines,
+If she moves her mouse over particular lines,\index{Git!pull request!reviewing}\index{reviewing (Git pull request})\index{code review!pull request}
 a white-on-blue cross appears near the numbers to indicate that she can add comments
 (Figure \@ref(fig:git-advanced-pull-request-comment-marker)).
 She clicks on the marker beside her own name and writes a comment:
@@ -1468,25 +1479,25 @@ GitHub redisplays the page with her remarks inserted
 (Figure \@ref(fig:git-advanced-pull-request-pr-with-comment)).
 
 ```{r git-advanced-pull-request-comment-marker, echo=FALSE, fig.cap="Comment Marker"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-comment-marker.png")
 ```
 
 ```{r git-advanced-pull-request-write-comment, echo=FALSE, fig.cap="Writing Comment"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-writing-comment.png")
 ```
 
 ```{r git-advanced-pull-request-pr-with-comment, echo=FALSE, fig.cap="Pull Request With Comment"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-with-comment.png")
 ```
 
-While all of this has been doing on,
+While Amira is working,
 GitHub has been emailing notifications to both Sami and Amira.
-When Sami clicks on the link in theirs,
+When Sami clicks on the link in their email notification,
 it takes them to the PR and shows Amira's comment.
 Sami changes `README.md`,
 commits,
 and pushes,
-but does *not* create a new pull request or do anything to the existing one.
+but does *not* create a new pull request or do anything to the existing one.\index{Git!pull request!updating}
 As explained above,
 a PR is a note asking that two branches be merged,
 so if either end of the merge changes,
@@ -1501,11 +1512,11 @@ The icon at the top of the PR's page changes text and color to show that the mer
 (Figure \@ref(fig:git-advanced-pull-request-successful-merge)).
 
 ```{r git-advanced-pull-request-pr-with-fix, echo=FALSE, fig.cap="Pull Request With Fix"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-with-fix.png")
 ```
 
 ```{r git-advanced-pull-request-successful-merge, echo=FALSE, fig.cap="Successful Merge"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-successful-merge.png")
 ```
 
 To get those changes from GitHub to her desktop repository,
@@ -1519,12 +1530,11 @@ amira:~/zipf $ git pull origin master
 remote: Enumerating objects: 9, done.
 remote: Counting objects: 100% (9/9), done.
 remote: Compressing objects: 100% (5/5), done.
-remote: Total 7 (delta 3), reused 5 (delta 2), pack-reused 0
+remote: Total 7 (delta 4), reused 4 (delta 2), pack-reused 0
 Unpacking objects: 100% (7/7), done.
 From https://github.com/amira-khan/zipf
- * branch            master     -> FETCH_HEAD
-   766c2cd..984b116  master     -> origin/master
-Updating 766c2cd..984b116
+   893fc9f..4bf4b68  master     -> origin/master
+Updating 893fc9f..4bf4b68
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
@@ -1552,14 +1562,15 @@ sami:~/zipf $ git pull upstream master
 ```
 
 ```text
-remote: Enumerating objects: 1, done.
-remote: Counting objects: 100% (1/1), done.
-remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0
-Unpacking objects: 100% (1/1), done.
+remote: Enumerating objects: 8, done.
+remote: Counting objects: 100% (8/8), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 4 (delta 2), reused 3 (delta 2), pack-reused 0
+Unpacking objects: 100% (4/4), done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
-   766c2cd..984b116  master     -> upstream/master
-Updating 766c2cd..984b116
+   893fc9f..4bf4b68  master     -> upstream/master
+Updating 893fc9f..4bf4b68
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
@@ -1570,21 +1581,26 @@ All four repositories are now synchronized.
 ## Handling Conflicts in Pull Requests {#git-advanced-pr-conflict}
 
 Finally,
-suppose that Sami makes a change to `README.md`
-and merges it into `master` on GitHub
-while Amira is making a conflicting change to the same file.
+suppose that Amira and Sami have decided to collaborate more extensively on this project.
+Amira has added Sami as a collaborator to the GitHub repository.
+Now Sami can make contributions directly to the repository,
+rather than via a pull request from a forked repository. 
+
+Sami makes a change to `README.md` in the `master` branch on GitHub.
+Meanwhile, Amira is making a conflicting change to the same file in a different branch.\index{Git!pull request!conflict}
+When Amira creates her pull request,
 GitHub will detect the conflict and report that the PR cannot be merged automatically
 (Figure \@ref(fig:git-advanced-pr-conflict)).
 
 ```{r git-advanced-pr-conflict, echo=FALSE, fig.cap="Conflict in a Pull Request"}
-knitr::include_graphics("figures/FIXME.png")
+knitr::include_graphics("figures/git-advanced/pr-conflict.png")
 ```
 
 Amira can solve this problem with the tools she already has.
 If she has made her changes in a branch called `editing-readme`,
 the steps are:
 
-1.  Pull the changes Sami merged into the `master` branch of the main repository on GitHub
+1.  Pull Sami's on the `master` branch of the GitHub repository
     into the `master` branch of her desktop repository.
 
 2.  Merge *from* the `master` branch of her desktop repository
