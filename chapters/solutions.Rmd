@@ -993,56 +993,38 @@ include config.mk
 
 ### Exercise \@ref(config-ex-build-plotparams) {-}
 
-The build rule involving `plotcounts.py` should now
-read as follows:
+The build rule involving `plotcounts.py` should now read,
 
 ```make
 ## results/collated.png: plot the collated results.
-results/collated.png : results/collated.csv bin/plotparams.yml
+results/collated.png : results/collated.csv $(PARAMS)
 	python $(PLOT) $< --outfile $@ --plotparams $(word 2,$^)
 ```
 
-For reference, the complete `Makefile` is now:
-```make
-.PHONY: all clean help settings
+where `PARAMS` is defined earlier in the `Makefile`
+along with all the other variables and
+also included later in the settings build rule:
 
+```make
 COUNT=bin/countwords.py
 COLLATE=bin/collate.py
+PARAMS=bin/plotparams.yml
 PLOT=bin/plotcounts.py
+SUMMARY=bin/book_summary.sh
 DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
+```
 
-## all : regenerate all results.
-all : results/collated.png
-
-## results/collated.png: plot the collated results.
-results/collated.png : results/collated.csv bin/plotparams.yml
-	python $(PLOT) $< --outfile $@ --plotparams $(word 2,$^)
-
-## results/collated.csv : collate all results.
-results/collated.csv : $(RESULTS) $(COLLATE)
-	@mkdir -p results
-	python $(COLLATE) $(RESULTS) > $@
-
-## results/%.csv : regenerate result for any book.
-results/%.csv : data/%.txt $(COUNT)
-	python $(COUNT) $< > $@
-
-## clean : remove all generated files.
-clean :
-	rm $(RESULTS) results/collated.csv results/collated.png
-
+```make
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
 	@echo DATA: $(DATA)
 	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
+	@echo PARAMS: $(PARAMS)
 	@echo PLOT: $(PLOT)
-
-## help : show this message.
-help :
-	@grep '^##' ./Makefile
+	@echo SUMMARY: $(SUMMARY)
 ```
 
 ### Exercise \@ref(config-ex-accessible) {-}
