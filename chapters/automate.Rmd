@@ -729,7 +729,7 @@ add a data file and run Make.
 This is a big improvement over running things manually,
 particularly as we start to add more steps like merging data files and generating plots.
 
-## Documenting a Makefile? {#automate-doc}
+## Documenting a Makefile {#automate-doc}
 
 Every well-behaved program should tell people how to use it @Tasc2017.
 If we run `make --help`,
@@ -866,7 +866,7 @@ all : results/collated.png
 
 ## results/collated.png: plot the collated results.
 results/collated.png : results/collated.csv
-	python $(PLOT) $^ --outfile $@
+	python $(PLOT) $< --outfile $@
 
 ## settings : show variables' values.
 settings :
@@ -930,27 +930,102 @@ If you want to go deeper,
 
 ## Exercises {#automate-exercises}
 
-### Create a summary results file {#automate-ex-create-summary-results}
+Our `Makefile` currently reads as follows:
 
--   Add a rule to Makefile to create a summary CSV file from all of the book CSV files.
--   Be careful about writing the prerequisites so that it doesn't depend on itself.
+```make
+.PHONY: all clean help settings
 
-### Generate a plot for the top N words {#automate-ex-plot-top-n}
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PLOT=bin/plotcounts.py
+DATA=$(wildcard data/*.txt)
+RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
--   Make it depend on the summary.
+## all : regenerate all results.
+all : results/collated.png
 
-### Make sure the output directory exists {#automate-ex-mkdir}
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv
+	python $(PLOT) $< --outfile $@
 
--   Why is `mkdir -p` useful?
+## results/collated.csv : collate all results.
+results/collated.csv : $(RESULTS) $(COLLATE)
+	@mkdir -p results
+	python $(COLLATE) $(RESULTS) > $@
+
+## results/%.csv : regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+
+## clean : remove all generated files.
+clean :
+	rm $(RESULTS) results/collated.csv results/collated.png
+
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	@echo PLOT: $(PLOT)
+
+## help : show this message.
+help :
+	@grep '^##' ./Makefile
+```
+
+A number of the exercises below ask you to make further edits to `Makefile`. 
 
 ### Report results that would change {#automate-ex-report-change}
 
--   Write a rule to report which result files would actually change.
--   Hint: use `diff`.
+How can you get `make` to show the commands it would run
+without actually running them?
+(Hint: look at the manual page.)
 
-### Create more readable help {#automate-ex-readable-help}
+### Useful options {#automate-ex-useful-options}
 
--   Modify the command in the `help` recipe to remove the leading '##' markers from the output.
+1.  What does Make's `-B` option do and when is it useful?
+1.  What about the `-C` option?
+1.  What about the `-f` option?
+
+### Make sure the output directory exists {#automate-ex-mkdir}
+
+One of our \gref{build recipes}{build_recipe} includes `mkdir -p`.
+What does this do and why is it useful?
+
+### Print the title and author {#automate-ex-print}
+
+The build rule for regenerating the result for any book is currently:
+```make
+## results/%.csv : regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+```
+
+Add an extra line to the recipe that uses the `book_summary.sh` script
+to print the title and author of the book to the screen.
+Use `@bash` so that the command itself isn't printed to the screen
+and don't forget to update the settings build rule to include the `book_summary.sh` script.
+
+If you've successfully made those changes,
+you should get the following output for *Dracula*:
+
+```shell
+$ make -B results/dracula.csv
+```
+
+```text
+Title: Dracula
+Author: Bram Stoker
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+```
+
+### Create all results {#automate-ex-all-results}
+
+The default target of our final `Makefile` re-creates `results/collated.csv`.
+Add a target to `Makefile`
+so that `make results` creates or updates any result files that are missing or out of date,
+but does *not* regenerate `results/collated.csv`.
 
 ### The perils of shell wildcards {#automate-ex-wildcard-perils}
 
@@ -961,7 +1036,8 @@ results/collated.csv : results/*.csv
 	python $(COLLATE) $^ > $@
 ```
 
-Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
+(The fact that the result no longer depends on the program used to create it
+isn't the biggest problem.)
 
 ### Making documentation more readable {#automate-ex-readable-docs}
 
@@ -976,11 +1052,17 @@ help :
 Using `man` and online search,
 explain what every part of this recipe does.
 
-### Useful options {#automate-ex-useful-options}
+## Configuration {#automate-ex-configuration}
 
-1.  What does the `-n` option to Make do and when is it useful?
-2.  What does the `-B` option do and when is it useful?
-3.  What about the `-C` option?
+Let's say that in future we intend to write a number of different Makefiles
+that all use the `countwords.py`, `collate.py` and `plotcounts.py` scripts.
+
+To avoid duplication,
+cut and paste the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
+into a separate file called `config.mk`.
+Use the `include` command to access those definitions in the existing `Makefile`. 
+
+(In Chapter \@ref(config) we discuss configuration strategies in more detail.)
 
 ## Key Points {#automate-keypoints}
 
