@@ -16700,7 +16700,7 @@ and is intended to help instructors who want to use this curriculum.
 
 FIXME: Update the ordering of this section when we are finished rearranging.
 
-## Chapter \@ref(bash-basics)
+## Chapter \@ref(bash-basics) {.unnumbered .unlisted}
 
 ### Exercise \@ref(bash-basics-ex-more-ls) {-}
 
@@ -17039,7 +17039,7 @@ have a record of the last command run in the event of a crash.
 -   followed by zero or more other characters (the `*`),
 -   followed by `.txt` or `.pdf`.
 
-## Chapter \@ref(bash-advanced)
+## Chapter \@ref(bash-advanced) {.unnumbered .unlisted}
 
 ### Exercise \@ref(bash-advanced-ex-cleaning-up) {-}
 
@@ -17177,7 +17177,7 @@ Assuming that Ahmed's home is our working directory we type:
 $ find ./ -type f -mtime -1 -user ahmed
 ```
 
-## Chapter \@ref(scripting)
+## Chapter \@ref(scripting) {.unnumbered .unlisted}
 
 ### Exercise \@ref(scripting-ex-command-line) {-}
 
@@ -17223,7 +17223,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-## Chapter \@ref(git-cmdline)
+## Chapter \@ref(git-cmdline) {.unnumbered .unlisted}
 
 ### Exercise \@ref(git-cmdline-ex-places) {-}
 
@@ -17434,7 +17434,7 @@ Each line of output corresponds to a line in the file, who was last
 to modify the line, when that change was made, and what the file name was
 or is called.
 
-## Chapter \@ref(git-advanced)
+## Chapter \@ref(git-advanced) {.unnumbered .unlisted}
 
 ### Exercise \@ref(git-advanced-ex-explain-options) {-}
 
@@ -17541,7 +17541,7 @@ and set aside time to do more reading.
     but not in their desktop repository.
 9.  All four repositories contain both `fuchsia.txt` and `chartreuse.txt`.
 
-## Chapter \@ref(teams)
+## Chapter \@ref(teams) {.unnumbered .unlisted}
 
 ### Exercise \@ref(teams-ex-scavenger-hunt) {-}
 
@@ -17680,7 +17680,7 @@ We obviously can't say which description fits you best, but:
 
 -   Get *Frank* and *Raj* off your project as quickly as you can.
 
-## Chapter \@ref(automate)
+## Chapter \@ref(automate) {.unnumbered .unlisted}
 
 ### Exercise \@ref(automate-ex-report-change) {-}
 
@@ -17793,7 +17793,7 @@ include config.mk
 
 ```
 
-## Chapter \@ref(config)
+## Chapter \@ref(config) {.unnumbered .unlisted}
 
 ### Exercise \@ref(config-ex-build-plotparams) {-}
 
@@ -17851,7 +17851,7 @@ FIXME
 
 FIXME
 
-## Chapter \@ref(errors)
+## Chapter \@ref(errors) {.unnumbered .unlisted}
 
 ### Exercise \@ref(errors-ex-set-level) {-}
 
@@ -17955,7 +17955,7 @@ FIXME
 
 FIXME
 
-## Chapter \@ref(testing)
+## Chapter \@ref(testing) {.unnumbered .unlisted}
 
 ### Exercise \@ref(testing-ex-explain-assertions) {-}
 
@@ -17980,7 +17980,7 @@ FIXME
 
 FIXME
 
-## Chapter \@ref(provenance)
+## Chapter \@ref(provenance) {.unnumbered .unlisted}
 
 ### Exercise \@ref(provenance-ex-get-orcid) {-}
 
@@ -18061,7 +18061,7 @@ Some steps to publishing your project's code would be:
     and tells people how to run the code in the project.
 5.  Include a `requirements.txt` file for Python package dependencies.
 
-## Chapter \@ref(packaging)
+## Chapter \@ref(packaging) {.unnumbered .unlisted}
 
 ### Exercise \@ref(packaging-ex-fixing-warnings) {-}
 
