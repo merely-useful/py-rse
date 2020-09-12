@@ -1,17 +1,21 @@
 # Git at the Command Line {#git-cmdline}
 
-A [version control system][version_control_system] records changes to files
+> +++ Divide By Cucumber Error. Please Reinstall Universe And Reboot +++
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
+A \gref{version control system}{version_control_system} records changes to files\index{version control}
 and helps people share their work with each other.
 These things can be done by emailing files to colleagues
 or by using "track changes" in Microsoft Word and Google Docs,
 but version control does both more accurately and efficiently.
 Originally developed to support software development,
 over the past fifteen years it has become the cornerstone
-of [reproducible research][reproducible_research].
+of \gref{reproducible research}{reproducible_research}.\index{reproducible research!version control}
 
 A version control system stores a master copy of your code in a repository,
 which you can't edit directly.
-Instead, you checkout a working copy of the code,
+Instead, you check out a working copy of the code,
 edit that code, then commit changes back to the repository.
 In this way, the system records a complete revision history (i.e. of every commit),
 so that you can retrieve and compare previous versions at any time.
@@ -22,12 +26,12 @@ It's also useful from a collaboration viewpoint,
 because the system keeps a record of who made what changes and when.
 
 ```{r git-cmdline-phdcomics, echo=FALSE, fig.cap="Without a version control system, managing different versions of the same file can get messy."}
-knitr::include_graphics("figures/py-rse/git-cmdline/phd-comics.png")
+knitr::include_graphics("figures/git-cmdline/phd-comics.png")
 ```
 
 There are many different version control systems,
 such as CVS, Subversion, and Mercurial,
-but the most widely used version control system today is [Git][git].
+but the most widely used version control system today is \gref{Git}{git}.
 Many people first encounter it through a GUI like [GitKraken][gitkraken]
 or [the RStudio IDE][rstudio-ide].
 However,
@@ -45,8 +49,8 @@ Our project directory should currently include:
 zipf/
 ├── bin
 │   ├── book_summary.sh
-│   ├── countwords.py
 │   ├── collate.py
+│   ├── countwords.py
 │   ├── plotcounts.py
 │   ├── script_template.py
 │   └── utilities.py
@@ -98,11 +102,11 @@ if __name__ == '__main__':
 
 ## Setting Up {#git-cmdline-setup}
 
-We write Git commands as <code>git <em>verb</em> <em>options</em></code>,
-where the [subcommand][subcommand] <code><em>verb</em></code> tells Git what we want to do
-and <code><em>options</em></code> provide whatever additional information that subcommand needs.
+We write Git commands as `git VERB [options]`,
+where the \gref{subcommand}{subcommand} `VERB` tells Git what we want to do
+and `[options]` provide whatever additional information that subcommand needs.
 Using this syntax,
-the first thing we need to do is configure Git:
+the first thing we need to do is configure Git:\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
 
 ```shell
 $ git config --global user.name "Amira Khan"
@@ -172,7 +176,7 @@ $ ls
  bin       data      results
 ```
 
-We want to make this directory a [repository][repository],
+We want to make this directory a \gref{repository}{repository},\index{repository (version control)}\index{Git commands!init}
 i.e.,
 a place where Git can store versions of our files.
 We do this using the `init` command with `.` to mean "the current directory":
@@ -196,7 +200,7 @@ bin     data    results
 ```
 
 But if we add the `-a` flag to show everything,
-we can see that Git has created a hidden directory within `zipf` called `.git`:
+we can see that Git has created a hidden directory within `zipf` called `.git`:\index{Git!.git directory}
 
 ```shell
 $ ls -a
@@ -237,12 +241,26 @@ while "Untracked files" means Git has noticed that
 there are things in `bin/`, `data/` and `results/`
 that it is not yet keeping track of.
 
+> **Hints from Git**
+>
+> After executing Git commands,
+> you may see messages output that differ slightly from what is printed here.
+> For example, 
+> you may see a reference to `git restore` after executing the command above.
+> This is because newer versions of Git (>=2.23.0) 
+> include commands that streamline some common tasks. 
+> The commands presented here will still work,
+> and you can consider any deviation you see to be a reminder
+> to continue checking the documentation (e.g., `git restore --help`) 
+> to learn how new features can help your workflow.
+
+
 ## Adding Existing Work {#git-cmdline-add-existing}
 
 Now that our project is a repository,
 we can tell Git to start recording its history.
 To do this,
-we add things to the list of things Git is tracking using `git add`.
+we add things to the list of things Git is tracking using `git add`.\index{Git commands!add}
 We can do this for single files:
 
 ```shell
@@ -299,9 +317,9 @@ Changes to be committed:
 Adding all of our existing files this way is easy,
 but we can accidentally add things that should never be in version control,
 such as files containing passwords or other sensitive information.
-The output of `git status` tells us that
+The output of `git status` tells us that\index{Git commands!status}
 we can remove such files from the list of things to be saved
-using `git rm --cached`;
+using `git rm --cached`;\index{Git commands!rm}
 we will practice this in Exercise \@ref(git-cmdline-ex-unsave).
 
 > **What to Save**
@@ -322,7 +340,7 @@ we will practice this in Exercise \@ref(git-cmdline-ex-unsave).
 > We will explore this issue further in Chapter \@ref(provenance).
 
 We no longer have any untracked files,
-but the tracked files haven't been [committed][commit]
+but the tracked files haven't been \gref{committed}{commit}\index{Git commands!commit}\index{commit!to version control}
 (i.e., saved permanently in our project's history).
 We can do this using `git commit`:
 
@@ -355,13 +373,13 @@ $ git commit -m "Add scripts, novels, word counts, and word rank plot"
 
 `git commit` takes everything we have told Git to save using `git add`
 and stores a copy permanently inside the repository's `.git` directory.
-This permanent copy is called a [commit][commit] or a [revision][revision].
+This permanent copy is called a \gref{commit}{commit} or a \gref{revision}{revision}.\index{commit!set of files}
 Git gives is a unique identifier,
 and the first line of output from `git commit` displays
-its [short identifier][short_identifier_git] `31a216a`,
+its \gref{short identifier}{short_identifier_git} `31a216a`,\index{Git!short identifier}\index{short identifier (in Git)}
 which is the first few characters of that unique label.
 
-We use the `-m` option (short for <strong>m</strong>essage)
+We use the `-m` option (short for **m**essage)
 to record a short comment with the commit
 to remind us later what we did and why.
 (Once again,
@@ -390,7 +408,7 @@ rather than after we have done some work.
 
 If we run `git commit` *without* the `-m` option,
 Git opens a text editor
-so that we can write a longer [commit message][commit_message].
+so that we can write a longer \gref{commit message}{commit_message}.\index{Git!commit message}\index{commit!message}
 In this message,
 the first line is referred to as the "subject"
 and the rest as the "body",
@@ -424,7 +442,6 @@ Following [these guidelines][desc-cmt-msgs] will help:
 > but no one has ever claimed that its interface is intuitive.
 > ("How do I exit the Vim editor?"
 > is one of the most frequently read questions on Stack Overflow.)
-FIXME: This section doesn't exist
 > Section \@ref(install-git-nano) explains
 > how to configure Git to use the `nano` editor
 > introduced in Chapter \@ref(bash-basics) instead.
@@ -482,7 +499,7 @@ $ git commit -m "Add plot of word counts for 'Dracula'"
 ```
 
 If we want to know what we've done recently,
-we can display the project's history using `git log`:
+we can display the project's history using `git log`:\index{Git commands!log}
 
 ```shell
 $ git log
@@ -504,7 +521,7 @@ Date:   Wed Feb 19 15:39:04 2020 -0800
 
 `git log` lists all commits made to a repository in reverse chronological order.
 The listing for each commit includes
-the commit's [full identifier][full_identifier_git]
+the commit's \gref{full identifier}{full_identifier_git}\index{Git!full identifier}\index{full identifier (in Git)}
 (which starts with the same characters as the short identifier printed by `git commit`),
 the commit's author,
 when it was created,
@@ -516,7 +533,7 @@ most of the visual space is devoted to a few very common words,
 which makes it hard to see what is happening with the other ten thousand or so words.
 
 ```{r git-cmdline-initial-plot, echo=FALSE, fig.cap="Inverse rank versus word frequency for Dracula"}
-knitr::include_graphics("figures/py-rse/git-cmdline/plot-initial.png")
+knitr::include_graphics("figures/git-cmdline/plot-initial.png")
 ```
 
 An alternative way to visually evaluate Zipf's Law is
@@ -559,7 +576,7 @@ To save those changes in the repository's history,
 we must `git add` and then `git commit`.
 Before we do,
 though,
-let's review the changes using `git diff`.
+let's review the changes using `git diff`.\index{Git commands!diff}\index{diff (in Git)}
 This command shows us the differences between the current state of our repository
 and the most recently saved version:
 
@@ -670,17 +687,18 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 > We might want to commit those additions
 > but not commit the changes to `conclusion.tex` (which we haven't finished writing yet).
 > To allow for this,
-> Git has a special [staging area][git_stage] where it keeps track of things
+> Git has a special \gref{staging area}{git_stage}\index{staging area (in Git)}\index{Git!staging area}
+> where it keeps track of things
 > that have been added to the current changeset but not yet committed
 > (Figure \@ref(fig:git-cmdline-staging-area)).
 
 ```{r git-cmdline-staging-area, echo=FALSE, fig.cap="The staging area."}
 if (knitr::is_latex_output()) {
-  knitr::include_graphics("figures/py-rse/git-cmdline/staging-area.pdf")
+  knitr::include_graphics("figures/git-cmdline/staging-area.pdf")
 } else {
-  knitr::include_graphics("figures/py-rse/git-cmdline/staging-area.svg")
+  knitr::include_graphics("figures/git-cmdline/staging-area.svg")
 }
-> ```
+```
 
 Let's take a look at our new plot (Figure \@ref(fig:git-cmdline-loglog-plot)):
 
@@ -689,7 +707,7 @@ python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
 ```{r git-cmdline-loglog-plot, echo=FALSE, fig.cap="Rank versus word frequency, on log-log axes, for Dracula"}
-knitr::include_graphics("figures/py-rse/git-cmdline/plot-loglog.png")
+knitr::include_graphics("figures/git-cmdline/plot-loglog.png")
 ```
 
 > **Interpreting Our Plot**
@@ -760,6 +778,12 @@ we will probably want to collaborate with others,
 which we can do by linking our local repository
 to one stored on a hosting service such as [GitHub][github].
 
+> **Where's My Repository?**
+> So far we've worked with repositories located on your own computer,
+> which we'll also refer to as local or desktop repositories.
+> The alternative is hosting repositories on GitHub or another server,
+> which we'll refer to as a remote or GitHub repository.
+
 The first steps are to create an account on GitHub,
 and then to create a new repository to synchronize with.
 The remote repository doesn't have to have the same name as the local one,
@@ -768,12 +792,13 @@ so the repository we create on GitHub will also be called `zipf`.
 
 Next,
 we need to connect our desktop repository with the one on GitHub.
-We do this by making the GitHub repository a [remote][remote_repository] of the local repository.
+We do this by making the GitHub repository a \gref{remote}{remote_repository}\index{Git!remote}\index{remote (in Git)}
+of the local repository.
 The home page of the repository on GitHub includes the string we need to identify it
 (Figure \@ref(fig:git-cmdline-repo-link)).
 
 ```{r git-cmdline-repo-link, echo=FALSE, fig.cap="Where to Find the Repository Link"}
-knitr::include_graphics("figures/py-rse/git-cmdline/repo-link.png")
+knitr::include_graphics("figures/git-cmdline/repo-link.png")
 ```
 
 We can click on "HTTPS" to change the URL from SSH to HTTPS
@@ -793,28 +818,28 @@ let's go into the local `zipf` repository and run this command:
 
 ```shell
 $ cd ~/zipf
-$ git remote add origin https://github.com/amira/zipf.git
+$ git remote add origin https://github.com/amira-khan/zipf.git
 ```
 
 Make sure to use the URL for your repository instead of the one shown:
-the only difference should be that it includes your username instead of `amira`.
+the only difference should be that it includes your username instead of `amira-khan`.
 
-A Git remote is like a bookmark:
+A Git remote is like a bookmark:\index{Git!remote}\index{Git commands!remote}\index{remote (in Git)}
 it gives a short name to a URL.
 In this case the remote's name is `origin`;
 we could use anything we want,
 but `origin` is Git's default,
 so we will stick with it.
 We can check that the command has worked by running `git remote -v`
-(where the `-v` option is short for <strong>v</strong>erbose):
+(where the `-v` option is short for **v**erbose):
 
 ```shell
 $ git remote -v
 ```
 
 ```text
-origin	https://github.com/amira/zipf.git (fetch)
-origin	https://github.com/amira/zipf.git (push)
+origin	https://github.com/amira-khan/zipf.git (fetch)
+origin	https://github.com/amira-khan/zipf.git (push)
 ```
 
 Git displays two lines because it's actually possible to set up a remote
@@ -823,7 +848,8 @@ Sensible people don't do this,
 so we won't explore this possibility any further.
 
 Now that we have configured a remote,
-we can [push][git_push] the work we have done so far to the repository on GitHub:
+we can \gref{push}{git_push} the work we have done so far\index{Git commands!push}\index{push (in Git)}
+to the repository on GitHub:
 
 ```shell
 $ git push origin master
@@ -841,7 +867,7 @@ Compressing objects: 100% (33/33), done.
 Writing objects: 100% (33/33), 2.12 MiB | 799.00 KiB/s, done.
 Total 33 (delta 5), reused 0 (delta 0)
 remote: Resolving deltas: 100% (5/5), done.
-To https://github.com/amira/zipf.git
+To https://github.com/amira-khan/zipf.git
  * [new branch]      master -> master
 Branch 'master' set up to track remote branch 'master' from 'origin'.
 ```
@@ -851,17 +877,18 @@ it now includes all of our project files,
 along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline-history)).
 
 ```{r git-cmdline-history, echo=FALSE, fig.cap="Repository history on GitHub"}
-knitr::include_graphics("figures/py-rse/git-cmdline/repo-history.png")
+knitr::include_graphics("figures/git-cmdline/repo-history.png")
 ```
 
-We can also [pull][git_pull] changes from the remote repository to the local one:
+We can also \gref{pull}{git_pull} changes\index{Git commands!pull}\index{pull (in Git)}
+from the remote repository to the local one:
 
 ```shell
 $ git pull origin master
 ```
 
 ```text
-From https://github.com/amira/zipf
+From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
 Already up-to-date.
 ```
@@ -870,7 +897,7 @@ Pulling has no effect in this case
 because the two repositories are already synchronized.
 
 ```{r git-cmdline-remote, echo=FALSE, fig.cap="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?"}
-knitr::include_graphics("figures/py-rse/git-cmdline/git-remote.png")
+knitr::include_graphics("figures/git-cmdline/git-remote.png")
 ```
 
 ## Exploring History {#git-cmdline-history}
@@ -881,12 +908,12 @@ In order to do these things,
 we need to identify the versions we want.
 
 The two ways to do this
-are analogous to [absolute][absolute_path] and [relative][relative_path] paths.
+are analogous to \gref{absolute}{absolute_path} and \gref{relative}{relative_path} paths.
 The "absolute" version is the unique identifier that Git gives to each commit.
 These identifiers are 40 characters long,
 but in most situations Git will let us use just the first half dozen characters or so.
 For example,
-if we run `git log` right now,
+if we run `git log`\index{Git commands!log} right now,
 it shows us something like this:
 
 ```text
@@ -921,7 +948,7 @@ but we can use `b5176bf` to reference it in almost all situations.
 
 While `git log` includes the commit message,
 it doesn't tell us exactly what changes were made in each commit.
-If we add the `-p` option (short for <strong>p</strong>atch),
+If we add the `-p` option (short for **p**atch),
 we get the same kind of details `git diff` provides
 to describe the changes in each commit:
 
@@ -947,7 +974,7 @@ Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
 Alternatively,
-we can use `git diff` directly
+we can use `git diff` directly\index{Git commands!diff}
 to examine the differences between files at any stage in the repository's history.
 Let's explore this with the `plotcounts.py` file.
 We no longer need the line of code in `plotcounts.py`
@@ -1006,11 +1033,11 @@ since Git may have assigned your commit a different unique identifier.
 Note also that we have *not* committed this change:
 we will look at ways of undoing it in the next section.
 
-The "relative" version of history relies on a special identifier called `HEAD`,
+The "relative" version of history relies on a special identifier called `HEAD`,\index{Git!HEAD}\index{HEAD (in Git)}
 which always refers to the most recent version in the repository.
 `git diff HEAD` therefore shows the same thing as `git diff`,
 but instead of typing in a version identifier to back up one commit,
-we can use `HEAD~1` (where `~` is the tilde symbol).
+we can use `HEAD~1` (where `~` is the tilde symbol).\index{Git!relative revision}
 This shorthand is read "HEAD minus one",
 and gives us the difference to the previous saved version.
 `git diff HEAD~2` goes back two revisions and so on.
@@ -1037,7 +1064,7 @@ index a6005cd..13e7f38 100644
 ```
 
 If we want to see the changes made in a particular commit,
-we can use `git show`
+we can use `git show`\index{Git commands!show}
 with an identifier and a file joined by a colon:
 
 ```shell
@@ -1068,11 +1095,11 @@ index 13e7f38..a6005cd 100644
 ## Restoring Old Versions of Files {#git-cmdline-restore}
 
 We can see what we changed,
-but how can we restore it?
+but how can we restore it?\index{Git!restore old versions}
 Suppose we change our mind about the last update to `bin/plotcounts.py`
 before we add it or commit it.
 `git status` tells us that the file has been changed,
-but those changes haven't been [staged][git_stage]:
+but those changes haven't been \gref{staged}{git_stage}:\index{Git!staging area}
 
 ```shell
 $ git status
@@ -1091,7 +1118,7 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-We can put things back the way they were in the last saved revision using `git checkout`:
+We can put things back the way they were in the last saved revision using `git checkout`:\index{Git commands!checkout}
 
 ```shell
 $ git checkout HEAD bin/plotcounts.py
@@ -1188,9 +1215,9 @@ we might want to track text files with names ending in `.txt`
 but not data files with names ending in `.dat`.
 
 To stop Git from telling us about these files every time we call `git status`,
-we can create a file in the root directory of our project called `.gitignore`.
+we can create a file in the root directory of our project called `.gitignore`.\index{Git!ignoring files}\index{.gitignore file (in Git)}
 This file can contain filenames like `thesis.pdf`
-or [wildcard][wildcard] patterns like `*.dat`.
+or \gref{wildcard}{wildcard} patterns like `*.dat`.\index{wildcard!in .gitignore}
 Each must be on a line of its own,
 and Git will ignore anything that matches any of these lines.
 For now we only need one entry in our `.gitignore` file,
@@ -1199,7 +1226,7 @@ For now we only need one entry in our `.gitignore` file,
 __pycache__
 ```
 
-which tells Git to ignore any `__pycache__` directory created by Python
+which tells Git to ignore any `__pycache__` directory created by Python\index{\_\_pycache\_\_ directory!ignoring in Git}
 (Section \@ref(py-rse-py-scripting-modules)).
 
 > **Remember to Ignore**
@@ -1212,10 +1239,10 @@ which tells Git to ignore any `__pycache__` directory created by Python
 The biggest benefit of version control for individual research is that
 we can always go back to the precise set of files
 that we used to produce a particular result.
-Being able to back up our changes on sites like GitHub
-with just a few keystrokes
-is a close second,
-but some of Git's advanced features make it even more powerful.
+While Git is complex @Pere2013,
+being able to back up our changes on sites like GitHub
+with just a few keystrokes can save us a lot of pain,
+and some of Git's advanced features make it even more powerful.
 We will explore these in the next chapter.
 
 ## Exercises {#git-cmdline-exercises}
@@ -1223,8 +1250,7 @@ We will explore these in the next chapter.
 ### Places to create Git repositories {#git-cmdline-ex-places}
 
 Along with information about the Zipf's Law project,
-Amira would also like to keep some notes on
-[Heaps' Law][heaps-law].
+Amira would also like to keep some notes on [Heaps' Law][heaps-law].
 Despite her colleagues' concerns,
 Amira creates a `heaps-law` project inside her `zipf` project as follows:
 
@@ -1246,9 +1272,9 @@ using `git rm --cached`.
 Try this out:
 
 1.  Create a new file in the repository called `example.txt`.
-2.  Use `git add` to add this file.
+2.  Use `git add example.txt` to add this file.
 3.  Use `git status` to check that Git has noticed it.
-4.  Use `git rm --cached` to remove it from the list of things to be saved.
+4.  Use `git rm --cached example.txt` to remove it from the list of things to be saved.
 
 What does `git status` now show?
 What (if anything) has happened to the file?
@@ -1373,24 +1399,27 @@ $ git checkout HEAD motivation.txt
 $ cat motivation.txt
 ```
 
-1. ```text
-   Zipf's Law describes the relationship between the frequency and rarity of words.
-   ```
+1. 
+```
+    Zipf's Law describes the relationship between the frequency and rarity of words.
+```
 
-2. ```
-   Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
-   ```
+2. 
+```
+    Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
+```
 
-3. ```
+3. 
+```
    Zipf's Law describes the relationship between the frequency and rarity of words.
    Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
-   ```
+```
 
 4. An error message because we have changed `motivation.txt` without committing first.
 
 ### Understanding `git diff` {#git-cmdline-ex-diff}
 
-1.   What will the command `git diff HEAD~9 bin/plotcounts.py` do if we run it?
+1.  What will the command `git diff HEAD~2 bin/plotcounts.py` do if we run it?
 2.  What does it actually do?
 3.  What does `git diff HEAD bin/plotcounts.py` do?
 
@@ -1401,7 +1430,7 @@ but will it also work for changes that have been staged but not committed?
 To find out:
 
 1.  Change `bin/plotcounts.py`.
-2.  `git add` that change.
+2.  Use `git add` on those changes to `bin/plotcounts.py`.
 3.  Use `git checkout` to see if you can remove your change.
 
 Does it work?
@@ -1409,9 +1438,7 @@ Does it work?
 ### Figuring out who did what {#git-cmdline-ex-blame}
 
 Run the command `git blame bin/plotcounts.py`.
-
-1.  What does each line of the output show?
-2.  Why do some lines start with a circumflex `^`?
+What does each line of the output show?
 
 ## Key Points {#git-cmdline-keypoints}
 

@@ -1,5 +1,12 @@
 # Automating Analyses {#automate}
 
+> The three rules of the Librarians of Time and Space are:
+> 1) Silence;
+> 2) Books must be returned no later than the last date shown; and
+> 3) Do not interfere with the nature of causality.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 It's easy to run one program to process a single data file,
 but what happens when our analysis depends on many files,
 or when we need to re-do the analysis every time new data arrives?
@@ -10,7 +17,7 @@ If we try to keep track of this ourselves
 we will inevitably forget some crucial steps
 and it will be hard for other people to pick up our work.
 Instead,
-we should use a [build manager][build_manager]
+we should use a \gref{build manager}{build_manager}\index{build manager}
 to keep track of what depends on what
 and run our analysis programs automatically.
 These tools were invented to help programmers compile complex software,
@@ -45,18 +52,18 @@ zipf/
 
 Now that the project's main building blocks are in place,
 we're ready to atomate our analysis using a build manager.
-We will use a program called [Make][make] to do this
+We will use a program called [Make][gnu-make]\index{Make} to do this
 so that every time we add a new book to our data,
 we can create new plots and update our fits with a single command.
 Make works as follows:
 
-1.  Every time the [operating system][operating_system] creates, reads, or changes a file,
-    it updates a [timestamp][timestamp] on the file to show when the operation took place.
+1.  Every time the \gref{operating system}{operating_system} creates, reads, or changes a file,
+    it updates a \gref{timestamp}{timestamp}\index{timestamp} on the file to show when the operation took place.
     Make can compare these timestamps
     to figure out whether files are newer or older than one another.
 
 2.  A user can describe which files depend on each other
-    by writing [rules][build_rule] in a [Makefile][makefile].
+    by writing \gref{rules}{build_rule}\index{build rule} in a \gref{Makefile}{makefile}.
     For example,
     one rule could say that `results/moby_dick.csv` depends on `data/moby_dick.txt`,
     while another could say that the plot `results/comparison.png`
@@ -70,7 +77,7 @@ Make works as follows:
 4.  When the user runs Make,
     the program checks all of the rules in the Makefile
     and runs the commands needed to update any that are out of date.
-    If there are [transitive dependencies][transitive_dependency]---i.e.,
+    If there are \gref{transitive dependencies}{transitive_dependency}---i.e.,\index{build dependency}\index{dependency!in build}
     if A depends on B and B depends on C---then Make will trace them through
     and run all of the commands it needs to in the right order.
 
@@ -99,13 +106,13 @@ results/moby_dick.csv : data/moby_dick.txt
 
 As in the shell and many other programming languages,
 `#` indicates that the first line is a comment.
-The second and third lines form a [build rule][build_rule]:
-the [target][build_target] of the rule is `results/moby_dick.csv`,
-its single [prerequisite][prerequisite] is the file `data/moby_dick.txt`,
+The second and third lines form a \gref{build rule}{build_rule}:\index{build rule}
+the \gref{target}{build_target}\index{build target} of the rule is `results/moby_dick.csv`,
+its single \gref{prerequisite}{prerequisite} is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
 
 The target and prerequisite tell Make what depends on what.
-The line below them describes the [recipe][build_recipe]
+The line below them describes the \gref{recipe}{build_recipe}\index{build recipe}
 that will update the target if it is out of date.
 The recipe consists of one or more shell commands,
 each of which *must* be prefixed by a single tab character.
@@ -143,7 +150,7 @@ one of three things will happen:
 In the first two cases,
 Make prints the commands it runs
 along with anything those command prints to the screen
-via [standard output][stdout] or [standard error][stderr].
+via \gref{standard output}{stdout} or \gref{standard error}{stderr}.
 There is no screen output in this case,
 so we only see the command.
 
@@ -217,7 +224,7 @@ make: `results/moby_dick.csv' is up to date.
 ```
 
 By default Make only attempts to update the first target it finds in the Makefile,
-which is called the [default target][default_target].
+which is called the \gref{default target}{default_target}.\index{build target!default}
 In this case,
 the first target is `results/moby_dick.csv`,
 which is already up to date.
@@ -236,7 +243,7 @@ If we have to run `make` once for each result
 we're right back where we started.
 However,
 we can add a rule to our Makefile to update all of our results at once.
-We do this by creating a [phony target][phony_target]
+We do this by creating a \gref{phony target}{phony_target}\index{build target!phony}
 that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
@@ -250,8 +257,8 @@ but when we run `make all`,
 Make finds everything that `all` depends on,
 then brings each of those prerequisites up to date (Figure \@ref(fig:automate-all)).
 
-```{r automate-all, echo=FALSE, fig.cap="Making Everything"}
-knitr::include_graphics("figures/py-rse/automate/make-dependency-graph.png")
+```{r automate-all, echo=FALSE, fig.cap="Making Everything", out.width="60%"}
+knitr::include_graphics("figures/automate/make-dependency-graph.png")
 ```
 
 The order in which rules appear in the Makefile
@@ -263,7 +270,7 @@ We can use phony targets to automate and document other steps in our workflow.
 For example,
 let's add another target to our Makefile to delete all of the result files we have generated
 so that we can start afresh.
-By convention this target is called `clean`,
+By convention this target is called `clean`,\index{build target!clean}
 and ours looks like this:
 
 ```make
@@ -366,7 +373,7 @@ If we ever change the name of the program or move it to a different location,
 we will have to find and replace each of those occurrences.
 More importantly,
 this redundancy makes our Makefile harder to understand,
-just as scattering [magic numbers][magic_number] through programs
+just as scattering \gref{magic numbers}{magic_number} through programs
 makes them harder to understand.
 
 The solution is the same one we use in programs:
@@ -408,7 +415,7 @@ to use `$(NAME)` and not `$NAME`.
 As in programs,
 variables don't just cut down on typing.
 They also tell readers that several things are always and exactly the same,
-which reduces [cognitive load][cognitive_load].
+which reduces \gref{cognitive load}{cognitive_load}.
 
 ## Automatic Variables {#automate-autovar}
 
@@ -418,7 +425,8 @@ Instead,
 we can write a generic rule that does what we want for every one of our data files.
 
 To do this,
-we need to understand Make's [automatic variables][automatic_variable].
+we need to understand Make's
+\gref{automatic variables}{automatic_variable}.\index{automatic variables (in Make)}\index{Make!automatic variables}
 The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 It lets us turn this:
@@ -479,8 +487,8 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 
 `$< > $@` is even harder to read than `$@` on its own,
 but we can now replace all the rules for generating results files
-with one [pattern rule][pattern_rule]
-using the [wildcard][wildcard] `%`,
+with one \gref{pattern rule}{pattern_rule}\index{pattern rule}
+using the \gref{wildcard}{wildcard}\index{wildcard!in Make} `%`,
 which matches zero or more characters in a filename.
 Whatever matches `%` in the target also matches in the prerequisites,
 so the rule:
@@ -585,7 +593,7 @@ and Make won't realize that we want to generate it.
 
 What we really want is to generate the list of results files
 based on the list of books in the `data/` directory.
-We can create that list using Make's `wildcard` function:
+We can create that list using Make's `wildcard` function:\index{functions (in Make)}
 
 ```make
 DATA=$(wildcard data/*.txt)
@@ -649,7 +657,7 @@ DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.t
 We now have the names of our input files.
 To create a list of corresponding output files,
 we use Make's `patsubst` function
-(short for <strong>pat</strong>tern <strong>subst</strong>itution):
+(short for **pat**tern **subst**itution):
 
 ```
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
@@ -657,7 +665,7 @@ RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
 The first argument to `patsubst` is the pattern to look for,
 which in this case is a text file in the `data` directory.
-We use `%` to match the [stem][filename_stem] of the file's name,
+We use `%` to match the \gref{stem}{filename_stem}\index{filename stem}\index{stem (of filename)} of the file's name,
 which is the part we want to keep.
 
 The second argument is the replacement we want.
@@ -721,9 +729,9 @@ add a data file and run Make.
 This is a big improvement over running things manually,
 particularly as we start to add more steps like merging data files and generating plots.
 
-## Documenting a Makefile? {#automate-doc}
+## Documenting a Makefile {#automate-doc}
 
-Every well-behaved program should tell people how to use it [@Tasc2017].
+Every well-behaved program should tell people how to use it @Tasc2017.
 If we run `make --help`,
 we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
@@ -870,7 +878,7 @@ settings :
 	...
 ```
 
-Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
+Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
 
 ```shell
 $ make all
@@ -883,7 +891,7 @@ alpha: 1.1712445413685917
 ```
 
 ```{r automate-collated, echo=FALSE, fig.cap="Word count distribution for all the books combined."}
-knitr::include_graphics("figures/py-rse/automate/collated.png")
+knitr::include_graphics("figures/automate/collated.png")
 ```
 
 Finally,
@@ -918,31 +926,106 @@ If you would like to explore them,
 check out [Snakemake][snakemake] (for Python)
 and [drake][drake] (for R).
 If you want to go deeper,
-[@Smit2011] describes the design and implementation of several build managers.
+@Smit2011 describes the design and implementation of several build managers.
 
 ## Exercises {#automate-exercises}
 
-### Create a summary results file {#automate-ex-create-summary-results}
+Our `Makefile` currently reads as follows:
 
--   Add a rule to Makefile to create a summary CSV file from all of the book CSV files.
--   Be careful about writing the prerequisites so that it doesn't depend on itself.
+```make
+.PHONY: all clean help settings
 
-### Generate a plot for the top N words {#automate-ex-plot-top-n}
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PLOT=bin/plotcounts.py
+DATA=$(wildcard data/*.txt)
+RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
--   Make it depend on the summary.
+## all : regenerate all results.
+all : results/collated.png
 
-### Make sure the output directory exists {#automate-ex-mkdir}
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv
+	python $(PLOT) $< --outfile $@
 
--   Why is `mkdir -p` useful?
+## results/collated.csv : collate all results.
+results/collated.csv : $(RESULTS) $(COLLATE)
+	@mkdir -p results
+	python $(COLLATE) $(RESULTS) > $@
+
+## results/%.csv : regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+
+## clean : remove all generated files.
+clean :
+	rm $(RESULTS) results/collated.csv results/collated.png
+
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	@echo PLOT: $(PLOT)
+
+## help : show this message.
+help :
+	@grep '^##' ./Makefile
+```
+
+A number of the exercises below ask you to make further edits to `Makefile`. 
 
 ### Report results that would change {#automate-ex-report-change}
 
--   Write a rule to report which result files would actually change.
--   Hint: use `diff`.
+How can you get `make` to show the commands it would run
+without actually running them?
+(Hint: look at the manual page.)
 
-### Create more readable help {#automate-ex-readable-help}
+### Useful options {#automate-ex-useful-options}
 
--   Modify the command in the `help` recipe to remove the leading '##' markers from the output.
+1.  What does Make's `-B` option do and when is it useful?
+1.  What about the `-C` option?
+1.  What about the `-f` option?
+
+### Make sure the output directory exists {#automate-ex-mkdir}
+
+One of our \gref{build recipes}{build_recipe} includes `mkdir -p`.
+What does this do and why is it useful?
+
+### Print the title and author {#automate-ex-print}
+
+The build rule for regenerating the result for any book is currently:
+```make
+## results/%.csv : regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+```
+
+Add an extra line to the recipe that uses the `book_summary.sh` script
+to print the title and author of the book to the screen.
+Use `@bash` so that the command itself isn't printed to the screen
+and don't forget to update the settings build rule to include the `book_summary.sh` script.
+
+If you've successfully made those changes,
+you should get the following output for *Dracula*:
+
+```shell
+$ make -B results/dracula.csv
+```
+
+```text
+Title: Dracula
+Author: Bram Stoker
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+```
+
+### Create all results {#automate-ex-all-results}
+
+The default target of our final `Makefile` re-creates `results/collated.csv`.
+Add a target to `Makefile`
+so that `make results` creates or updates any result files that are missing or out of date,
+but does *not* regenerate `results/collated.csv`.
 
 ### The perils of shell wildcards {#automate-ex-wildcard-perils}
 
@@ -953,7 +1036,8 @@ results/collated.csv : results/*.csv
 	python $(COLLATE) $^ > $@
 ```
 
-Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
+(The fact that the result no longer depends on the program used to create it
+isn't the biggest problem.)
 
 ### Making documentation more readable {#automate-ex-readable-docs}
 
@@ -968,11 +1052,17 @@ help :
 Using `man` and online search,
 explain what every part of this recipe does.
 
-### Useful options {#automate-ex-useful-options}
+## Configuration {#automate-ex-configuration}
 
-1.  What does the `-n` option to Make do and when is it useful?
-2.  What does the `-B` option do and when is it useful?
-3.  What about the `-C` option?
+Let's say that in future we intend to write a number of different Makefiles
+that all use the `countwords.py`, `collate.py` and `plotcounts.py` scripts.
+
+To avoid duplication,
+cut and paste the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
+into a separate file called `config.mk`.
+Use the `include` command to access those definitions in the existing `Makefile`. 
+
+(In Chapter \@ref(config) we discuss configuration strategies in more detail.)
 
 ## Key Points {#automate-keypoints}
 

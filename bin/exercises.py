@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
-'''Check that exercises have solutions and solutions have exercises.'''
+'''
+Check that exercises have solutions and solutions have exercises,
+all in the correct order.
+'''
 
 
 import sys
+import os
 import re
-from util import report
 
 
 PAT_EXERCISE = re.compile(r'^###\s+.+?\{#(.+?)\}', re.MULTILINE + re.DOTALL)
@@ -14,21 +17,32 @@ PAT_SOLUTION = re.compile(r'^###\s+Exercise.+?\((.+?)\)', re.MULTILINE + re.DOTA
 
 def main():
     '''Main driver.'''
-    filenames = sys.argv[1:]
-    exercise, solution = scan(filenames)
-    report('Exercise but not solution', exercise - solution)
-    report('Solution but not exercise', solution - exercise)
+    allSolutions = getSolutions(sys.argv[1])
+    for filename in sys.argv[2:]:
+        exercises = getExercises(filename)
+        if not exercises:
+            continue
+        subset = subsetSolutions(filename, allSolutions)
+        for (ex, sol) in zip(exercises, subset):
+            if ex != sol:
+                print(ex, sol)
 
 
-def scan(filenames):
-    exercise = set()
-    solution = set()
-    for f in filenames:
-        with open(f, 'r') as reader:
-            text = reader.read()
-            exercise |= set(PAT_EXERCISE.findall(text))
-            solution |= set(PAT_SOLUTION.findall(text))
-    return exercise, solution
+def getSolutions(filename):
+    with open(filename, 'r') as reader:
+        text = reader.read()
+        return [f'{t}\n' for t in PAT_SOLUTION.findall(text)]
+
+
+def getExercises(filename):
+    with open(filename, 'r') as reader:
+        text = reader.read()
+        return [f'{d}\n' for d in PAT_EXERCISE.findall(text) if '-ex-' in d]
+
+
+def subsetSolutions(filename, allSolutions):
+    stem = os.path.splitext(os.path.basename(filename))[0]
+    return [x for x in allSolutions if x.startswith(stem)]
 
 
 if __name__ == '__main__':

@@ -1,5 +1,9 @@
 # Testing {#testing}
 
+> Opera happens because a large number of things amazingly fail to go wrong.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
 We have written software to count and analyze the words in classic texts,
 but how can we be sure it's producing reliable results?
 The short is answer is that we can't---not completely---but
@@ -50,8 +54,8 @@ zipf/
 
 The first step in building confidence in our programs
 is to assume that mistakes will happen and guard against them.
-This is called [defensive programming][defensive_programming],
-and the most common way to do it is to add [assertions][assertion] to our code
+This is called \gref{defensive programming}{defensive_programming},\index{defensive programming}
+and the most common way to do it is to add \gref{assertions}{assertion} to our code\index{assertion}\index{Python!assertion}
 so that it checks itself as it runs.
 An assertion is a statement that something must be true at a certain point in a program.
 When Python sees an assertion, it checks the assertion's condition.
@@ -86,20 +90,23 @@ Programs intended for widespread use are full of assertions:
 10-20% of the code they contain are there to check that the other 80-90% are working correctly.
 Broadly speaking, assertions fall into three categories:
 
--   A [precondition][precondition] is something that must be true at the start of a function
+-   A \gref{precondition}{precondition}\index{precondition (in program)}\index{assertion!precondition}
+    is something that must be true at the start of a function
     in order for it to work correctly.
     For example,
     a function might check that the list it has been given has at least two elements
     and that all of its elements are integers.
 
--   A [postcondition][postcondition] is something that the function guarantees is true
+-   A \gref{postcondition}{postcondition}\index{postcondition (in program)}\index{assertion!postcondition}
+    is something that the function guarantees is true
     when it finishes.
     For example,
     a function could check that the value being returned is an integer
     that is greater than zero,
     but less than the length of the input list.
 
--   An [invariant][invariant] is something that is true for every iteration in a loop.
+-   An \gref{invariant}{invariant}\index{invariant (in program)}\index{assertion!invariant}
+    is something that is true for every iteration in a loop.
     The invariant might be a property of the data (as in the example above),
     or it might be something like,
     "the value of `highest` is less than or equal to the current loop index".
@@ -141,7 +148,8 @@ def get_power_law_params(word_counts):
 ## Unit Testing {#testing-unit}
 
 As the name suggests,
-a [unit test][unit_test] checks the correctness of a single unit of software.
+a \gref{unit test}{unit_test}\index{unit test}\index{testing!unit test}
+checks the correctness of a single unit of software.
 Exactly what constitutes a "unit" is subjective,
 but it typically means the behavior of a single function in one situation.
 In our Zipf's Law software,
@@ -160,12 +168,12 @@ def count_words(reader):
 
 A single unit test will typically have:
 
--   a [fixture][fixture],
+-   a \gref{fixture}{fixture},\index{testing!fixture}\index{fixture (of test)}
     which is the thing being tested (e.g., an array of numbers);
--   an [actual result][actual_result],
+-   an \gref{actual result}{actual_result},\index{testing!actual result}\index{actual result (of test)}
     which is what the code produces when given the fixture;
     and
--   an [expected result][expected_result]
+-   an \gref{expected result}{expected_result}\index{testing!expected result}\index{expected result (of test)}
     that the actual result is compared to.
 
 The fixture is typically a subset or smaller version of the data
@@ -223,7 +231,8 @@ which means the assertion (and test) passed.
 Writing one unit test is easy enough,
 but we should check other cases as well.
 To manage them,
-we can use a [test framework][test_framework] (also called a [test runner][test_runner]).
+we can use a \gref{test framework}{test_framework}\index{test framework}\index{testing!framework}
+(also called a \gref{test runner}{test_runner}).
 The most widely-used test framework for Python is called [`pytest`][pytest],
 which structures tests as follows:
 
@@ -419,7 +428,7 @@ the `actual_alpha` value of 0.9951524579316625 was very close to the expected va
 After a bit of thought,
 we decide that this isn't actually a failure:
 the value produced by `get_power_law_params` is an estimate,
-and being off by half a percent is good enough.
+and being off by half a percent is good enough.\index{testing!floating-point calculations}
 
 This example shows that testing scientific software
 almost always requires us to make the same kind of judgment calls
@@ -440,11 +449,11 @@ so that other people can tell what we actually did.
 
 So how should we write tests when we don't know precisely what the right answer is?
 The best approach is to write tests that check
-if the actual value is within some [tolerance][tolerance] of the expected value.
-The tolerance can be expressed as the [absolute error][absolute_error],
+if the actual value is within some \gref{tolerance}{tolerance} of the expected value.\index{testing!tolerance}\index{tolerance (of test)}
+The tolerance can be expressed as the \gref{absolute error}{absolute_error},\index{absolute error}\index{error!absolute}
 which is the absolute value of the difference between two,
-or the [relative error][relative_error],
-which the ratio of the absolute error to the value we're approximating.
+or the \gref{relative error}{relative_error},\index{relative error}\index{error!relative}
+which the ratio of the absolute error to the value we're approximating @Gold1991.
 For example,
 if we add 9+1 and get 11,
 the absolute error is 1 (i.e., 11-10),
@@ -513,7 +522,7 @@ bin/test_zipfs.py ..                                                     [100%]
 > Testing visualizations is hard:
 > any change to the dimension of the plot,
 > however small,
-> can change many pixels in a [raster image][raster_image],
+> can change many pixels in a \gref{raster image}{raster_image},
 > and cosmetic changes such as moving the legend up a couple of pixels
 > will cause all of our tests to fail.
 >
@@ -528,7 +537,7 @@ An alarm isn't much use if it doesn't go off when it's supposed to.
 Equally,
 if a function doesn't raise an exception when it should (Section \@ref(errors-exceptions)),
 errors can easily slip past us.
-If we want to check that a function called `func` raises an `ExpectedError` exception
+If we want to check that a function called `func` raises an `ExpectedError` exception\index{testing!error handling}\index{exception!testing}
 we can use the following template:
 
 ```python
@@ -586,7 +595,7 @@ counting the words in a text
 and estimating the \(\alpha\) parameter from the word count.
 Our unit tests give us some confidence that these components work in isolation,
 but do they work correctly together?
-Checking that is called [integration testing][integration_test].
+Checking that is called \gref{integration testing}{integration_test}.\index{testing!integration test}\index{integration test}
 
 Integration tests are structured the same way as unit tests:
 a fixture is used to produce an actual result
@@ -671,7 +680,8 @@ we don't know the expected result:
 it's not practical to count the words in *Dracula* by hand,
 and even if we tried,
 the odds are good that we'd make a mistake.
-For this kind of situation we can use [regression testing][regression_testing].
+For this kind of situation we can use
+\gref{regression testing}{regression_testing}.\index{testing!regression test}\index{regression test}
 Rather than assuming that the test author knows what the expected result should be,
 regression tests compares today's answer with a previous one.
 This doesn't guarantee that the answer is right---if the original answer is wrong,
@@ -713,7 +723,7 @@ bin/test_zipfs.py ....                                                   [100%]
 
 How much of our code do the tests we have written so far actually check?
 To find out,
-we can use a tool to check their [code coverage][code_coverage].
+we can use a tool to check their \gref{code coverage}{code_coverage}.\index{code coverage (of testing)}\index{testing!code coverage}
 Most Python programmers use the `coverage` library,
 which we can once again install using `pip`:
 
@@ -779,7 +789,7 @@ Clicking on the name of our `countwords.py` script, for instance,
 produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
 
 ```{r python-coverage, echo=FALSE, fig.cap="Coverage report"}
-knitr::include_graphics("figures/py-rse/testing/python-coverage.png")
+knitr::include_graphics("figures/testing/python-coverage.png")
 ```
 
 This output confirms that all lines relating to word counting were tested,
@@ -792,7 +802,7 @@ we should aim for 100% code coverage,
 i.e.,
 every single line in the application should be tested.
 In fact,
-we should probably go further and aim for 100% [path coverage][path_coverage]
+we should probably go further and aim for 100% \gref{path coverage}{path_coverage}
 to ensure that every possible path through the code has been checked.
 Similarly,
 if the software has become popular and is being used by thousands of researchers all over the world,
@@ -822,7 +832,7 @@ it's probably enough to check that it handles table with:
 -   rows having keys that are supposed to be unique, but aren't
 -   rows that contain nothing but missing values
 
-Some projects develop [checklists][checklist] like this one
+Some projects develop \gref{checklists}{checklist} like this one\index{testing!checklist}
 to remind programmers what they ought to test.
 These checklists can be a bit daunting for newcomers,
 but they are a great way to pass on hard-earned experience.
@@ -837,8 +847,8 @@ or if we are making changes over weeks or months,
 we might forget to run the tests
 or it might be difficult to identify which change is responsible for a test failure.
 
-The solution is [continuous integration][continuous_integration] (CI),
-which runs tests automatically whenever a change is made.
+The solution is \gref{continuous integration}{continuous_integration} (CI),\index{continuous integration}\index{CI (continuous integration)}
+which runs tests automatically whenever a change is made.\index{testing!continuous integration}
 CI tells developers immediately if changes have caused problems,
 which makes them much easier to fix.
 CI can also be set up to run tests with several different configurations of the software
@@ -847,7 +857,8 @@ so that a programmer using Windows
 can be warned that a change breaks things for Mac users and vice versa.
 
 One popular CI tool is [Travis CI][travis-ci],
-which integrates well with [GitHub][github].
+which integrates well with
+[GitHub][github].\index{continuous integration!use with version control}\index{version control!and continuous integration}
 If Travis CI has been set up,
 then every time a change is committed to a GitHub repository,
 Travis CI creates a fresh environment,
@@ -872,8 +883,8 @@ we can tell Travis CI which repository we want it to watch
 by clicking the "+" next to the "My Repositories" link
 on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
 
-```{r testing-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI"}
-knitr::include_graphics("figures/py-rse/testing/travis-add-repo.png")
+```{r testing-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI", out.width="50%"}
+knitr::include_graphics("figures/testing/travis-add-repo.png")
 ```
 
 To add the GitHub repository we have been using throughout the course,
@@ -885,8 +896,8 @@ re-synchronize the list using the green "Sync account" button on the left sideba
 If it still doesn't appear,
 the repository may belong to someone else or be private.
 
-```{r testing-list-repos, echo=FALSE, fig.cap="Find your Zipf's Law repository and switch it on"}
-knitr::include_graphics("figures/py-rse/testing/travis-list-repos.png")
+```{r testing-list-repos, echo=FALSE, fig.cap="Find your Zipf's Law repository and switch it on", out.width="50%"}
+knitr::include_graphics("figures/testing/travis-list-repos.png")
 ```
 
 The next step is to tell Travis CI what we want it to do
@@ -894,7 +905,7 @@ by creating a file called `.travis.yml`.
 (The leading `.` in the name hides the file from casual listings on Mac or Linux,
 but not on Windows.)
 This file must be in the root directory of the repository,
-and is written in [YAML][yaml]
+and is written in \gref{YAML}{yaml}
 (Section \@ref(config-formats) and Appendix \@ref(yaml)).
 For our project,
 we add the following lines:
@@ -910,7 +921,7 @@ script:
 ```
 
 The `language` key tells Travis CI which programming language to use,
-so that it knows which of its standard [virtual machines][virtual_machine] to use
+so that it knows which of its standard \gref{virtual machines}{virtual_machine} to use\index{continuous integration!use of virtual machines}
 as a starting point for the project.
 The `python` key specifies the version or versions of Python to use, 
 while the `script` key lists the commands to run---in this case, `pytest`.
@@ -949,15 +960,15 @@ To create this report, Travis CI has:
 1.  Created a new Linux virtual machine.
 1.  Installed the desired version of Python.
 1.  Ran the commands below the `script` key.
-1.  Reported the results at <code>https://travis-ci.org/<em>user</em>/<em>repo</em></code>,
-    where <code><em>user/repo</em></code>
-    identifies the repository.
+1.  Reported the results at `https://travis-ci.org/USER/REPO`,
+    where `USER/REPO`
+    identifies the repository for a given user.
 
 In this case,
 we can see that the build failed (Figure \@ref(fig:testing-build-fail)).
 
 ```{r testing-build-fail, echo=FALSE, fig.cap="Travis Build Overview"}
-knitr::include_graphics("figures/py-rse/testing/travis-build-fail.png")
+knitr::include_graphics("figures/testing/travis-build-fail.png")
 ```
 
 Scrolling down to read the job log in detail,
@@ -1025,7 +1036,7 @@ This time our tests pass and the build completes successfully
 (Figure \@ref(fig:testing-build-pass)).
 
 ```{r testing-build-pass, echo=FALSE, fig.cap="Travis Build Overview"}
-knitr::include_graphics("figures/py-rse/testing/travis-build-pass.png")
+knitr::include_graphics("figures/testing/travis-build-pass.png")
 ```
 
 This example shows one of the other benefits of CI:
@@ -1039,7 +1050,8 @@ At what point in the code development process should we write these?
 The answer depends on who you ask.
 
 Many programmers are passionate advocates of a practice called
-[test-driven development][tdd] (TDD).
+\gref{test-driven development}{tdd}
+(TDD).\index{test-driven development}\index{testing!test-driven development}\index{TDD (test-driven development)}
 Rather than writing code and then writing tests,
 they write the tests first and then write just enough code to make those tests pass.
 Once the code is working,
@@ -1048,7 +1060,7 @@ TDD's advocates claim that this leads to better code because:
 
 1.  Writing tests clarifies what the code is actually supposed to do.
 
-2.  It eliminates [confirmation bias][confirmation_bias].
+2.  It eliminates \gref{confirmation bias}{confirmation_bias}.
     If someone has just written a function,
     they are predisposed to want it to be right,
     so they will bias their tests towards proving that it is correct
@@ -1058,7 +1070,7 @@ TDD's advocates claim that this leads to better code because:
 
 These arguments are plausible.
 However,
-studies such as @Fucc2016 don't support them:
+studies such as @Fucc2016,@Fucc2017 don't support them:
 in practice,
 writing tests first or last doesn't appear to affect productivity.
 What *does* have an impact is working in small, interleaved increments,
@@ -1089,7 +1101,7 @@ and gets the same result that we did,
 then our computation is reproducible,
 but that doesn't mean they can understand it.
 Comments help
-(either in the code or as blocks of prose in a [computational notebook][computational_notebook]),
+(either in the code or as blocks of prose in a \gref{computational notebook}{computational_notebook}),
 but they won't check that assumptions and invariants hold.
 And unlike comments,
 runnable assertions can't fall out of step with what the code is actually doing.
@@ -1100,9 +1112,9 @@ Testing data analysis pipelines is often harder than testing mainstream software
 since data analysts often don't know what the right answer is @Brai2018.
 (If we did,
 we would have submitted our report and moved on to the next problem already.)
-The key distinction is the difference between [validation][validation],
+The key distinction is the difference between \gref{validation}{validation},
 which asks whether the specification is correct,
-and [verification][verification],
+and \gref{verification}{verification},
 which asks whether we have met that specification.
 The difference between them is the difference between
 building the right thing and building something right;
@@ -1110,7 +1122,7 @@ the practices introduced in this chapter will help with both.
 
 ## Exercises {#testing-exercises}
 
-TODO: Need more exercises (including one exploring `pytest.raises`).
+FIXME: Need more exercises (including one exploring `pytest.raises`).
 
 ### Explaining assertions {#testing-ex-explain-assertions}
 
@@ -1158,7 +1170,7 @@ FIXME
 
 You'll notice that the README file in many GitHub repositories includes a little
 Travis CI display status logo.
-Follow [these instructions](https://docs.travis-ci.com/user/status-images/) to include
+Follow [these instructions][travis-status-images] to include
 the status display in the REAMDE for this Zipf's Law project.
 
 ### Testing configuration {#testing-ex-config}
