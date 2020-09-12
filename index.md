@@ -1,9 +1,10 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-08"
+date: "2020-09-12"
 documentclass: krantz
 bibliography: book.bib
+cover-image: "tugboats-800x600.jpg"
 link-citations: yes
 github-repo: merely-useful/py-rse
 site: bookdown::bookdown_site
@@ -15,11 +16,11 @@ lof: yes
 
 # Introduction {#intro}
 
-
-
 > It's still magic even if you know how it's done.
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
+
+<img src="tugboats-800x600.jpg" width="400" height="300" align="right" alt="Cover image" />
 
 Software is now as essential to research as telescopes, test tubes, and reference libraries,
 which means that researchers need need to know how to build, check, use, and share programs.
@@ -381,6 +382,7 @@ and Elizabeth Wickes.
 [dryad]: https://datadryad.org/
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
+[explainshell]: http://explainshell.com
 [fair-questionnaire]: https://www.ands-nectar-rds.org.au/fair-tool
 [figshare]: https://figshare.com/
 [find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
@@ -6595,9 +6597,7 @@ Does it work?
 ### Figuring out who did what {#git-cmdline-ex-blame}
 
 Run the command `git blame bin/plotcounts.py`.
-
-1.  What does each line of the output show?
-2.  Why do some lines start with a circumflex `^`?
+What does each line of the output show?
 
 ## Key Points {#git-cmdline-keypoints}
 
@@ -8303,26 +8303,32 @@ Where could you look for more information about them?
 
 ### Creating the same file twice {#git-advanced-ex-create-twice}
 
-1.  Create a branch called `same`.
-    In it, create a file called `same.txt` that contains your name and the date.
-2.  Switch back to `master`.
-    Check that `same.txt` does not exist,
-    then create the same file with exactly the same contents.
-3.  What will `git diff master..same` show?
+Create a branch called `same`.
+In it, create a file called `same.txt` that contains your name and the date.
+
+Switch back to `master`.
+Check that `same.txt` does not exist,
+then create the same file with exactly the same contents.
+
+1.  What will `git diff master..same` show?
     (Try to answer the question *before* running the command.)
-4.  What will `git merge same master` do?
+
+2.  What will `git merge same master` do?
     (Try to answer the question *before* running the command.)
 
 ### Deleting a branch without merging {#git-advanced-ex-delete-unmerged}
 
-1.  Create a branch called `experiment`.
-    In it, create a file called `experiment.txt` that contains your name and the date.
-2.  Switch back to `master`.
-3.  What happens when you try to delete the `experiment` branch using `git branch -d experiment`?
+Create a branch called `experiment`.
+In it, create a file called `experiment.txt` that contains your name and the date,
+then switch back to `master`.
+
+1.  What happens when you try to delete the `experiment` branch using `git branch -d experiment`?
     Why?
-4.  What option can you give Git to delete the `experiment` branch?
+
+2.  What option can you give Git to delete the `experiment` branch?
     Why should you be very careful using it?
-5.  What do you think will happen if you try to delete the branch you are currently on using this flag?
+
+3.  What do you think will happen if you try to delete the branch you are currently on using this flag?
 
 ### Tracing changes {#git-advanced-ex-trace-changes}
 
@@ -8348,6 +8354,7 @@ Describe what is in each of the four repositories involved after each of the ste
 7.  Fuchsia pushes from the `master` branch of their desktop repository
     to the `master` branch of their GitHub repository.
 8.  Chartreuse merges Fuchsia's pull request.
+9.  Chartreuse runs `git pull origin master` on the desktop.
 
 ## Key Points {#git-advanced-keypoints}
 
@@ -9728,7 +9735,7 @@ to ask that exceptions be added to `countwords.py`.
 
 ### Label issues {#teams-ex-label}
 
-1.  Create the labels *Bug*, *Enhancement*, and *Current*
+1.  Create the labels *current* and *discussion*
     to help organize and prioritize your issues.
 2.  Delete at least one of the labels that GitHub automatically created for you.
 3.  Apply each label to at least one of the issues in your repository.
@@ -9758,7 +9765,8 @@ How would you address this issue?
 1.  Which (if any) of the profiles below best describes you?
 2.  How would you handle each of these people if they were on your team?
 
--   *Anna* thinks she knows more about every subject than everyone else on the team put together.
+-   *Anna* thinks she knows more about every subject
+    than everyone else on the team put together.
     No matter what you say, she'll correct you;
     no matter what you know, she knows better.
     If you keep track in team meetings of how often people interrupt one another,
@@ -9769,14 +9777,6 @@ How would you address this issue?
     This is healthy in small doses,
     but when Bao does it,
     there's always another objection lurking behind the first half dozen.
-
--   *Catherine* has so little confidence in her own ability (despite her good grades)
-    that she won't make any decision,
-    no matter how small,
-    until she has checked with someone else.
-    Everything has to be spelled out in detail for her,
-    and even then,
-    she will come up with questions that no one else would think needed asking.
 
 -   *Frank* believes that knowledge is power.
     He enjoys knowing things that other people don't---or to be more accurate,
@@ -9797,14 +9797,16 @@ How would you address this issue?
 -   *Kenny* is a hitchhiker.
     He has discovered that most people would rather shoulder some extra work than snitch,
     and he takes advantage of it at every turn.
-    The frustrating thing is that he's so damn *plausible* when someone finally does confront him.
+    The frustrating thing is that he's so damn *plausible*
+    when someone finally does confront him.
     "There have been mistakes on all sides," he says,
     or,
     "Well, I think you're nit-picking."
 
--   *Melissa* would easily have made the varsity procrastination team if she'd bothered to show up to tryouts.
-    She means well---she really does feel bad about letting people down---but somehow something always comes up,
-    and her tasks are never finished until the last possible moment.
+-   *Melissa* would easily have made the varsity procrastination team
+    if she'd bothered to show up to tryouts.
+    She means well---she really does feel bad about letting people down---but
+    somehow her tasks are never finished until the last possible moment.
     Of course, that means that everyone who is depending on her can't do their work until
     *after* the last possible moment...
 
@@ -9813,14 +9815,10 @@ How would you address this issue?
     Hey, why don't we invent our own little language for designing GUIs?
 
 -   *Raj* is rude.
-    "It's just the way I talk," he says, "If you can't hack it, maybe you should find another team."
+    "It's just the way I talk," he says.
+    "If you can't hack it, maybe you should find another team."
     His favorite phrase is, "That's stupid,"
     and he uses obscenity in every second sentence.
-
--   *Sergei* simply doesn't understand the problem.
-    He hasn't bothered to master the tools and libraries he's supposed to be using,
-    the code he commits doesn't compile,
-    and his thirty-second bug fixes introduce more problems than they solve.
 
 ## Key Points {#teams-keypoints}
 
@@ -10571,7 +10569,7 @@ add a data file and run Make.
 This is a big improvement over running things manually,
 particularly as we start to add more steps like merging data files and generating plots.
 
-## Documenting a Makefile? {#automate-doc}
+## Documenting a Makefile {#automate-doc}
 
 Every well-behaved program should tell people how to use it @Tasc2017.
 If we run `make --help`,
@@ -10708,7 +10706,7 @@ all : results/collated.png
 
 ## results/collated.png: plot the collated results.
 results/collated.png : results/collated.csv
-	python $(PLOT) $^ --outfile $@
+	python $(PLOT) $< --outfile $@
 
 ## settings : show variables' values.
 settings :
@@ -10773,27 +10771,102 @@ If you want to go deeper,
 
 ## Exercises {#automate-exercises}
 
-### Create a summary results file {#automate-ex-create-summary-results}
+Our `Makefile` currently reads as follows:
 
--   Add a rule to Makefile to create a summary CSV file from all of the book CSV files.
--   Be careful about writing the prerequisites so that it doesn't depend on itself.
+```make
+.PHONY: all clean help settings
 
-### Generate a plot for the top N words {#automate-ex-plot-top-n}
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PLOT=bin/plotcounts.py
+DATA=$(wildcard data/*.txt)
+RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 
--   Make it depend on the summary.
+## all : regenerate all results.
+all : results/collated.png
 
-### Make sure the output directory exists {#automate-ex-mkdir}
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv
+	python $(PLOT) $< --outfile $@
 
--   Why is `mkdir -p` useful?
+## results/collated.csv : collate all results.
+results/collated.csv : $(RESULTS) $(COLLATE)
+	@mkdir -p results
+	python $(COLLATE) $(RESULTS) > $@
+
+## results/%.csv : regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+
+## clean : remove all generated files.
+clean :
+	rm $(RESULTS) results/collated.csv results/collated.png
+
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	@echo PLOT: $(PLOT)
+
+## help : show this message.
+help :
+	@grep '^##' ./Makefile
+```
+
+A number of the exercises below ask you to make further edits to `Makefile`. 
 
 ### Report results that would change {#automate-ex-report-change}
 
--   Write a rule to report which result files would actually change.
--   Hint: use `diff`.
+How can you get `make` to show the commands it would run
+without actually running them?
+(Hint: look at the manual page.)
 
-### Create more readable help {#automate-ex-readable-help}
+### Useful options {#automate-ex-useful-options}
 
--   Modify the command in the `help` recipe to remove the leading '##' markers from the output.
+1.  What does Make's `-B` option do and when is it useful?
+1.  What about the `-C` option?
+1.  What about the `-f` option?
+
+### Make sure the output directory exists {#automate-ex-mkdir}
+
+One of our \gref{build recipes}{build_recipe} includes `mkdir -p`.
+What does this do and why is it useful?
+
+### Print the title and author {#automate-ex-print}
+
+The build rule for regenerating the result for any book is currently:
+```make
+## results/%.csv : regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+```
+
+Add an extra line to the recipe that uses the `book_summary.sh` script
+to print the title and author of the book to the screen.
+Use `@bash` so that the command itself isn't printed to the screen
+and don't forget to update the settings build rule to include the `book_summary.sh` script.
+
+If you've successfully made those changes,
+you should get the following output for *Dracula*:
+
+```shell
+$ make -B results/dracula.csv
+```
+
+```text
+Title: Dracula
+Author: Bram Stoker
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+```
+
+### Create all results {#automate-ex-all-results}
+
+The default target of our final `Makefile` re-creates `results/collated.csv`.
+Add a target to `Makefile`
+so that `make results` creates or updates any result files that are missing or out of date,
+but does *not* regenerate `results/collated.csv`.
 
 ### The perils of shell wildcards {#automate-ex-wildcard-perils}
 
@@ -10804,7 +10877,8 @@ results/collated.csv : results/*.csv
 	python $(COLLATE) $^ > $@
 ```
 
-Hint: the fact that the result no longer depends on the program used to create it isn't the only problem.
+(The fact that the result no longer depends on the program used to create it
+isn't the biggest problem.)
 
 ### Making documentation more readable {#automate-ex-readable-docs}
 
@@ -10819,11 +10893,17 @@ help :
 Using `man` and online search,
 explain what every part of this recipe does.
 
-### Useful options {#automate-ex-useful-options}
+## Configuration {#automate-ex-configuration}
 
-1.  What does the `-n` option to Make do and when is it useful?
-2.  What does the `-B` option do and when is it useful?
-3.  What about the `-C` option?
+Let's say that in future we intend to write a number of different Makefiles
+that all use the `countwords.py`, `collate.py` and `plotcounts.py` scripts.
+
+To avoid duplication,
+cut and paste the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
+into a separate file called `config.mk`.
+Use the `include` command to access those definitions in the existing `Makefile`. 
+
+(In Chapter \@ref(config) we discuss configuration strategies in more detail.)
 
 ## Key Points {#automate-keypoints}
 
@@ -16784,6 +16864,18 @@ The files/directories in each directory are sorted by time of last change.
     efficiently generate a blank text file to be used by such
     programs.
 
+### Exercise \@ref(bash-basics-ex-safe-rm) {-}
+
+```shell
+$ rm: remove regular file 'thesis_backup/quotations.txt'? y
+```
+
+The `-i` option will prompt before (every) removal
+(use <kbd>y</kbd> to confirm deletion or <kbd>n</kbd> to keep the file).
+The Unix shell doesn't have a trash bin, so all the files removed will disappear forever.
+By using the `-i` option, we have the chance to check that we are deleting
+only the files that we want to remove.
+
 ### Exercise \@ref(bash-basics-ex-move-dot) {-}
 
 ```shell
@@ -16817,18 +16909,6 @@ So, the only thing that will show using ls (in `/Users/jamie/data`) is the recom
 2. Yes
 3. No, see explanation above.  `proteins.dat` is located at `/Users/jamie/data/recombine`
 4. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
-
-### Exercise \@ref(bash-basics-ex-safe-rm) {-}
-
-```shell
-$ rm: remove regular file 'thesis_backup/quotations.txt'? y
-```
-
-The `-i` option will prompt before (every) removal
-(use <kbd>Y</kbd> to confirm deletion or <kbd>N</kbd> to keep the file).
-The Unix shell doesn't have a trash bin, so all the files removed will disappear forever.
-By using the `-i` option, we have the chance to check that we are deleting
-only the files that we want to remove.
 
 ### Exercise \@ref(bash-basics-ex-copy-multi) {-}
 
@@ -16928,15 +17008,24 @@ The file should contain the following lines:
 
 ### Exercise \@ref(bash-basics-ex-pipe-construction) {-}
 
-```shell
-$ cut -d , -f 2 animals.txt | sort | uniq
-```
+`cut` selects substrings from a line by:
+
+-   breaking the string into pieces wherever it finds a separator (`-d ,`),
+which in this case is a comma, and
+-   keeping one or more of the resulting fields (`-f 2`).
+
+Any single character can be used as a separator,
+but there is no way to escape characters:
+for example, if the string `a,"b,c",d` is split on commas,
+all three commas take effect.
 
 ### Exercise \@ref(bash-basics-ex-which-pipe) {-}
 
-Option 4. is the correct answer.
-If you have difficulty understanding why, try running the commands, or sub-sections of
-the pipelines (make sure you are in the `data-shell/data` directory).
+Option 4 is the correct answer.
+If you have difficulty understanding why,
+try running the commands or sub-sections of the pipelines
+(e.g., the code between pipes).
+Make sure you are in the `data-shell/data` directory.
 
 ### Exercise \@ref(bash-basics-ex-wildcard-expressions) {-}
 
@@ -17121,6 +17210,7 @@ Script 2 would print the contents of the first 3 files with a `.pdb` file extens
 Script 3 would print all the arguments to the script (i.e. all the `.pdb` files),
 followed by `.pdb`.
 `$@` refers to *all* the arguments given to a shell script.
+
 ```text
 cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
 ```
@@ -17132,7 +17222,15 @@ The other options will also match "of" when part of another word.
 
 ### Exercise \@ref(bash-advanced-ex-year-script) {-}
 
-FIXME
+```text
+# Obtain unique years from multiple comma-delimited lists of titles and publication years
+# Usage: bash year.sh file1.txt file2.txt ...
+
+for filename in $*
+do
+  cut -d , -f 2 $filename | sort -n | uniq
+done
+```
 
 ### Exercise \@ref(bash-advanced-ex-sense-sensibility) {-}
 
@@ -17187,7 +17285,15 @@ $ find ./ -type f -mtime -1 -user ahmed
 
 ### Exercise \@ref(scripting-ex-command-line) {-}
 
-FIXME
+Running Python statement directly from the command line is useful as a basic calculator
+and for simple string operations.
+Since anything more complicated than that usually requires more than one statement,
+it is often convenient to separate commands with semi-colons, as in:
+
+```python
+$ python -c "import math; print(math.log(123))"
+```
+
 
 ### Exercise \@ref(scripting-ex-better-plotting) {-}
 
@@ -17428,44 +17534,124 @@ the working directory.
 
 ### Exercise \@ref(git-cmdline-ex-blame) {-}
 
-1. Each line of output corresponds to a line in the file, who was last
+Each line of output corresponds to a line in the file, who was last
 to modify the line, when that change was made, and what the file name was
 or is called.
-2. FIXME: I don't see any `^` when I use it on a random file in the book repo.
 
 ## Chapter \@ref(git-advanced)
 
 ### Exercise \@ref(git-advanced-ex-explain-options) {-}
 
-FIXME
+1.  `--oneline` shows each commit on a single line
+    with the \gref{short identifier}{short_identifier_git} at the start
+    and the title of the commit beside it.
+    `-n NUMBER` limits the number of commits to show.
+
+2.  `--since` and `--after` can be used to show commits
+    in a range of dates or times;
+    `--author` can be used to show commits by a particular person;
+    and `-w` tells Git to ignore whitespace when comparing commits.
 
 ### Exercise \@ref(git-advanced-ex-modify-prompt) {-}
 
-FIXME
+An online search for "show Git branch in Bash prompt" turns up several approaches,
+one of the simplest of which is to add this line to our `~/.bashrc` file:
+
+```text
+export PS1="\\w + \$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \$ "
+```
+
+Breaking it down:
+
+1.  Setting the `PS1` variable defines the primary shell \gref{prompt}{prompt}.
+
+1.  `\\w` in a shell prompt string means "the current directory".
+
+1.  The `+` is a literal `+` sign between the current directory and the Git branch name.
+
+1.  The command that gets the name of the current Git branch is in `$(...)`.
+    (We need to escape the `$` as `\$` so Bash doesn't just run it once
+    when defining the string.)
+
+1.  The `git branch` command shows *all* the branches,
+    so we pipe that to `grep` and select the one marked with a `*`.
+
+1.  Finally, we remove the first column (i.e., the one containing the `*`)
+    to leave just the branch name.
+
+So what's `2>/dev/null` about?
+That redirects any error messages to `/dev/null`,
+a special "file" that consumes input without saving it.
+We need that because sometimes we will be in a directory
+that isn't inside a Git repository,
+and we don't want error messages showing up in our shell prompt.
+
+*None of this is obvious,*
+and we didn't figure it out ourselves.
+Instead,
+we did a search and pasted various answers into [explainshell.com][explainshell]
+until we had something we understood and trusted.
 
 ### Exercise \@ref(git-advanced-ex-ignoring-files) {-}
 
-FIXME
+<https://github.com/github/gitignore/blob/master/Python.gitignore>
+ignores 76 files or patterns.
+Of those,
+we recognized less than half.
+Searching online for some of these,
+like `"*.pot file"`,
+turns up useful explanations.
+Searching for others like `var/` does not;
+in that case,
+we have to look at the category (in this case, "Python distribution")
+and set aside time to do more reading.
 
 ### Exercise \@ref(git-advanced-ex-create-twice) {-}
 
-FIXME
+1.  `git diff master..same` does not print anything
+    because there are no differences between the two branches.
+
+2.  `git merge same master` prints `merging`
+    because Git combines histories even when the files themselves do not differ.
+    After running this command,
+    `git history` shows a commit for the merge.
 
 ### Exercise \@ref(git-advanced-ex-delete-unmerged) {-}
 
-FIXME
+1.  Git refuses to delete a branch with unmerged commits
+    because it doesn't want to destroy our work.
+
+2.  Using the `-D` (capital-D) option to `git branch` will delete the branch anyway.
+    This is dangerous because any content that exists only in that branch will be lost.
+
+3.  Even with `-D`, `git branch` will not delete the branch we are currently on.
 
 ### Exercise \@ref(git-advanced-ex-trace-changes) {-}
 
-FIXME
+1.  Chartreuse has repositories on GitHub and their desktop
+    containing identical copies of `README.md` and nothing else.
+2.  Fuchsia has repositories on GitHub and their desktop
+    with exactly the same content as Chartreuse's repositories.
+3.  `fuchsia.txt` is in both of Fuchsia's repositories
+    but not in Chartreuse's repositories.
+4.  `fuchsia.txt` is still in both of Fuchsia's repositories
+    but still not in Chartreuse's repositories.
+5.  `chartreuse.txt` is in both of Chartreuse's repositories
+    but not yet in either of Fuchsia's repositories.
+6.  `chartreuse.txt` is in Fuchsia's desktop repository
+    but not yet in their GitHub repository.
+7.  `chartreuse.txt` is in both of Fuchsia's repositories.
+8.  `fuchsia.txt` is in Chartreuse's GitHub repository
+    but not in their desktop repository.
+9.  All four repositories contain both `fuchsia.txt` and `chartreuse.txt`.
 
 ## Chapter \@ref(teams)
 
 ### Exercise \@ref(teams-ex-scavenger-hunt) {-}
 
-- Licensing is found at: https://github.com/merely-useful/py-rse/blob/book/LICENSE.md
-- Contributing is found at: https://github.com/merely-useful/py-rse/blob/book/.github/CONTRIBUTING.md
-FIXME: Should really only have one CONTRIBUTING file.
+-   Our license is at <https://github.com/merely-useful/py-rse/blob/book/LICENSE.md>.
+
+-   Our contribution guidelines are at <https://github.com/merely-useful/py-rse/blob/book/.github/CONTRIBUTING.md>.
 
 ### Exercise \@ref(teams-ex-boilerplate-coc) {-}
 
@@ -17533,11 +17719,14 @@ Please follow it in all your interactions with the project.
 
 ### Exercise \@ref(teams-ex-file-issue) {-}
 
-FIXME
+Be sure to tag the new issue as a feature request to help \gref{triage}{triage}.
 
 ### Exercise \@ref(teams-ex-label) {-}
 
-FIXME
+We often delete the `duplicate` label:
+when we mark an issue that way,
+we (almost) always add a comment saying which issue it's a duplicate *of*,
+in which case it's just as sensible to label the issue `wontfix`.
 
 ### Exercise \@ref(teams-ex-balancing) {-}
 
@@ -17560,43 +17749,153 @@ of duties, roles, and tasks the contributor provided for the project.
 
 ### Exercise \@ref(teams-ex-members) {-}
 
-FIXME
+We obviously can't say which description fits you best, but:
+
+-   Use \gref{three sticky notes}{three_stickies}
+    and \gref{interruption bingo}{interruption_bingo}
+    to stop *Anna* from cutting people off.
+
+-   Tell *Bao* that the devil doesn't need more advocates,
+    and that he's only allowed one "but what about" at a time.
+
+-   *Hediyeh*'s lack of self-confidence will take a long time to remedy.
+    Keeping a list of the times she's been right
+    and reminding her of them frequently is a start,
+    but the real fix is to create and maintain a supportive environment.
+
+-   Unmasking *Kenny*'s hitchhiking wll feel like nit-picking,
+    but so does the accounting required to pin down other forms of fraud.
+    The most important thing is to have the discussion in the open
+    so that everyone realizes he's taking credit for everyone else's work
+    as well as theirs.
+
+-   *Melissa* needs a running partner---someone to work beside her
+    so that she starts when she should and doesn't get distracted.
+    If that doesn't work,
+    the project may need to assign everything mission-critical to someone else
+    (which will probably lead to her leaving).
+
+-   *Petra* can be managed with a one-for-one rule:
+    each time she builds or fixes something that someone else needs,
+    she can then work on something she thinks is cool.
+    However,
+    she's only allowed to add whatever it is to the project
+    if someone else will publicly commit to maintaining it.
+
+-   Get *Frank* and *Raj* off your project as quickly as you can.
 
 ## Chapter \@ref(automate)
 
-### Exercise \@ref(automate-ex-create-summary-results) {-}
+### Exercise \@ref(automate-ex-report-change) {-}
 
-FIXME
+`make -n target` will show commands without running them.
 
-### Exercise \@ref(automate-ex-plot-top-n) {-}
+### Exercise \@ref(automate-ex-useful-options) {-}
 
-FIXME
+1.  The `-B` option makes everything, even files that aren't out of date.
+
+2.  The `-C` option tells Make to change directories before executing,
+    so that `make -C ~/myproject` runs Make in `~/myproject`
+    regardless of the directory it is invoked from.
+
+3.  By default, Make looks for (and runs) a file called `Makefile` or `makefile`.
+    If you use another name for your Makefile
+    (which is necessary if you have multiple Makefiles in the same directory),
+    then you need to specify the name of that Makefile using the `-f` option. 
 
 ### Exercise \@ref(automate-ex-mkdir) {-}
 
-FIXME
+`mkdir -p some/path` makes one or more nested directories if they don't exist,
+and does nothing (without complaining) if they already exist.
+It is useful for creating the output directories for build rules.
 
-### Exercise \@ref(automate-ex-report-change) {-}
+### Exercise \@ref(automate-ex-print) {-}
 
-FIXME
+The build rule for generated the result for any book should now be,
 
-### Exercise \@ref(automate-ex-readable-help) {-}
+```make
+## results/%.csv : regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	@bash $(SUMMARY) $<
+	python $(COUNT) $< > $@
+```
 
-FIXME
+where `SUMMARY` is defined earlier in the `Makefile` as
+
+```make
+SUMMARY=bin/book_summary.sh
+```
+
+and the settings build rule now includes:
+
+```make
+@echo SUMMARY: $(SUMMARY)
+```
+
+### Exercise \@ref(automate-ex-all-results) {-}
+
+Since we already have a variable `RESULTS` that contains all of the results files,
+all we need is a phony target that depends on them:
+
+```make
+.PHONY: results # and all the other phony targets
+
+## results : regenerate result for all books.
+results : ${RESULTS}
+```
 
 ### Exercise \@ref(automate-ex-wildcard-perils) {-}
 
-What is wrong with writing the rule for `results/collated.csv` like this:
+If we use a shell \gref{wildcard}{wildcard} in a rule like this:
 
-FIXME
+```make
+results/collated.csv : results/*.csv
+	python $(COLLATE) $^ > $@
+```
+
+then if `results/collated.csv` already exists,
+the rule tells Make that the file depends on itself.
 
 ### Exercise \@ref(automate-ex-readable-docs) {-}
 
-FIXME
+Our rule is:
 
-### Exercise \@ref(automate-ex-useful-options) {-}
+```make
+help :
+        @grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
+```
 
-FIXME
+-   The `-h` option to `grep` tells it *not* to print filenames,
+    while the `-E` option tells it to interprets `^##` as a pattern.
+
+-   `MAKEFILE_LIST` is an automatically-defined variable
+    with the names of all the Makefiles in play.
+    (There might be more than one because Makefiles can include other Makefiles.)
+
+-   `sed` can be used to do string substitution.
+
+-   `column` formats text nicely in columns.
+
+### Exercise \@ref(automate-ex-configuration) {-}
+
+The new `config.mk` file reads as follows:
+
+```
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PLOT=bin/plotcounts.py
+```
+
+The contents of that file can then be included in the `Makefile`:
+
+```make
+.PHONY: results all clean help settings
+
+include config.mk
+
+# ... the rest of the Makefile
+
+```
 
 ## Chapter \@ref(config)
 
@@ -19924,6 +20223,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [dryad]: https://datadryad.org/
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
+[explainshell]: http://explainshell.com
 [fair-questionnaire]: https://www.ands-nectar-rds.org.au/fair-tool
 [figshare]: https://figshare.com/
 [find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
