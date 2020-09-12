@@ -352,122 +352,6 @@ and Elizabeth Wickes.
 -   Chapter \@ref(packaging) is based in part on [Python 102][python-102]
     by [Ashwin Srinath][srinath-ashwin].
 
-
-[anaconda]: https://www.anaconda.com/
-[anaconda-cloud]: https://anaconda.org/
-[anaconda-docs]: https://docs.anaconda.com/anaconda/
-[argparse]: https://docs.python.org/3/library/argparse.html
-[arxiv]: https://arxiv.org/
-[bibtex]: http://www.bibtex.org/
-[biorxiv]: https://www.biorxiv.org/
-[bitbucket]: https://bitbucket.org/
-[book-repo]: https://github.com/merely-useful/py-rse/
-[capes-gerard]: https://github.com/gcapes
-[captain-awkward]: https://captainawkward.com/
-[carpentries]: https://carpentries.org/
-[caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
-[charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
-[choose-license]: https://choosealicense.com/
-[code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
-[conda]: https://conda.io/
-[conda-forge]: https://conda-forge.org/
-[conda-forge-instructions]: https://conda-forge.org/#add_recipe
-[conda-skeleton-pypi]: https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html
-[configparser]: https://docs.python.org/3/library/configparser.html
-[covenant]: https://www.contributor-covenant.org
-[creative-commons]: https://creativecommons.org/
-[desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
-[docker]: https://en.wikipedia.org/wiki/Docker_(software)
-[drake]: https://ropenscilabs.github.io/drake-manual/
-[dryad]: https://datadryad.org/
-[dursi-jonathan]: https://www.dursi.ca/
-[dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
-[explainshell]: http://explainshell.com
-[fair-questionnaire]: https://www.ands-nectar-rds.org.au/fair-tool
-[figshare]: https://figshare.com/
-[find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
-[geek-feminism]: https://geekfeminism.wikia.com/
-[geoscience-data-journal]: https://rmets.onlinelibrary.wiley.com/journal/20496060
-[geoscientific-model-development]: https://www.geoscientific-model-development.net/
-[gistemp]: https://data.giss.nasa.gov/gistemp/
-[git-ssh-bitbucket]: https://confluence.atlassian.com/bitbucket/set-up-ssh-for-git-728138079.html
-[git-ssh-github]: https://help.github.com/articles/generating-ssh-keys
-[git-ssh-gitlab]: https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/
-[github-contributors-guide]: https://docs.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors
-[github-gitignore]: https://github.com/github/gitignore
-[github-release]:https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository
-[github-release-link]: https://docs.github.com/en/github/administering-a-repository/linking-to-releases
-[github-zenodo-tutorial]: https://guides.github.com/activities/citable-code/
-[github]: https://github.com
-[gitkraken]: https://www.gitkraken.com/
-[gitlab]: https://gitlab.com/
-[gnu-make]: https://www.gnu.org/software/make/
-[gnu-man-coreutils]: https://www.gnu.org/software/coreutils/manual/coreutils.html
-[gnu-man]: https://www.gnu.org/manual/manual.html
-[go-fair]: https://www.go-fair.org/fair-principles/
-[heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
-[hippocratic-license]: https://firstdonoharm.dev/
-[ini-format]: https://en.wikipedia.org/wiki/INI_file
-[insight]: https://www.insightdatascience.com/
-[jors]: https://openresearchsoftware.metajnl.com/
-[jupyter]: https://jupyter.org/
-[lint]: https://en.wikipedia.org/wiki/Lint_(software)
-[make]: https://www.gnu.org/software/make/
-[make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
-[markdown]: https://en.wikipedia.org/wiki/Markdown
-[miniconda]: https://docs.conda.io/en/latest/miniconda.html
-[model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
-[orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
-[osf]: https://osf.io/
-[osi-license-list]: https://opensource.org/licenses
-[our-research]: http://ourresearch.org/
-[pep-8]: https://www.python.org/dev/peps/pep-0008/
-[pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
-[pip]: https://pypi.org/project/pip/
-[pipenv]: https://docs.pipenv.org/
-[project-gutenberg]: https://www.gutenberg.org/
-[pypi-user-guide]: https://packaging.python.org/guides/using-testpypi/
-[pypi]: https://pypi.org/
-[pytest]: https://pytest.org/
-[python]: https://www.python.org/
-[python-102]: https://python-102.readthedocs.io/
-[python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
-[python-standard-library]: https://docs.python.org/3/library/
-[readthedocs]: https://docs.readthedocs.io/en/latest/
-[readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
-[rstudio-ide]: https://www.rstudio.com/products/rstudio/
-[scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
-[scientific-data]: https://www.nature.com/sdata/
-[setuptools]: https://setuptools.readthedocs.io/
-[snakemake]: https://snakemake.readthedocs.io/
-[so-bash]: https://stackoverflow.com/questions/tagged/bash
-[sphinx]: https://www.sphinx-doc.org/en/master/
-[srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
-[stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
-[stack-overflow]: https://stackoverflow.com/
-[swc-make]: https://github.com/swcarpentry/make-novice
-[swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
-[testpypi]: https://test.pypi.org
-[theoj]: https://joss.theoj.org/
-[theoj-checklist]: https://joss.readthedocs.io/en/latest/review_checklist.html
-[tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
-[tldr]: https://tldr.sh/
-[travis-ci]: https://travis-ci.org/
-[travis-status-images]: https://docs.travis-ci.com/user/status-images/
-[troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
-[twine]: https://twine.readthedocs.io/en/latest/
-[ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
-[udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
-[ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
-[uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
-[vanderplas-licensing]: https://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
-[virtualenv]: https://virtualenv.pypa.io/
-[wayback-machine]: https://web.archive.org/
-[windspharm]: https://ajdawson.github.io/windspharm/latest/
-[zenodo]: https://zenodo.org/
-[zipf-project-page]: https://test.pypi.org/project/zipf/
-[zipfs-law]: https://en.wikipedia.org/wiki/Zipf%27s_law
-
 <!--chapter:end:index.Rmd-->
 
 
@@ -13922,7 +13806,7 @@ log in and make sure that your details and publication record are up-to-date.
 An [online questionnaire][fair-questionnaire]
 for measuring the extent to which datasets are FAIR
 has been created by the Australian Research Data Commons.
-Take the questionnaire for a dataset you have published or that you use often.
+Fill in the questionnaire for a dataset you have published or that you use often.
 
 ### Evaluate a project's data provenance {#provenance-ex-understand-project}
 
@@ -13944,11 +13828,10 @@ then review the spreadsheet file and the coded response file.
 The GitHub repository <https://github.com/borstlab/reversephi_paper/> provides the code and data for the paper @Leon2017.
 Browse the repository and answer the following questions:
 
-1. Where is the software environment described? What files would you need to recreate the software environment? 
-2. Where are the data processing steps described? How could you re-create the results included in the manuscript?
-3. How are the scripts and data archived?  I.e. Where can you download the version of the code and data as it was when the manuscript was published?
-
-To get a feel for the different approaches to code provenance, repeat steps 1-3 for... FIXME: List a few more papers. 
+1.  Where is the software environment described? What files would you need to recreate the software environment? 
+2.  Where are the data processing steps described? How could you re-create the results included in the manuscript?
+3.  How are the scripts and data archived?
+    I.e. Where can you download the version of the code and data as it was when the manuscript was published?
 
 ### Making permanent links {#provenance-ex-permanent-links}
 
@@ -13957,13 +13840,9 @@ Use the [Wayback Machine][wayback-machine] to find a link that is more likely to
 
 ### Create an archive of your Zipf's analysis {#provenance-ex-release}
 
-A slightly less permanent alternative to having a DOI 
-for your analysis code
+A slightly less permanent alternative to having a DOI for your analysis code
 is to provide a link to a GitHub release.  
-
-Follow [the instructions on GitHub][github-release] 
-to create a release
-for the current state of your `zipf/` project.
+Follow [the instructions on GitHub][github-release] to create a release for the current state of your `zipf/` project.
 
 Once you've created the release, 
 [read about how to link to it][github-release-link].
@@ -18105,56 +17984,57 @@ FIXME
 
 ### Exercise \@ref(provenance-ex-get-orcid) {-}
 
-FIXME
+You can get an ORCID by registered [here][orcid-registration].
+Please add this 16-digit identifier to all of your published works
+and to your online profiles.
 
 ### Exercise \@ref(provenance-ex-fair-test) {-}
 
-FIXME
+If possible,
+compare your answers with those of a colleague who works with the same data.
+Where did you agree and disagree, and why?
 
 ### Exercise \@ref(provenance-ex-understand-project) {-}
 
-1.  Who are the participants of this study?
-    -   51 soliciters were interviwed as the participants.
-1.  What types of data was collected and used for analysis?
-    -   Interview data and a data from a database on court decisions.
-1.  Can you find information on the demographics of the interviewees?
-    -   This information is not available within the documentation.
-        Information on their jobs and opinions are there,
-        but the participant demographics are only described within the associated article.
-        The difficulty is that the article is not linked within the documentation or the metadata.
-1.  This dataset is clearly in support of an article. What information can you find about it, and can you find a link to it?
-    -   We can search the dataset name and authorname trying to find this.
-        A search for "National Science Foundation (1228602)",
-        which is the grant information,
-        finds the grant page <https://www.nsf.gov/awardsearch/showAward?AWD_ID=1228602>.
-        Two articles are linked there,
-        but both the DOI links are broken.
-        We can search with the citation for each paper to find them.
-        The Forced Migration article can be found at <https://www.fmreview.org/fragilestates/meili>
-        but uses a different subset of interviews and does not mention demographics nor links to the deposited dataset.
-        The Boston College Law Review article at <https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr>
-        has the same two problems of different data and no dataset citation.
+1.  51 soliciters were interviwed as the participants.
 
-Searching more broadly through Meili's work, we can find this article:
+2.  Interview data and a data from a database on court decisions.
 
-> Stephen Meili: "Do Human Rights Treaties Help Asylum-Seekers?: Lessons from the United Kingdom"
-> (October 1, 2015).
-> Minnesota Legal Studies Research Paper No. 15-41.
-> Available at SSRN <https://ssrn.com/abstract=2668259> or <http://dx.doi.org/10.2139/ssrn.2668259>.
+3.  This information is not available within the documentation.
+    Information on their jobs and opinions are there,
+    but the participant demographics are only described within the associated article.
+    The difficulty is that the article is not linked within the documentation or the metadata.
 
-This does list the dataset as a footnote and reports the 51 interviews with demographic data on reported gender of the interviewees.
-This paper lists data collection as 2010-2014,
-while the other two say 2010-2013.
-We might come to a conclusion that this extra year is where the extra 9 interviews come in,
-but that difference is not explained anywhere.
+4.  We can search the dataset name and authorname trying to find this.
+    A search for "National Science Foundation (1228602)",
+    which is the grant information,
+    finds the grant page <https://www.nsf.gov/awardsearch/showAward?AWD_ID=1228602>.
+    Two articles are linked there,
+    but both the DOI links are broken.
+    We can search with the citation for each paper to find them.
+    The Forced Migration article can be found at <https://www.fmreview.org/fragilestates/meili>
+    but uses a different subset of interviews and does not mention demographics nor links to the deposited dataset.
+    The Boston College Law Review article at <https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr>
+    has the same two problems of different data and no dataset citation.
+
+    Searching more broadly through Meili's work, we can find <http://dx.doi.org/10.2139/ssrn.2668259>.
+    This lists the dataset as a footnote and reports the 51 interviews with demographic data on reported gender of the interviewees.
+    This paper lists data collection as 2010-2014,
+    while the other two say 2010-2013.
+    We might come to a conclusion that this extra year is where the extra 9 interviews come in,
+    but that difference is not explained anywhere.
 
 ### Exercise \@ref(provenance-ex-eval-code) {-}
 
-1. The software requirements are documented in `README.md`. In addition, to the tools used in the `zipf/` project (Python, Make and Git), the project also requires ImageMagick.  No information on installing ImageMagick or a required version of ImageMagick is provided.
+1.  The software requirements are documented in `README.md`.
+    In addition to the tools used in the `zipf/` project (Python, Make and Git), the project also requires ImageMagick.
+    No information on installing ImageMagick or a required version of ImageMagick is provided.
 
-To re-create the `conda` environment you would need the file, `my_environment.yml`.  Instructions for creating and using the environment are provided in `README.md`.
+    To re-create the `conda` environment you would need the file `my_environment.yml`.
+    Instructions for creating and using the environment are provided in `README.md`.
 
-2.  Like `zipf` the data processing and analysis steps are documented in a `Makefile`.  The `README` includes instructions for re-creating the results using `make all`.
+2.  Like `zipf` the data processing and analysis steps are documented in a `Makefile`.
+    The `README` includes instructions for re-creating the results using `make all`.
 
 3.  There doesn't seem to be a DOI for the archived code and data,
     but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)".
@@ -18166,26 +18046,41 @@ To re-create the `conda` environment you would need the file, `my_environment.ym
 
 ### Exercise \@ref(provenance-ex-release) {-} 
 
-You'll know you've completed this exercise when you have a URL that
-points to ZIP archive for a specific release of your repository on GitHub, e.g. `https://github.com/DamienIrving/zipf/archive/KhanVirtanen2020.zip`
+You'll know you've completed this exercise when you have a URL
+that points to ZIP archive for a specific release of your repository on GitHub,
+e.g. `https://github.com/DamienIrving/zipf/archive/KhanVirtanen2020.zip`
 
 ### Exercise \@ref(provenance-ex-publish-code) {-}
 
-FIXME
+Some steps to publishing your project's code would be:
+
+1.  Upload the code on GitHub.
+2.  Use a standard folder and file structure as taught in this book.
+3.  Include `README`, `CONTRIBUTING`, `CONDUCT`, and `LICENSE` files.
+4.  Make sure these files explain how to install and configure the required software
+    and tells people how to run the code in the project.
+5.  Include a `requirements.txt` file for Python package dependencies.
 
 ## Chapter \@ref(packaging)
 
 ### Exercise \@ref(packaging-ex-fixing-warnings) {-}
 
-FIXME
+Depending on how well the package was setup before running `python setup.py sdist`,
+there will be either very few warnings, or a lot.
 
 ### Exercise \@ref(packaging-ex-separating-requirements) {-}
 
-FIXME
+The new `requirements_dev.txt` file will have this inside it:
+
+```text
+pytest
+```
 
 ### Exercise \@ref(packaging-ex-software-review) {-}
 
-FIXME
+Depending on what was done before using the checklist, there will be either
+very little that needs to be updated or a lot. If this course was followed,
+most items would be checked off of the list.
 
 ### Exercise \@ref(packaging-ex-data) {-}
 
@@ -18193,7 +18088,8 @@ FIXME
 
 ### Exercise \@ref(packaging-ex-up-to-date) {-}
 
-FIXME
+Depending on how often you update your Python packages, you will have very little
+or a lot to update.
 
 <!--chapter:end:chapters/solutions.Rmd-->
 
@@ -20274,7 +20170,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [explainshell]: http://explainshell.com
-[fair-questionnaire]: https://www.ands-nectar-rds.org.au/fair-tool
+[fair-questionnaire]: https://ardc.edu.au/resources/working-with-data/fair-data/fair-self-assessment-tool
 [figshare]: https://figshare.com/
 [find-packages]: https://setuptools.readthedocs.io/en/latest/setuptools.html#using-find-packages
 [geek-feminism]: https://geekfeminism.wikia.com/
@@ -20308,6 +20204,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[orcid-registration]: https://orcid.org/register
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
