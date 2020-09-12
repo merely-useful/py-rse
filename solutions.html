@@ -1177,36 +1177,36 @@ do not match “temp”, rather than searching the file names.</p>
 and for simple string operations.
 Since anything more complicated than that usually requires more than one statement,
 it is often convenient to separate commands with semi-colons, as in:</p>
-<div class="sourceCode" id="cb832"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb832-1"><a href="solutions.html#cb832-1" aria-hidden="true"></a>$ python <span class="op">-</span>c <span class="st">&quot;import math; print(math.log(123))&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb833"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb833-1"><a href="solutions.html#cb833-1" aria-hidden="true"></a>$ python <span class="op">-</span>c <span class="st">&quot;import math; print(math.log(123))&quot;</span></span></code></pre></div>
 </div>
 <div id="exercise-refscripting-ex-better-plotting" class="section level3 unnumbered">
 <h3>Exercise <a href="scripting.html#scripting-ex-better-plotting">4.11.2</a></h3>
 <p>The <code>plotcounts.py</code> script should read as follows:</p>
-<div class="sourceCode" id="cb833"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb833-1"><a href="solutions.html#cb833-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
-<span id="cb833-2"><a href="solutions.html#cb833-2" aria-hidden="true"></a></span>
-<span id="cb833-3"><a href="solutions.html#cb833-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
-<span id="cb833-4"><a href="solutions.html#cb833-4" aria-hidden="true"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb833-5"><a href="solutions.html#cb833-5" aria-hidden="true"></a></span>
-<span id="cb833-6"><a href="solutions.html#cb833-6" aria-hidden="true"></a></span>
-<span id="cb833-7"><a href="solutions.html#cb833-7" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb833-8"><a href="solutions.html#cb833-8" aria-hidden="true"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
-<span id="cb833-9"><a href="solutions.html#cb833-9" aria-hidden="true"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
-<span id="cb833-10"><a href="solutions.html#cb833-10" aria-hidden="true"></a>    df[<span class="st">&#39;inverse_rank&#39;</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> df[<span class="st">&#39;rank&#39;</span>]</span>
-<span id="cb833-11"><a href="solutions.html#cb833-11" aria-hidden="true"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, y<span class="op">=</span><span class="st">&#39;inverse_rank&#39;</span>,</span>
-<span id="cb833-12"><a href="solutions.html#cb833-12" aria-hidden="true"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], grid<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb833-13"><a href="solutions.html#cb833-13" aria-hidden="true"></a>    ax.figure.savefig(args.outfile)</span>
-<span id="cb833-14"><a href="solutions.html#cb833-14" aria-hidden="true"></a></span>
-<span id="cb833-15"><a href="solutions.html#cb833-15" aria-hidden="true"></a></span>
-<span id="cb833-16"><a href="solutions.html#cb833-16" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb833-17"><a href="solutions.html#cb833-17" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb833-18"><a href="solutions.html#cb833-18" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
-<span id="cb833-19"><a href="solutions.html#cb833-19" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
-<span id="cb833-20"><a href="solutions.html#cb833-20" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
-<span id="cb833-21"><a href="solutions.html#cb833-21" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
-<span id="cb833-22"><a href="solutions.html#cb833-22" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
-<span id="cb833-23"><a href="solutions.html#cb833-23" aria-hidden="true"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
-<span id="cb833-24"><a href="solutions.html#cb833-24" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb833-25"><a href="solutions.html#cb833-25" aria-hidden="true"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb834"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb834-1"><a href="solutions.html#cb834-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
+<span id="cb834-2"><a href="solutions.html#cb834-2" aria-hidden="true"></a></span>
+<span id="cb834-3"><a href="solutions.html#cb834-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
+<span id="cb834-4"><a href="solutions.html#cb834-4" aria-hidden="true"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb834-5"><a href="solutions.html#cb834-5" aria-hidden="true"></a></span>
+<span id="cb834-6"><a href="solutions.html#cb834-6" aria-hidden="true"></a></span>
+<span id="cb834-7"><a href="solutions.html#cb834-7" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
+<span id="cb834-8"><a href="solutions.html#cb834-8" aria-hidden="true"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
+<span id="cb834-9"><a href="solutions.html#cb834-9" aria-hidden="true"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
+<span id="cb834-10"><a href="solutions.html#cb834-10" aria-hidden="true"></a>    df[<span class="st">&#39;inverse_rank&#39;</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> df[<span class="st">&#39;rank&#39;</span>]</span>
+<span id="cb834-11"><a href="solutions.html#cb834-11" aria-hidden="true"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, y<span class="op">=</span><span class="st">&#39;inverse_rank&#39;</span>,</span>
+<span id="cb834-12"><a href="solutions.html#cb834-12" aria-hidden="true"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], grid<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb834-13"><a href="solutions.html#cb834-13" aria-hidden="true"></a>    ax.figure.savefig(args.outfile)</span>
+<span id="cb834-14"><a href="solutions.html#cb834-14" aria-hidden="true"></a></span>
+<span id="cb834-15"><a href="solutions.html#cb834-15" aria-hidden="true"></a></span>
+<span id="cb834-16"><a href="solutions.html#cb834-16" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb834-17"><a href="solutions.html#cb834-17" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb834-18"><a href="solutions.html#cb834-18" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
+<span id="cb834-19"><a href="solutions.html#cb834-19" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
+<span id="cb834-20"><a href="solutions.html#cb834-20" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
+<span id="cb834-21"><a href="solutions.html#cb834-21" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
+<span id="cb834-22"><a href="solutions.html#cb834-22" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
+<span id="cb834-23"><a href="solutions.html#cb834-23" aria-hidden="true"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
+<span id="cb834-24"><a href="solutions.html#cb834-24" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb834-25"><a href="solutions.html#cb834-25" aria-hidden="true"></a>    main(args)</span></code></pre></div>
 </div>
 </div>
 <div id="chapter-refgit-cmdline" class="section level2" number="22.4">
@@ -1225,13 +1225,13 @@ or both.</p>
 <h3>Exercise <a href="git-cmdline.html#git-cmdline-ex-unsave">5.11.2</a></h3>
 <ul>
 <li><p><code>git status</code> now shows:</p>
-<div class="sourceCode" id="cb834"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb834-1"><a href="solutions.html#cb834-1" aria-hidden="true"></a><span class="ex">On</span> branch book</span>
-<span id="cb834-2"><a href="solutions.html#cb834-2" aria-hidden="true"></a><span class="ex">Untracked</span> files:</span>
-<span id="cb834-3"><a href="solutions.html#cb834-3" aria-hidden="true"></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">&quot;git add &lt;file&gt;...&quot;</span> to include in what will be committed<span class="kw">)</span></span>
-<span id="cb834-4"><a href="solutions.html#cb834-4" aria-hidden="true"></a></span>
-<span id="cb834-5"><a href="solutions.html#cb834-5" aria-hidden="true"></a>        <span class="ex">example.txt</span></span>
-<span id="cb834-6"><a href="solutions.html#cb834-6" aria-hidden="true"></a></span>
-<span id="cb834-7"><a href="solutions.html#cb834-7" aria-hidden="true"></a><span class="ex">nothing</span> added to commit but untracked files present (use <span class="st">&quot;git add&quot;</span> to track)</span></code></pre></div></li>
+<div class="sourceCode" id="cb835"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb835-1"><a href="solutions.html#cb835-1" aria-hidden="true"></a><span class="ex">On</span> branch book</span>
+<span id="cb835-2"><a href="solutions.html#cb835-2" aria-hidden="true"></a><span class="ex">Untracked</span> files:</span>
+<span id="cb835-3"><a href="solutions.html#cb835-3" aria-hidden="true"></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">&quot;git add &lt;file&gt;...&quot;</span> to include in what will be committed<span class="kw">)</span></span>
+<span id="cb835-4"><a href="solutions.html#cb835-4" aria-hidden="true"></a></span>
+<span id="cb835-5"><a href="solutions.html#cb835-5" aria-hidden="true"></a>        <span class="ex">example.txt</span></span>
+<span id="cb835-6"><a href="solutions.html#cb835-6" aria-hidden="true"></a></span>
+<span id="cb835-7"><a href="solutions.html#cb835-7" aria-hidden="true"></a><span class="ex">nothing</span> added to commit but untracked files present (use <span class="st">&quot;git add&quot;</span> to track)</span></code></pre></div></li>
 <li><p>Nothing has happened to the file, it still exists but Git no longer has it in
 the staging area.</p></li>
 </ul>
@@ -1519,27 +1519,27 @@ but not in their desktop repository.</li>
 <h3>Exercise <a href="teams.html#teams-ex-boilerplate-license">7.14.3</a></h3>
 <p>The newly created <code>LICENSE.md</code> should have something like this
 (if MIT was chosen):</p>
-<div class="sourceCode" id="cb841"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb841-1"><a href="solutions.html#cb841-1" aria-hidden="true"></a><span class="fu"># MIT License</span></span>
-<span id="cb841-2"><a href="solutions.html#cb841-2" aria-hidden="true"></a></span>
-<span id="cb841-3"><a href="solutions.html#cb841-3" aria-hidden="true"></a>Copyright (c) YYYY YOUR NAME </span>
-<span id="cb841-4"><a href="solutions.html#cb841-4" aria-hidden="true"></a></span>
-<span id="cb841-5"><a href="solutions.html#cb841-5" aria-hidden="true"></a>Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span id="cb841-6"><a href="solutions.html#cb841-6" aria-hidden="true"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
-<span id="cb841-7"><a href="solutions.html#cb841-7" aria-hidden="true"></a>in the Software without restriction, including without limitation the rights</span>
-<span id="cb841-8"><a href="solutions.html#cb841-8" aria-hidden="true"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
-<span id="cb841-9"><a href="solutions.html#cb841-9" aria-hidden="true"></a>copies of the Software, and to permit persons to whom the Software is</span>
-<span id="cb841-10"><a href="solutions.html#cb841-10" aria-hidden="true"></a>furnished to do so, subject to the following conditions:</span>
-<span id="cb841-11"><a href="solutions.html#cb841-11" aria-hidden="true"></a></span>
-<span id="cb841-12"><a href="solutions.html#cb841-12" aria-hidden="true"></a>The above copyright notice and this permission notice shall be included in all</span>
-<span id="cb841-13"><a href="solutions.html#cb841-13" aria-hidden="true"></a>copies or substantial portions of the Software.</span>
-<span id="cb841-14"><a href="solutions.html#cb841-14" aria-hidden="true"></a></span>
-<span id="cb841-15"><a href="solutions.html#cb841-15" aria-hidden="true"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
-<span id="cb841-16"><a href="solutions.html#cb841-16" aria-hidden="true"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
-<span id="cb841-17"><a href="solutions.html#cb841-17" aria-hidden="true"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
-<span id="cb841-18"><a href="solutions.html#cb841-18" aria-hidden="true"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
-<span id="cb841-19"><a href="solutions.html#cb841-19" aria-hidden="true"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
-<span id="cb841-20"><a href="solutions.html#cb841-20" aria-hidden="true"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
-<span id="cb841-21"><a href="solutions.html#cb841-21" aria-hidden="true"></a>SOFTWARE.</span></code></pre></div>
+<div class="sourceCode" id="cb842"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb842-1"><a href="solutions.html#cb842-1" aria-hidden="true"></a><span class="fu"># MIT License</span></span>
+<span id="cb842-2"><a href="solutions.html#cb842-2" aria-hidden="true"></a></span>
+<span id="cb842-3"><a href="solutions.html#cb842-3" aria-hidden="true"></a>Copyright (c) YYYY YOUR NAME </span>
+<span id="cb842-4"><a href="solutions.html#cb842-4" aria-hidden="true"></a></span>
+<span id="cb842-5"><a href="solutions.html#cb842-5" aria-hidden="true"></a>Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span id="cb842-6"><a href="solutions.html#cb842-6" aria-hidden="true"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span id="cb842-7"><a href="solutions.html#cb842-7" aria-hidden="true"></a>in the Software without restriction, including without limitation the rights</span>
+<span id="cb842-8"><a href="solutions.html#cb842-8" aria-hidden="true"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span id="cb842-9"><a href="solutions.html#cb842-9" aria-hidden="true"></a>copies of the Software, and to permit persons to whom the Software is</span>
+<span id="cb842-10"><a href="solutions.html#cb842-10" aria-hidden="true"></a>furnished to do so, subject to the following conditions:</span>
+<span id="cb842-11"><a href="solutions.html#cb842-11" aria-hidden="true"></a></span>
+<span id="cb842-12"><a href="solutions.html#cb842-12" aria-hidden="true"></a>The above copyright notice and this permission notice shall be included in all</span>
+<span id="cb842-13"><a href="solutions.html#cb842-13" aria-hidden="true"></a>copies or substantial portions of the Software.</span>
+<span id="cb842-14"><a href="solutions.html#cb842-14" aria-hidden="true"></a></span>
+<span id="cb842-15"><a href="solutions.html#cb842-15" aria-hidden="true"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span id="cb842-16"><a href="solutions.html#cb842-16" aria-hidden="true"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span id="cb842-17"><a href="solutions.html#cb842-17" aria-hidden="true"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span id="cb842-18"><a href="solutions.html#cb842-18" aria-hidden="true"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span id="cb842-19"><a href="solutions.html#cb842-19" aria-hidden="true"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span id="cb842-20"><a href="solutions.html#cb842-20" aria-hidden="true"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span id="cb842-21"><a href="solutions.html#cb842-21" aria-hidden="true"></a>SOFTWARE.</span></code></pre></div>
 </div>
 <div id="exercise-refteams-ex-contributing" class="section level3 unnumbered">
 <h3>Exercise <a href="teams.html#teams-ex-contributing">7.14.4</a></h3>
@@ -1718,7 +1718,29 @@ include config.mk
 <h2><span class="header-section-number">H.8</span> Chapter <a href="config.html#config">9</a></h2>
 <div id="exercise-refconfig-ex-build-plotparams" class="section level3 unnumbered">
 <h3>Exercise <a href="config.html#config-ex-build-plotparams">9.8.1</a></h3>
-<p>FIXME</p>
+<p>The build rule involving <code>plotcounts.py</code> should now read,</p>
+<pre class="make"><code>## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv $(PARAMS)
+    python $(PLOT) $&lt; --outfile $@ --plotparams $(word 2,$^)</code></pre>
+<p>where <code>PARAMS</code> is defined earlier in the <code>Makefile</code>
+along with all the other variables and
+also included later in the settings build rule:</p>
+<pre class="make"><code>COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PARAMS=bin/plotparams.yml
+PLOT=bin/plotcounts.py
+SUMMARY=bin/book_summary.sh
+DATA=$(wildcard data/*.txt)
+RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))</code></pre>
+<pre class="make"><code>## settings : show variables&#39; values.
+settings :
+    @echo COUNT: $(COUNT)
+    @echo DATA: $(DATA)
+    @echo RESULTS: $(RESULTS)
+    @echo COLLATE: $(COLLATE)
+    @echo PARAMS: $(PARAMS)
+    @echo PLOT: $(PLOT)
+    @echo SUMMARY: $(SUMMARY)</code></pre>
 </div>
 <div id="exercise-refconfig-ex-accessible" class="section level3 unnumbered">
 <h3>Exercise <a href="config.html#config-ex-accessible">9.8.2</a></h3>
@@ -1746,86 +1768,86 @@ include config.mk
 <div id="exercise-referrors-ex-set-level" class="section level3 unnumbered">
 <h3>Exercise <a href="errors.html#errors-ex-set-level">10.6.1</a></h3>
 <p>The <code>collate.py</code> script should now read as follows:</p>
-<div class="sourceCode" id="cb852"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb852-1"><a href="solutions.html#cb852-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Combine multiple word count CSV-files into a single cumulative count.&quot;&quot;&quot;</span></span>
-<span id="cb852-2"><a href="solutions.html#cb852-2" aria-hidden="true"></a><span class="im">import</span> csv</span>
-<span id="cb852-3"><a href="solutions.html#cb852-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
-<span id="cb852-4"><a href="solutions.html#cb852-4" aria-hidden="true"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
-<span id="cb852-5"><a href="solutions.html#cb852-5" aria-hidden="true"></a><span class="im">import</span> logging</span>
-<span id="cb852-6"><a href="solutions.html#cb852-6" aria-hidden="true"></a><span class="im">import</span> utilities</span>
-<span id="cb852-7"><a href="solutions.html#cb852-7" aria-hidden="true"></a></span>
-<span id="cb852-8"><a href="solutions.html#cb852-8" aria-hidden="true"></a></span>
-<span id="cb852-9"><a href="solutions.html#cb852-9" aria-hidden="true"></a><span class="kw">def</span> update_counts(reader, word_counts):</span>
-<span id="cb852-10"><a href="solutions.html#cb852-10" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Update word counts with data from another reader/file.&quot;&quot;&quot;</span></span>
-<span id="cb852-11"><a href="solutions.html#cb852-11" aria-hidden="true"></a>    <span class="cf">for</span> word, count <span class="kw">in</span> csv.reader(reader):</span>
-<span id="cb852-12"><a href="solutions.html#cb852-12" aria-hidden="true"></a>        word_counts[word] <span class="op">+=</span> <span class="bu">int</span>(count)</span>
-<span id="cb852-13"><a href="solutions.html#cb852-13" aria-hidden="true"></a></span>
-<span id="cb852-14"><a href="solutions.html#cb852-14" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb852-15"><a href="solutions.html#cb852-15" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb852-16"><a href="solutions.html#cb852-16" aria-hidden="true"></a>    log_level <span class="op">=</span> logging.DEBUG <span class="cf">if</span> args.verbose <span class="cf">else</span> logging.WARNING</span>
-<span id="cb852-17"><a href="solutions.html#cb852-17" aria-hidden="true"></a>    logging.basicConfig(level<span class="op">=</span>log_level)</span>
-<span id="cb852-18"><a href="solutions.html#cb852-18" aria-hidden="true"></a>    word_counts <span class="op">=</span> Counter()</span>
-<span id="cb852-19"><a href="solutions.html#cb852-19" aria-hidden="true"></a>    logging.info(<span class="st">&#39;Processing files...&#39;</span>)</span>
-<span id="cb852-20"><a href="solutions.html#cb852-20" aria-hidden="true"></a>    <span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
-<span id="cb852-21"><a href="solutions.html#cb852-21" aria-hidden="true"></a>        logging.debug(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
-<span id="cb852-22"><a href="solutions.html#cb852-22" aria-hidden="true"></a>        <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
-<span id="cb852-23"><a href="solutions.html#cb852-23" aria-hidden="true"></a>            <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span>
-<span id="cb852-24"><a href="solutions.html#cb852-24" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
-<span id="cb852-25"><a href="solutions.html#cb852-25" aria-hidden="true"></a>            logging.debug(<span class="st">&#39;Computing word counts...&#39;</span>)</span>
-<span id="cb852-26"><a href="solutions.html#cb852-26" aria-hidden="true"></a>            update_counts(reader, word_counts)</span>
-<span id="cb852-27"><a href="solutions.html#cb852-27" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
-<span id="cb852-28"><a href="solutions.html#cb852-28" aria-hidden="true"></a></span>
-<span id="cb852-29"><a href="solutions.html#cb852-29" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb852-30"><a href="solutions.html#cb852-30" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb852-31"><a href="solutions.html#cb852-31" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infiles&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, nargs<span class="op">=</span><span class="st">&#39;*&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file names&#39;</span>)</span>
-<span id="cb852-32"><a href="solutions.html#cb852-32" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb852-33"><a href="solutions.html#cb852-33" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
-<span id="cb852-34"><a href="solutions.html#cb852-34" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-v&#39;</span>, <span class="st">&#39;--verbose&#39;</span>, action<span class="op">=</span><span class="st">&quot;store_true&quot;</span>, default<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb852-35"><a href="solutions.html#cb852-35" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&quot;Change logging threshold from WARNING to DEBUG&quot;</span>)</span>
-<span id="cb852-36"><a href="solutions.html#cb852-36" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb852-37"><a href="solutions.html#cb852-37" aria-hidden="true"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb856"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb856-1"><a href="solutions.html#cb856-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Combine multiple word count CSV-files into a single cumulative count.&quot;&quot;&quot;</span></span>
+<span id="cb856-2"><a href="solutions.html#cb856-2" aria-hidden="true"></a><span class="im">import</span> csv</span>
+<span id="cb856-3"><a href="solutions.html#cb856-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
+<span id="cb856-4"><a href="solutions.html#cb856-4" aria-hidden="true"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb856-5"><a href="solutions.html#cb856-5" aria-hidden="true"></a><span class="im">import</span> logging</span>
+<span id="cb856-6"><a href="solutions.html#cb856-6" aria-hidden="true"></a><span class="im">import</span> utilities</span>
+<span id="cb856-7"><a href="solutions.html#cb856-7" aria-hidden="true"></a></span>
+<span id="cb856-8"><a href="solutions.html#cb856-8" aria-hidden="true"></a></span>
+<span id="cb856-9"><a href="solutions.html#cb856-9" aria-hidden="true"></a><span class="kw">def</span> update_counts(reader, word_counts):</span>
+<span id="cb856-10"><a href="solutions.html#cb856-10" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Update word counts with data from another reader/file.&quot;&quot;&quot;</span></span>
+<span id="cb856-11"><a href="solutions.html#cb856-11" aria-hidden="true"></a>    <span class="cf">for</span> word, count <span class="kw">in</span> csv.reader(reader):</span>
+<span id="cb856-12"><a href="solutions.html#cb856-12" aria-hidden="true"></a>        word_counts[word] <span class="op">+=</span> <span class="bu">int</span>(count)</span>
+<span id="cb856-13"><a href="solutions.html#cb856-13" aria-hidden="true"></a></span>
+<span id="cb856-14"><a href="solutions.html#cb856-14" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
+<span id="cb856-15"><a href="solutions.html#cb856-15" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb856-16"><a href="solutions.html#cb856-16" aria-hidden="true"></a>    log_level <span class="op">=</span> logging.DEBUG <span class="cf">if</span> args.verbose <span class="cf">else</span> logging.WARNING</span>
+<span id="cb856-17"><a href="solutions.html#cb856-17" aria-hidden="true"></a>    logging.basicConfig(level<span class="op">=</span>log_level)</span>
+<span id="cb856-18"><a href="solutions.html#cb856-18" aria-hidden="true"></a>    word_counts <span class="op">=</span> Counter()</span>
+<span id="cb856-19"><a href="solutions.html#cb856-19" aria-hidden="true"></a>    logging.info(<span class="st">&#39;Processing files...&#39;</span>)</span>
+<span id="cb856-20"><a href="solutions.html#cb856-20" aria-hidden="true"></a>    <span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
+<span id="cb856-21"><a href="solutions.html#cb856-21" aria-hidden="true"></a>        logging.debug(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
+<span id="cb856-22"><a href="solutions.html#cb856-22" aria-hidden="true"></a>        <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
+<span id="cb856-23"><a href="solutions.html#cb856-23" aria-hidden="true"></a>            <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span>
+<span id="cb856-24"><a href="solutions.html#cb856-24" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
+<span id="cb856-25"><a href="solutions.html#cb856-25" aria-hidden="true"></a>            logging.debug(<span class="st">&#39;Computing word counts...&#39;</span>)</span>
+<span id="cb856-26"><a href="solutions.html#cb856-26" aria-hidden="true"></a>            update_counts(reader, word_counts)</span>
+<span id="cb856-27"><a href="solutions.html#cb856-27" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
+<span id="cb856-28"><a href="solutions.html#cb856-28" aria-hidden="true"></a></span>
+<span id="cb856-29"><a href="solutions.html#cb856-29" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb856-30"><a href="solutions.html#cb856-30" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb856-31"><a href="solutions.html#cb856-31" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infiles&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, nargs<span class="op">=</span><span class="st">&#39;*&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file names&#39;</span>)</span>
+<span id="cb856-32"><a href="solutions.html#cb856-32" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb856-33"><a href="solutions.html#cb856-33" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
+<span id="cb856-34"><a href="solutions.html#cb856-34" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-v&#39;</span>, <span class="st">&#39;--verbose&#39;</span>, action<span class="op">=</span><span class="st">&quot;store_true&quot;</span>, default<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb856-35"><a href="solutions.html#cb856-35" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&quot;Change logging threshold from WARNING to DEBUG&quot;</span>)</span>
+<span id="cb856-36"><a href="solutions.html#cb856-36" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb856-37"><a href="solutions.html#cb856-37" aria-hidden="true"></a>    main(args)</span></code></pre></div>
 </div>
 <div id="exercise-referrors-ex-logging-output" class="section level3 unnumbered">
 <h3>Exercise <a href="errors.html#errors-ex-logging-output">10.6.2</a></h3>
 <p>The <code>collate.py</code> script should now read as follows:</p>
-<div class="sourceCode" id="cb853"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb853-1"><a href="solutions.html#cb853-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Combine multiple word count CSV-files into a single cumulative count.&quot;&quot;&quot;</span></span>
-<span id="cb853-2"><a href="solutions.html#cb853-2" aria-hidden="true"></a><span class="im">import</span> csv</span>
-<span id="cb853-3"><a href="solutions.html#cb853-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
-<span id="cb853-4"><a href="solutions.html#cb853-4" aria-hidden="true"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
-<span id="cb853-5"><a href="solutions.html#cb853-5" aria-hidden="true"></a><span class="im">import</span> logging</span>
-<span id="cb853-6"><a href="solutions.html#cb853-6" aria-hidden="true"></a><span class="im">import</span> utilities</span>
-<span id="cb853-7"><a href="solutions.html#cb853-7" aria-hidden="true"></a></span>
-<span id="cb853-8"><a href="solutions.html#cb853-8" aria-hidden="true"></a></span>
-<span id="cb853-9"><a href="solutions.html#cb853-9" aria-hidden="true"></a><span class="kw">def</span> update_counts(reader, word_counts):</span>
-<span id="cb853-10"><a href="solutions.html#cb853-10" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Update word counts with data from another reader/file.&quot;&quot;&quot;</span></span>
-<span id="cb853-11"><a href="solutions.html#cb853-11" aria-hidden="true"></a>    <span class="cf">for</span> word, count <span class="kw">in</span> csv.reader(reader):</span>
-<span id="cb853-12"><a href="solutions.html#cb853-12" aria-hidden="true"></a>        word_counts[word] <span class="op">+=</span> <span class="bu">int</span>(count)</span>
-<span id="cb853-13"><a href="solutions.html#cb853-13" aria-hidden="true"></a></span>
-<span id="cb853-14"><a href="solutions.html#cb853-14" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb853-15"><a href="solutions.html#cb853-15" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb853-16"><a href="solutions.html#cb853-16" aria-hidden="true"></a>    log_level <span class="op">=</span> logging.DEBUG <span class="cf">if</span> args.verbose <span class="cf">else</span> logging.WARNING</span>
-<span id="cb853-17"><a href="solutions.html#cb853-17" aria-hidden="true"></a>    logging.basicConfig(level<span class="op">=</span>log_level, filename<span class="op">=</span>args.logfile)</span>
-<span id="cb853-18"><a href="solutions.html#cb853-18" aria-hidden="true"></a>    word_counts <span class="op">=</span> Counter()</span>
-<span id="cb853-19"><a href="solutions.html#cb853-19" aria-hidden="true"></a>    logging.info(<span class="st">&#39;Processing files...&#39;</span>)</span>
-<span id="cb853-20"><a href="solutions.html#cb853-20" aria-hidden="true"></a>    <span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
-<span id="cb853-21"><a href="solutions.html#cb853-21" aria-hidden="true"></a>        logging.debug(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
-<span id="cb853-22"><a href="solutions.html#cb853-22" aria-hidden="true"></a>        <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
-<span id="cb853-23"><a href="solutions.html#cb853-23" aria-hidden="true"></a>            <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span>
-<span id="cb853-24"><a href="solutions.html#cb853-24" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
-<span id="cb853-25"><a href="solutions.html#cb853-25" aria-hidden="true"></a>            logging.debug(<span class="st">&#39;Computing word counts...&#39;</span>)</span>
-<span id="cb853-26"><a href="solutions.html#cb853-26" aria-hidden="true"></a>            update_counts(reader, word_counts)</span>
-<span id="cb853-27"><a href="solutions.html#cb853-27" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
-<span id="cb853-28"><a href="solutions.html#cb853-28" aria-hidden="true"></a></span>
-<span id="cb853-29"><a href="solutions.html#cb853-29" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb853-30"><a href="solutions.html#cb853-30" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb853-31"><a href="solutions.html#cb853-31" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infiles&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, nargs<span class="op">=</span><span class="st">&#39;*&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file names&#39;</span>)</span>
-<span id="cb853-32"><a href="solutions.html#cb853-32" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb853-33"><a href="solutions.html#cb853-33" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
-<span id="cb853-34"><a href="solutions.html#cb853-34" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-v&#39;</span>, <span class="st">&#39;--verbose&#39;</span>, action<span class="op">=</span><span class="st">&quot;store_true&quot;</span>, default<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb853-35"><a href="solutions.html#cb853-35" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&quot;Change logging threshold from WARNING to DEBUG&quot;</span>)</span>
-<span id="cb853-36"><a href="solutions.html#cb853-36" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-l&#39;</span>, <span class="st">&#39;--logfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;collate.log&#39;</span>,</span>
-<span id="cb853-37"><a href="solutions.html#cb853-37" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Name of the log file&#39;</span>)</span>
-<span id="cb853-38"><a href="solutions.html#cb853-38" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb853-39"><a href="solutions.html#cb853-39" aria-hidden="true"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb857"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb857-1"><a href="solutions.html#cb857-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Combine multiple word count CSV-files into a single cumulative count.&quot;&quot;&quot;</span></span>
+<span id="cb857-2"><a href="solutions.html#cb857-2" aria-hidden="true"></a><span class="im">import</span> csv</span>
+<span id="cb857-3"><a href="solutions.html#cb857-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
+<span id="cb857-4"><a href="solutions.html#cb857-4" aria-hidden="true"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb857-5"><a href="solutions.html#cb857-5" aria-hidden="true"></a><span class="im">import</span> logging</span>
+<span id="cb857-6"><a href="solutions.html#cb857-6" aria-hidden="true"></a><span class="im">import</span> utilities</span>
+<span id="cb857-7"><a href="solutions.html#cb857-7" aria-hidden="true"></a></span>
+<span id="cb857-8"><a href="solutions.html#cb857-8" aria-hidden="true"></a></span>
+<span id="cb857-9"><a href="solutions.html#cb857-9" aria-hidden="true"></a><span class="kw">def</span> update_counts(reader, word_counts):</span>
+<span id="cb857-10"><a href="solutions.html#cb857-10" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Update word counts with data from another reader/file.&quot;&quot;&quot;</span></span>
+<span id="cb857-11"><a href="solutions.html#cb857-11" aria-hidden="true"></a>    <span class="cf">for</span> word, count <span class="kw">in</span> csv.reader(reader):</span>
+<span id="cb857-12"><a href="solutions.html#cb857-12" aria-hidden="true"></a>        word_counts[word] <span class="op">+=</span> <span class="bu">int</span>(count)</span>
+<span id="cb857-13"><a href="solutions.html#cb857-13" aria-hidden="true"></a></span>
+<span id="cb857-14"><a href="solutions.html#cb857-14" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
+<span id="cb857-15"><a href="solutions.html#cb857-15" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb857-16"><a href="solutions.html#cb857-16" aria-hidden="true"></a>    log_level <span class="op">=</span> logging.DEBUG <span class="cf">if</span> args.verbose <span class="cf">else</span> logging.WARNING</span>
+<span id="cb857-17"><a href="solutions.html#cb857-17" aria-hidden="true"></a>    logging.basicConfig(level<span class="op">=</span>log_level, filename<span class="op">=</span>args.logfile)</span>
+<span id="cb857-18"><a href="solutions.html#cb857-18" aria-hidden="true"></a>    word_counts <span class="op">=</span> Counter()</span>
+<span id="cb857-19"><a href="solutions.html#cb857-19" aria-hidden="true"></a>    logging.info(<span class="st">&#39;Processing files...&#39;</span>)</span>
+<span id="cb857-20"><a href="solutions.html#cb857-20" aria-hidden="true"></a>    <span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
+<span id="cb857-21"><a href="solutions.html#cb857-21" aria-hidden="true"></a>        logging.debug(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
+<span id="cb857-22"><a href="solutions.html#cb857-22" aria-hidden="true"></a>        <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
+<span id="cb857-23"><a href="solutions.html#cb857-23" aria-hidden="true"></a>            <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span>
+<span id="cb857-24"><a href="solutions.html#cb857-24" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
+<span id="cb857-25"><a href="solutions.html#cb857-25" aria-hidden="true"></a>            logging.debug(<span class="st">&#39;Computing word counts...&#39;</span>)</span>
+<span id="cb857-26"><a href="solutions.html#cb857-26" aria-hidden="true"></a>            update_counts(reader, word_counts)</span>
+<span id="cb857-27"><a href="solutions.html#cb857-27" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
+<span id="cb857-28"><a href="solutions.html#cb857-28" aria-hidden="true"></a></span>
+<span id="cb857-29"><a href="solutions.html#cb857-29" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb857-30"><a href="solutions.html#cb857-30" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb857-31"><a href="solutions.html#cb857-31" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infiles&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, nargs<span class="op">=</span><span class="st">&#39;*&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file names&#39;</span>)</span>
+<span id="cb857-32"><a href="solutions.html#cb857-32" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb857-33"><a href="solutions.html#cb857-33" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
+<span id="cb857-34"><a href="solutions.html#cb857-34" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-v&#39;</span>, <span class="st">&#39;--verbose&#39;</span>, action<span class="op">=</span><span class="st">&quot;store_true&quot;</span>, default<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb857-35"><a href="solutions.html#cb857-35" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&quot;Change logging threshold from WARNING to DEBUG&quot;</span>)</span>
+<span id="cb857-36"><a href="solutions.html#cb857-36" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-l&#39;</span>, <span class="st">&#39;--logfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;collate.log&#39;</span>,</span>
+<span id="cb857-37"><a href="solutions.html#cb857-37" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Name of the log file&#39;</span>)</span>
+<span id="cb857-38"><a href="solutions.html#cb857-38" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb857-39"><a href="solutions.html#cb857-39" aria-hidden="true"></a>    main(args)</span></code></pre></div>
 </div>
 <div id="exercise-referrors-ex-exceptions" class="section level3 unnumbered">
 <h3>Exercise <a href="errors.html#errors-ex-exceptions">10.6.3</a></h3>

@@ -412,6 +412,8 @@ and Elizabeth Wickes.
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
+[make]: https://www.gnu.org/software/make/
+[make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
@@ -11367,9 +11369,24 @@ but knowing what it entails allows us to make a conscious, thoughtful choice.
 
 ### Building with plotting parameters {#config-ex-build-plotparams}
 
-1.  Add the new `--plotparams` option to the `Makefile` developed in Chapter \@ref(automate).
-2.  Rewrite the rules in the `Makefile` so that
-    the appropriate commands will be re-run if plotting parameters change.
+In the `Makefile` created in Chapter \@ref(automate),
+the build rule involving `plotcounts.py` was defined as:
+
+```make
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv
+	python $(PLOT) $< --outfile $@
+```
+
+Update that build rule to include the new `--plotparams` option.
+Make sure `plotparams.yml` is added as a second prerequisite in the updated build rule
+so that the appropriate commands will be re-run if the plotting parameters change.
+
+Hint: We use the automatic variable `$<` to access the first prerequisite,
+but you'll need `$(word 2,$^)` to access the second.
+Read about automatic variables (Section \@ref(automate-autovar)) and 
+[functions for string substitution and analysis][make-string-functions]
+to understand what that command is doing.
 
 ### Making plots more accessible {#config-ex-accessible}
 
@@ -17901,7 +17918,39 @@ include config.mk
 
 ### Exercise \@ref(config-ex-build-plotparams) {-}
 
-FIXME
+The build rule involving `plotcounts.py` should now read,
+
+```make
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv $(PARAMS)
+	python $(PLOT) $< --outfile $@ --plotparams $(word 2,$^)
+```
+
+where `PARAMS` is defined earlier in the `Makefile`
+along with all the other variables and
+also included later in the settings build rule:
+
+```make
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PARAMS=bin/plotparams.yml
+PLOT=bin/plotcounts.py
+SUMMARY=bin/book_summary.sh
+DATA=$(wildcard data/*.txt)
+RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
+```
+
+```make
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	@echo PARAMS: $(PARAMS)
+	@echo PLOT: $(PLOT)
+	@echo SUMMARY: $(SUMMARY)
+```
 
 ### Exercise \@ref(config-ex-accessible) {-}
 
@@ -18342,7 +18391,8 @@ committed to the repository in Exercise \@ref(teams-ex-contributing).
 `LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
 committed to the repository in Exercise \@ref(teams-ex-boilerplate-license).
 
-`Makefile`: Introduced and updated throughout Chapter \@ref(automate).
+`Makefile`: Introduced and updated throughout Chapter \@ref(automate).
+Updated again in Exercise \@ref(config-ex-build-plotparams).
 
 `README.rst`: Introduced as a `.md` file in Section \@ref(git-advanced-conflict),
 updated in Section \@ref(git-advanced-fork) and then converted to a `.rst` file
@@ -20253,6 +20303,8 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
+[make]: https://www.gnu.org/software/make/
+[make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
