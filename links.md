@@ -79,6 +79,7 @@
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [python-standard-library]: https://docs.python.org/3/library/
+[python-traceback]: https://docs.python.org/3/library/traceback.html
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
