@@ -62,6 +62,7 @@
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[orcid-registration]: https://orcid.org/register
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
