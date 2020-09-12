@@ -1099,7 +1099,39 @@ include config.mk
 
 ### Exercise \@ref(config-ex-build-plotparams) {-}
 
-FIXME
+The build rule involving `plotcounts.py` should now read,
+
+```make
+## results/collated.png: plot the collated results.
+results/collated.png : results/collated.csv $(PARAMS)
+	python $(PLOT) $< --outfile $@ --plotparams $(word 2,$^)
+```
+
+where `PARAMS` is defined earlier in the `Makefile`
+along with all the other variables and
+also included later in the settings build rule:
+
+```make
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PARAMS=bin/plotparams.yml
+PLOT=bin/plotcounts.py
+SUMMARY=bin/book_summary.sh
+DATA=$(wildcard data/*.txt)
+RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
+```
+
+```make
+## settings : show variables' values.
+settings :
+	@echo COUNT: $(COUNT)
+	@echo DATA: $(DATA)
+	@echo RESULTS: $(RESULTS)
+	@echo COLLATE: $(COLLATE)
+	@echo PARAMS: $(PARAMS)
+	@echo PLOT: $(PLOT)
+	@echo SUMMARY: $(SUMMARY)
+```
 
 ### Exercise \@ref(config-ex-accessible) {-}
 
