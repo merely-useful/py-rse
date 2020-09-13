@@ -441,6 +441,9 @@
 **privilege**<a id="privilege"></a>
 :   An unearned advantage, typically as a result of belonging to a dominant social class or group.
 
+**pseudo-random number generator**<a id="prng"></a>
+:   A function that can generate [pseudo-random numbers](#pseudo_random_number). See also: [seed](#seed)
+
 **procedural programming**<a id="procedural_programming"></a>
 :   A style of programming in which functions operate on data that is passed into them. The term is used in contrast to [object-oriented programming](#oop).
 
@@ -530,6 +533,9 @@
 
 **search path**<a id="search_path"></a>
 :   The list of directories that a program searches to find something. For example, the Unix [shell](#shell) uses the search path stored in the `PATH` variable when trying to find a program given its name.
+
+**seed**<a id="seed"></a>
+:   A value used to initialize a [pseudo-random number generator](#prng).
 
 **semantic versioning**<a id="semantic_versioning"></a>
 :   A standard for identifying software releases. In the version identifier `major.minor.patch`, `major` changes when a new version of software is incompatible with old versions, `minor` changes when new features are added to an existing version, and `patch` changes when small bugs are fixed.

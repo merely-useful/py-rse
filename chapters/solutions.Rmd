@@ -1355,21 +1355,90 @@ used to get and print information from these objects.
 
 ### Exercise \@ref(testing-ex-test-assert) {-}
 
-FIXME
+We can test that the first assertion fails when `values` is not a non-empty list as follows:
+
+```python
+def test_fails_for_non_list():
+    try:
+        total('not a list')
+        assert False, 'Should have raised AssertionError'
+    except AssertionError:
+        pass
+    except:
+        assert False, 'Should have raised AssertionError'
+```
+
+In order:
+
+1.  The first `assert False` will only happen if `total` runs without raising any kind of exception.
+
+2.  The `except AssertionError` branch does nothing (`pass`) if the correct exception is raised.
+
+3.  The catch-all `except` at the end makes the test fail if the wrong kind of exception is raised.
+
+This pattern is so common that `pytest` provides a shorthand notation for it:
+
+```python
+def test_fails_for_non_list():
+    with pytest.raises(AssertionError):
+        total('not a list')
+```
+
+If the call to `total` *doesn't* raise `AssertionError`, this test fails.
 
 ### Exercise \@ref(testing-ex-ci-status-readme) {-}
 
-FIXME
+To test that the Travis status display is working correctly,
+try committing a test that deliberately fails to version control.
 
 ### Exercise \@ref(testing-ex-config) {-}
 
-FIXME
+If every configuration setting has a sensible default,
+we can create configuration files that each change exactly one parameter.
+Alternatively,
+if our program uses \gref{overlay configuration}{overlay_configuration},
+we can have each test use a standard configuration file plus a second one that changes one setting.
+In either case,
+we can either run the program and check its output,
+or check that the data structure storing configuration information has the right values
+(and trust other tests to make sure that those settings do what they're supposed to).
+
+### Exercise \@ref(testing-ex-random) {-}
+
+There are three approaches to testing when pseudo-random numbers are involved:
+
+1.  Run the function once with a known \gref{seed}{seed},
+    check and record its output,
+    and then compare the output of subsequent runs to that saved output.
+    (Basically, if the function does the same thing it did the first time, we trust it.)
+
+2.  Replace the \gref{pseudo-random number generator}{prng} with a function of our own
+    that generates a predictable series of values.
+    For example,
+    if we are randomly partitioning a list into two equal halves,
+    we could instead use a function that puts odd-numbered values in one partition
+    and even-numbered values in another
+    (which is a legal but unlikely outcome of truly random partitioning).
+
+3.  Instead of checking for an exact result,
+    check that the result lies within certain bounds,
+    just as we would with the result of a physical experiment.
+
+### Exercise \@ref(testing-ex-relative-error) {-}
+
+This result seems counter-intuitive to many people because relative error is a measure of a single value,
+but in this case we are looking at a distribution of values:
+each result is off by 0.1 compared to a range of 0--2,
+which doesn't "feel" infinite.
+In this case,
+a better measure might be the largest \gref{absolute error}{absolute_error}
+divided by the standard deviation of the data.
 
 ## Chapter \@ref(provenance) {.unnumbered .unlisted}
 
 ### Exercise \@ref(provenance-ex-get-orcid) {-}
 
-You can get an ORCID by registered [here][orcid-registration].
+You can get an ORCID by registering [here][orcid-registration].
 Please add this 16-digit identifier to all of your published works
 and to your online profiles.
 
