@@ -1157,7 +1157,21 @@ FIXME
 
 ### Exercise \@ref(errors-ex-set-level) {-}
 
-The `collate.py` script should now read as follows:
+Add a new command line argument to `collate.py`,
+
+```python
+parser.add_argument('-v', '--verbose', action="store_true", default=False,
+                    help="Change logging threshold from WARNING to DEBUG")
+```
+
+and two new lines to the beginning of the `main` function,
+
+```python
+log_level = logging.DEBUG if args.verbose else logging.WARNING
+logging.basicConfig(level=log_level)
+```
+
+such that the full `collate.py` script now reads as follows:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
@@ -1167,6 +1181,10 @@ from collections import Counter
 import logging
 import utilities
 
+
+ERROR_MESSAGES = {
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+}
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -1182,7 +1200,7 @@ def main(args):
     for file_name in args.infiles:
         logging.debug(f'Reading in {file_name}...')
         if file_name[-4:] != '.csv':
-            raise OSError('The filename must end in `.csv`')
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
         with open(file_name, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
@@ -1201,7 +1219,21 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(errors-ex-logging-output) {-}
 
-The `collate.py` script should now read as follows:
+Add a new command line argument to `collate.py`,
+
+```python
+parser.add_argument('-l', '--logfile', type=str, default='collate.log',
+                    help='Name of the log file')
+```
+
+and pass the name of the log file to `logging.basicConfig`
+using the `filename` argument,
+
+```python
+logging.basicConfig(level=log_level, filename=args.logfile)
+```
+
+such that the `collate.py` script now reads as follows:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
@@ -1211,6 +1243,10 @@ from collections import Counter
 import logging
 import utilities
 
+
+ERROR_MESSAGES = {
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+}
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -1226,7 +1262,7 @@ def main(args):
     for file_name in args.infiles:
         logging.debug(f'Reading in {file_name}...')
         if file_name[-4:] != '.csv':
-            raise OSError('The filename must end in `.csv`')
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
         with open(file_name, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
@@ -1247,19 +1283,54 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(errors-ex-exceptions) {-}
 
-FIXME
+1. The loop in `collate.py` that reads/processes each input file
+   should now read as follows:
 
-### Exercise \@ref(errors-ex-format) {-}
+```python
+for file_name in args.infiles:
+    try:
+        logging.debug(f'Reading in {file_name}...')
+        if file_name[-4:] != '.csv':
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+        with open(file_name, 'r') as reader:
+            logging.debug('Computing word counts...')
+            update_counts(reader, word_counts)
+    except Exception as error:
+        logging.warning(f'{file_name} not processed: {error}')
+```
 
-Python's f-strings interpolate variables that are in scope:
-there is no easy way to interpolate values from a lookup table.
-In contrast,
-`str.format` can be given any number of named keyword arguments (Appendix \@ref(style)),
-so we can look up a string and then interpolate whatever values we want.
+2. The loop in `collate.py` that reads/processes each input file
+   should now read as follows:
+
+```python
+for file_name in args.infiles:
+    try:
+        logging.debug(f'Reading in {file_name}...')
+        if file_name[-4:] != '.csv':
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+        with open(file_name, 'r') as reader:
+            logging.debug('Computing word counts...')
+            update_counts(reader, word_counts)
+    except FileNotFoundError:
+        logging.warning(f'{file_name} not processed: File does not exist')
+    except PermissionError:
+        logging.warning(f'{file_name} not processed: No permission to read file')
+    except Exception as error:
+        logging.warning(f'{file_name} not processed: {error}')
+```
 
 ### Exercise \@ref(errors-ex-catalog) {-}
 
-FIXME
+1. The convention is to use `ALL_CAPS_WITH_UNDERSCORES` when defining global variables.
+
+2. Python's f-strings interpolate variables that are in scope:
+   there is no easy way to interpolate values from a lookup table.
+   In contrast,
+   `str.format` can be given any number of named keyword arguments (Appendix \@ref(style)),
+   so we can look up a string and then interpolate whatever values we want.
+
+3. Once `ERROR_MESSAGES` has been moved to the `utilities` module
+   all references to it in `collate.py` must be updated to `utilities.ERROR_MESSAGES`. 
 
 ### Exercise \@ref(errors-ex-traceback) {-}
 

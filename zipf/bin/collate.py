@@ -18,12 +18,19 @@ def main(args):
     word_counts = Counter()
     logging.info('Processing files...')
     for file_name in args.infiles:
-        logging.debug(f'Reading in {file_name}...')
-        if file_name[-4:] != '.csv':
-            raise OSError('The filename must end in `.csv`')
-        with open(file_name, 'r') as reader:
-            logging.debug('Computing word counts...')
-            update_counts(reader, word_counts)
+        try:
+            logging.debug(f'Reading in {file_name}...')
+            if file_name[-4:] != '.csv':
+                raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+            with open(file_name, 'r') as reader:
+                logging.debug('Computing word counts...')
+                update_counts(reader, word_counts)
+        except FileNotFoundError:
+            logging.warning(f'{file_name} not processed: File does not exist')
+        except PermissionError:
+            logging.warning(f'{file_name} not processed: No permission to read file')
+        except Exception as error:
+            logging.warning(f'{file_name} not processed: {error}')
     utilities.collection_to_csv(word_counts, num=args.num)
 
 if __name__ == '__main__':

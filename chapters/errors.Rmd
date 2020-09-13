@@ -249,7 +249,7 @@ even if we are familiar with the code's internals.
 Our program should therefore check that the input files are CSV files,
 and if not,
 raise an error with a useful explanation to what went wrong.
-We can achieve this by wrapping the call to `open` in a `try/except` clause:
+We could achieve this by wrapping the call to `open` in a `try/except` clause:
 
 ```python
 for file_name in args.infiles:
@@ -442,15 +442,15 @@ Most people write error messages directly in their code:
 
 ```python
 if file_name[-4:] != '.csv':
-    raise OSError('The filename must end in `.csv`')
+    raise OSError(f'{file_name}: The filename must end in `.csv`')
 ```
 
 A better approach is to put all the error messages in a dictionary:
 
 ```python
 ERROR_MESSAGES = {
-    'cannot_read_file' : 'The filename must end in `.csv`',
-    'config_corrupted' : f'Configuration file {config_name} corrupted',
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+    'config_corrupted' : 'Configuration file {config_name} corrupted',
     # ...more error messages...
 }
 ```
@@ -459,7 +459,7 @@ and then only use messages from that dictionary:
 
 ```python
 if file_name[-4:] != '.csv':
-    raise OSError(ERROR_MESSAGES['cannot_read_file'].format(file_name))
+    raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
 ```
 
 Doing this makes it much easier to ensure that messages are consistent.
@@ -468,12 +468,12 @@ It also makes it much easier to give messages in the user's preferred language:
 ```python
 ERROR_MESSAGES = {
     'en' : {
-        'cannot_read_file' : 'The filename must end in `.csv`',
+        'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
         'config_corrupted' : 'Configuration file {config_name} corrupted',
         # ...more error messages in English...
     },
     'fr' : {
-        'cannot_read_file' : 'Le nom du fichier doit se terminer par `.csv`',
+        'not_csv_file_suffix' : '{file_name}: Le nom du fichier doit se terminer par `.csv`',
         'config_corrupted' : f'Fichier de configuration {config_name} corrompu',
         # ...more error messages in French...
     }
@@ -484,7 +484,7 @@ ERROR_MESSAGES = {
 The error report is then looked up and formatted as:
 
 ```python
-ERROR_MESSAGES[user_language]['cannot_read_file'].format(file_name=file_name)
+ERROR_MESSAGES[user_language]['not_csv_file_suffix'].format(file_name=file_name)
 ```
 
 where `user_language` is a two-letter code for the user's preferred language.
@@ -517,7 +517,7 @@ for file_name in args.infiles:
     if LOG_LEVEL >= 1:
         print(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError('The filename must end in `.csv`')
+        raise OSError(ERROR_MESSAGES['cannot_read_file'].format(file_name=file_name))
     with open(file_name, 'r') as reader:
         if LOG_LEVEL >= 1:
             print(f'Computing word counts...')
@@ -577,7 +577,7 @@ logging.info('Processing files...')
 for file_name in args.infiles:
     logging.debug(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError('The filename must end in `.csv`')
+        raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
     with open(file_name, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
@@ -701,6 +701,10 @@ import logging
 import utilities
 
 
+ERROR_MESSAGES = {
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+}
+
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
@@ -713,7 +717,7 @@ def main(args):
     for file_name in args.infiles:
         logging.debug(f'Reading in {file_name}...')
         if file_name[-4:] != '.csv':
-            raise OSError('The filename must end in `.csv`')
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
         with open(file_name, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
@@ -786,35 +790,35 @@ called `collate.log` instead.
 
 2. Create a new command line option '-l' or '--logfile' so that the user
 can specify a different name for the log file if they don't like
-the default name of `collate.py`.  
+the default name of `collate.log`.  
 
 ### Handling exceptions {#errors-ex-exceptions}
 
 1.  Modify the script `collate.py` so that it catches any exceptions
-    that are raised when it tries to open files.
+    that are raised when it tries to open files
+    and records them in the log file.
     When you are finished,
     the program should collate all the files it can
     rather than halting as soon as it encounters a problem.
 2.  Modify your first solution to handle nonexistent files
     and permission problems separately.
 
-### Formatting messages {#errors-ex-format}
-
-Python has three ways to format strings: the `%` operator,
-the `str.format` method,
-and f-strings (where the 'f' stands for "format").
-Look up the documentation for each
-and explain why we have to use `str.format` rather than f-strings
-for formatting error messages that come from a lookup table.
-
 ### Error catalogs {#errors-ex-catalog}
 
-1.  Modify your solution to the previous exercise
-    to put your error message in a catalog
-    as described in Section \@ref(errors-messages).
-2.  Add messages in a second language.
-    (Use Google Translate if necessary.)
-3.  Add a command-line flag to allow users to select the language they want to use.
+In Section \@ref(errors-messages) we started to define an error catalog called `ERROR_MESSAGES`.
+
+1. Read Appendix \@ref{style-pep8} and explain why we have used capital letters
+   for the name of the catalog.
+2. Python has three ways to format strings:
+   the `%` operator, the `str.format` method, and f-strings (where the 'f' stands for "format").
+   Look up the documentation for each
+   and explain why we have to use `str.format` rather than f-strings
+   for formatting error messages in our catalog/lookup table.
+3. There's a good chance we will eventually want to use the error messages we've defined
+   in other scripts besides `collate.py`.
+   To avoid duplication,
+   move `ERROR_MESSAGES` to the `utilities` module that was first created in
+   Section \@ref(py-rse-py-scripting-modules).
 
 ### Tracebacks {#errors-ex-traceback}
 
