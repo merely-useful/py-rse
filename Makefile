@@ -47,7 +47,7 @@ everything : ${HTML} ${PDF}
 ## html : build all HTML versions.
 html : _book/index.html
 
-_book/index.html : ${SOURCE} glossary/glossary-html.lua
+_book/index.html : ${SOURCE} glossary/glossary-html.lua $(wildcard includes/*.html)
 	rm -f py-rse.Rmd
 	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook'); warnings()"
 	cp -r ${EXTRA} _book
@@ -57,7 +57,7 @@ _book/index.html : ${SOURCE} glossary/glossary-html.lua
 ## pdf : build PDF version.
 pdf : _book/py-rse.pdf
 
-_book/py-rse.pdf : ${SOURCE}
+_book/py-rse.pdf : ${SOURCE} $(wildcard includes/*.tex)
 	rm -f py-rse.Rmd
 	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book'); warnings()"
 
