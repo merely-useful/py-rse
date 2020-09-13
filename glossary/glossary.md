@@ -64,7 +64,7 @@
 :   A set of instructions designed to be executed efficiently by an [interpreter](#interpreter).
 
 **call stack**<a id="call_stack"></a>
-:   A data structure that stores information about the active subroutines executed. `cst()` is a useful function provided in the `lobstr` package to visualize a call stack.
+:   A data structure that stores information about the active subroutines executed. See also: [stack frame](#stack_frame)
 
 **camel case**<a id="camel_case"></a>
 :   A style of writing code that involves naming variables and objects with no space, underscore (`_`), dot (`.`), or dash (`-`), with each word being capitalized.  Examples include `CalculateSum` and `findPattern`. See also: [kebab case](#kebab_case), [pothole case](#pothole_case)
@@ -582,6 +582,9 @@
 **SSH protocol**<a id="ssh_protocol"></a>
 :   A formal standard for exchanging encrypted messages between computers and for managing [remote logins](#remote_login_server).
 
+**stack frame**<a id="stack_frame"></a>
+:   A section of the [call stack](#call_stack) that records details of a single call to a specific function.
+
 **standard error**<a id="stderr"></a>
 :   A predefined communication channel for a [process](#process), typically used for error messages. See also: [standard input](#stdin), [standard output](#stdout)
 
@@ -632,6 +635,9 @@
 
 **tolerance**<a id="tolerance"></a>
 :   How closely the [actual result](#actual_result) of a test must agree with the [expected result](#expected_result) in order for the test to pass. Tolerances are usually expressed in terms of [relative error](#relative_error).
+
+**traceback**<a id="traceback"></a>
+:   In Python, an object that records where an [exception](#exception) was [raised](#raise_exception), what [stack frames](#stack_frame) were on the [call stack](#call_stack), and other details.
 
 **transitive dependency**<a id="transitive_dependency"></a>
 :   If A depends on B and B depends on C, C is a transitive dependency of A.
