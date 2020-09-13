@@ -394,8 +394,8 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="10.6.1" data-path="errors.html"><a href="errors.html#errors-ex-set-level"><i class="fa fa-check"></i><b>10.6.1</b> Set the logging level</a></li>
 <li class="chapter" data-level="10.6.2" data-path="errors.html"><a href="errors.html#errors-ex-logging-output"><i class="fa fa-check"></i><b>10.6.2</b> Send the logging output to file</a></li>
 <li class="chapter" data-level="10.6.3" data-path="errors.html"><a href="errors.html#errors-ex-exceptions"><i class="fa fa-check"></i><b>10.6.3</b> Handling exceptions</a></li>
-<li class="chapter" data-level="10.6.4" data-path="errors.html"><a href="errors.html#errors-ex-format"><i class="fa fa-check"></i><b>10.6.4</b> Formatting messages</a></li>
-<li class="chapter" data-level="10.6.5" data-path="errors.html"><a href="errors.html#errors-ex-catalog"><i class="fa fa-check"></i><b>10.6.5</b> Error catalogs</a></li>
+<li class="chapter" data-level="10.6.4" data-path="errors.html"><a href="errors.html#errors-ex-catalog"><i class="fa fa-check"></i><b>10.6.4</b> Error catalogs</a></li>
+<li class="chapter" data-level="10.6.5" data-path="errors.html"><a href="errors.html#errors-ex-traceback"><i class="fa fa-check"></i><b>10.6.5</b> Tracebacks</a></li>
 </ul></li>
 <li class="chapter" data-level="10.7" data-path="errors.html"><a href="errors.html#errors-keypoints"><i class="fa fa-check"></i><b>10.7</b> Key Points</a></li>
 </ul></li>
@@ -418,6 +418,8 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="11.12.2" data-path="testing.html"><a href="testing.html#testing-ex-test-assert"><i class="fa fa-check"></i><b>11.12.2</b> Test assertions</a></li>
 <li class="chapter" data-level="11.12.3" data-path="testing.html"><a href="testing.html#testing-ex-ci-status-readme"><i class="fa fa-check"></i><b>11.12.3</b> Add the Travis CI status to your README</a></li>
 <li class="chapter" data-level="11.12.4" data-path="testing.html"><a href="testing.html#testing-ex-config"><i class="fa fa-check"></i><b>11.12.4</b> Testing configuration</a></li>
+<li class="chapter" data-level="11.12.5" data-path="testing.html"><a href="testing.html#testing-ex-random"><i class="fa fa-check"></i><b>11.12.5</b> Testing with randomness</a></li>
+<li class="chapter" data-level="11.12.6" data-path="testing.html"><a href="testing.html#testing-ex-relative-error"><i class="fa fa-check"></i><b>11.12.6</b> Testing with relative error</a></li>
 </ul></li>
 <li class="chapter" data-level="11.13" data-path="testing.html"><a href="testing.html#testing-keypoints"><i class="fa fa-check"></i><b>11.13</b> Key Points</a></li>
 </ul></li>
@@ -796,7 +798,7 @@ even if we are familiar with the code’s internals.
 Our program should therefore check that the input files are CSV files,
 and if not,
 raise an error with a useful explanation to what went wrong.
-We can achieve this by wrapping the call to <code>open</code> in a <code>try/except</code> clause:</p>
+We could achieve this by wrapping the call to <code>open</code> in a <code>try/except</code> clause:</p>
 <div class="sourceCode" id="cb668"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb668-1"><a href="errors.html#cb668-1" aria-hidden="true"></a><span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
 <span id="cb668-2"><a href="errors.html#cb668-2" aria-hidden="true"></a>    <span class="cf">try</span>:</span>
 <span id="cb668-3"><a href="errors.html#cb668-3" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
@@ -946,33 +948,33 @@ but putting them all in one module makes review easier.</p></li>
 <p>That last suggestion deserves a little elaboration.
 Most people write error messages directly in their code:</p>
 <div class="sourceCode" id="cb677"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb677-1"><a href="errors.html#cb677-1" aria-hidden="true"></a><span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
-<span id="cb677-2"><a href="errors.html#cb677-2" aria-hidden="true"></a>    <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span></code></pre></div>
+<span id="cb677-2"><a href="errors.html#cb677-2" aria-hidden="true"></a>    <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="ss">f&#39;</span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">: The filename must end in `.csv`&#39;</span>)</span></code></pre></div>
 <p>A better approach is to put all the error messages in a dictionary:</p>
 <div class="sourceCode" id="cb678"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb678-1"><a href="errors.html#cb678-1" aria-hidden="true"></a>ERROR_MESSAGES <span class="op">=</span> {</span>
-<span id="cb678-2"><a href="errors.html#cb678-2" aria-hidden="true"></a>    <span class="st">&#39;cannot_read_file&#39;</span> : <span class="st">&#39;The filename must end in `.csv`&#39;</span>,</span>
-<span id="cb678-3"><a href="errors.html#cb678-3" aria-hidden="true"></a>    <span class="st">&#39;config_corrupted&#39;</span> : <span class="ss">f&#39;Configuration file </span><span class="sc">{</span>config_name<span class="sc">}</span><span class="ss"> corrupted&#39;</span>,</span>
+<span id="cb678-2"><a href="errors.html#cb678-2" aria-hidden="true"></a>    <span class="st">&#39;not_csv_file_suffix&#39;</span> : <span class="st">&#39;</span><span class="sc">{file_name}</span><span class="st">: The filename must end in `.csv`&#39;</span>,</span>
+<span id="cb678-3"><a href="errors.html#cb678-3" aria-hidden="true"></a>    <span class="st">&#39;config_corrupted&#39;</span> : <span class="st">&#39;Configuration file </span><span class="sc">{config_name}</span><span class="st"> corrupted&#39;</span>,</span>
 <span id="cb678-4"><a href="errors.html#cb678-4" aria-hidden="true"></a>    <span class="co"># ...more error messages...</span></span>
 <span id="cb678-5"><a href="errors.html#cb678-5" aria-hidden="true"></a>}</span></code></pre></div>
 <p>and then only use messages from that dictionary:</p>
 <div class="sourceCode" id="cb679"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb679-1"><a href="errors.html#cb679-1" aria-hidden="true"></a><span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
-<span id="cb679-2"><a href="errors.html#cb679-2" aria-hidden="true"></a>    <span class="cf">raise</span> <span class="pp">OSError</span>(ERROR_MESSAGES[<span class="st">&#39;cannot_read_file&#39;</span>].<span class="bu">format</span>(file_name))</span></code></pre></div>
+<span id="cb679-2"><a href="errors.html#cb679-2" aria-hidden="true"></a>    <span class="cf">raise</span> <span class="pp">OSError</span>(ERROR_MESSAGES[<span class="st">&#39;not_csv_file_suffix&#39;</span>].<span class="bu">format</span>(file_name<span class="op">=</span>file_name))</span></code></pre></div>
 <p>Doing this makes it much easier to ensure that messages are consistent.
 It also makes it much easier to give messages in the user’s preferred language:</p>
 <div class="sourceCode" id="cb680"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb680-1"><a href="errors.html#cb680-1" aria-hidden="true"></a>ERROR_MESSAGES <span class="op">=</span> {</span>
 <span id="cb680-2"><a href="errors.html#cb680-2" aria-hidden="true"></a>    <span class="st">&#39;en&#39;</span> : {</span>
-<span id="cb680-3"><a href="errors.html#cb680-3" aria-hidden="true"></a>        <span class="st">&#39;cannot_read_file&#39;</span> : <span class="st">&#39;The filename must end in `.csv`&#39;</span>,</span>
+<span id="cb680-3"><a href="errors.html#cb680-3" aria-hidden="true"></a>        <span class="st">&#39;not_csv_file_suffix&#39;</span> : <span class="st">&#39;</span><span class="sc">{file_name}</span><span class="st">: The filename must end in `.csv`&#39;</span>,</span>
 <span id="cb680-4"><a href="errors.html#cb680-4" aria-hidden="true"></a>        <span class="st">&#39;config_corrupted&#39;</span> : <span class="st">&#39;Configuration file </span><span class="sc">{config_name}</span><span class="st"> corrupted&#39;</span>,</span>
 <span id="cb680-5"><a href="errors.html#cb680-5" aria-hidden="true"></a>        <span class="co"># ...more error messages in English...</span></span>
 <span id="cb680-6"><a href="errors.html#cb680-6" aria-hidden="true"></a>    },</span>
 <span id="cb680-7"><a href="errors.html#cb680-7" aria-hidden="true"></a>    <span class="st">&#39;fr&#39;</span> : {</span>
-<span id="cb680-8"><a href="errors.html#cb680-8" aria-hidden="true"></a>        <span class="st">&#39;cannot_read_file&#39;</span> : <span class="st">&#39;Le nom du fichier doit se terminer par `.csv`&#39;</span>,</span>
+<span id="cb680-8"><a href="errors.html#cb680-8" aria-hidden="true"></a>        <span class="st">&#39;not_csv_file_suffix&#39;</span> : <span class="st">&#39;</span><span class="sc">{file_name}</span><span class="st">: Le nom du fichier doit se terminer par `.csv`&#39;</span>,</span>
 <span id="cb680-9"><a href="errors.html#cb680-9" aria-hidden="true"></a>        <span class="st">&#39;config_corrupted&#39;</span> : <span class="ss">f&#39;Fichier de configuration </span><span class="sc">{</span>config_name<span class="sc">}</span><span class="ss"> corrompu&#39;</span>,</span>
 <span id="cb680-10"><a href="errors.html#cb680-10" aria-hidden="true"></a>        <span class="co"># ...more error messages in French...</span></span>
 <span id="cb680-11"><a href="errors.html#cb680-11" aria-hidden="true"></a>    }</span>
 <span id="cb680-12"><a href="errors.html#cb680-12" aria-hidden="true"></a>    <span class="co"># ...other languages...</span></span>
 <span id="cb680-13"><a href="errors.html#cb680-13" aria-hidden="true"></a>}</span></code></pre></div>
 <p>The error report is then looked up and formatted as:</p>
-<div class="sourceCode" id="cb681"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb681-1"><a href="errors.html#cb681-1" aria-hidden="true"></a>ERROR_MESSAGES[user_language][<span class="st">&#39;cannot_read_file&#39;</span>].<span class="bu">format</span>(file_name<span class="op">=</span>file_name)</span></code></pre></div>
+<div class="sourceCode" id="cb681"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb681-1"><a href="errors.html#cb681-1" aria-hidden="true"></a>ERROR_MESSAGES[user_language][<span class="st">&#39;not_csv_file_suffix&#39;</span>].<span class="bu">format</span>(file_name<span class="op">=</span>file_name)</span></code></pre></div>
 <p>where <code>user_language</code> is a two-letter code for the user’s preferred language.</p>
 </div>
 <div id="errors-logging" class="section level2" number="10.4">
@@ -999,7 +1001,7 @@ We would probably wind up with code like this:</p>
 <span id="cb682-4"><a href="errors.html#cb682-4" aria-hidden="true"></a>    <span class="cf">if</span> LOG_LEVEL <span class="op">&gt;=</span> <span class="dv">1</span>:</span>
 <span id="cb682-5"><a href="errors.html#cb682-5" aria-hidden="true"></a>        <span class="bu">print</span>(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
 <span id="cb682-6"><a href="errors.html#cb682-6" aria-hidden="true"></a>    <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
-<span id="cb682-7"><a href="errors.html#cb682-7" aria-hidden="true"></a>        <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span>
+<span id="cb682-7"><a href="errors.html#cb682-7" aria-hidden="true"></a>        <span class="cf">raise</span> <span class="pp">OSError</span>(ERROR_MESSAGES[<span class="st">&#39;not_csv_file_suffix&#39;</span>].<span class="bu">format</span>(file_name<span class="op">=</span>file_name))</span>
 <span id="cb682-8"><a href="errors.html#cb682-8" aria-hidden="true"></a>    <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
 <span id="cb682-9"><a href="errors.html#cb682-9" aria-hidden="true"></a>        <span class="cf">if</span> LOG_LEVEL <span class="op">&gt;=</span> <span class="dv">1</span>:</span>
 <span id="cb682-10"><a href="errors.html#cb682-10" aria-hidden="true"></a>            <span class="bu">print</span>(<span class="ss">f&#39;Computing word counts...&#39;</span>)</span>
@@ -1047,7 +1049,7 @@ yields code that is less cluttered:</p>
 <span id="cb685-5"><a href="errors.html#cb685-5" aria-hidden="true"></a><span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
 <span id="cb685-6"><a href="errors.html#cb685-6" aria-hidden="true"></a>    logging.debug(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
 <span id="cb685-7"><a href="errors.html#cb685-7" aria-hidden="true"></a>    <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
-<span id="cb685-8"><a href="errors.html#cb685-8" aria-hidden="true"></a>        <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span>
+<span id="cb685-8"><a href="errors.html#cb685-8" aria-hidden="true"></a>        <span class="cf">raise</span> <span class="pp">OSError</span>(ERROR_MESSAGES[<span class="st">&#39;not_csv_file_suffix&#39;</span>].<span class="bu">format</span>(file_name<span class="op">=</span>file_name))</span>
 <span id="cb685-9"><a href="errors.html#cb685-9" aria-hidden="true"></a>    <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
 <span id="cb685-10"><a href="errors.html#cb685-10" aria-hidden="true"></a>        logging.debug(<span class="st">&#39;Computing word counts...&#39;</span>)</span>
 <span id="cb685-11"><a href="errors.html#cb685-11" aria-hidden="true"></a>        update_counts(reader, word_counts)</span></code></pre></div>
@@ -1142,8 +1144,8 @@ can save us and our users a lot of needless work.</p>
 </div>
 <div id="errors-exercises" class="section level2" number="10.6">
 <h2><span class="header-section-number">10.6</span> Exercises</h2>
-<p>In this chapter a number of edits to <code>collate.py</code> were suggested,
-such that the script now reads as follows:</p>
+<p>This chapter suggested several edits to <code>collate.py</code>,
+such that the script now reads:</p>
 <div class="sourceCode" id="cb689"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb689-1"><a href="errors.html#cb689-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Combine multiple word count CSV-files into a single cumulative count.&quot;&quot;&quot;</span></span>
 <span id="cb689-2"><a href="errors.html#cb689-2" aria-hidden="true"></a><span class="im">import</span> csv</span>
 <span id="cb689-3"><a href="errors.html#cb689-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
@@ -1152,38 +1154,42 @@ such that the script now reads as follows:</p>
 <span id="cb689-6"><a href="errors.html#cb689-6" aria-hidden="true"></a><span class="im">import</span> utilities</span>
 <span id="cb689-7"><a href="errors.html#cb689-7" aria-hidden="true"></a></span>
 <span id="cb689-8"><a href="errors.html#cb689-8" aria-hidden="true"></a></span>
-<span id="cb689-9"><a href="errors.html#cb689-9" aria-hidden="true"></a><span class="kw">def</span> update_counts(reader, word_counts):</span>
-<span id="cb689-10"><a href="errors.html#cb689-10" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Update word counts with data from another reader/file.&quot;&quot;&quot;</span></span>
-<span id="cb689-11"><a href="errors.html#cb689-11" aria-hidden="true"></a>    <span class="cf">for</span> word, count <span class="kw">in</span> csv.reader(reader):</span>
-<span id="cb689-12"><a href="errors.html#cb689-12" aria-hidden="true"></a>        word_counts[word] <span class="op">+=</span> <span class="bu">int</span>(count)</span>
-<span id="cb689-13"><a href="errors.html#cb689-13" aria-hidden="true"></a></span>
-<span id="cb689-14"><a href="errors.html#cb689-14" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb689-15"><a href="errors.html#cb689-15" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb689-16"><a href="errors.html#cb689-16" aria-hidden="true"></a>    word_counts <span class="op">=</span> Counter()</span>
-<span id="cb689-17"><a href="errors.html#cb689-17" aria-hidden="true"></a>    logging.info(<span class="st">&#39;Processing files...&#39;</span>)</span>
-<span id="cb689-18"><a href="errors.html#cb689-18" aria-hidden="true"></a>    <span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
-<span id="cb689-19"><a href="errors.html#cb689-19" aria-hidden="true"></a>        logging.debug(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
-<span id="cb689-20"><a href="errors.html#cb689-20" aria-hidden="true"></a>        <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
-<span id="cb689-21"><a href="errors.html#cb689-21" aria-hidden="true"></a>            <span class="cf">raise</span> <span class="pp">OSError</span>(<span class="st">&#39;The filename must end in `.csv`&#39;</span>)</span>
-<span id="cb689-22"><a href="errors.html#cb689-22" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
-<span id="cb689-23"><a href="errors.html#cb689-23" aria-hidden="true"></a>            logging.debug(<span class="st">&#39;Computing word counts...&#39;</span>)</span>
-<span id="cb689-24"><a href="errors.html#cb689-24" aria-hidden="true"></a>            update_counts(reader, word_counts)</span>
-<span id="cb689-25"><a href="errors.html#cb689-25" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
-<span id="cb689-26"><a href="errors.html#cb689-26" aria-hidden="true"></a></span>
-<span id="cb689-27"><a href="errors.html#cb689-27" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb689-28"><a href="errors.html#cb689-28" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb689-29"><a href="errors.html#cb689-29" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infiles&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, nargs<span class="op">=</span><span class="st">&#39;*&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file names&#39;</span>)</span>
-<span id="cb689-30"><a href="errors.html#cb689-30" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb689-31"><a href="errors.html#cb689-31" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
-<span id="cb689-32"><a href="errors.html#cb689-32" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb689-33"><a href="errors.html#cb689-33" aria-hidden="true"></a>    main(args)</span></code></pre></div>
+<span id="cb689-9"><a href="errors.html#cb689-9" aria-hidden="true"></a>ERROR_MESSAGES <span class="op">=</span> {</span>
+<span id="cb689-10"><a href="errors.html#cb689-10" aria-hidden="true"></a>    <span class="st">&#39;not_csv_file_suffix&#39;</span> : <span class="st">&#39;</span><span class="sc">{file_name}</span><span class="st">: The filename must end in `.csv`&#39;</span>,</span>
+<span id="cb689-11"><a href="errors.html#cb689-11" aria-hidden="true"></a>}</span>
+<span id="cb689-12"><a href="errors.html#cb689-12" aria-hidden="true"></a></span>
+<span id="cb689-13"><a href="errors.html#cb689-13" aria-hidden="true"></a><span class="kw">def</span> update_counts(reader, word_counts):</span>
+<span id="cb689-14"><a href="errors.html#cb689-14" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Update word counts with data from another reader/file.&quot;&quot;&quot;</span></span>
+<span id="cb689-15"><a href="errors.html#cb689-15" aria-hidden="true"></a>    <span class="cf">for</span> word, count <span class="kw">in</span> csv.reader(reader):</span>
+<span id="cb689-16"><a href="errors.html#cb689-16" aria-hidden="true"></a>        word_counts[word] <span class="op">+=</span> <span class="bu">int</span>(count)</span>
+<span id="cb689-17"><a href="errors.html#cb689-17" aria-hidden="true"></a></span>
+<span id="cb689-18"><a href="errors.html#cb689-18" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
+<span id="cb689-19"><a href="errors.html#cb689-19" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb689-20"><a href="errors.html#cb689-20" aria-hidden="true"></a>    word_counts <span class="op">=</span> Counter()</span>
+<span id="cb689-21"><a href="errors.html#cb689-21" aria-hidden="true"></a>    logging.info(<span class="st">&#39;Processing files...&#39;</span>)</span>
+<span id="cb689-22"><a href="errors.html#cb689-22" aria-hidden="true"></a>    <span class="cf">for</span> file_name <span class="kw">in</span> args.infiles:</span>
+<span id="cb689-23"><a href="errors.html#cb689-23" aria-hidden="true"></a>        logging.debug(<span class="ss">f&#39;Reading in </span><span class="sc">{</span>file_name<span class="sc">}</span><span class="ss">...&#39;</span>)</span>
+<span id="cb689-24"><a href="errors.html#cb689-24" aria-hidden="true"></a>        <span class="cf">if</span> file_name[<span class="op">-</span><span class="dv">4</span>:] <span class="op">!=</span> <span class="st">&#39;.csv&#39;</span>:</span>
+<span id="cb689-25"><a href="errors.html#cb689-25" aria-hidden="true"></a>            <span class="cf">raise</span> <span class="pp">OSError</span>(ERROR_MESSAGES[<span class="st">&#39;not_csv_file_suffix&#39;</span>].<span class="bu">format</span>(file_name<span class="op">=</span>file_name))</span>
+<span id="cb689-26"><a href="errors.html#cb689-26" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(file_name, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
+<span id="cb689-27"><a href="errors.html#cb689-27" aria-hidden="true"></a>            logging.debug(<span class="st">&#39;Computing word counts...&#39;</span>)</span>
+<span id="cb689-28"><a href="errors.html#cb689-28" aria-hidden="true"></a>            update_counts(reader, word_counts)</span>
+<span id="cb689-29"><a href="errors.html#cb689-29" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
+<span id="cb689-30"><a href="errors.html#cb689-30" aria-hidden="true"></a></span>
+<span id="cb689-31"><a href="errors.html#cb689-31" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb689-32"><a href="errors.html#cb689-32" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb689-33"><a href="errors.html#cb689-33" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infiles&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, nargs<span class="op">=</span><span class="st">&#39;*&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file names&#39;</span>)</span>
+<span id="cb689-34"><a href="errors.html#cb689-34" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb689-35"><a href="errors.html#cb689-35" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
+<span id="cb689-36"><a href="errors.html#cb689-36" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb689-37"><a href="errors.html#cb689-37" aria-hidden="true"></a>    main(args)</span></code></pre></div>
 <p>Some of the following exercises will ask you to make further edits to <code>collate.py</code>.</p>
 <div id="errors-ex-set-level" class="section level3" number="10.6.1">
 <h3><span class="header-section-number">10.6.1</span> Set the logging level</h3>
 <p>Define a new command line flag for <code>collate.py</code> called <code>--verbose</code> (or <code>-v</code>)
 that changes the logging level from <code>WARNING</code> (the default)
 to <code>DEBUG</code> (the noisiest level).</p>
-<p>HINT: The following command changes the logging level to DEBUG.</p>
+<p>Hint: the following command changes the logging level to <code>DEBUG</code>:</p>
 <div class="sourceCode" id="cb690"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb690-1"><a href="errors.html#cb690-1" aria-hidden="true"></a>logging.basicConfig(level<span class="op">=</span>logging.DEBUG)</span></code></pre></div>
 <p>Once finished,
 running <code>collate.py</code> with and without the <code>-v</code> flag should produce the following output:</p>
@@ -1218,14 +1224,15 @@ called <code>collate.log</code> instead.
 (HINT: <code>logging.basicConfig</code> has an argument called <code>filename</code>.)</p></li>
 <li><p>Create a new command line option ‘-l’ or ‘–logfile’ so that the user
 can specify a different name for the log file if they don’t like
-the default name of <code>collate.py</code>.</p></li>
+the default name of <code>collate.log</code>.</p></li>
 </ol>
 </div>
 <div id="errors-ex-exceptions" class="section level3" number="10.6.3">
 <h3><span class="header-section-number">10.6.3</span> Handling exceptions</h3>
 <ol style="list-style-type: decimal">
 <li>Modify the script <code>collate.py</code> so that it catches any exceptions
-that are raised when it tries to open files.
+that are raised when it tries to open files
+and records them in the log file.
 When you are finished,
 the program should collate all the files it can
 rather than halting as soon as it encounters a problem.</li>
@@ -1233,24 +1240,34 @@ rather than halting as soon as it encounters a problem.</li>
 and permission problems separately.</li>
 </ol>
 </div>
-<div id="errors-ex-format" class="section level3" number="10.6.4">
-<h3><span class="header-section-number">10.6.4</span> Formatting messages</h3>
-<p>Python has three ways to format strings: the <code>%</code> operator,
-the <code>str.format</code> method,
-and f-strings (where the ‘f’ stands for “format”).
+<div id="errors-ex-catalog" class="section level3" number="10.6.4">
+<h3><span class="header-section-number">10.6.4</span> Error catalogs</h3>
+<p>In Section <a href="errors.html#errors-messages">10.3</a> we started to define an error catalog called <code>ERROR_MESSAGES</code>.</p>
+<ol style="list-style-type: decimal">
+<li>Read Appendix @ref{style-pep8} and explain why we have used capital letters
+for the name of the catalog.</li>
+<li>Python has three ways to format strings:
+the <code>%</code> operator, the <code>str.format</code> method, and f-strings (where the ‘f’ stands for “format”).
 Look up the documentation for each
 and explain why we have to use <code>str.format</code> rather than f-strings
-for formatting error messages that come from a lookup table.</p>
+for formatting error messages in our catalog/lookup table.</li>
+<li>There’s a good chance we will eventually want to use the error messages we’ve defined
+in other scripts besides <code>collate.py</code>.
+To avoid duplication,
+move <code>ERROR_MESSAGES</code> to the <code>utilities</code> module that was first created in
+Section <a href="scripting.html#py-rse-py-scripting-modules">4.8</a>.</li>
+</ol>
 </div>
-<div id="errors-ex-catalog" class="section level3" number="10.6.5">
-<h3><span class="header-section-number">10.6.5</span> Error catalogs</h3>
+<div id="errors-ex-traceback" class="section level3" number="10.6.5">
+<h3><span class="header-section-number">10.6.5</span> Tracebacks</h3>
+<p>Run the following code:</p>
+<div class="sourceCode" id="cb695"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb695-1"><a href="errors.html#cb695-1" aria-hidden="true"></a><span class="cf">try</span>:</span>
+<span id="cb695-2"><a href="errors.html#cb695-2" aria-hidden="true"></a>    <span class="dv">1</span><span class="op">/</span><span class="dv">0</span></span>
+<span id="cb695-3"><a href="errors.html#cb695-3" aria-hidden="true"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb695-4"><a href="errors.html#cb695-4" aria-hidden="true"></a>    <span class="bu">help</span>(e.__traceback__)</span></code></pre></div>
 <ol style="list-style-type: decimal">
-<li>Modify your solution to the previous exercise
-to put your error message in a catalog
-as described in Section <a href="errors.html#errors-messages">10.3</a>.</li>
-<li>Add messages in a second language.
-(Use Google Translate if necessary.)</li>
-<li>Add a command-line flag to allow users to select the language they want to use.</li>
+<li>What kind of object is <code>e.__traceback__</code>?</li>
+<li>What useful information can you get from it?</li>
 </ol>
 </div>
 </div>

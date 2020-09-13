@@ -175,7 +175,38 @@
 \thispagestyle{empty}
 
 \begin{center}
-FIXME
+To David Flanders\\
+who taught me so much about growing and sustaining coding communities.\\
+--- Damien\\
+
+~\\
+
+To the U~of~T Coders Group\\
+who taught us much more than we taught them.\\
+--- Luke and Joel
+
+~\\
+
+To my parents Judy and John\\
+who taught me to love books and everything I can learn from them.\\
+--- Kate\\
+
+~\\
+
+To Joshua\\
+--- Charlotte\\
+
+~\\
+
+To Brent Gorda\\
+without whom none of this would have happened.\\
+--- Greg
+
+~\\
+
+All royalties from this book are being donated to The Carpentries,\\
+an organization that teaches foundational coding and data science skills\\
+to researchers worldwide.
 \end{center}
 
 \setlength{\abovedisplayskip}{-5pt}
@@ -12961,7 +12992,7 @@ even if we are familiar with the code's internals.
 Our program should therefore check that the input files are CSV files,
 and if not,
 raise an error with a useful explanation to what went wrong.
-We can achieve this by wrapping the call to \texttt{open} in a \texttt{try/except} clause:
+We could achieve this by wrapping the call to \texttt{open} in a \texttt{try/except} clause:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -13170,7 +13201,7 @@ Most people write error messages directly in their code:
 \begin{Shaded}
 \begin{Highlighting}[]
 \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
-    \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(}\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{)}
+    \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{: The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -13179,8 +13210,8 @@ A better approach is to put all the error messages in a dictionary:
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{ERROR\_MESSAGES }\OperatorTok{=}\NormalTok{ \{}
-    \StringTok{\textquotesingle{}cannot\_read\_file\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
-    \StringTok{\textquotesingle{}config\_corrupted\textquotesingle{}}\NormalTok{ : }\SpecialStringTok{f\textquotesingle{}Configuration file }\SpecialCharTok{\{}\NormalTok{config\_name}\SpecialCharTok{\}}\SpecialStringTok{ corrupted\textquotesingle{}}\NormalTok{,}
+    \StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}}\SpecialCharTok{\{file\_name\}}\StringTok{: The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
+    \StringTok{\textquotesingle{}config\_corrupted\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}Configuration file }\SpecialCharTok{\{config\_name\}}\StringTok{ corrupted\textquotesingle{}}\NormalTok{,}
     \CommentTok{\# ...more error messages...}
 \NormalTok{\}}
 \end{Highlighting}
@@ -13191,7 +13222,7 @@ and then only use messages from that dictionary:
 \begin{Shaded}
 \begin{Highlighting}[]
 \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
-    \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}cannot\_read\_file\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name))}
+    \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -13202,12 +13233,12 @@ It also makes it much easier to give messages in the user's preferred language:
 \begin{Highlighting}[]
 \NormalTok{ERROR\_MESSAGES }\OperatorTok{=}\NormalTok{ \{}
     \StringTok{\textquotesingle{}en\textquotesingle{}}\NormalTok{ : \{}
-        \StringTok{\textquotesingle{}cannot\_read\_file\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
+        \StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}}\SpecialCharTok{\{file\_name\}}\StringTok{: The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
         \StringTok{\textquotesingle{}config\_corrupted\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}Configuration file }\SpecialCharTok{\{config\_name\}}\StringTok{ corrupted\textquotesingle{}}\NormalTok{,}
         \CommentTok{\# ...more error messages in English...}
 \NormalTok{    \},}
     \StringTok{\textquotesingle{}fr\textquotesingle{}}\NormalTok{ : \{}
-        \StringTok{\textquotesingle{}cannot\_read\_file\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}Le nom du fichier doit se terminer par \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
+        \StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}}\SpecialCharTok{\{file\_name\}}\StringTok{: Le nom du fichier doit se terminer par \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
         \StringTok{\textquotesingle{}config\_corrupted\textquotesingle{}}\NormalTok{ : }\SpecialStringTok{f\textquotesingle{}Fichier de configuration }\SpecialCharTok{\{}\NormalTok{config\_name}\SpecialCharTok{\}}\SpecialStringTok{ corrompu\textquotesingle{}}\NormalTok{,}
         \CommentTok{\# ...more error messages in French...}
 \NormalTok{    \}}
@@ -13220,7 +13251,7 @@ The error report is then looked up and formatted as:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{ERROR\_MESSAGES[user\_language][}\StringTok{\textquotesingle{}cannot\_read\_file\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name)}
+\NormalTok{ERROR\_MESSAGES[user\_language][}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -13256,7 +13287,7 @@ We would probably wind up with code like this:
     \ControlFlowTok{if}\NormalTok{ LOG\_LEVEL }\OperatorTok{\textgreater{}=} \DecValTok{1}\NormalTok{:}
         \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
     \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
-        \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(}\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{)}
+        \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
     \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
         \ControlFlowTok{if}\NormalTok{ LOG\_LEVEL }\OperatorTok{\textgreater{}=} \DecValTok{1}\NormalTok{:}
             \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
@@ -13328,7 +13359,7 @@ yields code that is less cluttered:
 \ControlFlowTok{for}\NormalTok{ file\_name }\KeywordTok{in}\NormalTok{ args.infiles:}
 \NormalTok{    logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
     \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
-        \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(}\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{)}
+        \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
     \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
 \NormalTok{        logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
 \NormalTok{        update\_counts(reader, word\_counts)}
@@ -13453,8 +13484,8 @@ can save us and our users a lot of needless work.
 \hypertarget{errors-exercises}{%
 \section{Exercises}\label{errors-exercises}}
 
-In this chapter a number of edits to \texttt{collate.py} were suggested,
-such that the script now reads as follows:
+This chapter suggested several edits to \texttt{collate.py},
+such that the script now reads:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -13465,6 +13496,10 @@ such that the script now reads as follows:
 \ImportTok{import}\NormalTok{ logging}
 \ImportTok{import}\NormalTok{ utilities}
 
+
+\NormalTok{ERROR\_MESSAGES }\OperatorTok{=}\NormalTok{ \{}
+    \StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}}\SpecialCharTok{\{file\_name\}}\StringTok{: The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
+\NormalTok{\}}
 
 \KeywordTok{def}\NormalTok{ update\_counts(reader, word\_counts):}
     \CommentTok{"""Update word counts with data from another reader/file."""}
@@ -13478,7 +13513,7 @@ such that the script now reads as follows:
     \ControlFlowTok{for}\NormalTok{ file\_name }\KeywordTok{in}\NormalTok{ args.infiles:}
 \NormalTok{        logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
         \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
-            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(}\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{)}
+            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
         \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
 \NormalTok{            logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
 \NormalTok{            update\_counts(reader, word\_counts)}
@@ -13503,7 +13538,7 @@ Define a new command line flag for \texttt{collate.py} called \texttt{-\/-verbos
 that changes the logging level from \texttt{WARNING} (the default)
 to \texttt{DEBUG} (the noisiest level).
 
-HINT: The following command changes the logging level to DEBUG.
+Hint: the following command changes the logging level to \texttt{DEBUG}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -13565,7 +13600,7 @@ as well as the words and their counts.
 \item
   Create a new command line option `-l' or `--logfile' so that the user
   can specify a different name for the log file if they don't like
-  the default name of \texttt{collate.py}.
+  the default name of \texttt{collate.log}.
 \end{enumerate}
 
 \hypertarget{errors-ex-exceptions}{%
@@ -13576,7 +13611,8 @@ as well as the words and their counts.
 \tightlist
 \item
   Modify the script \texttt{collate.py} so that it catches any exceptions
-  that are raised when it tries to open files.
+  that are raised when it tries to open files
+  and records them in the log file.
   When you are finished,
   the program should collate all the files it can
   rather than halting as soon as it encounters a problem.
@@ -13585,31 +13621,52 @@ as well as the words and their counts.
   and permission problems separately.
 \end{enumerate}
 
-\hypertarget{errors-ex-format}{%
-\subsection{Formatting messages}\label{errors-ex-format}}
-
-Python has three ways to format strings: the \texttt{\%} operator,
-the \texttt{str.format} method,
-and f-strings (where the `f' stands for ``format'').
-Look up the documentation for each
-and explain why we have to use \texttt{str.format} rather than f-strings
-for formatting error messages that come from a lookup table.
-
 \hypertarget{errors-ex-catalog}{%
 \subsection{Error catalogs}\label{errors-ex-catalog}}
+
+In Section \ref{errors-messages} we started to define an error catalog called \texttt{ERROR\_MESSAGES}.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Modify your solution to the previous exercise
-  to put your error message in a catalog
-  as described in Section~\ref{errors-messages}.
+  Read Appendix @ref\{style-pep8\} and explain why we have used capital letters
+  for the name of the catalog.
 \item
-  Add messages in a second language.
-  (Use Google Translate if necessary.)
+  Python has three ways to format strings:
+  the \texttt{\%} operator, the \texttt{str.format} method, and f-strings (where the `f' stands for ``format'').
+  Look up the documentation for each
+  and explain why we have to use \texttt{str.format} rather than f-strings
+  for formatting error messages in our catalog/lookup table.
 \item
-  Add a command-line flag to allow users to select the language they want to use.
+  There's a good chance we will eventually want to use the error messages we've defined
+  in other scripts besides \texttt{collate.py}.
+  To avoid duplication,
+  move \texttt{ERROR\_MESSAGES} to the \texttt{utilities} module that was first created in
+  Section \ref{py-rse-py-scripting-modules}.
+\end{enumerate}
+
+\hypertarget{errors-ex-traceback}{%
+\subsection{Tracebacks}\label{errors-ex-traceback}}
+
+Run the following code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{try}\NormalTok{:}
+    \DecValTok{1}\OperatorTok{/}\DecValTok{0}
+\ControlFlowTok{except} \PreprocessorTok{Exception} \ImportTok{as}\NormalTok{ e:}
+    \BuiltInTok{help}\NormalTok{(e.\_\_traceback\_\_)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What kind of object is \texttt{e.\_\_traceback\_\_}?
+\item
+  What useful information can you get from it?
 \end{enumerate}
 
 \hypertarget{errors-keypoints}{%
@@ -14892,8 +14949,6 @@ the practices introduced in this chapter will help with both.
 \hypertarget{testing-exercises}{%
 \section{Exercises}\label{testing-exercises}}
 
-FIXME: Need more exercises (including one exploring \texttt{pytest.raises}).
-
 \hypertarget{testing-ex-explain-assertions}{%
 \subsection{Explaining assertions}\label{testing-ex-explain-assertions}}
 
@@ -14942,7 +14997,8 @@ give an example of input that will make that assertion fail.
 \hypertarget{testing-ex-test-assert}{%
 \subsection{Test assertions}\label{testing-ex-test-assert}}
 
-FIXME
+Write unit tests to check that the \texttt{assert} statements in the previous question's \texttt{total} function
+do what they're supposed to.
 
 \hypertarget{testing-ex-ci-status-readme}{%
 \subsection{Add the Travis CI status to your README}\label{testing-ex-ci-status-readme}}
@@ -14950,13 +15006,36 @@ FIXME
 You'll notice that the README file in many GitHub repositories includes a little
 Travis CI display status logo.
 Follow \href{https://docs.travis-ci.com/user/status-images/}{these instructions} to include
-the status display in the REAMDE for this Zipf's Law project.
+the status display in the README for this Zipf's Law project.
 
 \hypertarget{testing-ex-config}{%
 \subsection{Testing configuration}\label{testing-ex-config}}
 
 Suppose your program uses a configuration file of the kind described in Chapter~\ref{config}.
 How would you test that different parameters were having the correct effect?
+
+\hypertarget{testing-ex-random}{%
+\subsection{Testing with randomness}\label{testing-ex-random}}
+
+Programs that rely on random numbers are impossible to test
+because there's (deliberately) no way to predict their output.
+Luckily, computer programs don't actually use random numbers:
+they use a \gref{pseudo-random number generator}{prng} (PRNG)
+that produces values in a repeatable but unpredictable way.
+Given the same initial \gref{seed}{seed},
+a PRNG will always produce the same sequence of values.
+How can we use this fact when testing programs that rely on pseudo-random numbers?
+
+\hypertarget{testing-ex-relative-error}{%
+\subsection{Testing with relative error}\label{testing-ex-relative-error}}
+
+If E is the expected result of a function and A is the actual value it produces,
+the \gref{relative error}{relative\_error} is \texttt{abs((A-E)/E)}.
+This means that if we expect the results of tests to be 2, 1, and 0,
+and we actually get 2.1, 1.1, and 0.1
+the relative errors are 5\%, 10\%, and infinity.
+Why does this seem counter-intuitive,
+and what might be a better way to measure error in this case?
 
 \hypertarget{testing-keypoints}{%
 \section{Key Points}\label{testing-keypoints}}
@@ -17547,7 +17626,7 @@ The file(s) that a \protect\hyperlink{build_rule}{build rule} will update if the
 \item[\textbf{byte code}]
 A set of instructions designed to be executed efficiently by an \protect\hyperlink{interpreter}{interpreter}.
 \item[\textbf{call stack}]
-A data structure that stores information about the active subroutines executed. \texttt{cst()} is a useful function provided in the \texttt{lobstr} package to visualize a call stack.
+A data structure that stores information about the active subroutines executed. See also: \protect\hyperlink{stack_frame}{stack frame}
 \item[\textbf{camel case}]
 A style of writing code that involves naming variables and objects with no space, underscore (\texttt{\_}), dot (\texttt{.}), or dash (\texttt{-}), with each word being capitalized. Examples include \texttt{CalculateSum} and \texttt{findPattern}. See also: \protect\hyperlink{kebab_case}{kebab case}, \protect\hyperlink{pothole_case}{pothole case}
 \item[\textbf{catch (an exception)}]
@@ -17798,6 +17877,8 @@ Something that must be true before a piece of software runs in order for that so
 Something that a \protect\hyperlink{build_target}{build target} depends on.
 \item[\textbf{privilege}]
 An unearned advantage, typically as a result of belonging to a dominant social class or group.
+\item[\textbf{pseudo-random number generator}]
+A function that can generate \protect\hyperlink{pseudo_random_number}{pseudo-random numbers}. See also: \protect\hyperlink{seed}{seed}
 \item[\textbf{procedural programming}]
 A style of programming in which functions operate on data that is passed into them. The term is used in contrast to \protect\hyperlink{oop}{object-oriented programming}.
 \item[\textbf{process}]
@@ -17858,6 +17939,8 @@ Someone whose primary responsibility is to build the specialized software that o
 Originally, a program written in a language too usable for ``real'' programmers to take seriously; the term is now synonymous with program.
 \item[\textbf{search path}]
 The list of directories that a program searches to find something. For example, the Unix \protect\hyperlink{shell}{shell} uses the search path stored in the \texttt{PATH} variable when trying to find a program given its name.
+\item[\textbf{seed}]
+A value used to initialize a \protect\hyperlink{prng}{pseudo-random number generator}.
 \item[\textbf{semantic versioning}]
 A standard for identifying software releases. In the version identifier \texttt{major.minor.patch}, \texttt{major} changes when a new version of software is incompatible with old versions, \texttt{minor} changes when new features are added to an existing version, and \texttt{patch} changes when small bugs are fixed.
 \item[\textbf{sense vote}]
@@ -17892,6 +17975,8 @@ A \protect\hyperlink{remote_login_server}{remote login server} that handles \pro
 A string of random bits stored in a file that is used to identify a user for \protect\hyperlink{ssh}{SSH}. Each SSH key has separate public and private parts; the public part can safely be shared, but if the private part becomes known, the key is compromised.
 \item[\textbf{SSH protocol}]
 A formal standard for exchanging encrypted messages between computers and for managing \protect\hyperlink{remote_login_server}{remote logins}.
+\item[\textbf{stack frame}]
+A section of the \protect\hyperlink{call_stack}{call stack} that records details of a single call to a specific function.
 \item[\textbf{standard error}]
 A predefined communication channel for a \protect\hyperlink{process}{process}, typically used for error messages. See also: \protect\hyperlink{stdin}{standard input}, \protect\hyperlink{stdout}{standard output}
 \item[\textbf{standard input}]
@@ -17926,6 +18011,8 @@ See \protect\hyperlink{issue_tracking_system}{issue tracking system}.
 A digital identifier showing the time at which something was created or accessed. Timestamps should use \protect\hyperlink{iso_date_format}{ISO date format} for portability.
 \item[\textbf{tolerance}]
 How closely the \protect\hyperlink{actual_result}{actual result} of a test must agree with the \protect\hyperlink{expected_result}{expected result} in order for the test to pass. Tolerances are usually expressed in terms of \protect\hyperlink{relative_error}{relative error}.
+\item[\textbf{traceback}]
+In Python, an object that records where an \protect\hyperlink{exception}{exception} was \protect\hyperlink{raise_exception}{raised}, what \protect\hyperlink{stack_frame}{stack frames} were on the \protect\hyperlink{call_stack}{call stack}, and other details.
 \item[\textbf{transitive dependency}]
 If A depends on B and B depends on C, C is a transitive dependency of A.
 \item[\textbf{triage}]
@@ -20257,7 +20344,25 @@ FIXME
 \subsection*{Exercise~\ref{errors-ex-set-level}}\label{exercise-referrors-ex-set-level}}
 
 
-The \texttt{collate.py} script should now read as follows:
+Add a new command line argument to \texttt{collate.py},
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{parser.add\_argument(}\StringTok{\textquotesingle{}{-}v\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}{-}{-}verbose\textquotesingle{}}\NormalTok{, action}\OperatorTok{=}\StringTok{"store\_true"}\NormalTok{, default}\OperatorTok{=}\VariableTok{False}\NormalTok{,}
+                    \BuiltInTok{help}\OperatorTok{=}\StringTok{"Change logging threshold from WARNING to DEBUG"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+and two new lines to the beginning of the \texttt{main} function,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log\_level }\OperatorTok{=}\NormalTok{ logging.DEBUG }\ControlFlowTok{if}\NormalTok{ args.verbose }\ControlFlowTok{else}\NormalTok{ logging.WARNING}
+\NormalTok{logging.basicConfig(level}\OperatorTok{=}\NormalTok{log\_level)}
+\end{Highlighting}
+\end{Shaded}
+
+such that the full \texttt{collate.py} script now reads as follows:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20268,6 +20373,10 @@ The \texttt{collate.py} script should now read as follows:
 \ImportTok{import}\NormalTok{ logging}
 \ImportTok{import}\NormalTok{ utilities}
 
+
+\NormalTok{ERROR\_MESSAGES }\OperatorTok{=}\NormalTok{ \{}
+    \StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}}\SpecialCharTok{\{file\_name\}}\StringTok{: The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
+\NormalTok{\}}
 
 \KeywordTok{def}\NormalTok{ update\_counts(reader, word\_counts):}
     \CommentTok{"""Update word counts with data from another reader/file."""}
@@ -20283,7 +20392,7 @@ The \texttt{collate.py} script should now read as follows:
     \ControlFlowTok{for}\NormalTok{ file\_name }\KeywordTok{in}\NormalTok{ args.infiles:}
 \NormalTok{        logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
         \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
-            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(}\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{)}
+            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
         \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
 \NormalTok{            logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
 \NormalTok{            update\_counts(reader, word\_counts)}
@@ -20305,7 +20414,25 @@ The \texttt{collate.py} script should now read as follows:
 \subsection*{Exercise~\ref{errors-ex-logging-output}}\label{exercise-referrors-ex-logging-output}}
 
 
-The \texttt{collate.py} script should now read as follows:
+Add a new command line argument to \texttt{collate.py},
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{parser.add\_argument(}\StringTok{\textquotesingle{}{-}l\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}{-}{-}logfile\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{str}\NormalTok{, default}\OperatorTok{=}\StringTok{\textquotesingle{}collate.log\textquotesingle{}}\NormalTok{,}
+                    \BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}Name of the log file\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+and pass the name of the log file to \texttt{logging.basicConfig}
+using the \texttt{filename} argument,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{logging.basicConfig(level}\OperatorTok{=}\NormalTok{log\_level, filename}\OperatorTok{=}\NormalTok{args.logfile)}
+\end{Highlighting}
+\end{Shaded}
+
+such that the \texttt{collate.py} script now reads as follows:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20316,6 +20443,10 @@ The \texttt{collate.py} script should now read as follows:
 \ImportTok{import}\NormalTok{ logging}
 \ImportTok{import}\NormalTok{ utilities}
 
+
+\NormalTok{ERROR\_MESSAGES }\OperatorTok{=}\NormalTok{ \{}
+    \StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{ : }\StringTok{\textquotesingle{}}\SpecialCharTok{\{file\_name\}}\StringTok{: The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{,}
+\NormalTok{\}}
 
 \KeywordTok{def}\NormalTok{ update\_counts(reader, word\_counts):}
     \CommentTok{"""Update word counts with data from another reader/file."""}
@@ -20331,7 +20462,7 @@ The \texttt{collate.py} script should now read as follows:
     \ControlFlowTok{for}\NormalTok{ file\_name }\KeywordTok{in}\NormalTok{ args.infiles:}
 \NormalTok{        logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
         \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
-            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(}\StringTok{\textquotesingle{}The filename must end in \textasciigrave{}.csv\textasciigrave{}\textquotesingle{}}\NormalTok{)}
+            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
         \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
 \NormalTok{            logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
 \NormalTok{            update\_counts(reader, word\_counts)}
@@ -20355,19 +20486,85 @@ The \texttt{collate.py} script should now read as follows:
 \subsection*{Exercise~\ref{errors-ex-exceptions}}\label{exercise-referrors-ex-exceptions}}
 
 
-FIXME
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The loop in \texttt{collate.py} that reads/processes each input file
+  should now read as follows:
+\end{enumerate}
 
-\hypertarget{exercise-referrors-ex-format}{%
-\subsection*{Exercise~\ref{errors-ex-format}}\label{exercise-referrors-ex-format}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ file\_name }\KeywordTok{in}\NormalTok{ args.infiles:}
+    \ControlFlowTok{try}\NormalTok{:}
+\NormalTok{        logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
+        \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
+            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
+        \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
+\NormalTok{            logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
+\NormalTok{            update\_counts(reader, word\_counts)}
+    \ControlFlowTok{except} \PreprocessorTok{Exception} \ImportTok{as}\NormalTok{ error:}
+\NormalTok{        logging.warning(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{ not processed: }\SpecialCharTok{\{}\NormalTok{error}\SpecialCharTok{\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  The loop in \texttt{collate.py} that reads/processes each input file
+  should now read as follows:
+\end{enumerate}
 
-FIXME
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ file\_name }\KeywordTok{in}\NormalTok{ args.infiles:}
+    \ControlFlowTok{try}\NormalTok{:}
+\NormalTok{        logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
+        \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
+            \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
+        \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
+\NormalTok{            logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
+\NormalTok{            update\_counts(reader, word\_counts)}
+    \ControlFlowTok{except} \PreprocessorTok{FileNotFoundError}\NormalTok{:}
+\NormalTok{        logging.warning(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{ not processed: File does not exist\textquotesingle{}}\NormalTok{)}
+    \ControlFlowTok{except} \PreprocessorTok{PermissionError}\NormalTok{:}
+\NormalTok{        logging.warning(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{ not processed: No permission to read file\textquotesingle{}}\NormalTok{)}
+    \ControlFlowTok{except} \PreprocessorTok{Exception} \ImportTok{as}\NormalTok{ error:}
+\NormalTok{        logging.warning(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{ not processed: }\SpecialCharTok{\{}\NormalTok{error}\SpecialCharTok{\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{exercise-referrors-ex-catalog}{%
 \subsection*{Exercise~\ref{errors-ex-catalog}}\label{exercise-referrors-ex-catalog}}
 
 
-FIXME
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  The convention is to use \texttt{ALL\_CAPS\_WITH\_UNDERSCORES} when defining global variables.
+\item
+  Python's f-strings interpolate variables that are in scope:
+  there is no easy way to interpolate values from a lookup table.
+  In contrast,
+  \texttt{str.format} can be given any number of named keyword arguments (Appendix~\ref{style}),
+  so we can look up a string and then interpolate whatever values we want.
+\item
+  Once \texttt{ERROR\_MESSAGES} has been moved to the \texttt{utilities} module
+  all references to it in \texttt{collate.py} must be updated to \texttt{utilities.ERROR\_MESSAGES}.
+\end{enumerate}
+
+\hypertarget{exercise-referrors-ex-traceback}{%
+\subsection*{Exercise~\ref{errors-ex-traceback}}\label{exercise-referrors-ex-traceback}}
+
+
+A \gref{traceback}{traceback} is an object that records where an exception was
+raised), what \gref{stack frames}{stack\_frame} were on the
+\protect\hyperlink{call_stack}{call stack} when the error occurred, and other details that are
+helpful for debugging. Python's \href{https://docs.python.org/3/library/traceback.html}{traceback} library can be
+used to get and print information from these objects.
 
 \hypertarget{chapter-reftesting}{%
 \section*{Chapter~\ref{testing}}\label{chapter-reftesting}}
@@ -20392,19 +20589,104 @@ FIXME
 \subsection*{Exercise~\ref{testing-ex-test-assert}}\label{exercise-reftesting-ex-test-assert}}
 
 
-FIXME
+We can test that the first assertion fails when \texttt{values} is not a non-empty list as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ test\_fails\_for\_non\_list():}
+    \ControlFlowTok{try}\NormalTok{:}
+\NormalTok{        total(}\StringTok{\textquotesingle{}not a list\textquotesingle{}}\NormalTok{)}
+        \ControlFlowTok{assert} \VariableTok{False}\NormalTok{, }\StringTok{\textquotesingle{}Should have raised AssertionError\textquotesingle{}}
+    \ControlFlowTok{except} \PreprocessorTok{AssertionError}\NormalTok{:}
+        \ControlFlowTok{pass}
+    \ControlFlowTok{except}\NormalTok{:}
+        \ControlFlowTok{assert} \VariableTok{False}\NormalTok{, }\StringTok{\textquotesingle{}Should have raised AssertionError\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+
+In order:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  The first \texttt{assert\ False} will only happen if \texttt{total} runs without raising any kind of exception.
+\item
+  The \texttt{except\ AssertionError} branch does nothing (\texttt{pass}) if the correct exception is raised.
+\item
+  The catch-all \texttt{except} at the end makes the test fail if the wrong kind of exception is raised.
+\end{enumerate}
+
+This pattern is so common that \texttt{pytest} provides a shorthand notation for it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ test\_fails\_for\_non\_list():}
+    \ControlFlowTok{with}\NormalTok{ pytest.raises(}\PreprocessorTok{AssertionError}\NormalTok{):}
+\NormalTok{        total(}\StringTok{\textquotesingle{}not a list\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+If the call to \texttt{total} \emph{doesn't} raise \texttt{AssertionError}, this test fails.
 
 \hypertarget{exercise-reftesting-ex-ci-status-readme}{%
 \subsection*{Exercise~\ref{testing-ex-ci-status-readme}}\label{exercise-reftesting-ex-ci-status-readme}}
 
 
-FIXME
+To test that the Travis status display is working correctly,
+try committing a test that deliberately fails to version control.
 
 \hypertarget{exercise-reftesting-ex-config}{%
 \subsection*{Exercise~\ref{testing-ex-config}}\label{exercise-reftesting-ex-config}}
 
 
-FIXME
+If every configuration setting has a sensible default,
+we can create configuration files that each change exactly one parameter.
+Alternatively,
+if our program uses \gref{overlay configuration}{overlay\_configuration},
+we can have each test use a standard configuration file plus a second one that changes one setting.
+In either case,
+we can either run the program and check its output,
+or check that the data structure storing configuration information has the right values
+(and trust other tests to make sure that those settings do what they're supposed to).
+
+\hypertarget{exercise-reftesting-ex-random}{%
+\subsection*{Exercise~\ref{testing-ex-random}}\label{exercise-reftesting-ex-random}}
+
+
+There are three approaches to testing when pseudo-random numbers are involved:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Run the function once with a known \gref{seed}{seed},
+  check and record its output,
+  and then compare the output of subsequent runs to that saved output.
+  (Basically, if the function does the same thing it did the first time, we trust it.)
+\item
+  Replace the \gref{pseudo-random number generator}{prng} with a function of our own
+  that generates a predictable series of values.
+  For example,
+  if we are randomly partitioning a list into two equal halves,
+  we could instead use a function that puts odd-numbered values in one partition
+  and even-numbered values in another
+  (which is a legal but unlikely outcome of truly random partitioning).
+\item
+  Instead of checking for an exact result,
+  check that the result lies within certain bounds,
+  just as we would with the result of a physical experiment.
+\end{enumerate}
+
+\hypertarget{exercise-reftesting-ex-relative-error}{%
+\subsection*{Exercise~\ref{testing-ex-relative-error}}\label{exercise-reftesting-ex-relative-error}}
+
+
+This result seems counter-intuitive to many people because relative error is a measure of a single value,
+but in this case we are looking at a distribution of values:
+each result is off by 0.1 compared to a range of 0--2,
+which doesn't ``feel'' infinite.
+In this case,
+a better measure might be the largest \gref{absolute error}{absolute\_error}
+divided by the standard deviation of the data.
 
 \hypertarget{chapter-refprovenance}{%
 \section*{Chapter~\ref{provenance}}\label{chapter-refprovenance}}
@@ -20413,7 +20695,7 @@ FIXME
 \subsection*{Exercise~\ref{provenance-ex-get-orcid}}\label{exercise-refprovenance-ex-get-orcid}}
 
 
-You can get an ORCID by registered \href{https://orcid.org/register}{here}.
+You can get an ORCID by registering \href{https://orcid.org/register}{here}.
 Please add this 16-digit identifier to all of your published works
 and to your online profiles.
 

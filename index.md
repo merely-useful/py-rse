@@ -11586,7 +11586,7 @@ even if we are familiar with the code's internals.
 Our program should therefore check that the input files are CSV files,
 and if not,
 raise an error with a useful explanation to what went wrong.
-We can achieve this by wrapping the call to `open` in a `try/except` clause:
+We could achieve this by wrapping the call to `open` in a `try/except` clause:
 
 ```python
 for file_name in args.infiles:
@@ -11780,15 +11780,15 @@ Most people write error messages directly in their code:
 
 ```python
 if file_name[-4:] != '.csv':
-    raise OSError('The filename must end in `.csv`')
+    raise OSError(f'{file_name}: The filename must end in `.csv`')
 ```
 
 A better approach is to put all the error messages in a dictionary:
 
 ```python
 ERROR_MESSAGES = {
-    'cannot_read_file' : 'The filename must end in `.csv`',
-    'config_corrupted' : f'Configuration file {config_name} corrupted',
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+    'config_corrupted' : 'Configuration file {config_name} corrupted',
     # ...more error messages...
 }
 ```
@@ -11797,7 +11797,7 @@ and then only use messages from that dictionary:
 
 ```python
 if file_name[-4:] != '.csv':
-    raise OSError(ERROR_MESSAGES['cannot_read_file'].format(file_name))
+    raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
 ```
 
 Doing this makes it much easier to ensure that messages are consistent.
@@ -11806,12 +11806,12 @@ It also makes it much easier to give messages in the user's preferred language:
 ```python
 ERROR_MESSAGES = {
     'en' : {
-        'cannot_read_file' : 'The filename must end in `.csv`',
+        'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
         'config_corrupted' : 'Configuration file {config_name} corrupted',
         # ...more error messages in English...
     },
     'fr' : {
-        'cannot_read_file' : 'Le nom du fichier doit se terminer par `.csv`',
+        'not_csv_file_suffix' : '{file_name}: Le nom du fichier doit se terminer par `.csv`',
         'config_corrupted' : f'Fichier de configuration {config_name} corrompu',
         # ...more error messages in French...
     }
@@ -11822,7 +11822,7 @@ ERROR_MESSAGES = {
 The error report is then looked up and formatted as:
 
 ```python
-ERROR_MESSAGES[user_language]['cannot_read_file'].format(file_name=file_name)
+ERROR_MESSAGES[user_language]['not_csv_file_suffix'].format(file_name=file_name)
 ```
 
 where `user_language` is a two-letter code for the user's preferred language.
@@ -11855,7 +11855,7 @@ for file_name in args.infiles:
     if LOG_LEVEL >= 1:
         print(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError('The filename must end in `.csv`')
+        raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
     with open(file_name, 'r') as reader:
         if LOG_LEVEL >= 1:
             print(f'Computing word counts...')
@@ -11915,7 +11915,7 @@ logging.info('Processing files...')
 for file_name in args.infiles:
     logging.debug(f'Reading in {file_name}...')
     if file_name[-4:] != '.csv':
-        raise OSError('The filename must end in `.csv`')
+        raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
     with open(file_name, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
@@ -12027,8 +12027,8 @@ can save us and our users a lot of needless work.
 
 ## Exercises {#errors-exercises}
 
-In this chapter a number of edits to `collate.py` were suggested,
-such that the script now reads as follows:
+This chapter suggested several edits to `collate.py`,
+such that the script now reads:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
@@ -12038,6 +12038,10 @@ from collections import Counter
 import logging
 import utilities
 
+
+ERROR_MESSAGES = {
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+}
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -12051,7 +12055,7 @@ def main(args):
     for file_name in args.infiles:
         logging.debug(f'Reading in {file_name}...')
         if file_name[-4:] != '.csv':
-            raise OSError('The filename must end in `.csv`')
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
         with open(file_name, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
@@ -12074,7 +12078,8 @@ Define a new command line flag for `collate.py` called `--verbose` (or `-v`)
 that changes the logging level from `WARNING` (the default)
 to `DEBUG` (the noisiest level).
 
-HINT: The following command changes the logging level to DEBUG.
+Hint: the following command changes the logging level to `DEBUG`:
+
 ```python
 logging.basicConfig(level=logging.DEBUG)
 ```
@@ -12123,37 +12128,49 @@ called `collate.log` instead.
 
 2. Create a new command line option '-l' or '--logfile' so that the user
 can specify a different name for the log file if they don't like
-the default name of `collate.py`.  
+the default name of `collate.log`.  
 
 ### Handling exceptions {#errors-ex-exceptions}
 
 1.  Modify the script `collate.py` so that it catches any exceptions
-    that are raised when it tries to open files.
+    that are raised when it tries to open files
+    and records them in the log file.
     When you are finished,
     the program should collate all the files it can
     rather than halting as soon as it encounters a problem.
 2.  Modify your first solution to handle nonexistent files
     and permission problems separately.
 
-### Formatting messages {#errors-ex-format}
-
-Python has three ways to format strings: the `%` operator,
-the `str.format` method,
-and f-strings (where the 'f' stands for "format").
-Look up the documentation for each
-and explain why we have to use `str.format` rather than f-strings
-for formatting error messages that come from a lookup table.
-
 ### Error catalogs {#errors-ex-catalog}
 
-1.  Modify your solution to the previous exercise
-    to put your error message in a catalog
-    as described in Section \@ref(errors-messages).
-2.  Add messages in a second language.
-    (Use Google Translate if necessary.)
-3.  Add a command-line flag to allow users to select the language they want to use.
+In Section \@ref(errors-messages) we started to define an error catalog called `ERROR_MESSAGES`.
 
+1. Read Appendix \@ref{style-pep8} and explain why we have used capital letters
+   for the name of the catalog.
+2. Python has three ways to format strings:
+   the `%` operator, the `str.format` method, and f-strings (where the 'f' stands for "format").
+   Look up the documentation for each
+   and explain why we have to use `str.format` rather than f-strings
+   for formatting error messages in our catalog/lookup table.
+3. There's a good chance we will eventually want to use the error messages we've defined
+   in other scripts besides `collate.py`.
+   To avoid duplication,
+   move `ERROR_MESSAGES` to the `utilities` module that was first created in
+   Section \@ref(py-rse-py-scripting-modules).
 
+### Tracebacks {#errors-ex-traceback}
+
+Run the following code:
+
+```python
+try:
+    1/0
+except Exception as e:
+    help(e.__traceback__)
+```
+
+1.  What kind of object is `e.__traceback__`?
+2.  What useful information can you get from it?
 
 ## Key Points {#errors-keypoints}
 
@@ -13300,8 +13317,6 @@ the practices introduced in this chapter will help with both.
 
 ## Exercises {#testing-exercises}
 
-FIXME: Need more exercises (including one exploring `pytest.raises`).
-
 ### Explaining assertions {#testing-ex-explain-assertions}
 
 Given a list of a numbers,
@@ -13342,19 +13357,41 @@ def total(values):
 
 ### Test assertions {#testing-ex-test-assert}
 
-FIXME
+Write unit tests to check that the `assert` statements in the previous question's `total` function
+do what they're supposed to.
 
 ### Add the Travis CI status to your README {#testing-ex-ci-status-readme}
 
 You'll notice that the README file in many GitHub repositories includes a little
 Travis CI display status logo.
 Follow [these instructions][travis-status-images] to include
-the status display in the REAMDE for this Zipf's Law project.
+the status display in the README for this Zipf's Law project.
 
 ### Testing configuration {#testing-ex-config}
 
 Suppose your program uses a configuration file of the kind described in Chapter \@ref(config).
 How would you test that different parameters were having the correct effect?
+
+### Testing with randomness {#testing-ex-random}
+
+Programs that rely on random numbers are impossible to test
+because there's (deliberately) no way to predict their output.
+Luckily, computer programs don't actually use random numbers:
+they use a \gref{pseudo-random number generator}{prng} (PRNG)
+that produces values in a repeatable but unpredictable way.
+Given the same initial \gref{seed}{seed},
+a PRNG will always produce the same sequence of values.
+How can we use this fact when testing programs that rely on pseudo-random numbers?
+
+### Testing with relative error {#testing-ex-relative-error}
+
+If E is the expected result of a function and A is the actual value it produces,
+the \gref{relative error}{relative_error} is `abs((A-E)/E)`.
+This means that if we expect the results of tests to be 2, 1, and 0,
+and we actually get 2.1, 1.1, and 0.1
+the relative errors are 5%, 10%, and infinity.
+Why does this seem counter-intuitive,
+and what might be a better way to measure error in this case?
 
 ## Key Points {#testing-keypoints}
 
@@ -15670,7 +15707,7 @@ add a Python package dependency, include the package name as a new line in the
 :   A set of instructions designed to be executed efficiently by an [interpreter](#interpreter).
 
 **call stack**<a id="call_stack"></a>
-:   A data structure that stores information about the active subroutines executed. `cst()` is a useful function provided in the `lobstr` package to visualize a call stack.
+:   A data structure that stores information about the active subroutines executed. See also: [stack frame](#stack_frame)
 
 **camel case**<a id="camel_case"></a>
 :   A style of writing code that involves naming variables and objects with no space, underscore (`_`), dot (`.`), or dash (`-`), with each word being capitalized.  Examples include `CalculateSum` and `findPattern`. See also: [kebab case](#kebab_case), [pothole case](#pothole_case)
@@ -16047,6 +16084,9 @@ add a Python package dependency, include the package name as a new line in the
 **privilege**<a id="privilege"></a>
 :   An unearned advantage, typically as a result of belonging to a dominant social class or group.
 
+**pseudo-random number generator**<a id="prng"></a>
+:   A function that can generate [pseudo-random numbers](#pseudo_random_number). See also: [seed](#seed)
+
 **procedural programming**<a id="procedural_programming"></a>
 :   A style of programming in which functions operate on data that is passed into them. The term is used in contrast to [object-oriented programming](#oop).
 
@@ -16137,6 +16177,9 @@ add a Python package dependency, include the package name as a new line in the
 **search path**<a id="search_path"></a>
 :   The list of directories that a program searches to find something. For example, the Unix [shell](#shell) uses the search path stored in the `PATH` variable when trying to find a program given its name.
 
+**seed**<a id="seed"></a>
+:   A value used to initialize a [pseudo-random number generator](#prng).
+
 **semantic versioning**<a id="semantic_versioning"></a>
 :   A standard for identifying software releases. In the version identifier `major.minor.patch`, `major` changes when a new version of software is incompatible with old versions, `minor` changes when new features are added to an existing version, and `patch` changes when small bugs are fixed.
 
@@ -16188,6 +16231,9 @@ add a Python package dependency, include the package name as a new line in the
 **SSH protocol**<a id="ssh_protocol"></a>
 :   A formal standard for exchanging encrypted messages between computers and for managing [remote logins](#remote_login_server).
 
+**stack frame**<a id="stack_frame"></a>
+:   A section of the [call stack](#call_stack) that records details of a single call to a specific function.
+
 **standard error**<a id="stderr"></a>
 :   A predefined communication channel for a [process](#process), typically used for error messages. See also: [standard input](#stdin), [standard output](#stdout)
 
@@ -16238,6 +16284,9 @@ add a Python package dependency, include the package name as a new line in the
 
 **tolerance**<a id="tolerance"></a>
 :   How closely the [actual result](#actual_result) of a test must agree with the [expected result](#expected_result) in order for the test to pass. Tolerances are usually expressed in terms of [relative error](#relative_error).
+
+**traceback**<a id="traceback"></a>
+:   In Python, an object that records where an [exception](#exception) was [raised](#raise_exception), what [stack frames](#stack_frame) were on the [call stack](#call_stack), and other details.
 
 **transitive dependency**<a id="transitive_dependency"></a>
 :   If A depends on B and B depends on C, C is a transitive dependency of A.
@@ -17889,7 +17938,21 @@ FIXME
 
 ### Exercise \@ref(errors-ex-set-level) {-}
 
-The `collate.py` script should now read as follows:
+Add a new command line argument to `collate.py`,
+
+```python
+parser.add_argument('-v', '--verbose', action="store_true", default=False,
+                    help="Change logging threshold from WARNING to DEBUG")
+```
+
+and two new lines to the beginning of the `main` function,
+
+```python
+log_level = logging.DEBUG if args.verbose else logging.WARNING
+logging.basicConfig(level=log_level)
+```
+
+such that the full `collate.py` script now reads as follows:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
@@ -17899,6 +17962,10 @@ from collections import Counter
 import logging
 import utilities
 
+
+ERROR_MESSAGES = {
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+}
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -17914,7 +17981,7 @@ def main(args):
     for file_name in args.infiles:
         logging.debug(f'Reading in {file_name}...')
         if file_name[-4:] != '.csv':
-            raise OSError('The filename must end in `.csv`')
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
         with open(file_name, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
@@ -17933,7 +18000,21 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(errors-ex-logging-output) {-}
 
-The `collate.py` script should now read as follows:
+Add a new command line argument to `collate.py`,
+
+```python
+parser.add_argument('-l', '--logfile', type=str, default='collate.log',
+                    help='Name of the log file')
+```
+
+and pass the name of the log file to `logging.basicConfig`
+using the `filename` argument,
+
+```python
+logging.basicConfig(level=log_level, filename=args.logfile)
+```
+
+such that the `collate.py` script now reads as follows:
 
 ```python
 """Combine multiple word count CSV-files into a single cumulative count."""
@@ -17943,6 +18024,10 @@ from collections import Counter
 import logging
 import utilities
 
+
+ERROR_MESSAGES = {
+    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
+}
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -17958,7 +18043,7 @@ def main(args):
     for file_name in args.infiles:
         logging.debug(f'Reading in {file_name}...')
         if file_name[-4:] != '.csv':
-            raise OSError('The filename must end in `.csv`')
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
         with open(file_name, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
@@ -17979,15 +18064,62 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(errors-ex-exceptions) {-}
 
-FIXME
+1. The loop in `collate.py` that reads/processes each input file
+   should now read as follows:
 
-### Exercise \@ref(errors-ex-format) {-}
+```python
+for file_name in args.infiles:
+    try:
+        logging.debug(f'Reading in {file_name}...')
+        if file_name[-4:] != '.csv':
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+        with open(file_name, 'r') as reader:
+            logging.debug('Computing word counts...')
+            update_counts(reader, word_counts)
+    except Exception as error:
+        logging.warning(f'{file_name} not processed: {error}')
+```
 
-FIXME
+2. The loop in `collate.py` that reads/processes each input file
+   should now read as follows:
+
+```python
+for file_name in args.infiles:
+    try:
+        logging.debug(f'Reading in {file_name}...')
+        if file_name[-4:] != '.csv':
+            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+        with open(file_name, 'r') as reader:
+            logging.debug('Computing word counts...')
+            update_counts(reader, word_counts)
+    except FileNotFoundError:
+        logging.warning(f'{file_name} not processed: File does not exist')
+    except PermissionError:
+        logging.warning(f'{file_name} not processed: No permission to read file')
+    except Exception as error:
+        logging.warning(f'{file_name} not processed: {error}')
+```
 
 ### Exercise \@ref(errors-ex-catalog) {-}
 
-FIXME
+1. The convention is to use `ALL_CAPS_WITH_UNDERSCORES` when defining global variables.
+
+2. Python's f-strings interpolate variables that are in scope:
+   there is no easy way to interpolate values from a lookup table.
+   In contrast,
+   `str.format` can be given any number of named keyword arguments (Appendix \@ref(style)),
+   so we can look up a string and then interpolate whatever values we want.
+
+3. Once `ERROR_MESSAGES` has been moved to the `utilities` module
+   all references to it in `collate.py` must be updated to `utilities.ERROR_MESSAGES`. 
+
+### Exercise \@ref(errors-ex-traceback) {-}
+
+A \gref{traceback}{traceback} is an object that records where an exception was
+raised), what \gref{stack frames}{stack_frame} were on the
+[call stack](#call_stack) when the error occurred, and other details that are
+helpful for debugging. Python's [traceback][python-traceback] library can be
+used to get and print information from these objects.
 
 ## Chapter \@ref(testing) {.unnumbered .unlisted}
 
@@ -18004,21 +18136,90 @@ FIXME
 
 ### Exercise \@ref(testing-ex-test-assert) {-}
 
-FIXME
+We can test that the first assertion fails when `values` is not a non-empty list as follows:
+
+```python
+def test_fails_for_non_list():
+    try:
+        total('not a list')
+        assert False, 'Should have raised AssertionError'
+    except AssertionError:
+        pass
+    except:
+        assert False, 'Should have raised AssertionError'
+```
+
+In order:
+
+1.  The first `assert False` will only happen if `total` runs without raising any kind of exception.
+
+2.  The `except AssertionError` branch does nothing (`pass`) if the correct exception is raised.
+
+3.  The catch-all `except` at the end makes the test fail if the wrong kind of exception is raised.
+
+This pattern is so common that `pytest` provides a shorthand notation for it:
+
+```python
+def test_fails_for_non_list():
+    with pytest.raises(AssertionError):
+        total('not a list')
+```
+
+If the call to `total` *doesn't* raise `AssertionError`, this test fails.
 
 ### Exercise \@ref(testing-ex-ci-status-readme) {-}
 
-FIXME
+To test that the Travis status display is working correctly,
+try committing a test that deliberately fails to version control.
 
 ### Exercise \@ref(testing-ex-config) {-}
 
-FIXME
+If every configuration setting has a sensible default,
+we can create configuration files that each change exactly one parameter.
+Alternatively,
+if our program uses \gref{overlay configuration}{overlay_configuration},
+we can have each test use a standard configuration file plus a second one that changes one setting.
+In either case,
+we can either run the program and check its output,
+or check that the data structure storing configuration information has the right values
+(and trust other tests to make sure that those settings do what they're supposed to).
+
+### Exercise \@ref(testing-ex-random) {-}
+
+There are three approaches to testing when pseudo-random numbers are involved:
+
+1.  Run the function once with a known \gref{seed}{seed},
+    check and record its output,
+    and then compare the output of subsequent runs to that saved output.
+    (Basically, if the function does the same thing it did the first time, we trust it.)
+
+2.  Replace the \gref{pseudo-random number generator}{prng} with a function of our own
+    that generates a predictable series of values.
+    For example,
+    if we are randomly partitioning a list into two equal halves,
+    we could instead use a function that puts odd-numbered values in one partition
+    and even-numbered values in another
+    (which is a legal but unlikely outcome of truly random partitioning).
+
+3.  Instead of checking for an exact result,
+    check that the result lies within certain bounds,
+    just as we would with the result of a physical experiment.
+
+### Exercise \@ref(testing-ex-relative-error) {-}
+
+This result seems counter-intuitive to many people because relative error is a measure of a single value,
+but in this case we are looking at a distribution of values:
+each result is off by 0.1 compared to a range of 0--2,
+which doesn't "feel" infinite.
+In this case,
+a better measure might be the largest \gref{absolute error}{absolute_error}
+divided by the standard deviation of the data.
 
 ## Chapter \@ref(provenance) {.unnumbered .unlisted}
 
 ### Exercise \@ref(provenance-ex-get-orcid) {-}
 
-You can get an ORCID by registered [here][orcid-registration].
+You can get an ORCID by registering [here][orcid-registration].
 Please add this 16-digit identifier to all of your published works
 and to your online profiles.
 
@@ -20255,6 +20456,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [python-standard-library]: https://docs.python.org/3/library/
+[python-traceback]: https://docs.python.org/3/library/traceback.html
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
