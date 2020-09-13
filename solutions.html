@@ -418,6 +418,8 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="11.12.2" data-path="testing.html"><a href="testing.html#testing-ex-test-assert"><i class="fa fa-check"></i><b>11.12.2</b> Test assertions</a></li>
 <li class="chapter" data-level="11.12.3" data-path="testing.html"><a href="testing.html#testing-ex-ci-status-readme"><i class="fa fa-check"></i><b>11.12.3</b> Add the Travis CI status to your README</a></li>
 <li class="chapter" data-level="11.12.4" data-path="testing.html"><a href="testing.html#testing-ex-config"><i class="fa fa-check"></i><b>11.12.4</b> Testing configuration</a></li>
+<li class="chapter" data-level="11.12.5" data-path="testing.html"><a href="testing.html#testing-ex-random"><i class="fa fa-check"></i><b>11.12.5</b> Testing with randomness</a></li>
+<li class="chapter" data-level="11.12.6" data-path="testing.html"><a href="testing.html#testing-ex-relative-error"><i class="fa fa-check"></i><b>11.12.6</b> Testing with relative error</a></li>
 </ul></li>
 <li class="chapter" data-level="11.13" data-path="testing.html"><a href="testing.html#testing-keypoints"><i class="fa fa-check"></i><b>11.13</b> Key Points</a></li>
 </ul></li>
@@ -1797,22 +1799,80 @@ Input such as <code>[-10, 2, 3]</code> will make it fail.</p></li>
 </div>
 <div id="exercise-reftesting-ex-test-assert" class="section level3 unnumbered">
 <h3>Exercise <a href="testing.html#testing-ex-test-assert">11.12.2</a></h3>
-<p>FIXME</p>
+<p>We can test that the first assertion fails when <code>values</code> is not a non-empty list as follows:</p>
+<div class="sourceCode" id="cb865"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb865-1"><a href="solutions.html#cb865-1" aria-hidden="true"></a><span class="kw">def</span> test_fails_for_non_list():</span>
+<span id="cb865-2"><a href="solutions.html#cb865-2" aria-hidden="true"></a>    <span class="cf">try</span>:</span>
+<span id="cb865-3"><a href="solutions.html#cb865-3" aria-hidden="true"></a>        total(<span class="st">&#39;not a list&#39;</span>)</span>
+<span id="cb865-4"><a href="solutions.html#cb865-4" aria-hidden="true"></a>        <span class="cf">assert</span> <span class="va">False</span>, <span class="st">&#39;Should have raised AssertionError&#39;</span></span>
+<span id="cb865-5"><a href="solutions.html#cb865-5" aria-hidden="true"></a>    <span class="cf">except</span> <span class="pp">AssertionError</span>:</span>
+<span id="cb865-6"><a href="solutions.html#cb865-6" aria-hidden="true"></a>        <span class="cf">pass</span></span>
+<span id="cb865-7"><a href="solutions.html#cb865-7" aria-hidden="true"></a>    <span class="cf">except</span>:</span>
+<span id="cb865-8"><a href="solutions.html#cb865-8" aria-hidden="true"></a>        <span class="cf">assert</span> <span class="va">False</span>, <span class="st">&#39;Should have raised AssertionError&#39;</span></span></code></pre></div>
+<p>In order:</p>
+<ol style="list-style-type: decimal">
+<li><p>The first <code>assert False</code> will only happen if <code>total</code> runs without raising any kind of exception.</p></li>
+<li><p>The <code>except AssertionError</code> branch does nothing (<code>pass</code>) if the correct exception is raised.</p></li>
+<li><p>The catch-all <code>except</code> at the end makes the test fail if the wrong kind of exception is raised.</p></li>
+</ol>
+<p>This pattern is so common that <code>pytest</code> provides a shorthand notation for it:</p>
+<div class="sourceCode" id="cb866"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb866-1"><a href="solutions.html#cb866-1" aria-hidden="true"></a><span class="kw">def</span> test_fails_for_non_list():</span>
+<span id="cb866-2"><a href="solutions.html#cb866-2" aria-hidden="true"></a>    <span class="cf">with</span> pytest.raises(<span class="pp">AssertionError</span>):</span>
+<span id="cb866-3"><a href="solutions.html#cb866-3" aria-hidden="true"></a>        total(<span class="st">&#39;not a list&#39;</span>)</span></code></pre></div>
+<p>If the call to <code>total</code> <em>doesn’t</em> raise <code>AssertionError</code>, this test fails.</p>
 </div>
 <div id="exercise-reftesting-ex-ci-status-readme" class="section level3 unnumbered">
 <h3>Exercise <a href="testing.html#testing-ex-ci-status-readme">11.12.3</a></h3>
-<p>FIXME</p>
+<p>To test that the Travis status display is working correctly,
+try committing a test that deliberately fails to version control.</p>
 </div>
 <div id="exercise-reftesting-ex-config" class="section level3 unnumbered">
 <h3>Exercise <a href="testing.html#testing-ex-config">11.12.4</a></h3>
-<p>FIXME</p>
+<p>If every configuration setting has a sensible default,
+we can create configuration files that each change exactly one parameter.
+Alternatively,
+if our program uses <a href="glossary.html#overlay_configuration">overlay configuration</a>,
+we can have each test use a standard configuration file plus a second one that changes one setting.
+In either case,
+we can either run the program and check its output,
+or check that the data structure storing configuration information has the right values
+(and trust other tests to make sure that those settings do what they’re supposed to).</p>
+</div>
+<div id="exercise-reftesting-ex-random" class="section level3 unnumbered">
+<h3>Exercise <a href="testing.html#testing-ex-random">11.12.5</a></h3>
+<p>There are three approaches to testing when pseudo-random numbers are involved:</p>
+<ol style="list-style-type: decimal">
+<li><p>Run the function once with a known <a href="glossary.html#seed">seed</a>,
+check and record its output,
+and then compare the output of subsequent runs to that saved output.
+(Basically, if the function does the same thing it did the first time, we trust it.)</p></li>
+<li><p>Replace the <a href="glossary.html#prng">pseudo-random number generator</a> with a function of our own
+that generates a predictable series of values.
+For example,
+if we are randomly partitioning a list into two equal halves,
+we could instead use a function that puts odd-numbered values in one partition
+and even-numbered values in another
+(which is a legal but unlikely outcome of truly random partitioning).</p></li>
+<li><p>Instead of checking for an exact result,
+check that the result lies within certain bounds,
+just as we would with the result of a physical experiment.</p></li>
+</ol>
+</div>
+<div id="exercise-reftesting-ex-relative-error" class="section level3 unnumbered">
+<h3>Exercise <a href="testing.html#testing-ex-relative-error">11.12.6</a></h3>
+<p>This result seems counter-intuitive to many people because relative error is a measure of a single value,
+but in this case we are looking at a distribution of values:
+each result is off by 0.1 compared to a range of 0–2,
+which doesn’t “feel” infinite.
+In this case,
+a better measure might be the largest <a href="glossary.html#absolute_error">absolute error</a>
+divided by the standard deviation of the data.</p>
 </div>
 </div>
 <div id="chapter-refprovenance" class="section level2 unnumbered unlisted">
 <h2>Chapter <a href="provenance.html#provenance">12</a></h2>
 <div id="exercise-refprovenance-ex-get-orcid" class="section level3 unnumbered">
 <h3>Exercise <a href="provenance.html#provenance-ex-get-orcid">12.4.1</a></h3>
-<p>You can get an ORCID by registered <a href="https://orcid.org/register">here</a>.
+<p>You can get an ORCID by registering <a href="https://orcid.org/register">here</a>.
 Please add this 16-digit identifier to all of your published works
 and to your online profiles.</p>
 </div>
