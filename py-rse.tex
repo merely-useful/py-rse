@@ -162,7 +162,7 @@
 
 \title{Research Software Engineering with Python}
 \author{Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson}
-\date{2020-09-12}
+\date{2020-09-13}
 
 \begin{document}
 \maketitle
@@ -17366,42 +17366,150 @@ This Code of Conduct is adapted from the
 \href{https://www.contributor-covenant.org}{Contributor Covenant} version 1.4.
 
 \hypertarget{contributing}{%
-\chapter{Contributing}\label{contributing}}
+\chapter{Contributing Guidelines}\label{contributing}}
 
 Contributions of all kinds are welcome.
 By offering a contribution, you agree to abide by our \href{CONDUCT.md}{Code of Conduct}
 and that your work may be made available under the terms of \href{LICENSE.md}{our license}.
 
+\hypertarget{workflow-for-adding-content}{%
+\section{Workflow for adding content}\label{workflow-for-adding-content}}
+
+The main development branch is \texttt{book} and the website is built on \texttt{gh-pages}.
+To add content, create a new branch in the repository (or your fork) and submit a PR.
+Please only create a PR when you are ready for your change to be reviewed and merged in.
+In general, only the \texttt{Rmd} files need to be edited.
+
+When reviewing PRs and making changes, it's probably easier to edit the branch
+directly and push the change up. For comments, please use the commenting features
+in the PR.
+
+\hypertarget{setting-up-and-building-the-book}{%
+\section{Setting up and building the book}\label{setting-up-and-building-the-book}}
+
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  To report a bug or request a new feature,
-  please check the \href{https://github.com/tidyblocks/tidyblocks/issues}{list of open issues}
-  to see if it's already there,
-  and if not,
-  file as complete a description as you can.
+  Install R and RStudio
 \item
-  If you have made a fix or improvement,
-  please create a \href{https://github.com/tidyblocks/tidyblocks/pulls}{pull request}.
-  We will review these as quickly as we can (typically within 2-3 days).
-  If you are tackling an issue that has already been opened,
-  please name your branch \texttt{number-some-description}
-  (e.g., \texttt{20-highlighting-active-block})
-  and put \texttt{Closes\ \#N} (e.g., \texttt{Closes\ \#20})
-  on a line by itself at the end of the PR's long description.
+  Open RStudio by clicking on the \texttt{py-rse.Rproj} file
+\item
+  Install the dependencies by typing in the console
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Make sure you have remotes installed}
+\CommentTok{\# install.packages("remotes")}
+\NormalTok{remotes}\OperatorTok{::}\KeywordTok{install\_deps}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+\end{enumerate}
+
+This book is written in \href{https://bookdown.org/}{Bookdown}.
+If you want to preview builds on your own computer, please:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Build the website by using Ctrl-Shift-B when in RStudio or;
+\item
+  When in the terminal run \texttt{make\ html} or \texttt{make\ pdf} (the book gets built to
+  \texttt{\_book/})
+\end{enumerate}
+
+Please note that Bookdown works best with \href{https://yihui.name/tinytex/}{TinyTeX}.
+After installing it, you can run \texttt{make\ tex-packages} to install all the packages this book depends on.
+You do \emph{not} need to do this if you are only building and previewing the HTML versions of the books.
+
+\hypertarget{other-considerations-when-making-edits}{%
+\section{Other considerations when making edits}\label{other-considerations-when-making-edits}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  The ID for each chapter and section heading is set by putting
+  \texttt{\{\#some-label\}} on the heading line. Please use the stem of the file's name in
+  labels, i.e., start all labels for chapter \texttt{stuff.Rmd} with the word \texttt{stuff}.
+  Also include the course type to the beginning (e.g.~``r-'', ``py-'', and ``rse-'').
+\item
+  Each chapter starts with a list of questions and a list of learning
+  objectives and ends with a list of key points. These lists are kept in plain
+  Markdown files in the \texttt{questions}, \texttt{objectives}, and \texttt{keypoints} folders
+  respectively so that they can be included in both the chapters and the
+  \texttt{objectives.Rmd} and \texttt{keypoints.Rmd} appendices.
+\item
+  Please always use \texttt{{[}text{]}{[}label{]}} to refer to links and put the URL itself in
+  the \texttt{links.md} file to ensure consistency between chapters.
+\item
+  Please use the free desktop version of \href{https://www.draw.io/}{draw.io} to
+  draw diagrams. Save the source as \texttt{figures/stem/stem.drawio} and export drawings
+  as all of PDF, PNG, and SVG.
+\item
+  Since LaTeX doesn't understand SVG images, hand-drawn diagrams are included as follows:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Create an R code block with the header \texttt{\{r\ stem-label,\ echo=FALSE,\ fig.cap="Some\ Caption"\}}, which means:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Give this figure the ID \texttt{fig:stem-label}.
+      (Bookdown automatically puts \texttt{fig:} in front of figure labels,
+      though it doesn't prefix section labels with anything.)
+    \item
+      Don't show the R code used to load the image, just its output (i.e., the image).
+    \item
+      Give the figure the specified caption.
+    \end{itemize}
+  \item
+    Use \texttt{insert\_graphic("figures/stem/filename.ext")} to include your image. If you are using a \texttt{.pdf} image, make sure that you have the same file but as a \texttt{.svg} as well.
+  \end{itemize}
+\item
+  Use \texttt{@Name1234} or \texttt{{[}@Name1234{]}} to refer to bibliography entries. These
+  entries must exist in the \texttt{book.bib} file. For multiple entries, separate the
+  entries with \texttt{;}, i.e.~\texttt{{[}@Name1234;@Name5678{]}}.
+\item
+  Use \texttt{\textbackslash{}@ref(label)} to refer to labels for sections and figures. Note that:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This only inserts the section number, not the words \texttt{Chapter}, \texttt{Appendix}, \texttt{Section}, or \texttt{Figure}.
+  \item
+    Those are round parentheses, not curly braces.
+  \item
+    If the figure's chunk ID is \texttt{stem-label}, use \texttt{fig:stem-label} to refer to it.
+  \end{itemize}
+\item
+  Glossary entries are in \texttt{gloss.md}, which is plain Markdown rather than R Markdown.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    To refer to a glossary entry, use a direct link of the form \texttt{{[}text{]}\textasciigrave{}\textasciigrave{}(glossary.html\#term-label)}.
+  \item
+    Glossary definitions are set in bold and use an HTML anchor tag to provide the ID.
+    We should find a more elegant way to do this.
+  \end{itemize}
+\item
+  We use Simplified English rather than Traditional English, i.e., American
+  rather than British spelling and grammar.
 \end{enumerate}
 
 \hypertarget{contributing-style}{%
 \section{Style Guide}\label{contributing-style}}
 
-We follow the \href{https://style.tidyverse.org/}{tidyverse style guide} for R and
-\href{https://www.python.org/dev/peps/pep-0008/}{PEP 8} for Python as closely as
+We follow \href{https://www.python.org/dev/peps/pep-0008/}{PEP 8} for Python as closely as
 possible but specify some conventions further. We go against the style guides
 only when it is considered that it will improve clarity.
 
 Specific conventions include:
 
 \begin{itemize}
+\tightlist
 \item
   \texttt{variable\_name} (snake\_case)
 \item
@@ -17425,50 +17533,37 @@ Specific conventions include:
   \item
     We will settle on single vs.~double quotes before we publish :-)
   \end{itemize}
-\item
-  Method chaining in pandas:
-
-\begin{verbatim}
-(dataframe
-    .method()
-    .method(short_arg)
-    .method(
-        long_arg1,
-        long_arg2))
-\end{verbatim}
 \end{itemize}
 
-For markdown, we use ATX-headers (\texttt{\#} prefix) rather than Setext headers (\texttt{=/-}
-underlines), links with \texttt{{[}linkname{]}{[}tag{]}} rather than \texttt{{[}linkname{]}(url)}, and
-fenced code blocks rather than indented blocks.
+\hypertarget{using-python-packages-in-the-book}{%
+\section{Using Python packages in the book}\label{using-python-packages-in-the-book}}
 
-There are more details for what we recommend for learners in
-\url{rse-style.Rmd}, and some further discussion in
-\href{https://github.com/merely-useful/py-rse/issues/116}{issue \#116}.
+GitHub Actions needs to know what packages to install to build the website. To
+add a Python package dependency, include the package name as a new line in the
+\texttt{requirements.txt} file.
 
-Please note that we use Simplified English rather than Traditional English,
-i.e., American rather than British spelling and grammar.
-
-\hypertarget{setting-up}{%
-\section{Setting Up}\label{setting-up}}
-
-This book is written in \href{https://bookdown.org/}{Bookdown}.
-If you want to preview builds on your own computer, please:
+\textbf{Note}, this section only documents what was done and why. This does not need
+to be done, unless others want to clone this repository for their own purposes.
+In order for GitHub Actions to build the website to the \texttt{gh-pages} branch,
+a GitHub Personal Access Token (PAT) must be added. This PAT can be generated
+and assigned to the Secrets setting of the project repository, followed by these
+steps:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Follow the instructions for installing Bookdown.
+  Create a \href{https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line}{PAT}
+  for your account on GitHub (make sure to enable the ``repo'' scope so that using
+  this token will enable writing to your GitHub repos) and copy the token to your
+  clipboard.
 \item
-  Run \texttt{make} on its own to see a list of targets for rebuilding specific volumes as HTML or PDF.
+  Go to the GitHub repository Settings, then to Secrets.
 \item
-  Run \texttt{make\ py-rse} to recompile the Python RSE book.
+  Create a New Secret for \texttt{UNIQUE\_PAT} and paste the PAT token into the field.
+\item
+  Create another New Secret, called \texttt{EMAIL} and include your email there.
 \end{enumerate}
-
-Please note that Bookdown works best with \href{https://yihui.name/tinytex/}{TinyTeX}.
-After installing it, you can run \texttt{make\ tex-packages} to install all the packages this book depends on.
-You do \emph{not} need to do this if you are only building and previewing the HTML versions of the books.
 
 \hypertarget{glossary}{%
 \chapter{Glossary}\label{glossary}}
