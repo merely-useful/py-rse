@@ -13317,6 +13317,8 @@ the practices introduced in this chapter will help with both.
 
 ## Exercises {#testing-exercises}
 
+FIXME: Need more exercises (including one exploring `pytest.raises`).
+
 ### Explaining assertions {#testing-ex-explain-assertions}
 
 Given a list of a numbers,
@@ -13357,41 +13359,19 @@ def total(values):
 
 ### Test assertions {#testing-ex-test-assert}
 
-Write unit tests to check that the `assert` statements in the previous question's `total` function
-do what they're supposed to.
+FIXME
 
 ### Add the Travis CI status to your README {#testing-ex-ci-status-readme}
 
 You'll notice that the README file in many GitHub repositories includes a little
 Travis CI display status logo.
 Follow [these instructions][travis-status-images] to include
-the status display in the README for this Zipf's Law project.
+the status display in the REAMDE for this Zipf's Law project.
 
 ### Testing configuration {#testing-ex-config}
 
 Suppose your program uses a configuration file of the kind described in Chapter \@ref(config).
 How would you test that different parameters were having the correct effect?
-
-### Testing with randomness {#testing-ex-random}
-
-Programs that rely on random numbers are impossible to test
-because there's (deliberately) no way to predict their output.
-Luckily, computer programs don't actually use random numbers:
-they use a \gref{pseudo-random number generator}{prng} (PRNG)
-that produces values in a repeatable but unpredictable way.
-Given the same initial \gref{seed}{seed},
-a PRNG will always produce the same sequence of values.
-How can we use this fact when testing programs that rely on pseudo-random numbers?
-
-### Testing with relative error {#testing-ex-relative-error}
-
-If E is the expected result of a function and A is the actual value it produces,
-the \gref{relative error}{relative_error} is `abs((A-E)/E)`.
-This means that if we expect the results of tests to be 2, 1, and 0,
-and we actually get 2.1, 1.1, and 0.1
-the relative errors are 5%, 10%, and infinity.
-Why does this seem counter-intuitive,
-and what might be a better way to measure error in this case?
 
 ## Key Points {#testing-keypoints}
 
@@ -16084,9 +16064,6 @@ add a Python package dependency, include the package name as a new line in the
 **privilege**<a id="privilege"></a>
 :   An unearned advantage, typically as a result of belonging to a dominant social class or group.
 
-**pseudo-random number generator**<a id="prng"></a>
-:   A function that can generate [pseudo-random numbers](#pseudo_random_number). See also: [seed](#seed)
-
 **procedural programming**<a id="procedural_programming"></a>
 :   A style of programming in which functions operate on data that is passed into them. The term is used in contrast to [object-oriented programming](#oop).
 
@@ -16176,9 +16153,6 @@ add a Python package dependency, include the package name as a new line in the
 
 **search path**<a id="search_path"></a>
 :   The list of directories that a program searches to find something. For example, the Unix [shell](#shell) uses the search path stored in the `PATH` variable when trying to find a program given its name.
-
-**seed**<a id="seed"></a>
-:   A value used to initialize a [pseudo-random number generator](#prng).
 
 **semantic versioning**<a id="semantic_versioning"></a>
 :   A standard for identifying software releases. In the version identifier `major.minor.patch`, `major` changes when a new version of software is incompatible with old versions, `minor` changes when new features are added to an existing version, and `patch` changes when small bugs are fixed.
@@ -18136,90 +18110,21 @@ used to get and print information from these objects.
 
 ### Exercise \@ref(testing-ex-test-assert) {-}
 
-We can test that the first assertion fails when `values` is not a non-empty list as follows:
-
-```python
-def test_fails_for_non_list():
-    try:
-        total('not a list')
-        assert False, 'Should have raised AssertionError'
-    except AssertionError:
-        pass
-    except:
-        assert False, 'Should have raised AssertionError'
-```
-
-In order:
-
-1.  The first `assert False` will only happen if `total` runs without raising any kind of exception.
-
-2.  The `except AssertionError` branch does nothing (`pass`) if the correct exception is raised.
-
-3.  The catch-all `except` at the end makes the test fail if the wrong kind of exception is raised.
-
-This pattern is so common that `pytest` provides a shorthand notation for it:
-
-```python
-def test_fails_for_non_list():
-    with pytest.raises(AssertionError):
-        total('not a list')
-```
-
-If the call to `total` *doesn't* raise `AssertionError`, this test fails.
+FIXME
 
 ### Exercise \@ref(testing-ex-ci-status-readme) {-}
 
-To test that the Travis status display is working correctly,
-try committing a test that deliberately fails to version control.
+FIXME
 
 ### Exercise \@ref(testing-ex-config) {-}
 
-If every configuration setting has a sensible default,
-we can create configuration files that each change exactly one parameter.
-Alternatively,
-if our program uses \gref{overlay configuration}{overlay_configuration},
-we can have each test use a standard configuration file plus a second one that changes one setting.
-In either case,
-we can either run the program and check its output,
-or check that the data structure storing configuration information has the right values
-(and trust other tests to make sure that those settings do what they're supposed to).
-
-### Exercise \@ref(testing-ex-random) {-}
-
-There are three approaches to testing when pseudo-random numbers are involved:
-
-1.  Run the function once with a known \gref{seed}{seed},
-    check and record its output,
-    and then compare the output of subsequent runs to that saved output.
-    (Basically, if the function does the same thing it did the first time, we trust it.)
-
-2.  Replace the \gref{pseudo-random number generator}{prng} with a function of our own
-    that generates a predictable series of values.
-    For example,
-    if we are randomly partitioning a list into two equal halves,
-    we could instead use a function that puts odd-numbered values in one partition
-    and even-numbered values in another
-    (which is a legal but unlikely outcome of truly random partitioning).
-
-3.  Instead of checking for an exact result,
-    check that the result lies within certain bounds,
-    just as we would with the result of a physical experiment.
-
-### Exercise \@ref(testing-ex-relative-error) {-}
-
-This result seems counter-intuitive to many people because relative error is a measure of a single value,
-but in this case we are looking at a distribution of values:
-each result is off by 0.1 compared to a range of 0--2,
-which doesn't "feel" infinite.
-In this case,
-a better measure might be the largest \gref{absolute error}{absolute_error}
-divided by the standard deviation of the data.
+FIXME
 
 ## Chapter \@ref(provenance) {.unnumbered .unlisted}
 
 ### Exercise \@ref(provenance-ex-get-orcid) {-}
 
-You can get an ORCID by registering [here][orcid-registration].
+You can get an ORCID by registered [here][orcid-registration].
 Please add this 16-digit identifier to all of your published works
 and to your online profiles.
 
