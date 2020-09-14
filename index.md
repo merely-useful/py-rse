@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-13"
+date: "2020-09-14"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -19,8 +19,6 @@ lof: yes
 > It's still magic even if you know how it's done.
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
-
-<img src="tugboats-800x600.jpg" width="400" height="300" align="right" alt="Cover image" />
 
 Software is now as essential to research as telescopes, test tubes, and reference libraries,
 which means that researchers need need to know how to build, check, use, and share programs.
@@ -351,6 +349,34 @@ and Elizabeth Wickes.
 
 -   Chapter \@ref(packaging) is based in part on [Python 102][python-102]
     by [Ashwin Srinath][srinath-ashwin].
+
+
+## Dedications
+
+
+To David Flanders  
+who taught me so much about growing and sustaining coding communities.  
+--- Damien  
+   
+To the U of T Coders Group  
+who taught us much more than we taught them.  
+--- Luke and Joel  
+   
+To my parents Judy and John  
+who taught me to love books and everything I can learn from them.  
+--- Kate  
+   
+To Joshua  
+--- Charlotte  
+   
+To Brent Gorda  
+without whom none of this would have happened.  
+--- Greg  
+   
+All royalties from this book are being donated to The Carpentries,  
+an organization that teaches foundational coding and data science
+skills  
+to researchers worldwide.
 
 <!--chapter:end:index.Rmd-->
 
