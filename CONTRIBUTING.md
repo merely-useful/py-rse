@@ -63,10 +63,12 @@ Please only edit `index.Rmd` in the root directory or the `.Rmd` files in the `c
         include the image.  If you are using a `.pdf` image, make sure that you
         have the same file but as a `.svg` as well.
 
--   Use `@Name123` to refer to bibliography entries. These entries must exist in
-    the `book.bib` file. For multiple entries, separate the entries with `,`,
-    as in `@Name123,@Name456,@Name789`.
-
+-   Use `@Name123` or `[@Name123]` to refer to bibliography entries
+    (the latter puts the citation in braces).
+    These entries must exist in the `book.bib` file.
+    To cite multiple entries in braces,
+    separate the keys by semicolons, e.g., `[@Name123; @Name456; @Name789]`.
+    
 -   Use `\@ref(label)` with parentheses (not curly braces) to refer to labels
     for sections and figures. Note that this only inserts the section number,
     not the words `Chapter`, `Appendix`, `Section`, or `Figure`---you must add
