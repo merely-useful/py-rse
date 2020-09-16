@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-15"
+date: "2020-09-16"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -56,8 +56,9 @@ Our approach to research software engineering is based on three related concepts
 
 -   \gref{Reproducible research}{reproducible_research} means ensuring that anyone
     with access to data and software can feasibly reproduce results, both to
-    check them and to build on them.  - Software is
-    \gref{sustainable}{sustainable_software} if it's easier for people to
+    check them and to build on them. 
+
+-   Software is \gref{sustainable}{sustainable_software} if it's easier for people to
     maintain it and extend it than to replace it.  However, sustainability isn't
     just a property of the software: it also depends on the skills and culture
     of its users.
@@ -290,7 +291,7 @@ This structure works well for many computational research projects and
 we encourage its use beyond just this book. 
 We will add some more folders and files  not directly addressed by @Nobl2009
 when we talk about provenance (Chapter \@ref(provenance)),
-testing (Chapter \@ref(testing),
+testing (Chapter \@ref(testing)),
 and packaging (Chapter \@ref(packaging)).
 
 ### Getting Started {#intro-setup}
@@ -324,7 +325,7 @@ zipf/
 This book owes its existence to
 everyone we met through [the Carpentries][carpentries].
 We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work,
-to the authors of @Nobl2009,@Hadd2010,@Wils2014,@Scop2015,@Tasc2017,@Wils2017,@Brow2018,@Deve2018,@Shol2019,@Wils2019,
+to the authors of @Nobl2009, @Hadd2010, @Wils2014, @Scop2015, @Tasc2017, @Wils2017, @Brow2018, @Deve2018, @Shol2019, @Wils2019
 and to everyone who has contributed, including Madeleine Bonsma-Fisher,
 Jonathan Dursi,
 Christina Koch,
@@ -1226,7 +1227,7 @@ cp: analysis is a directory (not copied).
 ```
 
 If we really want to copy everything,
-we must give `cp` the `-r` option (meaning \gref{recursive}{recursion}:
+we must give `cp` the `-r` option (meaning \gref{recursive}{recursion}):
 
 ```shell
 $ cp -r analysis backup
@@ -4090,7 +4091,7 @@ run it with many different parameters,
 or combine it with other programs as part of a data analysis pipeline.
 The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
-just like other command-line tools @Tasc2017.
+just like other command-line tools [@Tasc2017].
 
 In this chapter we will develop a command-line Python program\index{Python!command line}
 that handles input and output in the same way as other shell commands,
@@ -4925,8 +4926,10 @@ if __name__ == '__main__':
 ```
 
 Any Python source file can be imported by any other.
-This is why Python files should be named using \gref{`snake_case`}{snake_case}\index{snake case}\index{naming conventions!snake case}
-instead of \gref{`kebab-case`}{kebab_case}:\index{kebab case}\index{naming conventions!kebab case}
+This is why Python files should be named using \gref{snake case}{snake_case}\index{snake case}\index{naming conventions!snake case}
+(e.g. `some_thing`)
+instead of \gref{kebab case}{kebab_case}\index{kebab case}\index{naming conventions!kebab case}
+(e.g. `some-thing`):
 an expression like `import some-thing` isn't allowed
 because `some-thing` isn't a legal variable name.
 When a file is imported,
@@ -5175,7 +5178,7 @@ We write Git commands as `git VERB [options]`,
 where the \gref{subcommand}{subcommand} `VERB` tells Git what we want to do
 and `[options]` provide whatever additional information that subcommand needs.
 Using this syntax,
-the first thing we need to do is configure Git:\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
+the first thing we need to do is configure Git.\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
 
 ```shell
 $ git config --global user.name "Amira Khan"
@@ -6310,7 +6313,7 @@ which tells Git to ignore any `__pycache__` directory created by Python\index{\_
 The biggest benefit of version control for individual research is that
 we can always go back to the precise set of files
 that we used to produce a particular result.
-While Git is complex @Pere2013,
+While Git is complex [@Pere2013],
 being able to back up our changes on sites like GitHub
 with just a few keystrokes can save us a lot of pain,
 and some of Git's advanced features make it even more powerful.
@@ -7579,7 +7582,7 @@ this workflow will help us keep track of what we are doing:
     and all of our tests should pass.
 
 Most experienced developers use this
-\gref{branch-per-feature workflow}{branch_per_feature_workflow},\index{branch-per-feature workflow (in Git)\index{Git!branch-per-feature workflow}
+\gref{branch-per-feature workflow}{branch_per_feature_workflow},\index{branch-per-feature workflow (in Git)}\index{Git!branch-per-feature workflow}
 but what exactly is a "feature"?
 These rules make sense for small projects:
 
@@ -8331,7 +8334,7 @@ zipf/
 
 ## What is a Project? {#teams-scope}
 
-The first decision we have to make is what exactly constitutes a "project" @Wils2017.
+The first decision we have to make is what exactly constitutes a "project" [@Wils2017].
 Some examples are:
 
 -   A dataset that is being used by several research projects.
@@ -8376,7 +8379,7 @@ that's an even stronger sign.
 ## Include Everyone {#teams-inclusive}
 
 Most research software projects begin as the work of one person,
-who may continue to do the bulk of the coding and data analysis throughout its existence @Maju2019.
+who may continue to do the bulk of the coding and data analysis throughout its existence [@Maju2019].
 As projects become larger,
 though,
 they eventually need more contributors to sustain them.
@@ -8386,7 +8389,7 @@ In order to leverage a group's expertise,
 though,
 a project must do more than *allow* people to contribute:
 its leaders must communicate that the project *wants* contributions,
-and that newcomers are welcome and valued @Shol2019.\index{project!inclusivity}\index{inclusivity}
+and that newcomers are welcome and valued [@Shol2019].\index{project!inclusivity}\index{inclusivity}
 
 But saying "the door is open" is not enough,
 since many potential contributors have painful personal experience of being less welcome than others.
@@ -8394,7 +8397,7 @@ In order to create a truly welcoming environment for everyone,
 the project must explicitly acknowledge that some people are treated unfairly
 and actively take steps to remedy this.
 Doing this increases diversity within the team,
-which makes it more productive @Zhan2020.
+which makes it more productive [@Zhan2020].
 More importantly,
 it is the right thing to do.
 
@@ -8402,7 +8405,7 @@ it is the right thing to do.
 >
 > \gref{Privilege}{privilege} is an unearned advantage given to some people but not all,\index{privilege}
 > while \gref{oppression}{oppression} is systemic inequality that benefits the privileged\index{oppression}
-> and harms those without privilege @Auro2019.
+> and harms those without privilege [@Auro2019].
 > In Europe, the Americas, Australia, and New Zealand,
 > a straight, white, affluent, physically able male
 > is less likely to be interrupted when speaking,
@@ -8429,7 +8432,7 @@ we should educate ourselves and call out peers who are marginalizing others,
 even if (or especially if) they aren't conscious of doing it.
 As project leaders,
 part of our job is to teach contributors how to be allies
-and to ensure an inclusive culture @Lee1962.
+and to ensure an inclusive culture [@Lee1962].
 
 ## Establish a Code of Conduct {#teams-coc}
 
@@ -8686,7 +8689,7 @@ Unfortunately,
 GitHub's list does not include common licenses for data or written works like papers and reports.
 Those can be added in manually,
 but it's often hard to understand the interactions between multiple licenses
-on different kinds of material @Alme2017.
+on different kinds of material [@Alme2017].
 
 Just as the project's Code of Conduct is usually placed in a root-level file called `CONDUCT.md`,
 its license is usually put in a file called `LICENSE.md`\index{project files!LICENSE}
@@ -8893,7 +8896,7 @@ people create three kinds of issues:
 ## Bug Reports {#teams-bugs}
 
 A well-written \gref{bug report}{bug_report} is more likely to get a fast response,\index{bug report!style}
-and is more likely to get a response actually addresses the issue @Bett2008.
+and is more likely to get a response actually addresses the issue [@Bett2008].
 To write a good bug report:
 
 1.  Make sure the problem actually *is* a bug.
@@ -9005,7 +9008,7 @@ Projects also often use:
 -   *Suitable for Newcomer* or *Beginner-Friendly*:
     to identify an easy starting point for someone who has just joined the project.
     If we help potential new contributors find places to start,
-    they are more likely to do so @Stei2014.
+    they are more likely to do so [@Stei2014].
 
 The labels listed above identify the kind of work an issue describes.
 A separate set of labels can be used to indicate the state of an issue:
@@ -9328,7 +9331,7 @@ and only allowing the moderator to unmute people.
 Every team has a power structure:
 the only question is
 whether it's formal or informal---in other words,
-whether it's accountable or unaccountable @Free1972.
+whether it's accountable or unaccountable [@Free1972].
 The latter can work for groups of up to half a dozen people
 in which everyone knows everyone else.
 Beyond that,
@@ -9339,7 +9342,7 @@ In short,
 they need explicit \gref{governance}{governance}.\index{governance!project}\index{project!governance}
 
 \gref{Martha's Rules}{marthas_rules} are a practical way to do this\index{Martha's Rules}\index{governance!Martha's Rules}
-in groups of up to a few dozen members @Mina1986:
+in groups of up to a few dozen members [@Mina1986]:
 
 1.  Before each meeting, anyone who wishes may sponsor a proposal.
     Proposals must be filed at least 24 hours before a meeting
@@ -9417,7 +9420,7 @@ or put into files of their own:
     These instructions can also be included as a section in `README`;
     wherever they go,
     remember that the easier it is for people to get set up and contribute,
-    the more likely they are to do so @Stei2014.
+    the more likely they are to do so [@Stei2014].
 
 -   `GOVERNANCE`\index{project files!GOVERNANCE}
     explains how the project is run (Section \@ref(teams-martha)).
@@ -10855,7 +10858,7 @@ because each level overrides the ones above it:
 the user's configuration file overrides the system settings,
 the job configuration overrides the user's defaults,
 and the command-line options overrides that.
-This is more complex than most research software needs initially @Xu2015,
+This is more complex than most research software needs initially [@Xu2015],
 but being able to read a complete set of options from a file
 is a big boost to reproducibility.
 
@@ -11763,7 +11766,7 @@ so they should therefore be the most carefully written documentation for that so
 A web search for "writing good error messages" turns up hundreds of hits,
 but recommendations are often more like gripes than guidelines
 and are usually not backed up by evidence.
-What research there is gives us the following rules @Beck2016:
+What research there is gives us the following rules [@Beck2016]:
 
 1.  Tell the user what they did, not what the program did.
     Putting it another way,
@@ -12233,10 +12236,10 @@ including assertions, unit tests, integration tests, and regression tests.
 > Geoffrey Chang,
 > had to retract five published papers---three from
 > the journal *Science*---because his code had
-> inadvertently flipped two columns of data @Miller2006.
+> inadvertently flipped two columns of data [@Miller2006].
 > More recently, a simple calculation mistake in a paper by Reinhart and Rogoff
 > contributed to making the financial crash of 2008 even worse
-> for millions of people @Borw2013.
+> for millions of people [@Borw2013].
 
 Our Zipf's Law project files are structured as they were at the end of the previous chapter:
 
@@ -12669,7 +12672,7 @@ if the actual value is within some \gref{tolerance}{tolerance} of the expected v
 The tolerance can be expressed as the \gref{absolute error}{absolute_error},\index{absolute error}\index{error!absolute}
 which is the absolute value of the difference between two,
 or the \gref{relative error}{relative_error},\index{relative error}\index{error!relative}
-which the ratio of the absolute error to the value we're approximating @Gold1991.
+which the ratio of the absolute error to the value we're approximating [@Gold1991].
 For example,
 if we add 9+1 and get 11,
 the absolute error is 1 (i.e., 11-10),
@@ -13262,7 +13265,7 @@ This time our tests pass and the build completes successfully
 
 This example shows one of the other benefits of CI:
 it forces us to be explicit about what we are doing and how we do it,
-just as writing a Makefile forces us to be explicit about exactly how we produce results @Zamp2020.
+just as writing a Makefile forces us to be explicit about exactly how we produce results [@Zamp2020].
 
 ## When to Write Tests {#testing-tdd}
 
@@ -13291,7 +13294,7 @@ TDD's advocates claim that this leads to better code because:
 
 These arguments are plausible.
 However,
-studies such as @Fucc2016,@Fucc2017 don't support them:
+studies such as @Fucc2016 and @Fucc2017 don't support them:
 in practice,
 writing tests first or last doesn't appear to affect productivity.
 What *does* have an impact is working in small, interleaved increments,
@@ -13330,7 +13333,7 @@ runnable assertions can't fall out of step with what the code is actually doing.
 ## Summary {#testing-summary}
 
 Testing data analysis pipelines is often harder than testing mainstream software applications,
-since data analysts often don't know what the right answer is @Brai2018.
+since data analysts often don't know what the right answer is [@Brai2018].
 (If we did,
 we would have submitted our report and moved on to the next problem already.)
 The key distinction is the difference between \gref{validation}{validation},
@@ -13562,7 +13565,7 @@ should follow the FAIR Principles.
 
 The [FAIR Principles][go-fair] describe what research data should look like.\index{FAIR Principles}\index{publishing!FAIR Principles}
 They are still aspirational for most researchers,
-but tell us what to aim for @Good2014,@Mich2015,@Hart2016,@Broc2019,@Tier2020.
+but tell us what to aim for [@Good2014, @Mich2015, @Hart2016, @Broc2019, @Tier2020].
 The most immediately important elements of the FAIR Principles are outlined below.
 
 #### Data should be *findable*.
@@ -13742,7 +13745,7 @@ $ git push origin master
 > More complex tools like [Docker][docker]
 > can install our entire environment
 > (down to the precise version of the operating system)
-> on a different computer @Nust2020.
+> on a different computer [@Nust2020].
 > However,
 > their complexity can be daunting,
 > and there is a lot of debate
@@ -13818,7 +13821,7 @@ most readers are not looking to exactly re-run a decade old analysis:
 they just want to be able to figure out what was run 
 and what the important decisions were,
 which is sometimes referred to as \gref{inspectability}{inspectability}\index{inspectability}
-(@Gil2016, @Brown2017). 
+[@Gil2016; @Brown2017]. 
 While exact repeatability has a short shelf-life,
 inspectability is the enduring legacy of a well-documented computational analysis.
 
@@ -13873,7 +13876,7 @@ Fill in the questionnaire for a dataset you have published or that you use often
 
 ### Evaluate a project's data provenance {#provenance-ex-understand-project}
 
-*This exercise is modified from @Wick2016 and explore the dataset from @Meil2015.
+*This exercise is modified from @Wick2016 and explores the dataset from @Meil2015.
 Go to the dataset's page <http://doi.org/10.3886/E17507V2> and download the files.
 You will need to make an ICPSER account and agree to their data agreement before you can download.*
 
@@ -13904,7 +13907,7 @@ Use the [Wayback Machine][wayback-machine] to find a link that is more likely to
 ### Create an archive of your Zipf's analysis {#provenance-ex-release}
 
 A slightly less permanent alternative to having a DOI for your analysis code
-is to provide a link to a GitHub release.  
+is to provide a link to a GitHub release.
 Follow [the instructions on GitHub][github-release] to create a release for the current state of your `zipf/` project.
 
 Once you've created the release, 
@@ -14705,7 +14708,7 @@ It's important to consider who documentation is for.
 There are three kinds of people in any domain:
 \gref{novices}{novice},
 \gref{competent practitioners}{competent_practitioner},
-and \gref{experts}{expert} @Wils2018.
+and \gref{experts}{expert} [@Wils2018].
 A novice doesn't yet have a \gref{mental model}{mental_model} of the domain:
 they don't know what the key terms are,
 how they relate,
@@ -15246,7 +15249,7 @@ Use "I" and question words (how/what/when/where/why).
     what someone might actually be thinking when they need help.
 
 Keep each item short.
-:   The "minimal manual" approach to instructional design @Carr2014
+:   The "minimal manual" approach to instructional design [@Carr2014]
     breaks everything down into single-page steps,
     with half of that page devoted to troubleshooting.
     This may feel trivializing to the person doing the writing,
@@ -15622,10 +15625,12 @@ Please only edit `index.Rmd` in the root directory or the `.Rmd` files in the `c
         include the image.  If you are using a `.pdf` image, make sure that you
         have the same file but as a `.svg` as well.
 
--   Use `@Name123` to refer to bibliography entries. These entries must exist in
-    the `book.bib` file. For multiple entries, separate the entries with `,`,
-    as in `@Name123,@Name456,@Name789`.
-
+-   Use `@Name123` or `[@Name123]` to refer to bibliography entries
+    (the latter puts the citation in braces).
+    These entries must exist in the `book.bib` file.
+    To cite multiple entries in braces,
+    separate the keys by semicolons, e.g., `[@Name123; @Name456; @Name789]`.
+    
 -   Use `\@ref(label)` with parentheses (not curly braces) to refer to labels
     for sections and figures. Note that this only inserts the section number,
     not the words `Chapter`, `Appendix`, `Section`, or `Figure`---you must add
@@ -16374,7 +16379,7 @@ In order to complete the activities in this book,
 the following software is required:
 
 1. a \gref{Bash shell}{shell}
-2. \gref{Git}{git}
+2. \gref{Git}{git} version control
 3. a text editor
 4. [Python 3][python] (via the Anaconda distribution)
 5. [GNU Make][gnu-make]
@@ -17656,7 +17661,7 @@ and set aside time to do more reading.
 
 -   Our license is at <https://github.com/merely-useful/py-rse/blob/book/LICENSE.md>.
 
--   Our contribution guidelines are at <https://github.com/merely-useful/py-rse/blob/book/.github/CONTRIBUTING.md>.
+-   Our contribution guidelines are at <https://github.com/merely-useful/py-rse/blob/book/CONTRIBUTING.md>.
 
 ### Exercise \@ref(teams-ex-boilerplate-coc) {-}
 
@@ -18621,7 +18626,7 @@ updated in Section \@ref(scripting-docstrings).
 
 # Code Style, Review, and Refactoring {#style}
 
-Nothing in biology makes sense except in light of evolution @Dobz1973.
+Nothing in biology makes sense except in light of evolution [@Dobz1973].
 Similarly,
 nothing in software development makes sense except in light of human psychology.
 This is particularly true when we look at programming style.
@@ -18637,7 +18642,7 @@ and introduce some language features that can make programs more flexible and mo
 ## Python Style {#style-pep8}
 
 The single most important rule of style is to be consistent,
-both internally and with other programs @Kern1999.
+both internally and with other programs [@Kern1999].
 Python's standard style is called [PEP-8][pep-8];\index{Python!PEP-8}\index{PEP-8 (Python style)}
 the acronym "PEP" is short for "Python Enhancement Proposal",
 and PEP-8 lays out the rules that Python's own libraries use.
@@ -18757,7 +18762,7 @@ some things shouldn't be messed with.
 
 **Use `lower_case_with_underscores` for the names of functions and variables.**
 
-Research on naming conventions has produced mixed results @Bink2012,@Scha2018,
+Research on naming conventions has produced mixed results [@Bink2012; @Scha2018]
 but Python has (mostly) settled on underscored names for most things.
 This style is called \gref{snake case}{snake_case} or \gref{pothole case}{pothole_case};
 we should only use \gref{CamelCase}{camel_case} for classes,
@@ -18774,7 +18779,7 @@ a good programming editor will \gref{auto-complete}{auto_completion} names for u
 **Use short names for short-lived local variables and longer names for things with wider scope.**
 
 Using `i` and `j` for loop indices is perfectly readable
-provided the loop is only a few lines long @Beni2017.
+provided the loop is only a few lines long [@Beni2017].
 Anything that is used at a greater distance
 or whose purpose isn't immediately clear
 (such as a function) should have a longer name.
@@ -18956,7 +18961,7 @@ To \gref{refactor}{refactoring} code\index{refactoring (software)}
 means to change its structure without changing what it does,
 like simplifying an equation.
 It is just as much a part of programming as writing code in the first place:
-nobody gets things right the first time @Bran1995,
+nobody gets things right the first time [@Bran1995],
 and needs or insights can change over time.
 
 Most discussions of refactoring focus on \gref{object-oriented programming}{oop},
@@ -18986,7 +18991,7 @@ Finally,
 a single value defined in one place is much easier to change
 than a bunch of numbers scattered throughout our program.
 We may not think we will have to change it,
-but then people want to use our software on Mars and we discover that constants aren't @Mak2006.
+but then people want to use our software on Mars and we discover that constants aren't [@Mak2006].
 
 ```python
 # ...before...
@@ -19481,7 +19486,7 @@ Reading code in order to find bugs and suggest improvements like these
 is called \gref{code review}{code_review}.\index{code review}
 Multiple studies over more than 40 years have shown that
 code review is the most effective way to find bugs in software
-@Faga1976,@Faga1986,@Cohe2010,@Bacc2013.
+[@Faga1976; @Faga1986; @Cohe2010; @Bacc2013].
 It is also a great way to transfer knowledge between programmers:
 reading someone else's code critically will give us lots of ideas about what we could do better,
 and highlight things that we should probably stop doing as well.
@@ -19489,22 +19494,22 @@ and highlight things that we should probably stop doing as well.
 Despite this,
 code review still isn't common in research software development.
 This is partly a chicken-and-egg problem:
-people don't do it because other people don't do it @Sega2005.
+people don't do it because other people don't do it [@Sega2005].
 Code review is also more difficult to do in specialized scientific fields:
 in order for review to be useful,
 reviewers need to understand the problem domain well enough to comment on algorithms and design choices
 rather than indentation and variable naming,
-and the number of people who can do that for a research project is often very small @Petr2014.
+and the number of people who can do that for a research project is often very small [@Petr2014].
 
 Section \@ref(git-advanced-pull-requests) explained how to create and merge pull requests.
 How we review these is just as important as what we look for:
 being dismissive or combative are good ways to ensure that people don't pay attention to our reviews,
-or avoid having us review their work @Bern2018.
+or avoid having us review their work [@Bern2018].
 Equally,
 being defensive when someone offers suggestions politely and sincerely is very human,
 but can stunt our development as a programmer.
 
-Lots of people have written guidelines for doing reviews that avoid these traps @Quen2018,@Sank2018.
+Lots of people have written guidelines for doing reviews that avoid these traps [@Quen2018; @Sank2018].
 A few common points are:
 
 Work in small increments.
@@ -19520,7 +19525,7 @@ Look for algorithmic problems first.
     The first pass over any change should therefore look for algorithmic problems.
     Are the calculations right?
     Are any rare cases going to be missed?
-    Are errors being caught and handled Chapter \@ref(errors-logging)?
+    Are errors being caught and handled (Chapter \@ref(errors-logging))?
     Using a consistent style helps reviewers focus on these issues.
 
 Use a checklist.
@@ -19591,7 +19596,7 @@ Don't let people break these rules just because they're frequent contributors or
 ## Python Features {#style-features}
 
 \gref{Working memory}{working_memory} can only hold a few items at once:
-initial estimates in the 1950s put the number at 7±2 @Mill1956,
+initial estimates in the 1950s put the number at 7±2 [@Mill1956],
 and more recent estimates put it as low as 4 or 5.
 High-level languages from FORTRAN to Python
 are essentially a way to reduce the number of things programmers have to think about at once
