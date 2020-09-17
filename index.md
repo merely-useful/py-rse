@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-16"
+date: "2020-09-17"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -11357,7 +11357,7 @@ What steps could you take to ensure the required consistency?
 -   Use a user-specific configuration file for personal preferences.
 -   Use a job-specific configuration file with settings for a particular run.
 -   Use command-line options to change things that commonly change.
--   Use \gref{YAML}{yaml} or some other standard syntax to write configuration files.
+-   Use \gref{YAML}{yaml_glossary} or some other standard syntax to write configuration files.
 -   Save configuration information to make your research \gref{reproducible}{reproducible_research}.
 
 <!--chapter:end:chapters/config.Rmd-->
@@ -13127,7 +13127,7 @@ by creating a file called `.travis.yml`.
 (The leading `.` in the name hides the file from casual listings on Mac or Linux,
 but not on Windows.)
 This file must be in the root directory of the repository,
-and is written in \gref{YAML}{yaml}
+and is written in \gref{YAML}{yaml_glossary}
 (Section \@ref(config-formats) and Appendix \@ref(yaml)).
 For our project,
 we add the following lines:
@@ -16250,7 +16250,7 @@ add a Python package dependency, include the package name as a new line in the
 **sprint**<a id="sprint"></a>
 :   A short, intense period of work on a project.
 
-**Secure Shell**<a id="ssh"></a>
+**Secure Shell**<a id="ssh_glossary"></a>
 :   A program that allows secure access to remote computers.
 
 **ssh daemon**<a id="ssh_daemon"></a>
@@ -16364,7 +16364,7 @@ add a Python package dependency, include the package name as a new line in the
 **working memory**<a id="working_memory"></a>
 :   The part of memory that briefly stores information that can be directly accessed by consciousness.
 
-**YAML**<a id="yaml"></a>
+**YAML**<a id="yaml_glossary"></a>
 :   Short for "YAML Ain't Markup Language", a way to represent nested data using indentation rather than the parentheses and commas of [JSON](#json). YAML is often used in configuration files and to define parameters for various flavors of [Markdown](#markdown) documents.
 
 
@@ -16746,7 +16746,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Use a user-specific configuration file for personal preferences.
 -   Use a job-specific configuration file with settings for a particular run.
 -   Use command-line options to change things that commonly change.
--   Use \gref{YAML}{yaml} or some other standard syntax to write configuration files.
+-   Use \gref{YAML}{yaml_glossary} or some other standard syntax to write configuration files.
 -   Save configuration information to make your research \gref{reproducible}{reproducible_research}.
 
 ## Error Handling
@@ -19867,7 +19867,7 @@ but there are probably fewer of them than you think.
 
 # YAML {#yaml}
 
-\gref{YAML}{yaml}\index{YAML} is a way to write nested data structures in plain text
+\gref{YAML}{yaml_glossary}\index{YAML} is a way to write nested data structures in plain text
 that is often used to specify configuration options for software.
 The acronym stands for "YAML Ain't Markup Language",
 but that's a lie:
@@ -20015,7 +20015,7 @@ then sends back output, via the server, to our client, for our computer to displ
 
 The remote login server which accepts connections from client programs
 is known as the \gref{SSH daemon}{ssh_daemon}, or `sshd`.
-The client program we use to login remotely is the \gref{secure shell}{ssh},
+The client program we use to login remotely is the \gref{secure shell}{ssh_glossary},
 or `ssh`.
 It has a companion program called `scp`
 that allows us to copy files to or from a remote computer using the same kind of encrypted connection.
