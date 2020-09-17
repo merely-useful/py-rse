@@ -4,5 +4,5 @@
 -   Use a user-specific configuration file for personal preferences.
 -   Use a job-specific configuration file with settings for a particular run.
 -   Use command-line options to change things that commonly change.
--   Use \gref{YAML}{yaml} or some other standard syntax to write configuration files.
+-   Use \gref{YAML}{yaml_glossary} or some other standard syntax to write configuration files.
 -   Save configuration information to make your research \gref{reproducible}{reproducible_research}.

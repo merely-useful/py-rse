@@ -576,7 +576,7 @@
 **sprint**<a id="sprint"></a>
 :   A short, intense period of work on a project.
 
-**Secure Shell**<a id="ssh"></a>
+**Secure Shell**<a id="ssh_glossary"></a>
 :   A program that allows secure access to remote computers.
 
 **ssh daemon**<a id="ssh_daemon"></a>
@@ -690,6 +690,6 @@
 **working memory**<a id="working_memory"></a>
 :   The part of memory that briefly stores information that can be directly accessed by consciousness.
 
-**YAML**<a id="yaml"></a>
+**YAML**<a id="yaml_glossary"></a>
 :   Short for "YAML Ain't Markup Language", a way to represent nested data using indentation rather than the parentheses and commas of [JSON](#json). YAML is often used in configuration files and to define parameters for various flavors of [Markdown](#markdown) documents.
 
