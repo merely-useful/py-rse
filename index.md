@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-17"
+date: "2020-09-19"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -11011,7 +11011,7 @@ and then re-generate the Jane Eyre plot with bigger labels
 (Figure \@ref(fig:configuration-jane-eyre-big-labels)):
 
 ```python
-$ python bin/plotcounts.py data/jane_eyre.csv --outfile results/jane_eyre.png
+$ python bin/plotcounts.py results/jane_eyre.csv --outfile results/jane_eyre.png
 ```
 
 <div class="figure" style="text-align: center">
@@ -11025,7 +11025,7 @@ Since `matplotlibrc` file sets system-wide defaults,
 we will now have big labels by default for all plotting we do in future,
 which we may not want.
 Secondly,
-we want to package our Zipf's Law code and make it available to other people.
+we want to package our Zipf's Law code and make it available to other people (Chapter \@ref(packaging)).
 That package won't include our `matplotlibrc` file,
 and we don't have access to the one on their computer,
 so this solution isn't as reproducible as others.
@@ -11301,16 +11301,24 @@ Read about automatic variables (Section \@ref(automate-autovar)) and
 [functions for string substitution and analysis][make-string-functions]
 to understand what that command is doing.
 
-### Making plots more accessible {#config-ex-accessible}
+### Using different plot styles {#config-ex-style}
 
-If we want to make sure our plots are accessible to people with color vision challenges,
-we can choose an appropriate style at the beginning of our script:
+There are a wide variety of pre-defined matplotlib styles (Section \@ref(config-user)),
+as illustrated at the [Python Graph Gallery][python-graph-gallery-styles].
 
-```python
-plt.style.use('tableau-colorblind10')
-```
+1. Add a new option `--style` to `plotcounts.py` that allows the user
+to pick a style from the list of pre-defined matplotlib styles.
 
-How can we make this the default for all of our plots?
+Hint: Use the `choices` parameter discussed in Section \@ref(config-command-line)
+to define the valid choices for the new `--style` option.
+
+2. Re-generate the plot of the *Jane Eyre* word count distribution 
+using a bunch of different styles to decide which you like best.
+
+3. Matplotlib style sheets are designed to be composed together.
+(See the [style sheets tutorial][matplotlib-style-tutorial] for details.)
+Use the `nargs` parameter to allow the user to pass any number of styles
+when using the `--style` option.  
 
 ### Saving configurations {#config-ex-saveload}
 
@@ -11334,10 +11342,28 @@ but whose values are a list of the places where that configuration parameter was
 
 ### Using INI syntax {#config-ex-ini}
 
-Read the documentation for Python's [`configparser`][configparser] module,
-then rewrite the configuration loader in this chapter to use INI syntax rather than YAML.
-Which do you find easier to read?
-What factors other than readability should influence your choice of a configuration file syntax?
+If we used [Windows INI format][ini-format] instead of YAML
+for our plot parameters configuration file
+(i.e. `plotparams.ini` instead of `plotparams.yml`)
+that file would read as follows:
+
+```text
+[AXES]
+axes.labelsize=x-large
+
+[TICKS]
+xtick.labelsize=large
+ytick.labelsize=large
+```
+
+The [`configparser`][configparser] library can be used to read and write INI files.
+Install that library by running `pip install configparser` at the command line.
+
+Using `configparser`, rewrite the `set_plot_params` function in `plotcounts.py` to
+handle a configuration file in INI rather than YAML format.
+
+Which file format do you find easier to work with?
+What other factors should influence your choice of a configuration file syntax?
 
 ### Configuration consistency {#config-ex-consistency}
 
@@ -17945,9 +17971,35 @@ settings :
 	@echo SUMMARY: $(SUMMARY)
 ```
 
-### Exercise \@ref(config-ex-accessible) {-}
+### Exercise \@ref(config-ex-style) {-}
 
-FIXME
+1. Make the following additions to `plotcounts.py`:
+
+Import `matplotlib.pyplot`:
+```python
+import matplotlib.pyplot as plt
+```
+
+Define the new `--style` option:
+```python
+parser.add_argument('--style', type=str, choices=plt.style.available,
+                    default=None, help='matplotlib style')
+```
+
+Use the style at the top of the `main function:
+```python
+def main(args):
+    """Run the command line program."""
+    if args.style:
+        plt.style.use(args.style)
+```
+
+3. Add `nargs='*'` to the definition of the `--style` option:
+
+```python
+parser.add_argument('--style', type=str, nargs='*', choices=plt.style.available,
+                    default=None, help='matplotlib style')
+```
 
 ### Exercise \@ref(config-ex-saveload) {-}
 
@@ -17959,7 +18011,25 @@ FIXME
 
 ### Exercise \@ref(config-ex-ini) {-}
 
-FIXME
+```python
+import configparser
+
+def set_plot_params(param_file):
+    """Set the matplotlib parameters."""
+    if param_file:
+        config = configparser.ConfigParser()
+        config.read(param_file)
+        for section in config.sections():
+            for param in config[section]:
+                value = config[section][param]
+                mpl.rcParams[param] = value
+```
+
+TODO: Add answers to the following questions:
+
+- Which file format do you find easier to work with?
+- What other factors should influence your choice of a configuration file syntax?
+
 
 ### Exercise \@ref(config-ex-consistency) {-}
 
@@ -20468,6 +20538,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [make]: https://www.gnu.org/software/make/
 [make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
+[matplotlib-style-tutorial]: https://matplotlib.org/tutorials/introductory/customizing.html
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
 [orcid-registration]: https://orcid.org/register
@@ -20486,6 +20557,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [python]: https://www.python.org/
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
+[python-graph-gallery-styles]: https://python-graph-gallery.com/199-matplotlib-style-sheets/
 [python-standard-library]: https://docs.python.org/3/library/
 [python-traceback]: https://docs.python.org/3/library/traceback.html
 [readthedocs]: https://docs.readthedocs.io/en/latest/

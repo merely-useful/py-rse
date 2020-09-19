@@ -162,7 +162,7 @@
 
 \title{Research Software Engineering with Python}
 \author{Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson}
-\date{2020-09-17}
+\date{2020-09-19}
 
 \begin{document}
 \maketitle
@@ -12312,7 +12312,7 @@ and then re-generate the Jane Eyre plot with bigger labels
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{$ python }\BuiltInTok{bin}\OperatorTok{/}\NormalTok{plotcounts.py data}\OperatorTok{/}\NormalTok{jane\_eyre.csv }\OperatorTok{{-}{-}}\NormalTok{outfile results}\OperatorTok{/}\NormalTok{jane\_eyre.png}
+\NormalTok{$ python }\BuiltInTok{bin}\OperatorTok{/}\NormalTok{plotcounts.py results}\OperatorTok{/}\NormalTok{jane\_eyre.csv }\OperatorTok{{-}{-}}\NormalTok{outfile results}\OperatorTok{/}\NormalTok{jane\_eyre.png}
 \end{Highlighting}
 \end{Shaded}
 
@@ -12331,7 +12331,7 @@ Since \texttt{matplotlibrc} file sets system-wide defaults,
 we will now have big labels by default for all plotting we do in future,
 which we may not want.
 Secondly,
-we want to package our Zipf's Law code and make it available to other people.
+we want to package our Zipf's Law code and make it available to other people (Chapter \ref{packaging}).
 That package won't include our \texttt{matplotlibrc} file,
 and we don't have access to the one on their computer,
 so this solution isn't as reproducible as others.
@@ -12637,19 +12637,35 @@ Read about automatic variables (Section \ref{automate-autovar}) and
 \href{https://www.gnu.org/software/make/manual/html_node/Text-Functions.html\#Text-Functions}{functions for string substitution and analysis}
 to understand what that command is doing.
 
-\hypertarget{config-ex-accessible}{%
-\subsection{Making plots more accessible}\label{config-ex-accessible}}
+\hypertarget{config-ex-style}{%
+\subsection{Using different plot styles}\label{config-ex-style}}
 
-If we want to make sure our plots are accessible to people with color vision challenges,
-we can choose an appropriate style at the beginning of our script:
+There are a wide variety of pre-defined matplotlib styles (Section \ref{config-user}),
+as illustrated at the \href{https://python-graph-gallery.com/199-matplotlib-style-sheets/}{Python Graph Gallery}.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{plt.style.use(}\StringTok{\textquotesingle{}tableau{-}colorblind10\textquotesingle{}}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Add a new option \texttt{-\/-style} to \texttt{plotcounts.py} that allows the user
+  to pick a style from the list of pre-defined matplotlib styles.
+\end{enumerate}
 
-How can we make this the default for all of our plots?
+Hint: Use the \texttt{choices} parameter discussed in Section \ref{config-command-line}
+to define the valid choices for the new \texttt{-\/-style} option.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\item
+  Re-generate the plot of the \emph{Jane Eyre} word count distribution
+  using a bunch of different styles to decide which you like best.
+\item
+  Matplotlib style sheets are designed to be composed together.
+  (See the \href{https://matplotlib.org/tutorials/introductory/customizing.html}{style sheets tutorial} for details.)
+  Use the \texttt{nargs} parameter to allow the user to pass any number of styles
+  when using the \texttt{-\/-style} option.
+\end{enumerate}
 
 \hypertarget{config-ex-saveload}{%
 \subsection{Saving configurations}\label{config-ex-saveload}}
@@ -12683,10 +12699,28 @@ but whose values are a list of the places where that configuration parameter was
 \hypertarget{config-ex-ini}{%
 \subsection{Using INI syntax}\label{config-ex-ini}}
 
-Read the documentation for Python's \href{https://docs.python.org/3/library/configparser.html}{\texttt{configparser}} module,
-then rewrite the configuration loader in this chapter to use INI syntax rather than YAML.
-Which do you find easier to read?
-What factors other than readability should influence your choice of a configuration file syntax?
+If we used \href{https://en.wikipedia.org/wiki/INI_file}{Windows INI format} instead of YAML
+for our plot parameters configuration file
+(i.e.~\texttt{plotparams.ini} instead of \texttt{plotparams.yml})
+that file would read as follows:
+
+\begin{verbatim}
+[AXES]
+axes.labelsize=x-large
+
+[TICKS]
+xtick.labelsize=large
+ytick.labelsize=large
+\end{verbatim}
+
+The \href{https://docs.python.org/3/library/configparser.html}{\texttt{configparser}} library can be used to read and write INI files.
+Install that library by running \texttt{pip\ install\ configparser} at the command line.
+
+Using \texttt{configparser}, rewrite the \texttt{set\_plot\_params} function in \texttt{plotcounts.py} to
+handle a configuration file in INI rather than YAML format.
+
+Which file format do you find easier to work with?
+What other factors should influence your choice of a configuration file syntax?
 
 \hypertarget{config-ex-consistency}{%
 \subsection{Configuration consistency}\label{config-ex-consistency}}
@@ -20313,11 +20347,59 @@ settings :
     @echo SUMMARY: $(SUMMARY)
 \end{verbatim}
 
-\hypertarget{exercise-refconfig-ex-accessible}{%
-\subsection*{Exercise~\ref{config-ex-accessible}}\label{exercise-refconfig-ex-accessible}}
+\hypertarget{exercise-refconfig-ex-style}{%
+\subsection*{Exercise~\ref{config-ex-style}}\label{exercise-refconfig-ex-style}}
 
 
-FIXME
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Make the following additions to \texttt{plotcounts.py}:
+\end{enumerate}
+
+Import \texttt{matplotlib.pyplot}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\end{Highlighting}
+\end{Shaded}
+
+Define the new \texttt{-\/-style} option:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{parser.add\_argument(}\StringTok{\textquotesingle{}{-}{-}style\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{str}\NormalTok{, choices}\OperatorTok{=}\NormalTok{plt.style.available,}
+\NormalTok{                    default}\OperatorTok{=}\VariableTok{None}\NormalTok{, }\BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}matplotlib style\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Use the style at the top of the `main function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ main(args):}
+    \CommentTok{"""Run the command line program."""}
+    \ControlFlowTok{if}\NormalTok{ args.style:}
+\NormalTok{        plt.style.use(args.style)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Add \texttt{nargs=\textquotesingle{}*\textquotesingle{}} to the definition of the \texttt{-\/-style} option:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{parser.add\_argument(}\StringTok{\textquotesingle{}{-}{-}style\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{str}\NormalTok{, nargs}\OperatorTok{=}\StringTok{\textquotesingle{}*\textquotesingle{}}\NormalTok{, choices}\OperatorTok{=}\NormalTok{plt.style.available,}
+\NormalTok{                    default}\OperatorTok{=}\VariableTok{None}\NormalTok{, }\BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}matplotlib style\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{exercise-refconfig-ex-saveload}{%
 \subsection*{Exercise~\ref{config-ex-saveload}}\label{exercise-refconfig-ex-saveload}}
@@ -20335,7 +20417,31 @@ FIXME
 \subsection*{Exercise~\ref{config-ex-ini}}\label{exercise-refconfig-ex-ini}}
 
 
-FIXME
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ configparser}
+
+\KeywordTok{def}\NormalTok{ set\_plot\_params(param\_file):}
+    \CommentTok{"""Set the matplotlib parameters."""}
+    \ControlFlowTok{if}\NormalTok{ param\_file:}
+\NormalTok{        config }\OperatorTok{=}\NormalTok{ configparser.ConfigParser()}
+\NormalTok{        config.read(param\_file)}
+        \ControlFlowTok{for}\NormalTok{ section }\KeywordTok{in}\NormalTok{ config.sections():}
+            \ControlFlowTok{for}\NormalTok{ param }\KeywordTok{in}\NormalTok{ config[section]:}
+\NormalTok{                value }\OperatorTok{=}\NormalTok{ config[section][param]}
+\NormalTok{                mpl.rcParams[param] }\OperatorTok{=}\NormalTok{ value}
+\end{Highlighting}
+\end{Shaded}
+
+TODO: Add answers to the following questions:
+
+\begin{itemize}
+\tightlist
+\item
+  Which file format do you find easier to work with?
+\item
+  What other factors should influence your choice of a configuration file syntax?
+\end{itemize}
 
 \hypertarget{exercise-refconfig-ex-consistency}{%
 \subsection*{Exercise~\ref{config-ex-consistency}}\label{exercise-refconfig-ex-consistency}}
