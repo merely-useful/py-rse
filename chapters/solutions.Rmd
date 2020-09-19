@@ -1133,9 +1133,35 @@ settings :
 	@echo SUMMARY: $(SUMMARY)
 ```
 
-### Exercise \@ref(config-ex-accessible) {-}
+### Exercise \@ref(config-ex-style) {-}
 
-FIXME
+1. Make the following additions to `plotcounts.py`:
+
+Import `matplotlib.pyplot`:
+```python
+import matplotlib.pyplot as plt
+```
+
+Define the new `--style` option:
+```python
+parser.add_argument('--style', type=str, choices=plt.style.available,
+                    default=None, help='matplotlib style')
+```
+
+Use the style at the top of the `main function:
+```python
+def main(args):
+    """Run the command line program."""
+    if args.style:
+        plt.style.use(args.style)
+```
+
+3. Add `nargs='*'` to the definition of the `--style` option:
+
+```python
+parser.add_argument('--style', type=str, nargs='*', choices=plt.style.available,
+                    default=None, help='matplotlib style')
+```
 
 ### Exercise \@ref(config-ex-saveload) {-}
 
@@ -1147,7 +1173,25 @@ FIXME
 
 ### Exercise \@ref(config-ex-ini) {-}
 
-FIXME
+```python
+import configparser
+
+def set_plot_params(param_file):
+    """Set the matplotlib parameters."""
+    if param_file:
+        config = configparser.ConfigParser()
+        config.read(param_file)
+        for section in config.sections():
+            for param in config[section]:
+                value = config[section][param]
+                mpl.rcParams[param] = value
+```
+
+TODO: Add answers to the following questions:
+
+- Which file format do you find easier to work with?
+- What other factors should influence your choice of a configuration file syntax?
+
 
 ### Exercise \@ref(config-ex-consistency) {-}
 

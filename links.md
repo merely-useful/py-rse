@@ -60,6 +60,7 @@
 [make]: https://www.gnu.org/software/make/
 [make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
+[matplotlib-style-tutorial]: https://matplotlib.org/tutorials/introductory/customizing.html
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
 [orcid-registration]: https://orcid.org/register
@@ -78,6 +79,7 @@
 [python]: https://www.python.org/
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
+[python-graph-gallery-styles]: https://python-graph-gallery.com/199-matplotlib-style-sheets/
 [python-standard-library]: https://docs.python.org/3/library/
 [python-traceback]: https://docs.python.org/3/library/traceback.html
 [readthedocs]: https://docs.readthedocs.io/en/latest/
