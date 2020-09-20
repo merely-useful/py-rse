@@ -71,11 +71,19 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     ax.loglog(xvals, yvals, color='grey')
 
 
+def save_configuration(filename, params):
+    """Save configuration to a file."""
+    with open(filename, 'w') as reader:
+        yaml.dump(params, reader)
+
+
 def main(args):
     """Run the command line program."""
     if args.style:
         plt.style.use(args.style)
     set_plot_params(args.plotparams)
+    if args.saveconfig:
+        save_configuration(args.saveconfig, mpl.rcParams)
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
@@ -109,5 +117,9 @@ if __name__ == '__main__':
                         help='YAML file containing matplotlib parameters')
     parser.add_argument('--style', type=str, nargs='*', choices=plt.style.available,
                         default=None, help='matplotlib style')
+    parser.add_argument('--saveconfig', type=str, default=None,
+                        help='Save configuration to file')
+    parser.add_argument('--loadconfig', type=str, default=None,
+                        help='Load configuration from file')
     args = parser.parse_args()
     main(args)
