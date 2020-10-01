@@ -1,7 +1,5 @@
 # Solutions {#solutions}
 
-FIXME: Update the ordering of this section when we are finished rearranging.
-
 ## Chapter \@ref(bash-basics) {.unnumbered .unlisted}
 
 ### Exercise \@ref(bash-basics-ex-more-ls) {-}
@@ -1202,7 +1200,7 @@ parser.add_argument('--style', type=str, choices=plt.style.available,
                     default=None, help='matplotlib style')
 ```
 
-Use the style at the top of the `main function:
+Use the style at the top of the `main` function:
 ```python
 def main(args):
     """Run the command line program."""
@@ -1219,11 +1217,82 @@ parser.add_argument('--style', type=str, nargs='*', choices=plt.style.available,
 
 ### Exercise \@ref(config-ex-saveload) {-}
 
-FIXME: GVW to write solution
+The first step is to add a new command-line argument to tell `plotcount.py` what we want to do:
 
-### Exercise \@ref(config-ex-trace) {-}
+```python
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    # ...other options as before...
+    parser.add_argument('--saveconfig', type=str, default=None,
+                        help='Save configuration to file')
+    args = parser.parse_args()
+    main(args)
+```
 
-FIXME
+Next, we add three lines to `main` to act on this option *after* all of the plotting parameters have been set.
+For now we use `return` to exit from `main` as soon as the parameters have been saved;
+this lets us test our change without overwriting any of our actual plots.
+
+```python
+def main(args):
+    """Run the command line program."""
+    if args.style:
+        plt.style.use(args.style)
+    set_plot_params(args.plotparams)
+    # Save plotting configuration.
+    if args.saveconfig:
+        save_configuration(args.saveconfig, mpl.rcParams)
+        return
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    # ...carry on producing plot...
+
+
+def save_configuration(filename, params):
+    """Save configuration to a file."""
+    with open(filename, 'w') as reader:
+        yaml.dump(params, reader)
+```
+
+Finally, we add a target to `Makefile` to try out our change.
+We do the test this way so that we can be sure that
+we're testing with the same options we use with the real program;
+if we were to type in the whole command ourselves,
+we might use something different.
+We also save the configuration to `/tmp` rather than to our project directory
+to keep it out of version control's way:
+
+```python
+## test-saveconfig : save plot configuration.
+test-saveconfig :
+	python $(PLOT) --saveconfig /tmp/test-saveconfig.yml --plotparams $(PARAMS)
+```
+
+The output is over 400 lines long,
+and includes settings for everything from the animation bit rate and the size of y-axis ticks:
+
+```yaml
+!!python/object/new:matplotlib.RcParams
+dictitems:
+  _internal.classic_mode: false
+  agg.path.chunksize: 0
+  animation.avconv_args: []
+  animation.avconv_path: avconv
+  animation.bitrate: -1
+  ...
+  ytick.minor.size: 2.0
+  ytick.minor.visible: false
+  ytick.minor.width: 0.6
+  ytick.right: false
+```
+
+The beautiful thing about this file is that the entries are automatically sorted alphabetically,
+which makes it easy for both human beings and the `diff` command to spot differences.
+This helps reproducibility because any one of these settings might change
+in a new release of `matplotlib`,
+and any of those changes might affect our plots.
+Saving the settings allows us to compare what we had when we did our work
+to what we have when we're trying to recreate it,
+which in turn gives us a starting point for debugging if we need to.
 
 ### Exercise \@ref(config-ex-ini) {-}
 
@@ -1241,15 +1310,26 @@ def set_plot_params(param_file):
                 mpl.rcParams[param] = value
 ```
 
-TODO: Add answers to the following questions:
+1.  Most people seem to find Windows INI files easier to write and read,
+    since it's easier to see what's a heading and what's a value.
 
-- Which file format do you find easier to work with?
-- What other factors should influence your choice of a configuration file syntax?
-
+2.  However, Windows INI files only provide one level of sectioning,
+    so complex configurations are harder to express.
+    Thus, while YAML may be a bit more difficult to get started with,
+    it will take us further.
 
 ### Exercise \@ref(config-ex-consistency) {-}
 
-FIXME
+The answer depends on whether we are able to make changes to Program A and Program B.
+If we can,
+we can modify them to use overlay configuration
+and put the shared parameters in a single file that both programs load.
+If we can't do that,
+the next best thing is to create a small helper program
+that reads their configuration files and checks that common parameters have consistent values.
+The first solution prevents the problem;
+the second detects it,
+which is a lot better than nothing.
 
 ## Chapter \@ref(errors) {.unnumbered .unlisted}
 
@@ -1634,11 +1714,45 @@ Depending on what was done before using the checklist, there will be either
 very little that needs to be updated or a lot. If this course was followed,
 most items would be checked off of the list.
 
-### Exercise \@ref(packaging-ex-data) {-}
-
-FIXME
-
 ### Exercise \@ref(packaging-ex-up-to-date) {-}
 
 Depending on how often you update your Python packages, you will have very little
 or a lot to update.
+
+### Exercise \@ref(packaging-ex-pratchett) {-}
+
+The directory tree for the `pratchett` package is:
+
+```
+pratchett
+├── pratchett
+│   └── quotes.py
+├── README.md
+└── setup.py
+```
+
+`README.md` should contain a basic description of the package and how to install/use it,
+while `setup.py` should contain:
+
+```
+from setuptools import setup
+
+
+setup(
+    name='pratchett',
+    version='0.1',
+    author='Amira Khan',
+    packages=['pratchett'],
+)
+```
+
+The following sequence of commands will create the development environment,
+activate it,
+and then install the package:
+
+```
+$ conda create -n pratchett python
+$ conda activate pratchett
+(pratchett)$ cd pratchett
+(pratchett)$ pip install -e .
+```
