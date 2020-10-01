@@ -162,7 +162,7 @@
 
 \title{Research Software Engineering with Python}
 \author{Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson}
-\date{2020-09-19}
+\date{2020-10-01}
 
 \begin{document}
 \maketitle
@@ -5019,8 +5019,9 @@ Our function splits the text on \gref{whitespace}{whitespace} characters
 then strips leading and trailing punctuation.
 This isn't completely correct---if two words are joined by a long dash
 like ``correct'' and ``if'' in this sentence, for example,
-they will be treated as one word---so
-we will explore better options in the exercises.
+they will be treated as one word---but given that long dashes are used relatively
+infrequently it's close enough to correct for our purposes.
+(We will submit a bug report about the long dash issue in Section \ref{teams-bugs}).
 We also use the \texttt{Counter} class from the \texttt{collections} library
 to count how many times each word occurs.
 If we give \texttt{Counter} a list of words,
@@ -5654,6 +5655,112 @@ and the statement we want to run:
 \end{verbatim}
 
 When and why is this useful?
+
+\hypertarget{scripting-ex-glob-ls}{%
+\subsection{Listing files}\label{scripting-ex-glob-ls}}
+
+A Python library called \href{https://docs.python.org/3/library/glob.html}{glob} can be used to create a list of files
+matching a pattern, much like the \texttt{ls} shell command.
+
+\begin{verbatim}
+$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import glob
+>>> glob.glob('data/*.txt')
+['data/moby_dick.txt', 'data/sense_and_sensibility.txt',
+'data/sherlock_holmes.txt', 'data/time_machine.txt',
+'data/frankenstein.txt', 'data/dracula.txt',
+'data/jane_eyre.txt']
+\end{verbatim}
+
+Using \texttt{script\_template.py} as a guide,
+write a new script called \texttt{my\_ls.py}
+that takes as input a directory and suffix (e.g.~py, txt, md, sh)
+and outputs a list of the files (sorted alphabetically)
+in that directory ending in that suffix.
+
+The help information for the new script should read as follows,
+
+\begin{verbatim}
+$ python bin/my_ls.py -h
+\end{verbatim}
+
+\begin{verbatim}
+usage: my_ls.py [-h] dir suffix
+
+List the files in a given directory with a given suffix.
+
+positional arguments:
+  dir         Directory
+  suffix      File suffix (e.g. py, sh)
+
+optional arguments:
+  -h, --help  show this help message and exit
+\end{verbatim}
+
+and an example of the output would be:
+
+\begin{verbatim}
+$ python bin/my_ls.py data/ txt
+\end{verbatim}
+
+\begin{verbatim}
+data/dracula.txt
+data/frankenstein.txt
+data/jane_eyre.txt
+data/moby_dick.txt
+data/sense_and_sensibility.txt
+data/sherlock_holmes.txt
+data/time_machine.txt
+\end{verbatim}
+
+\hypertarget{scripting-ex-sentence-endings}{%
+\subsection{Sentence ending punctuation}\label{scripting-ex-sentence-endings}}
+
+Our \texttt{countwords.py} script strips the punctuation from a text,
+which means it provides no information on sentence endings.
+Using \texttt{script\_template.py} and \texttt{countwords.py} as a guide,
+write a new script called \texttt{sentence\_endings.py} that counts
+the occurrence of full stops, question marks and exclamation points
+and prints that information to the screen.
+
+Hint: String objects have a \texttt{count} method, e.g:
+
+\begin{verbatim}
+$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> "Hello! Are you ok?".count('!')
+1
+\end{verbatim}
+
+When you're done,
+the script should be able to accept an input file,
+
+\begin{verbatim}
+$ python bin/sentence_endings.py data/dracula.txt
+\end{verbatim}
+
+\begin{verbatim}
+Number of . is 8505
+Number of ? is 492
+Number of ! is 752
+\end{verbatim}
+
+or standard input:
+
+\begin{verbatim}
+$ head -500 data/dracula.txt | python bin/sentence_endings.py
+\end{verbatim}
+
+\begin{verbatim}
+Number of . is 148
+Number of ? is 8
+Number of ! is 8
+\end{verbatim}
 
 \hypertarget{scripting-ex-better-plotting}{%
 \subsection{A better plotting program}\label{scripting-ex-better-plotting}}
@@ -19522,6 +19629,68 @@ it is often convenient to separate commands with semi-colons, as in:
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{exercise-refscripting-ex-glob-ls}{%
+\subsection*{Exercise~\ref{scripting-ex-glob-ls}}\label{exercise-refscripting-ex-glob-ls}}
+
+
+The \texttt{my\_ls.py} script could read as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{"""List the files in a given directory with a given suffix."""}
+
+\ImportTok{import}\NormalTok{ argparse}
+\ImportTok{import}\NormalTok{ glob}
+
+
+\KeywordTok{def}\NormalTok{ main(args):}
+    \CommentTok{"""Run the program."""}
+    \BuiltInTok{dir} \OperatorTok{=}\NormalTok{ args.}\BuiltInTok{dir} \ControlFlowTok{if}\NormalTok{ args.}\BuiltInTok{dir}\NormalTok{[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{] }\OperatorTok{==} \StringTok{\textquotesingle{}/\textquotesingle{}} \ControlFlowTok{else}\NormalTok{ args.}\BuiltInTok{dir} \OperatorTok{+} \StringTok{\textquotesingle{}/\textquotesingle{}}
+\NormalTok{    glob\_input }\OperatorTok{=} \BuiltInTok{dir} \OperatorTok{+} \StringTok{\textquotesingle{}*.\textquotesingle{}} \OperatorTok{+}\NormalTok{ args.suffix}
+\NormalTok{    glob\_output }\OperatorTok{=} \BuiltInTok{sorted}\NormalTok{(glob.glob(glob\_input))}
+    \ControlFlowTok{for}\NormalTok{ item }\KeywordTok{in}\NormalTok{ glob\_output:}
+        \BuiltInTok{print}\NormalTok{(item)}
+
+
+\ControlFlowTok{if} \VariableTok{\_\_name\_\_} \OperatorTok{==} \StringTok{\textquotesingle{}\_\_main\_\_\textquotesingle{}}\NormalTok{:}
+\NormalTok{    parser }\OperatorTok{=}\NormalTok{ argparse.ArgumentParser(description}\OperatorTok{=}\NormalTok{\_\_doc\_\_)}
+\NormalTok{    parser.add\_argument(}\StringTok{\textquotesingle{}dir\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{str}\NormalTok{, }\BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}Directory\textquotesingle{}}\NormalTok{)}
+\NormalTok{    parser.add\_argument(}\StringTok{\textquotesingle{}suffix\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{str}\NormalTok{, }\BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}File suffix (e.g. py, sh)\textquotesingle{}}\NormalTok{)}
+\NormalTok{    args }\OperatorTok{=}\NormalTok{ parser.parse\_args()}
+\NormalTok{    main(args)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{exercise-refscripting-ex-sentence-endings}{%
+\subsection*{Exercise~\ref{scripting-ex-sentence-endings}}\label{exercise-refscripting-ex-sentence-endings}}
+
+
+The \texttt{sentence\_endings.py} script could read as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{"""Count the occurrence of different types of sentence endings."""}
+
+\ImportTok{import}\NormalTok{ argparse}
+
+
+\KeywordTok{def}\NormalTok{ main(args):}
+    \CommentTok{"""Run the command line program."""}
+\NormalTok{    text }\OperatorTok{=}\NormalTok{ args.infile.read()}
+    \ControlFlowTok{for}\NormalTok{ ending }\KeywordTok{in}\NormalTok{ [}\StringTok{\textquotesingle{}.\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}?\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}!\textquotesingle{}}\NormalTok{]:}
+\NormalTok{        count }\OperatorTok{=}\NormalTok{ text.count(ending)}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f\textquotesingle{}Number of }\SpecialCharTok{\{}\NormalTok{ending}\SpecialCharTok{\}}\SpecialStringTok{ is }\SpecialCharTok{\{}\NormalTok{count}\SpecialCharTok{\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{)}
+
+ 
+\ControlFlowTok{if} \VariableTok{\_\_name\_\_} \OperatorTok{==} \StringTok{\textquotesingle{}\_\_main\_\_\textquotesingle{}}\NormalTok{:}
+\NormalTok{    parser }\OperatorTok{=}\NormalTok{ argparse.ArgumentParser(description}\OperatorTok{=}\NormalTok{\_\_doc\_\_)}
+\NormalTok{    parser.add\_argument(}\StringTok{\textquotesingle{}infile\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\NormalTok{argparse.FileType(}\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{), nargs}\OperatorTok{=}\StringTok{\textquotesingle{}?\textquotesingle{}}\NormalTok{,}
+\NormalTok{                        default}\OperatorTok{=}\StringTok{\textquotesingle{}{-}\textquotesingle{}}\NormalTok{, }\BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}Input file name\textquotesingle{}}\NormalTok{)}
+\NormalTok{    args }\OperatorTok{=}\NormalTok{ parser.parse\_args()}
+\NormalTok{    main(args)}
+\end{Highlighting}
+\end{Shaded}
+
 \hypertarget{exercise-refscripting-ex-better-plotting}{%
 \subsection*{Exercise~\ref{scripting-ex-better-plotting}}\label{exercise-refscripting-ex-better-plotting}}
 
@@ -19537,6 +19706,7 @@ The \texttt{plotcounts.py} script should read as follows:
 
 
 \KeywordTok{def}\NormalTok{ main(args):}
+    \CommentTok{"""Run the command line program."""}
 \NormalTok{    df }\OperatorTok{=}\NormalTok{ pd.read\_csv(args.infile, header}\OperatorTok{=}\VariableTok{None}\NormalTok{, names}\OperatorTok{=}\NormalTok{(}\StringTok{\textquotesingle{}word\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}word\_frequency\textquotesingle{}}\NormalTok{))}
 \NormalTok{    df[}\StringTok{\textquotesingle{}rank\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ df[}\StringTok{\textquotesingle{}word\_frequency\textquotesingle{}}\NormalTok{].rank(ascending}\OperatorTok{=}\VariableTok{False}\NormalTok{, method}\OperatorTok{=}\StringTok{\textquotesingle{}max\textquotesingle{}}\NormalTok{)}
 \NormalTok{    df[}\StringTok{\textquotesingle{}inverse\_rank\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \DecValTok{1} \OperatorTok{/}\NormalTok{ df[}\StringTok{\textquotesingle{}rank\textquotesingle{}}\NormalTok{]}

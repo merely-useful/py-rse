@@ -24,7 +24,7 @@
 <meta name="author" content="Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson" />
 
 
-<meta name="date" content="2020-09-19" />
+<meta name="date" content="2020-10-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 <link rel="prev" href="bash-advanced.html"/>
 <link rel="next" href="git-cmdline.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
+<script src="libs/header-attrs-2.4/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -237,7 +237,9 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="4.11" data-path="scripting.html"><a href="scripting.html#scripting-exercises"><i class="fa fa-check"></i><b>4.11</b> Exercises</a>
 <ul>
 <li class="chapter" data-level="4.11.1" data-path="scripting.html"><a href="scripting.html#scripting-ex-command-line"><i class="fa fa-check"></i><b>4.11.1</b> Running Python statements from the command line</a></li>
-<li class="chapter" data-level="4.11.2" data-path="scripting.html"><a href="scripting.html#scripting-ex-better-plotting"><i class="fa fa-check"></i><b>4.11.2</b> A better plotting program</a></li>
+<li class="chapter" data-level="4.11.2" data-path="scripting.html"><a href="scripting.html#scripting-ex-glob-ls"><i class="fa fa-check"></i><b>4.11.2</b> Listing files</a></li>
+<li class="chapter" data-level="4.11.3" data-path="scripting.html"><a href="scripting.html#scripting-ex-sentence-endings"><i class="fa fa-check"></i><b>4.11.3</b> Sentence ending punctuation</a></li>
+<li class="chapter" data-level="4.11.4" data-path="scripting.html"><a href="scripting.html#scripting-ex-better-plotting"><i class="fa fa-check"></i><b>4.11.4</b> A better plotting program</a></li>
 </ul></li>
 <li class="chapter" data-level="4.12" data-path="scripting.html"><a href="scripting.html#scripting-keypoints"><i class="fa fa-check"></i><b>4.12</b> Key Points</a></li>
 </ul></li>
@@ -862,8 +864,9 @@ Our function splits the text on <a href="glossary.html#whitespace">whitespace</a
 then strips leading and trailing punctuation.
 This isn’t completely correct—if two words are joined by a long dash
 like “correct” and “if” in this sentence, for example,
-they will be treated as one word—so
-we will explore better options in the exercises.
+they will be treated as one word—but given that long dashes are used relatively
+infrequently it’s close enough to correct for our purposes.
+(We will submit a bug report about the long dash issue in Section <a href="teams.html#teams-bugs">7.6</a>).
 We also use the <code>Counter</code> class from the <code>collections</code> library
 to count how many times each word occurs.
 If we give <code>Counter</code> a list of words,
@@ -1347,8 +1350,76 @@ and the statement we want to run:</p>
 <pre class="text"><code>5</code></pre>
 <p>When and why is this useful?</p>
 </div>
-<div id="scripting-ex-better-plotting" class="section level3" number="4.11.2">
-<h3><span class="header-section-number">4.11.2</span> A better plotting program</h3>
+<div id="scripting-ex-glob-ls" class="section level3" number="4.11.2">
+<h3><span class="header-section-number">4.11.2</span> Listing files</h3>
+<p>A Python library called <a href="https://docs.python.org/3/library/glob.html">glob</a> can be used to create a list of files
+matching a pattern, much like the <code>ls</code> shell command.</p>
+<pre class="shell"><code>$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import glob
+&gt;&gt;&gt; glob.glob(&#39;data/*.txt&#39;)
+[&#39;data/moby_dick.txt&#39;, &#39;data/sense_and_sensibility.txt&#39;,
+&#39;data/sherlock_holmes.txt&#39;, &#39;data/time_machine.txt&#39;,
+&#39;data/frankenstein.txt&#39;, &#39;data/dracula.txt&#39;,
+&#39;data/jane_eyre.txt&#39;]</code></pre>
+<p>Using <code>script_template.py</code> as a guide,
+write a new script called <code>my_ls.py</code>
+that takes as input a directory and suffix (e.g. py, txt, md, sh)
+and outputs a list of the files (sorted alphabetically)
+in that directory ending in that suffix.</p>
+<p>The help information for the new script should read as follows,</p>
+<pre class="shell"><code>$ python bin/my_ls.py -h</code></pre>
+<pre class="text"><code>usage: my_ls.py [-h] dir suffix
+
+List the files in a given directory with a given suffix.
+
+positional arguments:
+  dir         Directory
+  suffix      File suffix (e.g. py, sh)
+
+optional arguments:
+  -h, --help  show this help message and exit</code></pre>
+<p>and an example of the output would be:</p>
+<pre class="shell"><code>$ python bin/my_ls.py data/ txt</code></pre>
+<pre class="text"><code>data/dracula.txt
+data/frankenstein.txt
+data/jane_eyre.txt
+data/moby_dick.txt
+data/sense_and_sensibility.txt
+data/sherlock_holmes.txt
+data/time_machine.txt</code></pre>
+</div>
+<div id="scripting-ex-sentence-endings" class="section level3" number="4.11.3">
+<h3><span class="header-section-number">4.11.3</span> Sentence ending punctuation</h3>
+<p>Our <code>countwords.py</code> script strips the punctuation from a text,
+which means it provides no information on sentence endings.
+Using <code>script_template.py</code> and <code>countwords.py</code> as a guide,
+write a new script called <code>sentence_endings.py</code> that counts
+the occurrence of full stops, question marks and exclamation points
+and prints that information to the screen.</p>
+<p>Hint: String objects have a <code>count</code> method, e.g:</p>
+<pre class="shell"><code>$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; &quot;Hello! Are you ok?&quot;.count(&#39;!&#39;)
+1</code></pre>
+<p>When you’re done,
+the script should be able to accept an input file,</p>
+<pre class="shell"><code>$ python bin/sentence_endings.py data/dracula.txt</code></pre>
+<pre class="text"><code>Number of . is 8505
+Number of ? is 492
+Number of ! is 752</code></pre>
+<p>or standard input:</p>
+<pre class="shell"><code>$ head -500 data/dracula.txt | python bin/sentence_endings.py</code></pre>
+<pre class="text"><code>Number of . is 148
+Number of ? is 8
+Number of ! is 8</code></pre>
+</div>
+<div id="scripting-ex-better-plotting" class="section level3" number="4.11.4">
+<h3><span class="header-section-number">4.11.4</span> A better plotting program</h3>
 <p>Using <code>script_template.py</code> as a guide,
 take the plotting code from Section <a href="scripting.html#scripting-plotting">4.9</a>
 and write a new Python program called <code>plotcounts.py</code>.

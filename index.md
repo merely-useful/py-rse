@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-09-19"
+date: "2020-10-01"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -4436,8 +4436,9 @@ Our function splits the text on \gref{whitespace}{whitespace} characters
 then strips leading and trailing punctuation.
 This isn't completely correct---if two words are joined by a long dash
 like "correct" and "if" in this sentence, for example,
-they will be treated as one word---so
-we will explore better options in the exercises.
+they will be treated as one word---but given that long dashes are used relatively
+infrequently it's close enough to correct for our purposes.
+(We will submit a bug report about the long dash issue in Section \@ref(teams-bugs)).
 We also use the `Counter` class from the `collections` library
 to count how many times each word occurs.
 If we give `Counter` a list of words,
@@ -5025,6 +5026,110 @@ $ python -c "print(2+3)"
 ```
 
 When and why is this useful?
+
+### Listing files {#scripting-ex-glob-ls}
+
+A Python library called [glob][glob] can be used to create a list of files
+matching a pattern, much like the `ls` shell command.
+
+```shell
+$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import glob
+>>> glob.glob('data/*.txt')
+['data/moby_dick.txt', 'data/sense_and_sensibility.txt',
+'data/sherlock_holmes.txt', 'data/time_machine.txt',
+'data/frankenstein.txt', 'data/dracula.txt',
+'data/jane_eyre.txt']
+```
+
+Using `script_template.py` as a guide,
+write a new script called `my_ls.py`
+that takes as input a directory and suffix (e.g. py, txt, md, sh)
+and outputs a list of the files (sorted alphabetically)
+in that directory ending in that suffix.
+
+The help information for the new script should read as follows,
+
+```shell
+$ python bin/my_ls.py -h
+```
+
+```text
+usage: my_ls.py [-h] dir suffix
+
+List the files in a given directory with a given suffix.
+
+positional arguments:
+  dir         Directory
+  suffix      File suffix (e.g. py, sh)
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+and an example of the output would be:
+
+```shell
+$ python bin/my_ls.py data/ txt
+```
+
+```text
+data/dracula.txt
+data/frankenstein.txt
+data/jane_eyre.txt
+data/moby_dick.txt
+data/sense_and_sensibility.txt
+data/sherlock_holmes.txt
+data/time_machine.txt
+```
+
+### Sentence ending punctuation {#scripting-ex-sentence-endings}
+
+Our `countwords.py` script strips the punctuation from a text,
+which means it provides no information on sentence endings.
+Using `script_template.py` and `countwords.py` as a guide,
+write a new script called `sentence_endings.py` that counts
+the occurrence of full stops, question marks and exclamation points
+and prints that information to the screen.
+
+Hint: String objects have a `count` method, e.g:
+
+```shell
+$ python
+Python 3.8.1 | packaged by conda-forge | (default, Jan 29 2020, 14:55:04)
+[GCC 7.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> "Hello! Are you ok?".count('!')
+1
+```
+
+When you're done,
+the script should be able to accept an input file,
+
+```shell
+$ python bin/sentence_endings.py data/dracula.txt
+```
+
+```text
+Number of . is 8505
+Number of ? is 492
+Number of ! is 752
+```
+
+or standard input:
+
+```shell
+$ head -500 data/dracula.txt | python bin/sentence_endings.py
+```
+
+```text
+Number of . is 148
+Number of ? is 8
+Number of ! is 8
+```
 
 ### A better plotting program {#scripting-ex-better-plotting}
 
@@ -17330,6 +17435,59 @@ it is often convenient to separate commands with semi-colons, as in:
 $ python -c "import math; print(math.log(123))"
 ```
 
+### Exercise \@ref(scripting-ex-glob-ls) {-}
+
+The `my_ls.py` script could read as follows:
+
+```python
+"""List the files in a given directory with a given suffix."""
+
+import argparse
+import glob
+
+
+def main(args):
+    """Run the program."""
+    dir = args.dir if args.dir[-1] == '/' else args.dir + '/'
+    glob_input = dir + '*.' + args.suffix
+    glob_output = sorted(glob.glob(glob_input))
+    for item in glob_output:
+        print(item)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('dir', type=str, help='Directory')
+    parser.add_argument('suffix', type=str, help='File suffix (e.g. py, sh)')
+    args = parser.parse_args()
+    main(args)
+```
+
+### Exercise \@ref(scripting-ex-sentence-endings) {-}
+
+The `sentence_endings.py` script could read as follows:
+
+```python
+"""Count the occurrence of different types of sentence endings."""
+
+import argparse
+
+
+def main(args):
+    """Run the command line program."""
+    text = args.infile.read()
+    for ending in ['.', '?', '!']:
+        count = text.count(ending)
+        print(f'Number of {ending} is {count}')
+
+ 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    args = parser.parse_args()
+    main(args)
+```
 
 ### Exercise \@ref(scripting-ex-better-plotting) {-}
 
@@ -17343,6 +17501,7 @@ import pandas as pd
 
 
 def main(args):
+    """Run the command line program."""
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     df['inverse_rank'] = 1 / df['rank']
@@ -20524,6 +20683,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [github]: https://github.com
 [gitkraken]: https://www.gitkraken.com/
 [gitlab]: https://gitlab.com/
+[glob]: https://docs.python.org/3/library/glob.html
 [gnu-make]: https://www.gnu.org/software/make/
 [gnu-man-coreutils]: https://www.gnu.org/software/coreutils/manual/coreutils.html
 [gnu-man]: https://www.gnu.org/manual/manual.html
