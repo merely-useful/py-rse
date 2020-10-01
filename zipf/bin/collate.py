@@ -11,6 +11,15 @@ def update_counts(reader, word_counts):
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
+def process_file(file_name, word_counts):
+    """Read file and update word counts"""
+    logging.debug(f'Reading in {file_name}...')
+    if file_name[-4:] != '.csv':
+        raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+    with open(file_name, 'r') as reader:
+        logging.debug('Computing word counts...')
+        update_counts(reader, word_counts)
+
 def main(args):
     """Run the command line program."""
     log_level = logging.DEBUG if args.verbose else logging.WARNING
@@ -19,12 +28,7 @@ def main(args):
     logging.info('Processing files...')
     for file_name in args.infiles:
         try:
-            logging.debug(f'Reading in {file_name}...')
-            if file_name[-4:] != '.csv':
-                raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-            with open(file_name, 'r') as reader:
-                logging.debug('Computing word counts...')
-                update_counts(reader, word_counts)
+            process_file(file_name, word_counts)
         except FileNotFoundError:
             logging.warning(f'{file_name} not processed: File does not exist')
         except PermissionError:

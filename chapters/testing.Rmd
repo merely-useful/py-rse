@@ -111,7 +111,8 @@ Broadly speaking, assertions fall into three categories:
     or it might be something like,
     "the value of `highest` is less than or equal to the current loop index".
 
-The function `get_power_law_params` is a good example of the need for a precondition.
+The function `get_power_law_params` in our `plotcounts.py` script
+is a good example of the need for a precondition.
 Its docstring does not say that its `word_counts` parameter must be a list of numeric word counts;
 even if we add that,
 a user might easily pass in a list of the words themselves instead.
@@ -1164,6 +1165,69 @@ def total(values):
 
 Write unit tests to check that the `assert` statements in the previous question's `total` function
 do what they're supposed to.
+
+### Test error handling {#testing-ex-error-handling}
+
+In Chapter \@ref(errors), we added some functionality to `collate.py` in order to handle
+different types of errors associated with reading input files.
+The relevant code appears in the `main` function of that script:
+
+```python
+def main(args):
+    """Run the command line program."""
+    log_level = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(level=log_level, filename=args.logfile)
+    word_counts = Counter()
+    logging.info('Processing files...')
+    for file_name in args.infiles:
+        try:
+            logging.debug(f'Reading in {file_name}...')
+            if file_name[-4:] != '.csv':
+                raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+            with open(file_name, 'r') as reader:
+                logging.debug('Computing word counts...')
+                update_counts(reader, word_counts)
+        except FileNotFoundError:
+            logging.warning(f'{file_name} not processed: File does not exist')
+        except PermissionError:
+            logging.warning(f'{file_name} not processed: No permission to read file')
+        except Exception as error:
+            logging.warning(f'{file_name} not processed: {error}')
+    utilities.collection_to_csv(word_counts, num=args.num)
+```
+
+In this current chapter we discussed using `pytest.raises`
+to test whether the error handling in a program is working as expected (Section \@ref(testing-failure)).
+An appropriate test for `collate.py` would be to check that an `OSError` is raised
+when the input file does not end in `.csv`.
+The problem is that it is difficult to write a simple unit test
+for the code as it is currently written,
+because `main` is a long function that requires command line arguments as input.
+In other words, we need to edit `collate.py` so that it is more modular
+before writing our unit test.
+
+1. Edit `collate.py` so that the six lines of code responsible for processing an input file
+appear in their own function that reads as follows
+(i.e. once you are done, `main` should call `process_file` in place of the existing code): 
+
+```python
+def process_file(file_name, word_counts):
+    """Read file and update word counts"""
+    logging.debug(f'Reading in {file_name}...')
+    if file_name[-4:] != '.csv':
+        raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+    with open(file_name, 'r') as reader:
+        logging.debug('Computing word counts...')
+        update_counts(reader, word_counts)
+``` 
+
+2. Add a unit test to `test_zipfs.py` that uses `pytest.raises` to check that the new
+`collate.process_file` function raises an `OSError` if the input file does not end in `.csv`.
+Run `pytest` to check that the new test passes.
+
+3. Add a unit test to `test_zipfs.py` that uses `pytest.raises` to check that the new
+`collate.process_file` function raises a `FileNotFoundError` if the input file does not exist.
+Run `pytest` to check that the new test passes.
 
 ### Add the Travis CI status to your README {#testing-ex-ci-status-readme}
 
