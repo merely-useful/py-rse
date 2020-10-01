@@ -21,6 +21,7 @@
 [configparser]: https://docs.python.org/3/library/configparser.html
 [covenant]: https://www.contributor-covenant.org
 [creative-commons]: https://creativecommons.org/
+[data-files]: https://github.com/merely-useful/py-rse/raw/book/data/zipf.zip
 [desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [drake]: https://ropenscilabs.github.io/drake-manual/
@@ -113,6 +114,7 @@
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
+[xcode]: https://developer.apple.com/xcode/
 [zenodo]: https://zenodo.org/
 [zipf-project-page]: https://test.pypi.org/project/zipf/
 [zipfs-law]: https://en.wikipedia.org/wiki/Zipf%27s_law
