@@ -47,6 +47,7 @@
 [github]: https://github.com
 [gitkraken]: https://www.gitkraken.com/
 [gitlab]: https://gitlab.com/
+[glob]: https://docs.python.org/3/library/glob.html
 [gnu-make]: https://www.gnu.org/software/make/
 [gnu-man-coreutils]: https://www.gnu.org/software/coreutils/manual/coreutils.html
 [gnu-man]: https://www.gnu.org/manual/manual.html
