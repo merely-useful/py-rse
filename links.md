@@ -21,7 +21,6 @@
 [configparser]: https://docs.python.org/3/library/configparser.html
 [covenant]: https://www.contributor-covenant.org
 [creative-commons]: https://creativecommons.org/
-[data-files]: https://github.com/merely-useful/py-rse/raw/book/data/zipf.zip
 [desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [drake]: https://ropenscilabs.github.io/drake-manual/
@@ -96,6 +95,7 @@
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
+[swc-git]: http://swcarpentry.github.io/git-novice/
 [swc-make]: https://github.com/swcarpentry/make-novice
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
