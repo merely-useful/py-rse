@@ -1245,6 +1245,12 @@ def main(args):
         return
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
     # ...carry on producing plot...
+
+
+def save_configuration(filename, params):
+    """Save configuration to a file."""
+    with open(filename, 'w') as reader:
+        yaml.dump(params, reader)
 ```
 
 Finally, we add a target to `Makefile` to try out our change.
@@ -1309,6 +1315,8 @@ def set_plot_params(param_file):
 
 2.  However, Windows INI files only provide one level of sectioning,
     so complex configurations are harder to express.
+    Thus, while YAML may be a bit more difficult to get started with,
+    it will take us further.
 
 ### Exercise \@ref(config-ex-consistency) {-}
 
@@ -1710,3 +1718,41 @@ most items would be checked off of the list.
 
 Depending on how often you update your Python packages, you will have very little
 or a lot to update.
+
+### Exercise \@ref(packaging-ex-pratchett) {-}
+
+The directory tree for the `pratchett` package is:
+
+```
+pratchett
+├── pratchett
+│   └── quotes.py
+├── README.md
+└── setup.py
+```
+
+`README.md` should contain a basic description of the package and how to install/use it,
+while `setup.py` should contain:
+
+```
+from setuptools import setup
+
+
+setup(
+    name='pratchett',
+    version='0.1',
+    author='Amira Khan',
+    packages=['pratchett'],
+)
+```
+
+The following sequence of commands will create the development environment,
+activate it,
+and then install the package:
+
+```
+$ conda create -n pratchett python
+$ conda activate pratchett
+(pratchett)$ cd pratchett
+(pratchett)$ pip install -e .
+```

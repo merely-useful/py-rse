@@ -119,7 +119,5 @@ if __name__ == '__main__':
                         default=None, help='matplotlib style')
     parser.add_argument('--saveconfig', type=str, default=None,
                         help='Save configuration to file')
-    parser.add_argument('--loadconfig', type=str, default=None,
-                        help='Load configuration from file')
     args = parser.parse_args()
     main(args)
