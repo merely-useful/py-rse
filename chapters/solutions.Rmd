@@ -492,6 +492,59 @@ it is often convenient to separate commands with semi-colons, as in:
 $ python -c "import math; print(math.log(123))"
 ```
 
+### Exercise \@ref(scripting-ex-glob-ls) {-}
+
+The `my_ls.py` script could read as follows:
+
+```python
+"""List the files in a given directory with a given suffix."""
+
+import argparse
+import glob
+
+
+def main(args):
+    """Run the program."""
+    dir = args.dir if args.dir[-1] == '/' else args.dir + '/'
+    glob_input = dir + '*.' + args.suffix
+    glob_output = sorted(glob.glob(glob_input))
+    for item in glob_output:
+        print(item)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('dir', type=str, help='Directory')
+    parser.add_argument('suffix', type=str, help='File suffix (e.g. py, sh)')
+    args = parser.parse_args()
+    main(args)
+```
+
+### Exercise \@ref(scripting-ex-sentence-endings) {-}
+
+The `sentence_endings.py` script could read as follows:
+
+```python
+"""Count the occurrence of different types of sentence endings."""
+
+import argparse
+
+
+def main(args):
+    """Run the command line program."""
+    text = args.infile.read()
+    for ending in ['.', '?', '!']:
+        count = text.count(ending)
+        print(f'Number of {ending} is {count}')
+
+ 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
+                        default='-', help='Input file name')
+    args = parser.parse_args()
+    main(args)
+```
 
 ### Exercise \@ref(scripting-ex-better-plotting) {-}
 
@@ -505,6 +558,7 @@ import pandas as pd
 
 
 def main(args):
+    """Run the command line program."""
     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     df['inverse_rank'] = 1 / df['rank']
