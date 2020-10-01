@@ -11427,23 +11427,11 @@ when using the `--style` option.
 
 ### Saving configurations {#config-ex-saveload}
 
-1.  Add an option `--saveconfig filename` to `plotcounts.py`
-    that writes all of the configuration for `plotcounts.py` to a file
-    (or to standard output if the filename given is `-`).
-    Make sure this option saves *all* of the configuration,
-    including any defaults that the user hasn't changed.
-2.  Add an option `--loadconfig filename` to `plotcounts.py`
-    that reads settings from a file like the one created in the previous step.
-3.  How would you use these two options when debugging?
-
-### Tracing configuration {#config-ex-trace}
-
-One drawback of overlay configuration is
-the difficulty of figuring out where particular parameters are set.
-Modify the functions written in this chapter
-so that they keep track of where parameters' values come from.
-(Hint: create a second dictionary whose keys match those in the dictionary holding configuration values,
-but whose values are a list of the places where that configuration parameter was set.)
+Add an option `--saveconfig filename` to `plotcounts.py`
+that writes all of its configuration to a file.
+Make sure this option saves *all* of the configuration,
+including any defaults that the user hasn't changed.
+How would this option make your work more reproducible?
 
 ### Using INI syntax {#config-ex-ini}
 
@@ -11467,8 +11455,8 @@ Install that library by running `pip install configparser` at the command line.
 Using `configparser`, rewrite the `set_plot_params` function in `plotcounts.py` to
 handle a configuration file in INI rather than YAML format.
 
-Which file format do you find easier to work with?
-What other factors should influence your choice of a configuration file syntax?
+1.  Which file format do you find easier to work with?
+2.  What other factors should influence your choice of a configuration file syntax?
 
 ### Configuration consistency {#config-ex-consistency}
 
@@ -15018,7 +15006,7 @@ together with a line for the theoretical distribution for Zipf's Law.
 Motivation
 ----------
 
-Zipf’s Law is often stated as an observational pattern seen in the
+Zipf's Law is often stated as an observational pattern seen in the
 relationship between the frequency and rank of words in a text:
 
 `"…the most frequent word will occur approximately twice as often
@@ -15491,28 +15479,6 @@ that reviewers must follow when assessing a submitted software paper.
 Run through the checklist (skipping the criteria related to the software paper)
 and see how the Zipf's Law package would rate on each criteria.
 
-### Data packages {#packaging-ex-data}
-
-R provides many \gref{data packages}{data_package}
-that can be loaded like any other library but provide a dataset instead of
-(or as well as)
-runnable code.
-Create a Python package called `collated` that provides a single function `getData`,
-so that:
-
-```python
-import collated
-counts = collated.getData()
-```
-
-assigns a dictionary of word frequencies to the variable `counts`
-using the data from the Zipf project's `collated.csv`.
-Do *not* copy the data into a Python file;
-instead,
-have `getData` read the data from a copy of the CSV file distributed as part of the package.
-(Hint: the special variable `collated.__path__`
-holds the directory containing the installed `collated` package.)
-
 ### Staying up to date {#packaging-ex-up-to-date}
 
 1.  Run `pip list` to get a list of the Python packages you have installed.
@@ -15522,6 +15488,44 @@ holds the directory containing the installed `collated` package.)
     (This may take a few seconds.)
     How many are there,
     and how can you update them?
+
+### Packaging quotations {#packaging-ex-pratchett}
+
+Each chapter in this book opens with a quote from the British author Terry Pratchett.
+This script `quotes.py` contains a function `random_quote` which prints a random Pratchett quote:
+
+```
+import random
+
+quote_list = ["It's still magic even if you know how it's done.",
+              "Ninety percent of most magic merely consists "\
+              "of knowing one extra fact.",
+              "There isn't a way things should be. "\
+              "There's just what happens, and what we do.",
+              "Multiple exclamation marks are a sure sign "\
+              "of a diseased mind.",
+              "+++ Divide By Cucumber Error. "\
+              "Please Reinstall Universe And Reboot +++",
+              "It's got three keyboards and a hundred extra knobs, "\
+              "including twelve with ‘?' on them.",
+              "Evil begins when you begin to treat people as things.",
+             ]
+                         
+def random_quote():
+    """Print a random Pratchett quote."""
+    print(random.choice(quote_list))
+```
+
+Create a new conda development environment called `pratchett`
+and use `pip` to install a new package called `pratchett` into that environment.
+The package should contain `quotes.py`,
+and once the package has been installed the user should be able to run:
+
+```
+from pratchett import quotes
+
+quotes.random_quote()
+```
 
 ## Key Points {#packaging-keypoints}
 
@@ -16943,8 +16947,6 @@ and is intended to help instructors who want to use this curriculum.
 
 # Solutions {#solutions}
 
-FIXME: Update the ordering of this section when we are finished rearranging.
-
 ## Chapter \@ref(bash-basics) {.unnumbered .unlisted}
 
 ### Exercise \@ref(bash-basics-ex-more-ls) {-}
@@ -18145,7 +18147,7 @@ parser.add_argument('--style', type=str, choices=plt.style.available,
                     default=None, help='matplotlib style')
 ```
 
-Use the style at the top of the `main function:
+Use the style at the top of the `main` function:
 ```python
 def main(args):
     """Run the command line program."""
@@ -18162,11 +18164,82 @@ parser.add_argument('--style', type=str, nargs='*', choices=plt.style.available,
 
 ### Exercise \@ref(config-ex-saveload) {-}
 
-FIXME: GVW to write solution
+The first step is to add a new command-line argument to tell `plotcount.py` what we want to do:
 
-### Exercise \@ref(config-ex-trace) {-}
+```python
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    # ...other options as before...
+    parser.add_argument('--saveconfig', type=str, default=None,
+                        help='Save configuration to file')
+    args = parser.parse_args()
+    main(args)
+```
 
-FIXME
+Next, we add three lines to `main` to act on this option *after* all of the plotting parameters have been set.
+For now we use `return` to exit from `main` as soon as the parameters have been saved;
+this lets us test our change without overwriting any of our actual plots.
+
+```python
+def main(args):
+    """Run the command line program."""
+    if args.style:
+        plt.style.use(args.style)
+    set_plot_params(args.plotparams)
+    # Save plotting configuration.
+    if args.saveconfig:
+        save_configuration(args.saveconfig, mpl.rcParams)
+        return
+    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    # ...carry on producing plot...
+
+
+def save_configuration(filename, params):
+    """Save configuration to a file."""
+    with open(filename, 'w') as reader:
+        yaml.dump(params, reader)
+```
+
+Finally, we add a target to `Makefile` to try out our change.
+We do the test this way so that we can be sure that
+we're testing with the same options we use with the real program;
+if we were to type in the whole command ourselves,
+we might use something different.
+We also save the configuration to `/tmp` rather than to our project directory
+to keep it out of version control's way:
+
+```python
+## test-saveconfig : save plot configuration.
+test-saveconfig :
+	python $(PLOT) --saveconfig /tmp/test-saveconfig.yml --plotparams $(PARAMS)
+```
+
+The output is over 400 lines long,
+and includes settings for everything from the animation bit rate and the size of y-axis ticks:
+
+```yaml
+!!python/object/new:matplotlib.RcParams
+dictitems:
+  _internal.classic_mode: false
+  agg.path.chunksize: 0
+  animation.avconv_args: []
+  animation.avconv_path: avconv
+  animation.bitrate: -1
+  ...
+  ytick.minor.size: 2.0
+  ytick.minor.visible: false
+  ytick.minor.width: 0.6
+  ytick.right: false
+```
+
+The beautiful thing about this file is that the entries are automatically sorted alphabetically,
+which makes it easy for both human beings and the `diff` command to spot differences.
+This helps reproducibility because any one of these settings might change
+in a new release of `matplotlib`,
+and any of those changes might affect our plots.
+Saving the settings allows us to compare what we had when we did our work
+to what we have when we're trying to recreate it,
+which in turn gives us a starting point for debugging if we need to.
 
 ### Exercise \@ref(config-ex-ini) {-}
 
@@ -18184,15 +18257,26 @@ def set_plot_params(param_file):
                 mpl.rcParams[param] = value
 ```
 
-TODO: Add answers to the following questions:
+1.  Most people seem to find Windows INI files easier to write and read,
+    since it's easier to see what's a heading and what's a value.
 
-- Which file format do you find easier to work with?
-- What other factors should influence your choice of a configuration file syntax?
-
+2.  However, Windows INI files only provide one level of sectioning,
+    so complex configurations are harder to express.
+    Thus, while YAML may be a bit more difficult to get started with,
+    it will take us further.
 
 ### Exercise \@ref(config-ex-consistency) {-}
 
-FIXME
+The answer depends on whether we are able to make changes to Program A and Program B.
+If we can,
+we can modify them to use overlay configuration
+and put the shared parameters in a single file that both programs load.
+If we can't do that,
+the next best thing is to create a small helper program
+that reads their configuration files and checks that common parameters have consistent values.
+The first solution prevents the problem;
+the second detects it,
+which is a lot better than nothing.
 
 ## Chapter \@ref(errors) {.unnumbered .unlisted}
 
@@ -18577,14 +18661,48 @@ Depending on what was done before using the checklist, there will be either
 very little that needs to be updated or a lot. If this course was followed,
 most items would be checked off of the list.
 
-### Exercise \@ref(packaging-ex-data) {-}
-
-FIXME
-
 ### Exercise \@ref(packaging-ex-up-to-date) {-}
 
 Depending on how often you update your Python packages, you will have very little
 or a lot to update.
+
+### Exercise \@ref(packaging-ex-pratchett) {-}
+
+The directory tree for the `pratchett` package is:
+
+```
+pratchett
+├── pratchett
+│   └── quotes.py
+├── README.md
+└── setup.py
+```
+
+`README.md` should contain a basic description of the package and how to install/use it,
+while `setup.py` should contain:
+
+```
+from setuptools import setup
+
+
+setup(
+    name='pratchett',
+    version='0.1',
+    author='Amira Khan',
+    packages=['pratchett'],
+)
+```
+
+The following sequence of commands will create the development environment,
+activate it,
+and then install the package:
+
+```
+$ conda create -n pratchett python
+$ conda activate pratchett
+(pratchett)$ cd pratchett
+(pratchett)$ pip install -e .
+```
 
 <!--chapter:end:chapters/solutions.Rmd-->
 
