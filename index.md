@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-10-01"
+date: "2020-10-02"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -138,7 +138,7 @@ that has the following software installed:
 - [Python 3][python] (via the Anaconda distribution)
 - [GNU Make][gnu-make]
 
-Please see Appendix \@ref(install) for instructions on how to set all of this up.
+Please see Appendix \@ref(install-software) for instructions on how to set all of this up.
 
 ## Syllabus {#intro-syllabus}
 
@@ -194,9 +194,9 @@ but experience teaches that we will be more productive if we make tidiness a hab
 
 In building the Zipf's Law project we'll follow 
 a widely-used template
-for organizing small and medium-sized data analysis projects @Nobl2009.
+for organizing small and medium-sized data analysis projects [@Nobl2009].
 The project will live in a directory called `zipf`, 
-which will also be a Git repository stored on GitHub.
+which will also be a Git repository stored on GitHub (Chapter \@ref(git-cmdline)).
 The following is an abbreviated version of the project directory tree
 as it appears towards the end of the book:
 
@@ -298,7 +298,7 @@ and packaging (Chapter \@ref(packaging)).
 
 Over the course of this book,
 you'll build up the project structure described above.
-Appendix \@ref(install) explains
+Appendix \@ref(install-data) explains
 how to download the novels in `data/`,
 which are the only files you'll need to get started.
 When you are done,
@@ -335,11 +335,11 @@ and Elizabeth Wickes.
 
 -   Many of the explanations and exercises in Chapters \@ref(bash-basics) and \@ref(bash-advanced)
     have been adapted from Software Carpentry's lesson
-    [The Unix Shell](http://swcarpentry.github.io/shell-novice/).
+    [The Unix Shell][swc-shell-novice].
 
 -   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
     have been adapted from Software Carpentry's lesson
-    [Version Control with Git](http://swcarpentry.github.io/git-novice/) and an
+    [Version Control with Git][swc-git] and an
     [adaptation/extension of that lesson][uwm-git-lesson] maintained by
     the University of Wisconsin-Madison Data Science Hub.
 
@@ -16516,20 +16516,20 @@ the following software is required:
 1. a \gref{Bash shell}{shell}
 2. \gref{Git}{git} version control
 3. a text editor
-4. [Python 3][python] (via the Anaconda distribution)
+4. Python 3 (via the Anaconda distribution)
 5. [GNU Make][gnu-make]
 
 Software installation instructions for Windows, Mac and Linux operating systems
 (with video tutorials) are maintained by [The Carpentries][carpentries]
-as part of their workshop website template:
-<https://carpentries.github.io/workshop-template/#setup>.
+as part of their workshop website template:  
+<https://carpentries.github.io/workshop-template/#setup>
 
 Follow those instructions to install the bash shell, Git, a text editor and Anaconda.
 
 If Make is not already installed on your computer (type `make -v` into the Bash shell to check): 
 
 - *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
-- *Mac*: Install [Xcode] (via the App Store).
+- *Mac*: Install [Xcode][xcode] (via the App Store).
 - *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
   Master of Data Science at the University of British Columbia.
 
@@ -16551,27 +16551,14 @@ git config --global core.editor "nano -w"
   
 ## Data {#install-data}
 
-Download [`zipf.zip`][data-files] and unzip it in the location that you would like
-to store the files associated with this book.
-When you are done,
-you should have a directory called `zipf`,
-containing a single sub-directory called `data`
-with the following contents:
- 
-```text
-zipf/
-└── data
-    ├── README.md
-    ├── dracula.txt
-    ├── frankenstein.txt
-    ├── jane_eyre.txt
-    ├── moby_dick.txt
-    ├── sense_and_sensibility.txt
-    ├── sherlock_holmes.txt
-    └── time_machine.txt
-```
+The data files used in the book have been archived
+at an online repository called Figshare (Section \@ref(provenance-data-where)).
+They can be accessed at the following URL:  
+<https://doi.org/10.6084/m9.figshare.13040516>
 
-See `data/README.md` for information about the data.
+Download a zip file containing the data files by clicking "download all" at the URL above.
+Unzip the contents into your `zipf/data` directory,
+following the project structure described in Section \@ref(intro-setup).
 
 <!--chapter:end:chapters/install.Rmd-->
 
@@ -20850,6 +20837,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
+[swc-git]: http://swcarpentry.github.io/git-novice/
 [swc-make]: https://github.com/swcarpentry/make-novice
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
@@ -20869,6 +20857,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
+[xcode]: https://developer.apple.com/xcode/
 [zenodo]: https://zenodo.org/
 [zipf-project-page]: https://test.pypi.org/project/zipf/
 [zipfs-law]: https://en.wikipedia.org/wiki/Zipf%27s_law
