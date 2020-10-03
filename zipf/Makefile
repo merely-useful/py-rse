@@ -11,7 +11,11 @@ RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 ## all : regenerate all results.
 all : results/collated.png
 
-## results/collated.png: plot the collated results.
+## test-saveconfig : save plot configuration.
+test-saveconfig :
+	python $(PLOT) --saveconfig /tmp/test-saveconfig.yml --plotparams $(PARAMS)
+
+## results/collated.png : plot the collated results.
 results/collated.png : results/collated.csv $(PARAMS)
 	python $(PLOT) $< --outfile $@ --plotparams $(word 2,$^)
 

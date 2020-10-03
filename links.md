@@ -46,6 +46,7 @@
 [github]: https://github.com
 [gitkraken]: https://www.gitkraken.com/
 [gitlab]: https://gitlab.com/
+[glob]: https://docs.python.org/3/library/glob.html
 [gnu-make]: https://www.gnu.org/software/make/
 [gnu-man-coreutils]: https://www.gnu.org/software/coreutils/manual/coreutils.html
 [gnu-man]: https://www.gnu.org/manual/manual.html
@@ -94,6 +95,7 @@
 [srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
+[swc-git]: http://swcarpentry.github.io/git-novice/
 [swc-make]: https://github.com/swcarpentry/make-novice
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
@@ -113,6 +115,7 @@
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
+[xcode]: https://developer.apple.com/xcode/
 [zenodo]: https://zenodo.org/
 [zipf-project-page]: https://test.pypi.org/project/zipf/
 [zipfs-law]: https://en.wikipedia.org/wiki/Zipf%27s_law
