@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-10-02"
+date: "2020-10-03"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
