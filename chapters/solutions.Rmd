@@ -1531,104 +1531,85 @@ used to get and print information from these objects.
 -   The third assertion checks that the total of the list is greater than 0.
     Input such as `[-10, 2, 3]` will make it fail.
 
-### Exercise \@ref(testing-ex-test-assert) {-}
+### Exercise \@ref(testing-ex-rectangles) {-}
 
-We can test that the first assertion fails when `values` is not a non-empty list as follows:
-
-```python
-def test_fails_for_non_list():
-    try:
-        total('not a list')
-        assert False, 'Should have raised AssertionError'
-    except AssertionError:
-        pass
-    except:
-        assert False, 'Should have raised AssertionError'
-```
-
-In order:
-
-1.  The first `assert False` will only happen if `total` runs without raising any kind of exception.
-
-2.  The `except AssertionError` branch does nothing (`pass`) if the correct exception is raised.
-
-3.  The catch-all `except` at the end makes the test fail if the wrong kind of exception is raised.
-
-This pattern is so common that `pytest` provides a shorthand notation for it:
+1. Remove the comment about inserting preconditions and add the following:
 
 ```python
-def test_fails_for_non_list():
-    with pytest.raises(AssertionError):
-        total('not a list')
+assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
+x0, y0, x1, y1 = rect
+assert x0 < x1, 'Invalid X coordinates'
+assert y0 < y1, 'Invalid Y coordinates'
 ```
 
-If the call to `total` *doesn't* raise `AssertionError`, this test fails.
+2. Remove the comment about inserting postconditions and add the following
+
+```python
+assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
+assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
+```
+
+3. The problem is that the following section of `normalize_rectangle`
+should read `float(dy) / dx`, not `float(dx) / dy`.
+
+```python
+if dx > dy:
+    scaled = float(dx) / dy
+```
+
+4. `test_geometry.py` should read as follows:
+
+```python
+import geometry
+
+def test_tall_skinny():
+    """Test normalization of a tall, skinny rectangle."""
+    rect = [20, 15, 30, 20]
+    expected_result = (0, 0, 1.0, 0.5)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+```
+
+5. Other tests might include (but are not limited to):
+
+```python
+def test_short_wide():
+    """Test normalization of a short, wide rectangle."""
+    rect = [2, 5, 3, 10]
+    expected_result = (0, 0, 0.2, 1.0)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+    
+def test_negative_coordinates():
+    """Test normalization of rectangle with negative coordinates."""
+    rect = [-2, 5, -1, 10]
+    expected_result = (0, 0, 0.2, 1.0)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+```
 
 ### Exercise \@ref(testing-ex-error-handling) {-}
 
-1. `collate.py` should read as follows:
+1. The `try/except` block in `collate.py` should read begin as follows:
 
 ```python
-"""Combine multiple word count CSV-files into a single cumulative count."""
-import csv
-import argparse
-from collections import Counter
-import logging
-import utilities
-
-
-def update_counts(reader, word_counts):
-    """Update word counts with data from another reader/file."""
-    for word, count in csv.reader(reader):
-        word_counts[word] += int(count)
-
-def process_file(file_name, word_counts):
-    """Read file and update word counts"""
-    logging.debug(f'Reading in {file_name}...')
-    if file_name[-4:] != '.csv':
-        raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-    with open(file_name, 'r') as reader:
-        logging.debug('Computing word counts...')
-        update_counts(reader, word_counts)
-
-def main(args):
-    """Run the command line program."""
-    log_level = logging.DEBUG if args.verbose else logging.WARNING
-    logging.basicConfig(level=log_level, filename=args.logfile)
-    word_counts = Counter()
-    logging.info('Processing files...')
-    for file_name in args.infiles:
-        try:
-            process_file(file_name, word_counts)
-        except FileNotFoundError:
-            logging.warning(f'{file_name} not processed: File does not exist')
-        except PermissionError:
-            logging.warning(f'{file_name} not processed: No permission to read file')
-        except Exception as error:
-            logging.warning(f'{file_name} not processed: {error}')
-    utilities.collection_to_csv(word_counts, num=args.num)
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
-    parser.add_argument('-v', '--verbose', action="store_true", default=False,
-                        help="Change logging threshold from WARNING to DEBUG")
-    parser.add_argument('-l', '--logfile', type=str, default='collate.log',
-                        help='Name of the log file')
-    args = parser.parse_args()
-    main(args)
+try:
+    process_file(file_name, word_counts)
+except FileNotFoundError:
+# ... the other exceptions
 ```
 
-2. The following needs to be added to `test_zipfs.py`:
+2. The following additions need to be made to `test_zipfs.py`.
+
+Import the `collate` library:
 
 ```python
-# .. other imports as before ...
 import collate
+```
 
-# .. other functions as before ...
+Define the new unit test:
 
+```python
 def test_not_csv_error():
     """Error handling test for csv check"""
     file_name = 'data/dracula.txt'
@@ -1637,14 +1618,9 @@ def test_not_csv_error():
         collate.process_file(file_name, word_counts)
 ```
 
-3. The following test could bne added to `test_zipfs.py`:
+3. The following unit test needs to be added to `test_zipfs.py`.
 
 ```python
-# .. other imports as before ...
-import collate
-
-# .. other functions as before ...
-
 def test_missing_file_error():
     """Error handling test for missing file"""
     file_name = 'fake_file.csv'
@@ -1653,23 +1629,20 @@ def test_missing_file_error():
         collate.process_file(file_name, word_counts)
 ```
 
-### Exercise \@ref(testing-ex-ci-status-readme) {-}
+4. The following sequence of commands is required to test the code coverage.
 
-To test that the Travis status display is working correctly,
-try committing a test that deliberately fails to version control.
+Generate the html report:
 
-### Exercise \@ref(testing-ex-config) {-}
+```shell
+$ coverage run -m pytest
+$ coverage html
+```
 
-If every configuration setting has a sensible default,
-we can create configuration files that each change exactly one parameter.
-Alternatively,
-if our program uses \gref{overlay configuration}{overlay_configuration},
-we can have each test use a standard configuration file plus a second one that changes one setting.
-In either case,
-we can either run the program and check its output,
-or check that the data structure storing configuration information has the right values
-(and trust other tests to make sure that those settings do what they're supposed to).
-
+Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
+The lines of `process_files` that include the `raise OSError` and
+`open(file_name, 'r')` commands should appear in green after clicking the green "run" box
+in the top left hand corner of the page.
+ 
 ### Exercise \@ref(testing-ex-random) {-}
 
 There are three approaches to testing when pseudo-random numbers are involved:
