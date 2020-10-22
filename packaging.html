@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 13 Python Packaging | Research Software Engineering with Python</title>
   <meta name="description" content="Chapter 13 Python Packaging | Research Software Engineering with Python" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 13 Python Packaging | Research Software Engineering with Python" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson" />
 
 
-<meta name="date" content="2020-10-03" />
+<meta name="date" content="2020-10-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 <link rel="prev" href="provenance.html"/>
 <link rel="next" href="finale.html"/>
-<script src="libs/header-attrs-2.4/header-attrs.js"></script>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link rel="shortcut icon" href="favicon.ico" />
 
 
@@ -418,11 +420,10 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="11.12" data-path="testing.html"><a href="testing.html#testing-exercises"><i class="fa fa-check"></i><b>11.12</b> Exercises</a>
 <ul>
 <li class="chapter" data-level="11.12.1" data-path="testing.html"><a href="testing.html#testing-ex-explain-assertions"><i class="fa fa-check"></i><b>11.12.1</b> Explaining assertions</a></li>
-<li class="chapter" data-level="11.12.2" data-path="testing.html"><a href="testing.html#testing-ex-test-assert"><i class="fa fa-check"></i><b>11.12.2</b> Test assertions</a></li>
-<li class="chapter" data-level="11.12.3" data-path="testing.html"><a href="testing.html#testing-ex-ci-status-readme"><i class="fa fa-check"></i><b>11.12.3</b> Add the Travis CI status to your README</a></li>
-<li class="chapter" data-level="11.12.4" data-path="testing.html"><a href="testing.html#testing-ex-config"><i class="fa fa-check"></i><b>11.12.4</b> Testing configuration</a></li>
-<li class="chapter" data-level="11.12.5" data-path="testing.html"><a href="testing.html#testing-ex-random"><i class="fa fa-check"></i><b>11.12.5</b> Testing with randomness</a></li>
-<li class="chapter" data-level="11.12.6" data-path="testing.html"><a href="testing.html#testing-ex-relative-error"><i class="fa fa-check"></i><b>11.12.6</b> Testing with relative error</a></li>
+<li class="chapter" data-level="11.12.2" data-path="testing.html"><a href="testing.html#testing-ex-rectangles"><i class="fa fa-check"></i><b>11.12.2</b> Rectangle normalization</a></li>
+<li class="chapter" data-level="11.12.3" data-path="testing.html"><a href="testing.html#testing-ex-error-handling"><i class="fa fa-check"></i><b>11.12.3</b> Test error handling</a></li>
+<li class="chapter" data-level="11.12.4" data-path="testing.html"><a href="testing.html#testing-ex-random"><i class="fa fa-check"></i><b>11.12.4</b> Testing with randomness</a></li>
+<li class="chapter" data-level="11.12.5" data-path="testing.html"><a href="testing.html#testing-ex-relative-error"><i class="fa fa-check"></i><b>11.12.5</b> Testing with relative error</a></li>
 </ul></li>
 <li class="chapter" data-level="11.13" data-path="testing.html"><a href="testing.html#testing-keypoints"><i class="fa fa-check"></i><b>11.13</b> Key Points</a></li>
 </ul></li>
@@ -702,10 +703,10 @@ we only need to make one important change to the code itself:
 changing the syntax for how we import our own modules.
 Currently,
 both <code>collate.py</code> and <code>countwords.py</code> contains this line,</p>
-<div class="sourceCode" id="cb767"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb767-1"><a href="packaging.html#cb767-1" aria-hidden="true"></a><span class="im">import</span> utilities</span></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb774-1"><a href="packaging.html#cb774-1" aria-hidden="true"></a><span class="im">import</span> utilities</span></code></pre></div>
 <p>while <code>test_zipfs.py</code> contains:</p>
-<div class="sourceCode" id="cb768"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb768-1"><a href="packaging.html#cb768-1" aria-hidden="true"></a><span class="im">import</span> plotcounts</span>
-<span id="cb768-2"><a href="packaging.html#cb768-2" aria-hidden="true"></a><span class="im">import</span> countwords</span></code></pre></div>
+<div class="sourceCode" id="cb775"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb775-1"><a href="packaging.html#cb775-1" aria-hidden="true"></a><span class="im">import</span> plotcounts</span>
+<span id="cb775-2"><a href="packaging.html#cb775-2" aria-hidden="true"></a><span class="im">import</span> countwords</span></code></pre></div>
 <p>These are called
 <a href="glossary.html#implicit_relative_import">implicit relative imports</a>,
 because it is not clear whether we mean
@@ -714,10 +715,10 @@ or
 “import a file in our local directory called <code>utilities.py</code>”
 (which is what we want).
 To remove this ambiguity we need to be explicit and write,</p>
-<div class="sourceCode" id="cb769"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb769-1"><a href="packaging.html#cb769-1" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> utilities</span></code></pre></div>
+<div class="sourceCode" id="cb776"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb776-1"><a href="packaging.html#cb776-1" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> utilities</span></code></pre></div>
 <p>and</p>
-<div class="sourceCode" id="cb770"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb770-1"><a href="packaging.html#cb770-1" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> plotcounts</span>
-<span id="cb770-2"><a href="packaging.html#cb770-2" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> countwords</span></code></pre></div>
+<div class="sourceCode" id="cb777"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb777-1"><a href="packaging.html#cb777-1" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> plotcounts</span>
+<span id="cb777-2"><a href="packaging.html#cb777-2" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> countwords</span></code></pre></div>
 <p>These are <a href="glossary.html#absolute_import">absolute imports</a>
 since we are specifying the full location of <code>utilities</code>, <code>plotcounts</code> and <code>countwords</code>
 inside the <code>zipf</code> package.
@@ -726,7 +727,7 @@ but we can also use
 <a href="glossary.html#explicit_relative_import">explicit relative imports</a>,
 which require a little less typing
 and can sometimes make it easier to restructure very large projects:</p>
-<div class="sourceCode" id="cb771"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb771-1"><a href="packaging.html#cb771-1" aria-hidden="true"></a><span class="im">from</span> . <span class="im">import</span> utilities</span></code></pre></div>
+<div class="sourceCode" id="cb778"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb778-1"><a href="packaging.html#cb778-1" aria-hidden="true"></a><span class="im">from</span> . <span class="im">import</span> utilities</span></code></pre></div>
 <p>Here,
 the <code>.</code> signals that <code>utilities</code> exists in the current directory.</p>
 <p>Python has several ways to build an installable package.
@@ -740,14 +741,14 @@ we must create a file called <code>setup.py</code> in the directory <em>above</e
 (This is why we require the two-level directory structure described earlier.)
 <code>setup.py</code> must have exactly that name,
 and must contain lines like these:</p>
-<div class="sourceCode" id="cb772"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb772-1"><a href="packaging.html#cb772-1" aria-hidden="true"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
-<span id="cb772-2"><a href="packaging.html#cb772-2" aria-hidden="true"></a></span>
-<span id="cb772-3"><a href="packaging.html#cb772-3" aria-hidden="true"></a></span>
-<span id="cb772-4"><a href="packaging.html#cb772-4" aria-hidden="true"></a>setup(</span>
-<span id="cb772-5"><a href="packaging.html#cb772-5" aria-hidden="true"></a>    name<span class="op">=</span><span class="st">&#39;zipf&#39;</span>,</span>
-<span id="cb772-6"><a href="packaging.html#cb772-6" aria-hidden="true"></a>    version<span class="op">=</span><span class="st">&#39;0.1.0&#39;</span>,</span>
-<span id="cb772-7"><a href="packaging.html#cb772-7" aria-hidden="true"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
-<span id="cb772-8"><a href="packaging.html#cb772-8" aria-hidden="true"></a>    packages<span class="op">=</span>[<span class="st">&#39;zipf&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb779"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb779-1"><a href="packaging.html#cb779-1" aria-hidden="true"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
+<span id="cb779-2"><a href="packaging.html#cb779-2" aria-hidden="true"></a></span>
+<span id="cb779-3"><a href="packaging.html#cb779-3" aria-hidden="true"></a></span>
+<span id="cb779-4"><a href="packaging.html#cb779-4" aria-hidden="true"></a>setup(</span>
+<span id="cb779-5"><a href="packaging.html#cb779-5" aria-hidden="true"></a>    name<span class="op">=</span><span class="st">&#39;zipf&#39;</span>,</span>
+<span id="cb779-6"><a href="packaging.html#cb779-6" aria-hidden="true"></a>    version<span class="op">=</span><span class="st">&#39;0.1.0&#39;</span>,</span>
+<span id="cb779-7"><a href="packaging.html#cb779-7" aria-hidden="true"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
+<span id="cb779-8"><a href="packaging.html#cb779-8" aria-hidden="true"></a>    packages<span class="op">=</span>[<span class="st">&#39;zipf&#39;</span>])</span></code></pre></div>
 <p>The <code>name</code> and <code>author</code> parameters are self-explanatory.
 Most software projects use <a href="glossary.html#semantic_versioning">semantic versioning</a>
 for software releases.
@@ -885,20 +886,20 @@ We could install these manually,
 but it is more reliable to automate this process
 by listing everything that our package depends on
 using the <code>install_requires</code> parameter in <code>setup.py</code>:</p>
-<div class="sourceCode" id="cb784"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb784-1"><a href="packaging.html#cb784-1" aria-hidden="true"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
-<span id="cb784-2"><a href="packaging.html#cb784-2" aria-hidden="true"></a></span>
-<span id="cb784-3"><a href="packaging.html#cb784-3" aria-hidden="true"></a></span>
-<span id="cb784-4"><a href="packaging.html#cb784-4" aria-hidden="true"></a>setup(</span>
-<span id="cb784-5"><a href="packaging.html#cb784-5" aria-hidden="true"></a>    name<span class="op">=</span><span class="st">&#39;zipf&#39;</span>,</span>
-<span id="cb784-6"><a href="packaging.html#cb784-6" aria-hidden="true"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
-<span id="cb784-7"><a href="packaging.html#cb784-7" aria-hidden="true"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
-<span id="cb784-8"><a href="packaging.html#cb784-8" aria-hidden="true"></a>    packages<span class="op">=</span>[<span class="st">&#39;zipf&#39;</span>],</span>
-<span id="cb784-9"><a href="packaging.html#cb784-9" aria-hidden="true"></a>    install_requires<span class="op">=</span>[</span>
-<span id="cb784-10"><a href="packaging.html#cb784-10" aria-hidden="true"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
-<span id="cb784-11"><a href="packaging.html#cb784-11" aria-hidden="true"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
-<span id="cb784-12"><a href="packaging.html#cb784-12" aria-hidden="true"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
-<span id="cb784-13"><a href="packaging.html#cb784-13" aria-hidden="true"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
-<span id="cb784-14"><a href="packaging.html#cb784-14" aria-hidden="true"></a>        <span class="st">&#39;pytest&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb791"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb791-1"><a href="packaging.html#cb791-1" aria-hidden="true"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
+<span id="cb791-2"><a href="packaging.html#cb791-2" aria-hidden="true"></a></span>
+<span id="cb791-3"><a href="packaging.html#cb791-3" aria-hidden="true"></a></span>
+<span id="cb791-4"><a href="packaging.html#cb791-4" aria-hidden="true"></a>setup(</span>
+<span id="cb791-5"><a href="packaging.html#cb791-5" aria-hidden="true"></a>    name<span class="op">=</span><span class="st">&#39;zipf&#39;</span>,</span>
+<span id="cb791-6"><a href="packaging.html#cb791-6" aria-hidden="true"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
+<span id="cb791-7"><a href="packaging.html#cb791-7" aria-hidden="true"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
+<span id="cb791-8"><a href="packaging.html#cb791-8" aria-hidden="true"></a>    packages<span class="op">=</span>[<span class="st">&#39;zipf&#39;</span>],</span>
+<span id="cb791-9"><a href="packaging.html#cb791-9" aria-hidden="true"></a>    install_requires<span class="op">=</span>[</span>
+<span id="cb791-10"><a href="packaging.html#cb791-10" aria-hidden="true"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
+<span id="cb791-11"><a href="packaging.html#cb791-11" aria-hidden="true"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
+<span id="cb791-12"><a href="packaging.html#cb791-12" aria-hidden="true"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
+<span id="cb791-13"><a href="packaging.html#cb791-13" aria-hidden="true"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
+<span id="cb791-14"><a href="packaging.html#cb791-14" aria-hidden="true"></a>        <span class="st">&#39;pytest&#39;</span>])</span></code></pre></div>
 <p>We don’t have to list <code>numpy</code> explicitly
 because it will be installed as a dependency for <code>pandas</code> and <code>scipy</code>.</p>
 <blockquote>
@@ -946,10 +947,10 @@ just as we would any other package.
 For example,
 to use the function in <code>utilities</code>,
 we would write:</p>
-<div class="sourceCode" id="cb787"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb787-1"><a href="packaging.html#cb787-1" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> utilities</span>
-<span id="cb787-2"><a href="packaging.html#cb787-2" aria-hidden="true"></a></span>
-<span id="cb787-3"><a href="packaging.html#cb787-3" aria-hidden="true"></a></span>
-<span id="cb787-4"><a href="packaging.html#cb787-4" aria-hidden="true"></a>utilities.collection_to_csv(...)</span></code></pre></div>
+<div class="sourceCode" id="cb794"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb794-1"><a href="packaging.html#cb794-1" aria-hidden="true"></a><span class="im">from</span> zipf <span class="im">import</span> utilities</span>
+<span id="cb794-2"><a href="packaging.html#cb794-2" aria-hidden="true"></a></span>
+<span id="cb794-3"><a href="packaging.html#cb794-3" aria-hidden="true"></a></span>
+<span id="cb794-4"><a href="packaging.html#cb794-4" aria-hidden="true"></a>utilities.collection_to_csv(...)</span></code></pre></div>
 <p>However,
 the useful command-line scripts that we used to count and plot word counts
 are no longer accessible directly from the terminal.
@@ -958,25 +959,25 @@ the <code>setuptools</code> package allows us to install programs along with the
 These programs are placed beside those of other packages.
 We tell <code>setuptools</code> to do this by defining
 <a href="glossary.html#entry_point">entry points</a>:</p>
-<div class="sourceCode" id="cb788"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb788-1"><a href="packaging.html#cb788-1" aria-hidden="true"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
-<span id="cb788-2"><a href="packaging.html#cb788-2" aria-hidden="true"></a></span>
-<span id="cb788-3"><a href="packaging.html#cb788-3" aria-hidden="true"></a></span>
-<span id="cb788-4"><a href="packaging.html#cb788-4" aria-hidden="true"></a>setup(</span>
-<span id="cb788-5"><a href="packaging.html#cb788-5" aria-hidden="true"></a>    name<span class="op">=</span><span class="st">&#39;zipf&#39;</span>,</span>
-<span id="cb788-6"><a href="packaging.html#cb788-6" aria-hidden="true"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
-<span id="cb788-7"><a href="packaging.html#cb788-7" aria-hidden="true"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
-<span id="cb788-8"><a href="packaging.html#cb788-8" aria-hidden="true"></a>    packages<span class="op">=</span>[<span class="st">&#39;zipf&#39;</span>],</span>
-<span id="cb788-9"><a href="packaging.html#cb788-9" aria-hidden="true"></a>    install_requires<span class="op">=</span>[</span>
-<span id="cb788-10"><a href="packaging.html#cb788-10" aria-hidden="true"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
-<span id="cb788-11"><a href="packaging.html#cb788-11" aria-hidden="true"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
-<span id="cb788-12"><a href="packaging.html#cb788-12" aria-hidden="true"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
-<span id="cb788-13"><a href="packaging.html#cb788-13" aria-hidden="true"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
-<span id="cb788-14"><a href="packaging.html#cb788-14" aria-hidden="true"></a>        <span class="st">&#39;pytest&#39;</span>],</span>
-<span id="cb788-15"><a href="packaging.html#cb788-15" aria-hidden="true"></a>    entry_points<span class="op">=</span>{</span>
-<span id="cb788-16"><a href="packaging.html#cb788-16" aria-hidden="true"></a>        <span class="st">&#39;console_scripts&#39;</span>: [</span>
-<span id="cb788-17"><a href="packaging.html#cb788-17" aria-hidden="true"></a>            <span class="st">&#39;countwords = zipf.countwords:main&#39;</span>,</span>
-<span id="cb788-18"><a href="packaging.html#cb788-18" aria-hidden="true"></a>            <span class="st">&#39;collate = zipf.collate:main&#39;</span>,</span>
-<span id="cb788-19"><a href="packaging.html#cb788-19" aria-hidden="true"></a>            <span class="st">&#39;plotcounts = zipf.plotcounts:main&#39;</span>]})</span></code></pre></div>
+<div class="sourceCode" id="cb795"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb795-1"><a href="packaging.html#cb795-1" aria-hidden="true"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
+<span id="cb795-2"><a href="packaging.html#cb795-2" aria-hidden="true"></a></span>
+<span id="cb795-3"><a href="packaging.html#cb795-3" aria-hidden="true"></a></span>
+<span id="cb795-4"><a href="packaging.html#cb795-4" aria-hidden="true"></a>setup(</span>
+<span id="cb795-5"><a href="packaging.html#cb795-5" aria-hidden="true"></a>    name<span class="op">=</span><span class="st">&#39;zipf&#39;</span>,</span>
+<span id="cb795-6"><a href="packaging.html#cb795-6" aria-hidden="true"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
+<span id="cb795-7"><a href="packaging.html#cb795-7" aria-hidden="true"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
+<span id="cb795-8"><a href="packaging.html#cb795-8" aria-hidden="true"></a>    packages<span class="op">=</span>[<span class="st">&#39;zipf&#39;</span>],</span>
+<span id="cb795-9"><a href="packaging.html#cb795-9" aria-hidden="true"></a>    install_requires<span class="op">=</span>[</span>
+<span id="cb795-10"><a href="packaging.html#cb795-10" aria-hidden="true"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
+<span id="cb795-11"><a href="packaging.html#cb795-11" aria-hidden="true"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
+<span id="cb795-12"><a href="packaging.html#cb795-12" aria-hidden="true"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
+<span id="cb795-13"><a href="packaging.html#cb795-13" aria-hidden="true"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
+<span id="cb795-14"><a href="packaging.html#cb795-14" aria-hidden="true"></a>        <span class="st">&#39;pytest&#39;</span>],</span>
+<span id="cb795-15"><a href="packaging.html#cb795-15" aria-hidden="true"></a>    entry_points<span class="op">=</span>{</span>
+<span id="cb795-16"><a href="packaging.html#cb795-16" aria-hidden="true"></a>        <span class="st">&#39;console_scripts&#39;</span>: [</span>
+<span id="cb795-17"><a href="packaging.html#cb795-17" aria-hidden="true"></a>            <span class="st">&#39;countwords = zipf.countwords:main&#39;</span>,</span>
+<span id="cb795-18"><a href="packaging.html#cb795-18" aria-hidden="true"></a>            <span class="st">&#39;collate = zipf.collate:main&#39;</span>,</span>
+<span id="cb795-19"><a href="packaging.html#cb795-19" aria-hidden="true"></a>            <span class="st">&#39;plotcounts = zipf.plotcounts:main&#39;</span>]})</span></code></pre></div>
 <p>The right side of the <code>=</code> operator is the location of a function,
 written as <code>package.module:function</code>;
 the left side is the name we want to use to call this function from the command line.
@@ -985,41 +986,41 @@ which as it stands requires an input argument <code>args</code>
 containing the command-line arguments given by the user (Section <a href="scripting.html#scripting-options">4.2</a>).
 For example,
 the relevant section of our <code>countwords.py</code> program is:</p>
-<div class="sourceCode" id="cb789"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb789-1"><a href="packaging.html#cb789-1" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb789-2"><a href="packaging.html#cb789-2" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb789-3"><a href="packaging.html#cb789-3" aria-hidden="true"></a>    <span class="cf">with</span> args.infile <span class="im">as</span> reader:</span>
-<span id="cb789-4"><a href="packaging.html#cb789-4" aria-hidden="true"></a>        word_counts <span class="op">=</span> count_words(reader)</span>
-<span id="cb789-5"><a href="packaging.html#cb789-5" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
-<span id="cb789-6"><a href="packaging.html#cb789-6" aria-hidden="true"></a></span>
-<span id="cb789-7"><a href="packaging.html#cb789-7" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb789-8"><a href="packaging.html#cb789-8" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb789-9"><a href="packaging.html#cb789-9" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
-<span id="cb789-10"><a href="packaging.html#cb789-10" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
-<span id="cb789-11"><a href="packaging.html#cb789-11" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb789-12"><a href="packaging.html#cb789-12" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
-<span id="cb789-13"><a href="packaging.html#cb789-13" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb789-14"><a href="packaging.html#cb789-14" aria-hidden="true"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb796"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb796-1"><a href="packaging.html#cb796-1" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
+<span id="cb796-2"><a href="packaging.html#cb796-2" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb796-3"><a href="packaging.html#cb796-3" aria-hidden="true"></a>    <span class="cf">with</span> args.infile <span class="im">as</span> reader:</span>
+<span id="cb796-4"><a href="packaging.html#cb796-4" aria-hidden="true"></a>        word_counts <span class="op">=</span> count_words(reader)</span>
+<span id="cb796-5"><a href="packaging.html#cb796-5" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
+<span id="cb796-6"><a href="packaging.html#cb796-6" aria-hidden="true"></a></span>
+<span id="cb796-7"><a href="packaging.html#cb796-7" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb796-8"><a href="packaging.html#cb796-8" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb796-9"><a href="packaging.html#cb796-9" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
+<span id="cb796-10"><a href="packaging.html#cb796-10" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
+<span id="cb796-11"><a href="packaging.html#cb796-11" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb796-12"><a href="packaging.html#cb796-12" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
+<span id="cb796-13"><a href="packaging.html#cb796-13" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb796-14"><a href="packaging.html#cb796-14" aria-hidden="true"></a>    main(args)</span></code></pre></div>
 <p>We can’t pass any arguments to <code>main</code> when we define entry points in our <code>setup.py</code> file,
 so we need to change this slightly:</p>
-<div class="sourceCode" id="cb790"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb790-1"><a href="packaging.html#cb790-1" aria-hidden="true"></a><span class="kw">def</span> parse_command_line():</span>
-<span id="cb790-2"><a href="packaging.html#cb790-2" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Parse the command line for input arguments.&quot;&quot;&quot;</span></span>
-<span id="cb790-3"><a href="packaging.html#cb790-3" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb790-4"><a href="packaging.html#cb790-4" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
-<span id="cb790-5"><a href="packaging.html#cb790-5" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
-<span id="cb790-6"><a href="packaging.html#cb790-6" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb790-7"><a href="packaging.html#cb790-7" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
-<span id="cb790-8"><a href="packaging.html#cb790-8" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb790-9"><a href="packaging.html#cb790-9" aria-hidden="true"></a>    <span class="cf">return</span> args</span>
-<span id="cb790-10"><a href="packaging.html#cb790-10" aria-hidden="true"></a></span>
-<span id="cb790-11"><a href="packaging.html#cb790-11" aria-hidden="true"></a><span class="kw">def</span> main():</span>
-<span id="cb790-12"><a href="packaging.html#cb790-12" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb790-13"><a href="packaging.html#cb790-13" aria-hidden="true"></a>    args <span class="op">=</span> parse_command_line()</span>
-<span id="cb790-14"><a href="packaging.html#cb790-14" aria-hidden="true"></a>    <span class="cf">with</span> args.infile <span class="im">as</span> reader:</span>
-<span id="cb790-15"><a href="packaging.html#cb790-15" aria-hidden="true"></a>        word_counts <span class="op">=</span> count_words(reader)</span>
-<span id="cb790-16"><a href="packaging.html#cb790-16" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
-<span id="cb790-17"><a href="packaging.html#cb790-17" aria-hidden="true"></a></span>
-<span id="cb790-18"><a href="packaging.html#cb790-18" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb790-19"><a href="packaging.html#cb790-19" aria-hidden="true"></a>    main()</span></code></pre></div>
+<div class="sourceCode" id="cb797"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb797-1"><a href="packaging.html#cb797-1" aria-hidden="true"></a><span class="kw">def</span> parse_command_line():</span>
+<span id="cb797-2"><a href="packaging.html#cb797-2" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Parse the command line for input arguments.&quot;&quot;&quot;</span></span>
+<span id="cb797-3"><a href="packaging.html#cb797-3" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb797-4"><a href="packaging.html#cb797-4" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
+<span id="cb797-5"><a href="packaging.html#cb797-5" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
+<span id="cb797-6"><a href="packaging.html#cb797-6" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb797-7"><a href="packaging.html#cb797-7" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Limit output to N most frequent words&#39;</span>)</span>
+<span id="cb797-8"><a href="packaging.html#cb797-8" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb797-9"><a href="packaging.html#cb797-9" aria-hidden="true"></a>    <span class="cf">return</span> args</span>
+<span id="cb797-10"><a href="packaging.html#cb797-10" aria-hidden="true"></a></span>
+<span id="cb797-11"><a href="packaging.html#cb797-11" aria-hidden="true"></a><span class="kw">def</span> main():</span>
+<span id="cb797-12"><a href="packaging.html#cb797-12" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb797-13"><a href="packaging.html#cb797-13" aria-hidden="true"></a>    args <span class="op">=</span> parse_command_line()</span>
+<span id="cb797-14"><a href="packaging.html#cb797-14" aria-hidden="true"></a>    <span class="cf">with</span> args.infile <span class="im">as</span> reader:</span>
+<span id="cb797-15"><a href="packaging.html#cb797-15" aria-hidden="true"></a>        word_counts <span class="op">=</span> count_words(reader)</span>
+<span id="cb797-16"><a href="packaging.html#cb797-16" aria-hidden="true"></a>    utilities.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
+<span id="cb797-17"><a href="packaging.html#cb797-17" aria-hidden="true"></a></span>
+<span id="cb797-18"><a href="packaging.html#cb797-18" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb797-19"><a href="packaging.html#cb797-19" aria-hidden="true"></a>    main()</span></code></pre></div>
 <p>Once we have made the corresponding change in <code>collate.py</code> and <code>plotcounts.py</code>,
 we can re-install our package:</p>
 <pre class="shell"><code>(zipf)$ pip install -e .</code></pre>
@@ -1072,8 +1073,8 @@ Just as the <code>PATH</code> environment in the shell contains a list of direct
 that the shell searches for programs it can execute (Section <a href="bash-advanced.html#bash-advanced-vars">3.6</a>),
 the Python variable <code>sys.path</code> contains a list of the directories it searches.
 We can look at this list inside the interpreter:</p>
-<div class="sourceCode" id="cb795"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb795-1"><a href="packaging.html#cb795-1" aria-hidden="true"></a><span class="im">import</span> sys</span>
-<span id="cb795-2"><a href="packaging.html#cb795-2" aria-hidden="true"></a>sys.path</span></code></pre></div>
+<div class="sourceCode" id="cb802"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb802-1"><a href="packaging.html#cb802-1" aria-hidden="true"></a><span class="im">import</span> sys</span>
+<span id="cb802-2"><a href="packaging.html#cb802-2" aria-hidden="true"></a>sys.path</span></code></pre></div>
 <pre><code>[&#39;&#39;,
 &#39;/home/amira/anaconda3/envs/zipf/lib/python37.zip&#39;,
 &#39;/home/amira/anaconda3/envs/zipf/lib/python3.7&#39;,
@@ -1496,13 +1497,13 @@ The first change relates to the “path setup” section near the head of the fi
 our modules (i.e. <code>countwords.py</code>, <code>utilities.py</code>, etc) are located in the <code>../zipf</code> directory.
 We therefore need to uncomment the relevant lines of the path setup section in <code>conf.py</code>
 to tell Sphinx where those modules are:</p>
-<div class="sourceCode" id="cb811"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb811-1"><a href="packaging.html#cb811-1" aria-hidden="true"></a><span class="im">import</span> os</span>
-<span id="cb811-2"><a href="packaging.html#cb811-2" aria-hidden="true"></a><span class="im">import</span> sys</span>
-<span id="cb811-3"><a href="packaging.html#cb811-3" aria-hidden="true"></a></span>
-<span id="cb811-4"><a href="packaging.html#cb811-4" aria-hidden="true"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">&#39;../zipf&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb818"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb818-1"><a href="packaging.html#cb818-1" aria-hidden="true"></a><span class="im">import</span> os</span>
+<span id="cb818-2"><a href="packaging.html#cb818-2" aria-hidden="true"></a><span class="im">import</span> sys</span>
+<span id="cb818-3"><a href="packaging.html#cb818-3" aria-hidden="true"></a></span>
+<span id="cb818-4"><a href="packaging.html#cb818-4" aria-hidden="true"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">&#39;../zipf&#39;</span>))</span></code></pre></div>
 <p>We will also change the “general configuration” section
 to add <code>autodoc</code> to the list of Sphinx extensions we want:</p>
-<div class="sourceCode" id="cb812"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb812-1"><a href="packaging.html#cb812-1" aria-hidden="true"></a>extensions <span class="op">=</span> [<span class="st">&#39;sphinx.ext.autodoc&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb819"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb819-1"><a href="packaging.html#cb819-1" aria-hidden="true"></a>extensions <span class="op">=</span> [<span class="st">&#39;sphinx.ext.autodoc&#39;</span>]</span></code></pre></div>
 <p>With those edits complete,
 we can now generate a Sphinx <code>autodoc</code> script
 that will read the docstrings from our package

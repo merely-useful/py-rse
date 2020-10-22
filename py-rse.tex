@@ -162,7 +162,7 @@
 
 \title{Research Software Engineering with Python}
 \author{Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson}
-\date{2020-10-03}
+\date{2020-10-22}
 
 \begin{document}
 \maketitle
@@ -13948,7 +13948,8 @@ Broadly speaking, assertions fall into three categories:
   ``the value of \texttt{highest} is less than or equal to the current loop index''.
 \end{itemize}
 
-The function \texttt{get\_power\_law\_params} is a good example of the need for a precondition.
+The function \texttt{get\_power\_law\_params} in our \texttt{plotcounts.py} script
+is a good example of the need for a precondition.
 Its docstring does not say that its \texttt{word\_counts} parameter must be a list of numeric word counts;
 even if we add that,
 a user might easily pass in a list of the words themselves instead.
@@ -15124,25 +15125,234 @@ give an example of input that will make that assertion fail.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{testing-ex-test-assert}{%
-\subsection{Test assertions}\label{testing-ex-test-assert}}
+\hypertarget{testing-ex-rectangles}{%
+\subsection{Rectangle normalization}\label{testing-ex-rectangles}}
 
-Write unit tests to check that the \texttt{assert} statements in the previous question's \texttt{total} function
-do what they're supposed to.
+A rectangle can be described using a tuple of four cartesian coordinates \texttt{(x0,\ y0,\ x1,\ y1)},
+where \texttt{(x0,\ y0)} represents the lower left corner and \texttt{(x1,\ y1)} the upper right.
+In order to do some calculations,
+suppose we need to be able to normalize rectangles so that the lower left corner
+is at the origin (i.e.~\texttt{(x0,\ y0)\ =\ (0,\ 0)}) and the longest side is 1.0 units long.
+This function does that:
 
-\hypertarget{testing-ex-ci-status-readme}{%
-\subsection{Add the Travis CI status to your README}\label{testing-ex-ci-status-readme}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ normalize\_rectangle(rect):}
+    \CommentTok{"""Normalizes a rectangle so that it is at the origin}
+\CommentTok{    and 1.0 units long on its longest axis.}
+\CommentTok{    Input should be of the format (x0, y0, x1, y1).}
+\CommentTok{    (x0, y0) and (x1, y1) define the lower left and}
+\CommentTok{    upper right corners of the rectangle, respectively."""}
+    
+\NormalTok{    x0, y0, x1, y1 }\OperatorTok{=}\NormalTok{ rect  }\CommentTok{\# insert preconditions before and after this line }
+    
+\NormalTok{    dx }\OperatorTok{=}\NormalTok{ x1 }\OperatorTok{{-}}\NormalTok{ x0}
+\NormalTok{    dy }\OperatorTok{=}\NormalTok{ y1 }\OperatorTok{{-}}\NormalTok{ y0}
+    \ControlFlowTok{if}\NormalTok{ dx }\OperatorTok{\textgreater{}}\NormalTok{ dy:}
+\NormalTok{        scaled }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(dx) }\OperatorTok{/}\NormalTok{ dy}
+\NormalTok{        upper\_x, upper\_y }\OperatorTok{=} \FloatTok{1.0}\NormalTok{, scaled}
+    \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{        scaled }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(dx) }\OperatorTok{/}\NormalTok{ dy}
+\NormalTok{        upper\_x, upper\_y }\OperatorTok{=}\NormalTok{ scaled, }\FloatTok{1.0}
 
-You'll notice that the README file in many GitHub repositories includes a little
-Travis CI display status logo.
-Follow \href{https://docs.travis-ci.com/user/status-images/}{these instructions} to include
-the status display in the README for this Zipf's Law project.
+    \CommentTok{\# insert postconditions here}
 
-\hypertarget{testing-ex-config}{%
-\subsection{Testing configuration}\label{testing-ex-config}}
+    \ControlFlowTok{return}\NormalTok{ (}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, upper\_x, upper\_y)}
+\end{Highlighting}
+\end{Shaded}
 
-Suppose your program uses a configuration file of the kind described in Chapter~\ref{config}.
-How would you test that different parameters were having the correct effect?
+In order to answer the following questions,
+cut and paste the \texttt{normalize\_rectangle} function into a new file called \texttt{geometry.py} and
+save that file in a new directory called \texttt{exercises}.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  To ensure that the inputs to \texttt{normalize\_rectange} are valid,
+  add \gref{preconditions}{precondition} to check that
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item
+  \texttt{rect} contains 4 coordinates,
+\item
+  the width of the rectangle is a positive, non-zero value (i.e.~\texttt{x0\ \textless{}\ x1}), and
+\item
+  the height of the rectangle is a positive, non-zero value (i.e.~\texttt{y0\ \textless{}\ y1}).
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  If the normalization calculation has worked correctly,
+  the new \texttt{x1} coordinate will lie between 0 and 1 (i.e.~\texttt{0\ \textless{}\ upper\_x\ \textless{}=\ 1.0}).
+  Add a \gref{postcondition}{postcondition} to check that this is true.
+  Do the same for the new \texttt{y1} coordinate, \texttt{upper\_y}.
+\end{enumerate}
+
+Running \texttt{normalize\_rectangle} for a short, wide rectangle should pass your new
+preconditions and postconditions,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ geometry}
+
+\NormalTok{geometry.normalize\_rectangle([}\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{10}\NormalTok{])                                                             }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(0, 0, 0.2, 1.0)
+\end{verbatim}
+
+but will fail for a tall, skinny rectangle:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ geometry}
+
+\NormalTok{geometry.normalize\_rectangle([}\DecValTok{20}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{20}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+AssertionError                            Traceback (most recent call last)
+<ipython-input-3-f4e8cdf7f69d> in <module>
+----> 1 geometry.normalize_rectangle([20, 15, 30, 20])
+
+~/Desktop/exercises/geometry.py in normalize_rectangle(rect)
+     19 
+     20     assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
+---> 21     assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
+     22 
+     23     return (0, 0, upper_x, upper_y)
+
+AssertionError: Calculated upper Y coordinate invalid
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\item
+  Find and correct the source of the error in \texttt{normalize\_rectangle}.
+  Once fixed, you should be able to successfully run
+  \texttt{geometry.normalize\_rectangle({[}20,\ 15,\ 30,\ 20{]})}.
+\item
+  Write a unit test for tall, skinny rectangles and save it in a new file called
+  \texttt{test\_geometry.py}. Run \texttt{pytest} to make sure the test passes.
+\item
+  Add a couple more unit tests to \texttt{test\_geometry.py}.
+  Explain the rationale behind each test.
+\end{enumerate}
+
+\hypertarget{testing-ex-error-handling}{%
+\subsection{Test error handling}\label{testing-ex-error-handling}}
+
+In Chapter \ref{errors}, we modified \texttt{collate.py} to handle
+different types of errors associated with reading input files.
+The relevant code appears in \texttt{main}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{"""Combine multiple word count CSV{-}files into a single cumulative count."""}
+\ImportTok{import}\NormalTok{ csv}
+\ImportTok{import}\NormalTok{ argparse}
+\ImportTok{from}\NormalTok{ collections }\ImportTok{import}\NormalTok{ Counter}
+\ImportTok{import}\NormalTok{ logging}
+\ImportTok{import}\NormalTok{ utilities}
+
+
+\KeywordTok{def}\NormalTok{ update\_counts(reader, word\_counts):}
+    \CommentTok{"""Update word counts with data from another reader/file."""}
+    \ControlFlowTok{for}\NormalTok{ word, count }\KeywordTok{in}\NormalTok{ csv.reader(reader):}
+\NormalTok{        word\_counts[word] }\OperatorTok{+=} \BuiltInTok{int}\NormalTok{(count)}
+
+\KeywordTok{def}\NormalTok{ main(args):}
+    \CommentTok{"""Run the command line program."""}
+\NormalTok{    log\_level }\OperatorTok{=}\NormalTok{ logging.DEBUG }\ControlFlowTok{if}\NormalTok{ args.verbose }\ControlFlowTok{else}\NormalTok{ logging.WARNING}
+\NormalTok{    logging.basicConfig(level}\OperatorTok{=}\NormalTok{log\_level, filename}\OperatorTok{=}\NormalTok{args.logfile)}
+\NormalTok{    word\_counts }\OperatorTok{=}\NormalTok{ Counter()}
+\NormalTok{    logging.info(}\StringTok{\textquotesingle{}Processing files...\textquotesingle{}}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ file\_name }\KeywordTok{in}\NormalTok{ args.infiles:}
+        \ControlFlowTok{try}\NormalTok{:}
+\NormalTok{            logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
+            \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
+                \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(utilities.ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
+            \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
+\NormalTok{                logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
+\NormalTok{                update\_counts(reader, word\_counts)}
+        \ControlFlowTok{except} \PreprocessorTok{FileNotFoundError}\NormalTok{:}
+\NormalTok{            logging.warning(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{ not processed: File does not exist\textquotesingle{}}\NormalTok{)}
+        \ControlFlowTok{except} \PreprocessorTok{PermissionError}\NormalTok{:}
+\NormalTok{            logging.warning(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{ not processed: No permission to read file\textquotesingle{}}\NormalTok{)}
+        \ControlFlowTok{except} \PreprocessorTok{Exception} \ImportTok{as}\NormalTok{ error:}
+\NormalTok{            logging.warning(}\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{ not processed: }\SpecialCharTok{\{}\NormalTok{error}\SpecialCharTok{\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{)}
+\NormalTok{    utilities.collection\_to\_csv(word\_counts, num}\OperatorTok{=}\NormalTok{args.num)}
+
+\ControlFlowTok{if} \VariableTok{\_\_name\_\_} \OperatorTok{==} \StringTok{\textquotesingle{}\_\_main\_\_\textquotesingle{}}\NormalTok{:}
+\NormalTok{    parser }\OperatorTok{=}\NormalTok{ argparse.ArgumentParser(description}\OperatorTok{=}\NormalTok{\_\_doc\_\_)}
+\NormalTok{    parser.add\_argument(}\StringTok{\textquotesingle{}infiles\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{str}\NormalTok{, nargs}\OperatorTok{=}\StringTok{\textquotesingle{}*\textquotesingle{}}\NormalTok{, }\BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}Input file names\textquotesingle{}}\NormalTok{)}
+\NormalTok{    parser.add\_argument(}\StringTok{\textquotesingle{}{-}n\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}{-}{-}num\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{int}\NormalTok{, default}\OperatorTok{=}\VariableTok{None}\NormalTok{,}
+                        \BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}Limit output to N most frequent words\textquotesingle{}}\NormalTok{)}
+\NormalTok{    parser.add\_argument(}\StringTok{\textquotesingle{}{-}v\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}{-}{-}verbose\textquotesingle{}}\NormalTok{, action}\OperatorTok{=}\StringTok{"store\_true"}\NormalTok{, default}\OperatorTok{=}\VariableTok{False}\NormalTok{,}
+                        \BuiltInTok{help}\OperatorTok{=}\StringTok{"Change logging threshold from WARNING to DEBUG"}\NormalTok{)}
+\NormalTok{    parser.add\_argument(}\StringTok{\textquotesingle{}{-}l\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}{-}{-}logfile\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\OperatorTok{=}\BuiltInTok{str}\NormalTok{, default}\OperatorTok{=}\StringTok{\textquotesingle{}collate.log\textquotesingle{}}\NormalTok{,}
+                        \BuiltInTok{help}\OperatorTok{=}\StringTok{\textquotesingle{}Name of the log file\textquotesingle{}}\NormalTok{)}
+\NormalTok{    args }\OperatorTok{=}\NormalTok{ parser.parse\_args()}
+\NormalTok{    main(args)}
+\end{Highlighting}
+\end{Shaded}
+
+In this chapter we discussed using \texttt{pytest.raises}
+to test whether the error handling in a program is working as expected (Section \ref{testing-failure}).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  It is difficult to write a simple unit test for the lines of code dedicated
+  to reading input files, because \texttt{main} is a long function that requires
+  command line arguments as input. Edit \texttt{collate.py} so that the six lines of
+  code responsible for processing an input file appear in their own function
+  that reads as follows (i.e.~once you are done, \texttt{main} should call
+  \texttt{process\_file} in place of the existing code):
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ process\_file(file\_name, word\_counts):}
+    \CommentTok{"""Read file and update word counts"""}
+\NormalTok{    logging.debug(}\SpecialStringTok{f\textquotesingle{}Reading in }\SpecialCharTok{\{}\NormalTok{file\_name}\SpecialCharTok{\}}\SpecialStringTok{...\textquotesingle{}}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ file\_name[}\OperatorTok{{-}}\DecValTok{4}\NormalTok{:] }\OperatorTok{!=} \StringTok{\textquotesingle{}.csv\textquotesingle{}}\NormalTok{:}
+        \ControlFlowTok{raise} \PreprocessorTok{OSError}\NormalTok{(utilities.ERROR\_MESSAGES[}\StringTok{\textquotesingle{}not\_csv\_file\_suffix\textquotesingle{}}\NormalTok{].}\BuiltInTok{format}\NormalTok{(file\_name}\OperatorTok{=}\NormalTok{file\_name))}
+    \ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(file\_name, }\StringTok{\textquotesingle{}r\textquotesingle{}}\NormalTok{) }\ImportTok{as}\NormalTok{ reader:}
+\NormalTok{        logging.debug(}\StringTok{\textquotesingle{}Computing word counts...\textquotesingle{}}\NormalTok{)}
+\NormalTok{        update\_counts(reader, word\_counts)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\item
+  Add a unit test to \texttt{test\_zipfs.py} that uses \texttt{pytest.raises} to check that
+  the new \texttt{collate.process\_file} function raises an \texttt{OSError} if the input
+  file does not end in \texttt{.csv}. Run \texttt{pytest} to check that the new test
+  passes.
+\item
+  Add a unit test to \texttt{test\_zipfs.py} that uses \texttt{pytest.raises} to check that
+  the new \texttt{collate.process\_file} function raises a \texttt{FileNotFoundError} if the
+  input file does not exist. Run \texttt{pytest} to check that the new test passes.
+\item
+  Use the \texttt{coverage} library to check that the relevant commands in
+  \texttt{process\_file} (specifically \texttt{raise\ OSError} and \texttt{open(file\_name,\ \textquotesingle{}r\textquotesingle{})})
+  were indeed tested.
+\end{enumerate}
 
 \hypertarget{testing-ex-random}{%
 \subsection{Testing with randomness}\label{testing-ex-random}}
@@ -20940,69 +21150,191 @@ used to get and print information from these objects.
   Input such as \texttt{{[}-10,\ 2,\ 3{]}} will make it fail.
 \end{itemize}
 
-\hypertarget{exercise-reftesting-ex-test-assert}{%
-\subsection*{Exercise~\ref{testing-ex-test-assert}}\label{exercise-reftesting-ex-test-assert}}
+\hypertarget{exercise-reftesting-ex-rectangles}{%
+\subsection*{Exercise~\ref{testing-ex-rectangles}}\label{exercise-reftesting-ex-rectangles}}
 
-
-We can test that the first assertion fails when \texttt{values} is not a non-empty list as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ test\_fails\_for\_non\_list():}
-    \ControlFlowTok{try}\NormalTok{:}
-\NormalTok{        total(}\StringTok{\textquotesingle{}not a list\textquotesingle{}}\NormalTok{)}
-        \ControlFlowTok{assert} \VariableTok{False}\NormalTok{, }\StringTok{\textquotesingle{}Should have raised AssertionError\textquotesingle{}}
-    \ControlFlowTok{except} \PreprocessorTok{AssertionError}\NormalTok{:}
-        \ControlFlowTok{pass}
-    \ControlFlowTok{except}\NormalTok{:}
-        \ControlFlowTok{assert} \VariableTok{False}\NormalTok{, }\StringTok{\textquotesingle{}Should have raised AssertionError\textquotesingle{}}
-\end{Highlighting}
-\end{Shaded}
-
-In order:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
+\tightlist
 \item
-  The first \texttt{assert\ False} will only happen if \texttt{total} runs without raising any kind of exception.
-\item
-  The \texttt{except\ AssertionError} branch does nothing (\texttt{pass}) if the correct exception is raised.
-\item
-  The catch-all \texttt{except} at the end makes the test fail if the wrong kind of exception is raised.
+  Remove the comment about inserting preconditions and add the following:
 \end{enumerate}
-
-This pattern is so common that \texttt{pytest} provides a shorthand notation for it:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ test\_fails\_for\_non\_list():}
-    \ControlFlowTok{with}\NormalTok{ pytest.raises(}\PreprocessorTok{AssertionError}\NormalTok{):}
-\NormalTok{        total(}\StringTok{\textquotesingle{}not a list\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{assert} \BuiltInTok{len}\NormalTok{(rect) }\OperatorTok{==} \DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}Rectangles must contain 4 coordinates\textquotesingle{}}
+\NormalTok{x0, y0, x1, y1 }\OperatorTok{=}\NormalTok{ rect}
+\ControlFlowTok{assert}\NormalTok{ x0 }\OperatorTok{\textless{}}\NormalTok{ x1, }\StringTok{\textquotesingle{}Invalid X coordinates\textquotesingle{}}
+\ControlFlowTok{assert}\NormalTok{ y0 }\OperatorTok{\textless{}}\NormalTok{ y1, }\StringTok{\textquotesingle{}Invalid Y coordinates\textquotesingle{}}
 \end{Highlighting}
 \end{Shaded}
 
-If the call to \texttt{total} \emph{doesn't} raise \texttt{AssertionError}, this test fails.
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Remove the comment about inserting postconditions and add the following
+\end{enumerate}
 
-\hypertarget{exercise-reftesting-ex-ci-status-readme}{%
-\subsection*{Exercise~\ref{testing-ex-ci-status-readme}}\label{exercise-reftesting-ex-ci-status-readme}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{assert} \DecValTok{0} \OperatorTok{\textless{}}\NormalTok{ upper\_x }\OperatorTok{\textless{}=} \FloatTok{1.0}\NormalTok{, }\StringTok{\textquotesingle{}Calculated upper X coordinate invalid\textquotesingle{}}
+\ControlFlowTok{assert} \DecValTok{0} \OperatorTok{\textless{}}\NormalTok{ upper\_y }\OperatorTok{\textless{}=} \FloatTok{1.0}\NormalTok{, }\StringTok{\textquotesingle{}Calculated upper Y coordinate invalid\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  The problem is that the following section of \texttt{normalize\_rectangle}
+  should read \texttt{float(dy)\ /\ dx}, not \texttt{float(dx)\ /\ dy}.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ dx }\OperatorTok{\textgreater{}}\NormalTok{ dy:}
+\NormalTok{    scaled }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(dx) }\OperatorTok{/}\NormalTok{ dy}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \texttt{test\_geometry.py} should read as follows:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ geometry}
+
+\KeywordTok{def}\NormalTok{ test\_tall\_skinny():}
+    \CommentTok{"""Test normalization of a tall, skinny rectangle."""}
+\NormalTok{    rect }\OperatorTok{=}\NormalTok{ [}\DecValTok{20}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{20}\NormalTok{]}
+\NormalTok{    expected\_result }\OperatorTok{=}\NormalTok{ (}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{1.0}\NormalTok{, }\FloatTok{0.5}\NormalTok{)}
+\NormalTok{    actual\_result }\OperatorTok{=}\NormalTok{ geometry.normalize\_rectangle(rect)}
+    \ControlFlowTok{assert}\NormalTok{ actual\_result }\OperatorTok{==}\NormalTok{ expected\_result}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Other tests might include (but are not limited to):
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ test\_short\_wide():}
+    \CommentTok{"""Test normalization of a short, wide rectangle."""}
+\NormalTok{    rect }\OperatorTok{=}\NormalTok{ [}\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{10}\NormalTok{]}
+\NormalTok{    expected\_result }\OperatorTok{=}\NormalTok{ (}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{0.2}\NormalTok{, }\FloatTok{1.0}\NormalTok{)}
+\NormalTok{    actual\_result }\OperatorTok{=}\NormalTok{ geometry.normalize\_rectangle(rect)}
+    \ControlFlowTok{assert}\NormalTok{ actual\_result }\OperatorTok{==}\NormalTok{ expected\_result}
+    
+\KeywordTok{def}\NormalTok{ test\_negative\_coordinates():}
+    \CommentTok{"""Test normalization of rectangle with negative coordinates."""}
+\NormalTok{    rect }\OperatorTok{=}\NormalTok{ [}\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{]}
+\NormalTok{    expected\_result }\OperatorTok{=}\NormalTok{ (}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{0.2}\NormalTok{, }\FloatTok{1.0}\NormalTok{)}
+\NormalTok{    actual\_result }\OperatorTok{=}\NormalTok{ geometry.normalize\_rectangle(rect)}
+    \ControlFlowTok{assert}\NormalTok{ actual\_result }\OperatorTok{==}\NormalTok{ expected\_result}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{exercise-reftesting-ex-error-handling}{%
+\subsection*{Exercise~\ref{testing-ex-error-handling}}\label{exercise-reftesting-ex-error-handling}}
 
 
-To test that the Travis status display is working correctly,
-try committing a test that deliberately fails to version control.
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The \texttt{try/except} block in \texttt{collate.py} should read begin as follows:
+\end{enumerate}
 
-\hypertarget{exercise-reftesting-ex-config}{%
-\subsection*{Exercise~\ref{testing-ex-config}}\label{exercise-reftesting-ex-config}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{try}\NormalTok{:}
+\NormalTok{    process\_file(file\_name, word\_counts)}
+\ControlFlowTok{except} \PreprocessorTok{FileNotFoundError}\NormalTok{:}
+\CommentTok{\# ... the other exceptions}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  The following additions need to be made to \texttt{test\_zipfs.py}.
+\end{enumerate}
 
-If every configuration setting has a sensible default,
-we can create configuration files that each change exactly one parameter.
-Alternatively,
-if our program uses \gref{overlay configuration}{overlay\_configuration},
-we can have each test use a standard configuration file plus a second one that changes one setting.
-In either case,
-we can either run the program and check its output,
-or check that the data structure storing configuration information has the right values
-(and trust other tests to make sure that those settings do what they're supposed to).
+Import the \texttt{collate} library:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ collate}
+\end{Highlighting}
+\end{Shaded}
+
+Define the new unit test:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ test\_not\_csv\_error():}
+    \CommentTok{"""Error handling test for csv check"""}
+\NormalTok{    file\_name }\OperatorTok{=} \StringTok{\textquotesingle{}data/dracula.txt\textquotesingle{}}
+\NormalTok{    word\_counts }\OperatorTok{=}\NormalTok{ Counter()}
+    \ControlFlowTok{with}\NormalTok{ pytest.raises(}\PreprocessorTok{OSError}\NormalTok{):}
+\NormalTok{        collate.process\_file(file\_name, word\_counts)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  The following unit test needs to be added to \texttt{test\_zipfs.py}.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ test\_missing\_file\_error():}
+    \CommentTok{"""Error handling test for missing file"""}
+\NormalTok{    file\_name }\OperatorTok{=} \StringTok{\textquotesingle{}fake\_file.csv\textquotesingle{}}
+\NormalTok{    word\_counts }\OperatorTok{=}\NormalTok{ Counter()}
+    \ControlFlowTok{with}\NormalTok{ pytest.raises(}\PreprocessorTok{FileNotFoundError}\NormalTok{):}
+\NormalTok{        collate.process\_file(file\_name, word\_counts)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  The following sequence of commands is required to test the code coverage.
+\end{enumerate}
+
+Generate the html report:
+
+\begin{verbatim}
+$ coverage run -m pytest
+$ coverage html
+\end{verbatim}
+
+Open \texttt{htmlcov/index.html} and click on \texttt{bin/collate.py} to view a coverage summary.
+The lines of \texttt{process\_files} that include the \texttt{raise\ OSError} and
+\texttt{open(file\_name,\ \textquotesingle{}r\textquotesingle{})} commands should appear in green after clicking the green ``run'' box
+in the top left hand corner of the page.
 
 \hypertarget{exercise-reftesting-ex-random}{%
 \subsection*{Exercise~\ref{testing-ex-random}}\label{exercise-reftesting-ex-random}}

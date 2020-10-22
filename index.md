@@ -1,7 +1,7 @@
 ---
 title: "Research Software Engineering with Python"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-10-03"
+date: "2020-10-22"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -12449,7 +12449,8 @@ Broadly speaking, assertions fall into three categories:
     or it might be something like,
     "the value of `highest` is less than or equal to the current loop index".
 
-The function `get_power_law_params` is a good example of the need for a precondition.
+The function `get_power_law_params` in our `plotcounts.py` script
+is a good example of the need for a precondition.
 Its docstring does not say that its `word_counts` parameter must be a list of numeric word counts;
 even if we add that,
 a user might easily pass in a list of the words themselves instead.
@@ -13503,22 +13504,188 @@ def total(values):
     return total
 ```
 
-### Test assertions {#testing-ex-test-assert}
+### Rectangle normalization {#testing-ex-rectangles}
 
-Write unit tests to check that the `assert` statements in the previous question's `total` function
-do what they're supposed to.
+A rectangle can be described using a tuple of four cartesian coordinates `(x0, y0, x1, y1)`,
+where `(x0, y0)` represents the lower left corner and `(x1, y1)` the upper right.
+In order to do some calculations,
+suppose we need to be able to normalize rectangles so that the lower left corner
+is at the origin (i.e. `(x0, y0) = (0, 0)`) and the longest side is 1.0 units long.
+This function does that:
 
-### Add the Travis CI status to your README {#testing-ex-ci-status-readme}
+```python
+def normalize_rectangle(rect):
+    """Normalizes a rectangle so that it is at the origin
+    and 1.0 units long on its longest axis.
+    Input should be of the format (x0, y0, x1, y1).
+    (x0, y0) and (x1, y1) define the lower left and
+    upper right corners of the rectangle, respectively."""
+    
+    x0, y0, x1, y1 = rect  # insert preconditions before and after this line 
+    
+    dx = x1 - x0
+    dy = y1 - y0
+    if dx > dy:
+        scaled = float(dx) / dy
+        upper_x, upper_y = 1.0, scaled
+    else:
+        scaled = float(dx) / dy
+        upper_x, upper_y = scaled, 1.0
 
-You'll notice that the README file in many GitHub repositories includes a little
-Travis CI display status logo.
-Follow [these instructions][travis-status-images] to include
-the status display in the README for this Zipf's Law project.
+    # insert postconditions here
 
-### Testing configuration {#testing-ex-config}
+    return (0, 0, upper_x, upper_y)
+```
 
-Suppose your program uses a configuration file of the kind described in Chapter \@ref(config).
-How would you test that different parameters were having the correct effect?
+In order to answer the following questions,
+cut and paste the `normalize_rectangle` function into a new file called `geometry.py` and
+save that file in a new directory called `exercises`.
+
+1. To ensure that the inputs to `normalize_rectange` are valid,
+add \gref{preconditions}{precondition} to check that
+(a) `rect` contains 4 coordinates, 
+(b) the width of the rectangle is a positive, non-zero value (i.e. `x0 < x1`), and
+(c) the height of the rectangle is a positive, non-zero value (i.e. `y0 < y1`).
+
+2. If the normalization calculation has worked correctly,
+the new `x1` coordinate will lie between 0 and 1 (i.e. `0 < upper_x <= 1.0`).
+Add a \gref{postcondition}{postcondition} to check that this is true.
+Do the same for the new `y1` coordinate, `upper_y`.
+
+Running `normalize_rectangle` for a short, wide rectangle should pass your new
+preconditions and postconditions,
+
+```python
+import geometry
+
+geometry.normalize_rectangle([2, 5, 3, 10])                                                             
+```
+
+```text
+(0, 0, 0.2, 1.0)
+```
+
+but will fail for a tall, skinny rectangle:
+
+```python
+import geometry
+
+geometry.normalize_rectangle([20, 15, 30, 20])
+```
+
+```text
+AssertionError                            Traceback (most recent call last)
+<ipython-input-3-f4e8cdf7f69d> in <module>
+----> 1 geometry.normalize_rectangle([20, 15, 30, 20])
+
+~/Desktop/exercises/geometry.py in normalize_rectangle(rect)
+     19 
+     20     assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
+---> 21     assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
+     22 
+     23     return (0, 0, upper_x, upper_y)
+
+AssertionError: Calculated upper Y coordinate invalid
+```
+
+3. Find and correct the source of the error in `normalize_rectangle`.
+Once fixed, you should be able to successfully run
+`geometry.normalize_rectangle([20, 15, 30, 20])`.
+
+4. Write a unit test for tall, skinny rectangles and save it in a new file called
+`test_geometry.py`. Run `pytest` to make sure the test passes.
+
+5. Add a couple more unit tests to `test_geometry.py`.
+Explain the rationale behind each test. 
+
+### Test error handling {#testing-ex-error-handling}
+
+In Chapter \@ref(errors), we modified `collate.py` to handle
+different types of errors associated with reading input files.
+The relevant code appears in `main`:
+
+```python
+"""Combine multiple word count CSV-files into a single cumulative count."""
+import csv
+import argparse
+from collections import Counter
+import logging
+import utilities
+
+
+def update_counts(reader, word_counts):
+    """Update word counts with data from another reader/file."""
+    for word, count in csv.reader(reader):
+        word_counts[word] += int(count)
+
+def main(args):
+    """Run the command line program."""
+    log_level = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(level=log_level, filename=args.logfile)
+    word_counts = Counter()
+    logging.info('Processing files...')
+    for file_name in args.infiles:
+        try:
+            logging.debug(f'Reading in {file_name}...')
+            if file_name[-4:] != '.csv':
+                raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+            with open(file_name, 'r') as reader:
+                logging.debug('Computing word counts...')
+                update_counts(reader, word_counts)
+        except FileNotFoundError:
+            logging.warning(f'{file_name} not processed: File does not exist')
+        except PermissionError:
+            logging.warning(f'{file_name} not processed: No permission to read file')
+        except Exception as error:
+            logging.warning(f'{file_name} not processed: {error}')
+    utilities.collection_to_csv(word_counts, num=args.num)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Limit output to N most frequent words')
+    parser.add_argument('-v', '--verbose', action="store_true", default=False,
+                        help="Change logging threshold from WARNING to DEBUG")
+    parser.add_argument('-l', '--logfile', type=str, default='collate.log',
+                        help='Name of the log file')
+    args = parser.parse_args()
+    main(args)
+```
+
+In this chapter we discussed using `pytest.raises`
+to test whether the error handling in a program is working as expected (Section \@ref(testing-failure)).
+
+1.  It is difficult to write a simple unit test for the lines of code dedicated
+    to reading input files, because `main` is a long function that requires
+    command line arguments as input.  Edit `collate.py` so that the six lines of
+    code responsible for processing an input file appear in their own function
+    that reads as follows (i.e. once you are done, `main` should call
+    `process_file` in place of the existing code):
+
+```python
+def process_file(file_name, word_counts):
+    """Read file and update word counts"""
+    logging.debug(f'Reading in {file_name}...')
+    if file_name[-4:] != '.csv':
+        raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+    with open(file_name, 'r') as reader:
+        logging.debug('Computing word counts...')
+        update_counts(reader, word_counts)
+``` 
+
+2.  Add a unit test to `test_zipfs.py` that uses `pytest.raises` to check that
+    the new `collate.process_file` function raises an `OSError` if the input
+    file does not end in `.csv`.  Run `pytest` to check that the new test
+    passes.
+
+3.  Add a unit test to `test_zipfs.py` that uses `pytest.raises` to check that
+    the new `collate.process_file` function raises a `FileNotFoundError` if the
+    input file does not exist.  Run `pytest` to check that the new test passes.
+
+4.  Use the `coverage` library to check that the relevant commands in
+    `process_file` (specifically `raise OSError` and `open(file_name, 'r')`)
+    were indeed tested.
 
 ### Testing with randomness {#testing-ex-random}
 
@@ -18465,56 +18632,118 @@ used to get and print information from these objects.
 -   The third assertion checks that the total of the list is greater than 0.
     Input such as `[-10, 2, 3]` will make it fail.
 
-### Exercise \@ref(testing-ex-test-assert) {-}
+### Exercise \@ref(testing-ex-rectangles) {-}
 
-We can test that the first assertion fails when `values` is not a non-empty list as follows:
-
-```python
-def test_fails_for_non_list():
-    try:
-        total('not a list')
-        assert False, 'Should have raised AssertionError'
-    except AssertionError:
-        pass
-    except:
-        assert False, 'Should have raised AssertionError'
-```
-
-In order:
-
-1.  The first `assert False` will only happen if `total` runs without raising any kind of exception.
-
-2.  The `except AssertionError` branch does nothing (`pass`) if the correct exception is raised.
-
-3.  The catch-all `except` at the end makes the test fail if the wrong kind of exception is raised.
-
-This pattern is so common that `pytest` provides a shorthand notation for it:
+1. Remove the comment about inserting preconditions and add the following:
 
 ```python
-def test_fails_for_non_list():
-    with pytest.raises(AssertionError):
-        total('not a list')
+assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
+x0, y0, x1, y1 = rect
+assert x0 < x1, 'Invalid X coordinates'
+assert y0 < y1, 'Invalid Y coordinates'
 ```
 
-If the call to `total` *doesn't* raise `AssertionError`, this test fails.
+2. Remove the comment about inserting postconditions and add the following
 
-### Exercise \@ref(testing-ex-ci-status-readme) {-}
+```python
+assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
+assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
+```
 
-To test that the Travis status display is working correctly,
-try committing a test that deliberately fails to version control.
+3. The problem is that the following section of `normalize_rectangle`
+should read `float(dy) / dx`, not `float(dx) / dy`.
 
-### Exercise \@ref(testing-ex-config) {-}
+```python
+if dx > dy:
+    scaled = float(dx) / dy
+```
 
-If every configuration setting has a sensible default,
-we can create configuration files that each change exactly one parameter.
-Alternatively,
-if our program uses \gref{overlay configuration}{overlay_configuration},
-we can have each test use a standard configuration file plus a second one that changes one setting.
-In either case,
-we can either run the program and check its output,
-or check that the data structure storing configuration information has the right values
-(and trust other tests to make sure that those settings do what they're supposed to).
+4. `test_geometry.py` should read as follows:
 
+```python
+import geometry
+
+def test_tall_skinny():
+    """Test normalization of a tall, skinny rectangle."""
+    rect = [20, 15, 30, 20]
+    expected_result = (0, 0, 1.0, 0.5)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+```
+
+5. Other tests might include (but are not limited to):
+
+```python
+def test_short_wide():
+    """Test normalization of a short, wide rectangle."""
+    rect = [2, 5, 3, 10]
+    expected_result = (0, 0, 0.2, 1.0)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+    
+def test_negative_coordinates():
+    """Test normalization of rectangle with negative coordinates."""
+    rect = [-2, 5, -1, 10]
+    expected_result = (0, 0, 0.2, 1.0)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+```
+
+### Exercise \@ref(testing-ex-error-handling) {-}
+
+1. The `try/except` block in `collate.py` should read begin as follows:
+
+```python
+try:
+    process_file(file_name, word_counts)
+except FileNotFoundError:
+# ... the other exceptions
+```
+
+2. The following additions need to be made to `test_zipfs.py`.
+
+Import the `collate` library:
+
+```python
+import collate
+```
+
+Define the new unit test:
+
+```python
+def test_not_csv_error():
+    """Error handling test for csv check"""
+    file_name = 'data/dracula.txt'
+    word_counts = Counter()
+    with pytest.raises(OSError):
+        collate.process_file(file_name, word_counts)
+```
+
+3. The following unit test needs to be added to `test_zipfs.py`.
+
+```python
+def test_missing_file_error():
+    """Error handling test for missing file"""
+    file_name = 'fake_file.csv'
+    word_counts = Counter()
+    with pytest.raises(FileNotFoundError):
+        collate.process_file(file_name, word_counts)
+```
+
+4. The following sequence of commands is required to test the code coverage.
+
+Generate the html report:
+
+```shell
+$ coverage run -m pytest
+$ coverage html
+```
+
+Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
+The lines of `process_files` that include the `raise OSError` and
+`open(file_name, 'r')` commands should appear in green after clicking the green "run" box
+in the top left hand corner of the page.
+ 
 ### Exercise \@ref(testing-ex-random) {-}
 
 There are three approaches to testing when pseudo-random numbers are involved:
