@@ -104,7 +104,6 @@
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
 [travis-ci]: https://travis-ci.org/
-[travis-status-images]: https://docs.travis-ci.com/user/status-images/
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
