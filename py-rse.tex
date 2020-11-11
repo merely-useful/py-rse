@@ -585,7 +585,7 @@ and Elizabeth Wickes.
 
 \begin{itemize}
 \item
-  Many of the explanations and exercises in Chapters~\ref{bash-basics} and~\ref{bash-advanced}
+  Many of the explanations and exercises in Chapters~\ref{bash-basics}--\ref{bash-advanced}
   have been adapted from Software Carpentry's lesson
   \href{http://swcarpentry.github.io/shell-novice/}{The Unix Shell}.
 \item
@@ -662,20 +662,6 @@ or how they do what they do.
 
 \caption{The Shell}\label{fig:bash-basics-repl}
 \end{figure}
-
-The shell's greatest strength is that
-it lets us combine programs to create pipelines
-that can handle large volumes of data.
-Sequences of commands can be saved in a \gref{script}{script},
-just as commands for R or Python can be saved in programs,
-which makes our workflows more reproducible.
-Finally,
-the shell is often the easiest way to interact with remote machines---in fact,
-the shell is practically essential for working with clusters and the cloud.
-We won't need this much power in our Zipf's Law examples,
-but as we will see,
-being able to combine commands and save our work
-makes life easier even when working on small problems.
 
 \begin{quote}
 \textbf{What's in a Name?}
@@ -1798,807 +1784,6 @@ we need to have some idea of what we're looking for in the first place:
 someone who wants to know how many lines there are in a data file
 is unlikely to think to look for \texttt{wc}.
 
-\hypertarget{bash-basics-pipe}{%
-\section{Combining Commands}\label{bash-basics-pipe}}
-
-Now that we know a few basic commands,
-we can introduce one of the shell's most powerful features:
-the ease with which it lets us combine existing programs in new ways.
-Let's go into the \texttt{zipf/data} directory
-and count the number of lines in each file once again:
-
-\begin{verbatim}
-$ cd ~/zipf/data
-$ wc -l *.txt
-\end{verbatim}
-
-\begin{verbatim}
-  15975 dracula.txt
-   7832 frankenstein.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-   3582 time_machine.txt
-  96855 total
-\end{verbatim}
-
-Which of these books is shortest?
-We can check by eye when there are only 16 files,
-but what if there were eight thousand?
-
-Our first step toward a solution is to run this command:
-
-\begin{verbatim}
-$ wc -l *.txt > lengths.txt
-\end{verbatim}
-
-The greater-than symbol \texttt{\textgreater{}} tells the shell
-to \gref{redirect}{redirection} the command's output to a file instead of printing it.\index{redirection (in Unix shell)}\index{Unix shell!redirection}
-Nothing appears on the screen;
-instead,
-everything that would have appeared has gone into the file \texttt{lengths.txt}.
-The shell creates this file if it doesn't exist,
-or overwrites it if it already exists.
-\texttt{ls\ lengths.txt} confirms that the file exists:
-
-\begin{verbatim}
-$ ls lengths.txt
-\end{verbatim}
-
-\begin{verbatim}
-lengths.txt
-\end{verbatim}
-
-We can print the contents of \texttt{lengths.txt} using \texttt{cat},\index{Unix commands!cat}
-which is short for con\textbf{cat}enate
-(because if we give it the names of several files
-it will print them all in order):
-
-\begin{verbatim}
-$ cat lengths.txt
-\end{verbatim}
-
-\begin{verbatim}
-  15975 dracula.txt
-   7832 frankenstein.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-   3582 time_machine.txt
-  96855 total
-\end{verbatim}
-
-We can now use \texttt{sort} to sort the lines in this file:
-
-\begin{verbatim}
-$ sort lengths.txt
-\end{verbatim}
-
-\begin{verbatim}
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-  15975 dracula.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  96855 total
-\end{verbatim}
-
-Just to be safe,
-we should use \texttt{sort}'s \texttt{-n} option to specify that we want to sort numerically.
-Without it,
-\texttt{sort} would order things alphabetically
-so that \texttt{10} would come before \texttt{2}.
-
-\texttt{sort} does not change \texttt{lengths.txt}.
-Instead,
-it sends its output to the screen just as \texttt{wc} did.
-We can therefore put the sorted list of lines in another temporary file called \texttt{sorted-lengths.txt}
-using \texttt{\textgreater{}} once again:
-
-\begin{verbatim}
-$ sort lengths.txt > sorted-lengths.txt
-\end{verbatim}
-
-\begin{quote}
-\textbf{Redirecting to the Same File}
-
-It's tempting to send the output of \texttt{sort} back to the file it reads:
-
-\begin{verbatim}
-$ sort -n lengths.txt > lengths.txt
-\end{verbatim}
-
-However, all this does is wipe out the contents of \texttt{lengths.txt}.
-The reason is that when the shell sees the redirection,
-it opens the file on the right of the \texttt{\textgreater{}} for writing,
-which erases anything that file contained.
-It then runs \texttt{sort}, which finds itself reading from a newly-empty file.
-\end{quote}
-
-Creating intermediate files with names like \texttt{lengths.txt} and \texttt{sorted-lengths.txt} works,
-but keeping track of those files and cleaning them up when they're no longer needed is a burden.
-Let's delete the two files we just created:
-
-\begin{verbatim}
-rm lengths.txt sorted-lengths.txt
-\end{verbatim}
-
-We can produce the same result more safely and with less typing
-using a \gref{pipe}{pipe\_shell}:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
-
-\begin{verbatim}
-$ wc -l *.txt | sort -n
-\end{verbatim}
-
-\begin{verbatim}
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-  15975 dracula.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  96855 total
-\end{verbatim}
-
-The vertical bar \texttt{\textbar{}} between the \texttt{wc} and \texttt{sort} commands
-tells the shell that we want to use the output of the command on the left
-as the input to the command on the right.
-
-Running a command with a file as input has a clear flow of information:
-the command performs a task on that file and prints the output to the screen
-(Figure~\ref{fig:bash-basics-pipe}a).
-When using pipes, however,
-the information flows differently after the first (upstream) command.
-The downstream command doesn't read from a file.
-Instead,
-it reads the output of the upstream command
-(Figure~\ref{fig:bash-basics-pipe}b).
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\linewidth]{figures/bash-basics/pipe} 
-
-}
-
-\caption{Piping commands}\label{fig:bash-basics-pipe}
-\end{figure}
-
-We can use \texttt{\textbar{}} to build pipes of any length.
-For example,
-we can use the command \texttt{head} to get just the first three lines of sorted data,\index{Unix commands!head}
-which shows us the three shortest books:
-
-\begin{verbatim}
-$ wc -l *.txt | sort -n | head -n 3
-\end{verbatim}
-
-\begin{verbatim}
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-\end{verbatim}
-
-\begin{quote}
-\textbf{Options Can Have Values}
-
-When we write \texttt{head\ -n\ 3},
-the value 3 is not input to \texttt{head}.
-Instead, it is associated with the option \texttt{-n}.
-Many options take values like this,
-such as the names of input files or the background color to use in a plot.
-\end{quote}
-
-We could always redirect the output to a file
-by adding \texttt{\textgreater{}\ shortest.txt} to the end of the pipeline,
-thereby retaining our answer for later reference.
-
-In practice,
-most Unix users would create this pipeline step by step,
-just as we have:
-by starting with a single command and adding others one by one,
-checking the output after each change.
-The shell makes this easy
-by letting us move up and down in our \gref{command history}{command\_history}
-with the ↑ and ↓ keys.
-We can also edit old commands to create new ones,
-so a very common sequence is:
-
-\begin{itemize}
-\tightlist
-\item
-  Run a command and check its output.
-\item
-  Use ↑ to bring it up again.
-\item
-  Add the pipe symbol \texttt{\textbar{}} and another command to the end of the line.
-\item
-  Run the pipe and check its output.
-\item
-  Use ↑ to bring it up again.
-\item
-  And so on.
-\end{itemize}
-
-\hypertarget{bash-basics-stdio}{%
-\section{How Pipes Work}\label{bash-basics-stdio}}
-
-In order to use pipes and redirection effectively,
-we need to know a little about how they work.
-When a computer runs a program---any program---it creates a \gref{process}{process} in memory\index{process}
-to hold the program's instructions and data.
-Every process in Unix has an input channel called \gref{standard input}{stdin}\index{standard input}\index{stdin}
-and an output channel called \gref{standard output}{stdout}.\index{standard output}\index{stdout}
-(By now you may be surprised that their names are so memorable,
-but don't worry:
-most Unix programmers call them ``stdin'' and ``stdout'',
-which are pronounced ``stuh-Din'' and ``stuh-Dout'').
-
-The shell is a program like any other,
-and like any other,
-it runs inside a process.
-Under normal circumstances its standard input is connected to our keyboard
-and its standard output to our screen,
-so it reads what we type
-and displays its output for us to see (Figure~\ref{fig:bash-basics-stdio}a).
-When we tell the shell to run a program
-it creates a new process
-and temporarily reconnects the keyboard and stream
-to that process's standard input and output (Figure~\ref{fig:bash-basics-stdio}b).
-
-\begin{figure}
-
-{\centering \includegraphics[width=1\linewidth]{figures/bash-basics/standard-io} 
-
-}
-
-\caption{Standard I/O}\label{fig:bash-basics-stdio}
-\end{figure}
-
-If we provide one or more files for the command to read,
-as with \texttt{sort\ lengths.txt},
-the program reads data from those files.
-If we don't provide any filenames,
-though,
-the Unix convention is for the program to read from standard input.
-We can test this by running \texttt{sort} on its own,
-typing in a few lines of text,
-and then pressing Ctrl+D to signal the end of input .
-\texttt{sort} will then sort and print whatever we typed:
-
-\begin{verbatim}
-$ sort
-one
-two
-three
-four
-^D
-\end{verbatim}
-
-\begin{verbatim}
-four
-one
-three
-two
-\end{verbatim}
-
-Redirection with \texttt{\textgreater{}} tells the shell to connect the program's standard output to a file
-instead of the screen (Figure~\ref{fig:bash-basics-stdio}c).
-
-When we create a pipe like \texttt{wc\ *.txt\ \textbar{}\ sort},
-the shell creates one process for each command so that \texttt{wc} and \texttt{sort} will run simultaneously,
-and then connects the standard output of \texttt{wc} directly to the standard input of \texttt{sort}
-(Figure~\ref{fig:bash-basics-stdio}d).
-
-\texttt{wc} doesn't know whether its output is going to the screen,
-another program,
-or to a file via \texttt{\textgreater{}}.
-Equally,
-\texttt{sort} doesn't know if its input is coming from the keyboard or another process;
-it just knows that it has to read, sort, and print.
-
-\begin{quote}
-\textbf{Why Isn't It Doing Anything?}
-
-What happens if a command is supposed to process a file
-but we don't give it a filename?
-For example, what if we type:
-
-\begin{verbatim}
-$ wc -l
-\end{verbatim}
-
-but don't type \texttt{*.txt} (or anything else) after the command?
-Since \texttt{wc} doesn't have any filenames,
-it assumes it is supposed to read from the keyboard,
-so it waits for us to type in some data.
-It doesn't tell us this:
-it just sits and waits.
-
-This mistake can be hard to spot,
-particularly if we put the filename at the end of the pipeline:
-
-\begin{verbatim}
-$ wc -l | sort moby_dick.txt
-\end{verbatim}
-
-In this case,
-\texttt{sort} ignores standard input and reads the data in the file,
-but \texttt{wc} still just sits there waiting for input.
-
-If we make this mistake,
-we can end the program by typing Ctrl+C.
-We can also use this to interrupt programs that are taking a long time to run
-or are trying to connect to a website that isn't responding.
-\end{quote}
-
-Just as we can redirect standard output with \texttt{\textgreater{}},
-we can connect standard input to a file using \texttt{\textless{}}.\index{redirection (in Unix shell)}
-In the case of a single file,
-this has the same effect as providing the file's name to the command:
-
-\begin{verbatim}
-$ wc < moby_dick.txt
-\end{verbatim}
-
-\begin{verbatim}
-    22331  215832 1276222
-\end{verbatim}
-
-If we try to use redirection with a wildcard,
-though,
-the shell \emph{doesn't} concatenate all of the matching files:
-
-\begin{verbatim}
-$ wc < *.txt
-\end{verbatim}
-
-\begin{verbatim}
--bash: *.txt: ambiguous redirect
-\end{verbatim}
-
-It also doesn't print the error message to standard output,
-which we can prove by redirecting:
-
-\begin{verbatim}
-$ wc < *.txt > all.txt
-\end{verbatim}
-
-\begin{verbatim}
--bash: *.txt: ambiguous redirect
-\end{verbatim}
-
-\begin{verbatim}
-$ cat all.txt
-\end{verbatim}
-
-\begin{verbatim}
-cat: all.txt: No such file or directory
-\end{verbatim}
-
-Instead,
-every process has a second output channel called \gref{standard error}{stderr}
-(or \gref{stderr}{stderr}).\index{standard error}\index{stderr}
-Programs use it for error messages
-so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
-There are ways to redirect standard error,
-but doing so is almost always a bad idea.
-
-\hypertarget{bash-basics-loops}{%
-\section{Repeating Commands on Many Files}\label{bash-basics-loops}}
-
-A loop is a way to repeat a set of commands for each item in a list.\index{loop (in Unix shell)}
-We can use them to build complex workflows out of simple pieces,
-and (like wildcards)
-they reduce the typing we have to do and the number of mistakes we might make.
-
-Let's suppose that we want to take a section out of each book
-whose name starts with the letter ``s'' in the \texttt{data} directory.
-More specifically,
-suppose we want to get the first 8 lines of each book
-\emph{after} the 9 lines of license information that appear at the start of the file.
-If we only cared about one file,
-we could write a pipeline to take the first 17 lines
-and then take the last 8 of those:
-
-\begin{verbatim}
-$ head -n 17 sense_and_sensibility.txt | tail -n 8
-\end{verbatim}
-
-\begin{verbatim}
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-\end{verbatim}
-
-If we try to use a wildcard to select files,
-we only get 8 lines of output,
-not the 16 we expect:
-
-\begin{verbatim}
-$  head -n 17 s*.txt | tail -n 8
-\end{verbatim}
-
-\begin{verbatim}
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-\end{verbatim}
-
-The problem is that \texttt{head} is producing a single stream of output
-containing 17 lines for each file
-(along with a header telling us the file's name):
-
-\begin{verbatim}
-$ head -n 17 s*.txt
-\end{verbatim}
-
-\begin{verbatim}
-==> sense_and_sensibility.txt <==
-The Project Gutenberg EBook of Sense and Sensibility, by Jane Austen
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.net
-
-
-
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-
-==> sherlock_holmes.txt <==
-Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.net
-
-
-
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-\end{verbatim}
-
-Let's try this instead:
-
-\begin{verbatim}
-$ for filename in sense_and_sensibility.txt sherlock_holmes.txt
-> do
->   head -n 17 $filename | tail -n 8
-> done
-\end{verbatim}
-
-\begin{verbatim}
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-\end{verbatim}
-
-As the output shows,
-the loop runs our pipeline once for each file.
-There is a lot going on here,
-so we will break it down into pieces:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  The keywords \texttt{for}, \texttt{in}, \texttt{do}, and \texttt{done} create the loop,
-  and must always appear in that order.
-\item
-  \texttt{filename} is a variable just like a variable in R or Python.\index{variable (in Unix shell)}\index{shell variable}
-  At any moment it contains a value,
-  but that value can change over time.
-\item
-  The loop runs once for each item in the list.
-  Each time it runs,
-  it assigns the next item to the variable.
-  In this case \texttt{filename} will be \texttt{sense\_and\_sensibility.txt}
-  the first time around the loop
-  and \texttt{sherlock\_holmes.txt} the second time.
-\item
-  The commands that the loop executes are called the \gref{body}{loop\_body} of the loop\index{loop (in Unix shell)!loop body}
-  and appear between the keywords \texttt{do} and \texttt{done}.
-  Those commands use the current value of the variable \texttt{filename},
-  but to get it,
-  we must put a dollar sign \texttt{\$} in front of the variable's name.
-  If we forget and use \texttt{filename} instead of \texttt{\$filename},
-  the shell will think that we are referring to a file
-  that is actually called \texttt{filename}.
-\item
-  The shell prompt changes from \texttt{\$}
-  to a \gref{continuation prompt}{continuation\_prompt} \texttt{\textgreater{}}
-  as we type in our loop\index{continuation prompt}\index{prompt (in Unix shell)!continuation}
-  to remind us that we haven't finished typing a complete command yet.
-  We don't type the \texttt{\textgreater{}},
-  just as we don't type the \texttt{\$}.
-  The continuation prompt \texttt{\textgreater{}} has nothing to do with redirection;
-  it's used because there are only so many punctuation symbols available.
-\end{enumerate}
-
-It is very common to use a wildcard to select a set of files
-and then loop over that set to run commands:
-
-\begin{verbatim}
-$ for filename in s*.txt
-> do
->   head -n 17 $filename | tail -n 8
-> done
-\end{verbatim}
-
-\begin{verbatim}
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-
-
-
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-\end{verbatim}
-
-\hypertarget{bash-basics-meaningless}{%
-\section{Variable Names}\label{bash-basics-meaningless}}
-
-We should always choose meaningful names for variables,
-but we should remember that those names don't mean anything to the computer.
-For example,
-we have called our loop variable \texttt{filename}
-to make its purpose clear to human readers,
-but we could equally well write our loop as:
-
-\begin{verbatim}
-$ for x in s*.txt
-> do
->   head -n 17 $x | tail -n 8
-> done
-\end{verbatim}
-
-or as:
-
-\begin{verbatim}
-$ for username in s*.txt
-> do
->   head -n 17 $username | tail -n 8
-> done
-\end{verbatim}
-
-\emph{Don't do this.}
-Programs are only useful if people can understand them,
-so meaningless names like \texttt{x} and misleading names like \texttt{username}
-increase the odds of misunderstanding.
-
-\hypertarget{bash-basics-history}{%
-\section{Redoing Things}\label{bash-basics-history}}
-
-Loops are useful if we know in advance what we want to repeat,
-but if we have already run commands,
-we can still repeat.
-One way is to use ↑ and ↓
-to go up and down in our command history as described earlier.
-Another is to use \texttt{history}\index{history (in Unix shell)}\index{Unix commands!history}
-to get a list of the last few hundred commands we have run:
-
-\begin{verbatim}
-$ history
-\end{verbatim}
-
-\begin{verbatim}
-  551  wc -l *.txt | sort -n
-  552  wc -l *.txt | sort -n | head -n 3
-  553  wc -l *.txt | sort -n | head -n 1 > shortest.txt
-\end{verbatim}
-
-We can use an exclamation mark \texttt{!} followed by a number
-to repeat a recent command:
-
-\begin{verbatim}
-$ !552
-\end{verbatim}
-
-\begin{verbatim}
-wc -l *.txt | sort -n | head -n 3
-\end{verbatim}
-
-\begin{verbatim}
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-\end{verbatim}
-
-The shell prints the command it is going to re-run to standard error
-before executing it,
-so that (for example) \texttt{!572~\textgreater{}~results.txt}
-puts the command's output in a file
-\emph{without} also writing the command to the file.
-
-Having an accurate record of the things we have done
-and a simple way to repeat them
-are two of the main reasons people use the Unix shell.
-In fact,
-being able to repeat history is such a powerful idea
-that the shell gives us several ways to do it:
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{!head} re-runs the most recent command starting with \texttt{head},
-  while \texttt{!wc} re-runs the most recent starting with \texttt{wc}.
-\item
-  If we type Ctrl+R (for \textbf{r}everse search)
-  the shell searches backward through its history for whatever we type next.
-  If we don't like the first thing it finds,
-  we can type Ctrl+R again to go further back.
-\end{itemize}
-
-If we use \texttt{history}, ↑, or Ctrl+R
-we will quickly notice that loops don't have to be broken across lines.
-Instead,
-their parts can be separated with semi-colons:
-
-\begin{verbatim}
-$ for filename in s*.txt ; do head -n 17 $filename | tail -n 8; done
-\end{verbatim}
-
-This is fairly readable,
-although even experienced users have a tendency to put the semi-colon after \texttt{do} instead of before it.
-If our loop contains multiple commands,
-though,
-the multi-line format is much easier to read.
-For example,
-compare this:
-
-\begin{verbatim}
-$ for filename in s*.txt
-> do
->   echo $filename
->   head -n 17 $filename | tail -n 8
-> done
-\end{verbatim}
-
-with this:
-
-\begin{verbatim}
-$ for filename in s*.txt; do echo $filename; head -n 17 $filename | tail -n 8; done
-\end{verbatim}
-
-(The \texttt{echo} command simply prints its arguments to the screen.
-It is often used to keep track of progress or for debugging.)
-
-\hypertarget{bash-basics-autoname}{%
-\section{Creating New Filenames Automatically}\label{bash-basics-autoname}}
-
-Suppose we want to create a backup copy of each book whose name ends in ``e''.
-If we don't want to change the files' names,
-we can do this with \texttt{cp}:
-
-\begin{verbatim}
-$ cd ~/zipf
-$ mkdir backup
-$ cp data/*e.txt backup
-$ ls backup
-\end{verbatim}
-
-\begin{verbatim}
-jane_eyre.txt  time_machine.txt
-\end{verbatim}
-
-\begin{quote}
-\textbf{Warnings}
-
-If you attempt to re-execute the code chunk above,
-you'll end up with an error after the second line:
-
-\begin{verbatim}
-mkdir: backup: File exists
-\end{verbatim}
-
-This warning isn't necessarily a cause for alarm.
-It lets you know that the command couldn't be completed,
-but will not prevent you from proceeding.
-\end{quote}
-
-But what if we want to append the extension \texttt{.bak} to the files' names?
-\texttt{cp} can do this for a single file:
-
-\begin{verbatim}
-$ cp data/time_machine.txt backup/time_machine.txt.bak
-\end{verbatim}
-
-but not for all the files at once:
-
-\begin{verbatim}
-$ cp data/*e.txt backup/*e.txt.bak
-\end{verbatim}
-
-\begin{verbatim}
-cp: target 'backup/*e.txt.bak' is not a directory
-\end{verbatim}
-
-\texttt{backup/*e.txt.bak} doesn't match anything---those files don't yet exist---so
-after the shell expands the \texttt{*} wildcards,
-what we are actually asking \texttt{cp} to do is:
-
-\begin{verbatim}
-$ cp data/jane_eyre.txt data/time_machine.txt backup/*e.bak
-\end{verbatim}
-
-This doesn't work because \texttt{cp} only understands how to do two things:
-copy a single file to create another file,
-or copy a bunch of files into a directory.
-If we give it more than two names as arguments,
-it expects the last one to be a directory.
-Since \texttt{backup/*e.bak} is not,
-\texttt{cp} reports an error.
-
-Instead,
-let's use a loop to copy files to the backup directory
-and append the \texttt{.bak} suffix:
-
-\begin{verbatim}
-$ cd data
-$ for filename in *e.txt
-> do
->   cp $filename ../backup/$filename.bak
-> done
-$ ls ../backup
-\end{verbatim}
-
-\begin{verbatim}
-jane_eyre.txt.bak  time_machine.txt.bak
-\end{verbatim}
-
 \hypertarget{bash-basics-summary}{%
 \section{Summary}\label{bash-basics-summary}}
 
@@ -2606,9 +1791,8 @@ The original Unix shell was created in 1971,
 and will soon celebrate its fiftieth anniversary.
 Its commands may be cryptic,
 but few programs have remained in daily use for so long.
-The secret to its success is the way it combines a few powerful ideas:
-command history, wildcards, redirection, and above all pipes.
-The next chapter will explore how we can go beyond these basics.
+The next chapter will explore how we can use the tools it gives us
+to create new tools of our own.
 
 \hypertarget{bash-basics-exercises}{%
 \section{Exercises}\label{bash-basics-exercises}}
@@ -2947,169 +2131,6 @@ $ mkdir data
 $ mkdir raw processed
 \end{verbatim}
 
-\hypertarget{bash-basics-ex-redirect-append}{%
-\subsection{\texorpdfstring{What does \texttt{\textgreater{}\textgreater{}} mean?}{What does \textgreater\textgreater{} mean?}}\label{bash-basics-ex-redirect-append}}
-
-We have seen the use of \texttt{\textgreater{}}, but there is a similar operator \texttt{\textgreater{}\textgreater{}} which works slightly differently.
-We'll learn about the differences between these two operators by printing some strings.
-We can use the \texttt{echo} command to print strings e.g.
-
-\begin{verbatim}
-$ echo The echo command prints text
-\end{verbatim}
-
-\begin{verbatim}
-The echo command prints text
-\end{verbatim}
-
-Now test the commands below to reveal the difference between the two operators:
-
-\begin{verbatim}
-$ echo hello > testfile01.txt
-\end{verbatim}
-
-and:
-
-\begin{verbatim}
-$ echo hello >> testfile02.txt
-\end{verbatim}
-
-Hint: Try executing each command twice in a row and then examining the output files.
-
-\hypertarget{bash-basics-ex-append-data}{%
-\subsection{Appending data}\label{bash-basics-ex-append-data}}
-
-Given the following commands,
-what will be included in the file \texttt{extracted.txt}:
-
-\begin{verbatim}
-$ head -n 3 dracula.txt > extracted.txt
-$ tail -n 2 dracula.txt >> extracted.txt
-\end{verbatim}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  The first three lines of \texttt{dracula.txt}
-\item
-  The last two lines of \texttt{dracula.txt}
-\item
-  The first three lines and the last two lines of \texttt{dracula.txt}
-\item
-  The second and third lines of \texttt{dracula.txt}
-\end{enumerate}
-
-\hypertarget{bash-basics-ex-piping}{%
-\subsection{Piping commands}\label{bash-basics-ex-piping}}
-
-In our current directory, we want to find the 3 files which have the least number of
-lines. Which command listed below would work?
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \texttt{wc\ -l\ *\ \textgreater{}\ sort\ -n\ \textgreater{}\ head\ -n\ 3}
-\item
-  \texttt{wc\ -l\ *\ \textbar{}\ sort\ -n\ \textbar{}\ head\ -n\ 1-3}
-\item
-  \texttt{wc\ -l\ *\ \textbar{}\ head\ -n\ 3\ \textbar{}\ sort\ -n}
-\item
-  \texttt{wc\ -l\ *\ \textbar{}\ sort\ -n\ \textbar{}\ head\ -n\ 3}
-\end{enumerate}
-
-\hypertarget{bash-basics-ex-uniq-adjacent}{%
-\subsection{\texorpdfstring{Why does \texttt{uniq} only remove adjacent duplicates?}{Why does uniq only remove adjacent duplicates?}}\label{bash-basics-ex-uniq-adjacent}}
-
-The command \texttt{uniq} removes adjacent duplicated lines from its input.
-Consider a hypothetical file \texttt{genres.txt} containing the following data:
-
-\begin{verbatim}
-science fiction
-fantasy
-science fiction
-fantasy
-science fiction
-science fiction
-\end{verbatim}
-
-Running the command \texttt{uniq\ genres.txt} produces:
-
-\begin{verbatim}
-science fiction
-fantasy
-science fiction
-fantasy
-science fiction
-\end{verbatim}
-
-Why do you think \texttt{uniq} only removes \emph{adjacent} duplicated lines?
-(Hint: think about very large datasets.) What other command could
-you combine with it in a pipe to remove all duplicated lines?
-
-\hypertarget{bash-basics-ex-reading-pipes}{%
-\subsection{Pipe reading comprehension}\label{bash-basics-ex-reading-pipes}}
-
-A file called \texttt{titles.txt} contains the following data:
-
-\begin{verbatim}
-Sense and Sensibility,1811
-Frankenstein,1818
-Jane Eyre,1847
-Wuthering Heights,1847
-Moby Dick,1851
-The Adventures of Sherlock Holmes,1892
-The Time Machine,1895
-Dracula,1897
-The Invisible Man,1897
-\end{verbatim}
-
-What text passes through each of the pipes and the final redirect in the pipeline below?
-
-\begin{verbatim}
-$ cat titles.txt | head -n 5 | tail -n 3 | sort -r > final.txt
-\end{verbatim}
-
-Hint: build the pipeline up one command at a time to test your understanding
-
-\hypertarget{bash-basics-ex-pipe-construction}{%
-\subsection{Pipe construction}\label{bash-basics-ex-pipe-construction}}
-
-For the file \texttt{titles.txt} from the previous exercise, consider the following command:
-
-\begin{verbatim}
-$ cut -d , -f 2 titles.txt
-\end{verbatim}
-
-What does the \texttt{cut} command (and its options) accomplish?
-
-\hypertarget{bash-basics-ex-which-pipe}{%
-\subsection{Which pipe?}\label{bash-basics-ex-which-pipe}}
-
-Consider the same \texttt{titles.txt} from the previous exercises.
-
-The \texttt{uniq} command has a \texttt{-c} option which gives a count of the
-number of times a line occurs in its input.
-If \texttt{titles.txt} was in your working directory,
-what command would you use to produce
-a table that shows the total count of each publication year in the file?
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \texttt{sort\ titles.txt\ \textbar{}\ uniq\ -c}
-\item
-  \texttt{sort\ -t,\ -k2,2\ titles.txt\ \textbar{}\ uniq\ -c}
-\item
-  \texttt{cut\ -d,\ -f\ 2\ titles.txt\ \textbar{}\ uniq\ -c}
-\item
-  \texttt{cut\ -d,\ -f\ 2\ titles.txt\ \textbar{}\ sort\ \textbar{}\ uniq\ -c}
-\item
-  \texttt{cut\ -d,\ -f\ 2\ titles.txt\ \textbar{}\ sort\ \textbar{}\ uniq\ -c\ \textbar{}\ wc\ -l}
-\end{enumerate}
-
 \hypertarget{bash-basics-ex-wildcard-expressions}{%
 \subsection{Wildcard expressions}\label{bash-basics-ex-wildcard-expressions}}
 
@@ -3157,124 +2178,6 @@ and \emph{only} the processed data files?
 \item
   \texttt{rm\ *.*}
 \end{enumerate}
-
-\hypertarget{bash-basics-ex-loop-dry-run}{%
-\subsection{Doing a dry run}\label{bash-basics-ex-loop-dry-run}}
-
-A loop is a way to do many things at once---or to make many mistakes at
-once if it does the wrong thing. One way to check what a loop \emph{would} do
-is to \texttt{echo} the commands it would run instead of actually running them.
-
-Suppose we want to preview the commands the following loop will execute
-without actually running those commands
-(\texttt{analyze} is a hypothetical command):
-
-\begin{verbatim}
-$ for file in *.txt
-> do
->   analyze $file > analyzed-$file
-> done
-\end{verbatim}
-
-What is the difference between the two loops below, and which one would we
-want to run?
-
-\begin{verbatim}
-# Version 1
-$ for file in *.txt
-> do
->   echo analyze $file > analyzed-$file
-> done
-\end{verbatim}
-
-\begin{verbatim}
-# Version 2
-$ for file in *.txt
-> do
->   echo "analyze $file > analyzed-$file"
-> done
-\end{verbatim}
-
-\hypertarget{bash-basics-ex-loop-variables}{%
-\subsection{Variables in loops}\label{bash-basics-ex-loop-variables}}
-
-Given the files in \texttt{data/},
-what is the output of the following code?
-
-\begin{verbatim}
-$ for datafile in *.txt
-> do
->    ls *.txt
-> done
-\end{verbatim}
-
-Now, what is the output of the following code?
-
-\begin{verbatim}
-$ for datafile in *.txt
-> do
->   ls $datafile
-> done
-\end{verbatim}
-
-Why do these two loops give different outputs?
-
-\hypertarget{bash-basics-ex-limiting-file-sets}{%
-\subsection{Limiting sets of files}\label{bash-basics-ex-limiting-file-sets}}
-
-What would be the output of running the following loop in your \texttt{data/} directory?
-
-\begin{verbatim}
-$ for filename in d*
-> do
->    ls $filename
-> done
-\end{verbatim}
-
-How would the output differ from using this command instead?
-
-\begin{verbatim}
-$ for filename in *d*
-> do
->    ls $filename
-> done
-\end{verbatim}
-
-\hypertarget{bash-basics-ex-loop-save}{%
-\subsection{Saving to a file in a loop}\label{bash-basics-ex-loop-save}}
-
-Consider running the following loop in the \texttt{data/} directory:
-
-\begin{verbatim}
-for book in *.txt
-> do
->     echo $book
->     head -n 16 $book > headers.txt
-> done
-\end{verbatim}
-
-Why would the following loop be preferable?
-
-\begin{verbatim}
-for book in *.txt
-> do
->     head -n 16 $book >> headers.txt
-> done
-\end{verbatim}
-
-\hypertarget{bash-basics-ex-history-order}{%
-\subsection{\texorpdfstring{Why does \texttt{history} record commands before running them?}{Why does history record commands before running them?}}\label{bash-basics-ex-history-order}}
-
-If you run the command:
-
-\begin{verbatim}
-$ history | tail -n 5 > recent.sh
-\end{verbatim}
-
-the last command in the file is the \texttt{history} command itself, i.e.,
-the shell has added \texttt{history} to the command log before actually
-running it. In fact, the shell \emph{always} adds commands to the log
-before running them. Why do you think it does this?
 
 \hypertarget{bash-basics-ex-other-wildcards}{%
 \subsection{Other wildcards}\label{bash-basics-ex-other-wildcards}}
@@ -3326,6 +2229,1148 @@ explain in plain language what files the expression \texttt{novel-????-{[}ab{]}*
   \texttt{wc} counts lines, words, and characters in its inputs.
 \item
   \texttt{man} displays the manual page for a given command; some commands also have a \texttt{-\/-help} option.
+\end{itemize}
+
+\hypertarget{bash-tools}{%
+\chapter{Building Unix Tools}\label{bash-tools}}
+
+\begin{quote}
+Wisdom comes from experience. Experience is often a result of lack of wisdom.
+
+--- Terry Pratchett\index{Pratchett, Terry}
+\end{quote}
+
+The shell's greatest strength is that
+it lets us combine programs to create pipelines
+that can handle large volumes of data.
+Sequences of commands can be saved in a \gref{script}{script},
+just as commands for R or Python can be saved in programs,
+which makes our workflows more reproducible.
+Finally,
+the shell is often the easiest way to interact with remote machines---in fact,
+the shell is practically essential for working with clusters and the cloud.
+We won't need this much power in our Zipf's Law examples,
+but as we will see,
+being able to combine commands and save our work
+makes life easier even when working on small problems.
+
+\hypertarget{bash-tools-pipe}{%
+\section{Combining Commands}\label{bash-tools-pipe}}
+
+Now that we know a few basic commands,
+we can introduce one of the shell's most powerful features:
+the ease with which it lets us combine existing programs in new ways.
+Let's go into the \texttt{zipf/data} directory
+and count the number of lines in each file once again:
+
+\begin{verbatim}
+$ cd ~/zipf/data
+$ wc -l *.txt
+\end{verbatim}
+
+\begin{verbatim}
+  15975 dracula.txt
+   7832 frankenstein.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+   3582 time_machine.txt
+  96855 total
+\end{verbatim}
+
+Which of these books is shortest?
+We can check by eye when there are only 16 files,
+but what if there were eight thousand?
+
+Our first step toward a solution is to run this command:
+
+\begin{verbatim}
+$ wc -l *.txt > lengths.txt
+\end{verbatim}
+
+The greater-than symbol \texttt{\textgreater{}} tells the shell
+to \gref{redirect}{redirection} the command's output to a file instead of printing it.\index{redirection (in Unix shell)}\index{Unix shell!redirection}
+Nothing appears on the screen;
+instead,
+everything that would have appeared has gone into the file \texttt{lengths.txt}.
+The shell creates this file if it doesn't exist,
+or overwrites it if it already exists.
+\texttt{ls\ lengths.txt} confirms that the file exists:
+
+\begin{verbatim}
+$ ls lengths.txt
+\end{verbatim}
+
+\begin{verbatim}
+lengths.txt
+\end{verbatim}
+
+We can print the contents of \texttt{lengths.txt} using \texttt{cat},\index{Unix commands!cat}
+which is short for con\textbf{cat}enate
+(because if we give it the names of several files
+it will print them all in order):
+
+\begin{verbatim}
+$ cat lengths.txt
+\end{verbatim}
+
+\begin{verbatim}
+  15975 dracula.txt
+   7832 frankenstein.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+   3582 time_machine.txt
+  96855 total
+\end{verbatim}
+
+We can now use \texttt{sort} to sort the lines in this file:
+
+\begin{verbatim}
+$ sort lengths.txt
+\end{verbatim}
+
+\begin{verbatim}
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+  15975 dracula.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  96855 total
+\end{verbatim}
+
+Just to be safe,
+we should use \texttt{sort}'s \texttt{-n} option to specify that we want to sort numerically.
+Without it,
+\texttt{sort} would order things alphabetically
+so that \texttt{10} would come before \texttt{2}.
+
+\texttt{sort} does not change \texttt{lengths.txt}.
+Instead,
+it sends its output to the screen just as \texttt{wc} did.
+We can therefore put the sorted list of lines in another temporary file called \texttt{sorted-lengths.txt}
+using \texttt{\textgreater{}} once again:
+
+\begin{verbatim}
+$ sort lengths.txt > sorted-lengths.txt
+\end{verbatim}
+
+\begin{quote}
+\textbf{Redirecting to the Same File}
+
+It's tempting to send the output of \texttt{sort} back to the file it reads:
+
+\begin{verbatim}
+$ sort -n lengths.txt > lengths.txt
+\end{verbatim}
+
+However, all this does is wipe out the contents of \texttt{lengths.txt}.
+The reason is that when the shell sees the redirection,
+it opens the file on the right of the \texttt{\textgreater{}} for writing,
+which erases anything that file contained.
+It then runs \texttt{sort}, which finds itself reading from a newly-empty file.
+\end{quote}
+
+Creating intermediate files with names like \texttt{lengths.txt} and \texttt{sorted-lengths.txt} works,
+but keeping track of those files and cleaning them up when they're no longer needed is a burden.
+Let's delete the two files we just created:
+
+\begin{verbatim}
+rm lengths.txt sorted-lengths.txt
+\end{verbatim}
+
+We can produce the same result more safely and with less typing
+using a \gref{pipe}{pipe\_shell}:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
+
+\begin{verbatim}
+$ wc -l *.txt | sort -n
+\end{verbatim}
+
+\begin{verbatim}
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+  15975 dracula.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  96855 total
+\end{verbatim}
+
+The vertical bar \texttt{\textbar{}} between the \texttt{wc} and \texttt{sort} commands
+tells the shell that we want to use the output of the command on the left
+as the input to the command on the right.
+
+Running a command with a file as input has a clear flow of information:
+the command performs a task on that file and prints the output to the screen
+(Figure~\ref{fig:bash-tools-pipe}a).
+When using pipes, however,
+the information flows differently after the first (upstream) command.
+The downstream command doesn't read from a file.
+Instead,
+it reads the output of the upstream command
+(Figure~\ref{fig:bash-tools-pipe}b).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/bash-tools/pipe} 
+
+}
+
+\caption{Piping commands}\label{fig:bash-tools-pipe}
+\end{figure}
+
+We can use \texttt{\textbar{}} to build pipes of any length.
+For example,
+we can use the command \texttt{head} to get just the first three lines of sorted data,\index{Unix commands!head}
+which shows us the three shortest books:
+
+\begin{verbatim}
+$ wc -l *.txt | sort -n | head -n 3
+\end{verbatim}
+
+\begin{verbatim}
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+\end{verbatim}
+
+\begin{quote}
+\textbf{Options Can Have Values}
+
+When we write \texttt{head\ -n\ 3},
+the value 3 is not input to \texttt{head}.
+Instead, it is associated with the option \texttt{-n}.
+Many options take values like this,
+such as the names of input files or the background color to use in a plot.
+\end{quote}
+
+We could always redirect the output to a file
+by adding \texttt{\textgreater{}\ shortest.txt} to the end of the pipeline,
+thereby retaining our answer for later reference.
+
+In practice,
+most Unix users would create this pipeline step by step,
+just as we have:
+by starting with a single command and adding others one by one,
+checking the output after each change.
+The shell makes this easy
+by letting us move up and down in our \gref{command history}{command\_history}
+with the ↑ and ↓ keys.
+We can also edit old commands to create new ones,
+so a very common sequence is:
+
+\begin{itemize}
+\tightlist
+\item
+  Run a command and check its output.
+\item
+  Use ↑ to bring it up again.
+\item
+  Add the pipe symbol \texttt{\textbar{}} and another command to the end of the line.
+\item
+  Run the pipe and check its output.
+\item
+  Use ↑ to bring it up again.
+\item
+  And so on.
+\end{itemize}
+
+\hypertarget{bash-tools-stdio}{%
+\section{How Pipes Work}\label{bash-tools-stdio}}
+
+In order to use pipes and redirection effectively,
+we need to know a little about how they work.
+When a computer runs a program---any program---it creates a \gref{process}{process} in memory\index{process}
+to hold the program's instructions and data.
+Every process in Unix has an input channel called \gref{standard input}{stdin}\index{standard input}\index{stdin}
+and an output channel called \gref{standard output}{stdout}.\index{standard output}\index{stdout}
+(By now you may be surprised that their names are so memorable,
+but don't worry:
+most Unix programmers call them ``stdin'' and ``stdout'',
+which are pronounced ``stuh-Din'' and ``stuh-Dout'').
+
+The shell is a program like any other,
+and like any other,
+it runs inside a process.
+Under normal circumstances its standard input is connected to our keyboard
+and its standard output to our screen,
+so it reads what we type
+and displays its output for us to see (Figure~\ref{fig:bash-tools-stdio}a).
+When we tell the shell to run a program
+it creates a new process
+and temporarily reconnects the keyboard and stream
+to that process's standard input and output (Figure~\ref{fig:bash-tools-stdio}b).
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/bash-tools/standard-io} 
+
+}
+
+\caption{Standard I/O}\label{fig:bash-tools-stdio}
+\end{figure}
+
+If we provide one or more files for the command to read,
+as with \texttt{sort\ lengths.txt},
+the program reads data from those files.
+If we don't provide any filenames,
+though,
+the Unix convention is for the program to read from standard input.
+We can test this by running \texttt{sort} on its own,
+typing in a few lines of text,
+and then pressing Ctrl+D to signal the end of input .
+\texttt{sort} will then sort and print whatever we typed:
+
+\begin{verbatim}
+$ sort
+one
+two
+three
+four
+^D
+\end{verbatim}
+
+\begin{verbatim}
+four
+one
+three
+two
+\end{verbatim}
+
+Redirection with \texttt{\textgreater{}} tells the shell to connect the program's standard output to a file
+instead of the screen (Figure~\ref{fig:bash-tools-stdio}c).
+
+When we create a pipe like \texttt{wc\ *.txt\ \textbar{}\ sort},
+the shell creates one process for each command so that \texttt{wc} and \texttt{sort} will run simultaneously,
+and then connects the standard output of \texttt{wc} directly to the standard input of \texttt{sort}
+(Figure~\ref{fig:bash-tools-stdio}d).
+
+\texttt{wc} doesn't know whether its output is going to the screen,
+another program,
+or to a file via \texttt{\textgreater{}}.
+Equally,
+\texttt{sort} doesn't know if its input is coming from the keyboard or another process;
+it just knows that it has to read, sort, and print.
+
+\begin{quote}
+\textbf{Why Isn't It Doing Anything?}
+
+What happens if a command is supposed to process a file
+but we don't give it a filename?
+For example, what if we type:
+
+\begin{verbatim}
+$ wc -l
+\end{verbatim}
+
+but don't type \texttt{*.txt} (or anything else) after the command?
+Since \texttt{wc} doesn't have any filenames,
+it assumes it is supposed to read from the keyboard,
+so it waits for us to type in some data.
+It doesn't tell us this:
+it just sits and waits.
+
+This mistake can be hard to spot,
+particularly if we put the filename at the end of the pipeline:
+
+\begin{verbatim}
+$ wc -l | sort moby_dick.txt
+\end{verbatim}
+
+In this case,
+\texttt{sort} ignores standard input and reads the data in the file,
+but \texttt{wc} still just sits there waiting for input.
+
+If we make this mistake,
+we can end the program by typing Ctrl+C.
+We can also use this to interrupt programs that are taking a long time to run
+or are trying to connect to a website that isn't responding.
+\end{quote}
+
+Just as we can redirect standard output with \texttt{\textgreater{}},
+we can connect standard input to a file using \texttt{\textless{}}.\index{redirection (in Unix shell)}
+In the case of a single file,
+this has the same effect as providing the file's name to the command:
+
+\begin{verbatim}
+$ wc < moby_dick.txt
+\end{verbatim}
+
+\begin{verbatim}
+    22331  215832 1276222
+\end{verbatim}
+
+If we try to use redirection with a wildcard,
+though,
+the shell \emph{doesn't} concatenate all of the matching files:
+
+\begin{verbatim}
+$ wc < *.txt
+\end{verbatim}
+
+\begin{verbatim}
+-bash: *.txt: ambiguous redirect
+\end{verbatim}
+
+It also doesn't print the error message to standard output,
+which we can prove by redirecting:
+
+\begin{verbatim}
+$ wc < *.txt > all.txt
+\end{verbatim}
+
+\begin{verbatim}
+-bash: *.txt: ambiguous redirect
+\end{verbatim}
+
+\begin{verbatim}
+$ cat all.txt
+\end{verbatim}
+
+\begin{verbatim}
+cat: all.txt: No such file or directory
+\end{verbatim}
+
+Instead,
+every process has a second output channel called \gref{standard error}{stderr}
+(or \gref{stderr}{stderr}).\index{standard error}\index{stderr}
+Programs use it for error messages
+so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
+There are ways to redirect standard error,
+but doing so is almost always a bad idea.
+
+\hypertarget{bash-tools-loops}{%
+\section{Repeating Commands on Many Files}\label{bash-tools-loops}}
+
+A loop is a way to repeat a set of commands for each item in a list.\index{loop (in Unix shell)}
+We can use them to build complex workflows out of simple pieces,
+and (like wildcards)
+they reduce the typing we have to do and the number of mistakes we might make.
+
+Let's suppose that we want to take a section out of each book
+whose name starts with the letter ``s'' in the \texttt{data} directory.
+More specifically,
+suppose we want to get the first 8 lines of each book
+\emph{after} the 9 lines of license information that appear at the start of the file.
+If we only cared about one file,
+we could write a pipeline to take the first 17 lines
+and then take the last 8 of those:
+
+\begin{verbatim}
+$ head -n 17 sense_and_sensibility.txt | tail -n 8
+\end{verbatim}
+
+\begin{verbatim}
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+\end{verbatim}
+
+If we try to use a wildcard to select files,
+we only get 8 lines of output,
+not the 16 we expect:
+
+\begin{verbatim}
+$  head -n 17 s*.txt | tail -n 8
+\end{verbatim}
+
+\begin{verbatim}
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+\end{verbatim}
+
+The problem is that \texttt{head} is producing a single stream of output
+containing 17 lines for each file
+(along with a header telling us the file's name):
+
+\begin{verbatim}
+$ head -n 17 s*.txt
+\end{verbatim}
+
+\begin{verbatim}
+==> sense_and_sensibility.txt <==
+The Project Gutenberg EBook of Sense and Sensibility, by Jane Austen
+
+This eBook is for the use of anyone anywhere at no cost and with
+almost no restrictions whatsoever.  You may copy it, give it away or
+re-use it under the terms of the Project Gutenberg License included
+with this eBook or online at www.gutenberg.net
+
+
+
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+
+==> sherlock_holmes.txt <==
+Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
+
+This eBook is for the use of anyone anywhere at no cost and with
+almost no restrictions whatsoever.  You may copy it, give it away or
+re-use it under the terms of the Project Gutenberg License included
+with this eBook or online at www.gutenberg.net
+
+
+
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+\end{verbatim}
+
+Let's try this instead:
+
+\begin{verbatim}
+$ for filename in sense_and_sensibility.txt sherlock_holmes.txt
+> do
+>   head -n 17 $filename | tail -n 8
+> done
+\end{verbatim}
+
+\begin{verbatim}
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+\end{verbatim}
+
+As the output shows,
+the loop runs our pipeline once for each file.
+There is a lot going on here,
+so we will break it down into pieces:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  The keywords \texttt{for}, \texttt{in}, \texttt{do}, and \texttt{done} create the loop,
+  and must always appear in that order.
+\item
+  \texttt{filename} is a variable just like a variable in R or Python.\index{variable (in Unix shell)}\index{shell variable}
+  At any moment it contains a value,
+  but that value can change over time.
+\item
+  The loop runs once for each item in the list.
+  Each time it runs,
+  it assigns the next item to the variable.
+  In this case \texttt{filename} will be \texttt{sense\_and\_sensibility.txt}
+  the first time around the loop
+  and \texttt{sherlock\_holmes.txt} the second time.
+\item
+  The commands that the loop executes are called the \gref{body}{loop\_body} of the loop\index{loop (in Unix shell)!loop body}
+  and appear between the keywords \texttt{do} and \texttt{done}.
+  Those commands use the current value of the variable \texttt{filename},
+  but to get it,
+  we must put a dollar sign \texttt{\$} in front of the variable's name.
+  If we forget and use \texttt{filename} instead of \texttt{\$filename},
+  the shell will think that we are referring to a file
+  that is actually called \texttt{filename}.
+\item
+  The shell prompt changes from \texttt{\$}
+  to a \gref{continuation prompt}{continuation\_prompt} \texttt{\textgreater{}}
+  as we type in our loop\index{continuation prompt}\index{prompt (in Unix shell)!continuation}
+  to remind us that we haven't finished typing a complete command yet.
+  We don't type the \texttt{\textgreater{}},
+  just as we don't type the \texttt{\$}.
+  The continuation prompt \texttt{\textgreater{}} has nothing to do with redirection;
+  it's used because there are only so many punctuation symbols available.
+\end{enumerate}
+
+It is very common to use a wildcard to select a set of files
+and then loop over that set to run commands:
+
+\begin{verbatim}
+$ for filename in s*.txt
+> do
+>   head -n 17 $filename | tail -n 8
+> done
+\end{verbatim}
+
+\begin{verbatim}
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+
+
+
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+\end{verbatim}
+
+\hypertarget{bash-tools-meaningless}{%
+\section{Variable Names}\label{bash-tools-meaningless}}
+
+We should always choose meaningful names for variables,
+but we should remember that those names don't mean anything to the computer.
+For example,
+we have called our loop variable \texttt{filename}
+to make its purpose clear to human readers,
+but we could equally well write our loop as:
+
+\begin{verbatim}
+$ for x in s*.txt
+> do
+>   head -n 17 $x | tail -n 8
+> done
+\end{verbatim}
+
+or as:
+
+\begin{verbatim}
+$ for username in s*.txt
+> do
+>   head -n 17 $username | tail -n 8
+> done
+\end{verbatim}
+
+\emph{Don't do this.}
+Programs are only useful if people can understand them,
+so meaningless names like \texttt{x} and misleading names like \texttt{username}
+increase the odds of misunderstanding.
+
+\hypertarget{bash-tools-history}{%
+\section{Redoing Things}\label{bash-tools-history}}
+
+Loops are useful if we know in advance what we want to repeat,
+but if we have already run commands,
+we can still repeat.
+One way is to use ↑ and ↓
+to go up and down in our command history as described earlier.
+Another is to use \texttt{history}\index{history (in Unix shell)}\index{Unix commands!history}
+to get a list of the last few hundred commands we have run:
+
+\begin{verbatim}
+$ history
+\end{verbatim}
+
+\begin{verbatim}
+  551  wc -l *.txt | sort -n
+  552  wc -l *.txt | sort -n | head -n 3
+  553  wc -l *.txt | sort -n | head -n 1 > shortest.txt
+\end{verbatim}
+
+We can use an exclamation mark \texttt{!} followed by a number
+to repeat a recent command:
+
+\begin{verbatim}
+$ !552
+\end{verbatim}
+
+\begin{verbatim}
+wc -l *.txt | sort -n | head -n 3
+\end{verbatim}
+
+\begin{verbatim}
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+\end{verbatim}
+
+The shell prints the command it is going to re-run to standard error
+before executing it,
+so that (for example) \texttt{!572~\textgreater{}~results.txt}
+puts the command's output in a file
+\emph{without} also writing the command to the file.
+
+Having an accurate record of the things we have done
+and a simple way to repeat them
+are two of the main reasons people use the Unix shell.
+In fact,
+being able to repeat history is such a powerful idea
+that the shell gives us several ways to do it:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{!head} re-runs the most recent command starting with \texttt{head},
+  while \texttt{!wc} re-runs the most recent starting with \texttt{wc}.
+\item
+  If we type Ctrl+R (for \textbf{r}everse search)
+  the shell searches backward through its history for whatever we type next.
+  If we don't like the first thing it finds,
+  we can type Ctrl+R again to go further back.
+\end{itemize}
+
+If we use \texttt{history}, ↑, or Ctrl+R
+we will quickly notice that loops don't have to be broken across lines.
+Instead,
+their parts can be separated with semi-colons:
+
+\begin{verbatim}
+$ for filename in s*.txt ; do head -n 17 $filename | tail -n 8; done
+\end{verbatim}
+
+This is fairly readable,
+although even experienced users have a tendency to put the semi-colon after \texttt{do} instead of before it.
+If our loop contains multiple commands,
+though,
+the multi-line format is much easier to read.
+For example,
+compare this:
+
+\begin{verbatim}
+$ for filename in s*.txt
+> do
+>   echo $filename
+>   head -n 17 $filename | tail -n 8
+> done
+\end{verbatim}
+
+with this:
+
+\begin{verbatim}
+$ for filename in s*.txt; do echo $filename; head -n 17 $filename | tail -n 8; done
+\end{verbatim}
+
+(The \texttt{echo} command simply prints its arguments to the screen.
+It is often used to keep track of progress or for debugging.)
+
+\hypertarget{bash-tools-autoname}{%
+\section{Creating New Filenames Automatically}\label{bash-tools-autoname}}
+
+Suppose we want to create a backup copy of each book whose name ends in ``e''.
+If we don't want to change the files' names,
+we can do this with \texttt{cp}:
+
+\begin{verbatim}
+$ cd ~/zipf
+$ mkdir backup
+$ cp data/*e.txt backup
+$ ls backup
+\end{verbatim}
+
+\begin{verbatim}
+jane_eyre.txt  time_machine.txt
+\end{verbatim}
+
+\begin{quote}
+\textbf{Warnings}
+
+If you attempt to re-execute the code chunk above,
+you'll end up with an error after the second line:
+
+\begin{verbatim}
+mkdir: backup: File exists
+\end{verbatim}
+
+This warning isn't necessarily a cause for alarm.
+It lets you know that the command couldn't be completed,
+but will not prevent you from proceeding.
+\end{quote}
+
+But what if we want to append the extension \texttt{.bak} to the files' names?
+\texttt{cp} can do this for a single file:
+
+\begin{verbatim}
+$ cp data/time_machine.txt backup/time_machine.txt.bak
+\end{verbatim}
+
+but not for all the files at once:
+
+\begin{verbatim}
+$ cp data/*e.txt backup/*e.txt.bak
+\end{verbatim}
+
+\begin{verbatim}
+cp: target 'backup/*e.txt.bak' is not a directory
+\end{verbatim}
+
+\texttt{backup/*e.txt.bak} doesn't match anything---those files don't yet exist---so
+after the shell expands the \texttt{*} wildcards,
+what we are actually asking \texttt{cp} to do is:
+
+\begin{verbatim}
+$ cp data/jane_eyre.txt data/time_machine.txt backup/*e.bak
+\end{verbatim}
+
+This doesn't work because \texttt{cp} only understands how to do two things:
+copy a single file to create another file,
+or copy a bunch of files into a directory.
+If we give it more than two names as arguments,
+it expects the last one to be a directory.
+Since \texttt{backup/*e.bak} is not,
+\texttt{cp} reports an error.
+
+Instead,
+let's use a loop to copy files to the backup directory
+and append the \texttt{.bak} suffix:
+
+\begin{verbatim}
+$ cd data
+$ for filename in *e.txt
+> do
+>   cp $filename ../backup/$filename.bak
+> done
+$ ls ../backup
+\end{verbatim}
+
+\begin{verbatim}
+jane_eyre.txt.bak  time_machine.txt.bak
+\end{verbatim}
+
+\hypertarget{bash-tools-summary}{%
+\section{Summary}\label{bash-tools-summary}}
+
+The secret to the shell's success is the way it combines a few powerful ideas with pipes and loops.
+The next chapter will show how we can make our work more reproducible
+by saving commands in files that we can run over and over again.
+
+\hypertarget{bash-tools-exercises}{%
+\section{Exercises}\label{bash-tools-exercises}}
+
+The exercises below involve creating and moving new files,
+as well as considering hypothetical files.
+Please note that if you create or move any files or directories in your Zipf's Law project,
+you may want to reorganize your files following the outline at the beginning of the next chapter.
+If you accidentally delete necessary files,
+you can start with a fresh copy of the data files
+by following the instructions in Appendix~\ref{install}.
+
+\hypertarget{bash-tools-ex-redirect-append}{%
+\subsection{\texorpdfstring{What does \texttt{\textgreater{}\textgreater{}} mean?}{What does \textgreater\textgreater{} mean?}}\label{bash-tools-ex-redirect-append}}
+
+We have seen the use of \texttt{\textgreater{}}, but there is a similar operator \texttt{\textgreater{}\textgreater{}} which works slightly differently.
+We'll learn about the differences between these two operators by printing some strings.
+We can use the \texttt{echo} command to print strings e.g.
+
+\begin{verbatim}
+$ echo The echo command prints text
+\end{verbatim}
+
+\begin{verbatim}
+The echo command prints text
+\end{verbatim}
+
+Now test the commands below to reveal the difference between the two operators:
+
+\begin{verbatim}
+$ echo hello > testfile01.txt
+\end{verbatim}
+
+and:
+
+\begin{verbatim}
+$ echo hello >> testfile02.txt
+\end{verbatim}
+
+Hint: Try executing each command twice in a row and then examining the output files.
+
+\hypertarget{bash-tools-ex-append-data}{%
+\subsection{Appending data}\label{bash-tools-ex-append-data}}
+
+Given the following commands,
+what will be included in the file \texttt{extracted.txt}:
+
+\begin{verbatim}
+$ head -n 3 dracula.txt > extracted.txt
+$ tail -n 2 dracula.txt >> extracted.txt
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The first three lines of \texttt{dracula.txt}
+\item
+  The last two lines of \texttt{dracula.txt}
+\item
+  The first three lines and the last two lines of \texttt{dracula.txt}
+\item
+  The second and third lines of \texttt{dracula.txt}
+\end{enumerate}
+
+\hypertarget{bash-tools-ex-piping}{%
+\subsection{Piping commands}\label{bash-tools-ex-piping}}
+
+In our current directory, we want to find the 3 files which have the least number of
+lines. Which command listed below would work?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{wc\ -l\ *\ \textgreater{}\ sort\ -n\ \textgreater{}\ head\ -n\ 3}
+\item
+  \texttt{wc\ -l\ *\ \textbar{}\ sort\ -n\ \textbar{}\ head\ -n\ 1-3}
+\item
+  \texttt{wc\ -l\ *\ \textbar{}\ head\ -n\ 3\ \textbar{}\ sort\ -n}
+\item
+  \texttt{wc\ -l\ *\ \textbar{}\ sort\ -n\ \textbar{}\ head\ -n\ 3}
+\end{enumerate}
+
+\hypertarget{bash-tools-ex-uniq-adjacent}{%
+\subsection{\texorpdfstring{Why does \texttt{uniq} only remove adjacent duplicates?}{Why does uniq only remove adjacent duplicates?}}\label{bash-tools-ex-uniq-adjacent}}
+
+The command \texttt{uniq} removes adjacent duplicated lines from its input.
+Consider a hypothetical file \texttt{genres.txt} containing the following data:
+
+\begin{verbatim}
+science fiction
+fantasy
+science fiction
+fantasy
+science fiction
+science fiction
+\end{verbatim}
+
+Running the command \texttt{uniq\ genres.txt} produces:
+
+\begin{verbatim}
+science fiction
+fantasy
+science fiction
+fantasy
+science fiction
+\end{verbatim}
+
+Why do you think \texttt{uniq} only removes \emph{adjacent} duplicated lines?
+(Hint: think about very large datasets.) What other command could
+you combine with it in a pipe to remove all duplicated lines?
+
+\hypertarget{bash-tools-ex-reading-pipes}{%
+\subsection{Pipe reading comprehension}\label{bash-tools-ex-reading-pipes}}
+
+A file called \texttt{titles.txt} contains the following data:
+
+\begin{verbatim}
+Sense and Sensibility,1811
+Frankenstein,1818
+Jane Eyre,1847
+Wuthering Heights,1847
+Moby Dick,1851
+The Adventures of Sherlock Holmes,1892
+The Time Machine,1895
+Dracula,1897
+The Invisible Man,1897
+\end{verbatim}
+
+What text passes through each of the pipes and the final redirect in the pipeline below?
+
+\begin{verbatim}
+$ cat titles.txt | head -n 5 | tail -n 3 | sort -r > final.txt
+\end{verbatim}
+
+Hint: build the pipeline up one command at a time to test your understanding
+
+\hypertarget{bash-tools-ex-pipe-construction}{%
+\subsection{Pipe construction}\label{bash-tools-ex-pipe-construction}}
+
+For the file \texttt{titles.txt} from the previous exercise, consider the following command:
+
+\begin{verbatim}
+$ cut -d , -f 2 titles.txt
+\end{verbatim}
+
+What does the \texttt{cut} command (and its options) accomplish?
+
+\hypertarget{bash-tools-ex-which-pipe}{%
+\subsection{Which pipe?}\label{bash-tools-ex-which-pipe}}
+
+Consider the same \texttt{titles.txt} from the previous exercises.
+
+The \texttt{uniq} command has a \texttt{-c} option which gives a count of the
+number of times a line occurs in its input.
+If \texttt{titles.txt} was in your working directory,
+what command would you use to produce
+a table that shows the total count of each publication year in the file?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{sort\ titles.txt\ \textbar{}\ uniq\ -c}
+\item
+  \texttt{sort\ -t,\ -k2,2\ titles.txt\ \textbar{}\ uniq\ -c}
+\item
+  \texttt{cut\ -d,\ -f\ 2\ titles.txt\ \textbar{}\ uniq\ -c}
+\item
+  \texttt{cut\ -d,\ -f\ 2\ titles.txt\ \textbar{}\ sort\ \textbar{}\ uniq\ -c}
+\item
+  \texttt{cut\ -d,\ -f\ 2\ titles.txt\ \textbar{}\ sort\ \textbar{}\ uniq\ -c\ \textbar{}\ wc\ -l}
+\end{enumerate}
+
+\hypertarget{bash-tools-ex-loop-dry-run}{%
+\subsection{Doing a dry run}\label{bash-tools-ex-loop-dry-run}}
+
+A loop is a way to do many things at once---or to make many mistakes at
+once if it does the wrong thing. One way to check what a loop \emph{would} do
+is to \texttt{echo} the commands it would run instead of actually running them.
+
+Suppose we want to preview the commands the following loop will execute
+without actually running those commands
+(\texttt{analyze} is a hypothetical command):
+
+\begin{verbatim}
+$ for file in *.txt
+> do
+>   analyze $file > analyzed-$file
+> done
+\end{verbatim}
+
+What is the difference between the two loops below, and which one would we
+want to run?
+
+\begin{verbatim}
+# Version 1
+$ for file in *.txt
+> do
+>   echo analyze $file > analyzed-$file
+> done
+\end{verbatim}
+
+\begin{verbatim}
+# Version 2
+$ for file in *.txt
+> do
+>   echo "analyze $file > analyzed-$file"
+> done
+\end{verbatim}
+
+\hypertarget{bash-tools-ex-loop-variables}{%
+\subsection{Variables in loops}\label{bash-tools-ex-loop-variables}}
+
+Given the files in \texttt{data/},
+what is the output of the following code?
+
+\begin{verbatim}
+$ for datafile in *.txt
+> do
+>    ls *.txt
+> done
+\end{verbatim}
+
+Now, what is the output of the following code?
+
+\begin{verbatim}
+$ for datafile in *.txt
+> do
+>   ls $datafile
+> done
+\end{verbatim}
+
+Why do these two loops give different outputs?
+
+\hypertarget{bash-tools-ex-limiting-file-sets}{%
+\subsection{Limiting sets of files}\label{bash-tools-ex-limiting-file-sets}}
+
+What would be the output of running the following loop in your \texttt{data/} directory?
+
+\begin{verbatim}
+$ for filename in d*
+> do
+>    ls $filename
+> done
+\end{verbatim}
+
+How would the output differ from using this command instead?
+
+\begin{verbatim}
+$ for filename in *d*
+> do
+>    ls $filename
+> done
+\end{verbatim}
+
+\hypertarget{bash-tools-ex-loop-save}{%
+\subsection{Saving to a file in a loop}\label{bash-tools-ex-loop-save}}
+
+Consider running the following loop in the \texttt{data/} directory:
+
+\begin{verbatim}
+for book in *.txt
+> do
+>     echo $book
+>     head -n 16 $book > headers.txt
+> done
+\end{verbatim}
+
+Why would the following loop be preferable?
+
+\begin{verbatim}
+for book in *.txt
+> do
+>     head -n 16 $book >> headers.txt
+> done
+\end{verbatim}
+
+\hypertarget{bash-tools-ex-history-order}{%
+\subsection{\texorpdfstring{Why does \texttt{history} record commands before running them?}{Why does history record commands before running them?}}\label{bash-tools-ex-history-order}}
+
+If you run the command:
+
+\begin{verbatim}
+$ history | tail -n 5 > recent.sh
+\end{verbatim}
+
+the last command in the file is the \texttt{history} command itself, i.e.,
+the shell has added \texttt{history} to the command log before actually
+running it. In fact, the shell \emph{always} adds commands to the log
+before running them. Why do you think it does this?
+
+\hypertarget{bash-tools-keypoints}{%
+\section{Key Points}\label{bash-tools-keypoints}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{cat} displays the contents of its inputs.
+\item
+  \texttt{head} displays the first few lines of its input.
+\item
+  \texttt{tail} displays the last few lines of its input.
+\item
+  \texttt{sort} sorts its inputs.
+\item
+  Use the up-arrow key to scroll up through previous commands to edit and repeat them.
+\item
+  Use \gref{`history`}{command\_history} to display recent commands and \texttt{!number} to repeat a command by number.
 \item
   Every process in Unix has an input channel called \gref{standard input}{stdin}
   and an output channel called \gref{standard output}{stdin}.
@@ -3338,24 +3383,12 @@ explain in plain language what files the expression \texttt{novel-????-{[}ab{]}*
 \item
   A \gref{pipe}{pipe\_shell} \texttt{\textbar{}} sends the output of the command on the left to the input of the command on the right.
 \item
-  \texttt{cat} displays the contents of its inputs.
-\item
-  \texttt{head} displays the first few lines of its input.
-\item
-  \texttt{tail} displays the last few lines of its input.
-\item
-  \texttt{sort} sorts its inputs.
-\item
   A \texttt{for} loop repeats commands once for every thing in a list.
 \item
   Every \texttt{for} loop must have a variable to refer to the thing it is currently operating on
   and a \gref{body}{loop\_body} containing commands to execute.
 \item
   Use \texttt{\$name} or \texttt{\$\{name\}} to get the value of a variable.
-\item
-  Use the up-arrow key to scroll up through previous commands to edit and repeat them.
-\item
-  Use \gref{`history`}{command\_history} to display recent commands and \texttt{!number} to repeat a command by number.
 \end{itemize}
 
 \hypertarget{bash-advanced}{%
@@ -4146,7 +4179,7 @@ $ find . -name "*.bak"
 \hypertarget{bash-advanced-vars}{%
 \section{Configuring the Shell}\label{bash-advanced-vars}}
 
-As Section~\ref{bash-basics-loops} explained,
+As Section~\ref{bash-tools-loops} explained,
 the shell is a program,
 and like any other program it has variables.
 Some of those variables control the shell's operations;
@@ -4237,7 +4270,7 @@ as \texttt{./analyze} if we are in \texttt{/Users/amira}).
 
 If we want to see a variable's value,
 we can print it using the \texttt{echo} command
-introduced at the end of Section~\ref{bash-basics-history}.
+introduced at the end of Section~\ref{bash-tools-history}.
 Let's look at the value of the variable \texttt{HOME},\index{HOME variable (in Unix shell)}\index{Unix shell!HOME variable}
 which keeps track of our home directory:
 
@@ -4261,7 +4294,7 @@ $ echo $HOME
 /Users/amira
 \end{verbatim}
 
-As with loop variables (Section~\ref{bash-basics-loops}),
+As with loop variables (Section~\ref{bash-tools-loops}),
 the dollar sign before the variable names tells the shell
 that we want the variable's value.
 This works just like wildcard expansion
@@ -4538,7 +4571,7 @@ and predominates the whole of her sex. It was not that he felt
 \hypertarget{bash-advanced-ex-year-script}{%
 \subsection{Tracking publication years}\label{bash-advanced-ex-year-script}}
 
-In Exercise~\ref{bash-basics-ex-pipe-construction}
+In Exercise~\ref{bash-tools-ex-pipe-construction}
 you examined code that extracted the publication year from a list of book titles.
 Write a shell script called \texttt{year.sh} that takes any number of
 filenames as command-line arguments,
@@ -5175,7 +5208,7 @@ and put it in the \texttt{bin} subdirectory of the \texttt{zipf} project:
 Note that we have replaced the \texttt{\textquotesingle{}outfile\textquotesingle{}} argument with an optional \texttt{-n} (or \texttt{-\/-num}) flag
 to control how much output is printed
 and modified \texttt{collection\_to\_csv} so that it always prints to standard output
-(Section~\ref{bash-basics-stdio}).
+(Section~\ref{bash-tools-stdio}).
 If we want that output in a file,
 we can redirect with \texttt{\textgreater{}}.
 
@@ -18686,36 +18719,6 @@ and is intended to help instructors who want to use this curriculum.
   \texttt{wc} counts lines, words, and characters in its inputs.
 \item
   \texttt{man} displays the manual page for a given command; some commands also have a \texttt{-\/-help} option.
-\item
-  Every process in Unix has an input channel called \gref{standard input}{stdin}
-  and an output channel called \gref{standard output}{stdin}.
-\item
-  \texttt{\textgreater{}} redirects a command's output to a file, overwriting any existing content.
-\item
-  \texttt{\textgreater{}\textgreater{}} appends a command's output to a file.
-\item
-  \texttt{\textless{}} operator redirects input to a command
-\item
-  A \gref{pipe}{pipe\_shell} \texttt{\textbar{}} sends the output of the command on the left to the input of the command on the right.
-\item
-  \texttt{cat} displays the contents of its inputs.
-\item
-  \texttt{head} displays the first few lines of its input.
-\item
-  \texttt{tail} displays the last few lines of its input.
-\item
-  \texttt{sort} sorts its inputs.
-\item
-  A \texttt{for} loop repeats commands once for every thing in a list.
-\item
-  Every \texttt{for} loop must have a variable to refer to the thing it is currently operating on
-  and a \gref{body}{loop\_body} containing commands to execute.
-\item
-  Use \texttt{\$name} or \texttt{\$\{name\}} to get the value of a variable.
-\item
-  Use the up-arrow key to scroll up through previous commands to edit and repeat them.
-\item
-  Use \gref{`history`}{command\_history} to display recent commands and \texttt{!number} to repeat a command by number.
 \end{itemize}
 
 \hypertarget{going-further-with-the-unix-shell-1}{%
@@ -19258,92 +19261,6 @@ of a non-existant directory: the intermediate level folders must be created firs
 The final set of commands generates the `raw' and `processed' directories at the same level
 as the `data' directory.
 
-\hypertarget{exercise-refbash-basics-ex-redirect-append}{%
-\subsection*{Exercise~\ref{bash-basics-ex-redirect-append}}\label{exercise-refbash-basics-ex-redirect-append}}
-
-
-In the first example with \texttt{\textgreater{}}, the string ``hello'' is written to \texttt{testfile01.txt},
-but the file gets overwritten each time we run the command.
-
-We see from the second example that the \texttt{\textgreater{}\textgreater{}} operator also writes ``hello'' to a file
-(in this case\texttt{testfile02.txt}),
-but appends the string to the file if it already exists (i.e.~when we run it for the second time).
-
-\hypertarget{exercise-refbash-basics-ex-append-data}{%
-\subsection*{Exercise~\ref{bash-basics-ex-append-data}}\label{exercise-refbash-basics-ex-append-data}}
-
-
-Option 3 is correct.
-For option 1 to be correct we would only run the \texttt{head} command.
-For option 2 to be correct we would only run the \texttt{tail} command.
-For option 4 to be correct we would have to pipe the output of \texttt{head} into \texttt{tail\ -n\ 2}
-by doing \texttt{head\ -n\ 3\ animals.txt\ \textbar{}\ tail\ -n\ 2\ \textgreater{}\ animals-subset.txt}
-
-\hypertarget{exercise-refbash-basics-ex-piping}{%
-\subsection*{Exercise~\ref{bash-basics-ex-piping}}\label{exercise-refbash-basics-ex-piping}}
-
-
-Option 4 is the solution.
-The pipe character \texttt{\textbar{}} is used to feed the standard output from one process to
-the standard input of another.
-\texttt{\textgreater{}} is used to redirect standard output to a file.
-Try it in the \texttt{data-shell/molecules} directory!
-
-\hypertarget{exercise-refbash-basics-ex-uniq-adjacent}{%
-\subsection*{Exercise~\ref{bash-basics-ex-uniq-adjacent}}\label{exercise-refbash-basics-ex-uniq-adjacent}}
-
-
-\begin{verbatim}
-$ sort salmon.txt | uniq
-\end{verbatim}
-
-\hypertarget{exercise-refbash-basics-ex-reading-pipes}{%
-\subsection*{Exercise~\ref{bash-basics-ex-reading-pipes}}\label{exercise-refbash-basics-ex-reading-pipes}}
-
-
-The \texttt{head} command extracts the first 5 lines from \texttt{animals.txt}.
-Then, the last 3 lines are extracted from the previous 5 by using the \texttt{tail} command.
-With the \texttt{sort\ -r} command those 3 lines are sorted in reverse order and finally,
-the output is redirected to a file \texttt{final.txt}.
-The content of this file can be checked by executing \texttt{cat\ final.txt}.
-The file should contain the following lines:
-
-\begin{verbatim}
-2012-11-06,rabbit
-2012-11-06,deer
-2012-11-05,raccoon
-\end{verbatim}
-
-\hypertarget{exercise-refbash-basics-ex-pipe-construction}{%
-\subsection*{Exercise~\ref{bash-basics-ex-pipe-construction}}\label{exercise-refbash-basics-ex-pipe-construction}}
-
-
-\texttt{cut} selects substrings from a line by:
-
-\begin{itemize}
-\tightlist
-\item
-  breaking the string into pieces wherever it finds a separator (\texttt{-d\ ,}),
-  which in this case is a comma, and
-\item
-  keeping one or more of the resulting fields (\texttt{-f\ 2}).
-\end{itemize}
-
-Any single character can be used as a separator,
-but there is no way to escape characters:
-for example, if the string \texttt{a,"b,c",d} is split on commas,
-all three commas take effect.
-
-\hypertarget{exercise-refbash-basics-ex-which-pipe}{%
-\subsection*{Exercise~\ref{bash-basics-ex-which-pipe}}\label{exercise-refbash-basics-ex-which-pipe}}
-
-
-Option 4 is the correct answer.
-If you have difficulty understanding why,
-try running the commands or sub-sections of the pipelines
-(e.g., the code between pipes).
-Make sure you are in the \texttt{data-shell/data} directory.
-
 \hypertarget{exercise-refbash-basics-ex-wildcard-expressions}{%
 \subsection*{Exercise~\ref{bash-basics-ex-wildcard-expressions}}\label{exercise-refbash-basics-ex-wildcard-expressions}}
 
@@ -19381,8 +19298,120 @@ Make sure you are in the \texttt{data-shell/data} directory.
   so this command would delete all files
 \end{enumerate}
 
-\hypertarget{exercise-refbash-basics-ex-loop-dry-run}{%
-\subsection*{Exercise~\ref{bash-basics-ex-loop-dry-run}}\label{exercise-refbash-basics-ex-loop-dry-run}}
+\hypertarget{exercise-refbash-basics-ex-other-wildcards}{%
+\subsection*{Exercise~\ref{bash-basics-ex-other-wildcards}}\label{exercise-refbash-basics-ex-other-wildcards}}
+
+
+\texttt{novel-????-{[}ab{]}*.\{txt,pdf\}} matches:
+
+\begin{itemize}
+\tightlist
+\item
+  Files whose names started with the letters \texttt{novel-},
+\item
+  which is then followed by exactly four characters
+  (since each \texttt{?} matches one character),
+\item
+  followed by another literal \texttt{-},
+\item
+  followed by either the letter \texttt{a} or the letter \texttt{b},
+\item
+  followed by zero or more other characters (the \texttt{*}),
+\item
+  followed by \texttt{.txt} or \texttt{.pdf}.
+\end{itemize}
+
+\hypertarget{chapter-refbash-tools}{%
+\section*{Chapter~\ref{bash-tools}}\label{chapter-refbash-tools}}
+
+\hypertarget{exercise-refbash-tools-ex-redirect-append}{%
+\subsection*{Exercise~\ref{bash-tools-ex-redirect-append}}\label{exercise-refbash-tools-ex-redirect-append}}
+
+
+In the first example with \texttt{\textgreater{}}, the string ``hello'' is written to \texttt{testfile01.txt},
+but the file gets overwritten each time we run the command.
+
+We see from the second example that the \texttt{\textgreater{}\textgreater{}} operator also writes ``hello'' to a file
+(in this case\texttt{testfile02.txt}),
+but appends the string to the file if it already exists (i.e.~when we run it for the second time).
+
+\hypertarget{exercise-refbash-tools-ex-append-data}{%
+\subsection*{Exercise~\ref{bash-tools-ex-append-data}}\label{exercise-refbash-tools-ex-append-data}}
+
+
+Option 3 is correct.
+For option 1 to be correct we would only run the \texttt{head} command.
+For option 2 to be correct we would only run the \texttt{tail} command.
+For option 4 to be correct we would have to pipe the output of \texttt{head} into \texttt{tail\ -n\ 2}
+by doing \texttt{head\ -n\ 3\ animals.txt\ \textbar{}\ tail\ -n\ 2\ \textgreater{}\ animals-subset.txt}
+
+\hypertarget{exercise-refbash-tools-ex-piping}{%
+\subsection*{Exercise~\ref{bash-tools-ex-piping}}\label{exercise-refbash-tools-ex-piping}}
+
+
+Option 4 is the solution.
+The pipe character \texttt{\textbar{}} is used to feed the standard output from one process to
+the standard input of another.
+\texttt{\textgreater{}} is used to redirect standard output to a file.
+Try it in the \texttt{data-shell/molecules} directory!
+
+\hypertarget{exercise-refbash-tools-ex-uniq-adjacent}{%
+\subsection*{Exercise~\ref{bash-tools-ex-uniq-adjacent}}\label{exercise-refbash-tools-ex-uniq-adjacent}}
+
+
+\begin{verbatim}
+$ sort salmon.txt | uniq
+\end{verbatim}
+
+\hypertarget{exercise-refbash-tools-ex-reading-pipes}{%
+\subsection*{Exercise~\ref{bash-tools-ex-reading-pipes}}\label{exercise-refbash-tools-ex-reading-pipes}}
+
+
+The \texttt{head} command extracts the first 5 lines from \texttt{animals.txt}.
+Then, the last 3 lines are extracted from the previous 5 by using the \texttt{tail} command.
+With the \texttt{sort\ -r} command those 3 lines are sorted in reverse order and finally,
+the output is redirected to a file \texttt{final.txt}.
+The content of this file can be checked by executing \texttt{cat\ final.txt}.
+The file should contain the following lines:
+
+\begin{verbatim}
+2012-11-06,rabbit
+2012-11-06,deer
+2012-11-05,raccoon
+\end{verbatim}
+
+\hypertarget{exercise-refbash-tools-ex-pipe-construction}{%
+\subsection*{Exercise~\ref{bash-tools-ex-pipe-construction}}\label{exercise-refbash-tools-ex-pipe-construction}}
+
+
+\texttt{cut} selects substrings from a line by:
+
+\begin{itemize}
+\tightlist
+\item
+  breaking the string into pieces wherever it finds a separator (\texttt{-d\ ,}),
+  which in this case is a comma, and
+\item
+  keeping one or more of the resulting fields (\texttt{-f\ 2}).
+\end{itemize}
+
+Any single character can be used as a separator,
+but there is no way to escape characters:
+for example, if the string \texttt{a,"b,c",d} is split on commas,
+all three commas take effect.
+
+\hypertarget{exercise-refbash-tools-ex-which-pipe}{%
+\subsection*{Exercise~\ref{bash-tools-ex-which-pipe}}\label{exercise-refbash-tools-ex-which-pipe}}
+
+
+Option 4 is the correct answer.
+If you have difficulty understanding why,
+try running the commands or sub-sections of the pipelines
+(e.g., the code between pipes).
+Make sure you are in the \texttt{data-shell/data} directory.
+
+\hypertarget{exercise-refbash-tools-ex-loop-dry-run}{%
+\subsection*{Exercise~\ref{bash-tools-ex-loop-dry-run}}\label{exercise-refbash-tools-ex-loop-dry-run}}
 
 
 The second version is the one we want to run.
@@ -19396,8 +19425,8 @@ a file, \texttt{analyzed-\$file}. A series of files is generated: \texttt{analyz
 Try both versions for yourself to see the output! Be sure to open the
 \texttt{analyzed-*.pdb} files to view their contents.
 
-\hypertarget{exercise-refbash-basics-ex-loop-variables}{%
-\subsection*{Exercise~\ref{bash-basics-ex-loop-variables}}\label{exercise-refbash-basics-ex-loop-variables}}
+\hypertarget{exercise-refbash-tools-ex-loop-variables}{%
+\subsection*{Exercise~\ref{bash-tools-ex-loop-variables}}\label{exercise-refbash-tools-ex-loop-variables}}
 
 
 The first code block gives the same output on each iteration through
@@ -19436,8 +19465,8 @@ pentane.pdb
 propane.pdb
 \end{verbatim}
 
-\hypertarget{exercise-refbash-basics-ex-limiting-file-sets}{%
-\subsection*{Exercise~\ref{bash-basics-ex-limiting-file-sets}}\label{exercise-refbash-basics-ex-limiting-file-sets}}
+\hypertarget{exercise-refbash-tools-ex-limiting-file-sets}{%
+\subsection*{Exercise~\ref{bash-tools-ex-limiting-file-sets}}\label{exercise-refbash-tools-ex-limiting-file-sets}}
 
 
 \textbf{Part 1}
@@ -19450,8 +19479,8 @@ the letter c, followed by zero or more other characters will be matched.
 4 is the correct answer. \texttt{*} matches zero or more characters, so a file name with zero or more
 characters before a letter c and zero or more characters after the letter c will be matched.
 
-\hypertarget{exercise-refbash-basics-ex-loop-save}{%
-\subsection*{Exercise~\ref{bash-basics-ex-loop-save}}\label{exercise-refbash-basics-ex-loop-save}}
+\hypertarget{exercise-refbash-tools-ex-loop-save}{%
+\subsection*{Exercise~\ref{bash-tools-ex-loop-save}}\label{exercise-refbash-tools-ex-loop-save}}
 
 
 \textbf{Part 1}
@@ -19471,37 +19500,14 @@ characters before a letter c and zero or more characters after the letter c will
 output from a command.
 Given the output from the \texttt{cat} command has been redirected, nothing is printed to the screen.
 
-\hypertarget{exercise-refbash-basics-ex-history-order}{%
-\subsection*{Exercise~\ref{bash-basics-ex-history-order}}\label{exercise-refbash-basics-ex-history-order}}
+\hypertarget{exercise-refbash-tools-ex-history-order}{%
+\subsection*{Exercise~\ref{bash-tools-ex-history-order}}\label{exercise-refbash-tools-ex-history-order}}
 
 
 If a command causes something to crash or hang, it might be useful
 to know what that command was, in order to investigate the problem.
 Were the command only be recorded after running it, we would not
 have a record of the last command run in the event of a crash.
-
-\hypertarget{exercise-refbash-basics-ex-other-wildcards}{%
-\subsection*{Exercise~\ref{bash-basics-ex-other-wildcards}}\label{exercise-refbash-basics-ex-other-wildcards}}
-
-
-\texttt{novel-????-{[}ab{]}*.\{txt,pdf\}} matches:
-
-\begin{itemize}
-\tightlist
-\item
-  Files whose names started with the letters \texttt{novel-},
-\item
-  which is then followed by exactly four characters
-  (since each \texttt{?} matches one character),
-\item
-  followed by another literal \texttt{-},
-\item
-  followed by either the letter \texttt{a} or the letter \texttt{b},
-\item
-  followed by zero or more other characters (the \texttt{*}),
-\item
-  followed by \texttt{.txt} or \texttt{.pdf}.
-\end{itemize}
 
 \hypertarget{chapter-refbash-advanced}{%
 \section*{Chapter~\ref{bash-advanced}}\label{chapter-refbash-advanced}}

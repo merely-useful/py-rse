@@ -333,7 +333,7 @@ Sara Mahallati,
 Brandeis Marshall,
 and Elizabeth Wickes.
 
--   Many of the explanations and exercises in Chapters \@ref(bash-basics) and \@ref(bash-advanced)
+-   Many of the explanations and exercises in Chapters \@ref(bash-basics)--\@ref(bash-advanced)
     have been adapted from Software Carpentry's lesson
     [The Unix Shell][swc-shell-novice].
 
@@ -433,20 +433,6 @@ or how they do what they do.
 <img src="figures/bash-basics/the-shell.png" alt="The Shell" width="100%" />
 <p class="caption">(\#fig:bash-basics-repl)The Shell</p>
 </div>
-
-The shell's greatest strength is that
-it lets us combine programs to create pipelines
-that can handle large volumes of data.
-Sequences of commands can be saved in a \gref{script}{script},
-just as commands for R or Python can be saved in programs,
-which makes our workflows more reproducible.
-Finally,
-the shell is often the easiest way to interact with remote machines---in fact,
-the shell is practically essential for working with clusters and the cloud.
-We won't need this much power in our Zipf's Law examples,
-but as we will see,
-being able to combine commands and save our work
-makes life easier even when working on small problems.
 
 > **What's in a Name?**
 >
@@ -1505,778 +1491,14 @@ we need to have some idea of what we're looking for in the first place:
 someone who wants to know how many lines there are in a data file
 is unlikely to think to look for `wc`.
 
-## Combining Commands {#bash-basics-pipe}
-
-Now that we know a few basic commands,
-we can introduce one of the shell's most powerful features:
-the ease with which it lets us combine existing programs in new ways.
-Let's go into the `zipf/data` directory
-and count the number of lines in each file once again:
-
-```shell
-$ cd ~/zipf/data
-$ wc -l *.txt
-```
-
-```text
-
-  15975 dracula.txt
-   7832 frankenstein.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-   3582 time_machine.txt
-  96855 total
-```
-
-Which of these books is shortest?
-We can check by eye when there are only 16 files,
-but what if there were eight thousand?
-
-Our first step toward a solution is to run this command:
-
-```shell
-$ wc -l *.txt > lengths.txt
-```
-
-The greater-than symbol `>` tells the shell
-to \gref{redirect}{redirection} the command's output to a file instead of printing it.\index{redirection (in Unix shell)}\index{Unix shell!redirection}
-Nothing appears on the screen;
-instead,
-everything that would have appeared has gone into the file `lengths.txt`.
-The shell creates this file if it doesn't exist,
-or overwrites it if it already exists.
-`ls lengths.txt` confirms that the file exists:
-
-```shell
-$ ls lengths.txt
-```
-
-```text
-lengths.txt
-```
-
-We can print the contents of `lengths.txt` using `cat`,\index{Unix commands!cat}
-which is short for con**cat**enate
-(because if we give it the names of several files
-it will print them all in order):
-
-```shell
-$ cat lengths.txt
-```
-
-```text
-  15975 dracula.txt
-   7832 frankenstein.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-   3582 time_machine.txt
-  96855 total
-```
-
-We can now use `sort` to sort the lines in this file:
-
-```shell
-$ sort lengths.txt
-```
-
-```text
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-  15975 dracula.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  96855 total
-
-```
-
-Just to be safe,
-we should use `sort`'s `-n` option to specify that we want to sort numerically.
-Without it,
-`sort` would order things alphabetically
-so that `10` would come before `2`.
-
-`sort` does not change `lengths.txt`.
-Instead,
-it sends its output to the screen just as `wc` did.
-We can therefore put the sorted list of lines in another temporary file called `sorted-lengths.txt`
-using `>` once again:
-
-```shell
-$ sort lengths.txt > sorted-lengths.txt
-```
-
-> **Redirecting to the Same File**
->
-> It's tempting to send the output of `sort` back to the file it reads:
->
-> ```shell
-> $ sort -n lengths.txt > lengths.txt
-> ```
->
-> However, all this does is wipe out the contents of `lengths.txt`.
-> The reason is that when the shell sees the redirection,
-> it opens the file on the right of the `>` for writing,
-> which erases anything that file contained.
-> It then runs `sort`, which finds itself reading from a newly-empty file.
-
-Creating intermediate files with names like `lengths.txt` and `sorted-lengths.txt` works,
-but keeping track of those files and cleaning them up when they're no longer needed is a burden.
-Let's delete the two files we just created:
-
-```shell
-rm lengths.txt sorted-lengths.txt
-```
-
-We can produce the same result more safely and with less typing
-using a \gref{pipe}{pipe_shell}:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
-
-```shell
-$ wc -l *.txt | sort -n
-```
-
-```text
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-  13053 sherlock_holmes.txt
-  15975 dracula.txt
-  21054 jane_eyre.txt
-  22331 moby_dick.txt
-  96855 total
-```
-
-The vertical bar `|` between the `wc` and `sort` commands
-tells the shell that we want to use the output of the command on the left
-as the input to the command on the right.
-
-Running a command with a file as input has a clear flow of information:
-the command performs a task on that file and prints the output to the screen
-(Figure \@ref(fig:bash-basics-pipe)a).
-When using pipes, however,
-the information flows differently after the first (upstream) command.
-The downstream command doesn't read from a file.
-Instead,
-it reads the output of the upstream command
-(Figure \@ref(fig:bash-basics-pipe)b).
-
-<div class="figure" style="text-align: center">
-<img src="figures/bash-basics/pipe.png" alt="Piping commands" width="80%" />
-<p class="caption">(\#fig:bash-basics-pipe)Piping commands</p>
-</div>
-
-We can use `|` to build pipes of any length.
-For example,
-we can use the command `head` to get just the first three lines of sorted data,\index{Unix commands!head}
-which shows us the three shortest books:
-
-```shell
-$ wc -l *.txt | sort -n | head -n 3
-```
-
-```text
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-```
-
-> **Options Can Have Values**
->
-> When we write `head -n 3`,
-> the value 3 is not input to `head`.
-> Instead, it is associated with the option `-n`.
-> Many options take values like this,
-> such as the names of input files or the background color to use in a plot.
-
-We could always redirect the output to a file
-by adding `> shortest.txt` to the end of the pipeline,
-thereby retaining our answer for later reference.
-
-In practice,
-most Unix users would create this pipeline step by step,
-just as we have:
-by starting with a single command and adding others one by one,
-checking the output after each change.
-The shell makes this easy
-by letting us move up and down in our \gref{command history}{command_history}
-with the <kbd>↑</kbd> and <kbd>↓</kbd> keys.
-We can also edit old commands to create new ones,
-so a very common sequence is:
-
--   Run a command and check its output.
--   Use <kbd>↑</kbd> to bring it up again.
--   Add the pipe symbol `|` and another command to the end of the line.
--   Run the pipe and check its output.
--   Use <kbd>↑</kbd> to bring it up again.
--   And so on.
-
-## How Pipes Work {#bash-basics-stdio}
-
-In order to use pipes and redirection effectively,
-we need to know a little about how they work.
-When a computer runs a program---any program---it creates a \gref{process}{process} in memory\index{process}
-to hold the program's instructions and data.
-Every process in Unix has an input channel called \gref{standard input}{stdin}\index{standard input}\index{stdin}
-and an output channel called \gref{standard output}{stdout}.\index{standard output}\index{stdout}
-(By now you may be surprised that their names are so memorable,
-but don't worry:
-most Unix programmers call them "stdin" and "stdout",
-which are pronounced "stuh-Din" and "stuh-Dout").
-
-The shell is a program like any other,
-and like any other,
-it runs inside a process.
-Under normal circumstances its standard input is connected to our keyboard
-and its standard output to our screen,
-so it reads what we type
-and displays its output for us to see (Figure \@ref(fig:bash-basics-stdio)a).
-When we tell the shell to run a program
-it creates a new process
-and temporarily reconnects the keyboard and stream
-to that process's standard input and output (Figure \@ref(fig:bash-basics-stdio)b).
-
-<div class="figure" style="text-align: center">
-<img src="figures/bash-basics/standard-io.png" alt="Standard I/O" width="100%" />
-<p class="caption">(\#fig:bash-basics-stdio)Standard I/O</p>
-</div>
-
-If we provide one or more files for the command to read,
-as with `sort lengths.txt`,
-the program reads data from those files.
-If we don't provide any filenames,
-though,
-the Unix convention is for the program to read from standard input.
-We can test this by running `sort` on its own,
-typing in a few lines of text,
-and then pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> to signal the end of input .
-`sort` will then sort and print whatever we typed:
-
-```shell
-$ sort
-one
-two
-three
-four
-^D
-```
-
-```text
-four
-one
-three
-two
-```
-
-Redirection with `>` tells the shell to connect the program's standard output to a file
-instead of the screen (Figure \@ref(fig:bash-basics-stdio)c).
-
-When we create a pipe like `wc *.txt | sort`,
-the shell creates one process for each command so that `wc` and `sort` will run simultaneously,
-and then connects the standard output of `wc` directly to the standard input of `sort`
-(Figure \@ref(fig:bash-basics-stdio)d).
-
-`wc` doesn't know whether its output is going to the screen,
-another program,
-or to a file via `>`.
-Equally,
-`sort` doesn't know if its input is coming from the keyboard or another process;
-it just knows that it has to read, sort, and print.
-
-> **Why Isn't It Doing Anything?**
->
-> What happens if a command is supposed to process a file
-> but we don't give it a filename?
-> For example, what if we type:
->
-> ```shell
-> $ wc -l
-> ```
->
-> but don't type `*.txt` (or anything else) after the command?
-> Since `wc` doesn't have any filenames,
-> it assumes it is supposed to read from the keyboard,
-> so it waits for us to type in some data.
-> It doesn't tell us this:
-> it just sits and waits.
->
-> This mistake can be hard to spot,
-> particularly if we put the filename at the end of the pipeline:
->
-> ```shell
-> $ wc -l | sort moby_dick.txt
-> ```
->
-> In this case,
-> `sort` ignores standard input and reads the data in the file,
-> but `wc` still just sits there waiting for input.
->
-> If we make this mistake,
-> we can end the program by typing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
-> We can also use this to interrupt programs that are taking a long time to run
-> or are trying to connect to a website that isn't responding.
-
-Just as we can redirect standard output with `>`,
-we can connect standard input to a file using `<`.\index{redirection (in Unix shell)}
-In the case of a single file,
-this has the same effect as providing the file's name to the command:
-
-```shell
-$ wc < moby_dick.txt
-```
-
-```text
-    22331  215832 1276222
-```
-
-If we try to use redirection with a wildcard,
-though,
-the shell *doesn't* concatenate all of the matching files:
-
-```shell
-$ wc < *.txt
-```
-
-```text
--bash: *.txt: ambiguous redirect
-```
-
-It also doesn't print the error message to standard output,
-which we can prove by redirecting:
-
-```shell
-$ wc < *.txt > all.txt
-```
-
-```text
--bash: *.txt: ambiguous redirect
-```
-
-```shell
-$ cat all.txt
-```
-
-```text
-cat: all.txt: No such file or directory
-```
-
-Instead,
-every process has a second output channel called \gref{standard error}{stderr}
-(or \gref{stderr}{stderr}).\index{standard error}\index{stderr}
-Programs use it for error messages
-so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
-There are ways to redirect standard error,
-but doing so is almost always a bad idea.
-
-## Repeating Commands on Many Files {#bash-basics-loops}
-
-A loop is a way to repeat a set of commands for each item in a list.\index{loop (in Unix shell)}
-We can use them to build complex workflows out of simple pieces,
-and (like wildcards)
-they reduce the typing we have to do and the number of mistakes we might make.
-
-Let's suppose that we want to take a section out of each book
-whose name starts with the letter "s" in the `data` directory.
-More specifically,
-suppose we want to get the first 8 lines of each book
-*after* the 9 lines of license information that appear at the start of the file.
-If we only cared about one file,
-we could write a pipeline to take the first 17 lines
-and then take the last 8 of those:
-
-```shell
-$ head -n 17 sense_and_sensibility.txt | tail -n 8
-```
-
-```text
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-```
-
-If we try to use a wildcard to select files,
-we only get 8 lines of output,
-not the 16 we expect:
-
-```shell
-$  head -n 17 s*.txt | tail -n 8
-```
-
-```text
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-```
-
-The problem is that `head` is producing a single stream of output
-containing 17 lines for each file
-(along with a header telling us the file's name):
-
-```shell
-$ head -n 17 s*.txt
-```
-
-```text
-==> sense_and_sensibility.txt <==
-The Project Gutenberg EBook of Sense and Sensibility, by Jane Austen
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.net
-
-
-
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-
-==> sherlock_holmes.txt <==
-Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.net
-
-
-
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-```
-
-Let's try this instead:
-
-```shell
-$ for filename in sense_and_sensibility.txt sherlock_holmes.txt
-> do
->   head -n 17 $filename | tail -n 8
-> done
-```
-
-```text
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-```
-
-As the output shows,
-the loop runs our pipeline once for each file.
-There is a lot going on here,
-so we will break it down into pieces:
-
-1.  The keywords `for`, `in`, `do`, and `done` create the loop,
-    and must always appear in that order.
-
-2.  `filename` is a variable just like a variable in R or Python.\index{variable (in Unix shell)}\index{shell variable}
-    At any moment it contains a value,
-    but that value can change over time.
-
-3.  The loop runs once for each item in the list.
-    Each time it runs,
-    it assigns the next item to the variable.
-    In this case `filename` will be `sense_and_sensibility.txt`
-    the first time around the loop
-    and `sherlock_holmes.txt` the second time.
-
-4.  The commands that the loop executes are called the \gref{body}{loop_body} of the loop\index{loop (in Unix shell)!loop body}
-    and appear between the keywords `do` and `done`.
-    Those commands use the current value of the variable `filename`,
-    but to get it,
-    we must put a dollar sign `$` in front of the variable's name.
-    If we forget and use `filename` instead of `$filename`,
-    the shell will think that we are referring to a file
-    that is actually called `filename`.
-
-5.  The shell prompt changes from `$`
-    to a \gref{continuation prompt}{continuation_prompt} `>`
-    as we type in our loop\index{continuation prompt}\index{prompt (in Unix shell)!continuation}
-    to remind us that we haven't finished typing a complete command yet.
-    We don't type the `>`,
-    just as we don't type the `$`.
-    The continuation prompt `>` has nothing to do with redirection;
-    it's used because there are only so many punctuation symbols available.
-
-It is very common to use a wildcard to select a set of files
-and then loop over that set to run commands:
-
-```shell
-$ for filename in s*.txt
-> do
->   head -n 17 $filename | tail -n 8
-> done
-```
-
-```text
-Title: Sense and Sensibility
-
-Author: Jane Austen
-Editor:
-Release Date: May 25, 2008 [EBook #161]
-Posting Date:
-Last updated: February 11, 2015
-Language: English
-
-
-
-Title: The Adventures of Sherlock Holmes
-
-Author: Arthur Conan Doyle
-Editor:
-Release Date: April 18, 2011 [EBook #1661]
-Posting Date: November 29, 2002
-Latest Update:
-Language: English
-```
-
-## Variable Names {#bash-basics-meaningless}
-
-We should always choose meaningful names for variables,
-but we should remember that those names don't mean anything to the computer.
-For example,
-we have called our loop variable `filename`
-to make its purpose clear to human readers,
-but we could equally well write our loop as:
-
-```shell
-$ for x in s*.txt
-> do
->   head -n 17 $x | tail -n 8
-> done
-```
-
-or as:
-
-```shell
-$ for username in s*.txt
-> do
->   head -n 17 $username | tail -n 8
-> done
-```
-
-*Don't do this.*
-Programs are only useful if people can understand them,
-so meaningless names like `x` and misleading names like `username`
-increase the odds of misunderstanding.
-
-## Redoing Things {#bash-basics-history}
-
-Loops are useful if we know in advance what we want to repeat,
-but if we have already run commands,
-we can still repeat.
-One way is to use <kbd>↑</kbd> and <kbd>↓</kbd>
-to go up and down in our command history as described earlier.
-Another is to use `history`\index{history (in Unix shell)}\index{Unix commands!history}
-to get a list of the last few hundred commands we have run:
-
-```shell
-$ history
-```
-
-```text
-  551  wc -l *.txt | sort -n
-  552  wc -l *.txt | sort -n | head -n 3
-  553  wc -l *.txt | sort -n | head -n 1 > shortest.txt
-```
-
-We can use an exclamation mark `!` followed by a number
-to repeat a recent command:
-
-```shell
-$ !552
-```
-
-```shell
-wc -l *.txt | sort -n | head -n 3
-```
-
-```text
-   3582 time_machine.txt
-   7832 frankenstein.txt
-  13028 sense_and_sensibility.txt
-```
-
-The shell prints the command it is going to re-run to standard error
-before executing it,
-so that (for example) `!572 > results.txt`
-puts the command's output in a file
-*without* also writing the command to the file.
-
-Having an accurate record of the things we have done
-and a simple way to repeat them
-are two of the main reasons people use the Unix shell.
-In fact,
-being able to repeat history is such a powerful idea
-that the shell gives us several ways to do it:
-
--   `!head` re-runs the most recent command starting with `head`,
-    while `!wc` re-runs the most recent starting with `wc`.
--   If we type <kbd>Ctrl</kbd>+<kbd>R</kbd> (for **r**everse search)
-    the shell searches backward through its history for whatever we type next.
-    If we don't like the first thing it finds,
-    we can type <kbd>Ctrl</kbd>+<kbd>R</kbd> again to go further back.
-
-If we use `history`, <kbd>↑</kbd>, or <kbd>Ctrl</kbd>+<kbd>R</kbd>
-we will quickly notice that loops don't have to be broken across lines.
-Instead,
-their parts can be separated with semi-colons:
-
-```shell
-$ for filename in s*.txt ; do head -n 17 $filename | tail -n 8; done
-```
-
-This is fairly readable,
-although even experienced users have a tendency to put the semi-colon after `do` instead of before it.
-If our loop contains multiple commands,
-though,
-the multi-line format is much easier to read.
-For example,
-compare this:
-
-```shell
-$ for filename in s*.txt
-> do
->   echo $filename
->   head -n 17 $filename | tail -n 8
-> done
-```
-
-with this:
-
-```shell
-$ for filename in s*.txt; do echo $filename; head -n 17 $filename | tail -n 8; done
-```
-
-(The `echo` command simply prints its arguments to the screen.
-It is often used to keep track of progress or for debugging.)
-
-## Creating New Filenames Automatically {#bash-basics-autoname}
-
-Suppose we want to create a backup copy of each book whose name ends in "e".
-If we don't want to change the files' names,
-we can do this with `cp`:
-
-```shell
-$ cd ~/zipf
-$ mkdir backup
-$ cp data/*e.txt backup
-$ ls backup
-```
-
-```text
-jane_eyre.txt  time_machine.txt
-```
-
-> **Warnings**
->
-> If you attempt to re-execute the code chunk above,
-> you'll end up with an error after the second line:
->
-> ```text
-> mkdir: backup: File exists
-> ```
->
-> This warning isn't necessarily a cause for alarm.
-> It lets you know that the command couldn't be completed,
-> but will not prevent you from proceeding.
-
-But what if we want to append the extension `.bak` to the files' names?
-`cp` can do this for a single file:
-
-```shell
-$ cp data/time_machine.txt backup/time_machine.txt.bak
-```
-
-but not for all the files at once:
-
-```shell
-$ cp data/*e.txt backup/*e.txt.bak
-```
-
-```text
-cp: target 'backup/*e.txt.bak' is not a directory
-```
-
-`backup/*e.txt.bak` doesn't match anything---those files don't yet exist---so
-after the shell expands the `*` wildcards,
-what we are actually asking `cp` to do is:
-
-```shell
-$ cp data/jane_eyre.txt data/time_machine.txt backup/*e.bak
-```
-
-This doesn't work because `cp` only understands how to do two things:
-copy a single file to create another file,
-or copy a bunch of files into a directory.
-If we give it more than two names as arguments,
-it expects the last one to be a directory.
-Since `backup/*e.bak` is not,
-`cp` reports an error.
-
-Instead,
-let's use a loop to copy files to the backup directory
-and append the `.bak` suffix:
-
-```shell
-$ cd data
-$ for filename in *e.txt
-> do
->   cp $filename ../backup/$filename.bak
-> done
-$ ls ../backup
-```
-
-```text
-jane_eyre.txt.bak  time_machine.txt.bak
-```
-
 ## Summary {#bash-basics-summary}
 
 The original Unix shell was created in 1971,
 and will soon celebrate its fiftieth anniversary.
 Its commands may be cryptic,
 but few programs have remained in daily use for so long.
-The secret to its success is the way it combines a few powerful ideas:
-command history, wildcards, redirection, and above all pipes.
-The next chapter will explore how we can go beyond these basics.
+The next chapter will explore how we can use the tools it gives us
+to create new tools of our own.
 
 ## Exercises {#bash-basics-exercises}
 
@@ -2541,137 +1763,6 @@ $ mkdir data
 $ mkdir raw processed
 ```
 
-### What does `>>` mean? {#bash-basics-ex-redirect-append}
-
-We have seen the use of `>`, but there is a similar operator `>>` which works slightly differently.
-We'll learn about the differences between these two operators by printing some strings.
-We can use the `echo` command to print strings e.g.
-
-```shell
-$ echo The echo command prints text
-```
-
-```text
-The echo command prints text
-```
-
-Now test the commands below to reveal the difference between the two operators:
-
-```shell
-$ echo hello > testfile01.txt
-```
-
-and:
-
-```shell
-$ echo hello >> testfile02.txt
-```
-
-Hint: Try executing each command twice in a row and then examining the output files.
-
-### Appending data {#bash-basics-ex-append-data}
-
-Given the following commands,
-what will be included in the file `extracted.txt`:
-
-```shell
-$ head -n 3 dracula.txt > extracted.txt
-$ tail -n 2 dracula.txt >> extracted.txt
-```
-
-1. The first three lines of `dracula.txt`
-2. The last two lines of `dracula.txt`
-3. The first three lines and the last two lines of `dracula.txt`
-4. The second and third lines of `dracula.txt`
-
-### Piping commands {#bash-basics-ex-piping}
-
-In our current directory, we want to find the 3 files which have the least number of
-lines. Which command listed below would work?
-
-1. `wc -l * > sort -n > head -n 3`
-2. `wc -l * | sort -n | head -n 1-3`
-3. `wc -l * | head -n 3 | sort -n`
-4. `wc -l * | sort -n | head -n 3`
-
-### Why does `uniq` only remove adjacent duplicates? {#bash-basics-ex-uniq-adjacent}
-
-The command `uniq` removes adjacent duplicated lines from its input.
-Consider a hypothetical file `genres.txt` containing the following data:
-
-```text
-science fiction
-fantasy
-science fiction
-fantasy
-science fiction
-science fiction
-```
-
-Running the command `uniq genres.txt` produces:
-
-```text
-science fiction
-fantasy
-science fiction
-fantasy
-science fiction
-```
-
-Why do you think `uniq` only removes *adjacent* duplicated lines?
-(Hint: think about very large datasets.) What other command could
-you combine with it in a pipe to remove all duplicated lines?
-
-### Pipe reading comprehension {#bash-basics-ex-reading-pipes}
-
-A file called `titles.txt` contains the following data:
-
-```text
-Sense and Sensibility,1811
-Frankenstein,1818
-Jane Eyre,1847
-Wuthering Heights,1847
-Moby Dick,1851
-The Adventures of Sherlock Holmes,1892
-The Time Machine,1895
-Dracula,1897
-The Invisible Man,1897
-```
-
-What text passes through each of the pipes and the final redirect in the pipeline below?
-
-```shell
-$ cat titles.txt | head -n 5 | tail -n 3 | sort -r > final.txt
-```
-
-Hint: build the pipeline up one command at a time to test your understanding
-
-### Pipe construction {#bash-basics-ex-pipe-construction}
-
-For the file `titles.txt` from the previous exercise, consider the following command:
-
-```shell
-$ cut -d , -f 2 titles.txt
-```
-
-What does the `cut` command (and its options) accomplish?
-
-### Which pipe? {#bash-basics-ex-which-pipe}
-
-Consider the same `titles.txt` from the previous exercises.
-
-The `uniq` command has a `-c` option which gives a count of the
-number of times a line occurs in its input.
-If `titles.txt` was in your working directory,
-what command would you use to produce
-a table that shows the total count of each publication year in the file?
-
-1.  `sort titles.txt | uniq -c`
-2.  `sort -t, -k2,2 titles.txt | uniq -c`
-3.  `cut -d, -f 2 titles.txt | uniq -c`
-4.  `cut -d, -f 2 titles.txt | sort | uniq -c`
-5.  `cut -d, -f 2 titles.txt | sort | uniq -c | wc -l`
-
 ### Wildcard expressions {#bash-basics-ex-wildcard-expressions}
 
 Wildcard expressions can be very complex, but you can sometimes write
@@ -2706,7 +1797,969 @@ and *only* the processed data files?
 3. `rm * .csv`
 4. `rm *.*`
 
-### Doing a dry run {#bash-basics-ex-loop-dry-run}
+### Other wildcards {#bash-basics-ex-other-wildcards}
+
+The shell provides several wildcards beyond the widely-used `*`.
+To explore them,
+explain in plain language what files the expression `novel-????-[ab]*.{txt,pdf}` matches and why.
+
+## Key Points {#bash-basics-keypoints}
+
+
+-   A \gref{shell}{shell} is a program that reads commands and runs other programs.
+-   The \gref{filesystem}{filesystem} manages information stored on disk.
+-   Information is stored in files, which are located in directories (folders).
+-   Directories can also store other directories, which forms a directory tree.
+-   `pwd` prints the user's \gref{current working directory}{current_working_directory}.
+-   `/` on its own is the \gref{root directory}{root_directory} of the whole filesystem.
+-   `ls` prints a list of files and directories.
+-   An \gref{absolute path}{absolute_path} specifies a location from the root of the filesystem.
+-   A \gref{relative path}{relative_path} specifies a location in the filesystem starting from the current directory.
+-   `cd` changes the current working directory.
+-   `..` means the \gref{parent directory}{parent_directory}; `.` on its own means the current directory.
+-   `mkdir` creates a new directory.
+-   `cp` copies a file.
+-   `rm` removes (deletes) a file.
+-   `mv` moves (renames) a file or directory.
+-   `*` matches zero or more characters in a filename.
+-   `?` matches any single character in a filename.
+-   `wc` counts lines, words, and characters in its inputs.
+-   `man` displays the manual page for a given command; some commands also have a `--help` option.
+
+<!--chapter:end:chapters/bash-basics.Rmd-->
+
+
+# Building Unix Tools {#bash-tools}
+
+> Wisdom comes from experience. Experience is often a result of lack of wisdom.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
+
+The shell's greatest strength is that
+it lets us combine programs to create pipelines
+that can handle large volumes of data.
+Sequences of commands can be saved in a \gref{script}{script},
+just as commands for R or Python can be saved in programs,
+which makes our workflows more reproducible.
+Finally,
+the shell is often the easiest way to interact with remote machines---in fact,
+the shell is practically essential for working with clusters and the cloud.
+We won't need this much power in our Zipf's Law examples,
+but as we will see,
+being able to combine commands and save our work
+makes life easier even when working on small problems.
+
+## Combining Commands {#bash-tools-pipe}
+
+Now that we know a few basic commands,
+we can introduce one of the shell's most powerful features:
+the ease with which it lets us combine existing programs in new ways.
+Let's go into the `zipf/data` directory
+and count the number of lines in each file once again:
+
+```shell
+$ cd ~/zipf/data
+$ wc -l *.txt
+```
+
+```text
+
+  15975 dracula.txt
+   7832 frankenstein.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+   3582 time_machine.txt
+  96855 total
+```
+
+Which of these books is shortest?
+We can check by eye when there are only 16 files,
+but what if there were eight thousand?
+
+Our first step toward a solution is to run this command:
+
+```shell
+$ wc -l *.txt > lengths.txt
+```
+
+The greater-than symbol `>` tells the shell
+to \gref{redirect}{redirection} the command's output to a file instead of printing it.\index{redirection (in Unix shell)}\index{Unix shell!redirection}
+Nothing appears on the screen;
+instead,
+everything that would have appeared has gone into the file `lengths.txt`.
+The shell creates this file if it doesn't exist,
+or overwrites it if it already exists.
+`ls lengths.txt` confirms that the file exists:
+
+```shell
+$ ls lengths.txt
+```
+
+```text
+lengths.txt
+```
+
+We can print the contents of `lengths.txt` using `cat`,\index{Unix commands!cat}
+which is short for con**cat**enate
+(because if we give it the names of several files
+it will print them all in order):
+
+```shell
+$ cat lengths.txt
+```
+
+```text
+  15975 dracula.txt
+   7832 frankenstein.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+   3582 time_machine.txt
+  96855 total
+```
+
+We can now use `sort` to sort the lines in this file:
+
+```shell
+$ sort lengths.txt
+```
+
+```text
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+  15975 dracula.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  96855 total
+
+```
+
+Just to be safe,
+we should use `sort`'s `-n` option to specify that we want to sort numerically.
+Without it,
+`sort` would order things alphabetically
+so that `10` would come before `2`.
+
+`sort` does not change `lengths.txt`.
+Instead,
+it sends its output to the screen just as `wc` did.
+We can therefore put the sorted list of lines in another temporary file called `sorted-lengths.txt`
+using `>` once again:
+
+```shell
+$ sort lengths.txt > sorted-lengths.txt
+```
+
+> **Redirecting to the Same File**
+>
+> It's tempting to send the output of `sort` back to the file it reads:
+>
+> ```shell
+> $ sort -n lengths.txt > lengths.txt
+> ```
+>
+> However, all this does is wipe out the contents of `lengths.txt`.
+> The reason is that when the shell sees the redirection,
+> it opens the file on the right of the `>` for writing,
+> which erases anything that file contained.
+> It then runs `sort`, which finds itself reading from a newly-empty file.
+
+Creating intermediate files with names like `lengths.txt` and `sorted-lengths.txt` works,
+but keeping track of those files and cleaning them up when they're no longer needed is a burden.
+Let's delete the two files we just created:
+
+```shell
+rm lengths.txt sorted-lengths.txt
+```
+
+We can produce the same result more safely and with less typing
+using a \gref{pipe}{pipe_shell}:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
+
+```shell
+$ wc -l *.txt | sort -n
+```
+
+```text
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+  13053 sherlock_holmes.txt
+  15975 dracula.txt
+  21054 jane_eyre.txt
+  22331 moby_dick.txt
+  96855 total
+```
+
+The vertical bar `|` between the `wc` and `sort` commands
+tells the shell that we want to use the output of the command on the left
+as the input to the command on the right.
+
+Running a command with a file as input has a clear flow of information:
+the command performs a task on that file and prints the output to the screen
+(Figure \@ref(fig:bash-tools-pipe)a).
+When using pipes, however,
+the information flows differently after the first (upstream) command.
+The downstream command doesn't read from a file.
+Instead,
+it reads the output of the upstream command
+(Figure \@ref(fig:bash-tools-pipe)b).
+
+<div class="figure" style="text-align: center">
+<img src="figures/bash-tools/pipe.png" alt="Piping commands" width="80%" />
+<p class="caption">(\#fig:bash-tools-pipe)Piping commands</p>
+</div>
+
+We can use `|` to build pipes of any length.
+For example,
+we can use the command `head` to get just the first three lines of sorted data,\index{Unix commands!head}
+which shows us the three shortest books:
+
+```shell
+$ wc -l *.txt | sort -n | head -n 3
+```
+
+```text
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+```
+
+> **Options Can Have Values**
+>
+> When we write `head -n 3`,
+> the value 3 is not input to `head`.
+> Instead, it is associated with the option `-n`.
+> Many options take values like this,
+> such as the names of input files or the background color to use in a plot.
+
+We could always redirect the output to a file
+by adding `> shortest.txt` to the end of the pipeline,
+thereby retaining our answer for later reference.
+
+In practice,
+most Unix users would create this pipeline step by step,
+just as we have:
+by starting with a single command and adding others one by one,
+checking the output after each change.
+The shell makes this easy
+by letting us move up and down in our \gref{command history}{command_history}
+with the <kbd>↑</kbd> and <kbd>↓</kbd> keys.
+We can also edit old commands to create new ones,
+so a very common sequence is:
+
+-   Run a command and check its output.
+-   Use <kbd>↑</kbd> to bring it up again.
+-   Add the pipe symbol `|` and another command to the end of the line.
+-   Run the pipe and check its output.
+-   Use <kbd>↑</kbd> to bring it up again.
+-   And so on.
+
+## How Pipes Work {#bash-tools-stdio}
+
+In order to use pipes and redirection effectively,
+we need to know a little about how they work.
+When a computer runs a program---any program---it creates a \gref{process}{process} in memory\index{process}
+to hold the program's instructions and data.
+Every process in Unix has an input channel called \gref{standard input}{stdin}\index{standard input}\index{stdin}
+and an output channel called \gref{standard output}{stdout}.\index{standard output}\index{stdout}
+(By now you may be surprised that their names are so memorable,
+but don't worry:
+most Unix programmers call them "stdin" and "stdout",
+which are pronounced "stuh-Din" and "stuh-Dout").
+
+The shell is a program like any other,
+and like any other,
+it runs inside a process.
+Under normal circumstances its standard input is connected to our keyboard
+and its standard output to our screen,
+so it reads what we type
+and displays its output for us to see (Figure \@ref(fig:bash-tools-stdio)a).
+When we tell the shell to run a program
+it creates a new process
+and temporarily reconnects the keyboard and stream
+to that process's standard input and output (Figure \@ref(fig:bash-tools-stdio)b).
+
+<div class="figure" style="text-align: center">
+<img src="figures/bash-tools/standard-io.png" alt="Standard I/O" width="100%" />
+<p class="caption">(\#fig:bash-tools-stdio)Standard I/O</p>
+</div>
+
+If we provide one or more files for the command to read,
+as with `sort lengths.txt`,
+the program reads data from those files.
+If we don't provide any filenames,
+though,
+the Unix convention is for the program to read from standard input.
+We can test this by running `sort` on its own,
+typing in a few lines of text,
+and then pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> to signal the end of input .
+`sort` will then sort and print whatever we typed:
+
+```shell
+$ sort
+one
+two
+three
+four
+^D
+```
+
+```text
+four
+one
+three
+two
+```
+
+Redirection with `>` tells the shell to connect the program's standard output to a file
+instead of the screen (Figure \@ref(fig:bash-tools-stdio)c).
+
+When we create a pipe like `wc *.txt | sort`,
+the shell creates one process for each command so that `wc` and `sort` will run simultaneously,
+and then connects the standard output of `wc` directly to the standard input of `sort`
+(Figure \@ref(fig:bash-tools-stdio)d).
+
+`wc` doesn't know whether its output is going to the screen,
+another program,
+or to a file via `>`.
+Equally,
+`sort` doesn't know if its input is coming from the keyboard or another process;
+it just knows that it has to read, sort, and print.
+
+> **Why Isn't It Doing Anything?**
+>
+> What happens if a command is supposed to process a file
+> but we don't give it a filename?
+> For example, what if we type:
+>
+> ```shell
+> $ wc -l
+> ```
+>
+> but don't type `*.txt` (or anything else) after the command?
+> Since `wc` doesn't have any filenames,
+> it assumes it is supposed to read from the keyboard,
+> so it waits for us to type in some data.
+> It doesn't tell us this:
+> it just sits and waits.
+>
+> This mistake can be hard to spot,
+> particularly if we put the filename at the end of the pipeline:
+>
+> ```shell
+> $ wc -l | sort moby_dick.txt
+> ```
+>
+> In this case,
+> `sort` ignores standard input and reads the data in the file,
+> but `wc` still just sits there waiting for input.
+>
+> If we make this mistake,
+> we can end the program by typing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
+> We can also use this to interrupt programs that are taking a long time to run
+> or are trying to connect to a website that isn't responding.
+
+Just as we can redirect standard output with `>`,
+we can connect standard input to a file using `<`.\index{redirection (in Unix shell)}
+In the case of a single file,
+this has the same effect as providing the file's name to the command:
+
+```shell
+$ wc < moby_dick.txt
+```
+
+```text
+    22331  215832 1276222
+```
+
+If we try to use redirection with a wildcard,
+though,
+the shell *doesn't* concatenate all of the matching files:
+
+```shell
+$ wc < *.txt
+```
+
+```text
+-bash: *.txt: ambiguous redirect
+```
+
+It also doesn't print the error message to standard output,
+which we can prove by redirecting:
+
+```shell
+$ wc < *.txt > all.txt
+```
+
+```text
+-bash: *.txt: ambiguous redirect
+```
+
+```shell
+$ cat all.txt
+```
+
+```text
+cat: all.txt: No such file or directory
+```
+
+Instead,
+every process has a second output channel called \gref{standard error}{stderr}
+(or \gref{stderr}{stderr}).\index{standard error}\index{stderr}
+Programs use it for error messages
+so that their attempts to tell us something has gone wrong don't vanish silently into an output file.
+There are ways to redirect standard error,
+but doing so is almost always a bad idea.
+
+## Repeating Commands on Many Files {#bash-tools-loops}
+
+A loop is a way to repeat a set of commands for each item in a list.\index{loop (in Unix shell)}
+We can use them to build complex workflows out of simple pieces,
+and (like wildcards)
+they reduce the typing we have to do and the number of mistakes we might make.
+
+Let's suppose that we want to take a section out of each book
+whose name starts with the letter "s" in the `data` directory.
+More specifically,
+suppose we want to get the first 8 lines of each book
+*after* the 9 lines of license information that appear at the start of the file.
+If we only cared about one file,
+we could write a pipeline to take the first 17 lines
+and then take the last 8 of those:
+
+```shell
+$ head -n 17 sense_and_sensibility.txt | tail -n 8
+```
+
+```text
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+```
+
+If we try to use a wildcard to select files,
+we only get 8 lines of output,
+not the 16 we expect:
+
+```shell
+$  head -n 17 s*.txt | tail -n 8
+```
+
+```text
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+```
+
+The problem is that `head` is producing a single stream of output
+containing 17 lines for each file
+(along with a header telling us the file's name):
+
+```shell
+$ head -n 17 s*.txt
+```
+
+```text
+==> sense_and_sensibility.txt <==
+The Project Gutenberg EBook of Sense and Sensibility, by Jane Austen
+
+This eBook is for the use of anyone anywhere at no cost and with
+almost no restrictions whatsoever.  You may copy it, give it away or
+re-use it under the terms of the Project Gutenberg License included
+with this eBook or online at www.gutenberg.net
+
+
+
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+
+==> sherlock_holmes.txt <==
+Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur Conan Doyle
+
+This eBook is for the use of anyone anywhere at no cost and with
+almost no restrictions whatsoever.  You may copy it, give it away or
+re-use it under the terms of the Project Gutenberg License included
+with this eBook or online at www.gutenberg.net
+
+
+
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+```
+
+Let's try this instead:
+
+```shell
+$ for filename in sense_and_sensibility.txt sherlock_holmes.txt
+> do
+>   head -n 17 $filename | tail -n 8
+> done
+```
+
+```text
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+```
+
+As the output shows,
+the loop runs our pipeline once for each file.
+There is a lot going on here,
+so we will break it down into pieces:
+
+1.  The keywords `for`, `in`, `do`, and `done` create the loop,
+    and must always appear in that order.
+
+2.  `filename` is a variable just like a variable in R or Python.\index{variable (in Unix shell)}\index{shell variable}
+    At any moment it contains a value,
+    but that value can change over time.
+
+3.  The loop runs once for each item in the list.
+    Each time it runs,
+    it assigns the next item to the variable.
+    In this case `filename` will be `sense_and_sensibility.txt`
+    the first time around the loop
+    and `sherlock_holmes.txt` the second time.
+
+4.  The commands that the loop executes are called the \gref{body}{loop_body} of the loop\index{loop (in Unix shell)!loop body}
+    and appear between the keywords `do` and `done`.
+    Those commands use the current value of the variable `filename`,
+    but to get it,
+    we must put a dollar sign `$` in front of the variable's name.
+    If we forget and use `filename` instead of `$filename`,
+    the shell will think that we are referring to a file
+    that is actually called `filename`.
+
+5.  The shell prompt changes from `$`
+    to a \gref{continuation prompt}{continuation_prompt} `>`
+    as we type in our loop\index{continuation prompt}\index{prompt (in Unix shell)!continuation}
+    to remind us that we haven't finished typing a complete command yet.
+    We don't type the `>`,
+    just as we don't type the `$`.
+    The continuation prompt `>` has nothing to do with redirection;
+    it's used because there are only so many punctuation symbols available.
+
+It is very common to use a wildcard to select a set of files
+and then loop over that set to run commands:
+
+```shell
+$ for filename in s*.txt
+> do
+>   head -n 17 $filename | tail -n 8
+> done
+```
+
+```text
+Title: Sense and Sensibility
+
+Author: Jane Austen
+Editor:
+Release Date: May 25, 2008 [EBook #161]
+Posting Date:
+Last updated: February 11, 2015
+Language: English
+
+
+
+Title: The Adventures of Sherlock Holmes
+
+Author: Arthur Conan Doyle
+Editor:
+Release Date: April 18, 2011 [EBook #1661]
+Posting Date: November 29, 2002
+Latest Update:
+Language: English
+```
+
+## Variable Names {#bash-tools-meaningless}
+
+We should always choose meaningful names for variables,
+but we should remember that those names don't mean anything to the computer.
+For example,
+we have called our loop variable `filename`
+to make its purpose clear to human readers,
+but we could equally well write our loop as:
+
+```shell
+$ for x in s*.txt
+> do
+>   head -n 17 $x | tail -n 8
+> done
+```
+
+or as:
+
+```shell
+$ for username in s*.txt
+> do
+>   head -n 17 $username | tail -n 8
+> done
+```
+
+*Don't do this.*
+Programs are only useful if people can understand them,
+so meaningless names like `x` and misleading names like `username`
+increase the odds of misunderstanding.
+
+## Redoing Things {#bash-tools-history}
+
+Loops are useful if we know in advance what we want to repeat,
+but if we have already run commands,
+we can still repeat.
+One way is to use <kbd>↑</kbd> and <kbd>↓</kbd>
+to go up and down in our command history as described earlier.
+Another is to use `history`\index{history (in Unix shell)}\index{Unix commands!history}
+to get a list of the last few hundred commands we have run:
+
+```shell
+$ history
+```
+
+```text
+  551  wc -l *.txt | sort -n
+  552  wc -l *.txt | sort -n | head -n 3
+  553  wc -l *.txt | sort -n | head -n 1 > shortest.txt
+```
+
+We can use an exclamation mark `!` followed by a number
+to repeat a recent command:
+
+```shell
+$ !552
+```
+
+```shell
+wc -l *.txt | sort -n | head -n 3
+```
+
+```text
+   3582 time_machine.txt
+   7832 frankenstein.txt
+  13028 sense_and_sensibility.txt
+```
+
+The shell prints the command it is going to re-run to standard error
+before executing it,
+so that (for example) `!572 > results.txt`
+puts the command's output in a file
+*without* also writing the command to the file.
+
+Having an accurate record of the things we have done
+and a simple way to repeat them
+are two of the main reasons people use the Unix shell.
+In fact,
+being able to repeat history is such a powerful idea
+that the shell gives us several ways to do it:
+
+-   `!head` re-runs the most recent command starting with `head`,
+    while `!wc` re-runs the most recent starting with `wc`.
+-   If we type <kbd>Ctrl</kbd>+<kbd>R</kbd> (for **r**everse search)
+    the shell searches backward through its history for whatever we type next.
+    If we don't like the first thing it finds,
+    we can type <kbd>Ctrl</kbd>+<kbd>R</kbd> again to go further back.
+
+If we use `history`, <kbd>↑</kbd>, or <kbd>Ctrl</kbd>+<kbd>R</kbd>
+we will quickly notice that loops don't have to be broken across lines.
+Instead,
+their parts can be separated with semi-colons:
+
+```shell
+$ for filename in s*.txt ; do head -n 17 $filename | tail -n 8; done
+```
+
+This is fairly readable,
+although even experienced users have a tendency to put the semi-colon after `do` instead of before it.
+If our loop contains multiple commands,
+though,
+the multi-line format is much easier to read.
+For example,
+compare this:
+
+```shell
+$ for filename in s*.txt
+> do
+>   echo $filename
+>   head -n 17 $filename | tail -n 8
+> done
+```
+
+with this:
+
+```shell
+$ for filename in s*.txt; do echo $filename; head -n 17 $filename | tail -n 8; done
+```
+
+(The `echo` command simply prints its arguments to the screen.
+It is often used to keep track of progress or for debugging.)
+
+## Creating New Filenames Automatically {#bash-tools-autoname}
+
+Suppose we want to create a backup copy of each book whose name ends in "e".
+If we don't want to change the files' names,
+we can do this with `cp`:
+
+```shell
+$ cd ~/zipf
+$ mkdir backup
+$ cp data/*e.txt backup
+$ ls backup
+```
+
+```text
+jane_eyre.txt  time_machine.txt
+```
+
+> **Warnings**
+>
+> If you attempt to re-execute the code chunk above,
+> you'll end up with an error after the second line:
+>
+> ```text
+> mkdir: backup: File exists
+> ```
+>
+> This warning isn't necessarily a cause for alarm.
+> It lets you know that the command couldn't be completed,
+> but will not prevent you from proceeding.
+
+But what if we want to append the extension `.bak` to the files' names?
+`cp` can do this for a single file:
+
+```shell
+$ cp data/time_machine.txt backup/time_machine.txt.bak
+```
+
+but not for all the files at once:
+
+```shell
+$ cp data/*e.txt backup/*e.txt.bak
+```
+
+```text
+cp: target 'backup/*e.txt.bak' is not a directory
+```
+
+`backup/*e.txt.bak` doesn't match anything---those files don't yet exist---so
+after the shell expands the `*` wildcards,
+what we are actually asking `cp` to do is:
+
+```shell
+$ cp data/jane_eyre.txt data/time_machine.txt backup/*e.bak
+```
+
+This doesn't work because `cp` only understands how to do two things:
+copy a single file to create another file,
+or copy a bunch of files into a directory.
+If we give it more than two names as arguments,
+it expects the last one to be a directory.
+Since `backup/*e.bak` is not,
+`cp` reports an error.
+
+Instead,
+let's use a loop to copy files to the backup directory
+and append the `.bak` suffix:
+
+```shell
+$ cd data
+$ for filename in *e.txt
+> do
+>   cp $filename ../backup/$filename.bak
+> done
+$ ls ../backup
+```
+
+```text
+jane_eyre.txt.bak  time_machine.txt.bak
+```
+
+## Summary {#bash-tools-summary}
+
+The secret to the shell's success is the way it combines a few powerful ideas with pipes and loops.
+The next chapter will show how we can make our work more reproducible
+by saving commands in files that we can run over and over again.
+
+## Exercises {#bash-tools-exercises}
+
+The exercises below involve creating and moving new files,
+as well as considering hypothetical files.
+Please note that if you create or move any files or directories in your Zipf's Law project,
+you may want to reorganize your files following the outline at the beginning of the next chapter.
+If you accidentally delete necessary files,
+you can start with a fresh copy of the data files
+by following the instructions in Appendix \@ref(install).
+
+### What does `>>` mean? {#bash-tools-ex-redirect-append}
+
+We have seen the use of `>`, but there is a similar operator `>>` which works slightly differently.
+We'll learn about the differences between these two operators by printing some strings.
+We can use the `echo` command to print strings e.g.
+
+```shell
+$ echo The echo command prints text
+```
+
+```text
+The echo command prints text
+```
+
+Now test the commands below to reveal the difference between the two operators:
+
+```shell
+$ echo hello > testfile01.txt
+```
+
+and:
+
+```shell
+$ echo hello >> testfile02.txt
+```
+
+Hint: Try executing each command twice in a row and then examining the output files.
+
+### Appending data {#bash-tools-ex-append-data}
+
+Given the following commands,
+what will be included in the file `extracted.txt`:
+
+```shell
+$ head -n 3 dracula.txt > extracted.txt
+$ tail -n 2 dracula.txt >> extracted.txt
+```
+
+1. The first three lines of `dracula.txt`
+2. The last two lines of `dracula.txt`
+3. The first three lines and the last two lines of `dracula.txt`
+4. The second and third lines of `dracula.txt`
+
+### Piping commands {#bash-tools-ex-piping}
+
+In our current directory, we want to find the 3 files which have the least number of
+lines. Which command listed below would work?
+
+1. `wc -l * > sort -n > head -n 3`
+2. `wc -l * | sort -n | head -n 1-3`
+3. `wc -l * | head -n 3 | sort -n`
+4. `wc -l * | sort -n | head -n 3`
+
+### Why does `uniq` only remove adjacent duplicates? {#bash-tools-ex-uniq-adjacent}
+
+The command `uniq` removes adjacent duplicated lines from its input.
+Consider a hypothetical file `genres.txt` containing the following data:
+
+```text
+science fiction
+fantasy
+science fiction
+fantasy
+science fiction
+science fiction
+```
+
+Running the command `uniq genres.txt` produces:
+
+```text
+science fiction
+fantasy
+science fiction
+fantasy
+science fiction
+```
+
+Why do you think `uniq` only removes *adjacent* duplicated lines?
+(Hint: think about very large datasets.) What other command could
+you combine with it in a pipe to remove all duplicated lines?
+
+### Pipe reading comprehension {#bash-tools-ex-reading-pipes}
+
+A file called `titles.txt` contains the following data:
+
+```text
+Sense and Sensibility,1811
+Frankenstein,1818
+Jane Eyre,1847
+Wuthering Heights,1847
+Moby Dick,1851
+The Adventures of Sherlock Holmes,1892
+The Time Machine,1895
+Dracula,1897
+The Invisible Man,1897
+```
+
+What text passes through each of the pipes and the final redirect in the pipeline below?
+
+```shell
+$ cat titles.txt | head -n 5 | tail -n 3 | sort -r > final.txt
+```
+
+Hint: build the pipeline up one command at a time to test your understanding
+
+### Pipe construction {#bash-tools-ex-pipe-construction}
+
+For the file `titles.txt` from the previous exercise, consider the following command:
+
+```shell
+$ cut -d , -f 2 titles.txt
+```
+
+What does the `cut` command (and its options) accomplish?
+
+### Which pipe? {#bash-tools-ex-which-pipe}
+
+Consider the same `titles.txt` from the previous exercises.
+
+The `uniq` command has a `-c` option which gives a count of the
+number of times a line occurs in its input.
+If `titles.txt` was in your working directory,
+what command would you use to produce
+a table that shows the total count of each publication year in the file?
+
+1.  `sort titles.txt | uniq -c`
+2.  `sort -t, -k2,2 titles.txt | uniq -c`
+3.  `cut -d, -f 2 titles.txt | uniq -c`
+4.  `cut -d, -f 2 titles.txt | sort | uniq -c`
+5.  `cut -d, -f 2 titles.txt | sort | uniq -c | wc -l`
+
+### Doing a dry run {#bash-tools-ex-loop-dry-run}
 
 A loop is a way to do many things at once---or to make many mistakes at
 once if it does the wrong thing. One way to check what a loop *would* do
@@ -2742,7 +2795,7 @@ $ for file in *.txt
 > done
 ```
 
-### Variables in loops {#bash-basics-ex-loop-variables}
+### Variables in loops {#bash-tools-ex-loop-variables}
 
 Given the files in `data/`,
 what is the output of the following code?
@@ -2765,7 +2818,7 @@ $ for datafile in *.txt
 
 Why do these two loops give different outputs?
 
-### Limiting sets of files {#bash-basics-ex-limiting-file-sets}
+### Limiting sets of files {#bash-tools-ex-limiting-file-sets}
 
 What would be the output of running the following loop in your `data/` directory?
 
@@ -2785,7 +2838,7 @@ $ for filename in *d*
 > done
 ```
 
-### Saving to a file in a loop {#bash-basics-ex-loop-save}
+### Saving to a file in a loop {#bash-tools-ex-loop-save}
 
 Consider running the following loop in the  `data/` directory:
 
@@ -2806,7 +2859,7 @@ for book in *.txt
 > done
 ```
 
-### Why does `history` record commands before running them? {#bash-basics-ex-history-order}
+### Why does `history` record commands before running them? {#bash-tools-ex-history-order}
 
 If you run the command:
 
@@ -2819,52 +2872,27 @@ the shell has added `history` to the command log before actually
 running it. In fact, the shell *always* adds commands to the log
 before running them. Why do you think it does this?
 
-### Other wildcards {#bash-basics-ex-other-wildcards}
-
-The shell provides several wildcards beyond the widely-used `*`.
-To explore them,
-explain in plain language what files the expression `novel-????-[ab]*.{txt,pdf}` matches and why.
-
-## Key Points {#bash-basics-keypoints}
+## Key Points {#bash-tools-keypoints}
 
 
--   A \gref{shell}{shell} is a program that reads commands and runs other programs.
--   The \gref{filesystem}{filesystem} manages information stored on disk.
--   Information is stored in files, which are located in directories (folders).
--   Directories can also store other directories, which forms a directory tree.
--   `pwd` prints the user's \gref{current working directory}{current_working_directory}.
--   `/` on its own is the \gref{root directory}{root_directory} of the whole filesystem.
--   `ls` prints a list of files and directories.
--   An \gref{absolute path}{absolute_path} specifies a location from the root of the filesystem.
--   A \gref{relative path}{relative_path} specifies a location in the filesystem starting from the current directory.
--   `cd` changes the current working directory.
--   `..` means the \gref{parent directory}{parent_directory}; `.` on its own means the current directory.
--   `mkdir` creates a new directory.
--   `cp` copies a file.
--   `rm` removes (deletes) a file.
--   `mv` moves (renames) a file or directory.
--   `*` matches zero or more characters in a filename.
--   `?` matches any single character in a filename.
--   `wc` counts lines, words, and characters in its inputs.
--   `man` displays the manual page for a given command; some commands also have a `--help` option.
+-   `cat` displays the contents of its inputs.
+-   `head` displays the first few lines of its input.
+-   `tail` displays the last few lines of its input.
+-   `sort` sorts its inputs.
+-   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
+-   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
 -   Every process in Unix has an input channel called \gref{standard input}{stdin}
     and an output channel called \gref{standard output}{stdin}.
 -   `>` redirects a command's output to a file, overwriting any existing content.
 -   `>>` appends a command's output to a file.
 -   `<` operator redirects input to a command
 -   A \gref{pipe}{pipe_shell} `|` sends the output of the command on the left to the input of the command on the right.
--   `cat` displays the contents of its inputs.
--   `head` displays the first few lines of its input.
--   `tail` displays the last few lines of its input.
--   `sort` sorts its inputs.
 -   A `for` loop repeats commands once for every thing in a list.
 -   Every `for` loop  must have a variable to refer to the thing it is currently operating on
     and a \gref{body}{loop_body} containing commands to execute.
 -   Use `$name` or `${name}` to get the value of a variable.
--   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
--   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
 
-<!--chapter:end:chapters/bash-basics.Rmd-->
+<!--chapter:end:chapters/bash-tools.Rmd-->
 
 
 # Going Further with the Unix Shell {#bash-advanced}
@@ -3638,7 +3666,7 @@ $ find . -name "*.bak"
 
 ## Configuring the Shell {#bash-advanced-vars}
 
-As Section \@ref(bash-basics-loops) explained,
+As Section \@ref(bash-tools-loops) explained,
 the shell is a program,
 and like any other program it has variables.
 Some of those variables control the shell's operations;
@@ -3729,7 +3757,7 @@ as `./analyze` if we are in `/Users/amira`).
 
 If we want to see a variable's value,
 we can print it using the `echo` command
-introduced at the end of Section \@ref(bash-basics-history).
+introduced at the end of Section \@ref(bash-tools-history).
 Let's look at the value of the variable `HOME`,\index{HOME variable (in Unix shell)}\index{Unix shell!HOME variable}
 which keeps track of our home directory:
 
@@ -3753,7 +3781,7 @@ $ echo $HOME
 /Users/amira
 ```
 
-As with loop variables (Section \@ref(bash-basics-loops)),
+As with loop variables (Section \@ref(bash-tools-loops)),
 the dollar sign before the variable names tells the shell
 that we want the variable's value.
 This works just like wildcard expansion
@@ -4004,7 +4032,7 @@ and predominates the whole of her sex. It was not that he felt
 
 ### Tracking publication years {#bash-advanced-ex-year-script}
 
-In Exercise \@ref(bash-basics-ex-pipe-construction)
+In Exercise \@ref(bash-tools-ex-pipe-construction)
 you examined code that extracted the publication year from a list of book titles.
 Write a shell script called `year.sh` that takes any number of
 filenames as command-line arguments,
@@ -4580,7 +4608,7 @@ if __name__ == '__main__':
 Note that we have replaced the `'outfile'` argument with an optional `-n` (or `--num`) flag
 to control how much output is printed
 and modified `collection_to_csv` so that it always prints to standard output
-(Section \@ref(bash-basics-stdio)).
+(Section \@ref(bash-tools-stdio)).
 If we want that output in a file,
 we can redirect with `>`.
 
@@ -16806,22 +16834,6 @@ and is intended to help instructors who want to use this curriculum.
 -   `?` matches any single character in a filename.
 -   `wc` counts lines, words, and characters in its inputs.
 -   `man` displays the manual page for a given command; some commands also have a `--help` option.
--   Every process in Unix has an input channel called \gref{standard input}{stdin}
-    and an output channel called \gref{standard output}{stdin}.
--   `>` redirects a command's output to a file, overwriting any existing content.
--   `>>` appends a command's output to a file.
--   `<` operator redirects input to a command
--   A \gref{pipe}{pipe_shell} `|` sends the output of the command on the left to the input of the command on the right.
--   `cat` displays the contents of its inputs.
--   `head` displays the first few lines of its input.
--   `tail` displays the last few lines of its input.
--   `sort` sorts its inputs.
--   A `for` loop repeats commands once for every thing in a list.
--   Every `for` loop  must have a variable to refer to the thing it is currently operating on
-    and a \gref{body}{loop_body} containing commands to execute.
--   Use `$name` or `${name}` to get the value of a variable.
--   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
--   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
 
 ## Going Further with the Unix Shell
 
@@ -17146,72 +17158,6 @@ of a non-existant directory: the intermediate level folders must be created firs
 The final set of commands generates the 'raw' and 'processed' directories at the same level
 as the 'data' directory.
 
-### Exercise \@ref(bash-basics-ex-redirect-append) {-}
-
-In the first example with `>`, the string "hello" is written to `testfile01.txt`,
-but the file gets overwritten each time we run the command.
-
-We see from the second example that the `>>` operator also writes "hello" to a file
-(in this case`testfile02.txt`),
-but appends the string to the file if it already exists (i.e. when we run it for the second time).
-
-### Exercise \@ref(bash-basics-ex-append-data) {-}
-
-Option 3 is correct.
-For option 1 to be correct we would only run the `head` command.
-For option 2 to be correct we would only run the `tail` command.
-For option 4 to be correct we would have to pipe the output of `head` into `tail -n 2`
-by doing `head -n 3 animals.txt | tail -n 2 > animals-subset.txt`
-
-### Exercise \@ref(bash-basics-ex-piping) {-}
-
-Option 4 is the solution.
-The pipe character `|` is used to feed the standard output from one process to
-the standard input of another.
-`>` is used to redirect standard output to a file.
-Try it in the `data-shell/molecules` directory!
-
-### Exercise \@ref(bash-basics-ex-uniq-adjacent) {-}
-
-```shell
-$ sort salmon.txt | uniq
-```
-
-### Exercise \@ref(bash-basics-ex-reading-pipes) {-}
-
-The `head` command extracts the first 5 lines from `animals.txt`.
-Then, the last 3 lines are extracted from the previous 5 by using the `tail` command.
-With the `sort -r` command those 3 lines are sorted in reverse order and finally,
-the output is redirected to a file `final.txt`.
-The content of this file can be checked by executing `cat final.txt`.
-The file should contain the following lines:
-```text
-2012-11-06,rabbit
-2012-11-06,deer
-2012-11-05,raccoon
-```
-
-### Exercise \@ref(bash-basics-ex-pipe-construction) {-}
-
-`cut` selects substrings from a line by:
-
--   breaking the string into pieces wherever it finds a separator (`-d ,`),
-which in this case is a comma, and
--   keeping one or more of the resulting fields (`-f 2`).
-
-Any single character can be used as a separator,
-but there is no way to escape characters:
-for example, if the string `a,"b,c",d` is split on commas,
-all three commas take effect.
-
-### Exercise \@ref(bash-basics-ex-which-pipe) {-}
-
-Option 4 is the correct answer.
-If you have difficulty understanding why,
-try running the commands or sub-sections of the pipelines
-(e.g., the code between pipes).
-Make sure you are in the `data-shell/data` directory.
-
 ### Exercise \@ref(bash-basics-ex-wildcard-expressions) {-}
 
 1. A solution using two wildcard expressions:
@@ -17233,7 +17179,87 @@ file called `.txt`
 4. The shell would expand `*.*` to match all files with any extension,
 so this command would delete all files
 
-### Exercise \@ref(bash-basics-ex-loop-dry-run) {-}
+### Exercise \@ref(bash-basics-ex-other-wildcards) {-}
+
+`novel-????-[ab]*.{txt,pdf}` matches:
+
+-   Files whose names started with the letters `novel-`,
+-   which is then followed by exactly four characters
+    (since each `?` matches one character),
+-   followed by another literal `-`,
+-   followed by either the letter `a` or the letter `b`,
+-   followed by zero or more other characters (the `*`),
+-   followed by `.txt` or `.pdf`.
+
+## Chapter \@ref(bash-tools) {.unnumbered .unlisted}
+
+### Exercise \@ref(bash-tools-ex-redirect-append) {-}
+
+In the first example with `>`, the string "hello" is written to `testfile01.txt`,
+but the file gets overwritten each time we run the command.
+
+We see from the second example that the `>>` operator also writes "hello" to a file
+(in this case`testfile02.txt`),
+but appends the string to the file if it already exists (i.e. when we run it for the second time).
+
+### Exercise \@ref(bash-tools-ex-append-data) {-}
+
+Option 3 is correct.
+For option 1 to be correct we would only run the `head` command.
+For option 2 to be correct we would only run the `tail` command.
+For option 4 to be correct we would have to pipe the output of `head` into `tail -n 2`
+by doing `head -n 3 animals.txt | tail -n 2 > animals-subset.txt`
+
+### Exercise \@ref(bash-tools-ex-piping) {-}
+
+Option 4 is the solution.
+The pipe character `|` is used to feed the standard output from one process to
+the standard input of another.
+`>` is used to redirect standard output to a file.
+Try it in the `data-shell/molecules` directory!
+
+### Exercise \@ref(bash-tools-ex-uniq-adjacent) {-}
+
+```shell
+$ sort salmon.txt | uniq
+```
+
+### Exercise \@ref(bash-tools-ex-reading-pipes) {-}
+
+The `head` command extracts the first 5 lines from `animals.txt`.
+Then, the last 3 lines are extracted from the previous 5 by using the `tail` command.
+With the `sort -r` command those 3 lines are sorted in reverse order and finally,
+the output is redirected to a file `final.txt`.
+The content of this file can be checked by executing `cat final.txt`.
+The file should contain the following lines:
+```text
+2012-11-06,rabbit
+2012-11-06,deer
+2012-11-05,raccoon
+```
+
+### Exercise \@ref(bash-tools-ex-pipe-construction) {-}
+
+`cut` selects substrings from a line by:
+
+-   breaking the string into pieces wherever it finds a separator (`-d ,`),
+which in this case is a comma, and
+-   keeping one or more of the resulting fields (`-f 2`).
+
+Any single character can be used as a separator,
+but there is no way to escape characters:
+for example, if the string `a,"b,c",d` is split on commas,
+all three commas take effect.
+
+### Exercise \@ref(bash-tools-ex-which-pipe) {-}
+
+Option 4 is the correct answer.
+If you have difficulty understanding why,
+try running the commands or sub-sections of the pipelines
+(e.g., the code between pipes).
+Make sure you are in the `data-shell/data` directory.
+
+### Exercise \@ref(bash-tools-ex-loop-dry-run) {-}
 
 The second version is the one we want to run.
 This prints to screen everything enclosed in the quote marks, expanding the
@@ -17246,7 +17272,7 @@ a file, `analyzed-$file`. A series of files is generated: `analyzed-cubane.pdb`,
 Try both versions for yourself to see the output! Be sure to open the
 `analyzed-*.pdb` files to view their contents.
 
-### Exercise \@ref(bash-basics-ex-loop-variables) {-}
+### Exercise \@ref(bash-tools-ex-loop-variables) {-}
 
 The first code block gives the same output on each iteration through
 the loop.
@@ -17283,7 +17309,7 @@ pentane.pdb
 propane.pdb
 ```
 
-### Exercise \@ref(bash-basics-ex-limiting-file-sets) {-}
+### Exercise \@ref(bash-tools-ex-limiting-file-sets) {-}
 
 **Part 1**
 
@@ -17295,7 +17321,7 @@ the letter c, followed by zero or more other characters will be matched.
 4 is the correct answer. `*` matches zero or more characters, so a file name with zero or more
 characters before a letter c and zero or more characters after the letter c will be matched.
 
-### Exercise \@ref(bash-basics-ex-loop-save) {-}
+### Exercise \@ref(bash-tools-ex-loop-save) {-}
 
 **Part 1**
 
@@ -17309,24 +17335,12 @@ is the text from the `propane.pdb` file.
 output from a command.
 Given the output from the `cat` command has been redirected, nothing is printed to the screen.
 
-### Exercise \@ref(bash-basics-ex-history-order) {-}
+### Exercise \@ref(bash-tools-ex-history-order) {-}
 
 If a command causes something to crash or hang, it might be useful
 to know what that command was, in order to investigate the problem.
 Were the command only be recorded after running it, we would not
 have a record of the last command run in the event of a crash.
-
-### Exercise \@ref(bash-basics-ex-other-wildcards) {-}
-
-`novel-????-[ab]*.{txt,pdf}` matches:
-
--   Files whose names started with the letters `novel-`,
--   which is then followed by exactly four characters
-    (since each `?` matches one character),
--   followed by another literal `-`,
--   followed by either the letter `a` or the letter `b`,
--   followed by zero or more other characters (the `*`),
--   followed by `.txt` or `.pdf`.
 
 ## Chapter \@ref(bash-advanced) {.unnumbered .unlisted}
 
@@ -20963,7 +20977,6 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
 [travis-ci]: https://travis-ci.org/
-[travis-status-images]: https://docs.travis-ci.com/user/status-images/
 [troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
