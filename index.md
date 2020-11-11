@@ -9191,25 +9191,26 @@ and who can change those labels,
 let us define a workflow like the one shown in Figure \@ref(fig:teams-lifecycle).
 
 <div class="figure" style="text-align: center">
-<img src="figures/teams/lifecycle.svg" alt="FIXME Issue Lifecycle (diagram needs updating)" width="100%" />
-<p class="caption">(\#fig:teams-lifecycle)FIXME Issue Lifecycle (diagram needs updating)</p>
+<img src="figures/teams/lifecycle.svg" alt="FIXME Issue Lifecycle" width="100%" />
+<p class="caption">(\#fig:teams-lifecycle)FIXME Issue Lifecycle</p>
 </div>
 
 -   An *Open* issue becomes *Assigned* when someone is made responsible for it.
 
--   An *Assigned* issue becomes *Active* when that person starts to work on it.
+-   They can then move the issue to *Cancelled* if they think it was filed mistakenly
+    or doesn't need to be fixed.
+    (This is different from closing the issue after working on it.)
 
--   If they stop work for any length of time, it becomes *Suspended*.
-    (That way, people who are waiting for it know not to hold their breath.)
+-   An *Assigned* issue becomes *Active* when someone starts to work on it.
 
--   An *Active* issue can either be *Completed* or *Cancelled*.
-    The latter state means that the person working on it has decided that
-    it isn't a bug or is no longer needed.
+-   When work is done it becomes *Ready for Review*.
 
--   Once an issue is *Completed*,
-    it can either be *Closed* or,
-    if the team thinks more work is needed,
-    moved back into the *Open* state.
+-   From there it is either *Assigned* again because it needs more work
+    or moved to *Fixed*,
+    which means the change is ready to be incorporated into the project.
+
+-   When the change is actually merged,
+    the issue's state is changed to reflect that.
 
 Small projects do not need this much formality,
 but when the team is distributed
