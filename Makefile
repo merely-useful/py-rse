@@ -31,6 +31,13 @@ EXTRA=\
   src\
   zipf
 
+LINE_LENGTH=70
+
+PYTHON_FILES=\
+  $(wildcard src/*/*/*.py) \
+  $(wildcard src/*/*/*/*.py) \
+  $(wildcard zipf/*/*.py)
+
 #-------------------------------------------------------------------------------
 
 all : commands
@@ -101,6 +108,10 @@ glosscheck :
 ## images : check that all images are defined and used.
 images :
 	@bin/images.py ./figures ${SOURCE}
+
+## linelength : check lengths of lines in source files
+linelength :
+	@bin/line-length.py ${LINE_LENGTH} ${PYTHON_FILES}
 
 ## linkcheck : check that links are defined and used.
 linkcheck :
