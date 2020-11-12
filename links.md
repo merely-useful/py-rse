@@ -6,7 +6,9 @@
 [bibtex]: http://www.bibtex.org/
 [biorxiv]: https://www.biorxiv.org/
 [bitbucket]: https://bitbucket.org/
+[blab-h3n2-reassortment]: https://github.com/blab/h3n2-reassortment
 [book-repo]: https://github.com/merely-useful/py-rse/
+[borstlab-reversephi]: https://github.com/borstlab/reversephi_paper/
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
@@ -55,6 +57,7 @@
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
+[irving-figshare]: https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
