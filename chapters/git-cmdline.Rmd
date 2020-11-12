@@ -80,21 +80,28 @@ import pandas as pd
 
 
 def main(args):
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+    df = pd.read_csv(args.infile, header=None, 
+                     names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                           method='max')
     df['inverse_rank'] = 1 / df['rank']
-    ax = df.plot.scatter(x='word_frequency', y='inverse_rank',
-                         figsize=[12, 6], grid=True)
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='inverse_rank',
+                         figsize=[12, 6], 
+                         grid=True)
     ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'), 
+                        nargs='?', default='-', 
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, 
+                        default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+    parser.add_argument('--xlim', type=float, nargs=2, 
+                        metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     args = parser.parse_args()
     main(args)
@@ -227,13 +234,15 @@ On branch master
 No commits yet
 
 Untracked files:
-  (use "git add <file>..." to include in what will be committed)
+  (use "git add <file>..." to include in what will 
+  be committed)
 
         bin/
         data/
         results/
 
-nothing added to commit but untracked files present (use "git add" to track)
+nothing added to commit but untracked files 
+present (use "git add" to track)
 ```
 
 "No commits yet" means that Git hasn't recorded any history yet,
@@ -349,7 +358,8 @@ $ git commit -m "Add scripts, novels, word counts, and word rank plot"
 ```
 
 ```text
-[master (root-commit) 31a216a] Add scripts, novels, word counts, and word rank plot
+[master (root-commit) 31a216a] Add scripts, novels, word 
+    counts, and word rank plot
  17 files changed, 240337 insertions(+)
  create mode 100644 bin/book_summary.sh
  create mode 100644 bin/collate.py
@@ -464,7 +474,8 @@ $ pwd
 Let's use `plotcounts.py` to plot the word counts in `results/dracula.csv`:
 
 ```shell
-python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
+python bin/plotcounts.py results/dracula.csv \
+  --outfile results/dracula.png
 ```
 
 If we check the status of our repository again,
@@ -477,11 +488,13 @@ $ git status
 ```text
 On branch master
 Untracked files:
-  (use "git add <file>..." to include in what will be committed)
+  (use "git add <file>..." to include in what will 
+  be committed)
 
         results/dracula.png
 
-nothing added to commit but untracked files present (use "git add" to track)
+nothing added to commit but untracked files 
+present (use "git add" to track)
 ```
 
 Git isn't tracking this file yet because we haven't told it to.
@@ -541,15 +554,21 @@ to plot the word frequency against rank on log-log axes.
 Let's change the line:
 
 ```python
-    ax = df.plot.scatter(x='word_frequency', y='inverse_rank',
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='inverse_rank',
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)
 ```
 
 to put `'rank'` on the y-axis and add `loglog=True`:
 
 ```python
-    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='rank', loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)
 ```
 
 When we run `git status` now,
@@ -590,12 +609,18 @@ index 13e7f38..a6005cd 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
 @@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+     df = pd.read_csv(args.infile, header=None, 
+                      names=('word', 'word_frequency'))
+     df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                            method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', y='inverse_rank',
-+    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                          figsize=[12, 6], grid=True, xlim=args.xlim)
+-    df.plot.scatter(x='word_frequency', 
+                     y='inverse_rank',
++    ax = df.plot.scatter(x='word_frequency', 
++                         y='rank', loglog=True,
+                          figsize=[12, 6], 
+                          grid=True, 
+                          xlim=args.xlim)
      ax.figure.savefig(args.outfile)
 ```
 
@@ -621,13 +646,15 @@ To be specific,
 this `diff` tells us that this line in the file was removed:
 
 ```python
-    df.plot.scatter(x='word_frequency', y='inverse_rank',
+    df.plot.scatter(x='word_frequency', 
+                    y='inverse_rank',
 ```
 
 and this line was added:
 
 ```python
-    df.plot.scatter(x='word_frequency', y='rank', loglog=True,
+    df.plot.scatter(x='word_frequency', 
+                    y='rank', loglog=True,
 ```
 
 Git's default is to compare line by line,
@@ -703,7 +730,8 @@ if (knitr::is_latex_output()) {
 Let's take a look at our new plot (Figure \@ref(fig:git-cmdline-loglog-plot)):
 
 ```shell
-python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
+python bin/plotcounts.py results/dracula.csv \
+  --outfile results/dracula.png
 ```
 
 ```{r git-cmdline-loglog-plot, echo=FALSE, fig.cap="Rank versus word frequency, on log-log axes, for Dracula"}
@@ -727,12 +755,15 @@ Running `git status` again shows that our plot has been modified:
 ```text
 On branch master
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+  (use "git add <file>..." to update what will be 
+  committed)
+  (use "git checkout -- <file>..." to discard changes in 
+  working directory)
 
         modified:   results/dracula.png
 
-no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" and/or 
+"git commit -a")
 ```
 
 Since `results/dracula.png` is a binary file rather than text,
@@ -742,7 +773,8 @@ It therefore simply tells us that the new file is different from the old one:
 ```diff
 diff --git a/results/dracula.png b/results/dracula.png
 index d8162ac..e9fe7f8 100644
-Binary files a/results/dracula.png and b/results/dracula.png differ
+Binary files a/results/dracula.png and 
+b/results/dracula.png differ
 ```
 
 This is one of the biggest weaknesses of Git
@@ -917,7 +949,8 @@ if we run `git log`\index{Git commands!log} right now,
 it shows us something like this:
 
 ```text
-commit d77bc5cc204f3140d95f942d0515b143927c6f51 (HEAD -> master, origin/master)
+commit d77bc5cc204f3140d95f942d0515b143927c6f51 
+  (HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:44:54 2020 -0800
 
@@ -961,7 +994,8 @@ we have truncated the rest,
 since it is very long:
 
 ```text
-commit d77bc5cc204f3140d95f942d0515b143927c6f51 (HEAD -> master, origin/master)
+commit d77bc5cc204f3140d95f942d0515b143927c6f51
+  (HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:44:54 2020 -0800
 
@@ -969,7 +1003,8 @@ Date:   Thu Feb 20 11:44:54 2020 -0800
 
 diff --git a/results/dracula.png b/results/dracula.png
 index 8e3ff84..af8e892 100644
-Binary files a/results/dracula.png and b/results/dracula.png differ
+Binary files a/results/dracula.png and 
+b/results/dracula.png differ
 ...
 ```
 
@@ -995,11 +1030,16 @@ index a6005cd..d085f22 100644
 +++ b/bin/plotcounts.py
 @@ -7,7 +7,6 @@ def main(args):
      """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+     df = pd.read_csv(args.infile, header=None, 
+                      names=('word', 'word_frequency'))
+     df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                            method='max')
 -    df['inverse_rank'] = 1 / df['rank']
-     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+     ax = df.plot.scatter(x='word_frequency',
+                          y='rank', loglog=True,
+                          figsize=[12, 6], 
+                          grid=True, 
+                          xlim=args.xlim)
      ax.figure.savefig(args.outfile)
 ```
 
@@ -1015,17 +1055,24 @@ index a6005cd..04e824d 100644
 +++ b/bin/plotcounts.py
 @@ -7,8 +7,7 @@ def main(args):
      """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+     df = pd.read_csv(args.infile, header=None, 
+                      names=('word', 'word_frequency'))
+     df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                            method='max')
 -    df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-+    ax = df.plot.scatter(x='word_frequency', y='inverse_rank',
-                          figsize=[12, 6], grid=True, xlim=args.xlim)
+-    df.plot.scatter(x='word_frequency',    
+-                    y='rank', loglog=True,
++    ax = df.plot.scatter(x='word_frequency', 
++                         y='inverse_rank',
+                          figsize=[12, 6], 
+                          grid=True, 
+                          xlim=args.xlim)
      ax.figure.savefig(args.outfile)
 
 diff --git a/results/dracula.png b/results/dracula.png
 index d8162ac..e9fe7f8 100644
-Binary files a/results/dracula.png and b/results/dracula.png differ
+Binary files a/results/dracula.png and 
+b/results/dracula.png differ
 ```
 
 Note that you may need to use something other than `b5176bf`,
@@ -1054,12 +1101,18 @@ index a6005cd..13e7f38 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
 @@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+     df = pd.read_csv(args.infile, header=None, 
+                      names=('word', 'word_frequency'))
+     df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                            method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-+    ax = df.plot.scatter(x='word_frequency', y='inverse_rank',
-                          figsize=[12, 6], grid=True, xlim=args.xlim)
+-    df.plot.scatter(x='word_frequency', 
+-                    y='rank', loglog=True,
++    ax = df.plot.scatter(x='word_frequency', 
++                         y='inverse_rank',
+                          figsize=[12, 6], 
+                          grid=True, 
+                          xlim=args.xlim)
      ax.figure.savefig(args.outfile)
 ```
 
@@ -1083,12 +1136,18 @@ index 13e7f38..a6005cd 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
 @@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+     df = pd.read_csv(args.infile, header=None, 
+                      names=('word', 'word_frequency'))
+     df['rank'] = df['word_frequency'].rank(ascending=False,
+                                            method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', y='inverse_rank',
-+    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                          figsize=[12, 6], grid=True, xlim=args.xlim)
+-    df.plot.scatter(x='word_frequency', 
+-                    y='inverse_rank',
++    ax = df.plot.scatter(x='word_frequency', 
++                         y='rank', loglog=True,
+                          figsize=[12, 6], 
+                          grid=True, 
+                          xlim=args.xlim)
      ax.figure.savefig(args.outfile)
 ```
 
@@ -1110,12 +1169,15 @@ On branch master
 Your branch is up to date with 'origin/master'.
 
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+  (use "git add <file>..." to update what will be 
+  committed)
+  (use "git checkout -- <file>..." to discard changes 
+  in working directory)
 
         modified:   bin/plotcounts.py
 
-no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" and/or 
+"git commit -a")
 ```
 
 We can put things back the way they were in the last saved revision using `git checkout`:\index{Git commands!checkout}
@@ -1137,10 +1199,14 @@ $ head -12 bin/plotcounts.py | tail -4
 ```
 
 ```text
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+    df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                           method='max')
     df['inverse_rank'] = 1 / df['rank']
-    df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                    figsize=[12, 6], grid=True, xlim=args.xlim)
+    df.plot.scatter(x='word_frequency', 
+                    y='rank', loglog=True,
+                    figsize=[12, 6], 
+                    grid=True, 
+                    xlim=args.xlim)
 ```
 
 As its name suggests,
@@ -1196,10 +1262,14 @@ $ head -12 bin/plotcounts.py | tail -4
 ```
 
 ```text
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+    df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                           method='max')
     df['inverse_rank'] = 1 / df['rank']
-    df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                    figsize=[12, 6], grid=True, xlim=args.xlim)
+    df.plot.scatter(x='word_frequency', 
+                    y='rank', loglog=True,
+                    figsize=[12, 6], 
+                    grid=True, 
+                    xlim=args.xlim)
 ```
 
 Since we didn't commit the change
@@ -1255,7 +1325,7 @@ Despite her colleagues' concerns,
 Amira creates a `heaps-law` project inside her `zipf` project as follows:
 
 ```shell
-$ cd ~/zipf         # go into zipf directory, which is already a Git repository
+$ cd ~/zipf         # go into zipf directory, which is a Git repo
 $ mkdir heaps-law   # make a subdirectory zipf/heaps-law
 $ cd heaps-law      # go into heaps-law subdirectory
 $ git heaps-law     # make heaps-law a Git repository
@@ -1391,9 +1461,11 @@ What is the output of the last command in the sequence below?
 
 ```
 $ cd zipf
-$ echo "Zipf's Law describes the relationship between the frequency and rarity of words." > motivation.txt
+$ echo "Zipf's Law describes the relationship between the 
+  frequency and rarity of words." > motivation.txt
 $ git add motivation.txt
-$ echo "Zipf's Law suggests the frequency of any word is inversely proportional to its rank." > motivation.txt
+$ echo "Zipf's Law suggests the frequency of any word is 
+  inversely proportional to its rank." > motivation.txt
 $ git commit -m "Motivate project"
 $ git checkout HEAD motivation.txt
 $ cat motivation.txt
@@ -1401,18 +1473,22 @@ $ cat motivation.txt
 
 1. 
 ```
-    Zipf's Law describes the relationship between the frequency and rarity of words.
+    Zipf's Law describes the relationship between the 
+    frequency and rarity of words.
 ```
 
 2. 
 ```
-    Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
+    Zipf's Law suggests the frequency of any word is 
+    inversely proportional to its rank.
 ```
 
 3. 
 ```
-   Zipf's Law describes the relationship between the frequency and rarity of words.
-   Zipf's Law suggests the frequency of any word is inversely proportional to its rank.
+   Zipf's Law describes the relationship between the 
+   frequency and rarity of words.
+   Zipf's Law suggests the frequency of any word is 
+   inversely proportional to its rank.
 ```
 
 4. An error message because we have changed `motivation.txt` without committing first.
