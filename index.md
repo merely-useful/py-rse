@@ -14206,13 +14206,19 @@ then review the spreadsheet file and the coded response file.
 
 ### Evaluate a project's code provenance {#provenance-ex-eval-code}
 
-The GitHub repository <https://github.com/borstlab/reversephi_paper/> provides the code and data for the paper @Leon2017.
+The GitHub repository [borstlab/reversephi_paper][borstlab-reversephi] provides the code and data for the paper @Leon2017.
 Browse the repository and answer the following questions:
 
 1.  Where is the software environment described? What files would you need to recreate the software environment? 
 2.  Where are the data processing steps described? How could you re-create the results included in the manuscript?
 3.  How are the scripts and data archived?
     I.e. Where can you download the version of the code and data as it was when the manuscript was published?
+    
+To get a feel for the different approaches to code provenance, repeat steps 1-3 with the following:
+
+* [The figshare page][irving-figshare] that accompanies the paper @Irving2019.
+
+* The GitHub repo [blab/h3n2-reassortment][blab-h3n2-reassortment] that accompanies the paper @Potter2019.
 
 ### Making permanent links {#provenance-ex-permanent-links}
 
@@ -18724,6 +18730,8 @@ Where did you agree and disagree, and why?
 
 ### Exercise \@ref(provenance-ex-eval-code) {-}
 
+For [borstlab/reversephi_paper][borstlab-reversephi]:
+
 1.  The software requirements are documented in `README.md`.
     In addition to the tools used in the `zipf/` project (Python, Make and Git), the project also requires ImageMagick.
     No information on installing ImageMagick or a required version of ImageMagick is provided.
@@ -18737,6 +18745,29 @@ Where did you agree and disagree, and why?
 3.  There doesn't seem to be a DOI for the archived code and data,
     but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)".
     A zip file of this release could be downloaded with the link <https://github.com/borstlab/reversephi_paper/archive/v1.0.zip>.
+    
+For [the figshare page][irving-figshare] that accompanies the paper @Irving2019:
+
+1. The figshare page includes a "Software environment" section.  To re-create the `conda` environment you would need the file `environment.yml`.
+
+2. 
+    > `"figure*_log.txt"` are log files for each figure in the paper. These files show the computational steps performed in generating the figure, in the form of a list of commands executed at the command line.
+    
+    > "code.zip" is a version controlled (using git) file directory containing the code written to perform the analysis (i.e. it contains the scripts referred to in the log files). This code can also be found at https://github.com/DamienIrving/ocean-analysis.
+
+3. The figshare page itself is the archive, and includes a version history for the contents.
+
+For the GitHub repo [blab/h3n2-reassortment][blab-h3n2-reassortment]:
+
+1. `README.md` includes an "Install requirements" section that describes setting up the `conda` environment using the file `h3n2_reassortment.yaml`.  
+    
+    The analysis also depends on components from Nextstrain. Instructions for cloning them from GitHub are provided.
+
+2. The code seems to be spread across the directories `jupyter_notebooks`, `hyphy`, `flu_epidemiology`, and `src`, but it isn't clear what order the code should be run in, or how the components depend on each other. 
+
+3. The data itself is not archived, but links are provided in the "Install requirements" section of `README.md` to documents that describe how to obtain the data. Some intermediate data is also provided in the `data/` directory.
+    
+    The GitHub repo has a release with files "that are up-to-date with the version of the manuscript that was submitted to Virus Evolution on 31 January 2019."
 
 ### Exercise \@ref(provenance-ex-permanent-links) {-}
 
@@ -20880,7 +20911,9 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [bibtex]: http://www.bibtex.org/
 [biorxiv]: https://www.biorxiv.org/
 [bitbucket]: https://bitbucket.org/
+[blab-h3n2-reassortment]: https://github.com/blab/h3n2-reassortment
 [book-repo]: https://github.com/merely-useful/py-rse/
+[borstlab-reversephi]: https://github.com/borstlab/reversephi_paper/
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
@@ -20929,6 +20962,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
+[irving-figshare]: https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
