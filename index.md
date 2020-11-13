@@ -14,18 +14,18 @@ lof: yes
 
 \mainmatter
 
-# Introduction {#intro}
+# Welcome {.unnumbered}
 
 > It's still magic even if you know how it's done.
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
 
-Software is now as essential to research as telescopes, test tubes, and reference libraries,
-which means that researchers need need to know how to build, check, use, and share programs.
+Software is now as essential to research as telescopes, test tubes, and reference libraries.
+This means that researchers *need* to know how to build, check, use, and share programs.
 However,
 most introductions to programming focus on developing commercial applications,
 not on exploring problems whose answers aren't yet known.
-Our goal is show you how to do that,
+Our goal is to show you how to do that,
 both on your own and as part of a team.
 
 We believe every researcher should know
@@ -34,32 +34,23 @@ and how to use version control to keep track of what they have done.
 But just as some astronomers spend their careers designing telescopes,
 some researchers focus on building the software that makes research possible.
 People who do this are called \gref{research software engineers}{rse};
-the aim of this book is to get you ready for this role,
-i.e.,
-to help you go from writing code for yourself
-to creating tools to help your entire field advance.
-
-All of this material can be freely re-used
-under the terms of the Creative Commons–Attribution License (CC-BY 4.0);
-please see Appendix \@ref(license) for details.
-The source for the book lives in a public Git repository;
-corrections and additions are very welcome,
-and everyone whose work is included will be credited in the acknowledgments.
+the aim of this book is to get you ready for this role by helping you go from
+writing code for yourself to creating tools to helping your entire field advance.
 
 ## The Big Picture {#intro-big-picture}
 
 Our approach to research software engineering is based on three related concepts:
 
--   \gref{Open science}{open_science} focuses on making data, methods, and results
+-   \gref{Open science}{open_science}: Making data, methods, and results
     freely available to all by publishing them under \gref{open
     licenses}{open_license}.
 
--   \gref{Reproducible research}{reproducible_research} means ensuring that anyone
-    with access to data and software can feasibly reproduce results, both to
+-   \gref{Reproducible research}{reproducible_research}: Ensuring that anyone
+    with access to the data and software can feasibly reproduce results, both to
     check them and to build on them. 
 
--   Software is \gref{sustainable}{sustainable_software} if it's easier for people to
-    maintain it and extend it than to replace it.  However, sustainability isn't
+-   \gref{Sustainable}{sustainable_software} software: The ease with which to
+    maintain and extend it rather than to replace it.  Sustainability isn't
     just a property of the software: it also depends on the skills and culture
     of its users.
 
@@ -78,15 +69,15 @@ if a software package is being maintained by a couple of post-docs
 who are being paid a fraction of what they could earn in industry
 and have no realistic hope of promotion because their field doesn't value tool building,
 then sooner or later it will become \gref{abandonware}{abandonware},
-at which point openness and reproducibility become moot points.
+at which point openness and reproducibility become less relevant.
 
 Nobody argues that research should be irreproducible or unsustainable,
 but "not against it" and actively supporting it are very different things.
-Academia doesn't yet know reward people for writing useful software,
+Academia doesn't yet know how to reward people for writing useful software,
 so while you may be thanked,
-the effort you put in may not translate into job security or decent pay.
+the effort you put in may not translate into academic job security or decent pay.
 
-And some people still worry that if they make their data and code generally available,
+Some people worry that if they make their data and code publicly available,
 someone else will use it and publish a result they have come up with themselves.
 This is almost unheard of in practice,
 but that doesn't stop it being used as a scare tactic.
@@ -95,7 +86,150 @@ This isn't just \gref{impostor syndrome}{impostor_syndrome}:
 members of marginalized groups are frequently judged more harshly than others,
 so being wrong in public is much riskier for them.
 
-## Audience {#intro-personas}
+With this course, we hope to give researchers the tools and knowledge to be
+better research software developers, to be more efficient in their work, make
+less mistakes, and work more openly and reproducibly.
+We hope that by having more researchers with these skills and knowledge,
+research culture can improve to address the issues raised above.
+
+## Contributing to the book and re-use
+
+The source for the book is found on the [`py-rse` GitHub repository](https://github.com/merely-useful/py-rse) and
+any corrections, additions, or contributions are very welcome.
+Everyone whose work is included will be credited in the acknowledgements.
+Check out our
+[contributing guidelines](https://github.com/merely-useful/py-rse/blob/book/CONTRIBUTING.md)
+as well as our
+[Code of Conduct](https://github.com/merely-useful/py-rse/blob/book/CONDUCT.md)
+for more information on how to contribute.
+
+The content and code of this book can be freely re-used as it is
+[licensed](https://github.com/merely-useful/py-rse/blob/book/LICENSE.md)
+under a 
+[Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/)
+(CC-BY 4.0)
+and a
+[MIT License](https://github.com/merely-useful/py-rse/blob/book/LICENSE-MIT.md),
+so the material can be used, re-used, and modified, 
+as long as there is attribution to this source.
+
+## Using this book
+
+This book is meant to be used as the material for (potentially) semester
+long course at the university level. 
+The course is designed with using participatory live-coding as the style
+for teaching the material and code, rather than as lectures talking about them.
+The chapters and their content are generally designed to be used in the order
+given.
+
+Chapters are structured with the introduction at the start, content in the middle,
+and exercises at the end. Callout boxes are interspersed throughout the content
+to be used as a supplement to the main text, but not a requirement for the course
+overall.
+While the exercises are at the end of each chapter, we recommend that the
+exercises are used throughout the lessons and not used at the end of the lesson.
+Possible exercise solutions are found in Appendix \@ref(solutions).
+
+## Acknowledgments {#intro-ack}
+
+This book owes its existence to
+everyone we met through [the Carpentries][carpentries].
+We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work,
+to the authors of @Nobl2009, @Hadd2010, @Wils2014, @Scop2015, @Tasc2017, @Wils2017, @Brow2018, @Deve2018, @Shol2019, @Wils2019
+and to everyone who has contributed, including Madeleine Bonsma-Fisher,
+Jonathan Dursi,
+Christina Koch,
+Sara Mahallati,
+Brandeis Marshall,
+and Elizabeth Wickes.
+
+-   Many of the explanations and exercises in Chapters \@ref(bash-basics)--\@ref(bash-advanced)
+    have been adapted from Software Carpentry's lesson
+    [The Unix Shell][swc-shell-novice].
+
+-   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
+    have been adapted from Software Carpentry's lesson
+    [Version Control with Git][swc-git] and an
+    [adaptation/extension of that lesson][uwm-git-lesson] maintained by
+    the University of Wisconsin-Madison Data Science Hub.
+
+-   Chapter \@ref(automate) is based on the [Software Carpentry lesson on Make][swc-make]
+    maintained by [Gerard Capes][capes-gerard]
+    and on [Jonathan Dursi][dursi-jonathan]'s
+    [introduction to pattern rules][dursi-pattern-rules].
+
+-   Chapter \@ref(packaging) is based in part on [Python 102][python-102]
+    by [Ashwin Srinath][srinath-ashwin].
+
+## Dedications
+
+
+To David Flanders  
+who taught me so much about growing and sustaining coding communities.  
+--- Damien  
+   
+To the UofT Coders Group  
+who taught us much more than we taught them.  
+--- Luke and Joel  
+   
+To my parents Judy and John  
+who taught me to love books and everything I can learn from them.  
+--- Kate  
+   
+To Joshua  
+--- Charlotte  
+   
+To Brent Gorda  
+without whom none of this would have happened.  
+--- Greg  
+   
+All royalties from this book are being donated to The Carpentries,  
+an organization that teaches foundational coding and data science
+skills  
+to researchers worldwide.
+
+<!--chapter:end:index.Rmd-->
+
+
+# Getting started {#getting-started}
+
+## Syllabus {#intro-syllabus}
+
+This book uses data analysis as a motivating example,
+and assumes that the learner's goal is to answer questions
+rather than deliver commercial software products.
+The data analysis task that we focus on
+relates to a fascinating result in the field of quantitative linguistics.
+[Zipf's Law][zipfs-law] states that the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often, and so on.
+To test Zipf's Law,
+we analyze the distribution of word frequencies
+in a collection of classic English novels
+that are freely available from [Project Gutenberg][project-gutenberg].
+
+In the process of writing and publishing a Python package to verify Zipf's Law,
+we will show you how to:
+
+-   Use the Unix shell to efficiently manage your data and code.
+-   Write Python programs that can be used on the command line.
+-   Write and review code to make it readable as well as correct.
+-   Use Git and GitHub to track and share your work.
+-   Work productively in a small team where everyone is welcome.
+-   Use Make to automate complex workflows.
+-   Enable users to configure your software without modifying it directly.
+-   Find, handle, and fix errors in your code.
+-   Test your software and know which parts have not yet been tested.
+-   Publish your code and research in open and reproducible ways.
+-   Organise small and medium-sized data science projects.
+-   Create Python packages that can be installed in standard ways.
+
+Each chapter concludes with some exercises,
+whose solutions are discussed in Appendix \@ref(solutions).
+Early chapters have many small exercises;
+later chapters have fewer but larger exercises.
+
+## Intended audience {#intro-personas}
 
 Amira Khan
 :   completed a master's in library science five years ago
@@ -123,67 +257,60 @@ Sami Virtanen
     this guide will teach them how to build and run data pipelines
     so that they can pass those skills on to their users.
 
-### Prerequisites
+## Software prerequisites {#install-software}
 
-Readers should already be using Python regularly for data analysis,
+Learners should already be using Python regularly for data analysis,
 and should be comfortable reading data from files
 and writing loops, conditionals, and functions.
 
 Learners will need a computer with Internet access
 that has the following software installed:
 
-- a \gref{Bash shell}{shell}
-- \gref{Git}{git} version control
-- a text editor
-- [Python 3][python] (via the Anaconda distribution)
-- [GNU Make][gnu-make]
+1. A \gref{Bash shell}{shell}
+2. \gref{Git}{git} version control
+3. A text editor
+4 [Python 3][python] (via the Anaconda distribution)
+5. [GNU Make][gnu-make]
 
-Please see Appendix \@ref(install-software) for instructions on how to set all of this up.
+Software installation instructions for Windows, Mac and Linux operating systems
+(with video tutorials) are maintained by [The Carpentries][carpentries]
+as part of their workshop website template:  
+<https://carpentries.github.io/workshop-template/#setup>
 
-## Syllabus {#intro-syllabus}
+Follow those instructions to install the bash shell, Git, a text editor and Anaconda.
 
-This book uses data analysis as a motivating example,
-and assumes that the learner's goal is to answer questions
-rather than deliver commercial software products.
-The data analysis task that we focus on
-relates to a fascinating result in the field of quantitative linguistics.
-[Zipf's Law][zipfs-law] states that the second most common word in a body of text
-appears half as often as the most common,
-the third most common appears a third as often, and so on.
-To test Zipf's Law,
-we analyze the distribution of word frequencies
-in a collection of classic English novels
-that are freely available from [Project Gutenberg][project-gutenberg].
+Check if Make is installed on your computer by typing `make -v` into the Bash
+shell. If it isn't installed, than:
 
-In the process of writing and publishing a Python package to verify Zipf's Law,
-we will show you how to:
+- *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
+- *Mac*: Install [Xcode][xcode] (via the App Store).
+- *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
+  Master of Data Science at the University of British Columbia.
 
--   Use the Unix shell to efficiently manage your data and code.
--   Write Python programs that can be run at the command line.
--   Write and review code to make it readable as well as correct.
--   Use Git and GitHub to track and share your work.
--   Work productively in a small team where everyone is welcome.
--   Use Make to automate complex workflows.
--   Enable users to configure your software without modifying it directly.
--   Find, handle, and fix errors in your code.
--   Test your software and know which parts have not yet been tested.
--   Publish your code and research in open and reproducible ways.
--   Organise small and medium-sized data science projects.
--   Create Python packages that can be installed in standard ways.
+> **conda in the shell on windows**
+>
+> If you are using Windows and the `conda` command isn’t available at the Bash shell,
+> you’ll need to open the Anaconda Prompt program (via the Windows start menu)
+> and run the command `conda init bash` (this only needs to be done once).
+> After that, your shell will be configured to use conda going forward.
 
-Each chapter concludes with some exercises,
-whose solutions are discussed in Appendix \@ref(solutions).
-Early chapters have many small exercises;
-later chapters have fewer but larger exercises.
+### Configuring Git to use Nano {#install-git-nano}
 
-## Project Structure {#intro-structure}
+To make Git use the Nano editor for writing commit messages,
+run the following command:
+
+```shell
+git config --global core.editor "nano -w"
+```
+
+## Where we'll end up: Project structure {#intro-structure}
 
 Project organization is like a diet:
 everyone has one,
 it's just a question of whether it's healthy or not.
 In the case of a project,
 "healthy" means that people can find what they need and do what they want without becoming frustrated.
-This depends how well organized the project is
+This depends on how well organized the project is
 and how familiar people are with that style of organization.
 
 As with coding style (Appendix \@ref(style)),
@@ -271,7 +398,7 @@ the directories in the repository's root are organized according to purpose:
 -   Raw data goes in `data/` 
     and is never modified after being stored.  
     You'll set up this directory, 
-    and its contents in Section \@ref(intro-setup).  
+    and its contents in Section \@ref(download-data).  
 
 -   Results are put in `results/`.
     This includes cleaned-up data,
@@ -294,13 +421,21 @@ when we talk about provenance (Chapter \@ref(provenance)),
 testing (Chapter \@ref(testing)),
 and packaging (Chapter \@ref(packaging)).
 
-### Getting Started {#intro-setup}
+### Downloading the data {#download-data}
 
 Over the course of this book,
 you'll build up the project structure described above.
-Appendix \@ref(install-data) explains
-how to download the novels in `data/`,
-which are the only files you'll need to get started.
+
+The data files used in the book have been archived
+at an online repository called Figshare (covered in Section \@ref(provenance-data-where)).
+They can be accessed at the following URL:  
+<https://doi.org/10.6084/m9.figshare.13040516>
+
+Download a zip file containing the data files by clicking "download all" at the URL above.
+Unzip the contents into your `zipf/data` directory
+following the project structure described below.
+
+These are the only files you'll need to get started.
 When you are done,
 you should have a directory (also called a \gref{folder}{folder}) 
 called `zipf`,
@@ -320,66 +455,7 @@ zipf/
     └── time_machine.txt
 ```
 
-## Acknowledgments {#intro-ack}
-
-This book owes its existence to
-everyone we met through [the Carpentries][carpentries].
-We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work,
-to the authors of @Nobl2009, @Hadd2010, @Wils2014, @Scop2015, @Tasc2017, @Wils2017, @Brow2018, @Deve2018, @Shol2019, @Wils2019
-and to everyone who has contributed, including Madeleine Bonsma-Fisher,
-Jonathan Dursi,
-Christina Koch,
-Sara Mahallati,
-Brandeis Marshall,
-and Elizabeth Wickes.
-
--   Many of the explanations and exercises in Chapters \@ref(bash-basics)--\@ref(bash-advanced)
-    have been adapted from Software Carpentry's lesson
-    [The Unix Shell][swc-shell-novice].
-
--   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
-    have been adapted from Software Carpentry's lesson
-    [Version Control with Git][swc-git] and an
-    [adaptation/extension of that lesson][uwm-git-lesson] maintained by
-    the University of Wisconsin-Madison Data Science Hub.
-
--   Chapter \@ref(automate) is based on the [Software Carpentry lesson on Make][swc-make]
-    maintained by [Gerard Capes][capes-gerard]
-    and on [Jonathan Dursi][dursi-jonathan]'s
-    [introduction to pattern rules][dursi-pattern-rules].
-
--   Chapter \@ref(packaging) is based in part on [Python 102][python-102]
-    by [Ashwin Srinath][srinath-ashwin].
-
-
-## Dedications
-
-
-To David Flanders  
-who taught me so much about growing and sustaining coding communities.  
---- Damien  
-   
-To the U of T Coders Group  
-who taught us much more than we taught them.  
---- Luke and Joel  
-   
-To my parents Judy and John  
-who taught me to love books and everything I can learn from them.  
---- Kate  
-   
-To Joshua  
---- Charlotte  
-   
-To Brent Gorda  
-without whom none of this would have happened.  
---- Greg  
-   
-All royalties from this book are being donated to The Carpentries,  
-an organization that teaches foundational coding and data science
-skills  
-to researchers worldwide.
-
-<!--chapter:end:index.Rmd-->
+<!--chapter:end:chapters/getting-started.Rmd-->
 
 
 # The Basics of the Unix Shell {#bash-basics}
@@ -448,7 +524,7 @@ or how they do what they do.
 > the most recent versions of MacOS use a shell called the Z Shell or `zsh`;
 > we will point out a few differences as we go along.
 
-Please see Appendix \@ref(install) for instructions
+Please see Section \@ref(install-software) for instructions
 on how to launch the shell on your computer.
 
 ## Exploring Files and Directories {#bash-basics-explore}
@@ -1508,7 +1584,7 @@ Please note that if you create or move any files or directories in your Zipf's L
 you may want to reorganize your files following the outline at the beginning of the next chapter.
 If you accidentally delete necessary files,
 you can start with a fresh copy of the data files
-by following the instructions in Appendix \@ref(install).
+by following the instructions in Section \@ref(download-data).
 
 ### Exploring more `ls` flags {#bash-basics-ex-more-ls}
 
@@ -2626,7 +2702,7 @@ Please note that if you create or move any files or directories in your Zipf's L
 you may want to reorganize your files following the outline at the beginning of the next chapter.
 If you accidentally delete necessary files,
 you can start with a fresh copy of the data files
-by following the instructions in Appendix \@ref(install).
+by following the instructions in Section \@ref(download-data).
 
 ### What does `>>` mean? {#bash-tools-ex-redirect-append}
 
@@ -2931,7 +3007,7 @@ zipf/
 > if you worked through all of the exercises in the previous chapter.
 > Feel free to delete them or move them to a separate directory.
 > If you have accidentally deleted files you need,
-> you can download them again by following the instructions in Appendix \@ref(install).
+> you can download them again by following the instructions in Section \@ref(download-data).
 
 ## Creating New Commands {#bash-advanced-script}
 
@@ -9971,7 +10047,7 @@ Make works as follows:
 
 This chapter uses a version of Make called [GNU Make][gnu-make].
 It comes with macOS and Linux;
-please see Appendix \@ref(install) for Windows installation instructions.
+please see Section \@ref(install-software) for Windows installation instructions.
 
 > **Keep Tracking With Version Control**
 >
@@ -15824,125 +15900,6 @@ we'd enjoy hearing from you.
 <!--chapter:end:appendix.Rmd-->
 
 
-# License {#license}
-
-*This is a human-readable summary of (and not a substitute for) the license.
-Please see <https://creativecommons.org/licenses/by/4.0/legalcode> for the full legal text.*
-
-This work is licensed under the Creative Commons Attribution 4.0
-International license (CC-BY-4.0).
-
-**You are free to:**
-
-- **Share**---copy and redistribute the material in any medium or
-  format
-
-- **Remix**---remix, transform, and build upon the material for any
-  purpose, even commercially.
-
-The licensor cannot revoke these freedoms as long as you follow the
-license terms.
-
-**Under the following terms:**
-
-- **Attribution**---You must give appropriate credit, provide a link
-  to the license, and indicate if changes were made. You may do so in
-  any reasonable manner, but not in any way that suggests the licensor
-  endorses you or your use.
-
-- **No additional restrictions**---You may not apply legal terms or
-  technological measures that legally restrict others from doing
-  anything the license permits.
-
-**Notices:**
-
-You do not have to comply with the license for elements of the
-material in the public domain or where your use is permitted by an
-applicable exception or limitation.
-
-No warranties are given. The license may not give you all of the
-permissions necessary for your intended use. For example, other rights
-such as publicity, privacy, or moral rights may limit how you use the
-material.
-
-<!--chapter:end:LICENSE.md-->
-
-
-# Code of Conduct {#conduct}
-
-In the interest of fostering an open and welcoming environment, we as
-contributors and maintainers pledge to making participation in our project and
-our community a harassment-free experience for everyone, regardless of age, body
-size, disability, ethnicity, gender identity and expression, level of
-experience, education, socio-economic status, nationality, personal appearance,
-race, religion, or sexual identity and orientation.
-
-## Our Standards {#conduct-standards}
-
-Examples of behavior that contributes to creating a positive environment
-include:
-
-* using welcoming and inclusive language,
-* being respectful of differing viewpoints and experiences,
-* gracefully accepting constructive criticism,
-* focusing on what is best for the community, and
-* showing empathy towards other community members.
-
-Examples of unacceptable behavior by participants include:
-
-* the use of sexualized language or imagery and unwelcome sexual
-  attention or advances,
-* trolling, insulting/derogatory comments, and personal or political
-  attacks,
-* public or private harassment,
-* publishing others' private information, such as a physical or
-  electronic address, without explicit permission, and
-* other conduct which could reasonably be considered inappropriate in
-  a professional setting
-
-## Our Responsibilities {#conduct-responsibilities}
-
-Project maintainers are responsible for clarifying the standards of acceptable
-behavior and are expected to take appropriate and fair corrective action in
-response to any instances of unacceptable behavior.
-
-Project maintainers have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct, or to ban temporarily or permanently any
-contributor for other behaviors that they deem inappropriate, threatening,
-offensive, or harmful.
-
-## Scope {#conduct-scope}
-
-This Code of Conduct applies both within project spaces and in public spaces
-when an individual is representing the project or its community. Examples of
-representing a project or community include using an official project e-mail
-address, posting via an official social media account, or acting as an appointed
-representative at an online or offline event. Representation of a project may be
-further defined and clarified by project maintainers.
-
-## Enforcement {#conduct-enforcement}
-
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by [emailing the project team](mailto:gvwilson@third-bit.com). All
-complaints will be reviewed and investigated and will result in a response that
-is deemed necessary and appropriate to the circumstances. The project team is
-obligated to maintain confidentiality with regard to the reporter of an
-incident.  Further details of specific enforcement policies may be posted
-separately.
-
-Project maintainers who do not follow or enforce the Code of Conduct in good
-faith may face temporary or permanent repercussions as determined by other
-members of the project's leadership.
-
-## Attribution {#conduct-attribution}
-
-This Code of Conduct is adapted from the
-[Contributor Covenant](https://www.contributor-covenant.org) version 1.4.
-
-<!--chapter:end:CONDUCT.md-->
-
-
 # Glossary {#glossary}
 
 **abandonware**<a id="abandonware"></a>
@@ -16640,63 +16597,6 @@ This Code of Conduct is adapted from the
 
 
 <!--chapter:end:glossary/glossary.md-->
-
-
-# Setting Up {#install}
-
-## Software {#install-software}
-
-In order to complete the activities in this book,
-the following software is required:
-
-1. a \gref{Bash shell}{shell}
-2. \gref{Git}{git} version control
-3. a text editor
-4. Python 3 (via the Anaconda distribution)
-5. [GNU Make][gnu-make]
-
-Software installation instructions for Windows, Mac and Linux operating systems
-(with video tutorials) are maintained by [The Carpentries][carpentries]
-as part of their workshop website template:  
-<https://carpentries.github.io/workshop-template/#setup>
-
-Follow those instructions to install the bash shell, Git, a text editor and Anaconda.
-
-If Make is not already installed on your computer (type `make -v` into the Bash shell to check): 
-
-- *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
-- *Mac*: Install [Xcode][xcode] (via the App Store).
-- *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
-  Master of Data Science at the University of British Columbia.
-
-> **conda in the shell on windows**
->
-> If you are using Windows and the `conda` command isn’t available at the Bash shell,
-> you’ll need to open the Anaconda Prompt program (via the Windows start menu)
-> and run the command `conda init bash` (this only needs to be done once).
-> After that, your shell will be configured to use conda going forward.
-
-## Configuring Git to use Nano {#install-git-nano}
-
-To make Git use the Nano editor for writing commit messages,
-run the following command:
-
-```shell
-git config --global core.editor "nano -w"
-```
-  
-## Data {#install-data}
-
-The data files used in the book have been archived
-at an online repository called Figshare (Section \@ref(provenance-data-where)).
-They can be accessed at the following URL:  
-<https://doi.org/10.6084/m9.figshare.13040516>
-
-Download a zip file containing the data files by clicking "download all" at the URL above.
-Unzip the contents into your `zipf/data` directory,
-following the project structure described in Section \@ref(intro-setup).
-
-<!--chapter:end:chapters/install.Rmd-->
 
 
 # Learning Objectives {#objectives}
@@ -19111,7 +19011,7 @@ with further updates in Section \@ref(packaging-readme).
 
 `setup.py`: Introduced and updated throughout Chapter \@ref(packaging).
 
-`data/*` : Downloaded as part of the setup instructions (Appendix \@ref(install)).
+`data/*` : Downloaded as part of the setup instructions (Section \@ref(download-data)).
 
 `docs/*`: Introduced in Section \@ref(packaging-sphinx).
 
