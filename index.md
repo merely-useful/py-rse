@@ -128,7 +128,7 @@ to be used as a supplement to the main text, but not a requirement for the cours
 overall.
 While the exercises are at the end of each chapter, we recommend that the
 exercises are used throughout the lessons and not used at the end of the lesson.
-Possible exercise solutions are found in Appendix \@ref(solutions).
+Possible exercise solutions are found in Appendix \@ref(solutions).
 
 ## Acknowledgments {#intro-ack}
 
@@ -176,7 +176,7 @@ To my parents Judy and John
 who taught me to love books and everything I can learn from them.  
 --- Kate  
    
-To Joshua  
+To Joshua.
 --- Charlotte  
    
 To Brent Gorda  
@@ -323,7 +323,7 @@ In building the Zipf's Law project we'll follow
 a widely-used template
 for organizing small and medium-sized data analysis projects [@Nobl2009].
 The project will live in a directory called `zipf`, 
-which will also be a Git repository stored on GitHub (Chapter \@ref(git-cmdline)).
+which will also be a Git repository stored on GitHub (Chapter \@ref(git-cmdline)).
 The following is an abbreviated version of the project directory tree
 as it appears towards the end of the book:
 
@@ -427,7 +427,7 @@ Over the course of this book,
 you'll build up the project structure described above.
 
 The data files used in the book have been archived
-at an online repository called Figshare (covered in Section \@ref(provenance-data-where)).
+at an online repository called Figshare (covered in Section \@ref(provenance-data-where)).
 They can be accessed at the following URL:  
 <https://doi.org/10.6084/m9.figshare.13040516>
 
@@ -4542,7 +4542,7 @@ This isn't completely correct---if two words are joined by a long dash
 like "correct" and "if" in this sentence, for example,
 they will be treated as one word---but given that long dashes are used relatively
 infrequently it's close enough to correct for our purposes.
-(We will submit a bug report about the long dash issue in Section \@ref(teams-bugs)).
+(We will submit a bug report about the long dash issue in Section \@ref(teams-bugs)).
 We also use the `Counter` class from the `collections` library
 to count how many times each word occurs.
 If we give `Counter` a list of words,
@@ -11028,7 +11028,7 @@ cut and paste the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
 into a separate file called `config.mk`.
 Use the `include` command to access those definitions in the existing `Makefile`. 
 
-(In Chapter \@ref(config) we discuss configuration strategies in more detail.)
+(In Chapter \@ref(config) we discuss configuration strategies in more detail.)
 
 ## Key Points {#automate-keypoints}
 
@@ -11235,7 +11235,7 @@ Since `matplotlibrc` file sets system-wide defaults,
 we will now have big labels by default for all plotting we do in future,
 which we may not want.
 Secondly,
-we want to package our Zipf's Law code and make it available to other people (Chapter \@ref(packaging)).
+we want to package our Zipf's Law code and make it available to other people (Chapter \@ref(packaging)).
 That package won't include our `matplotlibrc` file,
 and we don't have access to the one on their computer,
 so this solution isn't as reproducible as others.
@@ -11492,7 +11492,7 @@ but knowing what it entails allows us to make a conscious, thoughtful choice.
 
 ### Building with plotting parameters {#config-ex-build-plotparams}
 
-In the `Makefile` created in Chapter \@ref(automate),
+In the `Makefile` created in Chapter \@ref(automate),
 the build rule involving `plotcounts.py` was defined as:
 
 ```make
@@ -11507,19 +11507,19 @@ so that the appropriate commands will be re-run if the plotting parameters chang
 
 Hint: We use the automatic variable `$<` to access the first prerequisite,
 but you'll need `$(word 2,$^)` to access the second.
-Read about automatic variables (Section \@ref(automate-autovar)) and 
+Read about automatic variables (Section \@ref(automate-autovar)) and 
 [functions for string substitution and analysis][make-string-functions]
 to understand what that command is doing.
 
 ### Using different plot styles {#config-ex-style}
 
-There are a wide variety of pre-defined matplotlib styles (Section \@ref(config-user)),
+There are a wide variety of pre-defined matplotlib styles (Section \@ref(config-user)),
 as illustrated at the [Python Graph Gallery][python-graph-gallery-styles].
 
 1. Add a new option `--style` to `plotcounts.py` that allows the user
 to pick a style from the list of pre-defined matplotlib styles.
 
-Hint: Use the `choices` parameter discussed in Section \@ref(config-command-line)
+Hint: Use the `choices` parameter discussed in Section \@ref(config-command-line)
 to define the valid choices for the new `--style` option.
 
 2. Re-generate the plot of the *Jane Eyre* word count distribution 
@@ -12396,9 +12396,9 @@ the default name of `collate.log`.
 
 ### Error catalogs {#errors-ex-catalog}
 
-In Section \@ref(errors-messages) we started to define an error catalog called `ERROR_MESSAGES`.
+In Section \@ref(errors-messages) we started to define an error catalog called `ERROR_MESSAGES`.
 
-1. Read Appendix \@ref(style-pep8) and explain why we have used capital letters
+1. Read Appendix \@ref(style-pep8) and explain why we have used capital letters
    for the name of the catalog.
 2. Python has three ways to format strings:
    the `%` operator, the `str.format` method, and f-strings (where the "f" stands for "format").
@@ -12409,7 +12409,7 @@ In Section \@ref(errors-messages) we started to define an error catalog called `
    in other scripts besides `collate.py`.
    To avoid duplication,
    move `ERROR_MESSAGES` to the `utilities` module that was first created in
-   Section \@ref(py-rse-py-scripting-modules).
+   Section \@ref(py-rse-py-scripting-modules).
 
 ### Tracebacks {#errors-ex-traceback}
 
@@ -13705,7 +13705,7 @@ Explain the rationale behind each test.
 
 ### Test error handling {#testing-ex-error-handling}
 
-In Chapter \@ref(errors), we modified `collate.py` to handle
+In Chapter \@ref(errors), we modified `collate.py` to handle
 different types of errors associated with reading input files.
 The relevant code appears in `main`:
 
@@ -13759,7 +13759,7 @@ if __name__ == '__main__':
 ```
 
 In this chapter we discussed using `pytest.raises`
-to test whether the error handling in a program is working as expected (Section \@ref(testing-failure)).
+to test whether the error handling in a program is working as expected (Section \@ref(testing-failure)).
 
 1.  It is difficult to write a simple unit test for the lines of code dedicated
     to reading input files, because `main` is a long function that requires
@@ -17996,7 +17996,7 @@ We obviously can't say which description fits you best, but:
 
 `make -n target` will show commands without running them.
 
-### Exercise \@ref(automate-ex-useful-options) {-}
+### Exercise \@ref(automate-ex-useful-options) {-}
 
 1.  The `-B` option makes everything, even files that aren't out of date.
 
@@ -18015,7 +18015,7 @@ We obviously can't say which description fits you best, but:
 and does nothing (without complaining) if they already exist.
 It is useful for creating the output directories for build rules.
 
-### Exercise \@ref(automate-ex-print) {-}
+### Exercise \@ref(automate-ex-print) {-}
 
 The build rule for generated the result for any book should now be,
 
@@ -18996,8 +18996,8 @@ committed to the repository in Exercise \@ref(teams-ex-contributing).
 `LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
 committed to the repository in Exercise \@ref(teams-ex-boilerplate-license).
 
-`Makefile`: Introduced and updated throughout Chapter \@ref(automate).
-Updated again in Exercise \@ref(config-ex-build-plotparams).
+`Makefile`: Introduced and updated throughout Chapter \@ref(automate).
+Updated again in Exercise \@ref(config-ex-build-plotparams).
 
 `README.rst`: Introduced as a `.md` file in Section \@ref(git-advanced-conflict),
 updated in Section \@ref(git-advanced-fork) and then converted to a `.rst` file
