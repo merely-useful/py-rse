@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 10 Program Configuration | Research Software Engineering with Python</title>
-  <meta name="description" content="Chapter 10 Program Configuration | Research Software Engineering with Python" />
+  <title>I Documentation | Research Software Engineering with Python</title>
+  <meta name="description" content="I Documentation | Research Software Engineering with Python" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 10 Program Configuration | Research Software Engineering with Python" />
+  <meta property="og:title" content="I Documentation | Research Software Engineering with Python" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="tugboats-800x600.jpg" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="merely-useful/py-rse" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 10 Program Configuration | Research Software Engineering with Python" />
+  <meta name="twitter:title" content="I Documentation | Research Software Engineering with Python" />
   
   
   <meta name="twitter:image" content="tugboats-800x600.jpg" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="automate.html"/>
-<link rel="next" href="errors.html"/>
+<link rel="prev" href="yaml.html"/>
+<link rel="next" href="ssh.html"/>
 <script src="libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -603,440 +603,200 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="config" class="section level1" number="10">
-<h1><span class="header-section-number">Chapter 10</span> Program Configuration</h1>
-<blockquote>
-<p>Always be wary of any helpful item that weighs less than its operating manual.</p>
-<p>— Terry Pratchett</p>
-</blockquote>
-<p>In previous chapters we used command-line options to control our scripts and programs.
-If they are more complex,
-we may want to use up to four layers of configuration:</p>
-<ol style="list-style-type: decimal">
-<li>A system-wide configuration file for general settings.</li>
-<li>A user-specific configuration file for personal preferences.</li>
-<li>A job-specific file with settings for a particular run.</li>
-<li>Command-line options to change things that commonly change.</li>
-</ol>
-<p>This is sometimes called <a href="glossary.html#overlay_configuration">overlay configuration</a>
-because each level overrides the ones above it:
-the user’s configuration file overrides the system settings,
-the job configuration overrides the user’s defaults,
-and the command-line options overrides that.
-This is more complex than most research software needs initially <span class="citation">(Xu et al. <a href="references.html#ref-Xu2015" role="doc-biblioref">2015</a>)</span>,
-but being able to read a complete set of options from a file
-is a big boost to reproducibility.</p>
-<p>In this chapter,
-we’ll explore approaches for configuring our project,
-and apply one approach to our Zipf’s Law project.
-That project should now contain:</p>
-<pre class="text"><code>zipf/
-├── .gitignore
-├── CONDUCT.md
-├── CONTRIBUTING.md
-├── LICENSE.md
-├── Makefile
-├── README.md
-├── bin
-│   ├── book_summary.sh
-│   ├── collate.py
-│   ├── countwords.py
-│   ├── plotcounts.py
-│   ├── script_template.py
-│   └── utilities.py
-├── data
-│   ├── README.md
-│   ├── dracula.txt
-│   └── ...
-└── results
-    ├── dracula.csv
-    ├── dracula.png
-    └── ...</code></pre>
-<blockquote>
-<p><strong>Be Careful When Applying Settings Outside Your Project</strong></p>
-<p>This chapter’s examples modify files outside of the Zipf’s Law project
-in order to illustrate some concepts.
-If you alter these files while following along,
-remember to change them back later.</p>
-</blockquote>
-<div id="config-formats" class="section level2" number="10.1">
-<h2><span class="header-section-number">10.1</span> Configuration File Formats</h2>
-<p>Programmers have invented far too many formats for configuration files,
-so please do not create one of your own.
-One possibility is to write the configuration as a Python module
-and load it as if it was a library.
-This is clever,
-but means that tools in other languages can’t process it.</p>
-<p>A second option is <a href="https://en.wikipedia.org/wiki/INI_file">Windows INI format</a>,
-which is laid out like this:</p>
-<pre class="text"><code>[section_1]
-key_1=value_1
-key_2=value_2
-
-[section_2]
-key_3=value_3
-key_4=value_4</code></pre>
-<p>INI files are simple to read and write,
-but the format is slowly falling out of use in favor of <a href="glossary.html#yaml">YAML</a>.
-A simple YAML configuration file looks like this:</p>
-<div class="sourceCode" id="cb640"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb640-1"><a href="config.html#cb640-1" aria-hidden="true"></a><span class="co"># Standard settings for thesis.</span></span>
-<span id="cb640-2"><a href="config.html#cb640-2" aria-hidden="true"></a><span class="fu">logfile</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/tmp/log.txt&quot;</span></span>
-<span id="cb640-3"><a href="config.html#cb640-3" aria-hidden="true"></a><span class="fu">quiet</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb640-4"><a href="config.html#cb640-4" aria-hidden="true"></a><span class="fu">overwrite</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb640-5"><a href="config.html#cb640-5" aria-hidden="true"></a><span class="fu">fonts</span><span class="kw">:</span></span>
-<span id="cb640-6"><a href="config.html#cb640-6" aria-hidden="true"></a><span class="kw">-</span><span class="at"> Verdana</span></span>
-<span id="cb640-7"><a href="config.html#cb640-7" aria-hidden="true"></a><span class="kw">-</span><span class="at"> Serif</span></span></code></pre></div>
-<p>Here,
-the keys <code>logfile</code>, <code>quiet</code>, and <code>overwrite</code>
-have the values <code>/tmp/log.txt</code>, <code>false</code>, and <code>false</code> respectively,
-while the value associated with the key <code>fonts</code>
-is a list containing <code>Verdana</code> and <code>Serif</code>.
-For more discussion of YAML, see Appendix <a href="yaml.html#yaml">H</a>.</p>
-</div>
-<div id="config-matplotlib" class="section level2" number="10.2">
-<h2><span class="header-section-number">10.2</span> Matplotlib Configuration</h2>
-<p>To see overlay configuration in action,
-let’s consider a common task in data science:
-changing the size of the labels on a plot.
-The labels on our <em>Jane Eyre</em> word frequency plot are fine for viewing on screen
-(Figure <a href="config.html#fig:configuration-jane-eyre-default">10.1</a>),
-but they will need to be bigger
-if we want to include the figure in a slideshow or report.</p>
-<div class="figure" style="text-align: center"><span id="fig:configuration-jane-eyre-default"></span>
-<img src="figures/config/jane-eyre-default.png" alt="Word frequency distribution for the book Jane Eyre with default label sizes." width="100%" />
-<p class="caption">
-Figure 10.1: Word frequency distribution for the book Jane Eyre with default label sizes.
-</p>
-</div>
-<p>We could use any of the overlay options described above
-to change the size of the labels:</p>
+<div id="documentation" class="section level1" number="24">
+<h1><span class="header-section-number">I</span> Documentation</h1>
+<p>An old proverb says, “Trust, but verify.”
+The equivalent in programming is, “Be clear, but document.”
+No matter how well software is written,
+it always embodies decisions that aren’t explicit in the final code
+or accommodates complications that aren’t going to be obvious to the next reader.
+Putting it another way,
+the best function names in the world aren’t going to answer the questions
+“Why does the software do this?”
+and
+“Why doesn’t it do this in a simpler way?”</p>
+<div id="documentation-audience" class="section level2" number="24.1">
+<h2><span class="header-section-number">I.1</span> Defining Your Audience</h2>
+<p>It’s important to consider who documentation is for.
+There are three kinds of people in any domain:
+<a href="glossary.html#novice">novices</a>,
+<a href="glossary.html#competent_practitioner">competent practitioners</a>,
+and <a href="glossary.html#expert">experts</a> <span class="citation">(G. Wilson <a href="references.html#ref-Wils2018" role="doc-biblioref">2019</a><a href="references.html#ref-Wils2018" role="doc-biblioref">a</a>)</span>.
+A novice doesn’t yet have a <a href="glossary.html#mental_model">mental model</a> of the domain:
+they don’t know what the key terms are,
+how they relate,
+what the causes of their problems are,
+or how to tell whether a solution to their problem is appropriate or not.</p>
+<p>Competent practitioners know enough to accomplish routine tasks with routine effort:
+they may need to check <a href="https://stackoverflow.com/">Stack Overflow</a> every few minutes,
+but they know what to search for and what “done” looks like.</p>
+<p>Finally,
+experts have such a deep and broad understanding of the domain
+that they can solve routine problems at a glance
+and are able to handle the one-in-a-thousand cases
+that would baffle the merely competent.</p>
+<p>Each of these three groups needs a different kind of documentation:</p>
 <ul>
-<li>Edit the system-wide Matplotlib configuration file
-(which would affect everyone using this computer).</li>
-<li>Create a user-specific Matplotlib style sheet.</li>
-<li>Create a job-specific configuration file to set plotting options in <code>plotcounts.py</code>.</li>
-<li>Add some new command-line options to <code>plotcounts.py</code> .</li>
+<li><p>A novice needs a tutorial that introduces her to key ideas one by one
+and shows how they fit together.</p></li>
+<li><p>A competent practitioner needs reference guides, cookbooks, and Q&amp;A sites;
+these give her solutions close enough to what she needs
+that she can tweak them the rest of the way.</p></li>
+<li><p>Experts need this material as well—nobody’s memory is perfect—but
+they may also paradoxically want tutorials.
+The difference between them and novices is that experts want tutorials on how things work
+and why they were designed that way.</p></li>
 </ul>
-<p>Let’s consider these options one by one.</p>
+<p>The first thing to decide when writing documentation
+is therefore to decide which of these needs we are trying to meet.
+Tutorials like this one should be long-form prose that contain code samples and diagrams.
+They should use <a href="glossary.html#authentic_task">authentic tasks</a> to motivate ideas,
+i.e.,
+show people things they actually want to do rather than printing the numbers from 1 to 10,
+and should include regular check-ins
+so that learners and instructors alike can tell if they’re making progress.</p>
+<p>Tutorials help novices build a mental model,
+but competent practitioners and experts will be frustrated by their slow pace and low information density.
+They will want single-point solutions to specific problems like
+how to find cells in a spreadsheet that contain a certain string
+or how to configure the web server to load an access control module.
+They can make use of an alphabetical list of the functions in a library,
+but are much happier if they can search by keyword to find what they need;
+one of the signs that someone is no longer a novice is that
+they’re able to compose useful queries and tell if the results are on the right track or not.</p>
+<blockquote>
+<p><strong>False Beginners</strong></p>
+<p>A <a href="glossary.html#false_beginner">false beginner</a> is someone who appears not to know anything,
+but who has enough prior experience in other domains
+to be able to piece things together much more quickly than a genuine novice.
+Someone who is proficient with MATLAB, for example,
+will speed through a tutorial on Python’s numerical libraries
+much more quickly than someone who has never programmed before.
+Creating documentation for false beginners is especially challenging;
+if resources permit,
+the best option is often a translation guide
+that shows them how they would do a task with the system they know well
+and then how to do the equivalent task with the new system.</p>
+</blockquote>
+<p>In an ideal world,
+we would satisfy these needs with a <a href="https://hapgood.us/2016/05/13/choral-explanations/">chorus of explanations</a>,
+some long and detailed,
+others short and to the point.
+In our world, though,
+time and resources are limited,
+so all but the most popular packages must make do with single explanations.</p>
 </div>
-<div id="config-global" class="section level2" number="10.3">
-<h2><span class="header-section-number">10.3</span> The Global Configuration File</h2>
-<p>Our first option is to edit the system-wide Matplotlib runtime configuration file,
-which is called <code>matplotlibrc</code>.
-When we import Matplotlib,
-it uses this file to set the default characteristics of the plot.
-We can find it on our system by running this command:</p>
-<div class="sourceCode" id="cb641"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb641-1"><a href="config.html#cb641-1" aria-hidden="true"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
-<span id="cb641-2"><a href="config.html#cb641-2" aria-hidden="true"></a>mpl.matplotlib_fname()</span></code></pre></div>
-<pre class="text"><code>/Users/amira/opt/anaconda3/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc</code></pre>
-<p>In this case the file is located in the Python installation directory (<code>anaconda3</code>).
-All the different Python packages installed with Anaconda
-live in a <code>python3.7/site-packages</code> directory,
-including Matplotlib.</p>
-<p><code>matplotlibrc</code> lists all the default settings as comments.
-The default size of the X and Y axis labels is “medium”,
-as is the size of the tick labels:</p>
-<div class="sourceCode" id="cb643"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb643-1"><a href="config.html#cb643-1" aria-hidden="true"></a><span class="co">#axes.labelsize       : medium  ## fontsize of the x any y labels</span></span>
-<span id="cb643-2"><a href="config.html#cb643-2" aria-hidden="true"></a><span class="co">#xtick.labelsize      : medium  ## fontsize of the tick labels</span></span>
-<span id="cb643-3"><a href="config.html#cb643-3" aria-hidden="true"></a><span class="co">#ytick.labelsize      : medium  ## fontsize of the tick labels</span></span></code></pre></div>
-<p>We can uncomment those lines and change the sizes to “large” and “extra large”:</p>
-<div class="sourceCode" id="cb644"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb644-1"><a href="config.html#cb644-1" aria-hidden="true"></a><span class="fu">axes.labelsize       </span><span class="kw">:</span><span class="at"> x-large</span><span class="co">  ## fontsize of the x any y labels</span></span>
-<span id="cb644-2"><a href="config.html#cb644-2" aria-hidden="true"></a><span class="fu">xtick.labelsize      </span><span class="kw">:</span><span class="at"> large</span><span class="co">    ## fontsize of the tick labels</span></span>
-<span id="cb644-3"><a href="config.html#cb644-3" aria-hidden="true"></a><span class="fu">ytick.labelsize      </span><span class="kw">:</span><span class="at"> large</span><span class="co">    ## fontsize of the tick labels</span></span></code></pre></div>
-<p>and then re-generate the Jane Eyre plot with bigger labels
-(Figure <a href="config.html#fig:configuration-jane-eyre-big-labels">10.2</a>):</p>
-<div class="sourceCode" id="cb645"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb645-1"><a href="config.html#cb645-1" aria-hidden="true"></a>$ python <span class="bu">bin</span><span class="op">/</span>plotcounts.py results<span class="op">/</span>jane_eyre.csv <span class="op">--</span>outfile results<span class="op">/</span>jane_eyre.png</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:configuration-jane-eyre-big-labels"></span>
-<img src="figures/config/jane-eyre-big-labels.png" alt="Word frequency distribution for the book Jane Eyre with larger label sizes." width="100%" />
-<p class="caption">
-Figure 10.2: Word frequency distribution for the book Jane Eyre with larger label sizes.
-</p>
-</div>
-<p>This does what we want,
-but is usually the wrong approach.
-Since <code>matplotlibrc</code> file sets system-wide defaults,
-we will now have big labels by default for all plotting we do in future,
-which we may not want.
-Secondly,
-we want to package our Zipf’s Law code and make it available to other people (Chapter <a href="packaging.html#packaging">14</a>).
-That package won’t include our <code>matplotlibrc</code> file,
-and we don’t have access to the one on their computer,
-so this solution isn’t as reproducible as others.</p>
-<p>A global options file <em>is</em> useful, though.
-If we are using Matplotlib with <a href="glossary.html#latex">LaTeX</a> to generate reports
-and the latter is installed in an unusual place on our computing cluster,
-a one-line change in <code>matplotlibrc</code> can prevent a lot of failed jobs.</p>
-</div>
-<div id="config-user" class="section level2" number="10.4">
-<h2><span class="header-section-number">10.4</span> The User Configuration File</h2>
-<p>Matplotlib defines several carefully-designed styles for plots:</p>
-<div class="sourceCode" id="cb646"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb646-1"><a href="config.html#cb646-1" aria-hidden="true"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb646-2"><a href="config.html#cb646-2" aria-hidden="true"></a><span class="bu">print</span>(plt.style.available)</span></code></pre></div>
-<pre class="text"><code>[&#39;seaborn-dark&#39;, &#39;seaborn-darkgrid&#39;, &#39;seaborn-ticks&#39;, &#39;fivethirtyeight&#39;, &#39;seaborn-whitegrid&#39;, &#39;classic&#39;, &#39;_classic_test&#39;, &#39;fast&#39;, &#39;seaborn-talk&#39;, &#39;seaborn-dark-palette&#39;, &#39;seaborn-bright&#39;, &#39;seaborn-pastel&#39;, &#39;grayscale&#39;, &#39;seaborn-notebook&#39;, &#39;ggplot&#39;, &#39;seaborn-colorblind&#39;, &#39;seaborn-muted&#39;, &#39;seaborn&#39;, &#39;Solarize_Light2&#39;, &#39;seaborn-paper&#39;, &#39;bmh&#39;, &#39;tableau-colorblind10&#39;, &#39;seaborn-white&#39;, &#39;dark_background&#39;, &#39;seaborn-poster&#39;, &#39;seaborn-deep&#39;]</code></pre>
-<p>In order to make the labels bigger in all of our Zipf’s Law plots,
-we could create a custom Matplotlib style sheet.
-The convention is to store custom style sheets in a <code>stylelib</code> sub-directory
-in the Matplotlib configuration directory.
-That directory can be located by running the following command:</p>
-<div class="sourceCode" id="cb648"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb648-1"><a href="config.html#cb648-1" aria-hidden="true"></a>mpl.get_configdir()</span></code></pre></div>
-<pre class="text"><code>/Users/amira/.matplotlib</code></pre>
-<p>Once we’ve created the new sub-directory,</p>
-<pre class="shell"><code>$ mkdir /Users/amira/.matplotlib/stylelib</code></pre>
-<p>we can add a new file called <code>/Users/amira/.matplotlib/stylelib/big-labels.mplstyle</code>
-that has the same YAML format as the <code>matplotlibrc</code> file:</p>
-<div class="sourceCode" id="cb651"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb651-1"><a href="config.html#cb651-1" aria-hidden="true"></a>axes.labelsize   : x<span class="op">-</span>large  <span class="co">## fontsize of the x any y labels</span></span>
-<span id="cb651-2"><a href="config.html#cb651-2" aria-hidden="true"></a>xtick.labelsize  : large    <span class="co">## fontsize of the tick labels</span></span>
-<span id="cb651-3"><a href="config.html#cb651-3" aria-hidden="true"></a>ytick.labelsize  : large    <span class="co">## fontsize of the tick labels</span></span></code></pre></div>
-<p>To use this new style,
-we would just need to add one line to <code>plotcounts.py</code>:</p>
-<div class="sourceCode" id="cb652"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb652-1"><a href="config.html#cb652-1" aria-hidden="true"></a>plt.style.use(<span class="st">&#39;big-labels&#39;</span>)</span></code></pre></div>
-<p>Using a custom style sheet leaves the system-wide defaults unchanged,
-and it’s a good way to achieve a consistent look across our personal data visualization projects.
-However,
-since each user has their own <code>stylelib</code> directory,
-it doesn’t solve the problem of ensuring that other people can reproduce our plots.</p>
-</div>
-<div id="config-command-line" class="section level2" number="10.5">
-<h2><span class="header-section-number">10.5</span> Adding Command-Line Options</h2>
-<p>The third way to change the plot’s properties
-is to add some new command-line arguments to <code>plotcounts.py</code>.
-The <code>choices</code> parameter of <code>add_argument</code> lets us tell <code>argparse</code>
-that the user is only allowed to specify a value from a predefined list:</p>
-<div class="sourceCode" id="cb653"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb653-1"><a href="config.html#cb653-1" aria-hidden="true"></a>mpl_sizes <span class="op">=</span> [<span class="st">&#39;xx-small&#39;</span>, <span class="st">&#39;x-small&#39;</span>, <span class="st">&#39;small&#39;</span>, <span class="st">&#39;medium&#39;</span>, <span class="st">&#39;large&#39;</span>, <span class="st">&#39;x-large&#39;</span>, <span class="st">&#39;xx-large&#39;</span>]</span>
-<span id="cb653-2"><a href="config.html#cb653-2" aria-hidden="true"></a>parser.add_argument(<span class="st">&#39;--labelsize&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;x-large&#39;</span>, choices<span class="op">=</span>mpl_sizes,</span>
-<span id="cb653-3"><a href="config.html#cb653-3" aria-hidden="true"></a>                    <span class="bu">help</span><span class="op">=</span><span class="st">&#39;fontsize of the x any y labels&#39;</span>)</span>
-<span id="cb653-4"><a href="config.html#cb653-4" aria-hidden="true"></a>parser.add_argument(<span class="st">&#39;--xticksize&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;large&#39;</span>, choices<span class="op">=</span>mpl_sizes,</span>
-<span id="cb653-5"><a href="config.html#cb653-5" aria-hidden="true"></a>                    <span class="bu">help</span><span class="op">=</span><span class="st">&#39;fontsize of the x tick labels&#39;</span>)</span>
-<span id="cb653-6"><a href="config.html#cb653-6" aria-hidden="true"></a>parser.add_argument(<span class="st">&#39;--yticksize&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;large&#39;</span>, choices<span class="op">=</span>mpl_sizes,</span>
-<span id="cb653-7"><a href="config.html#cb653-7" aria-hidden="true"></a>                    <span class="bu">help</span><span class="op">=</span><span class="st">&#39;fontsize of the y tick labels&#39;</span>)</span></code></pre></div>
-<p>We can then add a few lines after the <code>ax</code> variable is defined in <code>plotcounts.py</code>
-to update the label sizes according to the user input:</p>
-<div class="sourceCode" id="cb654"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb654-1"><a href="config.html#cb654-1" aria-hidden="true"></a>ax.xaxis.label.set_fontsize(args.labelsize)</span>
-<span id="cb654-2"><a href="config.html#cb654-2" aria-hidden="true"></a>ax.yaxis.label.set_fontsize(args.labelsize)</span>
-<span id="cb654-3"><a href="config.html#cb654-3" aria-hidden="true"></a>ax.xaxis.set_tick_params(labelsize<span class="op">=</span>args.xticksize)</span>
-<span id="cb654-4"><a href="config.html#cb654-4" aria-hidden="true"></a>ax.yaxis.set_tick_params(labelsize<span class="op">=</span>args.yticksize)</span></code></pre></div>
-<p>Alternatively,
-we can change the default runtime configuration settings before the plot is created.
-These are stored in a variable called <code>matplotlib.rcParams</code>:</p>
-<div class="sourceCode" id="cb655"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb655-1"><a href="config.html#cb655-1" aria-hidden="true"></a>mpl.rcParams[<span class="st">&#39;axes.labelsize&#39;</span>] <span class="op">=</span> args.labelsize</span>
-<span id="cb655-2"><a href="config.html#cb655-2" aria-hidden="true"></a>mpl.rcParams[<span class="st">&#39;xtick.labelsize&#39;</span>] <span class="op">=</span> args.xticksize</span>
-<span id="cb655-3"><a href="config.html#cb655-3" aria-hidden="true"></a>mpl.rcParams[<span class="st">&#39;ytick.labelsize&#39;</span>] <span class="op">=</span> args.yticksize</span></code></pre></div>
-<p>Adding extra command line arguments is a good solution
-if we only want to change a small number of plot characteristics.
-It also makes our work more reproducible:
-if we use a Makefile to regenerate our plots (Chapter <a href="automate.html#automate">9</a>),
-the settings will all be saved in one place.
-However,
-<code>matplotlibrc</code> has hundreds of parameters we could change,
-so the number of new arguments can quickly get out of hand
-if we want to tweak other aspects of the plot.</p>
-</div>
-<div id="config-job-file" class="section level2" number="10.6">
-<h2><span class="header-section-number">10.6</span> A Job Control File</h2>
-<p>The final option—the one we will actually adopt in this case— is
-to pass a YAML file full of Matplotlib parameters to <code>plotcounts.py</code>.
-First,
-we save the parameters we want to change in a file inside our project directory.
-We can call it anything,
-but <code>plotparams.yml</code> seems like it will be easy to remember:</p>
-<div class="sourceCode" id="cb656"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb656-1"><a href="config.html#cb656-1" aria-hidden="true"></a>axes.labelsize   : x<span class="op">-</span>large  <span class="co">## fontsize of the x any y labels</span></span>
-<span id="cb656-2"><a href="config.html#cb656-2" aria-hidden="true"></a>xtick.labelsize  : large    <span class="co">## fontsize of the tick labels</span></span>
-<span id="cb656-3"><a href="config.html#cb656-3" aria-hidden="true"></a>ytick.labelsize  : large    <span class="co">## fontsize of the tick labels</span></span></code></pre></div>
-<p>Because this file is located in our project directory
-instead of the user-specific style sheet directory,
-we need to add one new option to <code>plotcounts.py</code> to load it:</p>
-<div class="sourceCode" id="cb657"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb657-1"><a href="config.html#cb657-1" aria-hidden="true"></a>parser.add_argument(<span class="st">&#39;--plotparams&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb657-2"><a href="config.html#cb657-2" aria-hidden="true"></a>                    <span class="bu">help</span><span class="op">=</span><span class="st">&#39;YAML file containing matplotlib parameters&#39;</span>)</span></code></pre></div>
-<p>We can use Python’s <code>yaml</code> library to read that file:</p>
-<div class="sourceCode" id="cb658"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb658-1"><a href="config.html#cb658-1" aria-hidden="true"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;plotparams.yml&#39;</span>, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
-<span id="cb658-2"><a href="config.html#cb658-2" aria-hidden="true"></a>    plot_params <span class="op">=</span> yaml.load(reader, Loader<span class="op">=</span>yaml.BaseLoader)</span>
-<span id="cb658-3"><a href="config.html#cb658-3" aria-hidden="true"></a><span class="bu">print</span>(plot_params)</span></code></pre></div>
-<pre class="text"><code>{&#39;axes.labelsize&#39;: &#39;x-large&#39;,
- &#39;xtick.labelsize&#39;: &#39;large&#39;,
- &#39;ytick.labelsize&#39;: &#39;large&#39;}</code></pre>
-<p>and then loop over each item in <code>plot_params</code> to update Matplotlib’s <code>mpl.rcParams</code>:</p>
-<div class="sourceCode" id="cb660"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb660-1"><a href="config.html#cb660-1" aria-hidden="true"></a><span class="cf">for</span> (param, value) <span class="kw">in</span> param_dict.items():</span>
-<span id="cb660-2"><a href="config.html#cb660-2" aria-hidden="true"></a>    mpl.rcParams[param] <span class="op">=</span> value</span></code></pre></div>
-<p><code>plotcounts.py</code> now looks like this:</p>
-<div class="sourceCode" id="cb661"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb661-1"><a href="config.html#cb661-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
-<span id="cb661-2"><a href="config.html#cb661-2" aria-hidden="true"></a><span class="im">import</span> argparse</span>
-<span id="cb661-3"><a href="config.html#cb661-3" aria-hidden="true"></a><span class="im">import</span> yaml</span>
-<span id="cb661-4"><a href="config.html#cb661-4" aria-hidden="true"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb661-5"><a href="config.html#cb661-5" aria-hidden="true"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb661-6"><a href="config.html#cb661-6" aria-hidden="true"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
-<span id="cb661-7"><a href="config.html#cb661-7" aria-hidden="true"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
-<span id="cb661-8"><a href="config.html#cb661-8" aria-hidden="true"></a></span>
-<span id="cb661-9"><a href="config.html#cb661-9" aria-hidden="true"></a></span>
-<span id="cb661-10"><a href="config.html#cb661-10" aria-hidden="true"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
-<span id="cb661-11"><a href="config.html#cb661-11" aria-hidden="true"></a>    <span class="co"># ...as before...</span></span>
-<span id="cb661-12"><a href="config.html#cb661-12" aria-hidden="true"></a></span>
-<span id="cb661-13"><a href="config.html#cb661-13" aria-hidden="true"></a></span>
-<span id="cb661-14"><a href="config.html#cb661-14" aria-hidden="true"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
-<span id="cb661-15"><a href="config.html#cb661-15" aria-hidden="true"></a>    <span class="co"># ...as before...</span></span>
-<span id="cb661-16"><a href="config.html#cb661-16" aria-hidden="true"></a></span>
-<span id="cb661-17"><a href="config.html#cb661-17" aria-hidden="true"></a></span>
-<span id="cb661-18"><a href="config.html#cb661-18" aria-hidden="true"></a><span class="kw">def</span> set_plot_params(param_file):</span>
-<span id="cb661-19"><a href="config.html#cb661-19" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Set the matplotlib parameters.&quot;&quot;&quot;</span></span>
-<span id="cb661-20"><a href="config.html#cb661-20" aria-hidden="true"></a>    <span class="cf">if</span> param_file:</span>
-<span id="cb661-21"><a href="config.html#cb661-21" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(param_file, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
-<span id="cb661-22"><a href="config.html#cb661-22" aria-hidden="true"></a>            param_dict <span class="op">=</span> yaml.load(reader, Loader<span class="op">=</span>yaml.BaseLoader)</span>
-<span id="cb661-23"><a href="config.html#cb661-23" aria-hidden="true"></a>    <span class="cf">else</span>:</span>
-<span id="cb661-24"><a href="config.html#cb661-24" aria-hidden="true"></a>        param_dict <span class="op">=</span> {}</span>
-<span id="cb661-25"><a href="config.html#cb661-25" aria-hidden="true"></a>    <span class="cf">for</span> param, value <span class="kw">in</span> param_dict.items():</span>
-<span id="cb661-26"><a href="config.html#cb661-26" aria-hidden="true"></a>        mpl.rcParams[param] <span class="op">=</span> value</span>
-<span id="cb661-27"><a href="config.html#cb661-27" aria-hidden="true"></a></span>
-<span id="cb661-28"><a href="config.html#cb661-28" aria-hidden="true"></a></span>
-<span id="cb661-29"><a href="config.html#cb661-29" aria-hidden="true"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):</span>
-<span id="cb661-30"><a href="config.html#cb661-30" aria-hidden="true"></a>    <span class="co"># ...as before...</span></span>
-<span id="cb661-31"><a href="config.html#cb661-31" aria-hidden="true"></a></span>
-<span id="cb661-32"><a href="config.html#cb661-32" aria-hidden="true"></a></span>
-<span id="cb661-33"><a href="config.html#cb661-33" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb661-34"><a href="config.html#cb661-34" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb661-35"><a href="config.html#cb661-35" aria-hidden="true"></a>    set_plot_params(args.plotparams)</span>
-<span id="cb661-36"><a href="config.html#cb661-36" aria-hidden="true"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
-<span id="cb661-37"><a href="config.html#cb661-37" aria-hidden="true"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
-<span id="cb661-38"><a href="config.html#cb661-38" aria-hidden="true"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb661-39"><a href="config.html#cb661-39" aria-hidden="true"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], grid<span class="op">=</span><span class="va">True</span>, xlim<span class="op">=</span>args.xlim)</span>
-<span id="cb661-40"><a href="config.html#cb661-40" aria-hidden="true"></a></span>
-<span id="cb661-41"><a href="config.html#cb661-41" aria-hidden="true"></a>    alpha, beta <span class="op">=</span> get_power_law_params(df[<span class="st">&#39;word_frequency&#39;</span>].to_numpy())</span>
-<span id="cb661-42"><a href="config.html#cb661-42" aria-hidden="true"></a>    <span class="bu">print</span>(<span class="st">&#39;alpha:&#39;</span>, alpha)</span>
-<span id="cb661-43"><a href="config.html#cb661-43" aria-hidden="true"></a></span>
-<span id="cb661-44"><a href="config.html#cb661-44" aria-hidden="true"></a>    <span class="co"># Since the ranks are already sorted, we can take the last one instead of</span></span>
-<span id="cb661-45"><a href="config.html#cb661-45" aria-hidden="true"></a>    <span class="co"># computing which row has the highest rank</span></span>
-<span id="cb661-46"><a href="config.html#cb661-46" aria-hidden="true"></a>    max_rank <span class="op">=</span> df[<span class="st">&#39;rank&#39;</span>].to_numpy()[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb661-47"><a href="config.html#cb661-47" aria-hidden="true"></a></span>
-<span id="cb661-48"><a href="config.html#cb661-48" aria-hidden="true"></a>    <span class="co"># Use the range of the data as the boundaries when drawing the power law curve</span></span>
-<span id="cb661-49"><a href="config.html#cb661-49" aria-hidden="true"></a>    curve_xmin <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">min</span>()</span>
-<span id="cb661-50"><a href="config.html#cb661-50" aria-hidden="true"></a>    curve_xmax <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">max</span>()</span>
-<span id="cb661-51"><a href="config.html#cb661-51" aria-hidden="true"></a></span>
-<span id="cb661-52"><a href="config.html#cb661-52" aria-hidden="true"></a>    <span class="co"># Plot the result</span></span>
-<span id="cb661-53"><a href="config.html#cb661-53" aria-hidden="true"></a>    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)</span>
-<span id="cb661-54"><a href="config.html#cb661-54" aria-hidden="true"></a>    ax.figure.savefig(args.outfile)</span>
-<span id="cb661-55"><a href="config.html#cb661-55" aria-hidden="true"></a></span>
-<span id="cb661-56"><a href="config.html#cb661-56" aria-hidden="true"></a></span>
-<span id="cb661-57"><a href="config.html#cb661-57" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb661-58"><a href="config.html#cb661-58" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb661-59"><a href="config.html#cb661-59" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
-<span id="cb661-60"><a href="config.html#cb661-60" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
-<span id="cb661-61"><a href="config.html#cb661-61" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
-<span id="cb661-62"><a href="config.html#cb661-62" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
-<span id="cb661-63"><a href="config.html#cb661-63" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
-<span id="cb661-64"><a href="config.html#cb661-64" aria-hidden="true"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
-<span id="cb661-65"><a href="config.html#cb661-65" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--plotparams&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb661-66"><a href="config.html#cb661-66" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;YAML file containing matplotlib parameters&#39;</span>)</span>
-<span id="cb661-67"><a href="config.html#cb661-67" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb661-68"><a href="config.html#cb661-68" aria-hidden="true"></a>    main(args)</span></code></pre></div>
-</div>
-<div id="config-summary" class="section level2" number="10.7">
-<h2><span class="header-section-number">10.7</span> Summary</h2>
-<p>Programs are only useful if they can be controlled,
-and work is only reproducible if those controls are explicit and shareable.
-If the number of controls needed is small,
-adding command-line options to programs and setting those options in Makefiles
-is usually the best solution.
-As the number of options grows,
-so too does the value of putting options in files of their own.
-And if we are installing the software on large systems that are used by many people,
-such as a research cluster,
-system-wide configuration files let us hide the details
-from people who just want to get their science done.</p>
-<p>More generally,
-the problem of configuring a program illustrates the difference
-between “works for me on my machine”
-and “works for everyone, everywhere”.
-From reproducible workflows (Chapter <a href="automate.html#automate">9</a>) to logging (Section <a href="errors.html#errors-logging">11.4</a>),
-this difference influences every aspect of a research software engineer’s work.
-We don’t always have to design for large-scale re-use,
-but knowing what it entails allows us to make a conscious, thoughtful choice.</p>
-</div>
-<div id="config-exercises" class="section level2" number="10.8">
-<h2><span class="header-section-number">10.8</span> Exercises</h2>
-<div id="config-ex-build-plotparams" class="section level3" number="10.8.1">
-<h3><span class="header-section-number">10.8.1</span> Building with plotting parameters</h3>
-<p>In the <code>Makefile</code> created in Chapter <a href="automate.html#automate">9</a>,
-the build rule involving <code>plotcounts.py</code> was defined as:</p>
-<pre class="make"><code>## results/collated.png: plot the collated results.
-results/collated.png : results/collated.csv
-    python $(PLOT) $&lt; --outfile $@</code></pre>
-<p>Update that build rule to include the new <code>--plotparams</code> option.
-Make sure <code>plotparams.yml</code> is added as a second prerequisite in the updated build rule
-so that the appropriate commands will be re-run if the plotting parameters change.</p>
-<p>Hint: We use the automatic variable <code>$&lt;</code> to access the first prerequisite,
-but you’ll need <code>$(word 2,$^)</code> to access the second.
-Read about automatic variables (Section <a href="automate.html#automate-autovar">9.5</a>) and
-<a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">functions for string substitution and analysis</a>
-to understand what that command is doing.</p>
-</div>
-<div id="config-ex-style" class="section level3" number="10.8.2">
-<h3><span class="header-section-number">10.8.2</span> Using different plot styles</h3>
-<p>There are a wide variety of pre-defined matplotlib styles (Section <a href="config.html#config-user">10.4</a>),
-as illustrated at the <a href="https://python-graph-gallery.com/199-matplotlib-style-sheets/">Python Graph Gallery</a>.</p>
-<ol style="list-style-type: decimal">
-<li>Add a new option <code>--style</code> to <code>plotcounts.py</code> that allows the user
-to pick a style from the list of pre-defined matplotlib styles.</li>
-</ol>
-<p>Hint: Use the <code>choices</code> parameter discussed in Section <a href="config.html#config-command-line">10.5</a>
-to define the valid choices for the new <code>--style</code> option.</p>
-<ol start="2" style="list-style-type: decimal">
-<li><p>Re-generate the plot of the <em>Jane Eyre</em> word count distribution
-using a bunch of different styles to decide which you like best.</p></li>
-<li><p>Matplotlib style sheets are designed to be composed together.
-(See the <a href="https://matplotlib.org/tutorials/introductory/customizing.html">style sheets tutorial</a> for details.)
-Use the <code>nargs</code> parameter to allow the user to pass any number of styles
-when using the <code>--style</code> option.</p></li>
-</ol>
-</div>
-<div id="config-ex-saveload" class="section level3" number="10.8.3">
-<h3><span class="header-section-number">10.8.3</span> Saving configurations</h3>
-<p>Add an option <code>--saveconfig filename</code> to <code>plotcounts.py</code>
-that writes all of its configuration to a file.
-Make sure this option saves <em>all</em> of the configuration,
-including any defaults that the user hasn’t changed.
-How would this option make your work more reproducible?</p>
-</div>
-<div id="config-ex-ini" class="section level3" number="10.8.4">
-<h3><span class="header-section-number">10.8.4</span> Using INI syntax</h3>
-<p>If we used <a href="https://en.wikipedia.org/wiki/INI_file">Windows INI format</a> instead of YAML
-for our plot parameters configuration file
-(i.e. <code>plotparams.ini</code> instead of <code>plotparams.yml</code>)
-that file would read as follows:</p>
-<pre class="text"><code>[AXES]
-axes.labelsize=x-large
-
-[TICKS]
-xtick.labelsize=large
-ytick.labelsize=large</code></pre>
-<p>The <a href="https://docs.python.org/3/library/configparser.html"><code>configparser</code></a> library can be used to read and write INI files.
-Install that library by running <code>pip install configparser</code> at the command line.</p>
-<p>Using <code>configparser</code>, rewrite the <code>set_plot_params</code> function in <code>plotcounts.py</code> to
-handle a configuration file in INI rather than YAML format.</p>
-<ol style="list-style-type: decimal">
-<li>Which file format do you find easier to work with?</li>
-<li>What other factors should influence your choice of a configuration file syntax?</li>
-</ol>
-</div>
-<div id="config-ex-consistency" class="section level3" number="10.8.5">
-<h3><span class="header-section-number">10.8.5</span> Configuration consistency</h3>
-<p>In order for a data processing pipeline to work correctly,
-some of the configuration parameters for Program A and Program B must be the same.
-However,
-the programs were written by different teams,
-and each has its own configuration file.
-What steps could you take to ensure the required consistency?</p>
-</div>
-</div>
-<div id="config-keypoints" class="section level2" number="10.9">
-<h2><span class="header-section-number">10.9</span> Key Points</h2>
+<div id="documentation-docstrings" class="section level2" number="24.2">
+<h2><span class="header-section-number">I.2</span> Writing Good Docstrings</h2>
+<p>If we are doing <a href="glossary.html#exploratory_programming">exploratory programming</a>,
+a short <a href="glossary.html#docstring">docstring</a> to remind ourselves of each function’s purpose
+is probably as much documentation as we need.
+(In fact, it’s probably better than what most people do.)
+That one- or two-liner should begin with an active verb and describe either
+how inputs are turned into outputs,
+or what side effects the function has;
+as we discuss below,
+if we need to describe both,
+we should probably rewrite our function.</p>
+<p>An active verb is something like “extract”, “normalize”, or “find”.
+For example,
+these are all good one-line docstrings:</p>
 <ul>
-<li><a href="glossary.html#overlay_configuration">Overlay configuration</a> specifies settings for a program in layers,
-each of which overrides previous layers.</li>
-<li>Use a system-wide configuration file for general settings.</li>
-<li>Use a user-specific configuration file for personal preferences.</li>
-<li>Use a job-specific configuration file with settings for a particular run.</li>
-<li>Use command-line options to change things that commonly change.</li>
-<li>Use <a href="glossary.html#yaml_glossary">YAML</a> or some other standard syntax to write configuration files.</li>
-<li>Save configuration information to make your research <a href="glossary.html#reproducible_research">reproducible</a>.</li>
+<li>“Create a list of current ages from a list of birth dates.”</li>
+<li>“Clip signals to lie in [0…1].”</li>
+<li>“Reduce the red component of each pixel.”</li>
 </ul>
+<p>We can tell our one-liners are useful if we can read them aloud in the order the functions are called
+in place of the function’s name and parameters.</p>
+<p>Once we start writing code for other people (or our future selves)
+our docstrings should include:</p>
+<ol style="list-style-type: decimal">
+<li>The name and purpose of every public class, function, and constant in our code.</li>
+<li>The name, purpose, and default value (if any) of every parameter to every function.</li>
+<li>Any side effects the function has.</li>
+<li>The type of value returned by every function.</li>
+<li>What exceptions those functions can raise and when.</li>
+</ol>
+<p>The word “public” in the first rule is important.
+We don’t have to write full documentation for helper functions
+that are only used inside our package and aren’t meant to be called by users,
+but these should still have at least a comment explaining their purpose.
+We also don’t have to document unit testing functions:
+as discussed in Chapter <a href="testing.html#testing">12</a>,
+these should have long names that describe what they’re checking
+so that failure reports are easy to scan.</p>
+</div>
+<div id="documentation-faq" class="section level2" number="24.3">
+<h2><span class="header-section-number">I.3</span> Creating a FAQ</h2>
+<p>As projects grow,
+documentation within functions alone may be insufficient for users to apply code to their own problems.
+One strategy to assist other people with understanding a project is with
+an <a href="glossary.html#faq">FAQ</a>:
+a list of frequently-asked questions and corresponding answers.
+A good FAQ uses the terms and concepts that people bring to the software
+rather than the vocabulary of its authors;
+putting it another way,
+the questions should be things that people might search for online,
+and the answers should give them enough information to solve their problem.</p>
+<p>Creating and maintaining a FAQ is a lot of work,
+and unless the community is large and active,
+a lot of that effort may turn out to be wasted,
+because it’s hard for the authors or maintainers of a piece of software
+to anticipate what newcomers will be mystified by.
+A better approach is to leverage sites like <a href="https://stackoverflow.com/">Stack Overflow</a>,
+which is where most programmers are going to look for answers anyway:</p>
+<ol style="list-style-type: decimal">
+<li><p>Post every question that someone actually asks us,
+whether it’s online, by email, or in person.
+Be sure to include the name of the software package in the question
+so that it’s findable.</p></li>
+<li><p>Answer the question,
+making sure to mention which version of the software we’re talking about
+(so that people can easily spot and discard stale answers in the future).</p></li>
+</ol>
+<p><a href="https://stackoverflow.com/">Stack Overflow</a>’s guide to <a href="https://stackoverflow.com/help/how-to-ask">asking a good question</a>
+has been refined over many years,
+and is a good guide for any project:</p>
+<dl>
+<dt>Write the most specific title we can.</dt>
+<dd>“Why does division sometimes give a different result in Python 2.7 and Python 3.5?”
+is much better than, “Help! Math in Python!!”
+</dd>
+<dt>Give context before giving sample code.</dt>
+<dd>A few sentences to explain what are are trying to do and why
+will help people determine if their question is a close match to ours or not.
+</dd>
+<dt>Provide a minimal reprex.</dt>
+<dd>Section <a href="teams.html#teams-bugs">8.6</a> explains the value of a <a href="glossary.html#reprex">reproducible example</a>,
+and why reprexes should be as short as possible.
+Readers will have a much easier time figuring out if this question and its answers are for them
+if they can see <em>and understand</em> a few lines of code.
+</dd>
+<dt>Tag, tag, tag.</dt>
+<dd>Keywords make everything more findable,
+from scientific papers to left-handed musical instruments.
+</dd>
+<dt>Use “I” and question words (how/what/when/where/why).</dt>
+<dd>Writing this way forces us to think more clearly about
+what someone might actually be thinking when they need help.
+</dd>
+<dt>Keep each item short.</dt>
+<dd>The “minimal manual” approach to instructional design <span class="citation">(Carroll <a href="references.html#ref-Carr2014" role="doc-biblioref">2014</a>)</span>
+breaks everything down into single-page steps,
+with half of that page devoted to troubleshooting.
+This may feel trivializing to the person doing the writing,
+but is often as much as a person searching and reading can handle.
+It also helps writers realize just how much implicit knowledge they are assuming.
+</dd>
+<dt>Allow for a <a href="https://hapgood.us/2016/05/13/choral-explanations/">chorus of explanations</a>.</dt>
+<dd>As discussed earlier,
+users are all different from one another,
+and are therefore best served by a chorus of explanations.
+Do not be afraid of providing multiple explanations to a single question
+that suggest different approaches
+or are written for different prior levels of understanding.
+</dd>
+</dl>
 
 </div>
 </div>
@@ -1045,8 +805,8 @@ each of which overrides previous layers.</li>
           </div>
         </div>
       </div>
-<a href="automate.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="errors.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="yaml.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ssh.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1068,7 +828,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/merely-useful/py-rse/edit/book/chapters/config.Rmd",
+"link": "https://github.com/merely-useful/py-rse/edit/book/chapters/documentation.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -1076,7 +836,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/merely-useful/py-rse/blob/book/chapters/config.Rmd",
+"link": "https://github.com/merely-useful/py-rse/blob/book/chapters/documentation.Rmd",
 "text": null
 },
 "download": null,
