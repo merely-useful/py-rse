@@ -1,4 +1,4 @@
-# Merely Useful
+# Research Software Engineering with Python: Building software that makes research possible
 
 <!-- badges: start -->
 ![renderbook](https://github.com/merely-useful/py-rse/workflows/renderbook/badge.svg)
