@@ -10,7 +10,7 @@ To my parents Judy and John
 who taught me to love books and everything I can learn from them.  
 --- Kate  
    
-To Joshua  
+To Joshua.
 --- Charlotte  
    
 To Brent Gorda  
