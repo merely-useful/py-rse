@@ -2,7 +2,7 @@ To David Flanders
 who taught me so much about growing and sustaining coding communities.  
 --- Damien  
    
-To the U of T Coders Group  
+To the UofT Coders Group  
 who taught us much more than we taught them.  
 --- Luke and Joel  
    
@@ -10,7 +10,7 @@ To my parents Judy and John
 who taught me to love books and everything I can learn from them.  
 --- Kate  
    
-To Joshua  
+To Joshua.
 --- Charlotte  
    
 To Brent Gorda  
