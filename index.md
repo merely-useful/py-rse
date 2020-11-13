@@ -1,5 +1,6 @@
 ---
 title: "Research Software Engineering with Python"
+subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
 date: "2020-11-13"
 documentclass: krantz
