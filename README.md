@@ -1,4 +1,4 @@
-# Merely Useful
+# Research Software Engineering with Python: Building software that makes research possible
 
 <!-- badges: start -->
 ![renderbook](https://github.com/merely-useful/py-rse/workflows/renderbook/badge.svg)
@@ -9,7 +9,7 @@
 > -- A research professor speaking about an early version of this material.
 
 This repository contains material for a semester-long course on computing skills for researchers.
-Please see <https://merely-useful.github.io/py-rse> for the rendered version,
-and <https://merely-useful.github.io/py-rse/conduct.html> for our Code of Conduct.
+Please see <https://merely-useful.github.io/py-rse> for the rendered version.
 
-For contributors, please follow our [contributing guidelines](.github/CONTRIBUTING.md).
+For contributors, please follow our [contributing guidelines](.github/CONTRIBUTING.md)
+as well as our [Code of Conduct](CONDUCT.md).

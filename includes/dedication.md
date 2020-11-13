@@ -2,7 +2,7 @@ To David Flanders
 who taught me so much about growing and sustaining coding communities.  
 --- Damien  
    
-To the U of T Coders Group  
+To the UofT Coders Group  
 who taught us much more than we taught them.  
 --- Luke and Joel  
    
