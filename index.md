@@ -93,7 +93,7 @@ less mistakes, and work more openly and reproducibly.
 We hope that by having more researchers with these skills and knowledge,
 research culture can improve to address the issues raised above.
 
-## Contributing to the book and re-use
+## Contributing and Re-Use
 
 The source for the book is found on the [`py-rse` GitHub repository](https://github.com/merely-useful/py-rse) and
 any corrections, additions, or contributions are very welcome.
@@ -114,14 +114,41 @@ and a
 so the material can be used, re-used, and modified, 
 as long as there is attribution to this source.
 
-## Using this book
+## Intended Audience {#intro-personas}
 
-This book is meant to be used as the material for (potentially) semester
-long course at the university level. 
+Amira Khan
+:   completed a master's in library science five years ago
+    and has since worked for a small aid organization.
+    She did some statistics during her degree,
+    and has learned some R and Python by doing data science courses online,
+    but has no formal training in programming.
+    Amira would like to tidy up the scripts, data sets, and reports she has created
+    in order to share them with her colleagues.
+    These lessons will show her how to do this and what "done" looks like.
+
+Jun Hsu
+:   completed an [Insight Data Science][insight] fellowship last year after doing a PhD in Geology
+    and now works for a company that does forensic audits.
+    He uses a variety of machine learning and visualization packages,
+    and would now like to turn some of his own work into an open source project.
+    This book will show him how such a project should be organized
+    and how to encourage people to contribute to it.
+
+Sami Virtanen
+:   became a competent programmer during a bachelor's degree in applied math
+    and was then hired by the university's research computing center.
+    The kinds of applications they are being asked to support
+    have shifted from fluid dynamics to data analysis;
+    this guide will teach them how to build and run data pipelines
+    so that they can pass those skills on to their users.
+
+## Using This Book {#intro-using}
+
+This book is meant to be used as the material for a (potentially) semester-long course
+at the university level. 
 The course is designed with using participatory live-coding as the style
 for teaching the material and code, rather than as lectures talking about them.
-The chapters and their content are generally designed to be used in the order
-given.
+The content is generally best used in the order given.
 
 Chapters are structured with the introduction at the start, content in the middle,
 and exercises at the end. Callout boxes are interspersed throughout the content
@@ -129,7 +156,7 @@ to be used as a supplement to the main text, but not a requirement for the cours
 overall.
 While the exercises are at the end of each chapter, we recommend that the
 exercises are used throughout the lessons and not used at the end of the lesson.
-Possible exercise solutions are found in Appendix \@ref(solutions).
+Sample solutions for the exercises are found in Appendix \@ref(solutions).
 
 ## Acknowledgments {#intro-ack}
 
@@ -192,9 +219,11 @@ to researchers worldwide.
 <!--chapter:end:index.Rmd-->
 
 
-# Getting started {#getting-started}
+# Getting Started {#getting-started}
 
-## Syllabus {#intro-syllabus}
+> Everything starts somewhere, though many physicists disagree.
+>
+> --- Terry Pratchett\index{Pratchett,  Terry}
 
 This book uses data analysis as a motivating example,
 and assumes that the learner's goal is to answer questions
@@ -230,40 +259,11 @@ whose solutions are discussed in Appendix \@ref(solutions).
 Early chapters have many small exercises;
 later chapters have fewer but larger exercises.
 
-## Intended audience {#intro-personas}
-
-Amira Khan
-:   completed a master's in library science five years ago
-    and has since worked for a small aid organization.
-    She did some statistics during her degree,
-    and has learned some R and Python by doing data science courses online,
-    but has no formal training in programming.
-    Amira would like to tidy up the scripts, data sets, and reports she has created
-    in order to share them with her colleagues.
-    These lessons will show her how to do this and what "done" looks like.
-
-Jun Hsu
-:   completed an [Insight Data Science][insight] fellowship last year after doing a PhD in Geology
-    and now works for a company that does forensic audits.
-    He uses a variety of machine learning and visualization packages,
-    and would now like to turn some of his own work into an open source project.
-    This book will show him how such a project should be organized
-    and how to encourage people to contribute to it.
-
-Sami Virtanen
-:   became a competent programmer during a bachelor's degree in applied math
-    and was then hired by the university's research computing center.
-    The kinds of applications they are being asked to support
-    have shifted from fluid dynamics to data analysis;
-    this guide will teach them how to build and run data pipelines
-    so that they can pass those skills on to their users.
-
-## Software prerequisites {#install-software}
+## Software Prerequisites {#install-software}
 
 Learners should already be using Python regularly for data analysis,
 and should be comfortable reading data from files
 and writing loops, conditionals, and functions.
-
 Learners will need a computer with Internet access
 that has the following software installed:
 
@@ -278,17 +278,17 @@ Software installation instructions for Windows, Mac and Linux operating systems
 as part of their workshop website template:  
 <https://carpentries.github.io/workshop-template/#setup>
 
-Follow those instructions to install the bash shell, Git, a text editor and Anaconda.
+Follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
 
 Check if Make is installed on your computer by typing `make -v` into the Bash
-shell. If it isn't installed, than:
+shell. If it isn't installed, then:
 
 - *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
 - *Mac*: Install [Xcode][xcode] (via the App Store).
 - *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
   Master of Data Science at the University of British Columbia.
 
-> **conda in the shell on windows**
+> **conda in the shell on Windows**
 >
 > If you are using Windows and the `conda` command isn't available at the Bash shell,
 > you'll need to open the Anaconda Prompt program (via the Windows start menu)
@@ -304,7 +304,7 @@ run the following command:
 git config --global core.editor "nano -w"
 ```
 
-## Where we'll end up: Project structure {#intro-structure}
+## Where We'll End Up: Project structure {#intro-structure}
 
 Project organization is like a diet:
 everyone has one,
@@ -359,7 +359,7 @@ zipf/
 
 The full, final directory tree is documented in Appendix \@ref(tree).
 
-### Standard Information {#intro-boilerplate}
+### Standard information {#intro-boilerplate}
 
 Our project will contain a few standard files
 that should be present in every research software project,
@@ -384,7 +384,7 @@ or make it a section in `CITATION`.
 These files are often called \gref{boilerplate}{boilerplate},
 meaning they are copied without change from one use to the next.
 
-### Organizing Project Content {#intro-organize}
+### Organizing project content {#intro-organize}
 
 Following @Nobl2009, 
 the directories in the repository's root are organized according to purpose:
@@ -1906,7 +1906,7 @@ explain in plain language what files the expression `novel-????-[ab]*.{txt,pdf}`
 <!--chapter:end:chapters/bash-basics.Rmd-->
 
 
-# Building Unix Tools {#bash-tools}
+# Building Tools with the Unix Shell {#bash-tools}
 
 > Wisdom comes from experience. Experience is often a result of lack of wisdom.
 >
@@ -4183,7 +4183,7 @@ Explain why the value for `-mtime` needs to be negative.
 <!--chapter:end:chapters/bash-advanced.Rmd-->
 
 
-# Command Line Programs in Python {#scripting}
+# Building Command-Line Tools with Python {#scripting}
 
 > Multiple exclamation marks are a sure sign of a diseased mind.
 >
@@ -5279,7 +5279,7 @@ the solution to this exercise is used in following chapters.
 <!--chapter:end:chapters/scripting.Rmd-->
 
 
-# Git at the Command Line {#git-cmdline}
+# Using Git at the Command Line {#git-cmdline}
 
 > +++ Divide By Cucumber Error. Please Reinstall Universe And Reboot +++
 >
@@ -5323,7 +5323,7 @@ This lesson describes how to perform fundamental operations using that interface
 Chapter \@ref(git-advanced) then introduces more advanced operations
 that can be used to implement a smoother research workflow.
 
-To show how git works,
+To show how Git works,
 we will apply it to the Zipf's Law project.
 Our project directory should currently include:
 
@@ -6747,7 +6747,7 @@ What does each line of the output show?
 <!--chapter:end:chapters/git-cmdline.Rmd-->
 
 
-# Advanced Git {#git-advanced}
+# Going Further with Git {#git-advanced}
 
 > It's got three keyboards and a hundred extra knobs, including twelve with '?' on them.
 >
@@ -8978,7 +8978,7 @@ SOFTWARE.
 > We have learned the hard way that software and science can be mis-used;
 > adopting the Hippocratic License is a small step toward preventing this.
 
-### Data and Reports {#teams-license-other}
+### Data and reports {#teams-license-other}
 
 The MIT license, the GPL, and the Hippocratic License are intended for use with software.
 When it comes to data and reports,
@@ -9260,7 +9260,7 @@ Teams can also create projects,
 which can include issues and pull requests from several repositories
 as well as notes and reminders for miscellaneous tasks.
 
-### Standardizing Workflows {#teams-workflow}
+### Standardizing workflows {#teams-workflow}
 
 Adding labels to issues also helps us standardize a workflow for the project.
 Conventions about who can do what to issues with various labels,
@@ -9482,7 +9482,7 @@ People can be held accountable at subsequent meetings.
     and update those that are being carried forward.
     This helps a lot when the time comes to draw up the agenda for the next meeting.
 
-### Air Time {#teams-fair}
+### Air time {#teams-fair}
 
 One of the problem in a synchronous meeting
 is the tendency of some people to speak far more than others.
@@ -9514,7 +9514,7 @@ one or two people are doing all of the interrupting.
 After that, saying, "All right, I'm adding another tally to the bingo card,"
 is often enough to get them to throttle back.
 
-### Online Meetings {#teams-online}
+### Online meetings {#teams-online}
 
 Online meetings provide special challenges,\index{meetings!online}
 both in the context of regulating how often individuals speak,
@@ -9963,7 +9963,7 @@ How would you address this issue?
 <!--chapter:end:chapters/teams.Rmd-->
 
 
-# Automating Analyses {#automate}
+# Automating Analyses with Make {#automate}
 
 > The three rules of the Librarians of Time and Space are:
 > 1) Silence;
@@ -10484,7 +10484,6 @@ results/%.csv : data/%.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
 
 # Remove all generated files.
-
 clean :
 	rm -f results/*
 ```
@@ -11049,7 +11048,7 @@ Use the `include` command to access those definitions in the existing `Makefile`
 <!--chapter:end:chapters/automate.Rmd-->
 
 
-# Program Configuration {#config}
+# Configuring Programs {#config}
 
 > Always be wary of any helpful item that weighs less than its operating manual.
 >
@@ -11588,7 +11587,7 @@ What steps could you take to ensure the required consistency?
 <!--chapter:end:chapters/config.Rmd-->
 
 
-# Error Handling {#errors}
+# Handling Errors {#errors}
 
 > "When Mister Safety Catch Is Not On, Mister Crossbow Is Not Your Friend."
 >
@@ -12442,7 +12441,7 @@ except Exception as e:
 <!--chapter:end:chapters/errors.Rmd-->
 
 
-# Testing {#testing}
+# Testing Software {#testing}
 
 > Opera happens because a large number of things amazingly fail to go wrong.
 >
@@ -13830,7 +13829,7 @@ and what might be a better way to measure error in this case?
 <!--chapter:end:chapters/testing.Rmd-->
 
 
-# Provenance {#provenance}
+# Tracking Provenance {#provenance}
 
 > The most important problem is that we are trying to understand the fundamental workings of the universe
 > via a language devised for telling one another when the best fruit is.
@@ -14343,7 +14342,7 @@ How would you go about publishing the code associated with that project
 <!--chapter:end:chapters/provenance.Rmd-->
 
 
-# Python Packaging {#packaging}
+# Creating Packages with Python {#packaging}
 
 > Another response of the wizards,
 > when faced with a new and unique situation,
@@ -15110,7 +15109,7 @@ along with more detailed function-level documentation.
 For further advice on writing documentation for larger and more complex packages,
 see Appendix \@ref(documentation).
 
-### Including Package Level Documentation in the `README` {#packaging-readme}
+### Including package-level documentation in the `README` {#packaging-readme}
 
 When a user first encounters a package,\index{Python package!documentation}
 they usually want to know what the package is meant to do,
@@ -15209,7 +15208,7 @@ Contributors
 - Sami Virtanen <sami@zipf.org>
 ```
 
-### Creating a Web Page for Documentation {#packaging-sphinx}
+### Creating a web page for documentation {#packaging-sphinx}
 
 Now that we've added package-level documentation to our README file,
 we need to think about function-level documentation.
@@ -15400,7 +15399,7 @@ Sphinx>=1.7.4
 Anyone wanting to build the documentation (including us, on another computer)
 now only needs run `pip install -r requirement_docs.txt`
 
-### Hosting Documentation Online {#packaging-rtd}
+### Hosting documentation online {#packaging-rtd}
 
 Now that we have generated our package documentation,
 we need to host it online.
@@ -17480,7 +17479,7 @@ From https://github.com/frances/eniac
 fatal: refusing to merge unrelated histories
 ```
 
-We can force git to merge the two repositories with the option `--allow-unrelated-histories`.
+We can force Git to merge the two repositories with the option `--allow-unrelated-histories`.
 Please check the contents of the local and remote repositories carefully before doing this.
 
 ### Exercise \@ref(git-cmdline-ex-recover) {-}
@@ -17533,7 +17532,7 @@ ENIAC was the world's first general-purpose electronic computer.
 
 1. `git diff HEAD~9 bin/plotcounts.py` compares what has changed between the 
 current `bin/plotcounts.py` and the same file 9 commits ago.
-2.  The previous git command takes the state of the file at each point and then
+2.  The previous Git command takes the state of the file at each point and then
 compares them.
 3.  `git diff HEAD bin/plotcounts.py` compares what has been changed in
 `bin/plotcounts.py` with the previous commit.
@@ -18628,7 +18627,7 @@ with installing additional libraries that weren't pre-installed.
 Today the most popular distribution for data science is [Anaconda][anaconda],\index{Anaconda}
 which comes with a package (and environment) manager called [conda][conda].\index{conda}
 
-## Package management with conda {#anaconda-conda-package-management}
+## Package Management With conda {#anaconda-conda-package-management}
 
 According to the [latest documentation][anaconda-docs],
 Anaconda comes with over 250 of the most widely used data science libraries (and their dependencies) pre-installed.
@@ -18641,7 +18640,7 @@ If you don't want to install the entire Anaconda distribution,
 you can install [Miniconda][miniconda]\index{miniconda} instead.
 It essentially comes with conda and nothing else.
 
-### Anaconda cloud {#anaconda-cloud}
+### Anaconda Cloud {#anaconda-cloud}
 
 What happens if we want to install a Python package
 that isn't on the list of the few thousand or so most popular data science packages
@@ -18697,7 +18696,7 @@ $ conda config --add channels conda-forge
 The conda-forge website has [instructions][conda-forge-instructions]
 for adding a conda installation package to the conda-forge repository.
 
-## Environment management with conda {#anaconda-environments}
+## Environment Management With conda {#anaconda-environments}
 
 If you are working on several data science projects at once,
 installing all the libraries you need in the same place
@@ -18873,7 +18872,7 @@ updated in Section \@ref(scripting-docstrings).
 <!--chapter:end:chapters/tree.Rmd-->
 
 
-# Code Style, Review, and Refactoring {#style}
+# Writing Readable Code {#style}
 
 Nothing in biology makes sense except in light of evolution [@Dobz1973].
 Similarly,
@@ -19218,7 +19217,7 @@ but many patterns can and should be used to clean up \gref{procedural}{procedura
 Knowing a few of these patterns helps us create better software
 and makes it easier to communicate with our peers.
 
-### Do not repeat values.
+### Do not repeat values
 
 The first and simplest refactoring is "replace value with name".
 It tells us to replace magic numbers with names,
@@ -19254,7 +19253,7 @@ SECONDS_PER_DAY = 24 * 60 * 60
 seconds_elapsed = num_days * SECONDS_PER_DAY
 ```
 
-### Do not repeat calculations in loops.
+### Do not repeat calculations in loops
 
 It's inefficient to calculate the same value over and over again.
 It also makes code less readable:
@@ -19280,7 +19279,7 @@ for sample in signals:
     output.append(sample * scaling)
 ```
 
-### Replace tests with flags to clarify repeated tests.
+### Replace tests with flags to clarify repeated tests
 
 Novice programmers frequently write conditional tests like this:
 
@@ -19340,7 +19339,7 @@ and the test then needs to change from `>` to `>=`,
 we are more likely to get the refactored version right the first time,
 since the test only appears in one place and its result is given a name.
 
-### Use in-place operators to avoid duplicating expression.
+### Use in-place operators to avoid duplicating expression
 
 An \gref{in-place operator}{in_place_operator},
 sometimes called an \gref{update operator}{update_operator},
@@ -19395,7 +19394,7 @@ for least_factor in all_factors:
     samples[least_factor] *= bayesian_scaling
 ```
 
-### Handle special cases first.
+### Handle special cases first
 
 A \gref{short circuit test}{short_circuit_test} is a quick check to handle a special case,
 such as checking the length of a list of values
@@ -19493,7 +19492,7 @@ which is less clear.
 > a ternary expression has three.
 > Conditional expressions are the only ternary expression in most programming languages.
 
-### Use functions to make code more comprehensible.
+### Use functions to make code more comprehensible
 
 Functions were created so that programmers could re-use common operations,
 but moving code into functions also reduces \gref{cognitive load}{cognitive_load}
@@ -19537,7 +19536,7 @@ Finally,
 it's often helpful to keep using the original variable names as parameter names during refactoring
 to reduce typing.
 
-### Combine operations in functions.
+### Combine operations in functions
 
 "Combine functions" is the opposite of "extract function".
 If operations are always done together,
@@ -19580,7 +19579,7 @@ def count_vowels_and_consonants(text):
     return num_vowels, num_consonants
 ```
 
-### Replace code with data.
+### Replace code with data
 
 It is easier to understand and maintain lookup tables than complicated conditionals,
 so the "create lookup table" refactoring tells us to turn the latter into the former:
@@ -19887,7 +19886,7 @@ Another is to use a nested \gref{list comprehension}{list_comprehension}:\index{
 An experienced programmer might recognize what the latter is doing;
 the rest of us are probably better off reading and writing the more verbose solution.
 
-### Provide default values for parameters.
+### Provide default values for parameters
 
 If our function requires two dozen parameters,
 the odds are very good that users will frequently forget them
@@ -19966,7 +19965,7 @@ def collect(new_value, accumulator=None):
     return accumulator
 ```
 
-### Handle a variable number of arguments.
+### Handle a variable number of arguments
 
 We can often make programs simpler by writing functions that take
 \gref{a variable number of arguments}{variable_arguments},\index{Python!variable arguments}
@@ -20039,7 +20038,7 @@ Notice that the names of parameters are not quoted:
 we pass `color='blue'` to the function,
 not `'color'='blue'`.
 
-### Unpacking variable arguments.
+### Unpacking variable arguments
 
 We can use the inverse of `*args` and `**kwargs` to match a list of values to arguments.
 In this case,
@@ -20059,7 +20058,7 @@ trim_value(*parameters, **named_parameters)
 some matrix with lower bound and upper bound
 ```
 
-### Use destructuring to assign multiple values at once.
+### Use destructuring to assign multiple values at once
 
 One last feature of Python is
 \gref{destructuring assignment}{destructuring_assignment}.\index{Python!destructuring assignment}\index{destructuring assignment (in Python)}
@@ -20213,7 +20212,7 @@ It corresponds to the following Python data structure:
 <!--chapter:end:chapters/yaml.Rmd-->
 
 
-# Documentation {#documentation}
+# Documenting Programs {#documentation}
 
 An old proverb says, "Trust, but verify."
 The equivalent in programming is, "Be clear, but document."
