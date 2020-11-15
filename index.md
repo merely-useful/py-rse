@@ -222,7 +222,7 @@ we will show you how to:
 -   Find, handle, and fix errors in your code.
 -   Test your software and know which parts have not yet been tested.
 -   Publish your code and research in open and reproducible ways.
--   Organise small and medium-sized data science projects.
+-   Organize small and medium-sized data science projects.
 -   Create Python packages that can be installed in standard ways.
 
 Each chapter concludes with some exercises,
@@ -290,8 +290,8 @@ shell. If it isn't installed, than:
 
 > **conda in the shell on windows**
 >
-> If you are using Windows and the `conda` command isn’t available at the Bash shell,
-> you’ll need to open the Anaconda Prompt program (via the Windows start menu)
+> If you are using Windows and the `conda` command isn't available at the Bash shell,
+> you'll need to open the Anaconda Prompt program (via the Windows start menu)
 > and run the command `conda init bash` (this only needs to be done once).
 > After that, your shell will be configured to use conda going forward.
 
@@ -1530,7 +1530,7 @@ and highlights a few of features useful for beginners.
 <p class="caption">(\#fig:bash-basics-manual)Manual highlights</p>
 </div>
 
-Some commands have a `--help` option that provides a succinct summary of possibilites,
+Some commands have a `--help` option that provides a succinct summary of possibilities,
 but the best place to go for help these days is probably the [TLDR][tldr] website.
 The acronym stands for "too long, didn't read",
 and its help for `wc` displays this:
@@ -6091,7 +6091,7 @@ and then copy that URL.
 > We use HTTPS here because it does not require additional configuration.
 > If we want to set up SSH access so that we do not have to type in our password as often,
 > the tutorials from [GitHub][git-ssh-github],
-> [Bitbucket][git-ssh-bitbucket],
+> [BitBucket][git-ssh-bitbucket],
 > or [GitLab][git-ssh-gitlab]
 > explain the steps required.
 
@@ -9615,8 +9615,8 @@ Who gets to vote?
 
 If your team has agreed on a project structure,
 a workflow, 
-how to get items on a meeting agenda, or
-how'll you'll make decisions, 
+how to get items on a meeting agenda,
+or how you will make decisions, 
 take the time to document this for newcomers.
 
 This information may be included as sections in the existing `README` file\index{project files!README}
@@ -10016,7 +10016,7 @@ zipf/
 ```
 
 Now that the project's main building blocks are in place,
-we're ready to atomate our analysis using a build manager.
+we're ready to automate our analysis using a build manager.
 We will use a program called [Make][gnu-make]\index{Make} to do this
 so that every time we add a new book to our data,
 we can create new plots and update our fits with a single command.
@@ -13004,7 +13004,7 @@ This template has three cases:
 
 2.  If `func` raises the error it's supposed to
     then we go into the first `except` branch
-    *without* triggering the `assert` immedately below the function call.
+    *without* triggering the `assert` immediately below the function call.
     The code in this `except` branch could check that
     the exception contains the right error message,
     but in this case it does nothing
@@ -13647,7 +13647,7 @@ In order to answer the following questions,
 cut and paste the `normalize_rectangle` function into a new file called `geometry.py` and
 save that file in a new directory called `exercises`.
 
-1. To ensure that the inputs to `normalize_rectange` are valid,
+1. To ensure that the inputs to `normalize_rectangle` are valid,
 add \gref{preconditions}{precondition} to check that
 (a) `rect` contains 4 coordinates, 
 (b) the width of the rectangle is a positive, non-zero value (i.e. `x0 < x1`), and
@@ -13909,7 +13909,7 @@ zipf/
 > DOIs are written as `doi:prefix/suffix`,
 > but are often also represented as URLs like `http://dx.doi.org/prefix/suffix`.
 > In order to be allowed to issue a DOI,
-> an academic journal, data archive, or other organiation
+> an academic journal, data archive, or other organization
 > must guarantee a certain level of security, longevity and access.
 >
 > An \gref{ORCID}{orcid}\index{ORCID (Open Researcher and Contributor ID)}
@@ -14315,8 +14315,8 @@ of your release?
 
 > **What about getting a DOI?**
 > 
-> Creating a GitHub release is also a neccessary step
-> to get a DOI through the Zenodo/Github integration 
+> Creating a GitHub release is also a necessary step
+> to get a DOI through the Zenodo/GitHub integration 
 > (Section \@ref(provenance-code-scripts)).
 > We are stopping short of getting the DOI here,
 > to avoid many DOIs pointing to the same code,
@@ -15025,7 +15025,7 @@ using the `--repository` option to specify the TestPyPI repository:
 ```shell
 $ twine upload --repository testpypi dist/*
 Enter your username: amirakhan
-Enter your passowrd: *********
+Enter your password: *********
 Uploading distributions to https://test.pypi.org/legacy/
 Uploading zipf-0.1.0.tar.gz
 100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
@@ -15334,7 +15334,7 @@ Creating file source/modules.rst.
 
 At this point, we are ready to generate our webpage.
 The `docs` sub-directory contains a Makefile that was generated by `sphinx-quickstart`.
-If we run `make html` and open `docs/_build/index.html` in a web broswer
+If we run `make html` and open `docs/_build/index.html` in a web browser
 we'll have a website landing page with minimal documentation (Figure \@ref(fig:packaging-sphinx-landing-page-original)).
 If we click on the `Module Index` link we can access the documentation for the individual modules
 (Figures \@ref(fig:packaging-sphinx-module-list) and \@ref(fig:packaging-sphinx-module-countwords)).
@@ -17085,7 +17085,7 @@ characters before a letter c and zero or more characters after the letter c will
 **Part 1**
 
 1. The text from each file in turn gets written to the `alkanes.pdb` file.
-However, the file gets overwritten on each loop interation, so the final content of `alkanes.pdb`
+However, the file gets overwritten on each loop iteration, so the final content of `alkanes.pdb`
 is the text from the `propane.pdb` file.
 
 **Part 2**
@@ -18452,7 +18452,7 @@ Where did you agree and disagree, and why?
 
 ### Exercise \@ref(provenance-ex-understand-project) {-}
 
-1.  51 soliciters were interviwed as the participants.
+1.  51 solicitors were interviewed as the participants.
 
 2.  Interview data and a data from a database on court decisions.
 
@@ -18624,7 +18624,7 @@ a number of scientific Python \gref{distributions}{software_distribution}\index{
 have been released over the years.
 These come with the most popular data science libraries and their dependencies pre-installed,
 and some also come with a package manager to assist
-with installing additional libraries that weren’t pre-installed.
+with installing additional libraries that weren't pre-installed.
 Today the most popular distribution for data science is [Anaconda][anaconda],\index{Anaconda}
 which comes with a package (and environment) manager called [conda][conda].\index{conda}
 
@@ -18637,7 +18637,7 @@ which can be executed at the command line or by using the Anaconda Navigator gra
 A package manager like conda greatly simplifies the software installation process
 by identifying and installing compatible versions of software and all required dependencies.
 It also handles the process of updating software as more recent versions become available.
-If you don’t want to install the entire Anaconda distribution,
+If you don't want to install the entire Anaconda distribution,
 you can install [Miniconda][miniconda]\index{miniconda} instead.
 It essentially comes with conda and nothing else.
 
@@ -20159,7 +20159,7 @@ rotation-time:
 
 are equivalent.
 (The indentation isn't absolutely required in this case,
-but helps make the intenton clear.)
+but helps make the intention clear.)
 If we want to write entire paragraphs,
 we can use a marker to show that a value spans multiple lines:
 
@@ -20558,7 +20558,7 @@ Password: ********
 results.dat              100%  9  1.0 MB/s 00:00
 ```
 
-Note the colon `:`, seperating the hostname of the server and the pathname of 
+Note the colon `:`, separating the hostname of the server and the pathname of 
 the file we are copying to.
 It is this character that informs `scp` that the source or target of the copy is
 on the remote machine and the reason it is needed can be explained as follows:
@@ -20574,7 +20574,7 @@ $ scp results.dat amira@backupserver:
 ```
 
 would copy `results.dat` into our home directory on `backupserver`, however, if we did not
-have the colon to inform `scp` of the remote machine, we would still have a valid commmad
+have the colon to inform `scp` of the remote machine, we would still have a valid command
 
 ```shell
 $ scp results.dat amira@backupserver
@@ -20587,7 +20587,7 @@ as we would have done with `cp`.
 $ cp results.dat amira@backupserver
 ```
 
-Copying a whole directory betwen remote machines uses the same syntax as the `cp` command:
+Copying a whole directory between remote machines uses the same syntax as the `cp` command:
 we just use the `-r` option to signal that we want copying to be recursively.
 For example,
 this command copies all of our results from the backup server to our laptop:
