@@ -2,13 +2,13 @@
 
 Please cite this work as:
 
-> Madeleine Bonsma-Fisher, Kate Hertweck, Damien Irving, Luke Johnston, Christina Koch, Sara Mahallati, Brandeis Marshall, Joel Ostblom, Elizabeth Wickes, Charlotte Wickham, and Greg Wilson: *Merely Useful*. http://github.com/merely-useful/merely-useful.github.io, viewed November 2019.
+> Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson: *Research Software Engineering with Python: Building software that makes research possible*. https://merely-useful.github.io/py-rse/, viewed November 2020.
 
 ```
-@misc{Bons2019,
-  author = {Madeleine Bonsma-Fisher and Kate Hertweck and Damien Irving and Luke Johnston and Christina Koch and Sara Mahallati and Brandeis Marshall and Joel Ostblom and Elizabeth Wickes and Charlotte Wickham and Greg Wilson},
-  title = {Merely Useful},
-  year = {2019},
-  howpublished = {\url{http://github.com/merely-useful/py-rse}}
+@misc{Irving2020,
+  author = {Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson},
+  title = {Research Software Engineering with Python: Building software that makes research possible},
+  year = {2020},
+  howpublished = {\url{https://merely-useful.github.io/py-rse/}}
 }
 ```
