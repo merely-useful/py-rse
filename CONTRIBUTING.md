@@ -6,7 +6,7 @@ to abide by our
 and that your work may be made available under the terms of our
 [license](https://github.com/merely-useful/py-rse/blob/book/LICENSE.md).
 
-## Setting up and building the book {-}
+## Setting Up and Building the Book {-}
 
 This book is written in [Bookdown](https://bookdown.org/).
 To preview it on your computer,
@@ -31,7 +31,7 @@ Please note that Bookdown works best with [TinyTeX](https://yihui.name/tinytex/)
 After installing it, you can run `make tex-packages` to install all the packages this book depends on.
 You do _not_ need to do this if you are only building and previewing the HTML versions of the books.
 
-## Adding content {-}
+## Adding Content {-}
 
 The main development branch is `book` and the website is built on `gh-pages`.
 To add content, create a new branch, make your changes, and then submit a PR.
@@ -101,7 +101,7 @@ Specific conventions include:
 
 -   `'string'` (single quotes) rather than `"string"` (double quotes).
 
-## Package installation {-}
+## Package Installation {-}
 
 GitHub Actions needs to know what packages to install to build the website. To
 add a Python package dependency, include the package name as a new line in the
