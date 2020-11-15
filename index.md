@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-13"
+date: "2020-11-15"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -9268,8 +9268,8 @@ and who can change those labels,
 let us define a workflow like the one shown in Figure \@ref(fig:teams-lifecycle).
 
 <div class="figure" style="text-align: center">
-<img src="figures/teams/lifecycle.svg" alt="FIXME Issue Lifecycle" width="100%" />
-<p class="caption">(\#fig:teams-lifecycle)FIXME Issue Lifecycle</p>
+<img src="figures/teams/lifecycle.svg" alt="Issue Lifecycle" width="100%" />
+<p class="caption">(\#fig:teams-lifecycle)Issue Lifecycle</p>
 </div>
 
 -   An *Open* issue becomes *Assigned* when someone is made responsible for it.
