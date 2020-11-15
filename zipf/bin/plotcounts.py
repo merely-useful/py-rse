@@ -10,7 +10,8 @@ from scipy.optimize import minimize_scalar
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
-    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1)
+                          - (1/(counts + 1))**(beta - 1)))
     return likelihood
 
 
@@ -84,7 +85,8 @@ def main(args):
     set_plot_params(args.plotparams)
     if args.saveconfig:
         save_configuration(args.saveconfig, mpl.rcParams)
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
                          figsize=[12, 6], grid=True, xlim=args.xlim)
@@ -92,11 +94,12 @@ def main(args):
     alpha = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
 
-    # Since the ranks are already sorted, we can take the last one instead of
-    # computing which row has the highest rank
+    # Since the ranks are already sorted, we can take the last one
+    # instead of computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
 
-    # Use the range of the data as the boundaries when drawing the power law curve
+    # Use the range of the data as the boundaries
+    # when drawing the power law curve
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
@@ -111,12 +114,14 @@ if __name__ == '__main__':
                         default='-', help='Word count csv file name')
     parser.add_argument('--outfile', type=str, default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
-                        default=None, help='X-axis limits')
+    parser.add_argument('--xlim', type=float, nargs=2,
+                        metavar=('XMIN', 'XMAX'), default=None,
+                        help='X-axis limits')
     parser.add_argument('--plotparams', type=str, default=None,
                         help='YAML file containing matplotlib parameters')
-    parser.add_argument('--style', type=str, nargs='*', choices=plt.style.available,
-                        default=None, help='matplotlib style')
+    parser.add_argument('--style', type=str, nargs='*',
+                        choices=plt.style.available, default=None,
+                        help='matplotlib style')
     parser.add_argument('--saveconfig', type=str, default=None,
                         help='Save configuration to file')
     args = parser.parse_args()
