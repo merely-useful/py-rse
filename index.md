@@ -539,8 +539,8 @@ the shell can run them without having to know what language they are written in
 or how they do what they do.
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-basics/the-shell.png" alt="The Shell" width="100%" />
-<p class="caption">(\#fig:bash-basics-repl)The Shell</p>
+<img src="figures/bash-basics/the-shell.png" alt="The Bash shell." width="100%" />
+<p class="caption">(\#fig:bash-basics-repl)The Bash shell.</p>
 </div>
 
 > **What's in a Name?**
@@ -635,8 +635,8 @@ On Amira's computer
 it looks like Figure \@ref(fig:bash-basics-filesystem).
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-basics/sample-filesystem.png" alt="Sample Filesystem" width="70%" />
-<p class="caption">(\#fig:bash-basics-filesystem)Sample Filesystem</p>
+<img src="figures/bash-basics/sample-filesystem.png" alt="A sample filesystem." width="70%" />
+<p class="caption">(\#fig:bash-basics-filesystem)A sample filesystem.</p>
 </div>
 
 At the top is the \gref{root directory}{root_directory} that holds everything else,\index{root directory}
@@ -1115,8 +1115,8 @@ $ nano draft.txt
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-basics/nano-editor.png" alt="The Nano Editor" width="100%" />
-<p class="caption">(\#fig:bash-basics-nano)The Nano Editor</p>
+<img src="figures/bash-basics/nano-editor.png" alt="The Nano editor." width="100%" />
+<p class="caption">(\#fig:bash-basics-nano)The Nano editor.</p>
 </div>
 
 When we say "Nano is a text editor" we really do mean "text":
@@ -1558,8 +1558,8 @@ includes excerpts from the manual on your screen,
 and highlights a few of features useful for beginners.
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-basics/man-callouts.png" alt="Manual highlights" width="100%" />
-<p class="caption">(\#fig:bash-basics-manual)Manual highlights</p>
+<img src="figures/bash-basics/man-callouts.png" alt="Key features of Unix manual pages." width="100%" />
+<p class="caption">(\#fig:bash-basics-manual)Key features of Unix manual pages.</p>
 </div>
 
 Some commands have a `--help` option that provides a succinct summary of possibilities,
@@ -1665,8 +1665,8 @@ what will `ls -F ../backup` display?
 4.  `data/ analysis/ doc/`
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-basics/exercise-filesystem.png" alt="Exercise Filesystem" width="100%" />
-<p class="caption">(\#fig:bash-basics-ex-rel-path)Exercise Filesystem</p>
+<img src="figures/bash-basics/exercise-filesystem.png" alt="Filesystem for exercises." width="100%" />
+<p class="caption">(\#fig:bash-basics-ex-rel-path)Filesystem for exercises.</p>
 </div>
 
 ### `ls` reading comprehension {#bash-basics-ex-reading-ls}
@@ -2119,8 +2119,8 @@ it reads the output of the upstream command
 (Figure \@ref(fig:bash-tools-pipe)b).
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-tools/pipe.png" alt="Piping commands" width="80%" />
-<p class="caption">(\#fig:bash-tools-pipe)Piping commands</p>
+<img src="figures/bash-tools/pipe.png" alt="Piping commands." width="80%" />
+<p class="caption">(\#fig:bash-tools-pipe)Piping commands.</p>
 </div>
 
 We can use `|` to build pipes of any length.
@@ -2194,8 +2194,8 @@ and temporarily reconnects the keyboard and stream
 to that process's standard input and output (Figure \@ref(fig:bash-tools-stdio)b).
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-tools/standard-io.png" alt="Standard I/O" width="100%" />
-<p class="caption">(\#fig:bash-tools-stdio)Standard I/O</p>
+<img src="figures/bash-tools/standard-io.png" alt="Standard I/O." width="100%" />
+<p class="caption">(\#fig:bash-tools-stdio)Standard I/O.</p>
 </div>
 
 If we provide one or more files for the command to read,
@@ -5120,8 +5120,8 @@ fig.savefig('results/jane_eyre.png')
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/scripting/jane-eyre.png" alt="Word frequency distribution for the book Jane Eyre" width="100%" />
-<p class="caption">(\#fig:scripting-repl)Word frequency distribution for the book Jane Eyre</p>
+<img src="figures/scripting/jane-eyre.png" alt="Word frequency distribution for 'Jane Eyre'." width="100%" />
+<p class="caption">(\#fig:scripting-repl)Word frequency distribution for 'Jane Eyre'.</p>
 </div>
 
 ## Summary {#scripting-summary}
@@ -5339,8 +5339,8 @@ It's also useful from a collaboration viewpoint,
 because the system keeps a record of who made what changes and when.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/phd-comics.png" alt="Without a version control system, managing different versions of the same file can get messy." width="100%" />
-<p class="caption">(\#fig:git-cmdline-phdcomics)Without a version control system, managing different versions of the same file can get messy.</p>
+<img src="figures/git-cmdline/phd-comics.png" alt="Managing different versions of a file without version control." width="100%" />
+<p class="caption">(\#fig:git-cmdline-phdcomics)Managing different versions of a file without version control.</p>
 </div>
 
 There are many different version control systems,
@@ -5852,8 +5852,8 @@ most of the visual space is devoted to a few very common words,
 which makes it hard to see what is happening with the other ten thousand or so words.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for Dracula" width="100%" />
-<p class="caption">(\#fig:git-cmdline-initial-plot)Inverse rank versus word frequency for Dracula</p>
+<img src="figures/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for 'Dracula'." width="100%" />
+<p class="caption">(\#fig:git-cmdline-initial-plot)Inverse rank versus word frequency for 'Dracula'.</p>
 </div>
 
 An alternative way to visually evaluate Zipf's Law is
@@ -6013,8 +6013,8 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 > (Figure \@ref(fig:git-cmdline-staging-area)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/staging-area.svg" alt="The staging area." width="100%" />
-<p class="caption">(\#fig:git-cmdline-staging-area)The staging area.</p>
+<img src="figures/git-cmdline/staging-area.svg" alt="The staging area in Git." width="100%" />
+<p class="caption">(\#fig:git-cmdline-staging-area)The staging area in Git.</p>
 </div>
 
 Let's take a look at our new plot (Figure \@ref(fig:git-cmdline-loglog-plot)):
@@ -6024,8 +6024,8 @@ python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/plot-loglog.png" alt="Rank versus word frequency, on log-log axes, for Dracula" width="100%" />
-<p class="caption">(\#fig:git-cmdline-loglog-plot)Rank versus word frequency, on log-log axes, for Dracula</p>
+<img src="figures/git-cmdline/plot-loglog.png" alt="Rank versus word frequency on log-log axes for 'Dracula'." width="100%" />
+<p class="caption">(\#fig:git-cmdline-loglog-plot)Rank versus word frequency on log-log axes for 'Dracula'.</p>
 </div>
 
 > **Interpreting Our Plot**
@@ -6116,8 +6116,8 @@ The home page of the repository on GitHub includes the string we need to identif
 (Figure \@ref(fig:git-cmdline-repo-link)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/repo-link.png" alt="Where to Find the Repository Link" width="100%" />
-<p class="caption">(\#fig:git-cmdline-repo-link)Where to Find the Repository Link</p>
+<img src="figures/git-cmdline/repo-link.png" alt="Find the link for a GitHub repository." width="100%" />
+<p class="caption">(\#fig:git-cmdline-repo-link)Find the link for a GitHub repository.</p>
 </div>
 
 We can click on "HTTPS" to change the URL from SSH to HTTPS
@@ -6196,8 +6196,8 @@ it now includes all of our project files,
 along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline-history)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/repo-history.png" alt="Repository history on GitHub" width="100%" />
-<p class="caption">(\#fig:git-cmdline-history)Repository history on GitHub</p>
+<img src="figures/git-cmdline/repo-history.png" alt="Viewing the repository's history on GitHub." width="100%" />
+<p class="caption">(\#fig:git-cmdline-history)Viewing the repository's history on GitHub.</p>
 </div>
 
 We can also \gref{pull}{git_pull} changes\index{Git commands!pull}\index{pull (in Git)}
@@ -7215,8 +7215,8 @@ as often as the second most frequent word,
 Figure \@ref(fig:git-advanced-dracula-fit) shows the plot.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/dracula-fit.png" alt="Word frequency distribution for the book *Dracula*" width="100%" />
-<p class="caption">(\#fig:git-advanced-dracula-fit)Word frequency distribution for the book *Dracula*</p>
+<img src="figures/git-advanced/dracula-fit.png" alt="Word frequency distribution for 'Dracula'." width="100%" />
+<p class="caption">(\#fig:git-advanced-dracula-fit)Word frequency distribution for 'Dracula'.</p>
 </div>
 
 The script appears to be working as we'd like,
@@ -7896,8 +7896,8 @@ Sami can go to that URL and click on the "Fork" button in the upper right corner
 GitHub immediately creates a copy of Amira's repository within Sami's account on GitHub's own servers.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/fork-button.png" alt="Forking" width="100%" />
-<p class="caption">(\#fig:git-advanced-fork-button)Forking</p>
+<img src="figures/git-advanced/fork-button.png" alt="Forking a repository." width="100%" />
+<p class="caption">(\#fig:git-advanced-fork-button)Forking a repository.</p>
 </div>
 
 When the command completes,
@@ -7908,8 +7908,8 @@ When Sami explores its history,
 they see that it contains all of the changes Amira made.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/after-fork.png" alt="After Forking" width="100%" />
-<p class="caption">(\#fig:git-advanced-after-fork)After Forking</p>
+<img src="figures/git-advanced/after-fork.png" alt="Repositories on GitHub after forking." width="100%" />
+<p class="caption">(\#fig:git-advanced-after-fork)Repositories on GitHub after forking.</p>
 </div>
 
 A copy of a repository is called a \gref{clone}{git_clone}.\index{Git!clone a repository}\index{clone (in Git)}
@@ -8185,8 +8185,8 @@ and asks them if they want to create a pull request
 (Figure \@ref(fig:git-advanced-after-sami-pushes)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/after-sami-pushes.png" alt="After Sami Pushes" width="100%" />
-<p class="caption">(\#fig:git-advanced-after-sami-pushes)After Sami Pushes</p>
+<img src="figures/git-advanced/after-sami-pushes.png" alt="Repository state after Sami pushes." width="100%" />
+<p class="caption">(\#fig:git-advanced-after-sami-pushes)Repository state after Sami pushes.</p>
 </div>
 
 When Sami clicks on the button,
@@ -8195,8 +8195,8 @@ and a pair of editable boxes for the pull request's title and a longer comment
 (Figure \@ref(fig:git-advanced-pull-request-start)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/open-pull-request.png" alt="Starting Pull Request" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-start)Starting Pull Request</p>
+<img src="figures/git-advanced/open-pull-request.png" alt="Starting a pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-start)Starting a pull request.</p>
 </div>
 
 If they scroll down,
@@ -8204,8 +8204,8 @@ Sami can see a summary of the changes that will be in the pull request
 (Figure \@ref(fig:git-advanced-pull-request-summary)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/open-pull-request-detail.png" alt="Summary of Pull Request" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-summary)Summary of Pull Request</p>
+<img src="figures/git-advanced/open-pull-request-detail.png" alt="Summary of a pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-summary)Summary of a pull request.</p>
 </div>
 
 The top (title) box is autofilled with the previous commit message,
@@ -8220,13 +8220,13 @@ Note that this pull request is displayed in Amira's repository rather than Sami'
 since it is Amira's repository that will be affected if the pull request is merged.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/fill-in-pull-request.png" alt="Filling In Pull Request" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-fill-in)Filling In Pull Request</p>
+<img src="figures/git-advanced/fill-in-pull-request.png" alt="Filling in a pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-fill-in)Filling in a pull request.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/new-pull-request.png" alt="New Pull Request" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-new)New Pull Request</p>
+<img src="figures/git-advanced/new-pull-request.png" alt="Creating a new pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-new)Creating a new pull request.</p>
 </div>
 
 Some time later,
@@ -8240,18 +8240,18 @@ Which appears identical to the details seen by .
 
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/viewing-new-pull-request.png" alt="Viewing Pull Request" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-viewing)Viewing Pull Request</p>
+<img src="figures/git-advanced/viewing-new-pull-request.png" alt="Viewing a pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-viewing)Viewing a pull request.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-list.png" alt="Listing Pull Requests" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-list)Listing Pull Requests</p>
+<img src="figures/git-advanced/pr-list.png" alt="Listing pull requests." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-list)Listing pull requests.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-details.png" alt="Pull Request Details" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-details)Pull Request Details</p>
+<img src="figures/git-advanced/pr-details.png" alt="Details of pull requests." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-details)Details of pull requests.</p>
 </div>
 
 Since there are no conflicts,
@@ -8262,8 +8262,8 @@ she clicks on the "Files changed" tab to see what Sami has changed
 (Figure \@ref(fig:git-advanced-pull-request-changes)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-changes.png" alt="Files Changed" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-changes)Files Changed</p>
+<img src="figures/git-advanced/pr-changes.png" alt="Viewing changes to files." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-changes)Viewing changes to files.</p>
 </div>
 
 If she moves her mouse over particular lines,\index{Git!pull request!reviewing}\index{reviewing (Git pull request})\index{code review!pull request}
@@ -8277,18 +8277,18 @@ GitHub redisplays the page with her remarks inserted
 (Figure \@ref(fig:git-advanced-pull-request-pr-with-comment)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-comment-marker.png" alt="Comment Marker" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-comment-marker)Comment Marker</p>
+<img src="figures/git-advanced/pr-comment-marker.png" alt="A GitHub comment marker." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-comment-marker)A GitHub comment marker.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-writing-comment.png" alt="Writing Comment" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-write-comment)Writing Comment</p>
+<img src="figures/git-advanced/pr-writing-comment.png" alt="Writing a comment on a pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-write-comment)Writing a comment on a pull request.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-with-comment.png" alt="Pull Request With Comment" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-pr-with-comment)Pull Request With Comment</p>
+<img src="figures/git-advanced/pr-with-comment.png" alt="Viewing a comment on a pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-pr-with-comment)Viewing a comment on a pull request.</p>
 </div>
 
 While Amira is working,
@@ -8313,13 +8313,13 @@ The icon at the top of the PR's page changes text and color to show that the mer
 (Figure \@ref(fig:git-advanced-pull-request-successful-merge)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-with-fix.png" alt="Pull Request With Fix" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-pr-with-fix)Pull Request With Fix</p>
+<img src="figures/git-advanced/pr-with-fix.png" alt="A pull request with a fix." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-pr-with-fix)A pull request with a fix.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-successful-merge.png" alt="Successful Merge" width="100%" />
-<p class="caption">(\#fig:git-advanced-pull-request-successful-merge)Successful Merge</p>
+<img src="figures/git-advanced/pr-successful-merge.png" alt="After a successful merge." width="100%" />
+<p class="caption">(\#fig:git-advanced-pull-request-successful-merge)After a successful merge.</p>
 </div>
 
 To get those changes from GitHub to her desktop repository,
@@ -8396,8 +8396,8 @@ GitHub will detect the conflict and report that the PR cannot be merged automati
 (Figure \@ref(fig:git-advanced-pr-conflict)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/pr-conflict.png" alt="Conflict in a Pull Request" width="100%" />
-<p class="caption">(\#fig:git-advanced-pr-conflict)Conflict in a Pull Request</p>
+<img src="figures/git-advanced/pr-conflict.png" alt="Showing a conflict in a pull request." width="100%" />
+<p class="caption">(\#fig:git-advanced-pr-conflict)Showing a conflict in a pull request.</p>
 </div>
 
 Amira can solve this problem with the tools she already has.
@@ -9305,8 +9305,8 @@ and who can change those labels,
 let us define a workflow like the one shown in Figure \@ref(fig:teams-lifecycle).
 
 <div class="figure" style="text-align: center">
-<img src="figures/teams/lifecycle.svg" alt="Issue Lifecycle" width="100%" />
-<p class="caption">(\#fig:teams-lifecycle)Issue Lifecycle</p>
+<img src="figures/teams/lifecycle.svg" alt="Example of issue lifecycle." width="100%" />
+<p class="caption">(\#fig:teams-lifecycle)Example of issue lifecycle.</p>
 </div>
 
 -   An *Open* issue becomes *Assigned* when someone is made responsible for it.
@@ -9374,8 +9374,8 @@ anything that's likely to take longer than multiple days should be broken down
 so that planning and progress tracking can be more accurate.
 
 <div class="figure" style="text-align: center">
-<img src="figures/teams/effort-impact-matrix.svg" alt="An Impact/Effort Matrix" width="100%" />
-<p class="caption">(\#fig:teams-impact-effort)An Impact/Effort Matrix</p>
+<img src="figures/teams/effort-impact-matrix.svg" alt="An impact/effort matrix." width="100%" />
+<p class="caption">(\#fig:teams-impact-effort)An impact/effort matrix.</p>
 </div>
 
 The impact/effort matrix makes the priorities for the coming sprint clear:
@@ -10260,8 +10260,8 @@ Make finds everything that `all` depends on,
 then brings each of those prerequisites up to date (Figure \@ref(fig:automate-all)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/automate/make-dependency-graph.png" alt="Making Everything" width="60%" />
-<p class="caption">(\#fig:automate-all)Making Everything</p>
+<img src="figures/automate/make-dependency-graph.png" alt="Dependency graph when making everything." width="60%" />
+<p class="caption">(\#fig:automate-all)Dependency graph when making everything.</p>
 </div>
 
 The order in which rules appear in the Makefile
@@ -10893,8 +10893,8 @@ alpha: 1.1712445413685917
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/automate/collated.png" alt="Word count distribution for all the books combined." width="100%" />
-<p class="caption">(\#fig:automate-collated)Word count distribution for all the books combined.</p>
+<img src="figures/automate/collated.png" alt="Word count distribution for all books combined." width="100%" />
+<p class="caption">(\#fig:automate-collated)Word count distribution for all books combined.</p>
 </div>
 
 Finally,
@@ -11200,8 +11200,8 @@ but they will need to be bigger
 if we want to include the figure in a slideshow or report.
 
 <div class="figure" style="text-align: center">
-<img src="figures/config/jane-eyre-default.png" alt="Word frequency distribution for the book Jane Eyre with default label sizes." width="100%" />
-<p class="caption">(\#fig:configuration-jane-eyre-default)Word frequency distribution for the book Jane Eyre with default label sizes.</p>
+<img src="figures/config/jane-eyre-default.png" alt="Word frequency distribution for 'Jane Eyre' with default label sizes." width="100%" />
+<p class="caption">(\#fig:configuration-jane-eyre-default)Word frequency distribution for 'Jane Eyre' with default label sizes.</p>
 </div>
 
 We could use any of the overlay options described above
@@ -11262,8 +11262,8 @@ $ python bin/plotcounts.py results/jane_eyre.csv --outfile results/jane_eyre.png
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/config/jane-eyre-big-labels.png" alt="Word frequency distribution for the book Jane Eyre with larger label sizes." width="100%" />
-<p class="caption">(\#fig:configuration-jane-eyre-big-labels)Word frequency distribution for the book Jane Eyre with larger label sizes.</p>
+<img src="figures/config/jane-eyre-big-labels.png" alt="Word frequency distribution for 'Jane Eyre' with larger labels." width="100%" />
+<p class="caption">(\#fig:configuration-jane-eyre-big-labels)Word frequency distribution for 'Jane Eyre' with larger labels.</p>
 </div>
 
 This does what we want,
@@ -11700,8 +11700,8 @@ as soon as Python tries to calculate `1/denom`,
 it skips directly to the code under `except`.
 
 <div class="figure" style="text-align: center">
-<img src="figures/errors/exceptions.png" alt="Exception Control Flow" width="40%" />
-<p class="caption">(\#fig:errors-control-flow)Exception Control Flow</p>
+<img src="figures/errors/exceptions.png" alt="Exception control flow." width="40%" />
+<p class="caption">(\#fig:errors-control-flow)Exception control flow.</p>
 </div>
 
 We often want to know exactly what went wrong,
@@ -11988,8 +11988,8 @@ the more useful those checks will be.
 The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:\index{error message!writing helpful}
 
 <div class="figure" style="text-align: center">
-<img src="figures/scripting/error-message.png" alt="An Unhelpful Error Message" width="60%" />
-<p class="caption">(\#fig:errors-error-message)An Unhelpful Error Message</p>
+<img src="figures/scripting/error-message.png" alt="An unhelpful error message." width="60%" />
+<p class="caption">(\#fig:errors-error-message)An unhelpful error message.</p>
 </div>
 
 Having `collate.py` print the message below would be equally unfriendly:
@@ -13270,8 +13270,8 @@ Clicking on the name of our `countwords.py` script, for instance,
 produces the colorized line-by-line display shown in Figure \@ref(fig:python-coverage).
 
 <div class="figure" style="text-align: center">
-<img src="figures/testing/python-coverage.png" alt="Coverage report" width="100%" />
-<p class="caption">(\#fig:python-coverage)Coverage report</p>
+<img src="figures/testing/python-coverage.png" alt="Example of Python code coverage report." width="100%" />
+<p class="caption">(\#fig:python-coverage)Example of Python code coverage report.</p>
 </div>
 
 This output confirms that all lines relating to word counting were tested,
@@ -13366,8 +13366,8 @@ by clicking the "+" next to the "My Repositories" link
 on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI" width="50%" />
-<p class="caption">(\#fig:testing-add-repo)Click to add a new GitHub repository to Travis CI</p>
+<img src="figures/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI." width="50%" />
+<p class="caption">(\#fig:testing-add-repo)Click to add a new GitHub repository to Travis CI.</p>
 </div>
 
 To add the GitHub repository we have been using throughout the course,
@@ -13380,8 +13380,8 @@ If it still doesn't appear,
 the repository may belong to someone else or be private.
 
 <div class="figure" style="text-align: center">
-<img src="figures/testing/travis-list-repos.png" alt="Find your Zipf's Law repository and switch it on" width="50%" />
-<p class="caption">(\#fig:testing-list-repos)Find your Zipf's Law repository and switch it on</p>
+<img src="figures/testing/travis-list-repos.png" alt="Find Zipf's Law repository and switch it on." width="50%" />
+<p class="caption">(\#fig:testing-list-repos)Find Zipf's Law repository and switch it on.</p>
 </div>
 
 The next step is to tell Travis CI what we want it to do
@@ -13452,8 +13452,8 @@ In this case,
 we can see that the build failed (Figure \@ref(fig:testing-build-fail)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/testing/travis-build-fail.png" alt="Travis Build Overview" width="100%" />
-<p class="caption">(\#fig:testing-build-fail)Travis Build Overview</p>
+<img src="figures/testing/travis-build-fail.png" alt="Travis build overview (build failed)." width="100%" />
+<p class="caption">(\#fig:testing-build-fail)Travis build overview (build failed).</p>
 </div>
 
 Scrolling down to read the job log in detail,
@@ -13521,8 +13521,8 @@ This time our tests pass and the build completes successfully
 (Figure \@ref(fig:testing-build-pass)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/testing/travis-build-pass.png" alt="Travis Build Overview" width="100%" />
-<p class="caption">(\#fig:testing-build-pass)Travis Build Overview</p>
+<img src="figures/testing/travis-build-pass.png" alt="Travis build overview (build succeeded)." width="100%" />
+<p class="caption">(\#fig:testing-build-pass)Travis build overview (build succeeded).</p>
 </div>
 
 This example shows one of the other benefits of CI:
@@ -14225,8 +14225,8 @@ the process involves creating a new release of our repository in GitHub
 that Zenodo copies and then issues a DOI for (Figure \@ref(fig:provenance-release)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/provenance/release.png" alt="A new code release in GitHub" width="100%" />
-<p class="caption">(\#fig:provenance-release)A new code release in GitHub</p>
+<img src="figures/provenance/release.png" alt="A new code release on GitHub." width="100%" />
+<p class="caption">(\#fig:provenance-release)A new code release on GitHub.</p>
 </div>
 
 ### Reproducibility versus inspectability {#provenance-inspectability}
@@ -15071,8 +15071,8 @@ https://test.pypi.org/project/zipf/0.1/
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/packaging/testpypi.png" alt="Our new project at `https://test.pypi.org/project/zipf/0.1/`" width="100%" />
-<p class="caption">(\#fig:packaging-testpypi)Our new project at `https://test.pypi.org/project/zipf/0.1/`</p>
+<img src="figures/packaging/testpypi.png" alt="Our new project on TestPyPI." width="100%" />
+<p class="caption">(\#fig:packaging-testpypi)Our new project on TestPyPI.</p>
 </div>
 
 We have now uploaded both types of distribution,
@@ -15376,18 +15376,18 @@ If we click on the `Module Index` link we can access the documentation for the i
 (Figures \@ref(fig:packaging-sphinx-module-list) and \@ref(fig:packaging-sphinx-module-countwords)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/packaging/landing-page-original.png" alt="The default website landing page" width="100%" />
-<p class="caption">(\#fig:packaging-sphinx-landing-page-original)The default website landing page</p>
+<img src="figures/packaging/landing-page-original.png" alt="The default website landing page." width="100%" />
+<p class="caption">(\#fig:packaging-sphinx-landing-page-original)The default website landing page.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/packaging/module-index.png" alt="The module index" width="100%" />
-<p class="caption">(\#fig:packaging-sphinx-module-list)The module index</p>
+<img src="figures/packaging/module-index.png" alt="The module index." width="100%" />
+<p class="caption">(\#fig:packaging-sphinx-module-list)The module index.</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="figures/packaging/module-countwords.png" alt="The countwords documentation" width="100%" />
-<p class="caption">(\#fig:packaging-sphinx-module-countwords)The countwords documentation</p>
+<img src="figures/packaging/module-countwords.png" alt="The countwords documentation." width="100%" />
+<p class="caption">(\#fig:packaging-sphinx-module-countwords)The countwords documentation.</p>
 </div>
 
 The landing page for the website is the perfect place for the content of our README file,
@@ -15416,8 +15416,8 @@ we now get an updated set of web pages that
 re-uses our README as the introduction to the documentation (Figure \@ref(fig:packaging-sphinx-landing-page)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/packaging/landing-page.png" alt="The new landing page showing the contents of `README.rst`" width="100%" />
-<p class="caption">(\#fig:packaging-sphinx-landing-page)The new landing page showing the contents of `README.rst`</p>
+<img src="figures/packaging/landing-page.png" alt="The new landing page showing the contents of README.rst." width="100%" />
+<p class="caption">(\#fig:packaging-sphinx-landing-page)The new landing page showing the contents of README.rst.</p>
 </div>
 
 Before going on,
@@ -18750,8 +18750,8 @@ $ conda install -c ajdawson windspharm
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/anaconda/cloud-windspharm-ajdawson.png" alt="Andrew Dawson's conda installation package for windspharm on Anaconda Cloud" width="100%" />
-<p class="caption">(\#fig:anaconda-windspharm-ajdawson)Andrew Dawson's conda installation package for windspharm on Anaconda Cloud</p>
+<img src="figures/anaconda/cloud-windspharm-ajdawson.png" alt="windspharm conda installation package on Anaconda Cloud." width="100%" />
+<p class="caption">(\#fig:anaconda-windspharm-ajdawson)windspharm conda installation package on Anaconda Cloud.</p>
 </div>
 
 The conda documentation has [instructions][conda-skeleton-pypi] for quickly building
@@ -18773,8 +18773,8 @@ $ conda config --add channels conda-forge
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/anaconda/cloud-windspharm-search.png" alt="Search results for the windspharm package on Anaconda Cloud" width="100%" />
-<p class="caption">(\#fig:anaconda-windspharm-search)Search results for the windspharm package on Anaconda Cloud</p>
+<img src="figures/anaconda/cloud-windspharm-search.png" alt="Search results for the windspharm package on Anaconda Cloud." width="100%" />
+<p class="caption">(\#fig:anaconda-windspharm-search)Search results for the windspharm package on Anaconda Cloud.</p>
 </div>
 
 The conda-forge website has [instructions][conda-forge-instructions]
