@@ -477,7 +477,7 @@ Make sure you've downloaded the required data files
 and installed the required software (following Section \@ref(getting-started-install-software))
 before progressing to the next chapter. 
 
-## Key Points {#scripting-keypoints}
+## Key Points {#getting-started-keypoints}
 
 
 - Make tidiness a habit, rather than cleaning up your project files later.
