@@ -701,7 +701,8 @@ though we won’t continue to remind you.</p>
 let’s create a file called <code>Makefile</code> in the root of our project:</p>
 <pre class="make"><code># Regenerate results for &quot;Moby Dick&quot;
 results/moby_dick.csv : data/moby_dick.txt
-    python bin/countwords.py data/moby_dick.txt &gt; results/moby_dick.csv</code></pre>
+    python bin/countwords.py \
+      data/moby_dick.txt &gt; results/moby_dick.csv</code></pre>
 <p>As in the shell and many other programming languages,
 <code>#</code> indicates that the first line is a comment.
 The second and third lines form a <a href="glossary.html#build_rule">build rule</a>:
@@ -724,7 +725,8 @@ and put the output in a CSV file in the <code>results</code> directory”.</p>
 follows the rules it contains,
 and prints the commands that were executed.
 In this case it displays:</p>
-<pre class="text"><code>python bin/countwords.py data/moby_dick.txt &gt; results/moby_dick.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py \
+  data/moby_dick.txt &gt; results/moby_dick.csv</code></pre>
 <p>When Make follows the rules in our Makefile,
 one of three things will happen:</p>
 <ol style="list-style-type: decimal">
@@ -755,8 +757,8 @@ It tells us this by displaying the message:</p>
 <p>We can check that it is telling the truth by listing the files with their timestamps,
 ordered by how recently they have been updated:</p>
 <pre class="shell"><code>$ ls -l -t data/moby_dick.txt results/moby_dick.csv</code></pre>
-<pre class="text"><code>-rw-r--r--  1 amira  staff   219107 31 Dec 08:58 results/moby_dick.csv
--rw-r--r--  1 amira  staff  1276201 31 Dec 08:58 data/moby_dick.txt</code></pre>
+<pre class="text"><code>-rw-r--r-- 1 amira staff  219107 31 Dec 08:58 results/moby_dick.csv
+-rw-r--r-- 1 amira staff 1276201 31 Dec 08:58 data/moby_dick.txt</code></pre>
 <p>As a further test:</p>
 <ol style="list-style-type: decimal">
 <li>Delete <code>results/moby_dick.csv</code> and run <code>make</code> again.
@@ -782,11 +784,13 @@ though it <em>does</em> already document exactly how to reproduce one specific r
 Let’s add another rule to it:</p>
 <pre class="make"><code># Regenerate results for &quot;Moby Dick&quot;
 results/moby_dick.csv : data/moby_dick.txt
-    python bin/countwords.py data/moby_dick.txt &gt; results/moby_dick.csv
+    python bin/countwords.py \
+      data/moby_dick.txt &gt; results/moby_dick.csv
 
 # Regenerate results for &quot;Jane Eyre&quot;
 results/jane_eyre.csv : data/jane_eyre.txt
-    python bin/countwords.py data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+    python bin/countwords.py \
+      data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
 <p>When we run <code>make</code> it tells us:</p>
 <pre class="text"><code>make: `results/moby_dick.csv&#39; is up to date.</code></pre>
 <p>By default Make only attempts to update the first target it finds in the Makefile,
@@ -797,7 +801,8 @@ which is already up to date.
 To update something else,
 we need to tell Make specifically what we want:</p>
 <pre class="shell"><code>$ make results/jane_eyre.csv</code></pre>
-<pre class="text"><code>python bin/countwords.py data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py \
+  data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
 <p>If we have to run <code>make</code> once for each result
 we’re right back where we started.
 However,
@@ -867,11 +872,13 @@ we can add the program to the prerequisites for each result:</p>
 
 # Regenerate results for &quot;Moby Dick&quot;
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
-    python bin/countwords.py data/moby_dick.txt &gt; results/moby_dick.csv
+    python bin/countwords.py \
+    data/moby_dick.txt &gt; results/moby_dick.csv
 
 # Regenerate results for &quot;Jane Eyre&quot;
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
-    python bin/countwords.py data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+    python bin/countwords.py \
+      data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
 <p>To run both of these rules,
 we can type <code>make all</code>.
 Alternatively,
@@ -879,8 +886,10 @@ since <code>all</code> is the first target in our Makefile,
 Make will use it if we just type <code>make</code> on its own:</p>
 <pre class="shell"><code>$ touch bin/countwords.py
 $ make</code></pre>
-<pre class="text"><code>python bin/countwords.py data/moby_dick.txt &gt; results/moby_dick.csv
-python bin/countwords.py data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py \
+  data/moby_dick.txt &gt; results/moby_dick.csv
+python bin/countwords.py \
+  data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
 <p>The exercises will explore how we can write a rule
 to tell us whether our results will be different
 after a change to a program
@@ -972,7 +981,8 @@ The rule’s prerequisites are the novel and the word-counting program.
 When Make expands the recipe,
 the resulting command tries to process the program <code>bin/countwords.py</code>
 as if it was a data file:</p>
-<pre class="shell"><code>python bin/countwords.py data/moby_dick.txt bin/countwords.py &gt; results/moby_dick.csv</code></pre>
+<pre class="shell"><code>python bin/countwords.py \
+  data/moby_dick.txt bin/countwords.py &gt; results/moby_dick.csv</code></pre>
 <p>Make solves this problem with another automatic variable <code>$&lt;</code>,
 which mean “only the first prerequisite”.
 Using it lets us rewrite our rule as:</p>
@@ -1014,17 +1024,21 @@ let’s delete all of the results files:</p>
 <pre class="shell"><code>$ make clean</code></pre>
 <pre class="text"><code>rm -f results/*</code></pre>
 <p>and then recreate them:</p>
-<pre class="shell"><code>$ make  # Same as `make all` since &quot;all&quot; is the first target in the Makefile</code></pre>
-<pre class="text"><code>python bin/countwords.py data/moby_dick.txt &gt; results/moby_dick.csv
-python bin/countwords.py data/jane_eyre.txt &gt; results/jane_eyre.csv
-python bin/countwords.py data/time_machine.txt &gt; results/time_machine.csv</code></pre>
+<pre class="shell"><code>$ make  # Same as `make all` as &quot;all&quot; is the first Makefile target</code></pre>
+<pre class="text"><code>python bin/countwords.py \
+  data/moby_dick.txt &gt; results/moby_dick.csv
+python bin/countwords.py \
+  data/jane_eyre.txt &gt; results/jane_eyre.csv
+python bin/countwords.py \
+  data/time_machine.txt &gt; results/time_machine.csv</code></pre>
 <p>We can still rebuild individual files if we want,
 since Make will take the target filename we give on the command line
 and see if a pattern rule matches it:</p>
 <pre class="shell"><code>$ # The touch command updates a file&#39;s timestamp
 $ touch data/jane_eyre.txt
 $ make results/jane_eyre.csv</code></pre>
-<pre class="text"><code>python bin/countwords.py data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py \
+  data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
 </div>
 <div id="automate-functions" class="section level2" number="9.7">
 <h2><span class="header-section-number">9.7</span> Defining Sets of Files</h2>
@@ -1071,8 +1085,14 @@ settings :
 <pre class="shell"><code>$ make settings</code></pre>
 <pre class="text"><code>echo COUNT: bin/countwords.py
 COUNT: bin/countwords.py
-echo DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
-DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt</code></pre>
+echo DATA: data/dracula.txt data/frankenstein.txt 
+  data/jane_eyre.txt data/moby_dick.txt 
+  data/sense_and_sensibility.txt 
+  data/sherlock_holmes.txt data/time_machine.txt
+DATA: data/dracula.txt data/frankenstein.txt 
+  data/jane_eyre.txt data/moby_dick.txt 
+  data/sense_and_sensibility.txt data/sherlock_holmes.txt 
+  data/time_machine.txt</code></pre>
 <p>The output appears twice
 because Make shows us the command it’s going to run before running it.
 Putting <code>@</code> before the command in the recipe prevents this,
@@ -1082,7 +1102,10 @@ which makes the output easier to read:</p>
     @echo DATA: $(DATA)</code></pre>
 <pre class="shell"><code>$ make settings</code></pre>
 <pre class="text"><code>COUNT: bin/countwords.py
-DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
+DATA: data/dracula.txt data/frankenstein.txt 
+  data/jane_eyre.txt data/moby_dick.txt 
+  data/sense_and_sensibility.txt data/sherlock_holmes.txt 
+  data/time_machine.txt
 </code></pre>
 <p>We now have the names of our input files.
 To create a list of corresponding output files,
@@ -1107,8 +1130,13 @@ which is our list of books’ names.</p>
     @echo RESULTS: $(RESULTS)</code></pre>
 <pre class="shell"><code>$ make settings</code></pre>
 <pre class="text"><code>COUNT: bin/countwords.py
-DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt data/moby_dick.txt data/sense_and_sensibility.txt data/sherlock_holmes.txt data/time_machine.txt
-RESULTS: results/dracula.csv results/frankenstein.csv results/jane_eyre.csv results/moby_dick.csv results/sense_and_sensibility.csv results/sherlock_holmes.csv results/time_machine.csv</code></pre>
+DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt 
+  data/moby_dick.txt data/sense_and_sensibility.txt 
+  data/sherlock_holmes.txt data/time_machine.txt
+RESULTS: results/dracula.csv results/frankenstein.csv 
+  results/jane_eyre.csv results/moby_dick.csv 
+  results/sense_and_sensibility.csv 
+  results/sherlock_holmes.csv results/time_machine.csv</code></pre>
 <p>Excellent:
 <code>DATA</code> has the names of the files we want to process
 and <code>RESULTS</code> automatically has the names of the corresponding result files.
@@ -1118,13 +1146,20 @@ we can regenerate all the results in one step:</p>
 <pre class="shell"><code>$ make clean</code></pre>
 <pre class="text"><code>rm -f results/*.csv</code></pre>
 <pre class="shell"><code>$ make  # Same as `make all` since &quot;all&quot; is the first target in the Makefile</code></pre>
-<pre class="text"><code>python bin/countwords.py data/dracula.txt &gt; results/dracula.csv
-python bin/countwords.py data/frankenstein.txt &gt; results/frankenstein.csv
-python bin/countwords.py data/jane_eyre.txt &gt; results/jane_eyre.csv
-python bin/countwords.py data/moby_dick.txt &gt; results/moby_dick.csv
-python bin/countwords.py data/sense_and_sensibility.txt &gt; results/sense_and_sensibility.csv
-python bin/countwords.py data/sherlock_holmes.txt &gt; results/sherlock_holmes.csv
-python bin/countwords.py data/time_machine.txt &gt; results/time_machine.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py \
+  data/dracula.txt &gt; results/dracula.csv
+python bin/countwords.py \
+  data/frankenstein.txt &gt; results/frankenstein.csv
+python bin/countwords.py \
+  data/jane_eyre.txt &gt; results/jane_eyre.csv
+python bin/countwords.py \
+  data/moby_dick.txt &gt; results/moby_dick.csv
+python bin/countwords.py \
+  data/sense_and_sensibility.txt &gt; results/sense_and_sensibility.csv
+python bin/countwords.py \
+  data/sherlock_holmes.txt &gt; results/sherlock_holmes.csv
+python bin/countwords.py \
+  data/time_machine.txt &gt; results/time_machine.csv</code></pre>
 <p>Our workflow is now just two steps:
 add a data file and run Make.
 This is a big improvement over running things manually,
@@ -1255,8 +1290,12 @@ settings :
     ...</code></pre>
 <p>Running <code>make all</code> should now generate the new <code>collated.png</code> plot (Figure <a href="automate.html#fig:automate-collated">9.2</a>):</p>
 <pre class="shell"><code>$ make all</code></pre>
-<pre class="text"><code>python bin/collate.py results/time_machine.csv results/moby_dick.csv results/jane_eyre.csv results/dracula.csv results/sense_and_sensibility.csv results/sherlock_holmes.csv results/frankenstein.csv &gt; results/collated.csv
-python bin/plotcounts.py results/collated.csv --outfile results/collated.png
+<pre class="text"><code>python bin/collate.py results/time_machine.csv \
+  results/moby_dick.csv results/jane_eyre.csv results/dracula.csv \
+  results/sense_and_sensibility.csv results/sherlock_holmes.csv \
+  results/frankenstein.csv &gt; results/collated.csv
+python bin/plotcounts.py results/collated.csv \
+  --outfile results/collated.png
 alpha: 1.1712445413685917</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:automate-collated"></span>
 <img src="figures/automate/collated.png" alt="Word count distribution for all books combined." width="100%" />
