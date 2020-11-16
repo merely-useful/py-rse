@@ -26,7 +26,8 @@ def main(links_dir, source_files):
 
     defined = set()
     for suffix in SUFFIXES:
-        defined.update(set(os.path.normpath(p) for p in glob.glob(f'{links_dir}/**/*.{suffix}', recursive=True)))
+        defined.update(set(os.path.normpath(p) for p in glob.glob(f'{links_dir}/**/*.{suffix}',
+                                                                  recursive=True)))
     used = read_all_files(source_files, find_uses)
     report('Links: undefined', used - defined)
     report('Links: unused', defined - used)
