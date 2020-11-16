@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-15"
+date: "2020-11-16"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -36,7 +36,7 @@ But just as some astronomers spend their careers designing telescopes,
 some researchers focus on building the software that makes research possible.
 People who do this are called \gref{research software engineers}{rse};
 the aim of this book is to get you ready for this role by helping you go from
-writing code for yourself to creating tools to helping your entire field advance.
+writing code for yourself to creating tools that help your entire field advance.
 
 ## The Big Picture {#intro-big-picture}
 
@@ -93,28 +93,15 @@ less mistakes, and work more openly and reproducibly.
 We hope that by having more researchers with these skills and knowledge,
 research culture can improve to address the issues raised above.
 
-## Contributing and Re-Use
-
-The source for the book is found on the [`py-rse` GitHub repository](https://github.com/merely-useful/py-rse) and
-any corrections, additions, or contributions are very welcome.
-Everyone whose work is included will be credited in the acknowledgements.
-Check out our
-[contributing guidelines](https://github.com/merely-useful/py-rse/blob/book/CONTRIBUTING.md)
-as well as our
-[Code of Conduct](https://github.com/merely-useful/py-rse/blob/book/CONDUCT.md)
-for more information on how to contribute.
-
-The content and code of this book can be freely re-used as it is
-[licensed](https://github.com/merely-useful/py-rse/blob/book/LICENSE.md)
-under a 
-[Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/)
-(CC-BY 4.0)
-and a
-[MIT License](https://github.com/merely-useful/py-rse/blob/book/LICENSE-MIT.md),
-so the material can be used, re-used, and modified, 
-as long as there is attribution to this source.
-
 ## Intended Audience {#intro-personas}
+
+This book is written for researchers who are already using Python for their data analysis,
+but who want to take their coding and software development to the next level.
+You don't have to be highly proficient with Python,
+but you should already be comfortable doing things like reading data from files
+and writing loops, conditionals, and functions.
+The following personas are examples of the types of people
+that are our target audience.
 
 Amira Khan
 :   completed a master's in library science five years ago
@@ -142,21 +129,79 @@ Sami Virtanen
     this guide will teach them how to build and run data pipelines
     so that they can pass those skills on to their users.
 
-## Using This Book {#intro-using}
+## Syllabus {#intro-syllabus}
 
-This book is meant to be used as the material for a (potentially) semester-long course
-at the university level. 
-The course is designed with using participatory live-coding as the style
-for teaching the material and code, rather than as lectures talking about them.
-The content is generally best used in the order given.
+Rather than simply providing reference material about good coding practices,
+the book follows Amira and Sami as they work together to write an actual software package
+to address a real research question.
+The data analysis task that we focus on
+relates to a fascinating result in the field of quantitative linguistics.
+[Zipf's Law][zipfs-law] states that the second most common word in a body of text
+appears half as often as the most common,
+the third most common appears a third as often, and so on.
+To test whether Zipf's Law holds for a collection of classic novels
+that are freely available from [Project Gutenberg][project-gutenberg],
+we write a software package that counts and analyzes the word frequency distribution
+in any arbitrary body of text.
+
+In the process of writing and publishing a Python package to verify Zipf's Law,
+we will show you how to:
+
+-   Use the Unix shell to efficiently manage your data and code.
+-   Write Python programs that can be used on the command line.
+-   Write and review code to make it readable as well as correct.
+-   Use Git and GitHub to track and share your work.
+-   Work productively in a small team where everyone is welcome.
+-   Use Make to automate complex workflows.
+-   Enable users to configure your software without modifying it directly.
+-   Find, handle, and fix errors in your code.
+-   Test your software and know which parts have not yet been tested.
+-   Publish your code and research in open and reproducible ways.
+-   Organize small and medium-sized data science projects.
+-   Create Python packages that can be installed in standard ways.
+
+## Using this Book  {#intro-using}
+
+This book was written to be used as the material for a (potentially) semester
+long course at the university level,
+although it can also be used for independent self-study.
+Participatory live-coding is the anticipated style for teaching the material,
+rather than lectures simply talking about the code presented [@Brow2018; @Wils2018].
+The chapters and their content are generally designed to be used in the order
+given.
 
 Chapters are structured with the introduction at the start, content in the middle,
 and exercises at the end. Callout boxes are interspersed throughout the content
-to be used as a supplement to the main text, but not a requirement for the course
-overall.
-While the exercises are at the end of each chapter, we recommend that the
-exercises are used throughout the lessons and not used at the end of the lesson.
-Sample solutions for the exercises are found in Appendix \@ref(solutions).
+to be used as a supplement to the main text,
+but not a requirement for the course overall.
+Early chapters have many small exercises;
+later chapters have fewer but larger exercises.
+In order to break up long periods of live-coding while teaching,
+it may be preferable to stop and complete some of the exercises
+at key points throughout the chapter,
+rather than waiting until the end. 
+Possible exercise solutions are discussed in Appendix \@ref(solutions).
+
+## Contributing and Re-Use
+
+The source for the book is found on the [`py-rse` GitHub repository](https://github.com/merely-useful/py-rse) and
+any corrections, additions, or contributions are very welcome.
+Everyone whose work is included will be credited in the acknowledgements.
+Check out our
+[contributing guidelines](https://github.com/merely-useful/py-rse/blob/book/CONTRIBUTING.md)
+as well as our
+[Code of Conduct](https://github.com/merely-useful/py-rse/blob/book/CONDUCT.md)
+for more information on how to contribute.
+
+The content and code of this book can be freely re-used as it is
+[licensed](https://github.com/merely-useful/py-rse/blob/book/LICENSE.md)
+under a 
+[Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/)
+(CC-BY 4.0)
+and a
+[MIT License](https://github.com/merely-useful/py-rse/blob/book/LICENSE-MIT.md),
+so the material can be used, re-used, and modified, 
+as long as there is attribution to this source.
 
 ## Acknowledgments {#intro-ack}
 
@@ -223,88 +268,24 @@ to researchers worldwide.
 
 > Everything starts somewhere, though many physicists disagree.
 >
-> --- Terry Pratchett\index{Pratchett,  Terry}
+> --- Terry Pratchett\index{Pratchett, Terry}
 
-This book uses data analysis as a motivating example,
-and assumes that the learner's goal is to answer questions
-rather than deliver commercial software products.
-The data analysis task that we focus on
-relates to a fascinating result in the field of quantitative linguistics.
-[Zipf's Law][zipfs-law] states that the second most common word in a body of text
-appears half as often as the most common,
-the third most common appears a third as often, and so on.
-To test Zipf's Law,
-we analyze the distribution of word frequencies
-in a collection of classic English novels
-that are freely available from [Project Gutenberg][project-gutenberg].
+As with any research project,
+one of the first steps in our Zipf's Law analysis
+involves collecting/downloading the research data
+and installing the required software.
+Before doing that,
+it's worth taking a moment to think about
+how we are going to organise everything.
+We will soon have a number of books from [Project Gutenberg][project-gutenberg]
+in the form of a series of text files,
+plots we've produced showing the word frequency distribution in each book,
+as well as the code we've written to produce those plots
+and to document and release our software package.
+If we aren't organized from the start,
+things could get messy later on.
 
-In the process of writing and publishing a Python package to verify Zipf's Law,
-we will show you how to:
-
--   Use the Unix shell to efficiently manage your data and code.
--   Write Python programs that can be used on the command line.
--   Write and review code to make it readable as well as correct.
--   Use Git and GitHub to track and share your work.
--   Work productively in a small team where everyone is welcome.
--   Use Make to automate complex workflows.
--   Enable users to configure your software without modifying it directly.
--   Find, handle, and fix errors in your code.
--   Test your software and know which parts have not yet been tested.
--   Publish your code and research in open and reproducible ways.
--   Organize small and medium-sized data science projects.
--   Create Python packages that can be installed in standard ways.
-
-Each chapter concludes with some exercises,
-whose solutions are discussed in Appendix \@ref(solutions).
-Early chapters have many small exercises;
-later chapters have fewer but larger exercises.
-
-## Software Prerequisites {#install-software}
-
-Learners should already be using Python regularly for data analysis,
-and should be comfortable reading data from files
-and writing loops, conditionals, and functions.
-Learners will need a computer with Internet access
-that has the following software installed:
-
-1. A \gref{Bash shell}{shell}
-2. \gref{Git}{git} version control
-3. A text editor
-4 [Python 3][python] (via the Anaconda distribution)
-5. [GNU Make][gnu-make]
-
-Software installation instructions for Windows, Mac and Linux operating systems
-(with video tutorials) are maintained by [The Carpentries][carpentries]
-as part of their workshop website template:  
-<https://carpentries.github.io/workshop-template/#setup>
-
-Follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
-
-Check if Make is installed on your computer by typing `make -v` into the Bash
-shell. If it isn't installed, then:
-
-- *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
-- *Mac*: Install [Xcode][xcode] (via the App Store).
-- *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
-  Master of Data Science at the University of British Columbia.
-
-> **conda in the shell on Windows**
->
-> If you are using Windows and the `conda` command isn't available at the Bash shell,
-> you'll need to open the Anaconda Prompt program (via the Windows start menu)
-> and run the command `conda init bash` (this only needs to be done once).
-> After that, your shell will be configured to use conda going forward.
-
-### Configuring Git to use Nano {#install-git-nano}
-
-To make Git use the Nano editor for writing commit messages,
-run the following command:
-
-```shell
-git config --global core.editor "nano -w"
-```
-
-## Where We'll End Up: Project structure {#intro-structure}
+## Project Structure {#getting-started-structure}
 
 Project organization is like a diet:
 everyone has one,
@@ -314,7 +295,7 @@ In the case of a project,
 This depends on how well organized the project is
 and how familiar people are with that style of organization.
 
-As with coding style (Appendix \@ref(style)),
+As with good coding style (Appendix \@ref(style)),
 small pieces in predictable places with readable names are easier to find and use
 than large chunks that vary from project to project and have names like "stuff".
 We can be messy while we are working and then tidy up later,
@@ -359,7 +340,7 @@ zipf/
 
 The full, final directory tree is documented in Appendix \@ref(tree).
 
-### Standard information {#intro-boilerplate}
+### Standard information {#getting-started-boilerplate}
 
 Our project will contain a few standard files
 that should be present in every research software project,
@@ -384,7 +365,7 @@ or make it a section in `CITATION`.
 These files are often called \gref{boilerplate}{boilerplate},
 meaning they are copied without change from one use to the next.
 
-### Organizing project content {#intro-organize}
+### Organizing project content {#getting-started-organize}
 
 Following @Nobl2009, 
 the directories in the repository's root are organized according to purpose:
@@ -399,7 +380,7 @@ the directories in the repository's root are organized according to purpose:
 -   Raw data goes in `data/` 
     and is never modified after being stored.  
     You'll set up this directory, 
-    and its contents in Section \@ref(download-data).  
+    and its contents in Section \@ref(getting-started-download-data).  
 
 -   Results are put in `results/`.
     This includes cleaned-up data,
@@ -417,31 +398,24 @@ the directories in the repository's root are organized according to purpose:
 
 This structure works well for many computational research projects and
 we encourage its use beyond just this book. 
-We will add some more folders and files  not directly addressed by @Nobl2009
+We will add some more folders and files not directly addressed by @Nobl2009
 when we talk about provenance (Chapter \@ref(provenance)),
 testing (Chapter \@ref(testing)),
 and packaging (Chapter \@ref(packaging)).
 
-### Downloading the data {#download-data}
-
-Over the course of this book,
-you'll build up the project structure described above.
+## Downloading the Data {#getting-started-download-data}
 
 The data files used in the book have been archived
 at an online repository called Figshare (covered in Section \@ref(provenance-data-where)).
 They can be accessed at the following URL:  
 <https://doi.org/10.6084/m9.figshare.13040516>
 
-Download a zip file containing the data files by clicking "download all" at the URL above.
-Unzip the contents into your `zipf/data` directory
-following the project structure described below.
-
-These are the only files you'll need to get started.
-When you are done,
-you should have a directory (also called a \gref{folder}{folder}) 
-called `zipf`,
-containing a single sub-directory called `data`
-with the following contents:
+We can download a zip file containing the data files by clicking
+"download all" at the URL above,
+before unzipping the contents into a new `zipf/data` directory
+(also called a \gref{folder}{folder}) 
+following the project structure described above.
+Here's how things look once we're done:
 
 ```text
 zipf/
@@ -455,6 +429,64 @@ zipf/
     ├── sherlock_holmes.txt
     └── time_machine.txt
 ```
+
+## Installing the Software {#getting-started-install-software}
+
+In order to conduct our Zipf's Law analysis,
+we need to have the following software installed:
+
+1. A \gref{Bash shell}{shell}
+2. \gref{Git}{git} version control
+3. A text editor
+4 [Python 3][python] (via the Anaconda distribution)
+5. [GNU Make][gnu-make]
+
+Comprehensive software installation instructions for Windows, Mac and Linux operating systems
+(with video tutorials) are maintained by [The Carpentries][carpentries]
+as part of their workshop website template:  
+<https://carpentries.github.io/workshop-template/#setup>
+
+We can follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
+
+If Make isn't installed on your computer (check by typing `make -v` into the Bash shell),
+then it can be installed as follows:
+
+- *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
+- *Mac*: Install [Xcode][xcode] (via the App Store).
+- *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
+  Master of Data Science at the University of British Columbia.
+
+> **conda in the shell on Windows**
+>
+> If you are using Windows and the `conda` command isn't available at the Bash shell,
+> you'll need to open the Anaconda Prompt program (via the Windows start menu)
+> and run the command `conda init bash` (this only needs to be done once).
+> After that, your shell will be configured to use conda going forward.
+
+## Summary {#getting-started-summary}
+
+With our project structure decided, data downloaded and software installed,
+we are now ready to start exploring our data.
+
+## Exercises {#getting-started-exercises}
+
+### Getting ready {#getting-started-install}
+
+Make sure you've downloaded the required data files
+(following Section \@ref(getting-started-download-data))
+and installed the required software (following Section \@ref(getting-started-install-software))
+before progressing to the next chapter. 
+
+## Key Points {#scripting-keypoints}
+
+
+- Make tidiness a habit, rather than cleaning up your project files later.
+- Include a few standard files in all your projects, such as README, LICENSE, CONTRIBUTING, CONDUCT and CITATION.
+- Put runnable in a `bin/` directory.
+- Put raw/original data in a `data/` directory and never modify it.
+- Put results in a `results/` directory. This includes cleaned-up data and figures (i.e. everything created using what's in `bin` and `data`).
+- Put documentation and manuscripts in a `docs/` directory.
+- Refer to The Carpentries [software installation guide][carpentries-install-instructions] if you're having trouble. 
 
 <!--chapter:end:chapters/getting-started.Rmd-->
 
@@ -525,8 +557,8 @@ or how they do what they do.
 > the most recent versions of MacOS use a shell called the Z Shell or `zsh`;
 > we will point out a few differences as we go along.
 
-Please see Section \@ref(install-software) for instructions
-on how to launch the shell on your computer.
+Please see Section \@ref(getting-started-install-software) for instructions
+on how to install and launch the shell on your computer.
 
 ## Exploring Files and Directories {#bash-basics-explore}
 
@@ -1239,7 +1271,7 @@ $ ls prior-work.txt
 prior-work.txt
 ```
 
-## Copy Files and Directories {#bash-basics-copy}
+## Copying Files and Directories {#bash-basics-copy}
 
 The `cp` command **c**o**p**ies files.\index{Unix commands!cp}
 It works like `mv` except it creates a file instead of moving an existing one
@@ -1585,7 +1617,7 @@ Please note that if you create or move any files or directories in your Zipf's L
 you may want to reorganize your files following the outline at the beginning of the next chapter.
 If you accidentally delete necessary files,
 you can start with a fresh copy of the data files
-by following the instructions in Section \@ref(download-data).
+by following the instructions in Section \@ref(getting-started-download-data).
 
 ### Exploring more `ls` flags {#bash-basics-ex-more-ls}
 
@@ -2703,7 +2735,7 @@ Please note that if you create or move any files or directories in your Zipf's L
 you may want to reorganize your files following the outline at the beginning of the next chapter.
 If you accidentally delete necessary files,
 you can start with a fresh copy of the data files
-by following the instructions in Section \@ref(download-data).
+by following the instructions in Section \@ref(getting-started-download-data).
 
 ### What does `>>` mean? {#bash-tools-ex-redirect-append}
 
@@ -2978,7 +3010,7 @@ before running them. Why do you think it does this?
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
 
-The previous chapter explained how we can use the command line
+The previous chapters explained how we can use the command line
 to do all of the things we can do with a GUI,
 and how to combine commands in new ways using pipes and redirection.
 This chapter extends those ideas to show
@@ -3008,7 +3040,7 @@ zipf/
 > if you worked through all of the exercises in the previous chapter.
 > Feel free to delete them or move them to a separate directory.
 > If you have accidentally deleted files you need,
-> you can download them again by following the instructions in Section \@ref(download-data).
+> you can download them again by following the instructions in Section \@ref(getting-started-download-data).
 
 ## Creating New Commands {#bash-advanced-script}
 
@@ -3020,7 +3052,7 @@ a file full of shell commands is usually called a \gref{shell script}{shell_scri
 but it is really just another kind of program.
 
 Let's start by creating a new directory for our runnable programs called `bin/`,
-consistent with the project structure described in Section \@ref(intro-organize).
+consistent with the project structure described in Section \@ref(getting-started-organize).
 
 ```shell
 $ cd ~/zipf
@@ -4528,7 +4560,7 @@ We talk more about what to put in a docstring in Appendix \@ref(documentation-d
 Now that we have a template for command-line Python programs,
 we can use it to check Zipf's Law for our collection of classic English novels.
 We start by moving the template into the directory
-where we store our runnable programs (Section \@ref(intro-organize)):
+where we store our runnable programs (Section \@ref(getting-started-organize)):
 
 ```shell
 $ mv script_template.py ~/zipf/bin
@@ -4807,7 +4839,7 @@ in the order in which they are specified to `add_argument`
 Ultimately,
 we want to save the word counts to a CSV file for further analysis and plotting.
 Let's create a subdirectory to hold our results 
-(following the structure described in Section \@ref(intro-structure)):
+(following the structure described in Section \@ref(getting-started-structure)):
 
 ```shell
 $ mkdir results
@@ -5724,9 +5756,14 @@ Following [these guidelines][desc-cmt-msgs] will help:
 > but no one has ever claimed that its interface is intuitive.
 > ("How do I exit the Vim editor?"
 > is one of the most frequently read questions on Stack Overflow.)
-> Section \@ref(install-git-nano) explains
-> how to configure Git to use the `nano` editor
-> introduced in Chapter \@ref(bash-basics) instead.
+>
+> To configure Git to use the `nano` editor
+> introduced in Chapter \@ref(bash-basics) instead,
+> execute the following command:
+>
+> ```shell
+> git config --global core.editor "nano -w"
+> ```
 
 ## Saving and Tracking Changes {#git-cmdline-changes}
 
@@ -10048,7 +10085,7 @@ Make works as follows:
 
 This chapter uses a version of Make called [GNU Make][gnu-make].
 It comes with macOS and Linux;
-please see Section \@ref(install-software) for Windows installation instructions.
+please see Section \@ref(getting-started-install-software) for Windows installation instructions.
 
 > **Keep Tracking With Version Control**
 >
@@ -15495,7 +15532,7 @@ Once you have obtained a DOI and possibly published with a software journal,
 the last step is to tell users how to cite your new software package.
 This is traditionally done by adding a `CITATION` file\index{CITATION file}\index{project files!CITATION}
 to the associated GitHub repository
-(alongside `README`, `LICENSE`, `CONDUCT` and similar files discussed in Section \@ref(intro-boilerplate)),
+(alongside `README`, `LICENSE`, `CONDUCT` and similar files discussed in Section \@ref(getting-started-boilerplate)),
 containing a plain text citation that can be copied and pasted into email
 as well as entries formatted for various bibliographic systems like [BibTeX][bibtex].
 
@@ -15581,8 +15618,12 @@ This script `quotes.py` contains a function `random_quote` which prints a random
 import random
 
 quote_list = ["It's still magic even if you know how it's done.",
+              "Everything starts somewhere, "\
+              "though many physicists disagree.",
               "Ninety percent of most magic merely consists "\
               "of knowing one extra fact.",
+              "Wisdom comes from experience. "\
+              "Experience is often a result of lack of wisdom.",
               "There isn't a way things should be. "\
               "There's just what happens, and what we do.",
               "Multiple exclamation marks are a sure sign "\
@@ -16411,6 +16452,14 @@ and is intended to help instructors who want to use this curriculum.
 
 <!-- Used `bin/list-keypoints-objectives.R` to create this list -->
 
+## Getting Started
+
+
+- Identify the few standard files that should be present in every research software project.
+- Explain the typical directory structure used in small and medium-sized data analysis projects.
+- Download the required data.
+- Install the required software.  
+
 ## The Basics of the Unix Shell
 
 
@@ -16422,6 +16471,10 @@ and is intended to help instructors who want to use this curriculum.
 -   Translate an \gref{absolute path}{absolute_path} into a \gref{relative path}{relative_path} and vice versa.
 -   Construct absolute and relative paths that identify specific files and directories.
 -   Delete, copy, and move files and directories.
+
+## Building Tools with the Unix Shell
+
+
 -   \gref{Redirect}{redirection} a command's output to a file.
 -   Use redirection to process a file instead of keyboard input.
 -   Construct \gref{pipelines}{pipe_shell} with two or more stages.
@@ -16443,7 +16496,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Edit the `.bashrc` file to change default shell variables.
 -   Create aliases for commonly-used commands.
 
-## Command Line Programs in Python
+## Building Command-Line Tools with Python
 
 
 -   Explain the benefits of writing Python programs that can be executed at the command line.
@@ -16454,7 +16507,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Explain the difference between \gref{optional arguments}{optional_argument} and \gref{positional arguments}{positional_argument}.
 -   Create a module that contains functions used by multiple programs and import that module.
 
-## Git at the Command Line
+## Using Git at the Command Line
 
 
 -   Explain the advantages and disadvantages of using \gref{Git}{git} at the command line.
@@ -16468,7 +16521,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Restore old versions of files in a repository.
 -   Explain how to use `.gitignore` to ignore files and identify files that are being ignored.
 
-## Advanced Git
+## Going Further with Git
 
 
 -   Explain why \gref{branches}{git_branch} are useful.
@@ -16494,7 +16547,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Explain why every project should include contribution guidelines and add some to a project.
 -   Explain how to handle conflict between project participants. 
 
-## Automating Analyses
+## Automating Analyses with Make
 
 
 -   Explain what a \gref{build manager}{build_manager} is and how they aid reproducible research.
@@ -16509,14 +16562,14 @@ and is intended to help instructors who want to use this curriculum.
 -   Define variables in a Makefile explicitly and by using functions.
 -   Make a self-documenting Makefile.
 
-## Program Configuration
+## Configuring Programs
 
 
 -   Explain what \gref{overlay configuration}{overlay_configuration} is.
 -   Describe the four levels of configuration typically used by robust software.
 -   Create a configuration file using \gref{YAML}{yaml}.
 
-## Error Handling
+## Handling Errors
 
 
 -   Explain how to use exceptions to signal and handle errors in programs.
@@ -16529,7 +16582,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Describe the five standard logging levels and explain what each should be used for.
 -   Create, configure, and use a simple logger.
 
-## Testing
+## Testing Software
 
 
 -   Explain three different goals for testing software.
@@ -16539,7 +16592,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Explain \gref{continuous integration}{continuous_integration} and implement it using [Travis CI][travis-ci].
 -   Describe and contrast \gref{test-driven development}{tdd} and checking-driven development.
 
-## Provenance
+## Tracking Provenance
 
 
 -   Explain what a \gref{DOI}{doi} is and how to get one.
@@ -16549,7 +16602,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Describe good practices for archiving analysis code and determine whether a report conforms to them.
 -   Explain the difference between \gref{reproducibility}{reproducible_research} and \gref{inspectability}{inspectability}.
 
-## Python Packaging
+## Creating Packages with Python
 
 
 -   Create a Python package using [setuptools][setuptools].
@@ -16569,6 +16622,17 @@ and is intended to help instructors who want to use this curriculum.
 # Key Points {#keypoints}
 
 <!-- Used `bin/list-keypoints-objectives.R` to create this list -->
+
+## Getting Started
+
+
+- Make tidiness a habit, rather than cleaning up your project files later.
+- Include a few standard files in all your projects, such as README, LICENSE, CONTRIBUTING, CONDUCT and CITATION.
+- Put runnable in a `bin/` directory.
+- Put raw/original data in a `data/` directory and never modify it.
+- Put results in a `results/` directory. This includes cleaned-up data and figures (i.e. everything created using what's in `bin` and `data`).
+- Put documentation and manuscripts in a `docs/` directory.
+- Refer to The Carpentries [software installation guide][carpentries-install-instructions] if you're having trouble. 
 
 ## The Basics of the Unix Shell
 
@@ -16593,6 +16657,26 @@ and is intended to help instructors who want to use this curriculum.
 -   `wc` counts lines, words, and characters in its inputs.
 -   `man` displays the manual page for a given command; some commands also have a `--help` option.
 
+## Building Tools with the Unix Shell
+
+
+-   `cat` displays the contents of its inputs.
+-   `head` displays the first few lines of its input.
+-   `tail` displays the last few lines of its input.
+-   `sort` sorts its inputs.
+-   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
+-   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
+-   Every process in Unix has an input channel called \gref{standard input}{stdin}
+    and an output channel called \gref{standard output}{stdin}.
+-   `>` redirects a command's output to a file, overwriting any existing content.
+-   `>>` appends a command's output to a file.
+-   `<` operator redirects input to a command
+-   A \gref{pipe}{pipe_shell} `|` sends the output of the command on the left to the input of the command on the right.
+-   A `for` loop repeats commands once for every thing in a list.
+-   Every `for` loop  must have a variable to refer to the thing it is currently operating on
+    and a \gref{body}{loop_body} containing commands to execute.
+-   Use `$name` or `${name}` to get the value of a variable.
+
 ## Going Further with the Unix Shell
 
 
@@ -16607,7 +16691,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Use the `.bashrc` file in your home directory to set shell variables each time the shell runs.
 -   Use `alias` to create shortcuts for things you type frequently.
 
-## Command Line Programs in Python
+## Building Command-Line Programs in Python
 
 
 -   Write command-line Python programs that can be run in the \gref{Unix shell}{shell} like other command-line tools.
@@ -16620,7 +16704,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Use \gref{docstrings}{docstring} to document functions and scripts.
 -   Place functions that are used across multiple scripts in a separate file that those scripts can import.
 
-## Git at the Command Line
+## Using Git at the Command Line
 
 
 -   Use `git config` with the `--global` option to configure your user name,
@@ -16640,7 +16724,7 @@ and is intended to help instructors who want to use this curriculum.
 -   `git checkout` recovers old versions of files.
 -   The `.gitignore` file tells Git what files to ignore.
 
-## Advanced Git
+## Going Further with Git
 
 
 -   Use a \gref{branch-per-feature}{branch_per_feature} workflow to develop new features while leaving the master branch in working order.
@@ -16669,7 +16753,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Use common-sense rules to make project meetings fair and productive.
 -   Manage conflict between participants rather than hoping it will take care of itself.
 
-## Automating Analyses
+## Automating Analyses with Make
 
 
 -   [Make][gnu-make] is a widely-used build manager.
@@ -16684,7 +16768,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
 -   Use specially-formatted comments to create self-documenting Makefiles.
 
-## Program Configuration
+## Configuring Programs
 
 
 -   \gref{Overlay configuration}{overlay_configuration} specifies settings for a program in layers,
@@ -16696,7 +16780,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Use \gref{YAML}{yaml_glossary} or some other standard syntax to write configuration files.
 -   Save configuration information to make your research \gref{reproducible}{reproducible_research}.
 
-## Error Handling
+## Handling Errors
 
 
 -   Signal errors by \gref{raising exceptions}{raise_exception}.
@@ -16709,7 +16793,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Separate logging messages into `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` levels.
 -   Use `logging.basicConfig` to define basic logging parameters.
 
-## Testing
+## Testing Software
 
 
 -   Test software to convince people (including yourself) that software is correct enough
@@ -16722,7 +16806,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Test \gref{coverage}{code_coverage} is the fraction of lines of code that are executed by a set of tests.
 -   \gref{Continuous integration}{continuous_integration} re-builds and/or re-tests software every time something changes.
 
-## Provenance
+## Tracking Provenance
 
 
 -   Publish data and code as well as papers.
@@ -16733,7 +16817,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Describe your software environment, analysis scripts, and data processing steps in \gref{reproducible}{reproducible_research} ways.
 -   Make your analyses \gref{inspectable}{inspectability} as well as reproducible.
 
-## Python Packaging
+## Creating Packages with Python
 
 
 -   Use [setuptools][setuptools] to build and distribute Python packages.
@@ -18816,7 +18900,7 @@ with further updates in Section \@ref(packaging-readme).
 
 `setup.py`: Introduced and updated throughout Chapter \@ref(packaging).
 
-`data/*` : Downloaded as part of the setup instructions (Section \@ref(download-data)).
+`data/*` : Downloaded as part of the setup instructions (Section \@ref(getting-started-download-data)).
 
 `docs/*`: Introduced in Section \@ref(packaging-sphinx).
 
@@ -18844,7 +18928,7 @@ with further updates in Section \@ref(packaging-readme).
 
 `test_data/risk.txt`: Introduced in Section \@ref(testing-unit).
 
-`zipf/`: Introduced as `bin/` in Section \@ref(intro-organize) and
+`zipf/`: Introduced as `bin/` in Section \@ref(getting-started-organize) and
 changes name to `zipf/` in Section \@ref(packaging-package).
 
 `zipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
@@ -20876,6 +20960,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 [capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
+[carpentries-install-instructions]: https://carpentries.github.io/workshop-template/#setup
 [caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
 [choose-license]: https://choosealicense.com/
