@@ -20839,8 +20839,8 @@ if we are allowed to login,
 that server then runs a shell for us on the remote computer (Figure \@ref(fig:ssh-ssh)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/ssh/ssh.svg" alt="To work remotely, the local client connects to the remote login server, and if successful, the remote login server starts a remote shell (solid lines). Once logged in, commands issued in the local client are passed on to the remote shell, and any output is passed back to the local client (dashed lines)." width="100%" />
-<p class="caption">(\#fig:ssh-ssh)To work remotely, the local client connects to the remote login server, and if successful, the remote login server starts a remote shell (solid lines). Once logged in, commands issued in the local client are passed on to the remote shell, and any output is passed back to the local client (dashed lines).</p>
+<img src="figures/ssh/ssh.svg" alt="The local client connects to the remote login server, which starts a remote shell (solid lines). Commands from the local client are passed to the remote shell and output is passed back (dashed lines)." width="100%" />
+<p class="caption">(\#fig:ssh-ssh)The local client connects to the remote login server, which starts a remote shell (solid lines). Commands from the local client are passed to the remote shell and output is passed back (dashed lines).</p>
 </div>
 
 Once our local client is connected to the remote server,
