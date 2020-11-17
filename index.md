@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-16"
+date: "2020-11-17"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -20836,9 +20836,12 @@ the remote computer must run a \gref{remote login server}{remote_login_server}
 and we must run a program that can talk to that server.
 The client program passes our login credentials to the remote login server;
 if we are allowed to login,
-that server then runs a shell for us on the remote computer.
+that server then runs a shell for us on the remote computer (Figure \@ref(fig:ssh-ssh)).
 
-FIXME: diagram of SSH
+<div class="figure" style="text-align: center">
+<img src="figures/ssh/ssh.svg" alt="To work remotely, the local client connects to the remote login server, and if successful, the remote login server starts a remote shell (solid lines). Once logged in, commands issued in the local client are passed on to the remote shell, and any output is passed back to the local client (dashed lines)." width="100%" />
+<p class="caption">(\#fig:ssh-ssh)To work remotely, the local client connects to the remote login server, and if successful, the remote login server starts a remote shell (solid lines). Once logged in, commands issued in the local client are passed on to the remote shell, and any output is passed back to the local client (dashed lines).</p>
+</div>
 
 Once our local client is connected to the remote server,
 everything we type into the client is passed on, by the server, to the shell 
