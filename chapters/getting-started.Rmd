@@ -2,88 +2,24 @@
 
 > Everything starts somewhere, though many physicists disagree.
 >
-> --- Terry Pratchett\index{Pratchett,  Terry}
+> --- Terry Pratchett\index{Pratchett, Terry}
 
-This book uses data analysis as a motivating example,
-and assumes that the learner's goal is to answer questions
-rather than deliver commercial software products.
-The data analysis task that we focus on
-relates to a fascinating result in the field of quantitative linguistics.
-[Zipf's Law][zipfs-law] states that the second most common word in a body of text
-appears half as often as the most common,
-the third most common appears a third as often, and so on.
-To test Zipf's Law,
-we analyze the distribution of word frequencies
-in a collection of classic English novels
-that are freely available from [Project Gutenberg][project-gutenberg].
+As with any research project,
+one of the first steps in our Zipf's Law analysis
+involves collecting/downloading the research data
+and installing the required software.
+Before doing that,
+it's worth taking a moment to think about
+how we are going to organise everything.
+We will soon have a number of books from [Project Gutenberg][project-gutenberg]
+in the form of a series of text files,
+plots we've produced showing the word frequency distribution in each book,
+as well as the code we've written to produce those plots
+and to document and release our software package.
+If we aren't organized from the start,
+things could get messy later on.
 
-In the process of writing and publishing a Python package to verify Zipf's Law,
-we will show you how to:
-
--   Use the Unix shell to efficiently manage your data and code.
--   Write Python programs that can be used on the command line.
--   Write and review code to make it readable as well as correct.
--   Use Git and GitHub to track and share your work.
--   Work productively in a small team where everyone is welcome.
--   Use Make to automate complex workflows.
--   Enable users to configure your software without modifying it directly.
--   Find, handle, and fix errors in your code.
--   Test your software and know which parts have not yet been tested.
--   Publish your code and research in open and reproducible ways.
--   Organize small and medium-sized data science projects.
--   Create Python packages that can be installed in standard ways.
-
-Each chapter concludes with some exercises,
-whose solutions are discussed in Appendix \@ref(solutions).
-Early chapters have many small exercises;
-later chapters have fewer but larger exercises.
-
-## Software Prerequisites {#install-software}
-
-Learners should already be using Python regularly for data analysis,
-and should be comfortable reading data from files
-and writing loops, conditionals, and functions.
-Learners will need a computer with Internet access
-that has the following software installed:
-
-1. A \gref{Bash shell}{shell}
-2. \gref{Git}{git} version control
-3. A text editor
-4 [Python 3][python] (via the Anaconda distribution)
-5. [GNU Make][gnu-make]
-
-Software installation instructions for Windows, Mac and Linux operating systems
-(with video tutorials) are maintained by [The Carpentries][carpentries]
-as part of their workshop website template:  
-<https://carpentries.github.io/workshop-template/#setup>
-
-Follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
-
-Check if Make is installed on your computer by typing `make -v` into the Bash
-shell. If it isn't installed, then:
-
-- *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
-- *Mac*: Install [Xcode][xcode] (via the App Store).
-- *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
-  Master of Data Science at the University of British Columbia.
-
-> **conda in the shell on Windows**
->
-> If you are using Windows and the `conda` command isn't available at the Bash shell,
-> you'll need to open the Anaconda Prompt program (via the Windows start menu)
-> and run the command `conda init bash` (this only needs to be done once).
-> After that, your shell will be configured to use conda going forward.
-
-### Configuring Git to use Nano {#install-git-nano}
-
-To make Git use the Nano editor for writing commit messages,
-run the following command:
-
-```shell
-git config --global core.editor "nano -w"
-```
-
-## Where We'll End Up: Project structure {#intro-structure}
+## Project Structure {#getting-started-structure}
 
 Project organization is like a diet:
 everyone has one,
@@ -93,7 +29,7 @@ In the case of a project,
 This depends on how well organized the project is
 and how familiar people are with that style of organization.
 
-As with coding style (Appendix \@ref(style)),
+As with good coding style (Appendix \@ref(style)),
 small pieces in predictable places with readable names are easier to find and use
 than large chunks that vary from project to project and have names like "stuff".
 We can be messy while we are working and then tidy up later,
@@ -138,7 +74,7 @@ zipf/
 
 The full, final directory tree is documented in Appendix \@ref(tree).
 
-### Standard information {#intro-boilerplate}
+### Standard information {#getting-started-boilerplate}
 
 Our project will contain a few standard files
 that should be present in every research software project,
@@ -163,7 +99,7 @@ or make it a section in `CITATION`.
 These files are often called \gref{boilerplate}{boilerplate},
 meaning they are copied without change from one use to the next.
 
-### Organizing project content {#intro-organize}
+### Organizing project content {#getting-started-organize}
 
 Following @Nobl2009, 
 the directories in the repository's root are organized according to purpose:
@@ -178,7 +114,7 @@ the directories in the repository's root are organized according to purpose:
 -   Raw data goes in `data/` 
     and is never modified after being stored.  
     You'll set up this directory, 
-    and its contents in Section \@ref(download-data).  
+    and its contents in Section \@ref(getting-started-download-data).  
 
 -   Results are put in `results/`.
     This includes cleaned-up data,
@@ -196,31 +132,24 @@ the directories in the repository's root are organized according to purpose:
 
 This structure works well for many computational research projects and
 we encourage its use beyond just this book. 
-We will add some more folders and files  not directly addressed by @Nobl2009
+We will add some more folders and files not directly addressed by @Nobl2009
 when we talk about provenance (Chapter \@ref(provenance)),
 testing (Chapter \@ref(testing)),
 and packaging (Chapter \@ref(packaging)).
 
-### Downloading the data {#download-data}
-
-Over the course of this book,
-you'll build up the project structure described above.
+## Downloading the Data {#getting-started-download-data}
 
 The data files used in the book have been archived
 at an online repository called Figshare (covered in Section \@ref(provenance-data-where)).
 They can be accessed at the following URL:  
 <https://doi.org/10.6084/m9.figshare.13040516>
 
-Download a zip file containing the data files by clicking "download all" at the URL above.
-Unzip the contents into your `zipf/data` directory
-following the project structure described below.
-
-These are the only files you'll need to get started.
-When you are done,
-you should have a directory (also called a \gref{folder}{folder}) 
-called `zipf`,
-containing a single sub-directory called `data`
-with the following contents:
+We can download a zip file containing the data files by clicking
+"download all" at the URL above,
+before unzipping the contents into a new `zipf/data` directory
+(also called a \gref{folder}{folder}) 
+following the project structure described above.
+Here's how things look once we're done:
 
 ```text
 zipf/
@@ -233,4 +162,56 @@ zipf/
     ├── sense_and_sensibility.txt
     ├── sherlock_holmes.txt
     └── time_machine.txt
+```
+
+## Installing the Software {#getting-started-install-software}
+
+In order to conduct our Zipf's Law analysis,
+we need to have the following software installed:
+
+1. A \gref{Bash shell}{shell}
+2. \gref{Git}{git} version control
+3. A text editor
+4 [Python 3][python] (via the Anaconda distribution)
+5. [GNU Make][gnu-make]
+
+Comprehensive software installation instructions for Windows, Mac and Linux operating systems
+(with video tutorials) are maintained by [The Carpentries][carpentries]
+as part of their workshop website template:  
+<https://carpentries.github.io/workshop-template/#setup>
+
+We can follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
+
+If Make isn't installed on your computer (check by typing `make -v` into the Bash shell),
+then it can be installed as follows:
+
+- *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
+- *Mac*: Install [Xcode][xcode] (via the App Store).
+- *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
+  Master of Data Science at the University of British Columbia.
+
+> **conda in the shell on Windows**
+>
+> If you are using Windows and the `conda` command isn't available at the Bash shell,
+> you'll need to open the Anaconda Prompt program (via the Windows start menu)
+> and run the command `conda init bash` (this only needs to be done once).
+> After that, your shell will be configured to use conda going forward.
+
+## Summary {#getting-started-summary}
+
+With our project structure decided, data downloaded and software installed,
+we are now ready to start exploring our data.
+
+## Exercises {#getting-started-exercises}
+
+### Getting ready {#getting-started-install}
+
+Make sure you've downloaded the required data files
+(following Section \@ref(getting-started-download-data))
+and installed the required software (following Section \@ref(getting-started-install-software))
+before progressing to the next chapter. 
+
+## Key Points {#getting-started-keypoints}
+
+```{r, child="keypoints/getting-started.md"}
 ```

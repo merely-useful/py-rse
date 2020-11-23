@@ -76,6 +76,10 @@ clean :
 	@rm -f *.aux *.lof *.log *.lot *.out *.toc
 	@find . -name '*~' -exec rm {} \;
 
+## captions : check that image captions are OK.
+captions :
+	@bin/captions.py ${SOURCE}
+
 ## chapters : check consistency of chapters.
 chapters :
 	@make settings | bin/chapters.py _bookdown.yml CHAPTERS

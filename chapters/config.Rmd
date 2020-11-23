@@ -112,7 +112,7 @@ The labels on our *Jane Eyre* word frequency plot are fine for viewing on screen
 but they will need to be bigger
 if we want to include the figure in a slideshow or report.
 
-```{r configuration-jane-eyre-default, echo=FALSE, fig.cap="Word frequency distribution for the book Jane Eyre with default label sizes."}
+```{r configuration-jane-eyre-default, echo=FALSE, fig.cap="Word frequency distribution for 'Jane Eyre' with default label sizes."}
 knitr::include_graphics("figures/config/jane-eyre-default.png")
 ```
 
@@ -173,7 +173,7 @@ and then re-generate the Jane Eyre plot with bigger labels
 $ python bin/plotcounts.py results/jane_eyre.csv --outfile results/jane_eyre.png
 ```
 
-```{r configuration-jane-eyre-big-labels, echo=FALSE, fig.cap="Word frequency distribution for the book Jane Eyre with larger label sizes."}
+```{r configuration-jane-eyre-big-labels, echo=FALSE, fig.cap="Word frequency distribution for 'Jane Eyre' with larger labels."}
 knitr::include_graphics("figures/config/jane-eyre-big-labels.png")
 ```
 
@@ -203,7 +203,14 @@ print(plt.style.available)
 ```
 
 ```text
-['seaborn-dark', 'seaborn-darkgrid', 'seaborn-ticks', 'fivethirtyeight', 'seaborn-whitegrid', 'classic', '_classic_test', 'fast', 'seaborn-talk', 'seaborn-dark-palette', 'seaborn-bright', 'seaborn-pastel', 'grayscale', 'seaborn-notebook', 'ggplot', 'seaborn-colorblind', 'seaborn-muted', 'seaborn', 'Solarize_Light2', 'seaborn-paper', 'bmh', 'tableau-colorblind10', 'seaborn-white', 'dark_background', 'seaborn-poster', 'seaborn-deep']
+['seaborn-dark', 'seaborn-darkgrid', 'seaborn-ticks',
+'fivethirtyeight', 'seaborn-whitegrid', 'classic',
+'_classic_test', 'fast', 'seaborn-talk', 'seaborn-dark-palette',
+'seaborn-bright', 'seaborn-pastel', 'grayscale',
+'seaborn-notebook', 'ggplot', 'seaborn-colorblind',
+'seaborn-muted', 'seaborn', 'Solarize_Light2', 'seaborn-paper',
+'bmh', 'tableau-colorblind10', 'seaborn-white',
+'dark_background', 'seaborn-poster', 'seaborn-deep']
 ```
 
 In order to make the labels bigger in all of our Zipf's Law plots,
@@ -256,12 +263,16 @@ The `choices` parameter of `add_argument` lets us tell `argparse`
 that the user is only allowed to specify a value from a predefined list:
 
 ```python
-mpl_sizes = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large']
-parser.add_argument('--labelsize', type=str, default='x-large', choices=mpl_sizes,
+mpl_sizes = ['xx-small', 'x-small', 'small', 'medium', 
+             'large', 'x-large', 'xx-large']
+parser.add_argument('--labelsize', type=str, default='x-large', 
+                    choices=mpl_sizes,
                     help='fontsize of the x any y labels')
-parser.add_argument('--xticksize', type=str, default='large', choices=mpl_sizes,
+parser.add_argument('--xticksize', type=str, default='large', 
+                    choices=mpl_sizes,
                     help='fontsize of the x tick labels')
-parser.add_argument('--yticksize', type=str, default='large', choices=mpl_sizes,
+parser.add_argument('--yticksize', type=str, default='large', 
+                    choices=mpl_sizes,
                     help='fontsize of the y tick labels')
 ```
 
@@ -315,8 +326,10 @@ instead of the user-specific style sheet directory,
 we need to add one new option to `plotcounts.py` to load it:
 
 ```python
-parser.add_argument('--plotparams', type=str, default=None,
-                    help='YAML file containing matplotlib parameters')
+parser.add_argument(
+  '--plotparams', type=str, default=None,
+  help='YAML file containing matplotlib parameters'
+)
 ```
 
 We can use Python's `yaml` library to read that file:
@@ -378,10 +391,15 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, beta, ax):
 def main(args):
     """Run the command line program."""
     set_plot_params(args.plotparams)
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
-    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    df = pd.read_csv(args.infile, header=None, 
+                     names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False, 
+                                           method='max')
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='rank', loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)
 
     alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
@@ -401,14 +419,18 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'), 
+                        nargs='?',
+                        default='-', 
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str, 
+                        default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+    parser.add_argument('--xlim', type=float, nargs=2, 
+                        metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     parser.add_argument('--plotparams', type=str, default=None,
-                        help='YAML file containing matplotlib parameters')
+                        help='YAML file with matplotlib parameters')
     args = parser.parse_args()
     main(args)
 ```
