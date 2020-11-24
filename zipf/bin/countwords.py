@@ -3,9 +3,10 @@ Count the occurrences of all words in a text
 and output them in CSV format.
 """
 
-import string
 import argparse
+import string
 from collections import Counter
+
 import utilities
 
 

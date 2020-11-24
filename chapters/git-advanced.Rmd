@@ -90,25 +90,34 @@ $ cat bin/plotcounts.py
 """Plot word counts."""
 
 import argparse
+
 import pandas as pd
 
 
 def main(args):
     """Run the command line program."""
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
-    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
+    ax = df.plot.scatter(x='word_frequency',
+                         y='rank', loglog=True,
+                         figsize=[12, 6],
+                         grid=True,
+                         xlim=args.xlim)
     ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?', default='-',
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str,
+                        default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+    parser.add_argument('--xlim', type=float, nargs=2,
+                        metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     args = parser.parse_args()
     main(args)
@@ -266,7 +275,8 @@ import numpy as np
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
-    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1)
+                          - (1/(counts + 1))**(beta - 1)))
     return likelihood
 ```
 
@@ -281,8 +291,10 @@ from scipy.optimize import minimize_scalar
 
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -326,6 +338,7 @@ we can update `plotcounts.py` so the entire script reads as follows:
 """Plot word counts."""
 
 import argparse
+
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize_scalar
@@ -333,14 +346,17 @@ from scipy.optimize import minimize_scalar
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
-    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1)
+                          - (1/(counts + 1))**(beta - 1)))
     return likelihood
 
 
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -350,7 +366,8 @@ def set_plot_params(param_file):
     """Set the matplotlib rc parameters."""
     if param_file:
         with open(param_file, 'r') as reader:
-            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+            param_dict = yaml.load(reader,
+                                   Loader=yaml.BaseLoader)
     else:
         param_dict = {}
     for param, value in param_dict.items():
@@ -381,17 +398,25 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
 
 def main(args):
     """Run the command line program."""
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
-    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
+    ax = df.plot.scatter(x='word_frequency',
+                         y='rank', loglog=True,
+                         figsize=[12, 6],
+                         grid=True,
+                         xlim=args.xlim)
 
     alpha = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
-    # Since the ranks are already sorted, we can take the last one instead of
-    # computing which row has the highest rank
+    
+    # Since the ranks are already sorted, we can take the last one
+    # instead of computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
-    # Use the range of the data as the boundaries when drawing the power law curve
+    
+    # Use the range of the data as the boundaries
+    # when drawing the power law curve
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
@@ -401,11 +426,14 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?', default='-',
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str,
+                        default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+    parser.add_argument('--xlim', type=float, nargs=2,
+                        metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     args = parser.parse_args()
     main(args)
@@ -519,8 +547,10 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -560,7 +590,8 @@ index 4501eaf..d57fd63 100644
 +
 +def nlog_likelihood(beta, counts):
 +    """Log-likelihood function."""
-+    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
++    likelihood = - np.sum(np.log((1/counts)**(beta - 1)
++                          - (1/(counts + 1))**(beta - 1)))
 +    return likelihood
 +
 +
@@ -579,8 +610,10 @@ index 4501eaf..d57fd63 100644
 +      PLoS ONE 11(1): e0147073.
 +      https://doi.org/10.1371/journal.pone.0147073
 +    """
-+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-+                          args=word_counts, method='brent')
++    mle = minimize_scalar(nlog_likelihood,
++                          bracket=(1 + 1e-10, 4),
++                          args=word_counts,
++                          method='brent')
 +    beta = mle.x
 +    alpha = 1 / (beta - 1)
 +    return alpha
@@ -590,7 +623,8 @@ index 4501eaf..d57fd63 100644
 +    """Set the matplotlib rc parameters."""
 +    if param_file:
 +        with open(param_file, 'r') as reader:
-+            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
++            param_dict = yaml.load(reader,
++                                   Loader=yaml.BaseLoader)
 +    else:
 +        param_dict = {}
 +    for param, value in param_dict.items():
@@ -621,18 +655,26 @@ index 4501eaf..d57fd63 100644
 
  def main(args):
 +    """Run the command line program.""" 
-     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+     df = pd.read_csv(args.infile, header=None,
+                      names=('word', 'word_frequency'))
+     df['rank'] = df['word_frequency'].rank(ascending=False,
+                                            method='max')
 -    df['inverse_rank'] = 1 / df['rank']
-     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                          figsize=[12, 6], grid=True, xlim=args.xlim)
+     ax = df.plot.scatter(x='word_frequency',
+                          y='rank', loglog=True,
+                          figsize=[12, 6],
+                          grid=True,
+                          xlim=args.xlim)
 +
 +    alpha = get_power_law_params(df['word_frequency'].to_numpy())
 +    print('alpha:', alpha)
-+    # Since the ranks are already sorted, we can take the last one instead of
-+    # computing which row has the highest rank
++
++    # Since the ranks are already sorted, we can take the last one
++    # instead of computing which row has the highest rank
 +    max_rank = df['rank'].to_numpy()[-1]
-+    # Use the range of the data as the boundaries when drawing the power law curve
++
++    # Use the range of the data as the boundaries
++    # when drawing the power law curve
 +    curve_xmin = df['word_frequency'].min()
 +    curve_xmax = df['word_frequency'].max()
 +

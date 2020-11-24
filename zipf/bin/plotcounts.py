@@ -1,5 +1,7 @@
 """Plot word counts."""
+
 import argparse
+
 import yaml
 import numpy as np
 import pandas as pd
@@ -31,9 +33,11 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     assert type(word_counts) == np.ndarray, \
-           'Input must be a numerical (numpy) array of word counts'
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+      'Input must be a numerical (numpy) array of word counts'
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -43,7 +47,8 @@ def set_plot_params(param_file):
     """Set the matplotlib parameters."""
     if param_file:
         with open(param_file, 'r') as reader:
-            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+            param_dict = yaml.load(reader,
+                                   Loader=yaml.BaseLoader)
     else:
         param_dict = {}
     for param, value in param_dict.items():
@@ -72,9 +77,9 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     ax.loglog(xvals, yvals, color='grey')
 
 
-def save_configuration(filename, params):
+def save_configuration(fname, params):
     """Save configuration to a file."""
-    with open(filename, 'w') as reader:
+    with open(fname, 'w') as reader:
         yaml.dump(params, reader)
 
 
@@ -87,9 +92,13 @@ def main(args):
         save_configuration(args.saveconfig, mpl.rcParams)
     df = pd.read_csv(args.infile, header=None,
                      names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
-    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
+    ax = df.plot.scatter(x='word_frequency',
+                         y='rank', loglog=True,
+                         figsize=[12, 6],
+                         grid=True,
+                         xlim=args.xlim)
 
     alpha = get_power_law_params(df['word_frequency'].to_numpy())
     print('alpha:', alpha)
@@ -103,25 +112,26 @@ def main(args):
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
-    # Plot the result
     plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
     ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?', default='-',
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str,
+                        default='plotcounts.png',
                         help='Output image file name')
     parser.add_argument('--xlim', type=float, nargs=2,
-                        metavar=('XMIN', 'XMAX'), default=None,
-                        help='X-axis limits')
+                        metavar=('XMIN', 'XMAX'),
+                        default=None, help='X-axis limits')
     parser.add_argument('--plotparams', type=str, default=None,
-                        help='YAML file containing matplotlib parameters')
+                        help='matplotlib parameters (YAML file)')
     parser.add_argument('--style', type=str, nargs='*',
-                        choices=plt.style.available, default=None,
-                        help='matplotlib style')
+                        choices=plt.style.available,
+                        default=None, help='matplotlib style')
     parser.add_argument('--saveconfig', type=str, default=None,
                         help='Save configuration to file')
     args = parser.parse_args()

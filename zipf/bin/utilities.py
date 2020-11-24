@@ -4,9 +4,9 @@ import sys
 import csv
 
 
-ERROR_MESSAGES = {
-    'not_csv_file_suffix': '{file_name}: File must end in .csv',
-}
+ERRORS = {
+    'not_csv_suffix': '{fname}: File must end in .csv',
+    }
 
 
 def collection_to_csv(collection, num=None):
