@@ -414,9 +414,7 @@ import csv
 
 
 def collection_to_csv(collection):
-    """
-    Write out a collection of items and counts in csv format.
-    """
+    """Write out collection of items and counts in csv format."""
     collection = collection.most_common()
     writer = csv.writer(sys.stdout)
     writer.writerows(collection)
@@ -433,9 +431,7 @@ in which case we display the whole collection:
 
 ```python
 def collection_to_csv(collection, num=None):
-    """
-    Write out a collection of items and counts in csv format.
-    """
+    """Write out collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -468,8 +464,8 @@ and put it in the `bin` subdirectory of the `zipf` project:
 
 ```python
 """
-Count the occurrences of all words in a text and output 
-them in CSV format.
+Count the occurrences of all words in a text 
+and output them in CSV format.
 """
 
 import sys
@@ -480,9 +476,7 @@ from collections import Counter
 
 
 def collection_to_csv(collection, num=None):
-    """
-    Write out a collection of items and counts in csv format.
-    """
+    """Write out collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -491,9 +485,7 @@ def collection_to_csv(collection, num=None):
 
 
 def count_words(reader):
-    """
-    Count the occurrence of each word in a string.
-    """
+    """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
     stripped = [word.strip(string.punctuation) for word in chunks]
@@ -513,10 +505,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=str, 
                         help='Input file name')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to N most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -576,10 +566,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'), 
                         nargs='?', default='-', 
                         help='Input file name')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to N most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -680,7 +668,10 @@ Using the same template as before,
 we can write a program called `collate.py`:
 
 ```python
-"""Combine multiple word count CSV-files into a single cumulative count."""
+"""
+Combine multiple word count CSV-files
+into a single cumulative count.
+"""
 
 import sys
 import csv
@@ -690,7 +681,7 @@ from collections import Counter
 
 def collection_to_csv(collection, num=None):
     """
-    Write out a collection of items and counts in csv format.
+    Write out collection of items and counts in csv format.
     """
     collection = collection.most_common()
     if num is None:
@@ -720,10 +711,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', 
                         help='Input file names')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to n most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -749,7 +738,7 @@ Let's give `collate.py` a try
 (using `-n 10` to limit the number of lines of output):
 
 ```shell
-$ python bin/collate.py results/dracula.csv \
+$ python bin/collate.py results/dracula.csv
   results/moby_dick.csv results/jane_eyre.csv -n 10
 ```
 
@@ -779,16 +768,15 @@ Let's create a file called `utilities.py` in the `bin` directory
 that looks like this:
 
 ```python
-"""
-Collection of commonly used functions.
-"""
+"""Collection of commonly used functions."""
 
 import sys
 import csv
 
+
 def collection_to_csv(collection, num=None):
     """
-    Write out a collection of items and counts in csv format.
+    Write out collection of items and counts in csv format.
 
     Parameters
     ----------
@@ -818,8 +806,8 @@ After making this change,
 
 ```python
 """
-Count the occurrences of all words in a text and 
-write them to a CSV-file.
+Count the occurrences of all words in a text
+and write them to a CSV-file.
 """
 
 import re
@@ -829,9 +817,7 @@ import utilities
 
 
 def count_words(reader):
-    """
-    Count the occurrence of each word in a string.
-    """
+    """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
     stripped = [word.strip(string.punctuation) for word in chunks]
@@ -851,10 +837,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'), 
                         nargs='?', default='-', 
                         help='Input file name')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to n most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -863,7 +847,8 @@ if __name__ == '__main__':
 
 ```python
 """
-Combine multiple word count CSV-files into a single cumulative count.
+Combine multiple word count CSV-files
+into a single cumulative count.
 """
 
 import csv
@@ -873,9 +858,7 @@ import utilities
 
 
 def update_counts(reader, word_counts):
-    """
-    Update word counts with data from another reader/file.
-    """
+    """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
@@ -893,10 +876,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', 
                         help='Input file names')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to n most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -1133,7 +1114,7 @@ When you are done,
 generate a plot of the word counts for *Jane Eyre*:
 
 ```shell
-$ python bin/plotcounts.py results/jane_eyre.csv \
+$ python bin/plotcounts.py results/jane_eyre.csv
   --outfile results/jane_eyre.png
 ```
 

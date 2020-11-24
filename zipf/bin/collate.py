@@ -1,4 +1,8 @@
-"""Combine multiple word count CSV-files into a single cumulative count."""
+"""
+Combine multiple word count CSV-files
+into a single cumulative count.
+"""
+
 import csv
 import argparse
 from collections import Counter
@@ -11,6 +15,7 @@ def update_counts(reader, word_counts):
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
+
 def process_file(file_name, word_counts):
     """Read file and update word counts"""
     logging.debug(f'Reading in {file_name}...')
@@ -19,6 +24,7 @@ def process_file(file_name, word_counts):
     with open(file_name, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
+
 
 def main(args):
     """Run the command line program."""
@@ -36,6 +42,7 @@ def main(args):
         except Exception as error:
             logging.warning(f'{file_name} not processed: {error}')
     utilities.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
