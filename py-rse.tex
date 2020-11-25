@@ -5,12 +5,13 @@
 \documentclass[
 ]{krantz}
 \usepackage{lmodern}
-\usepackage{amssymb,amsmath}
+\usepackage{amsmath}
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
 \else % if luatex or xetex
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
@@ -82,6 +83,7 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
+\usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
 \makeatletter
@@ -151,16 +153,40 @@
 % Handle glossary links specially.
 \newcommand{\gref}[2]{\hyperlink{#2}{\textbf{#1}}}
 
+% Allow box-drawing characters
+% See https://tex.stackexchange.com/questions/281368/print-box-drawing-characters-with-pdflatex
+% and pg 185 of http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
+\usepackage{pmboxdraw}
+\usepackage{newunicodechar}
+\newunicodechar{│}{\textSFxi}
+\newunicodechar{└}{\textSFii}
+\newunicodechar{├}{\textSFviii}
+\newunicodechar{─}{\textSFx}
+
 \frontmatter
 \ifluatex
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
-\newenvironment{cslreferences}%
-  {\setlength{\parindent}{0pt}%
-  \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces}%
-  {\par}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[3] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
+  % set entry spacing
+  \ifnum #2 > 0
+  \setlength{\parskip}{#2\baselineskip}
+  \fi
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \title{Research Software Engineering with Python}
 \usepackage{etoolbox}
@@ -171,7 +197,7 @@
 \makeatother
 \subtitle{Building software that makes research possible}
 \author{Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson}
-\date{2020-11-17}
+\date{2020-11-25}
 
 \begin{document}
 \maketitle
@@ -406,7 +432,7 @@ This book was written to be used as the material for a (potentially) semester
 long course at the university level,
 although it can also be used for independent self-study.
 Participatory live-coding is the anticipated style for teaching the material,
-rather than lectures simply talking about the code presented (Brown and Wilson \protect\hyperlink{ref-Brow2018}{2018}; Wilson \protect\hyperlink{ref-Wils2018}{2019}\protect\hyperlink{ref-Wils2018}{a}).
+rather than lectures simply talking about the code presented (\protect\hyperlink{ref-Brow2018}{N. C. C. Brown and Wilson 2018}; \protect\hyperlink{ref-Wils2018}{Wilson 2019a}).
 The chapters and their content are generally designed to be used in the order
 given.
 
@@ -450,7 +476,7 @@ as long as there is attribution to this source.
 This book owes its existence to
 everyone we met through \href{https://carpentries.org/}{the Carpentries}.
 We are also grateful to \href{https://www.insightdatascience.com/}{Insight Data Science} for sponsoring the early stages of this work,
-to the authors of Noble (\protect\hyperlink{ref-Nobl2009}{2009}), Haddock and Dunn (\protect\hyperlink{ref-Hadd2010}{2010}), Wilson et al. (\protect\hyperlink{ref-Wils2014}{2014}), Scopatz and Huff (\protect\hyperlink{ref-Scop2015}{2015}), Taschuk and Wilson (\protect\hyperlink{ref-Tasc2017}{2017}), Wilson et al. (\protect\hyperlink{ref-Wils2017}{2017}), Brown and Wilson (\protect\hyperlink{ref-Brow2018}{2018}), Devenyi et al. (\protect\hyperlink{ref-Deve2018}{2018}), Sholler et al. (\protect\hyperlink{ref-Shol2019}{2019}), Wilson (\protect\hyperlink{ref-Wils2019}{2019}\protect\hyperlink{ref-Wils2019}{b})
+to the authors of \protect\hyperlink{ref-Nobl2009}{Noble} (\protect\hyperlink{ref-Nobl2009}{2009}), \protect\hyperlink{ref-Hadd2010}{Haddock and Dunn} (\protect\hyperlink{ref-Hadd2010}{2010}), \protect\hyperlink{ref-Wils2014}{Wilson et al.} (\protect\hyperlink{ref-Wils2014}{2014}), \protect\hyperlink{ref-Scop2015}{Scopatz and Huff} (\protect\hyperlink{ref-Scop2015}{2015}), \protect\hyperlink{ref-Tasc2017}{Taschuk and Wilson} (\protect\hyperlink{ref-Tasc2017}{2017}), \protect\hyperlink{ref-Wils2017}{Wilson et al.} (\protect\hyperlink{ref-Wils2017}{2017}), \protect\hyperlink{ref-Brow2018}{N. C. C. Brown and Wilson} (\protect\hyperlink{ref-Brow2018}{2018}), \protect\hyperlink{ref-Deve2018}{Devenyi et al.} (\protect\hyperlink{ref-Deve2018}{2018}), \protect\hyperlink{ref-Shol2019}{Sholler et al.} (\protect\hyperlink{ref-Shol2019}{2019}), \protect\hyperlink{ref-Wils2019}{Wilson} (\protect\hyperlink{ref-Wils2019}{2019b})
 and to everyone who has contributed, including Madeleine Bonsma-Fisher,
 Jonathan Dursi,
 Christina Koch,
@@ -516,13 +542,13 @@ and how familiar people are with that style of organization.
 
 As with good coding style (Appendix~\ref{style}),
 small pieces in predictable places with readable names are easier to find and use
-than large chunks that vary from project to project and have names like ``stuff''.
+than large chunks that vary from project to project and have names like ``stuff.''
 We can be messy while we are working and then tidy up later,
 but experience teaches that we will be more productive if we make tidiness a habit.
 
 In building the Zipf's Law project we'll follow
 a widely-used template
-for organizing small and medium-sized data analysis projects (Noble \protect\hyperlink{ref-Nobl2009}{2009}).
+for organizing small and medium-sized data analysis projects (\protect\hyperlink{ref-Nobl2009}{Noble 2009}).
 The project will live in a directory called \texttt{zipf},
 which will also be a Git repository stored on GitHub (Chapter~\ref{git-cmdline}).
 The following is an abbreviated version of the project directory tree
@@ -591,13 +617,13 @@ meaning they are copied without change from one use to the next.
 \hypertarget{getting-started-organize}{%
 \subsection{Organizing project content}\label{getting-started-organize}}
 
-Following Noble (\protect\hyperlink{ref-Nobl2009}{2009}),
+Following \protect\hyperlink{ref-Nobl2009}{Noble} (\protect\hyperlink{ref-Nobl2009}{2009}),
 the directories in the repository's root are organized according to purpose:
 
 \begin{itemize}
 \item
   Runnable programs go in \texttt{bin/}
-  (an old Unix abbreviation for ``binary'', meaning ``not text'').
+  (an old Unix abbreviation for ``binary,'' meaning ``not text'').
   This will include both shell scripts,
   e.g.~\texttt{book\_summary.sh} developed in Chapter~\ref{bash-advanced},
   and Python programs,
@@ -625,7 +651,7 @@ the directories in the repository's root are organized according to purpose:
 
 This structure works well for many computational research projects and
 we encourage its use beyond just this book.
-We will add some more folders and files not directly addressed by Noble (\protect\hyperlink{ref-Nobl2009}{2009})
+We will add some more folders and files not directly addressed by \protect\hyperlink{ref-Nobl2009}{Noble} (\protect\hyperlink{ref-Nobl2009}{2009})
 when we talk about provenance (Chapter~\ref{provenance}),
 testing (Chapter~\ref{testing}),
 and packaging (Chapter~\ref{packaging}).
@@ -786,7 +812,7 @@ If you have used an interactive console for R or Python,
 you have already used a simple CLI.
 
 This lesson introduces another CLI that lets us interact with our computer's operating system.
-It is called a ``command shell'',
+It is called a ``command shell,''
 or just \gref{shell}{shell} for short,\index{Unix shell}
 and in essence is a program that runs other programs on our behalf
 (Figure~\ref{fig:bash-basics-repl}).
@@ -1183,7 +1209,7 @@ cd: amira: No such file or directory
 \end{verbatim}
 
 because \texttt{amira} on its own is a relative path meaning
-``a file or directory called \texttt{amira} \emph{below our current working directory}''.
+``a file or directory called \texttt{amira} \emph{below our current working directory}.''
 To get back home,
 we can either use an absolute path:
 
@@ -1192,7 +1218,7 @@ $ cd /Users/amira
 \end{verbatim}
 
 or a special relative path called \texttt{..} (two periods in a row with no spaces),\index{.. (parent directory)}\index{path!..}
-which always means ``the directory that contains the current one''.
+which always means ``the directory that contains the current one.''
 The directory that contains the one we are in is called the \gref{parent directory}{parent\_directory},\index{parent directory}
 and sure enough,
 \texttt{..} gets us there:
@@ -1209,7 +1235,7 @@ $ pwd
 \texttt{ls} usually doesn't show us this special directory---since it's always there,
 displaying it every time would be a distraction.
 We can ask \texttt{ls} to include it using the \texttt{-a} option,
-which stands for ``all''.
+which stands for ``all.''
 Remembering that we are now in \texttt{/Users/amira}:
 
 \begin{verbatim}
@@ -1478,7 +1504,7 @@ it displays some help in the bottom two lines of the screen
 using the last of these notations:
 for example,
 \texttt{\^{}G\ Get\ Help} means ``use Control+G to get help''
-and \texttt{\^{}O\ WriteOut} means ``use Control+O to write out the current file''.
+and \texttt{\^{}O\ WriteOut} means ``use Control+O to write out the current file.''
 \end{quote}
 
 Nano doesn't leave any output on the screen after it exits,
@@ -1495,7 +1521,7 @@ draft.txt
 \begin{quote}
 \textbf{Dot Something}
 
-All of Amira's files are named ``something dot something''.
+All of Amira's files are named ``something dot something.''
 This is just a convention:
 we can call a file \texttt{mythesis} or almost anything else.
 However,
@@ -1530,7 +1556,7 @@ so let's change it using \texttt{mv} (short for \textbf{m}o\textbf{v}e):\index{U
 $ mv analysis/draft.txt analysis/prior-work.txt
 \end{verbatim}
 
-The first argument tells \texttt{mv} what we are ``moving'',
+The first argument tells \texttt{mv} what we are ``moving,''
 while the second is where it's to go.
 ``Moving'' \texttt{analysis/draft.txt} to \texttt{analysis/prior-work.txt}
 has the same effect as renaming the file:
@@ -1894,7 +1920,7 @@ and highlights a few of features useful for beginners.
 
 Some commands have a \texttt{-\/-help} option that provides a succinct summary of possibilities,
 but the best place to go for help these days is probably the \href{https://tldr.sh/}{TLDR} website.
-The acronym stands for ``too long, didn't read'',
+The acronym stands for ``too long, didn't read,''
 and its help for \texttt{wc} displays this:
 
 \begin{verbatim}
@@ -2234,7 +2260,7 @@ books.txt    titles.txt
 You're starting a new analysis, and would like to duplicate the directory
 structure from your previous experiment so you can add new data.
 
-Assume that the previous experiment is in a folder called `2016-05-18',
+Assume that the previous experiment is in a folder called `2016-05-18,'
 which contains a \texttt{data} folder that in turn contains folders named \texttt{raw} and
 \texttt{processed} that contain data files. The goal is to copy the folder structure
 of the \texttt{2016-05-18-data} folder into a folder called \texttt{2016-05-20}
@@ -2638,7 +2664,7 @@ Every process in Unix has an input channel called \gref{standard input}{stdin}\i
 and an output channel called \gref{standard output}{stdout}.\index{standard output}\index{stdout}
 (By now you may be surprised that their names are so memorable,
 but don't worry:
-most Unix programmers call them ``stdin'' and ``stdout'',
+most Unix programmers call them ``stdin'' and ``stdout,''
 which are pronounced ``stuh-Din'' and ``stuh-Dout'').
 
 The shell is a program like any other,
@@ -3124,7 +3150,7 @@ It is often used to keep track of progress or for debugging.)
 \hypertarget{bash-tools-autoname}{%
 \section{Creating New Filenames Automatically}\label{bash-tools-autoname}}
 
-Suppose we want to create a backup copy of each book whose name ends in ``e''.
+Suppose we want to create a backup copy of each book whose name ends in ``e.''
 If we don't want to change the files' names,
 we can do this with \texttt{cp}:
 
@@ -3721,7 +3747,7 @@ head -n 17 $1 | tail -n 8 | grep Author
 \end{verbatim}
 
 Inside a shell script,
-\texttt{\$1} means ``the first argument on the command line''.
+\texttt{\$1} means ``the first argument on the command line.''
 If we now run our script like this:
 
 \begin{verbatim}
@@ -3857,13 +3883,13 @@ but we also often want to select lines that contain certain values.
 This is called \gref{filtering}{filter},\index{filter (in Unix shell)}
 and we usually do it in the shell with the command \texttt{grep}\index{grep}\index{Unix commands!grep}
 that we briefly met in Section~\ref{bash-advanced-script}.
-Its name is an acronym of ``global regular expression print'',
+Its name is an acronym of ``global regular expression print,''
 which was a common sequence of operations in early Unix text editors.
 
 To show how \texttt{grep} works,
 we will use our sleuthing skills to explore \texttt{data/sherlock\_holmes.txt}.
 First,
-let's find lines that contain the word ``Sherlock''.
+let's find lines that contain the word ``Sherlock.''
 Since there are likely to be hundreds of matches,
 we will pipe \texttt{grep}'s output to \texttt{head} to show only the first few:
 
@@ -3924,7 +3950,7 @@ Author: Arthur Conan Doyle
 \end{verbatim}
 
 In each of these lines,
-our pattern (``on'') is part of a larger word such as ``Conan''.
+our pattern (``on'') is part of a larger word such as ``Conan.''
 To restrict matching to lines containing \texttt{on} by itself,
 we can give \texttt{grep} the \texttt{-w} option (for ``match words''):
 
@@ -4101,7 +4127,7 @@ The distinction is clear. For example, you have frequently seen
 \end{verbatim}
 
 The \texttt{-E} option tells \texttt{grep} to interpret the pattern as a regular expression,
-rather than searching for an actual circumflex followed by an upper-case `T'.
+rather than searching for an actual circumflex followed by an upper-case `T.'
 The quotation marks prevent the shell from treating special characters in the pattern as wildcards,
 and the \texttt{\^{}} means that a line only matches
 if it begins with the search term---in this case, \texttt{T}.
@@ -4113,7 +4139,7 @@ online search engines,
 and most text editors (though not Nano---its creators wanted to keep it as small as possible).
 A detailed guide of regular expressions is outside the scope of this book,
 but a wide range of tutorials are available online,
-and Goyvaerts and Levithan (\protect\hyperlink{ref-Goyv2012}{2012}) is a useful companion if you need to go further.
+and \protect\hyperlink{ref-Goyv2012}{Goyvaerts and Levithan} (\protect\hyperlink{ref-Goyv2012}{2012}) is a useful companion if you need to go further.
 
 \hypertarget{bash-advanced-find}{%
 \section{Finding Files}\label{bash-advanced-find}}
@@ -4444,7 +4470,7 @@ $ echo HOME
 HOME
 \end{verbatim}
 
-Whoops: this just prints ``HOME'', which isn't what we wanted.
+Whoops: this just prints ``HOME,'' which isn't what we wanted.
 Instead,
 we need to run this:
 
@@ -4467,7 +4493,7 @@ Thus,
 which displays the right thing.
 
 Creating a variable is easy:\index{shell variable!creating}
-we assign a value to a name using ``='',
+we assign a value to a name using ``=,''
 putting quotes around the value if it contains spaces or special characters:
 
 \begin{verbatim}
@@ -4518,7 +4544,7 @@ because \texttt{.bashrc} is only executed when the shell starts up.
 The `.' character at the front of the name \texttt{.bashrc}
 prevents \texttt{ls} from listing this file
 unless we specifically ask it to using \texttt{-a}.
-The ``rc'' at the end is an abbreviation for ``run commands'',
+The ``rc'' at the end is an abbreviation for ``run commands,''
 which meant something really important decades ago,
 and is now just a convention everyone follows without understanding why.
 \end{quote}
@@ -4552,7 +4578,7 @@ alias rm='rm -iv'
 \end{verbatim}
 
 We can find interesting suggestions for other aliases
-by searching online for ``sample bashrc''.
+by searching online for ``sample bashrc.''
 
 While searching for additional aliases,
 you're likely to encounter references to other common shell features to customize,
@@ -4592,8 +4618,8 @@ specifying package installation directories to managing database login credentia
 And while \texttt{grep} and \texttt{find} may take some getting used to,
 they and their cousins can handle enormous datasets very efficiently.
 If you would like to go further,
-Ray and Ray (\protect\hyperlink{ref-Ray2014}{2014}) is an excellent general introduction,
-while Janssens (\protect\hyperlink{ref-Jans2014}{2014}) looks specifically at how to process data on the command line.
+\protect\hyperlink{ref-Ray2014}{Ray and Ray} (\protect\hyperlink{ref-Ray2014}{2014}) is an excellent general introduction,
+while \protect\hyperlink{ref-Jans2014}{Janssens} (\protect\hyperlink{ref-Jans2014}{2014}) looks specifically at how to process data on the command line.
 
 \hypertarget{bash-advanced-exercises}{%
 \section{Exercises}\label{bash-advanced-exercises}}
@@ -4845,7 +4871,7 @@ run it with many different parameters,
 or combine it with other programs as part of a data analysis pipeline.
 The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
-just like other command-line tools (Taschuk and Wilson \protect\hyperlink{ref-Tasc2017}{2017}).
+just like other command-line tools (\protect\hyperlink{ref-Tasc2017}{Taschuk and Wilson 2017}).
 
 In this chapter we will develop a command-line Python program\index{Python!command line}
 that handles input and output in the same way as other shell commands,
@@ -6519,14 +6545,14 @@ Git opens a text editor
 so that we can write a longer \gref{commit message}{commit\_message}.\index{Git!commit message}\index{commit!message}
 In this message,
 the first line is referred to as the ``subject''
-and the rest as the ``body'',
+and the rest as the ``body,''
 just as in an email.
 
 When we use \texttt{-m},
 we are only writing the subject line;
 this makes things easier in the short run,
 but if our project's history fills up with one-liners like
-``Fixed problem'' or ``Updated'',
+``Fixed problem'' or ``Updated,''
 our future self will wish that we had taken a few extra seconds
 to explain things in a little more detail.
 Following \href{https://chris.beams.io/posts/git-commit/}{these guidelines} will help:
@@ -7264,7 +7290,7 @@ which always refers to the most recent version in the repository.
 \texttt{git\ diff\ HEAD} therefore shows the same thing as \texttt{git\ diff},
 but instead of typing in a version identifier to back up one commit,
 we can use \texttt{HEAD\textasciitilde{}1} (where \texttt{\textasciitilde{}} is the tilde symbol).\index{Git!relative revision}
-This shorthand is read ``HEAD minus one'',
+This shorthand is read ``HEAD minus one,''
 and gives us the difference to the previous saved version.
 \texttt{git\ diff\ HEAD\textasciitilde{}2} goes back two revisions and so on.
 We can also look at the differences between two saved versions
@@ -7497,7 +7523,7 @@ so that Git knows to use it.
 The biggest benefit of version control for individual research is that
 we can always go back to the precise set of files
 that we used to produce a particular result.
-While Git is complex (Perez De Rosso and Jackson \protect\hyperlink{ref-Pere2013}{2013}),
+While Git is complex (\protect\hyperlink{ref-Pere2013}{Perez De Rosso and Jackson 2013}),
 being able to back up our changes on sites like GitHub
 with just a few keystrokes can save us a lot of pain,
 and some of Git's advanced features make it even more powerful.
@@ -8097,14 +8123,14 @@ and intercept \(\log(c)\).
 Our goal is to estimate the value of \(\alpha\);
 we'll see later that \(c\) is completely defined.
 
-In order to determine the best method for estimating \(\alpha\) we turn to Moreno-Sánchez, Font-Clos, and Corral (\protect\hyperlink{ref-Moreno2016}{2016}),
+In order to determine the best method for estimating \(\alpha\) we turn to \protect\hyperlink{ref-Moreno2016}{Moreno-Sánchez, Font-Clos, and Corral} (\protect\hyperlink{ref-Moreno2016}{2016}),
 which suggests using a method called \gref{maximum likelihood estimation}{maximum\_likelihood\_estimation}.\index{maximum likelihood estimation}
 The likelihood function is the probability of our observed data
 as a function of the parameters in the statistical model that we assume generated it.
 We estimate the parameters in the model by choosing them to maximize this likelihood;
 computationally,
 it is often easier to minimize the negative log likelihood function.
-Moreno-Sánchez, Font-Clos, and Corral (\protect\hyperlink{ref-Moreno2016}{2016}) define the likelihood using a parameter \(\beta\),
+\protect\hyperlink{ref-Moreno2016}{Moreno-Sánchez, Font-Clos, and Corral} (\protect\hyperlink{ref-Moreno2016}{2016}) define the likelihood using a parameter \(\beta\),
 which is related to the \(\alpha\) parameter in our definition of Zipf's Law
 through \(\alpha = \tfrac{1}{\beta-1}\).
 Under their model,
@@ -8128,7 +8154,7 @@ the negative log likelihood function is:
 Obtaining an estimate of \(\beta\) (and thus \(\alpha\))
 then becomes a numerical optimization problem,
 for which we can use the \texttt{scipy.optimize} library.
-Again following Moreno-Sánchez, Font-Clos, and Corral (\protect\hyperlink{ref-Moreno2016}{2016}),
+Again following \protect\hyperlink{ref-Moreno2016}{Moreno-Sánchez, Font-Clos, and Corral} (\protect\hyperlink{ref-Moreno2016}{2016}),
 we use Brent's Method with \(1 < \beta \leq 4\).
 
 \begin{Shaded}
@@ -8930,7 +8956,7 @@ this workflow will help us keep track of what we are doing:
 
 Most experienced developers use this
 \gref{branch-per-feature workflow}{branch\_per\_feature\_workflow},\index{branch-per-feature workflow (in Git)}\index{Git!branch-per-feature workflow}
-but what exactly is a ``feature''?
+but what exactly is a ``feature?''
 These rules make sense for small projects:
 
 \begin{enumerate}
@@ -8991,7 +9017,7 @@ but if the project is larger,
 or if contributors are worried that they might make a mess in the \texttt{master} branch,
 the second approach is safer.
 
-Git itself doesn't have any notion of a ``main repository'',
+Git itself doesn't have any notion of a ``main repository,''
 but \gref{forges}{forge} like \href{https://github.com}{GitHub},
 \href{https://gitlab.com/}{GitLab},
 and \href{https://bitbucket.org/}{BitBucket} all encourage people
@@ -9215,7 +9241,7 @@ They aren't part of Git itself,
 but are supported by all major online \gref{forges}{forge}.
 
 A pull request is essentially a note saying,
-``Someone would like to merge branch A of repository B into branch X of repository Y''.
+``Someone would like to merge branch A of repository B into branch X of repository Y.''
 The pull request does not contain the changes,
 but instead points at two particular branches.
 That way,
@@ -9473,7 +9499,7 @@ Sure enough,
 when Amira looks at the PR again a few moments later she sees Sami's changes
 (Figure~\ref{fig:git-advanced-pull-request-pr-with-fix}).
 Satisfied,
-she goes back to the ``Conversation'' tab and clicks on ``Merge''.
+she goes back to the ``Conversation'' tab and clicks on ``Merge.''
 The icon at the top of the PR's page changes text and color to show that the merge was successful
 (Figure~\ref{fig:git-advanced-pull-request-successful-merge}).
 
@@ -9779,9 +9805,9 @@ or hostile to each other.
 This chapter therefore looks at how to create a culture of collaboration
 that will help people who want to contribute to your project,
 and introduce a few ways to manage projects and teams as they develop.
-Our recommendations draw on Fogel (\protect\hyperlink{ref-Foge2005}{2005}),
+Our recommendations draw on \protect\hyperlink{ref-Foge2005}{Fogel} (\protect\hyperlink{ref-Foge2005}{2005}),
 which describes how good open source software projects are run,
-and on Bollier (\protect\hyperlink{ref-Boll2014}{2014}),
+and on \protect\hyperlink{ref-Boll2014}{Bollier} (\protect\hyperlink{ref-Boll2014}{2014}),
 which explains what a \gref{commons}{commons} is\index{commons}
 and when it's the right model to use.
 
@@ -9812,7 +9838,7 @@ zipf/
 \hypertarget{teams-scope}{%
 \section{What is a Project?}\label{teams-scope}}
 
-The first decision we have to make is what exactly constitutes a ``project'' (Wilson et al. \protect\hyperlink{ref-Wils2017}{2017}).
+The first decision we have to make is what exactly constitutes a ``project'' (\protect\hyperlink{ref-Wils2017}{Wilson et al. 2017}).
 Some examples are:
 
 \begin{itemize}
@@ -9861,7 +9887,7 @@ that's an even stronger sign.
 \section{Include Everyone}\label{teams-inclusive}}
 
 Most research software projects begin as the work of one person,
-who may continue to do the bulk of the coding and data analysis throughout its existence (Majumder et al. \protect\hyperlink{ref-Maju2019}{2019}).
+who may continue to do the bulk of the coding and data analysis throughout its existence (\protect\hyperlink{ref-Maju2019}{Majumder et al. 2019}).
 As projects become larger,
 though,
 they eventually need more contributors to sustain them.
@@ -9871,7 +9897,7 @@ In order to leverage a group's expertise,
 though,
 a project must do more than \emph{allow} people to contribute:
 its leaders must communicate that the project \emph{wants} contributions,
-and that newcomers are welcome and valued (Sholler et al. \protect\hyperlink{ref-Shol2019}{2019}).\index{project!inclusivity}\index{inclusivity}
+and that newcomers are welcome and valued (\protect\hyperlink{ref-Shol2019}{Sholler et al. 2019}).\index{project!inclusivity}\index{inclusivity}
 
 But saying ``the door is open'' is not enough,
 since many potential contributors have painful personal experience of being less welcome than others.
@@ -9879,7 +9905,7 @@ In order to create a truly welcoming environment for everyone,
 the project must explicitly acknowledge that some people are treated unfairly
 and actively take steps to remedy this.
 Doing this increases diversity within the team,
-which makes it more productive (Zhang \protect\hyperlink{ref-Zhan2020}{2020}).
+which makes it more productive (\protect\hyperlink{ref-Zhan2020}{Zhang 2020}).
 More importantly,
 it is the right thing to do.
 
@@ -9888,7 +9914,7 @@ it is the right thing to do.
 
 \gref{Privilege}{privilege} is an unearned advantage given to some people but not all,\index{privilege}
 while \gref{oppression}{oppression} is systemic inequality that benefits the privileged\index{oppression}
-and harms those without privilege (Aurora and Gardiner \protect\hyperlink{ref-Auro2019}{2019}).
+and harms those without privilege (\protect\hyperlink{ref-Auro2019}{Aurora and Gardiner 2019}).
 In Europe, the Americas, Australia, and New Zealand,
 a straight, white, affluent, physically able male
 is less likely to be interrupted when speaking,
@@ -9902,7 +9928,7 @@ they've been playing on \href{https://whatever.scalzi.com/2012/05/15/straight-wh
 their whole lives,
 and as a result don't realize how much harder things are for others.
 
-The targets of oppression are often called ``members of a marginalized group'',
+The targets of oppression are often called ``members of a marginalized group,''
 but targets don't choose to be marginalized:
 people with privilege marginalize them.
 Finally,
@@ -9916,7 +9942,7 @@ we should educate ourselves and call out peers who are marginalizing others,
 even if (or especially if) they aren't conscious of doing it.
 As project leaders,
 part of our job is to teach contributors how to be allies
-and to ensure an inclusive culture (Lee \protect\hyperlink{ref-Lee1962}{1962}).
+and to ensure an inclusive culture (\protect\hyperlink{ref-Lee1962}{Lee 1962}).
 
 \hypertarget{teams-coc}{%
 \section{Establish a Code of Conduct}\label{teams-coc}}
@@ -10111,7 +10137,7 @@ the consequences of non-compliance,
 and the mechanics of reporting and handling violations.
 The third part is as important as the first two,
 since rules are meaningless without a method to enforce them;
-Aurora, Gardiner, and Flower Horne (\protect\hyperlink{ref-Auro2018}{2018}) is a short, practical guide that every project lead should read.
+\protect\hyperlink{ref-Auro2018}{Aurora, Gardiner, and Flower Horne} (\protect\hyperlink{ref-Auro2018}{2018}) is a short, practical guide that every project lead should read.
 
 \begin{quote}
 \textbf{In-Person Events}
@@ -10152,9 +10178,9 @@ Every creative work has some sort of license;
 the only question is whether authors and users know what it is and choose to enforce it.
 Choosing a license for a project can be complex,
 not least because the law hasn't kept up with everyday practice.
-Morin, Urban, and Sliz (\protect\hyperlink{ref-Mori2012}{2012}) and \href{https://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/}{this blog post} are good starting points
+\protect\hyperlink{ref-Mori2012}{Morin, Urban, and Sliz} (\protect\hyperlink{ref-Mori2012}{2012}) and \href{https://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/}{this blog post} are good starting points
 to understand licensing and intellectual property from a researcher's point of view,
-while Lindberg (\protect\hyperlink{ref-Lind2008}{2008}) is a deeper dive for those who want details.
+while \protect\hyperlink{ref-Lind2008}{Lindberg} (\protect\hyperlink{ref-Lind2008}{2008}) is a deeper dive for those who want details.
 Depending on country, institution, and job role,
 most creative works are automatically eligible for intellectual property protection.
 However,
@@ -10213,7 +10239,7 @@ Unfortunately,
 GitHub's list does not include common licenses for data or written works like papers and reports.
 Those can be added in manually,
 but it's often hard to understand the interactions between multiple licenses
-on different kinds of material (Almeida et al. \protect\hyperlink{ref-Alme2017}{2017}).
+on different kinds of material (\protect\hyperlink{ref-Alme2017}{Almeida et al. 2017}).
 
 Just as the project's Code of Conduct is usually placed in a root-level file called \texttt{CONDUCT.md},
 its license is usually put in a file called \texttt{LICENSE.md}\index{project files!LICENSE}
@@ -10310,7 +10336,7 @@ by \href{https://creativecommons.org/}{Creative Commons}.\index{Creative Commons
 These have been written and checked by lawyers and are well understood by the community.
 
 The most liberal option is referred to as \gref{CC-0}{cc\_license},\index{Creative Commons!CC-0 license}\index{public domain}
-where the ``0'' stands for ``zero restrictions''.
+where the ``0'' stands for ``zero restrictions.''
 This puts work in the public domain,
 i.e.,
 allows anyone who wants to use it to do so however they want with no restrictions.
@@ -10416,7 +10442,7 @@ people create three kinds of issues:
 \item
   \gref{Feature requests}{feature\_request}\index{feature request}
   describing what could be done next,
-  such as ``add this function to this package'' or ``add a menu to the website''.
+  such as ``add this function to this package'' or ``add a menu to the website.''
 \item
   Questions about how to use the software,
   how parts of the project work,
@@ -10443,7 +10469,7 @@ to old questions and answers that are particularly helpful.
 \section{Bug Reports}\label{teams-bugs}}
 
 A well-written \gref{bug report}{bug\_report} is more likely to get a fast response,\index{bug report!style}
-and is more likely to get a response actually addresses the issue (Bettenburg et al. \protect\hyperlink{ref-Bett2008}{2008}).
+and is more likely to get a response actually addresses the issue (\protect\hyperlink{ref-Bett2008}{Bettenburg et al. 2008}).
 To write a good bug report:
 
 \begin{enumerate}
@@ -10565,7 +10591,7 @@ Projects also often use:
   \emph{Suitable for Newcomer} or \emph{Beginner-Friendly}:
   to identify an easy starting point for someone who has just joined the project.
   If we help potential new contributors find places to start,
-  they are more likely to do so (Steinmacher et al. \protect\hyperlink{ref-Stei2014}{2014}).
+  they are more likely to do so (\protect\hyperlink{ref-Stei2014}{Steinmacher et al. 2014}).
 \end{itemize}
 
 The labels listed above identify the kind of work an issue describes.
@@ -10691,7 +10717,7 @@ and is typically measured on a low--medium--high scale.
 but this just leads to arguing over whether something is a 4 or a 5.)
 Effort measures how much work the issue requires.
 Since this can't always be estimated accurately,
-it's common to classify things as ``an hour'', ``a day'', or ``multiple days''.
+it's common to classify things as ``an hour,'' ``a day,'' or ``multiple days.''
 Again,
 anything that's likely to take longer than multiple days should be broken down
 so that planning and progress tracking can be more accurate.
@@ -10902,7 +10928,7 @@ where people can signal that they want to speak.
 The moderator can then select people from the waiting list.
 This practice can be reinforced by having everyone mute themselves,
 and only allowing the moderator to unmute people.
-Brookfield and Preskill (\protect\hyperlink{ref-Broo2016}{2016}) has many other useful suggestions for managing meetings.
+\protect\hyperlink{ref-Broo2016}{Brookfield and Preskill} (\protect\hyperlink{ref-Broo2016}{2016}) has many other useful suggestions for managing meetings.
 
 \hypertarget{teams-martha}{%
 \section{Making Decisions}\label{teams-martha}}
@@ -10910,7 +10936,7 @@ Brookfield and Preskill (\protect\hyperlink{ref-Broo2016}{2016}) has many other 
 Every team has a power structure:
 the only question is
 whether it's formal or informal---in other words,
-whether it's accountable or unaccountable (Freeman \protect\hyperlink{ref-Free1972}{1972}).
+whether it's accountable or unaccountable (\protect\hyperlink{ref-Free1972}{Freeman 1972}).
 The latter can work for groups of up to half a dozen people
 in which everyone knows everyone else.
 Beyond that,
@@ -10921,7 +10947,7 @@ In short,
 they need explicit \gref{governance}{governance}.\index{governance!project}\index{project!governance}
 
 \gref{Martha's Rules}{marthas\_rules} are a practical way to do this\index{Martha's Rules}\index{governance!Martha's Rules}
-in groups of up to a few dozen members (Minahan \protect\hyperlink{ref-Mina1986}{1986}):
+in groups of up to a few dozen members (\protect\hyperlink{ref-Mina1986}{Minahan 1986}):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -11024,7 +11050,7 @@ or put into files of their own:
   These instructions can also be included as a section in \texttt{README};
   wherever they go,
   remember that the easier it is for people to get set up and contribute,
-  the more likely they are to do so (Steinmacher et al. \protect\hyperlink{ref-Stei2014}{2014}).
+  the more likely they are to do so (\protect\hyperlink{ref-Stei2014}{Steinmacher et al. 2014}).
 \item
   \texttt{GOVERNANCE}\index{project files!GOVERNANCE}
   explains how the project is run (Section~\ref{teams-martha}).
@@ -11135,7 +11161,7 @@ we are being foolish if we give them a chance to do it again and again.
 \end{description}
 
 In academic research projects,
-``escalation'' means ``taking the issue to the project's principal investigator''.
+``escalation'' means ``taking the issue to the project's principal investigator.''
 Of course,
 the PI has probably had dozens of students complain to her over the years
 about teammates not doing their share,
@@ -11370,7 +11396,7 @@ How would you address this issue?
   Of course, that means that everyone who is depending on her can't do their work until
   \emph{after} the last possible moment\ldots{}
 \item
-  \emph{Petra}'s favorite phrase is ``why don't we''.
+  \emph{Petra}'s favorite phrase is ``why don't we.''
   Why don't we write a GUI to help people edit the program's configuration files?
   Hey, why don't we invent our own little language for designing GUIs?
 \item
@@ -11541,7 +11567,7 @@ Spaces cannot be used instead of tabs here,
 which can be confusing as they are interchangeable in most other programming languages.
 In the rule above,
 the recipe is ``run \texttt{bin/countwords.py} on the raw data file
-and put the output in a CSV file in the \texttt{results} directory''.
+and put the output in a CSV file in the \texttt{results} directory.''
 
 To test our rule, run this command in the shell:
 
@@ -11862,7 +11888,7 @@ to use \texttt{\$(NAME)} and not \texttt{\$NAME}.
 \textbf{Why the Parentheses?}
 
 For historical reasons,
-Make interprets \texttt{\$NAME} to be a ``variable called \texttt{N} followed by the three characters `AME'\,'',
+Make interprets \texttt{\$NAME} to be a ``variable called \texttt{N} followed by the three characters `AME',''
 If no variable called \texttt{N} exists,
 \texttt{\$NAME} becomes \texttt{AME},
 which is almost certainly not what we want.
@@ -11885,7 +11911,7 @@ To do this,
 we need to understand Make's
 \gref{automatic variables}{automatic\_variable}.\index{automatic variables (in Make)}\index{Make!automatic variables}
 The first step is to use the very cryptic expression \texttt{\$@} in the rule's recipe
-to mean ``the target of the rule''.
+to mean ``the target of the rule.''
 It lets us turn this:
 
 \begin{verbatim}
@@ -11932,7 +11958,7 @@ python bin/countwords.py \
 \end{verbatim}
 
 Make solves this problem with another automatic variable \texttt{\$\textless{}},
-which mean ``only the first prerequisite''.
+which mean ``only the first prerequisite.''
 Using it lets us rewrite our rule as:
 
 \begin{verbatim}
@@ -12214,7 +12240,7 @@ particularly as we start to add more steps like merging data files and generatin
 \hypertarget{automate-doc}{%
 \section{Documenting a Makefile}\label{automate-doc}}
 
-Every well-behaved program should tell people how to use it Taschuk and Wilson (\protect\hyperlink{ref-Tasc2017}{2017}).
+Every well-behaved program should tell people how to use it \protect\hyperlink{ref-Tasc2017}{Taschuk and Wilson} (\protect\hyperlink{ref-Tasc2017}{2017}).
 If we run \texttt{make\ -\/-help},
 we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
@@ -12330,7 +12356,7 @@ and that the final result should be regenerated if the program used to create it
 One difference between the recipe in this rule and the recipes we've seen before
 is that this recipe uses \texttt{\$(RESULTS)} directly instead of an automatic variable.
 We have written the rule this way because
-there isn't an automatic variable that means ``all but the last prerequisite'',
+there isn't an automatic variable that means ``all but the last prerequisite,''
 so there's no way to use automatic variables that wouldn't result in us trying to process our program.
 
 Likewise,
@@ -12420,7 +12446,7 @@ If you would like to explore them,
 check out \href{https://snakemake.readthedocs.io/}{Snakemake} (for Python)
 and \href{https://ropenscilabs.github.io/drake-manual/}{drake} (for R).
 If you want to go deeper,
-Smith (\protect\hyperlink{ref-Smit2011}{2011}) describes the design and implementation of several build managers.
+\protect\hyperlink{ref-Smit2011}{Smith} (\protect\hyperlink{ref-Smit2011}{2011}) describes the design and implementation of several build managers.
 
 \hypertarget{automate-exercises}{%
 \section{Exercises}\label{automate-exercises}}
@@ -12635,7 +12661,7 @@ because each level overrides the ones above it:
 the user's configuration file overrides the system settings,
 the job configuration overrides the user's defaults,
 and the command-line options overrides that.
-This is more complex than most research software needs initially (Xu et al. \protect\hyperlink{ref-Xu2015}{2015}),
+This is more complex than most research software needs initially (\protect\hyperlink{ref-Xu2015}{Xu et al. 2015}),
 but being able to read a complete set of options from a file
 is a big boost to reproducibility.
 
@@ -12788,7 +12814,7 @@ live in a \texttt{python3.7/site-packages} directory,
 including Matplotlib.
 
 \texttt{matplotlibrc} lists all the default settings as comments.
-The default size of the X and Y axis labels is ``medium'',
+The default size of the X and Y axis labels is ``medium,''
 as is the size of the tick labels:
 
 \begin{Shaded}
@@ -13130,7 +13156,7 @@ from people who just want to get their science done.
 More generally,
 the problem of configuring a program illustrates the difference
 between ``works for me on my machine''
-and ``works for everyone, everywhere''.
+and ``works for everyone, everywhere.''
 From reproducible workflows (Chapter~\ref{automate}) to logging (Section~\ref{errors-logging}),
 this difference influences every aspect of a research software engineer's work.
 We don't always have to design for large-scale re-use,
@@ -13604,9 +13630,9 @@ and that the second is numerical.
 \hypertarget{errors-kind}{%
 \section{Kinds of Errors}\label{errors-kind}}
 
-The ``\texttt{if} then \texttt{raise}'' approach is sometimes referred to as ``look before you leap'',
+The ``\texttt{if} then \texttt{raise}'' approach is sometimes referred to as ``look before you leap,''
 while the \texttt{try/except} approach obeys the old adage that
-``it's easier to ask for forgiveness than permission''.
+``it's easier to ask for forgiveness than permission.''
 The first approach is more precise,
 but has the shortcoming that programmers can't anticipate everything that can go wrong when running a program,
 so there should always be an \texttt{except} somewhere
@@ -13700,7 +13726,7 @@ so they should therefore be the most carefully written documentation for that so
 A web search for ``writing good error messages'' turns up hundreds of hits,
 but recommendations are often more like gripes than guidelines
 and are usually not backed up by evidence.
-What research there is gives us the following rules (Becker et al. \protect\hyperlink{ref-Beck2016}{2016}):
+What research there is gives us the following rules (\protect\hyperlink{ref-Beck2016}{Becker et al. 2016}):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -13719,7 +13745,7 @@ What research there is gives us the following rules (Becker et al. \protect\hype
   Be as specific as possible without being or seeming wrong
   from a user's point of view.
   For example,
-  ``file not found'' is very different from ``don't have permissions to open file'' or ``file is empty''.
+  ``file not found'' is very different from ``don't have permissions to open file'' or ``file is empty.''
 \item
   Write for your audience's level of understanding.
   For example,
@@ -14231,7 +14257,7 @@ Run the following code:
 \item
   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
 \item
-  ``Throw low, catch high'', i.e., raise exceptions immediately but handle them at a higher level.
+  ``Throw low, catch high,'' i.e., raise exceptions immediately but handle them at a higher level.
 \item
   Write error messages that help users figure out what to do to fix the problem.
 \item
@@ -14267,10 +14293,10 @@ A successful early career researcher in protein crystallography,
 Geoffrey Chang,
 had to retract five published papers---three from
 the journal \emph{Science}---because his code had
-inadvertently flipped two columns of data (Miller \protect\hyperlink{ref-Miller2006}{2006}).
+inadvertently flipped two columns of data (\protect\hyperlink{ref-Miller2006}{G. Miller 2006}).
 More recently, a simple calculation mistake in a paper by Reinhart and Rogoff
 contributed to making the financial crash of 2008 even worse
-for millions of people (Borwein and Bailey \protect\hyperlink{ref-Borw2013}{2013}).
+for millions of people (\protect\hyperlink{ref-Borw2013}{Borwein and Bailey 2013}).
 \end{quote}
 
 Our Zipf's Law project files are structured as they were at the end of the previous chapter:
@@ -14365,7 +14391,7 @@ Broadly speaking, assertions fall into three categories:
   is something that is true for every iteration in a loop.
   The invariant might be a property of the data (as in the example above),
   or it might be something like,
-  ``the value of \texttt{highest} is less than or equal to the current loop index''.
+  ``the value of \texttt{highest} is less than or equal to the current loop index.''
 \end{itemize}
 
 The function \texttt{get\_power\_law\_params} in our \texttt{plotcounts.py} script
@@ -14744,7 +14770,7 @@ if the actual value is within some \gref{tolerance}{tolerance} of the expected v
 The tolerance can be expressed as the \gref{absolute error}{absolute\_error},\index{absolute error}\index{error!absolute}
 which is the absolute value of the difference between two,
 or the \gref{relative error}{relative\_error},\index{relative error}\index{error!relative}
-which the ratio of the absolute error to the value we're approximating (Goldberg \protect\hyperlink{ref-Gold1991}{1991}).
+which the ratio of the absolute error to the value we're approximating (\protect\hyperlink{ref-Gold1991}{Goldberg 1991}).
 For example,
 if we add 9+1 and get 11,
 the absolute error is 1 (i.e., 11-10),
@@ -15412,7 +15438,7 @@ This time our tests pass and the build completes successfully
 
 This example shows one of the other benefits of CI:
 it forces us to be explicit about what we are doing and how we do it,
-just as writing a Makefile forces us to be explicit about exactly how we produce results (Zampetti et al. \protect\hyperlink{ref-Zamp2020}{2020}).
+just as writing a Makefile forces us to be explicit about exactly how we produce results (\protect\hyperlink{ref-Zamp2020}{Zampetti et al. 2020}).
 
 \hypertarget{testing-tdd}{%
 \section{When to Write Tests}\label{testing-tdd}}
@@ -15446,7 +15472,7 @@ TDD's advocates claim that this leads to better code because:
 
 These arguments are plausible.
 However,
-studies such as Fucci et al. (\protect\hyperlink{ref-Fucc2016}{2016}) and Fucci et al. (\protect\hyperlink{ref-Fucc2017}{2017}) don't support them:
+studies such as \protect\hyperlink{ref-Fucc2016}{Fucci et al.} (\protect\hyperlink{ref-Fucc2016}{2016}) and \protect\hyperlink{ref-Fucc2017}{Fucci et al.} (\protect\hyperlink{ref-Fucc2017}{2017}) don't support them:
 in practice,
 writing tests first or last doesn't appear to affect productivity.
 What \emph{does} have an impact is working in small, interleaved increments,
@@ -15460,12 +15486,12 @@ each time they produce an intermediate or final result,
 they scan a table, create a chart, or inspect some summary statistics
 to see if everything looks OK.
 Their heuristics are usually easy to state,
-like ``there shouldn't be NAs at this point'' or ``the age range should be reasonable'',
+like ``there shouldn't be NAs at this point'' or ``the age range should be reasonable,''
 but applying those heuristics to a particular analysis always depends on
 their evolving insight into the data in question.
 
 By analogy with test-driven development,
-we could call this process ``checking-driven development''.
+we could call this process ``checking-driven development.''
 Each time we add a step to our pipeline and look at its output,
 we can also add a check of some kind to the pipeline to ensure that
 what we are checking for remains true as the pipeline evolves or is run on other data.
@@ -15486,7 +15512,7 @@ runnable assertions can't fall out of step with what the code is actually doing.
 \section{Summary}\label{testing-summary}}
 
 Testing data analysis pipelines is often harder than testing mainstream software applications,
-since data analysts often don't know what the right answer is (Braiek and Khomh \protect\hyperlink{ref-Brai2018}{2018}).
+since data analysts often don't know what the right answer is (\protect\hyperlink{ref-Brai2018}{Braiek and Khomh 2018}).
 (If we did,
 we would have submitted our report and moved on to the next problem already.)
 The key distinction is the difference between \gref{validation}{validation},
@@ -15860,7 +15886,7 @@ it is merely \emph{advertising} of the scholarship.
 The actual scholarship is the complete software development environment
 and the complete set of instructions which generated the figures.
 
---- Jonathan Buckheit and David Donoho, paraphrasing Jon Claerbout, in Buckheit and Donoho (\protect\hyperlink{ref-Buck1995}{1995})
+--- Jonathan Buckheit and David Donoho, paraphrasing Jon Claerbout, in \protect\hyperlink{ref-Buck1995}{Buckheit and Donoho} (\protect\hyperlink{ref-Buck1995}{1995})
 \end{quote}
 
 While some reports, datasets, software packages, and/or analysis scripts
@@ -15964,7 +15990,7 @@ should follow the FAIR Principles.
 
 The \href{https://www.go-fair.org/fair-principles/}{FAIR Principles} describe what research data should look like.\index{FAIR Principles}\index{publishing!FAIR Principles}
 They are still aspirational for most researchers,
-but tell us what to aim for (Goodman et al. \protect\hyperlink{ref-Good2014}{2014}, @Mich2015, @Hart2016, @Broc2019, @Tier2020).
+but tell us what to aim for \protect\hyperlink{ref-Tier2020}{Tierney and Ram} (\protect\hyperlink{ref-Tier2020}{2020}).
 The most immediately important elements of the FAIR Principles are outlined below.
 
 \hypertarget{data-should-be-findable.}{%
@@ -16191,7 +16217,7 @@ $ git push origin master
 More complex tools like \href{https://en.wikipedia.org/wiki/Docker_(software)}{Docker}
 can install our entire environment
 (down to the precise version of the operating system)
-on a different computer (Nüst et al. \protect\hyperlink{ref-Nust2020}{2020}).
+on a different computer (\protect\hyperlink{ref-Nust2020}{Nüst et al. 2020}).
 However,
 their complexity can be daunting,
 and there is a lot of debate
@@ -16280,7 +16306,7 @@ most readers are not looking to exactly re-run a decade old analysis:
 they just want to be able to figure out what was run
 and what the important decisions were,
 which is sometimes referred to as \gref{inspectability}{inspectability}\index{inspectability}
-(Gil et al. \protect\hyperlink{ref-Gil2016}{2016}; Brown \protect\hyperlink{ref-Brown2017}{2017}).
+(\protect\hyperlink{ref-Gil2016}{Gil et al. 2016}; \protect\hyperlink{ref-Brown2017}{T. Brown 2017}).
 While exact repeatability has a short shelf-life,
 inspectability is the enduring legacy of a well-documented computational analysis.
 
@@ -16342,7 +16368,7 @@ Fill in the questionnaire for a dataset you have published or that you use often
 \hypertarget{provenance-ex-understand-project}{%
 \subsection{Evaluate a project's data provenance}\label{provenance-ex-understand-project}}
 
-\emph{This exercise is modified from Wickes and Stein (\protect\hyperlink{ref-Wick2016}{2016}) and explores the dataset from Meili (\protect\hyperlink{ref-Meil2015}{2016}).
+\emph{This exercise is modified from \protect\hyperlink{ref-Wick2016}{Wickes and Stein} (\protect\hyperlink{ref-Wick2016}{2016}) and explores the dataset from \protect\hyperlink{ref-Meil2015}{Meili} (\protect\hyperlink{ref-Meil2015}{2016}).
 Go to the dataset's page \url{http://doi.org/10.3886/E17507V2} and download the files.
 You will need to make an ICPSER account and agree to their data agreement before you can download.}
 
@@ -16366,7 +16392,7 @@ then review the spreadsheet file and the coded response file.
 \hypertarget{provenance-ex-eval-code}{%
 \subsection{Evaluate a project's code provenance}\label{provenance-ex-eval-code}}
 
-The GitHub repository \href{https://github.com/borstlab/reversephi_paper/}{borstlab/reversephi\_paper} provides the code and data for the paper Leonhardt (\protect\hyperlink{ref-Leon2017}{2017}).
+The GitHub repository \href{https://github.com/borstlab/reversephi_paper/}{borstlab/reversephi\_paper} provides the code and data for the paper \protect\hyperlink{ref-Leon2017}{Leonhardt} (\protect\hyperlink{ref-Leon2017}{2017}).
 Browse the repository and answer the following questions:
 
 \begin{enumerate}
@@ -16385,9 +16411,9 @@ To get a feel for the different approaches to code provenance, repeat steps 1-3 
 
 \begin{itemize}
 \item
-  \href{https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3}{The figshare page} that accompanies the paper Irving, Wijffels, and Church (\protect\hyperlink{ref-Irving2019}{2019}).
+  \href{https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3}{The figshare page} that accompanies the paper \protect\hyperlink{ref-Irving2019}{Irving, Wijffels, and Church} (\protect\hyperlink{ref-Irving2019}{2019}).
 \item
-  The GitHub repo \href{https://github.com/blab/h3n2-reassortment}{blab/h3n2-reassortment} that accompanies the paper Potter et al. (\protect\hyperlink{ref-Potter2019}{2019}).
+  The GitHub repo \href{https://github.com/blab/h3n2-reassortment}{blab/h3n2-reassortment} that accompanies the paper \protect\hyperlink{ref-Potter2019}{Potter et al.} (\protect\hyperlink{ref-Potter2019}{2019}).
 \end{itemize}
 
 \hypertarget{provenance-ex-permanent-links}{%
@@ -16702,7 +16728,7 @@ Virtual environments also help with package development:
   without affecting the entire Python environment.
 \item
   We want to answer problems people have with our package with something more helpful than
-  ``I don't know, it works for me''.
+  ``I don't know, it works for me.''
   By installing and running our package in a completely empty environment,
   we can ensure that we're not accidentally relying on other packages being installed.
 \end{itemize}
@@ -17131,7 +17157,7 @@ We can look at this list inside the interpreter:
 '/home/amira/zipf']
 \end{verbatim}
 
-The empty string at the start of the list means ``the current directory''.
+The empty string at the start of the list means ``the current directory.''
 The rest are system paths for our Python installation,
 and will vary from computer to computer.
 
@@ -18016,7 +18042,7 @@ A data structure that stores information about the active subroutines executed. 
 \item[\textbf{camel case}]
 A style of writing code that involves naming variables and objects with no space, underscore (\texttt{\_}), dot (\texttt{.}), or dash (\texttt{-}), with each word being capitalized. Examples include \texttt{CalculateSum} and \texttt{findPattern}. See also: \protect\hyperlink{kebab_case}{kebab case}, \protect\hyperlink{pothole_case}{pothole case}
 \item[\textbf{catch (an exception)}]
-To accept responsibility for handling an error or other unexpected event. R prefers ``handling a condition'' to ``catching an exception''.
+To accept responsibility for handling an error or other unexpected event. R prefers ``handling a condition'' to ``catching an exception.''
 \item[\textbf{Creative Commons license}]
 A set of licenses that can be applied to published work. Each license is formed by concatenating one or more of \texttt{-BY} (Attribution): users must cite the original source; \texttt{-SA} (ShareAlike): users must share their own work under a similar license; \texttt{-NC} (NonCommercial): work may not be used for commercial purposes without the creator's permission; \texttt{-ND} (NoDerivatives): no derivative works (e.g., translations) can be created without the creator's permission. Thus, \texttt{CC-BY-NC} means ``users must give attribution and cannot use commercially without permission The term \texttt{CC-0} (zero, not letter `O') is sometimes used to mean''no restrictions", i.e., the work is in the public domain.
 \item[\textbf{checklist}]
@@ -18052,7 +18078,7 @@ Someone who can do normal tasks with normal effort under normal circumstances. S
 \item[\textbf{computational notebook}]
 A combination of a document format that allows users to mix prose and code in a single file, and an application that executes that code interactively and in place. The Jupyter Notebook and R Markdown files are both examples of computational notebooks.
 \item[\textbf{conditional expression}]
-A \protect\hyperlink{ternary_expression}{ternary expression} that serves the role of an if/else statement. For example, C and similar languages use the syntax \texttt{test\ :\ ifTrue\ ?\ ifFalse} to mean ``choose the value \texttt{ifTrue} if \texttt{test} is true, or the value \texttt{ifFalse} if it is not''.
+A \protect\hyperlink{ternary_expression}{ternary expression} that serves the role of an if/else statement. For example, C and similar languages use the syntax \texttt{test\ :\ ifTrue\ ?\ ifFalse} to mean ``choose the value \texttt{ifTrue} if \texttt{test} is true, or the value \texttt{ifFalse} if it is not.''
 \item[\textbf{confirmation bias}]
 The tendency to analyze information or make decisions in ways that reinforce existing beliefs.
 \item[\textbf{continuation prompt}]
@@ -18074,7 +18100,7 @@ Unpacking values from data structures and assigning them to multiple variables i
 \item[\textbf{dictionary}]
 A data structure that allows items to be looked up by value, sometimes called an \protect\hyperlink{associative_array}{associative array}. Dictionaries are often implemented using \protect\hyperlink{hash_table}{hash tables}.
 \item[\textbf{docstring}]
-Short for ``documentation string'', a string appearing at the start of a module, class, or function in Python that automatically becomes that object's documentation.
+Short for ``documentation string,'' a string appearing at the start of a module, class, or function in Python that automatically becomes that object's documentation.
 \item[\textbf{documentation generator}]
 A software tool that extracts specially-formatted comments or \protect\hyperlink{docstring}{dostrings} from code and generates cross-referenced developer documentation.
 \item[\textbf{Digital Object Identifier}]
@@ -18292,11 +18318,11 @@ Reorganizing software without changing its behavior.
 \item[\textbf{regression testing}]
 Testing software to ensure that things which used to work haven't been broken.
 \item[\textbf{regular expression}]
-A pattern for matching text, written as text itself. Regular expressions are sometimes called ``regexp'', ``regex'', or ``RE'', and are as powerful as they are cryptic.
+A pattern for matching text, written as text itself. Regular expressions are sometimes called ``regexp,'' ``regex,'' or ``RE,'' and are as powerful as they are cryptic.
 \item[\textbf{relative error}]
 The absolute value of the difference between the actual and correct value divided by the desired value. For example, if the actual value is 9 and the correct value is 10, the relative error is 0.1. Relative error is usually more useful than \protect\hyperlink{absolute_error}{absolute error}.
 \item[\textbf{relative path}]
-A path whose destination is interpreted relative to some other location, such as the \protect\hyperlink{current_working_directory}{current working directory}. A relative path is the equivalent of giving directions using terms like ``straight'' and ``left''. See also: \protect\hyperlink{absolute_path}{absolute path}
+A path whose destination is interpreted relative to some other location, such as the \protect\hyperlink{current_working_directory}{current working directory}. A relative path is the equivalent of giving directions using terms like ``straight'' and ``left.'' See also: \protect\hyperlink{absolute_path}{absolute path}
 \item[\textbf{remote login}]
 Starting an interactive session on one computer from another computer, e.g., by using \protect\hyperlink{ssh}{SSH}.
 \item[\textbf{remote login server}]
@@ -18370,7 +18396,7 @@ A predefined communication channel for a \protect\hyperlink{process}{process}, t
 \item[\textbf{standard output}]
 A predefined communication channel for a \protect\hyperlink{process}{process}, typically used to send output to the screen or to the next process in a \protect\hyperlink{pipe_shell}{pipe}. See also: \protect\hyperlink{stderr}{standard error}, \protect\hyperlink{stdin}{standard input}
 \item[\textbf{stop word}]
-Common words that are filtered out of text before processing it, such as ``the'' and ``an''.
+Common words that are filtered out of text before processing it, such as ``the'' and ``an.''
 \item[\textbf{subcommand}]
 A command that is part of a larger family of commands. For example, \texttt{git\ commit} is a subcommand of Git.
 \item[\textbf{subdirectory}]
@@ -18412,7 +18438,7 @@ A vote in favor of something. See also: \protect\hyperlink{down_vote}{down-vote}
 \item[\textbf{update operator}]
 See \protect\hyperlink{in_place_operator}{in-place operator}.
 \item[\textbf{validation}]
-Checking that a piece of software does what its users want, i.e., ``are we building the right thing''? See also: \protect\hyperlink{verification}{verification}
+Checking that a piece of software does what its users want, i.e., ``are we building the right thing?'' See also: \protect\hyperlink{verification}{verification}
 \item[\textbf{variable arguments}]
 In a function, the ability to take any number of arguments. R uses \texttt{...} to capture the ``extra'' arguments. See also: \protect\hyperlink{keyword_arguments}{keyword arguments}
 \item[\textbf{verification}]
@@ -18430,7 +18456,7 @@ A character expression that can match text, such as the \texttt{*} in \texttt{*.
 \item[\textbf{working memory}]
 The part of memory that briefly stores information that can be directly accessed by consciousness.
 \item[\textbf{YAML}]
-Short for ``YAML Ain't Markup Language'', a way to represent nested data using indentation rather than the parentheses and commas of \protect\hyperlink{json}{JSON}. YAML is often used in configuration files and to define parameters for various flavors of \protect\hyperlink{markdown}{Markdown} documents.
+Short for ``YAML Ain't Markup Language,'' a way to represent nested data using indentation rather than the parentheses and commas of \protect\hyperlink{json}{JSON}. YAML is often used in configuration files and to define parameters for various flavors of \protect\hyperlink{markdown}{Markdown} documents.
 \end{description}
 
 \hypertarget{objectives}{%
@@ -18673,7 +18699,7 @@ and is intended to help instructors who want to use this curriculum.
 \item
   Write \texttt{try}/\texttt{except} blocks to \gref{raise}{raise\_exception} and \gref{catch}{catch\_exception} exceptions.
 \item
-  Explain what is meant by ``throw low, catch high''.
+  Explain what is meant by ``throw low, catch high.''
 \item
   Describe the most common built-in exception types in Python and how they relate to each other.
 \item
@@ -19066,7 +19092,7 @@ and is intended to help instructors who want to use this curriculum.
 \item
   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
 \item
-  ``Throw low, catch high'', i.e., raise exceptions immediately but handle them at a higher level.
+  ``Throw low, catch high,'' i.e., raise exceptions immediately but handle them at a higher level.
 \item
   Write error messages that help users figure out what to do to fix the problem.
 \item
@@ -19175,7 +19201,7 @@ and is intended to help instructors who want to use this curriculum.
 The \texttt{-l} option makes \texttt{ls} use a \textbf{l}ong listing format, showing not only
 the file/directory names but also additional information such as the file size
 and the time of its last modification. If you use both the \texttt{-h} option and the \texttt{-l} option,
-this makes the file size ``\textbf{h}uman readable'', i.e.~displaying something like \texttt{5.3K}
+this makes the file size ``\textbf{h}uman readable,'' i.e.~displaying something like \texttt{5.3K}
 instead of \texttt{5369}.
 
 \hypertarget{exercise-refbash-basics-ex-ls-rt}{%
@@ -19322,7 +19348,7 @@ and that \texttt{.} refers to the current directory.
 We start in the \texttt{/Users/jamie/data} directory, and create a new folder called \texttt{recombine}.
 The second line moves (\texttt{mv}) the file \texttt{proteins.dat} to the new folder (\texttt{recombine}).
 The third line makes a copy of the file we just moved. The tricky part here is where the file was
-copied to. Recall that \texttt{..} means ``go up a level'', so the copied file is now in \texttt{/Users/jamie}.
+copied to. Recall that \texttt{..} means ``go up a level,'' so the copied file is now in \texttt{/Users/jamie}.
 Notice that \texttt{..} is interpreted with respect to the current working
 directory, \textbf{not} with respect to the location of the file being copied.
 So, the only thing that will show using ls (in \texttt{/Users/jamie/data}) is the recombine folder.
@@ -19787,7 +19813,7 @@ Option 2 is incorrect because the shell expands \texttt{*s.txt} instead of passi
 expression to \texttt{find}.
 
 Option 3 is incorrect because it searches the contents of the files for lines which
-do not match ``temp'', rather than searching the file names.
+do not match ``temp,'' rather than searching the file names.
 
 \hypertarget{exercise-refbash-advanced-ex-reading-find}{%
 \subsection*{Exercise~\ref{bash-advanced-ex-reading-find}}\label{exercise-refbash-advanced-ex-reading-find}}
@@ -20256,7 +20282,7 @@ Breaking it down:
 \item
   Setting the \texttt{PS1} variable defines the primary shell \gref{prompt}{prompt}.
 \item
-  \texttt{\textbackslash{}\textbackslash{}w} in a shell prompt string means ``the current directory''.
+  \texttt{\textbackslash{}\textbackslash{}w} in a shell prompt string means ``the current directory.''
 \item
   The \texttt{+} is a literal \texttt{+} sign between the current directory and the Git branch name.
 \item
@@ -21419,7 +21445,7 @@ Where did you agree and disagree, and why?
   The difficulty is that the article is not linked within the documentation or the metadata.
 \item
   We can search the dataset name and authorname trying to find this.
-  A search for ``National Science Foundation (1228602)'',
+  A search for ``National Science Foundation (1228602),''
   which is the grant information,
   finds the grant page \url{https://www.nsf.gov/awardsearch/showAward?AWD_ID=1228602}.
   Two articles are linked there,
@@ -21458,11 +21484,11 @@ For \href{https://github.com/borstlab/reversephi_paper/}{borstlab/reversephi\_pa
   The \texttt{README} includes instructions for re-creating the results using \texttt{make\ all}.
 \item
   There doesn't seem to be a DOI for the archived code and data,
-  but the GitHub repo does have a release \texttt{v1.0} with the description ``Published manuscript (1.0)''.
+  but the GitHub repo does have a release \texttt{v1.0} with the description ``Published manuscript (1.0).''
   A zip file of this release could be downloaded with the link \url{https://github.com/borstlab/reversephi_paper/archive/v1.0.zip}.
 \end{enumerate}
 
-For \href{https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3}{the figshare page} that accompanies the paper Irving, Wijffels, and Church (\protect\hyperlink{ref-Irving2019}{2019}):
+For \href{https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3}{the figshare page} that accompanies the paper \protect\hyperlink{ref-Irving2019}{Irving, Wijffels, and Church} (\protect\hyperlink{ref-Irving2019}{2019}):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -21881,7 +21907,7 @@ updated in Section~\ref{scripting-docstrings}.
 \hypertarget{style}{%
 \chapter{Writing Readable Code}\label{style}}
 
-Nothing in biology makes sense except in light of evolution (Dobzhansky \protect\hyperlink{ref-Dobz1973}{1973}).
+Nothing in biology makes sense except in light of evolution (\protect\hyperlink{ref-Dobz1973}{Dobzhansky 1973}).
 Similarly,
 nothing in software development makes sense except in light of human psychology.
 This is particularly true when we look at programming style.
@@ -21898,9 +21924,9 @@ and introduce some language features that can make programs more flexible and mo
 \section{Python Style}\label{style-pep8}}
 
 The single most important rule of style is to be consistent,
-both internally and with other programs (Kernighan and Pike \protect\hyperlink{ref-Kern1999}{1999}).
+both internally and with other programs (\protect\hyperlink{ref-Kern1999}{Kernighan and Pike 1999}).
 Python's standard style is called \href{https://www.python.org/dev/peps/pep-0008/}{PEP-8};\index{Python!PEP-8}\index{PEP-8 (Python style)}
-the acronym ``PEP'' is short for ``Python Enhancement Proposal'',
+the acronym ``PEP'' is short for ``Python Enhancement Proposal,''
 and PEP-8 lays out the rules that Python's own libraries use.
 Some of its rules are listed below,
 along with others borrowed from ``\href{https://github.com/jennybc/code-smells-and-feels}{Code Smells and Feels}'':
@@ -22034,7 +22060,7 @@ some things shouldn't be messed with.
 
 \textbf{Use \texttt{lower\_case\_with\_underscores} for the names of functions and variables.}
 
-Research on naming conventions has produced mixed results (Binkley et al. \protect\hyperlink{ref-Bink2012}{2012}; Schankin et al. \protect\hyperlink{ref-Scha2018}{2018})
+Research on naming conventions has produced mixed results (\protect\hyperlink{ref-Bink2012}{Binkley et al. 2012}; \protect\hyperlink{ref-Scha2018}{Schankin et al. 2018})
 but Python has (mostly) settled on underscored names for most things.
 This style is called \gref{snake case}{snake\_case} or \gref{pothole case}{pothole\_case};
 we should only use \gref{CamelCase}{camel\_case} for classes,
@@ -22043,7 +22069,7 @@ which are outside the scope of this lesson.
 \textbf{Avoid abbreviations in function and variable names.}
 
 Abbreviations and acronyms can be ambiguous
-(does \texttt{xcl} mean ``Excel'', ``exclude'', or ``excellent''?),
+(does \texttt{xcl} mean ``Excel,'' ``exclude,'' or ``excellent?''),
 and can be be hard for non-native speakers to understand.
 Following this rule doesn't necessarily require more typing:
 a good programming editor will \gref{auto-complete}{auto\_completion} names for us.
@@ -22051,7 +22077,7 @@ a good programming editor will \gref{auto-complete}{auto\_completion} names for 
 \textbf{Use short names for short-lived local variables and longer names for things with wider scope.}
 
 Using \texttt{i} and \texttt{j} for loop indices is perfectly readable
-provided the loop is only a few lines long (Beniamini et al. \protect\hyperlink{ref-Beni2017}{2017}).
+provided the loop is only a few lines long (\protect\hyperlink{ref-Beni2017}{Beniamini et al. 2017}).
 Anything that is used at a greater distance
 or whose purpose isn't immediately clear
 (such as a function) should have a longer name.
@@ -22293,7 +22319,7 @@ To \gref{refactor}{refactoring} code\index{refactoring (software)}
 means to change its structure without changing what it does,
 like simplifying an equation.
 It is just as much a part of programming as writing code in the first place:
-nobody gets things right the first time (Brand \protect\hyperlink{ref-Bran1995}{1995}),
+nobody gets things right the first time (\protect\hyperlink{ref-Bran1995}{Brand 1995}),
 and needs or insights can change over time.
 
 Most discussions of refactoring focus on \gref{object-oriented programming}{oop},
@@ -22304,7 +22330,7 @@ and makes it easier to communicate with our peers.
 \hypertarget{do-not-repeat-values}{%
 \subsection{Do not repeat values}\label{do-not-repeat-values}}
 
-The first and simplest refactoring is ``replace value with name''.
+The first and simplest refactoring is ``replace value with name.''
 It tells us to replace magic numbers with names,
 i.e., to define constants.
 This can seem ridiculous in simple cases
@@ -22324,7 +22350,7 @@ Finally,
 a single value defined in one place is much easier to change
 than a bunch of numbers scattered throughout our program.
 We may not think we will have to change it,
-but then people want to use our software on Mars and we discover that constants aren't (Mak \protect\hyperlink{ref-Mak2006}{2006}).
+but then people want to use our software on Mars and we discover that constants aren't (\protect\hyperlink{ref-Mak2006}{Mak 2006}).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -22351,7 +22377,7 @@ if a calculation is inside a loop or a function,
 readers will assume that it might change each time the code is executed.
 
 Our second refactoring,
-``hoist repeated calculation out of loop'',
+``hoist repeated calculation out of loop,''
 tells us to move the repeated calculation out of the loop or function.
 Doing this signals that its value is always the same.
 And naming that common value helps readers understand what its purpose is.
@@ -22400,7 +22426,7 @@ and those variables can then be used directly in tests:
 \end{Highlighting}
 \end{Shaded}
 
-This refactoring is ``replace repeated test with flag''.
+This refactoring is ``replace repeated test with flag.''
 Again,
 there is no need to write \texttt{if\ was\_greater\ ==\ True}:
 that always produces the same result as \texttt{if\ was\_greater}.
@@ -22563,7 +22589,7 @@ If a function contains any explicit \texttt{return} statements at all,
 it should end with one as well.
 \end{quote}
 
-A related refactoring pattern is ``default and override''.
+A related refactoring pattern is ``default and override.''
 To use it,
 assign a default or most common value to a variable unconditionally,
 and then override it in a special case.
@@ -22676,7 +22702,7 @@ to reduce typing.
 \hypertarget{combine-operations-in-functions}{%
 \subsection{Combine operations in functions}\label{combine-operations-in-functions}}
 
-``Combine functions'' is the opposite of ``extract function''.
+``Combine functions'' is the opposite of ``extract function.''
 If operations are always done together,
 it can sometimes be be more efficient to do them together,
 and might be easier to understand.
@@ -22891,7 +22917,7 @@ Reading code in order to find bugs and suggest improvements like these
 is called \gref{code review}{code\_review}.\index{code review}
 Multiple studies over more than 40 years have shown that
 code review is the most effective way to find bugs in software
-(Fagan \protect\hyperlink{ref-Faga1976}{1976}, \protect\hyperlink{ref-Faga1986}{1986}; Cohen \protect\hyperlink{ref-Cohe2010}{2010}; Bacchelli and Bird \protect\hyperlink{ref-Bacc2013}{2013}).
+(\protect\hyperlink{ref-Faga1976}{Fagan 1976}, \protect\hyperlink{ref-Faga1986}{1986}; \protect\hyperlink{ref-Cohe2010}{Cohen 2010}; \protect\hyperlink{ref-Bacc2013}{Bacchelli and Bird 2013}).
 It is also a great way to transfer knowledge between programmers:
 reading someone else's code critically will give us lots of ideas about what we could do better,
 and highlight things that we should probably stop doing as well.
@@ -22899,28 +22925,28 @@ and highlight things that we should probably stop doing as well.
 Despite this,
 code review still isn't common in research software development.
 This is partly a chicken-and-egg problem:
-people don't do it because other people don't do it (Segal \protect\hyperlink{ref-Sega2005}{2005}).
+people don't do it because other people don't do it (\protect\hyperlink{ref-Sega2005}{Segal 2005}).
 Code review is also more difficult to do in specialized scientific fields:
 in order for review to be useful,
 reviewers need to understand the problem domain well enough to comment on algorithms and design choices
 rather than indentation and variable naming,
-and the number of people who can do that for a research project is often very small (Petre and Wilson \protect\hyperlink{ref-Petr2014}{2014}).
+and the number of people who can do that for a research project is often very small (\protect\hyperlink{ref-Petr2014}{Petre and Wilson 2014}).
 
 Section~\ref{git-advanced-pull-requests} explained how to create and merge pull requests.
 How we review these is just as important as what we look for:
 being dismissive or combative are good ways to ensure that people don't pay attention to our reviews,
-or avoid having us review their work (Bernhardt \protect\hyperlink{ref-Bern2018}{2018}).
+or avoid having us review their work (\protect\hyperlink{ref-Bern2018}{Bernhardt 2018}).
 Equally,
 being defensive when someone offers suggestions politely and sincerely is very human,
 but can stunt our development as a programmer.
 
-Lots of people have written guidelines for doing reviews that avoid these traps (Quenneville \protect\hyperlink{ref-Quen2018}{2018}; Sankarram \protect\hyperlink{ref-Sank2018}{2018}).
+Lots of people have written guidelines for doing reviews that avoid these traps (\protect\hyperlink{ref-Quen2018}{Quenneville 2018}; \protect\hyperlink{ref-Sank2018}{Sankarram 2018}).
 A few common points are:
 
 \begin{description}
 \tightlist
 \item[Work in small increments.]
-As Cohen (\protect\hyperlink{ref-Cohe2010}{2010}) and others have found,
+As \protect\hyperlink{ref-Cohe2010}{Cohen} (\protect\hyperlink{ref-Cohe2010}{2010}) and others have found,
 code review is most effective when done in short bursts.
 That means that change requests should also be short:
 anything that's more than a couple of screens long
@@ -22992,7 +23018,7 @@ And finally:
 \begin{description}
 \tightlist
 \item[Don't let people break these rules just because they're frequent contributors or in positions of power.]
-The culture of any organization is shaped by the worst behavior it is willing to tolerate Gruenert and Whitaker (\protect\hyperlink{ref-Grue2015}{2015}).
+The culture of any organization is shaped by the worst behavior it is willing to tolerate \protect\hyperlink{ref-Grue2015}{Gruenert and Whitaker} (\protect\hyperlink{ref-Grue2015}{2015}).
 The main figures in a project should be \emph{more} respectful than everyone else
 in order to show what standards everyone else is expected to meet.
 \end{description}
@@ -23001,7 +23027,7 @@ in order to show what standards everyone else is expected to meet.
 \section{Python Features}\label{style-features}}
 
 \gref{Working memory}{working\_memory} can only hold a few items at once:
-initial estimates in the 1950s put the number at 7±2 (Miller \protect\hyperlink{ref-Mill1956}{1956}),
+initial estimates in the 1950s put the number at 7±2 (\protect\hyperlink{ref-Mill1956}{G. A. Miller 1956}),
 and more recent estimates put it as low as 4 or 5.
 High-level languages from FORTRAN to Python
 are essentially a way to reduce the number of things programmers have to think about at once
@@ -23311,7 +23337,7 @@ but there are probably fewer of them than you think.
 
 \gref{YAML}{yaml\_glossary}\index{YAML} is a way to write nested data structures in plain text
 that is often used to specify configuration options for software.
-The acronym stands for ``YAML Ain't Markup Language'',
+The acronym stands for ``YAML Ain't Markup Language,''
 but that's a lie:
 YAML doesn't use \texttt{\textless{}tags\textgreater{}} like HTML,
 but can still be quite fussy about what is allowed to appear where.
@@ -23436,7 +23462,7 @@ It's important to consider who documentation is for.
 There are three kinds of people in any domain:
 \gref{novices}{novice},
 \gref{competent practitioners}{competent\_practitioner},
-and \gref{experts}{expert} (Wilson \protect\hyperlink{ref-Wils2018}{2019}\protect\hyperlink{ref-Wils2018}{a}).
+and \gref{experts}{expert} (\protect\hyperlink{ref-Wils2018}{Wilson 2019a}).
 A novice doesn't yet have a \gref{mental model}{mental\_model} of the domain:
 they don't know what the key terms are,
 how they relate,
@@ -23527,7 +23553,7 @@ as we discuss below,
 if we need to describe both,
 we should probably rewrite our function.
 
-An active verb is something like ``extract'', ``normalize'', or ``find''.
+An active verb is something like ``extract,'' ``normalize,'' or ``find.''
 For example,
 these are all good one-line docstrings:
 
@@ -23630,7 +23656,7 @@ from scientific papers to left-handed musical instruments.
 Writing this way forces us to think more clearly about
 what someone might actually be thinking when they need help.
 \item[Keep each item short.]
-The ``minimal manual'' approach to instructional design (Carroll \protect\hyperlink{ref-Carr2014}{2014})
+The ``minimal manual'' approach to instructional design (\protect\hyperlink{ref-Carr2014}{Carroll 2014})
 breaks everything down into single-page steps,
 with half of that page devoted to troubleshooting.
 This may feel trivializing to the person doing the writing,
@@ -24096,9 +24122,9 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 \chapter{References}\label{references}}
 
 \hypertarget{refs}{}
-\begin{cslreferences}
+\begin{CSLReferences}{1}{0}
 \leavevmode\hypertarget{ref-Alme2017}{}%
-Almeida, Daniel A., Gail C. Murphy, Greg Wilson, and Mike Hoye. 2017. ``Do Software Developers Understand Open Source Licenses?'' In \emph{Proceedings of the 25th International Conference on Program Comprehension}, 1--11. IEEE Press. \url{https://doi.org/10.1109/ICPC.2017.7}.
+Almeida, Daniel A., Gail C. Murphy, Greg Wilson, and Mike Hoye. 2017. {``Do Software Developers Understand Open Source Licenses?''} In \emph{Proceedings of the 25th International Conference on Program Comprehension}, 1--11. {IEEE} Press. \url{https://doi.org/10.1109/ICPC.2017.7}.
 
 \leavevmode\hypertarget{ref-Auro2019}{}%
 Aurora, Valerie, and Mary Gardiner. 2019. \emph{How to Respond to Code of Conduct Reports}. Version 1.1. Frame Shift Consulting LLC.
@@ -24107,88 +24133,88 @@ Aurora, Valerie, and Mary Gardiner. 2019. \emph{How to Respond to Code of Conduc
 Aurora, Valerie, Mary Gardiner, and Annalee Flower Horne. 2018. \emph{How to Respond to Code of Conduct Reports}. Frame Shift Consulting.
 
 \leavevmode\hypertarget{ref-Bacc2013}{}%
-Bacchelli, Alberto, and Christian Bird. 2013. ``Expectations, Outcomes, and Challenges of Modern Code Review.'' In \emph{Proc.~International Conference on Software Engineering}. \url{http://research.microsoft.com/apps/pubs/default.aspx?id=180283}.
+Bacchelli, Alberto, and Christian Bird. 2013. {``Expectations, Outcomes, and Challenges of Modern Code Review.''} In \emph{Proc.~International Conference on Software Engineering}. \url{http://research.microsoft.com/apps/pubs/default.aspx?id=180283}.
 
 \leavevmode\hypertarget{ref-Beck2016}{}%
-Becker, Brett A., Graham Glanville, Ricardo Iwashima, Claire McDonnell, Kyle Goslin, and Catherine Mooney. 2016. ``Effective Compiler Error Message Enhancement for Novice Programming Students.'' \emph{Computer Science Education} 26 (2-3): 148--75. \url{https://doi.org/10.1080/08993408.2016.1225464}.
+Becker, Brett A., Graham Glanville, Ricardo Iwashima, Claire McDonnell, Kyle Goslin, and Catherine Mooney. 2016. {``Effective Compiler Error Message Enhancement for Novice Programming Students.''} \emph{Computer Science Education} 26 (2-3): 148--75. \url{https://doi.org/10.1080/08993408.2016.1225464}.
 
 \leavevmode\hypertarget{ref-Beni2017}{}%
-Beniamini, Gal, Sarah Gingichashvili, Alon Klein Orbach, and Dror G. Feitelson. 2017. ``Meaningful Identifier Names: The Case of Single-Letter Variables.'' In \emph{Proc.~2017 International Conference on Program Comprehension (ICPC'17)}. Institute of Electrical; Electronics Engineers (IEEE). \url{https://doi.org/10.1109/icpc.2017.18}.
+Beniamini, Gal, Sarah Gingichashvili, Alon Klein Orbach, and Dror G. Feitelson. 2017. {``Meaningful Identifier Names: The Case of Single-Letter Variables.''} In \emph{Proc.~2017 International Conference on Program Comprehension ({ICPC'17})}. Institute of Electrical; Electronics Engineers ({IEEE}). \url{https://doi.org/10.1109/icpc.2017.18}.
 
 \leavevmode\hypertarget{ref-Bern2018}{}%
-Bernhardt, Gary. 2018. ``A Case Study in Not Being a Jerk in Open Source.'' https://www.destroyallsoftware.com/blog/2018/a-case-study-in-not-being-a-jerk-in-open-source.
+Bernhardt, Gary. 2018. {``A Case Study in Not Being a Jerk in Open Source.''} https://www.destroyallsoftware.com/blog/2018/a-case-study-in-not-being-a-jerk-in-open-source.
 
 \leavevmode\hypertarget{ref-Bett2008}{}%
-Bettenburg, Nicolas, Sascha Just, Adrian Schröter, Cathrin Weiss, Rahul Premraj, and Thomas Zimmermann. 2008. ``What Makes a Good Bug Report?'' In \emph{Proc.~16th ACM SIGSOFT International Symposium on Foundations of Software Engineering - (SIGSOFT'08/FSE'16)}. ACM Press. \url{https://doi.org/10.1145/1453101.1453146}.
+Bettenburg, Nicolas, Sascha Just, Adrian Schröter, Cathrin Weiss, Rahul Premraj, and Thomas Zimmermann. 2008. {``What Makes a Good Bug Report?''} In \emph{Proc.~16th {ACM} {SIGSOFT} International Symposium on Foundations of Software Engineering - ({SIGSOFT}'08/{FSE}'16)}. {ACM} Press. \url{https://doi.org/10.1145/1453101.1453146}.
 
 \leavevmode\hypertarget{ref-Bink2012}{}%
-Binkley, Dave, Marcia Davis, Dawn Lawrie, Jonathan I. Maletic, Christopher Morrell, and Bonita Sharif. 2012. ``The Impact of Identifier Style on Effort and Comprehension.'' \emph{Empirical Software Engineering} 18 (2): 219--76. \url{https://doi.org/10.1007/s10664-012-9201-4}.
+Binkley, Dave, Marcia Davis, Dawn Lawrie, Jonathan I. Maletic, Christopher Morrell, and Bonita Sharif. 2012. {``The Impact of Identifier Style on Effort and Comprehension.''} \emph{Empirical Software Engineering} 18 (2): 219--76. \url{https://doi.org/10.1007/s10664-012-9201-4}.
 
 \leavevmode\hypertarget{ref-Boll2014}{}%
 Bollier, David. 2014. \emph{Think Like a Commoner: A Short Introduction to the Life of the Commons}. New Society Publishers.
 
 \leavevmode\hypertarget{ref-Borw2013}{}%
-Borwein, Jonathan, and David H. Bailey. 2013. ``The Reinhart-Rogoff Error---or, How Not to Excel at Economics.'' https://theconversation.com/the-reinhart-rogoff-error-or-how-not-to-excel-at-economics-13646.
+Borwein, Jonathan, and David H. Bailey. 2013. {``The Reinhart-Rogoff Error---or, How Not to Excel at Economics.''} https://theconversation.com/the-reinhart-rogoff-error-or-how-not-to-excel-at-economics-13646.
 
 \leavevmode\hypertarget{ref-Brai2018}{}%
-Braiek, Houssem Ben, and Foutse Khomh. 2018. ``On Testing Machine Learning Programs.'' https://arxiv.org/abs/1812.02257.
+Braiek, Houssem Ben, and Foutse Khomh. 2018. {``On Testing Machine Learning Programs.''} https://arxiv.org/abs/1812.02257.
 
 \leavevmode\hypertarget{ref-Bran1995}{}%
 Brand, Stewart. 1995. \emph{How Buildings Learn: What Happens After They're Built}. Penguin USA.
 
 \leavevmode\hypertarget{ref-Broc2019}{}%
-Brock, Jon. n.d. ``"A Love Letter to Your Future Self": What Scientists Need to Know About Fair Data.'' https://www.natureindex.com/news-blog/what-scientists-need-to-know-about-fair-data.
+Brock, Jon. n.d. {``"a Love Letter to Your Future Self": What Scientists Need to Know about FAIR Data.''} https://www.natureindex.com/news-blog/what-scientists-need-to-know-about-fair-data.
 
 \leavevmode\hypertarget{ref-Broo2016}{}%
 Brookfield, Stephen D., and Stephen Preskill. 2016. \emph{The Discussion Book: 50 Great Ways to Get People Talking}. Jossey-Bass.
 
 \leavevmode\hypertarget{ref-Brow2018}{}%
-Brown, Neil C. C., and Greg Wilson. 2018. ``Ten Quick Tips for Teaching Programming.'' \emph{PLOS Computational Biology} 14 (4). \url{https://doi.org/10.1371/journal.pcbi.1006023}.
+Brown, Neil C. C., and Greg Wilson. 2018. {``Ten Quick Tips for Teaching Programming.''} \emph{{PLOS} Computational Biology} 14 (4). \url{https://doi.org/10.1371/journal.pcbi.1006023}.
 
 \leavevmode\hypertarget{ref-Brown2017}{}%
-Brown, Titus. 2017. ``How I Learned to Stop Worrying and Love the Coming Archivability Crisis in Scientific Software.'' http://ivory.idyll.org/blog/tag/futurepaper.html.
+Brown, Titus. 2017. {``How i Learned to Stop Worrying and Love the Coming Archivability Crisis in Scientific Software.''} http://ivory.idyll.org/blog/tag/futurepaper.html.
 
 \leavevmode\hypertarget{ref-Buck1995}{}%
-Buckheit, Jonathan B., and David L. Donoho. 1995. ``WaveLab and Reproducible Research.'' In \emph{Wavelets and Statistics}, 55--81. Springer New York. \url{https://doi.org/10.1007/978-1-4612-2544-7_5}.
+Buckheit, Jonathan B., and David L. Donoho. 1995. {``{WaveLab} and Reproducible Research.''} In \emph{Wavelets and Statistics}, 55--81. Springer New York. \url{https://doi.org/10.1007/978-1-4612-2544-7_5}.
 
 \leavevmode\hypertarget{ref-Carr2014}{}%
-Carroll, John. 2014. ``Creating Minimalist Instruction.'' \emph{International Journal of Designs for Learning} 5 (2). \url{https://doi.org/10.14434/ijdl.v5i2.12887}.
+Carroll, John. 2014. {``Creating Minimalist Instruction.''} \emph{International Journal of Designs for Learning} 5 (2). \url{https://doi.org/10.14434/ijdl.v5i2.12887}.
 
 \leavevmode\hypertarget{ref-Cohe2010}{}%
-Cohen, Jason. 2010. ``Modern Code Review.'' In \emph{Making Software}, edited by Andy Oram and Greg Wilson. O'Reilly.
+Cohen, Jason. 2010. {``Modern Code Review.''} In \emph{Making Software}, edited by Andy Oram and Greg Wilson. O'Reilly.
 
 \leavevmode\hypertarget{ref-Deve2018}{}%
-Devenyi, Gabriel A., Rémi Emonet, Rayna M. Harris, Kate L. Hertweck, Damien Irving, Ian Milligan, and Greg Wilson. 2018. ``Ten Simple Rules for Collaborative Lesson Development.'' \emph{PLOS Computational Biology} 14 (3). \url{https://doi.org/10.1371/journal.pcbi.1005963}.
+Devenyi, Gabriel A., Rémi Emonet, Rayna M. Harris, Kate L. Hertweck, Damien Irving, Ian Milligan, and Greg Wilson. 2018. {``Ten Simple Rules for Collaborative Lesson Development.''} \emph{{PLOS} Computational Biology} 14 (3). \url{https://doi.org/10.1371/journal.pcbi.1005963}.
 
 \leavevmode\hypertarget{ref-Dobz1973}{}%
-Dobzhansky, Theodosius. 1973. ``Nothing in Biology Makes Sense Except in the Light of Evolution.'' \emph{The American Biology Teacher}, March.
+Dobzhansky, Theodosius. 1973. {``Nothing in Biology Makes Sense Except in the Light of Evolution.''} \emph{The American Biology Teacher}, March.
 
 \leavevmode\hypertarget{ref-Faga1976}{}%
-Fagan, Michael E. 1976. ``Design and Code Inspections to Reduce Errors in Program Development.'' \emph{IBM Systems Journal} 15 (3): 182--211. \url{https://doi.org/10.1147/sj.153.0182}.
+Fagan, Michael E. 1976. {``Design and Code Inspections to Reduce Errors in Program Development.''} \emph{IBM Systems Journal} 15 (3): 182--211. \url{https://doi.org/10.1147/sj.153.0182}.
 
 \leavevmode\hypertarget{ref-Faga1986}{}%
----------. 1986. ``Advances in Software Inspections.'' \emph{IEEE Transactions on Software Engineering} 12 (7): 744--51. \url{https://doi.org/10.1109/TSE.1986.6312976}.
+---------. 1986. {``Advances in Software Inspections.''} \emph{IEEE Transactions on Software Engineering} 12 (7): 744--51. \url{https://doi.org/10.1109/TSE.1986.6312976}.
 
 \leavevmode\hypertarget{ref-Foge2005}{}%
 Fogel, Karl. 2005. \emph{Producing Open Source Software: How to Run a Successful Free Software Project}. O'Reilly Media.
 
 \leavevmode\hypertarget{ref-Free1972}{}%
-Freeman, Jo. 1972. ``The Tyranny of Structurelessness.'' \emph{The Second Wave} 2 (1).
+Freeman, Jo. 1972. {``The Tyranny of Structurelessness.''} \emph{The Second Wave} 2 (1).
 
 \leavevmode\hypertarget{ref-Fucc2017}{}%
-Fucci, Davide, Hakan Erdogmus, Burak Turhan, Markku Oivo, and Natalia Juristo. 2017. ``A Dissection of the Test-Driven Development Process: Does It Really Matter to Test-First or to Test-Last?'' \emph{IEEE Transactions on Software Engineering} 43 (7). \url{https://doi.org/10.1109/tse.2016.2616877}.
+Fucci, Davide, Hakan Erdogmus, Burak Turhan, Markku Oivo, and Natalia Juristo. 2017. {``A Dissection of the Test-Driven Development Process: Does It Really Matter to Test-First or to Test-Last?''} \emph{{IEEE} Transactions on Software Engineering} 43 (7). \url{https://doi.org/10.1109/tse.2016.2616877}.
 
 \leavevmode\hypertarget{ref-Fucc2016}{}%
-Fucci, Davide, Giuseppe Scanniello, Simone Romano, Martin Shepperd, Boyce Sigweni, Fernando Uyaguari, Burak Turhan, Natalia Juristo, and Markku Oivo. 2016. ``An External Replication on the Effects of Test-Driven Development Using a Multi-Site Blind Analysis Approach.'' In \emph{Proc.~10th ACM/IEEE International Symposium on Empirical Software Engineering and Measurement (ESEM'16)}. ACM Press. \url{https://doi.org/10.1145/2961111.2962592}.
+Fucci, Davide, Giuseppe Scanniello, Simone Romano, Martin Shepperd, Boyce Sigweni, Fernando Uyaguari, Burak Turhan, Natalia Juristo, and Markku Oivo. 2016. {``An External Replication on the Effects of Test-Driven Development Using a Multi-Site Blind Analysis Approach.''} In \emph{Proc.~10th {ACM}/{IEEE} International Symposium on Empirical Software Engineering and Measurement ({ESEM'16})}. {ACM} Press. \url{https://doi.org/10.1145/2961111.2962592}.
 
 \leavevmode\hypertarget{ref-Gil2016}{}%
-Gil, Yolanda, Cédric H. David, Ibrahim Demir, Bakinam T. Essawy, Robinson W. Fulweiler, Jonathan L. Goodall, Leif Karlstrom, et al. 2016. ``Toward the Geoscience Paper of the Future: Best practices for documenting and sharing research from data to software to provenance.'' \emph{Earth and Space Science} 3: 388--415. \url{https://doi.org/10.1002/2015EA000136}.
+Gil, Yolanda, Cédric H. David, Ibrahim Demir, Bakinam T. Essawy, Robinson W. Fulweiler, Jonathan L. Goodall, Leif Karlstrom, et al. 2016. {``{Toward the Geoscience Paper of the Future: Best practices for documenting and sharing research from data to software to provenance}.''} \emph{Earth and Space Science} 3: 388--415. \url{https://doi.org/10.1002/2015EA000136}.
 
 \leavevmode\hypertarget{ref-Gold1991}{}%
-Goldberg, David. 1991. ``What Every Computer Scientist Should Know About Floating-Point Arithmetic.'' \emph{ACM Computing Surveys} 23 (1). \url{https://doi.org/10.1145/103162.103163}.
+Goldberg, David. 1991. {``What Every Computer Scientist Should Know about Floating-Point Arithmetic.''} \emph{{ACM} Computing Surveys} 23 (1). \url{https://doi.org/10.1145/103162.103163}.
 
 \leavevmode\hypertarget{ref-Good2014}{}%
-Goodman, Alyssa, Alberto Pepe, Alexander W. Blocker, Christine L. Borgman, Kyle Cranmer, Merce Crosas, Rosanne Di Stefano, et al. 2014. ``Ten Simple Rules for the Care and Feeding of Scientific Data.'' \emph{PLoS Computational Biology} 10 (4): e1003542. \url{https://doi.org/10.1371/journal.pcbi.1003542}.
+Goodman, Alyssa, Alberto Pepe, Alexander W. Blocker, Christine L. Borgman, Kyle Cranmer, Merce Crosas, Rosanne Di Stefano, et al. 2014. {``Ten Simple Rules for the Care and Feeding of Scientific Data.''} \emph{{PLoS} Computational Biology} 10 (4): e1003542. \url{https://doi.org/10.1371/journal.pcbi.1003542}.
 
 \leavevmode\hypertarget{ref-Goyv2012}{}%
 Goyvaerts, Jan, and Steven Levithan. 2012. \emph{Regular Expressions Cookbook}. 2nd ed. O'Reilly Media.
@@ -24200,10 +24226,10 @@ Gruenert, Steve, and Todd Whitaker. 2015. \emph{School Culture Rewired: How to D
 Haddock, Steven, and Casey Dunn. 2010. \emph{Practical Computing for Biologists}. Sinauer Associates.
 
 \leavevmode\hypertarget{ref-Hart2016}{}%
-Hart, Edmund M., Pauline Barmby, David LeBauer, François Michonneau, Sarah Mount, Patrick Mulrooney, Timothée Poisot, Kara H. Woo, Naupaka B. Zimmerman, and Jeffrey W. Hollister. 2016. ``Ten Simple Rules for Digital Data Storage.'' \emph{PLOS Computational Biology} 12 (10): e1005097. \url{https://doi.org/10.1371/journal.pcbi.1005097}.
+Hart, Edmund M., Pauline Barmby, David LeBauer, François Michonneau, Sarah Mount, Patrick Mulrooney, Timothée Poisot, Kara H. Woo, Naupaka B. Zimmerman, and Jeffrey W. Hollister. 2016. {``Ten Simple Rules for Digital Data Storage.''} \emph{{PLOS} Computational Biology} 12 (10): e1005097. \url{https://doi.org/10.1371/journal.pcbi.1005097}.
 
 \leavevmode\hypertarget{ref-Irving2019}{}%
-Irving, D. B., S. Wijffels, and J. A. Church. 2019. ``Anthropogenic Aerosols, Greenhouse Gases, and the Uptake, Transport, and Storage of Excess Heat in the Climate System.'' \emph{Geophysical Research Letters} 46 (9): 4894--4903. \url{https://doi.org/https://doi.org/10.1029/2019GL082015}.
+Irving, D. B., S. Wijffels, and J. A. Church. 2019. {``Anthropogenic Aerosols, Greenhouse Gases, and the Uptake, Transport, and Storage of Excess Heat in the Climate System.''} \emph{Geophysical Research Letters} 46 (9): 4894--4903. https://doi.org/\url{https://doi.org/10.1029/2019GL082015}.
 
 \leavevmode\hypertarget{ref-Jans2014}{}%
 Janssens, Jeroen. 2014. \emph{Data Science at the Command Line}. O'Reilly Media.
@@ -24215,110 +24241,111 @@ Kernighan, Brian W., and Rob Pike. 1999. \emph{The Practice of Programming}. Add
 Lee, Stan. 1962. \emph{Amazing Fantasy \#15}. Marvel.
 
 \leavevmode\hypertarget{ref-Leon2017}{}%
-Leonhardt, Matthias AND Serbe, Aljoscha AND Meier. 2017. ``Neural Mechanisms Underlying Sensitivity to Reverse-Phi Motion in the Fly.'' \emph{PLOS ONE} 12 (12): 1--25. \url{https://doi.org/10.1371/journal.pone.0189019}.
+Leonhardt, Matthias AND Serbe, Aljoscha AND Meier. 2017. {``Neural Mechanisms Underlying Sensitivity to Reverse-Phi Motion in the Fly.''} \emph{PLOS ONE} 12 (12): 1--25. \url{https://doi.org/10.1371/journal.pone.0189019}.
 
 \leavevmode\hypertarget{ref-Lind2008}{}%
 Lindberg, Van. 2008. \emph{Intellectual Property and Open Source: A Practical Guide to Protecting Code}. O'Reilly Media.
 
 \leavevmode\hypertarget{ref-Maju2019}{}%
-Majumder, Suvodeep, Joymallya Chakraborty, Amritanshu Agrawal, and Tim Menzies. 2019. ``Why Software Projects Need Heroes (Lessons Learned from 1000+ Projects).'' https://arxiv.org/abs/1904.09954.
+Majumder, Suvodeep, Joymallya Chakraborty, Amritanshu Agrawal, and Tim Menzies. 2019. {``Why Software Projects Need Heroes (lessons Learned from 1000+ Projects).''} https://arxiv.org/abs/1904.09954.
 
 \leavevmode\hypertarget{ref-Mak2006}{}%
 Mak, Ronald. 2006. \emph{The Martian Principles}. Wiley.
 
 \leavevmode\hypertarget{ref-Meil2015}{}%
-Meili, Stephen. 2016. ``Do Human Rights Treaties Help Asylum-Seekers: Findings from the U.k.'' ICPSR - Interuniversity Consortium for Political; Social Research. \url{https://doi.org/10.3886/E17507V2}.
+Meili, Stephen. 2016. {``Do Human Rights Treaties Help Asylum-Seekers: Findings from the u.k.''} ICPSR - Interuniversity Consortium for Political; Social Research. \url{https://doi.org/10.3886/E17507V2}.
 
 \leavevmode\hypertarget{ref-Mich2015}{}%
-Michener, William K. 2015. ``Ten Simple Rules for Creating a Good Data Management Plan.'' \emph{PLOS Computational Biology} 11 (10): e1004525. \url{https://doi.org/10.1371/journal.pcbi.1004525}.
+Michener, William K. 2015. {``Ten Simple Rules for Creating a Good Data Management Plan.''} \emph{{PLOS} Computational Biology} 11 (10): e1004525. \url{https://doi.org/10.1371/journal.pcbi.1004525}.
 
 \leavevmode\hypertarget{ref-Mill1956}{}%
-Miller, George A. 1956. ``The Magical Number Seven, Plus or Minus Two: Some Limits on Our Capacity for Processing Information.'' \emph{Psychological Review} 63 (2): 81--97. \url{https://doi.org/10.1037/h0043158}.
+Miller, George A. 1956. {``The Magical Number Seven, Plus or Minus Two: Some Limits on Our Capacity for Processing Information.''} \emph{Psychological Review} 63 (2): 81--97. \url{https://doi.org/10.1037/h0043158}.
 
 \leavevmode\hypertarget{ref-Miller2006}{}%
-Miller, Greg. 2006. ``A scientist's nightmare: Software problem leads to five retractions.'' \emph{Science} 314 (5807): 1856--7. \url{https://doi.org/10.1126/science.314.5807.1856}.
+Miller, Greg. 2006. {``{A scientist's nightmare: Software problem leads to five retractions}.''} \emph{Science} 314 (5807): 1856--57. \url{https://doi.org/10.1126/science.314.5807.1856}.
 
 \leavevmode\hypertarget{ref-Mina1986}{}%
-Minahan, Anne. 1986. ``Martha's Rules.'' \emph{Affilia} 1 (2): 53--56. \url{https://doi.org/10.1177/088610998600100206}.
+Minahan, Anne. 1986. {``Martha's Rules.''} \emph{Affilia} 1 (2): 53--56. \url{https://doi.org/10.1177/088610998600100206}.
 
 \leavevmode\hypertarget{ref-Moreno2016}{}%
-Moreno-Sánchez, Isabel, Francesc Font-Clos, and Álvaro Corral. 2016. ``Large-scale analysis of Zipf's Law in english texts.'' \emph{PLoS ONE} 11 (1): e0147073. \url{https://doi.org/10.1371/journal.pone.0147073}.
+Moreno-Sánchez, Isabel, Francesc Font-Clos, and Álvaro Corral. 2016. {``{Large-scale analysis of Zipf's Law in english texts}.''} \emph{{PLoS ONE}} 11 (1): e0147073. \url{https://doi.org/10.1371/journal.pone.0147073}.
 
 \leavevmode\hypertarget{ref-Mori2012}{}%
-Morin, Andrew, Jennifer Urban, and Piotr Sliz. 2012. ``A Quick Guide to Software Licensing for the Scientist-Programmer.'' \emph{PLoS Computational Biology} 8 (7). \url{https://doi.org/10.1371/journal.pcbi.1002598}.
+Morin, Andrew, Jennifer Urban, and Piotr Sliz. 2012. {``A Quick Guide to Software Licensing for the Scientist-Programmer.''} \emph{{PLoS} Computational Biology} 8 (7). \url{https://doi.org/10.1371/journal.pcbi.1002598}.
 
 \leavevmode\hypertarget{ref-Nobl2009}{}%
-Noble, William Stafford. 2009. ``A Quick Guide to Organizing Computational Biology Projects.'' \emph{PLoS Computational Biology} 5 (7). \url{https://doi.org/10.1371/journal.pcbi.1000424}.
+Noble, William Stafford. 2009. {``A Quick Guide to Organizing Computational Biology Projects.''} \emph{{PLoS} Computational Biology} 5 (7). \url{https://doi.org/10.1371/journal.pcbi.1000424}.
 
 \leavevmode\hypertarget{ref-Nust2020}{}%
-Nüst, Daniel, Vanessa Sochat, Ben Marwick, Stephen Eglen, Tim Head, Tony Hirst, and Benjamin Evans. 2020. ``Ten Simple Rules for Writing Dockerfiles for Reproducible Data Science.'' \url{https://doi.org/10.31219/osf.io/fsd7t}.
+Nüst, Daniel, Vanessa Sochat, Ben Marwick, Stephen Eglen, Tim Head, Tony Hirst, and Benjamin Evans. 2020. {``Ten Simple Rules for Writing Dockerfiles for Reproducible Data Science.''} \url{https://doi.org/10.31219/osf.io/fsd7t}.
 
 \leavevmode\hypertarget{ref-Pere2013}{}%
-Perez De Rosso, Santiago, and Daniel Jackson. 2013. ``What's Wrong with Git?'' In \emph{Proc.~2013 ACM International Symposium on New Ideas, New Paradigms, and Reflections on Programming and Software (Onward!'13)}. \url{https://doi.org/10.1145/2509578.2509584}.
+Perez De Rosso, Santiago, and Daniel Jackson. 2013. {``What's Wrong with Git?''} In \emph{Proc.~2013 {ACM} International Symposium on New Ideas, New Paradigms, and Reflections on Programming and Software ({Onward!'13})}. \url{https://doi.org/10.1145/2509578.2509584}.
 
 \leavevmode\hypertarget{ref-Petr2014}{}%
-Petre, Marian, and Greg Wilson. 2014. ``Code Review for and by Scientists.'' In \emph{Proc.~Second Workshop on Sustainable Software for Science: Practice and Experience}. \url{https://doi.org/arXiv:1407.5648}.
+Petre, Marian, and Greg Wilson. 2014. {``Code Review for and by Scientists.''} In \emph{Proc.~Second Workshop on Sustainable Software for Science: Practice and Experience}. \url{https://doi.org/arXiv:1407.5648}.
 
 \leavevmode\hypertarget{ref-Potter2019}{}%
-Potter, Barney I., Rebecca Garten, James Hadfield, John Huddleston, John Barnes, Thomas Rowe, Lizheng Guo, et al. 2019. ``Evolution and Rapid Spread of a Reassortant a(H3N2) Virus That Predominated the 2017-2018 Influenza Season.'' \emph{bioRxiv}. \url{https://doi.org/10.1101/543322}.
+Potter, Barney I., Rebecca Garten, James Hadfield, John Huddleston, John Barnes, Thomas Rowe, Lizheng Guo, et al. 2019. {``Evolution and Rapid Spread of a Reassortant a(H3N2) Virus That Predominated the 2017-2018 Influenza Season.''} \emph{bioRxiv}. \url{https://doi.org/10.1101/543322}.
 
 \leavevmode\hypertarget{ref-Quen2018}{}%
-Quenneville, Joël. 2018. ``Code Review.'' https://github.com/thoughtbot/guides/tree/master/code-review.
+Quenneville, Joël. 2018. {``Code Review.''} https://github.com/thoughtbot/guides/tree/master/code-review.
 
 \leavevmode\hypertarget{ref-Ray2014}{}%
-Ray, Eric J., and Deborah S. Ray. 2014. \emph{Unix and Linux: Visual Quickstart Guide}. Peachpit Press.
+Ray, Eric J., and Deborah S. Ray. 2014. \emph{Unix and Linux: Visual QuickStart Guide}. Peachpit Press.
 
 \leavevmode\hypertarget{ref-Sank2018}{}%
-Sankarram, Sandya. 2018. ``Unlearning Toxic Behaviors in a Code Review Culture.'' https://medium.freecodecamp.org/unlearning-toxic-behaviors-in-a-code-review-culture-b7c295452a3c.
+Sankarram, Sandya. 2018. {``Unlearning Toxic Behaviors in a Code Review Culture.''} https://medium.freecodecamp.org/unlearning-toxic-behaviors-in-a-code-review-culture-b7c295452a3c.
 
 \leavevmode\hypertarget{ref-Scha2018}{}%
-Schankin, Andrea, Annika Berger, Daniel V. Holt, Johannes C. Hofmeister, Till Riedel, and Michael Beigl. 2018. ``Descriptive Compound Identifier Names Improve Source Code Comprehension.'' In \emph{Proc.~26th Conference on Program Comprehension (Icpc'18)}. ACM Press. \url{https://doi.org/10.1145/3196321.3196332}.
+Schankin, Andrea, Annika Berger, Daniel V. Holt, Johannes C. Hofmeister, Till Riedel, and Michael Beigl. 2018. {``Descriptive Compound Identifier Names Improve Source Code Comprehension.''} In \emph{Proc.~26th Conference on Program Comprehension (ICPC'18)}. {ACM} Press. \url{https://doi.org/10.1145/3196321.3196332}.
 
 \leavevmode\hypertarget{ref-Scop2015}{}%
 Scopatz, Anthony, and Kathryn D. Huff. 2015. \emph{Effective Computation in Physics}. O'Reilly Media.
 
 \leavevmode\hypertarget{ref-Sega2005}{}%
-Segal, Judith. 2005. ``When Software Engineers Met Research Scientists: A Case Study.'' \emph{Empirical Software Engineering} 10 (4): 517--36. \url{https://doi.org/10.1007/s10664-005-3865-y}.
+Segal, Judith. 2005. {``When Software Engineers Met Research Scientists: A Case Study.''} \emph{Empirical Software Engineering} 10 (4): 517--36. \url{https://doi.org/10.1007/s10664-005-3865-y}.
 
 \leavevmode\hypertarget{ref-Shol2019}{}%
-Sholler, Dan, Igor Steinmacher, Denae Ford, Mara Averick, Mike Hoye, and Greg Wilson. 2019. ``Ten Simple Rules for Helping Newcomers Become Contributors to Open Projects.'' Edited by Scott Markel. \emph{PLOS Computational Biology} 15 (9): e1007296. \url{https://doi.org/10.1371/journal.pcbi.1007296}.
+Sholler, Dan, Igor Steinmacher, Denae Ford, Mara Averick, Mike Hoye, and Greg Wilson. 2019. {``Ten Simple Rules for Helping Newcomers Become Contributors to Open Projects.''} Edited by Scott Markel. \emph{{PLOS} Computational Biology} 15 (9): e1007296. \url{https://doi.org/10.1371/journal.pcbi.1007296}.
 
 \leavevmode\hypertarget{ref-Smit2011}{}%
 Smith, Peter. 2011. \emph{Software Build Systems: Principles and Experience}. Addison-Wesley Professional.
 
 \leavevmode\hypertarget{ref-Stei2014}{}%
-Steinmacher, Igor, Igor Scaliante Wiese, Tayana Conte, Marco Aurélio Gerosa, and David Redmiles. 2014. ``The Hard Life of Open Source Software Project Newcomers.'' In \emph{Proc.~7th International Workshop on Cooperative and Human Aspects of Software Engineering (CHASE/14)}. \url{https://doi.org/10.1145/2593702.2593704}.
+Steinmacher, Igor, Igor Scaliante Wiese, Tayana Conte, Marco Aurélio Gerosa, and David Redmiles. 2014. {``The Hard Life of Open Source Software Project Newcomers.''} In \emph{Proc.~7th International Workshop on Cooperative and Human Aspects of Software Engineering ({CHASE}/14)}. \url{https://doi.org/10.1145/2593702.2593704}.
 
 \leavevmode\hypertarget{ref-Tasc2017}{}%
-Taschuk, Morgan, and Greg Wilson. 2017. ``Ten Simple Rules for Making Research Software More Robust.'' \emph{PLoS Computational Biology} 13 (4). \url{https://doi.org/10.1371/journal.pcbi.1005412}.
+Taschuk, Morgan, and Greg Wilson. 2017. {``Ten Simple Rules for Making Research Software More Robust.''} \emph{{PLoS} Computational Biology} 13 (4). \url{https://doi.org/10.1371/journal.pcbi.1005412}.
 
 \leavevmode\hypertarget{ref-Tier2020}{}%
-Tierney, Nicholas J, and Karthik Ram. 2020. ``A Realistic Guide to Making Data Available Alongside Code to Improve Reproducibility.'' https://arxiv.org/abs/2002.11626.
+Tierney, Nicholas J, and Karthik Ram. 2020. {``A Realistic Guide to Making Data Available Alongside Code to Improve Reproducibility.''} https://arxiv.org/abs/2002.11626.
 
 \leavevmode\hypertarget{ref-Wick2016}{}%
-Wickes, Elizabeth, and Ayla Stein. 2016. ``Data Documentation Material.'' http://hdl.handle.net/2142/91611.
+Wickes, Elizabeth, and Ayla Stein. 2016. {``Data Documentation Material.''} http://hdl.handle.net/2142/91611.
 
 \leavevmode\hypertarget{ref-Wils2018}{}%
 Wilson, Greg. 2019a. \emph{Teaching Tech Together}. Taylor \& Francis.
 
 \leavevmode\hypertarget{ref-Wils2019}{}%
----------. 2019b. ``Ten Quick Tips for Creating an Effective Lesson.'' Edited by Francis Ouellette. \emph{PLOS Computational Biology} 15 (4): e1006915. \url{https://doi.org/10.1371/journal.pcbi.1006915}.
+---------. 2019b. {``Ten Quick Tips for Creating an Effective Lesson.''} Edited by Francis Ouellette. \emph{{PLOS} Computational Biology} 15 (4): e1006915. \url{https://doi.org/10.1371/journal.pcbi.1006915}.
 
 \leavevmode\hypertarget{ref-Wils2014}{}%
-Wilson, Greg, D. A. Aruliah, C. Titus Brown, Neil P. Chue Hong, Matt Davis, Richard T. Guy, Steven H. D. Haddock, et al. 2014. ``Best Practices for Scientific Computing.'' \emph{PLoS Biology} 12 (1). \url{https://doi.org/10.1371/journal.pbio.1001745}.
+Wilson, Greg, D. A. Aruliah, C. Titus Brown, Neil P. Chue Hong, Matt Davis, Richard T. Guy, Steven H. D. Haddock, et al. 2014. {``Best Practices for Scientific Computing.''} \emph{{PLoS} Biology} 12 (1). \url{https://doi.org/10.1371/journal.pbio.1001745}.
 
 \leavevmode\hypertarget{ref-Wils2017}{}%
-Wilson, Greg, Jennifer Bryan, Karen Cranston, Justin Kitzes, Lex Nederbragt, and Tracy K. Teal. 2017. ``Good Enough Practices in Scientific Computing.'' \emph{PLoS Computational Biology} 13 (6). \url{https://doi.org/10.1371/journal.pcbi.1005510}.
+Wilson, Greg, Jennifer Bryan, Karen Cranston, Justin Kitzes, Lex Nederbragt, and Tracy K. Teal. 2017. {``Good Enough Practices in Scientific Computing.''} \emph{{PLoS} Computational Biology} 13 (6). \url{https://doi.org/10.1371/journal.pcbi.1005510}.
 
 \leavevmode\hypertarget{ref-Xu2015}{}%
-Xu, Tianyin, Long Jin, Xuepeng Fan, Yuanyuan Zhou, Shankar Pasupathy, and Rukma Talwadker. 2015. ``Hey, You Have Given Me Too Many Knobs!: Understanding and Dealing with over-Designed Configuration in System Software.'' In \emph{Proc.~10th Joint Meeting on Foundations of Software Engineering (FSE'2015)}. ACM Press. \url{https://doi.org/10.1145/2786805.2786852}.
+Xu, Tianyin, Long Jin, Xuepeng Fan, Yuanyuan Zhou, Shankar Pasupathy, and Rukma Talwadker. 2015. {``Hey, You Have Given Me Too Many Knobs!: Understanding and Dealing with over-Designed Configuration in System Software.''} In \emph{Proc.~10th Joint Meeting on Foundations of Software Engineering ({FSE'2015})}. {ACM} Press. \url{https://doi.org/10.1145/2786805.2786852}.
 
 \leavevmode\hypertarget{ref-Zamp2020}{}%
-Zampetti, Fiorella, Carmine Vassallo, Sebastiano Panichella, Gerardo Canfora, Harald Gall, and Massimiliano Di Penta. 2020. ``An Empirical Characterization of Bad Practices in Continuous Integration.'' \emph{Empirical Software Engineering} 25 (2): 1095--1135. \url{https://doi.org/10.1007/s10664-019-09785-8}.
+Zampetti, Fiorella, Carmine Vassallo, Sebastiano Panichella, Gerardo Canfora, Harald Gall, and Massimiliano Di Penta. 2020. {``An Empirical Characterization of Bad Practices in Continuous Integration.''} \emph{Empirical Software Engineering} 25 (2): 1095--135. \url{https://doi.org/10.1007/s10664-019-09785-8}.
 
 \leavevmode\hypertarget{ref-Zhan2020}{}%
-Zhang, Letian. 2020. ``An Institutional Approach to Gender Diversity and Firm Performance.'' \emph{Organization Science} 31 (2).
-\end{cslreferences}
+Zhang, Letian. 2020. {``An Institutional Approach to Gender Diversity and Firm Performance.''} \emph{Organization Science} 31 (2).
+
+\end{CSLReferences}
 
 \backmatter
 \printindex

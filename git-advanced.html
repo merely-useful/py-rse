@@ -24,7 +24,7 @@
 <meta name="author" content="Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson" />
 
 
-<meta name="date" content="2020-11-17" />
+<meta name="date" content="2020-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -678,31 +678,31 @@ we foreshadowed some experimental changes that we could try and make to <code>pl
 we can inspect our current <code>plotcounts.py</code>:</p>
 <pre class="shell"><code>$ cd ~/zipf
 $ cat bin/plotcounts.py</code></pre>
-<div class="sourceCode" id="cb460"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb460-1"><a href="git-advanced.html#cb460-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
-<span id="cb460-2"><a href="git-advanced.html#cb460-2" aria-hidden="true"></a></span>
-<span id="cb460-3"><a href="git-advanced.html#cb460-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
-<span id="cb460-4"><a href="git-advanced.html#cb460-4" aria-hidden="true"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb460-5"><a href="git-advanced.html#cb460-5" aria-hidden="true"></a></span>
-<span id="cb460-6"><a href="git-advanced.html#cb460-6" aria-hidden="true"></a></span>
-<span id="cb460-7"><a href="git-advanced.html#cb460-7" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb460-8"><a href="git-advanced.html#cb460-8" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb460-9"><a href="git-advanced.html#cb460-9" aria-hidden="true"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
-<span id="cb460-10"><a href="git-advanced.html#cb460-10" aria-hidden="true"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
-<span id="cb460-11"><a href="git-advanced.html#cb460-11" aria-hidden="true"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb460-12"><a href="git-advanced.html#cb460-12" aria-hidden="true"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], grid<span class="op">=</span><span class="va">True</span>, xlim<span class="op">=</span>args.xlim)</span>
-<span id="cb460-13"><a href="git-advanced.html#cb460-13" aria-hidden="true"></a>    ax.figure.savefig(args.outfile)</span>
-<span id="cb460-14"><a href="git-advanced.html#cb460-14" aria-hidden="true"></a></span>
-<span id="cb460-15"><a href="git-advanced.html#cb460-15" aria-hidden="true"></a></span>
-<span id="cb460-16"><a href="git-advanced.html#cb460-16" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb460-17"><a href="git-advanced.html#cb460-17" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb460-18"><a href="git-advanced.html#cb460-18" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
-<span id="cb460-19"><a href="git-advanced.html#cb460-19" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
-<span id="cb460-20"><a href="git-advanced.html#cb460-20" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
-<span id="cb460-21"><a href="git-advanced.html#cb460-21" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
-<span id="cb460-22"><a href="git-advanced.html#cb460-22" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
-<span id="cb460-23"><a href="git-advanced.html#cb460-23" aria-hidden="true"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
-<span id="cb460-24"><a href="git-advanced.html#cb460-24" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb460-25"><a href="git-advanced.html#cb460-25" aria-hidden="true"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb460"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb460-1"><a href="git-advanced.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
+<span id="cb460-2"><a href="git-advanced.html#cb460-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb460-3"><a href="git-advanced.html#cb460-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
+<span id="cb460-4"><a href="git-advanced.html#cb460-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb460-5"><a href="git-advanced.html#cb460-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb460-6"><a href="git-advanced.html#cb460-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb460-7"><a href="git-advanced.html#cb460-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(args):</span>
+<span id="cb460-8"><a href="git-advanced.html#cb460-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb460-9"><a href="git-advanced.html#cb460-9" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
+<span id="cb460-10"><a href="git-advanced.html#cb460-10" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
+<span id="cb460-11"><a href="git-advanced.html#cb460-11" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb460-12"><a href="git-advanced.html#cb460-12" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], grid<span class="op">=</span><span class="va">True</span>, xlim<span class="op">=</span>args.xlim)</span>
+<span id="cb460-13"><a href="git-advanced.html#cb460-13" aria-hidden="true" tabindex="-1"></a>    ax.figure.savefig(args.outfile)</span>
+<span id="cb460-14"><a href="git-advanced.html#cb460-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb460-15"><a href="git-advanced.html#cb460-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb460-16"><a href="git-advanced.html#cb460-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb460-17"><a href="git-advanced.html#cb460-17" aria-hidden="true" tabindex="-1"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb460-18"><a href="git-advanced.html#cb460-18" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
+<span id="cb460-19"><a href="git-advanced.html#cb460-19" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
+<span id="cb460-20"><a href="git-advanced.html#cb460-20" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
+<span id="cb460-21"><a href="git-advanced.html#cb460-21" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
+<span id="cb460-22"><a href="git-advanced.html#cb460-22" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
+<span id="cb460-23"><a href="git-advanced.html#cb460-23" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
+<span id="cb460-24"><a href="git-advanced.html#cb460-24" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb460-25"><a href="git-advanced.html#cb460-25" aria-hidden="true" tabindex="-1"></a>    main(args)</span></code></pre></div>
 <p>We used this version of <code>plotcounts.py</code>
 to display the word counts for <em>Dracula</em> on a log-log plot
 (Figure <a href="git-cmdline.html#fig:git-cmdline-loglog-plot">6.4</a>).
@@ -806,14 +806,14 @@ with a slope of <span class="math inline">\(- \tfrac{1}{\alpha}\)</span>
 and intercept <span class="math inline">\(\log(c)\)</span>.
 Our goal is to estimate the value of <span class="math inline">\(\alpha\)</span>;
 we’ll see later that <span class="math inline">\(c\)</span> is completely defined.</p>
-<p>In order to determine the best method for estimating <span class="math inline">\(\alpha\)</span> we turn to <span class="citation">Moreno-Sánchez, Font-Clos, and Corral (<a href="references.html#ref-Moreno2016" role="doc-biblioref">2016</a>)</span>,
+<p>In order to determine the best method for estimating <span class="math inline">\(\alpha\)</span> we turn to <span class="citation"><a href="references.html#ref-Moreno2016" role="doc-biblioref">Moreno-Sánchez, Font-Clos, and Corral</a> (<a href="references.html#ref-Moreno2016" role="doc-biblioref">2016</a>)</span>,
 which suggests using a method called <a href="glossary.html#maximum_likelihood_estimation">maximum likelihood estimation</a>.
 The likelihood function is the probability of our observed data
 as a function of the parameters in the statistical model that we assume generated it.
 We estimate the parameters in the model by choosing them to maximize this likelihood;
 computationally,
 it is often easier to minimize the negative log likelihood function.
-<span class="citation">Moreno-Sánchez, Font-Clos, and Corral (<a href="references.html#ref-Moreno2016" role="doc-biblioref">2016</a>)</span> define the likelihood using a parameter <span class="math inline">\(\beta\)</span>,
+<span class="citation"><a href="references.html#ref-Moreno2016" role="doc-biblioref">Moreno-Sánchez, Font-Clos, and Corral</a> (<a href="references.html#ref-Moreno2016" role="doc-biblioref">2016</a>)</span> define the likelihood using a parameter <span class="math inline">\(\beta\)</span>,
 which is related to the <span class="math inline">\(\alpha\)</span> parameter in our definition of Zipf’s Law
 through <span class="math inline">\(\alpha = \tfrac{1}{\beta-1}\)</span>.
 Under their model,
@@ -821,48 +821,48 @@ the value of <span class="math inline">\(c\)</span> is the total number of uniqu
 or equivalently the largest value of the rank.</p>
 <p>Expressed as a Python function,
 the negative log likelihood function is:</p>
-<div class="sourceCode" id="cb468"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb468-1"><a href="git-advanced.html#cb468-1" aria-hidden="true"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb468-2"><a href="git-advanced.html#cb468-2" aria-hidden="true"></a></span>
-<span id="cb468-3"><a href="git-advanced.html#cb468-3" aria-hidden="true"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
-<span id="cb468-4"><a href="git-advanced.html#cb468-4" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
-<span id="cb468-5"><a href="git-advanced.html#cb468-5" aria-hidden="true"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>) <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
-<span id="cb468-6"><a href="git-advanced.html#cb468-6" aria-hidden="true"></a>    <span class="cf">return</span> likelihood</span></code></pre></div>
+<div class="sourceCode" id="cb468"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb468-1"><a href="git-advanced.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb468-2"><a href="git-advanced.html#cb468-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-3"><a href="git-advanced.html#cb468-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
+<span id="cb468-4"><a href="git-advanced.html#cb468-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
+<span id="cb468-5"><a href="git-advanced.html#cb468-5" aria-hidden="true" tabindex="-1"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>) <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
+<span id="cb468-6"><a href="git-advanced.html#cb468-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> likelihood</span></code></pre></div>
 <p>Obtaining an estimate of <span class="math inline">\(\beta\)</span> (and thus <span class="math inline">\(\alpha\)</span>)
 then becomes a numerical optimization problem,
 for which we can use the <code>scipy.optimize</code> library.
-Again following <span class="citation">Moreno-Sánchez, Font-Clos, and Corral (<a href="references.html#ref-Moreno2016" role="doc-biblioref">2016</a>)</span>,
+Again following <span class="citation"><a href="references.html#ref-Moreno2016" role="doc-biblioref">Moreno-Sánchez, Font-Clos, and Corral</a> (<a href="references.html#ref-Moreno2016" role="doc-biblioref">2016</a>)</span>,
 we use Brent’s Method with <span class="math inline">\(1 &lt; \beta \leq 4\)</span>.</p>
-<div class="sourceCode" id="cb469"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb469-1"><a href="git-advanced.html#cb469-1" aria-hidden="true"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
-<span id="cb469-2"><a href="git-advanced.html#cb469-2" aria-hidden="true"></a></span>
-<span id="cb469-3"><a href="git-advanced.html#cb469-3" aria-hidden="true"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
-<span id="cb469-4"><a href="git-advanced.html#cb469-4" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
-<span id="cb469-5"><a href="git-advanced.html#cb469-5" aria-hidden="true"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood, bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
-<span id="cb469-6"><a href="git-advanced.html#cb469-6" aria-hidden="true"></a>                          args<span class="op">=</span>word_counts, method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
-<span id="cb469-7"><a href="git-advanced.html#cb469-7" aria-hidden="true"></a>    beta <span class="op">=</span> mle.x</span>
-<span id="cb469-8"><a href="git-advanced.html#cb469-8" aria-hidden="true"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb469-9"><a href="git-advanced.html#cb469-9" aria-hidden="true"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
+<div class="sourceCode" id="cb469"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb469-1"><a href="git-advanced.html#cb469-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
+<span id="cb469-2"><a href="git-advanced.html#cb469-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb469-3"><a href="git-advanced.html#cb469-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
+<span id="cb469-4"><a href="git-advanced.html#cb469-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
+<span id="cb469-5"><a href="git-advanced.html#cb469-5" aria-hidden="true" tabindex="-1"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood, bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
+<span id="cb469-6"><a href="git-advanced.html#cb469-6" aria-hidden="true" tabindex="-1"></a>                          args<span class="op">=</span>word_counts, method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
+<span id="cb469-7"><a href="git-advanced.html#cb469-7" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> mle.x</span>
+<span id="cb469-8"><a href="git-advanced.html#cb469-8" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb469-9"><a href="git-advanced.html#cb469-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
 <p>We can then plot the fitted curve on the plot axes (<code>ax</code>)
 defined in the <code>plotcounts.py</code> script,</p>
-<div class="sourceCode" id="cb470"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb470-1"><a href="git-advanced.html#cb470-1" aria-hidden="true"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
-<span id="cb470-2"><a href="git-advanced.html#cb470-2" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb470-3"><a href="git-advanced.html#cb470-3" aria-hidden="true"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
-<span id="cb470-4"><a href="git-advanced.html#cb470-4" aria-hidden="true"></a></span>
-<span id="cb470-5"><a href="git-advanced.html#cb470-5" aria-hidden="true"></a><span class="co">    Parameters</span></span>
-<span id="cb470-6"><a href="git-advanced.html#cb470-6" aria-hidden="true"></a><span class="co">    ----------</span></span>
-<span id="cb470-7"><a href="git-advanced.html#cb470-7" aria-hidden="true"></a><span class="co">    curve_xmin : float</span></span>
-<span id="cb470-8"><a href="git-advanced.html#cb470-8" aria-hidden="true"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
-<span id="cb470-9"><a href="git-advanced.html#cb470-9" aria-hidden="true"></a><span class="co">    curve_xmax : float</span></span>
-<span id="cb470-10"><a href="git-advanced.html#cb470-10" aria-hidden="true"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
-<span id="cb470-11"><a href="git-advanced.html#cb470-11" aria-hidden="true"></a><span class="co">    max_rank : int</span></span>
-<span id="cb470-12"><a href="git-advanced.html#cb470-12" aria-hidden="true"></a><span class="co">        Maximum word frequency rank.</span></span>
-<span id="cb470-13"><a href="git-advanced.html#cb470-13" aria-hidden="true"></a><span class="co">    alpha : float</span></span>
-<span id="cb470-14"><a href="git-advanced.html#cb470-14" aria-hidden="true"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
-<span id="cb470-15"><a href="git-advanced.html#cb470-15" aria-hidden="true"></a><span class="co">    ax : matplotlib axes</span></span>
-<span id="cb470-16"><a href="git-advanced.html#cb470-16" aria-hidden="true"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
-<span id="cb470-17"><a href="git-advanced.html#cb470-17" aria-hidden="true"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb470-18"><a href="git-advanced.html#cb470-18" aria-hidden="true"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
-<span id="cb470-19"><a href="git-advanced.html#cb470-19" aria-hidden="true"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
-<span id="cb470-20"><a href="git-advanced.html#cb470-20" aria-hidden="true"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb470"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb470-1"><a href="git-advanced.html#cb470-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
+<span id="cb470-2"><a href="git-advanced.html#cb470-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb470-3"><a href="git-advanced.html#cb470-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
+<span id="cb470-4"><a href="git-advanced.html#cb470-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb470-5"><a href="git-advanced.html#cb470-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb470-6"><a href="git-advanced.html#cb470-6" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb470-7"><a href="git-advanced.html#cb470-7" aria-hidden="true" tabindex="-1"></a><span class="co">    curve_xmin : float</span></span>
+<span id="cb470-8"><a href="git-advanced.html#cb470-8" aria-hidden="true" tabindex="-1"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
+<span id="cb470-9"><a href="git-advanced.html#cb470-9" aria-hidden="true" tabindex="-1"></a><span class="co">    curve_xmax : float</span></span>
+<span id="cb470-10"><a href="git-advanced.html#cb470-10" aria-hidden="true" tabindex="-1"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
+<span id="cb470-11"><a href="git-advanced.html#cb470-11" aria-hidden="true" tabindex="-1"></a><span class="co">    max_rank : int</span></span>
+<span id="cb470-12"><a href="git-advanced.html#cb470-12" aria-hidden="true" tabindex="-1"></a><span class="co">        Maximum word frequency rank.</span></span>
+<span id="cb470-13"><a href="git-advanced.html#cb470-13" aria-hidden="true" tabindex="-1"></a><span class="co">    alpha : float</span></span>
+<span id="cb470-14"><a href="git-advanced.html#cb470-14" aria-hidden="true" tabindex="-1"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
+<span id="cb470-15"><a href="git-advanced.html#cb470-15" aria-hidden="true" tabindex="-1"></a><span class="co">    ax : matplotlib axes</span></span>
+<span id="cb470-16"><a href="git-advanced.html#cb470-16" aria-hidden="true" tabindex="-1"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
+<span id="cb470-17"><a href="git-advanced.html#cb470-17" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb470-18"><a href="git-advanced.html#cb470-18" aria-hidden="true" tabindex="-1"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
+<span id="cb470-19"><a href="git-advanced.html#cb470-19" aria-hidden="true" tabindex="-1"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
+<span id="cb470-20"><a href="git-advanced.html#cb470-20" aria-hidden="true" tabindex="-1"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span></code></pre></div>
 <p>where the maximum word frequency rank corresponds to <span class="math inline">\(c\)</span>,
 and <span class="math inline">\(-1 / \alpha\)</span> the exponent in the power law.</p>
 </div>
@@ -870,92 +870,92 @@ and <span class="math inline">\(-1 / \alpha\)</span> the exponent in the power l
 <h2><span class="header-section-number">7.4</span> Verifying Zipf’s Law</h2>
 <p>Now that we have defined the functions required to fit a curve to our word count plots,
 we can update <code>plotcounts.py</code> so the entire script reads as follows:</p>
-<div class="sourceCode" id="cb471"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb471-1"><a href="git-advanced.html#cb471-1" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
-<span id="cb471-2"><a href="git-advanced.html#cb471-2" aria-hidden="true"></a></span>
-<span id="cb471-3"><a href="git-advanced.html#cb471-3" aria-hidden="true"></a><span class="im">import</span> argparse</span>
-<span id="cb471-4"><a href="git-advanced.html#cb471-4" aria-hidden="true"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb471-5"><a href="git-advanced.html#cb471-5" aria-hidden="true"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb471-6"><a href="git-advanced.html#cb471-6" aria-hidden="true"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
-<span id="cb471-7"><a href="git-advanced.html#cb471-7" aria-hidden="true"></a></span>
-<span id="cb471-8"><a href="git-advanced.html#cb471-8" aria-hidden="true"></a></span>
-<span id="cb471-9"><a href="git-advanced.html#cb471-9" aria-hidden="true"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
-<span id="cb471-10"><a href="git-advanced.html#cb471-10" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
-<span id="cb471-11"><a href="git-advanced.html#cb471-11" aria-hidden="true"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>) <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
-<span id="cb471-12"><a href="git-advanced.html#cb471-12" aria-hidden="true"></a>    <span class="cf">return</span> likelihood</span>
-<span id="cb471-13"><a href="git-advanced.html#cb471-13" aria-hidden="true"></a></span>
-<span id="cb471-14"><a href="git-advanced.html#cb471-14" aria-hidden="true"></a></span>
-<span id="cb471-15"><a href="git-advanced.html#cb471-15" aria-hidden="true"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
-<span id="cb471-16"><a href="git-advanced.html#cb471-16" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
-<span id="cb471-17"><a href="git-advanced.html#cb471-17" aria-hidden="true"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood, bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
-<span id="cb471-18"><a href="git-advanced.html#cb471-18" aria-hidden="true"></a>                          args<span class="op">=</span>word_counts, method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
-<span id="cb471-19"><a href="git-advanced.html#cb471-19" aria-hidden="true"></a>    beta <span class="op">=</span> mle.x</span>
-<span id="cb471-20"><a href="git-advanced.html#cb471-20" aria-hidden="true"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb471-21"><a href="git-advanced.html#cb471-21" aria-hidden="true"></a>    <span class="cf">return</span> alpha</span>
-<span id="cb471-22"><a href="git-advanced.html#cb471-22" aria-hidden="true"></a></span>
-<span id="cb471-23"><a href="git-advanced.html#cb471-23" aria-hidden="true"></a></span>
-<span id="cb471-24"><a href="git-advanced.html#cb471-24" aria-hidden="true"></a><span class="kw">def</span> set_plot_params(param_file):</span>
-<span id="cb471-25"><a href="git-advanced.html#cb471-25" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Set the matplotlib rc parameters.&quot;&quot;&quot;</span></span>
-<span id="cb471-26"><a href="git-advanced.html#cb471-26" aria-hidden="true"></a>    <span class="cf">if</span> param_file:</span>
-<span id="cb471-27"><a href="git-advanced.html#cb471-27" aria-hidden="true"></a>        <span class="cf">with</span> <span class="bu">open</span>(param_file, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
-<span id="cb471-28"><a href="git-advanced.html#cb471-28" aria-hidden="true"></a>            param_dict <span class="op">=</span> yaml.load(reader, Loader<span class="op">=</span>yaml.BaseLoader)</span>
-<span id="cb471-29"><a href="git-advanced.html#cb471-29" aria-hidden="true"></a>    <span class="cf">else</span>:</span>
-<span id="cb471-30"><a href="git-advanced.html#cb471-30" aria-hidden="true"></a>        param_dict <span class="op">=</span> {}</span>
-<span id="cb471-31"><a href="git-advanced.html#cb471-31" aria-hidden="true"></a>    <span class="cf">for</span> param, value <span class="kw">in</span> param_dict.items():</span>
-<span id="cb471-32"><a href="git-advanced.html#cb471-32" aria-hidden="true"></a>        mpl.rcParams[param] <span class="op">=</span> value</span>
-<span id="cb471-33"><a href="git-advanced.html#cb471-33" aria-hidden="true"></a></span>
-<span id="cb471-34"><a href="git-advanced.html#cb471-34" aria-hidden="true"></a></span>
-<span id="cb471-35"><a href="git-advanced.html#cb471-35" aria-hidden="true"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
-<span id="cb471-36"><a href="git-advanced.html#cb471-36" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb471-37"><a href="git-advanced.html#cb471-37" aria-hidden="true"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
-<span id="cb471-38"><a href="git-advanced.html#cb471-38" aria-hidden="true"></a></span>
-<span id="cb471-39"><a href="git-advanced.html#cb471-39" aria-hidden="true"></a><span class="co">    Parameters</span></span>
-<span id="cb471-40"><a href="git-advanced.html#cb471-40" aria-hidden="true"></a><span class="co">    ----------</span></span>
-<span id="cb471-41"><a href="git-advanced.html#cb471-41" aria-hidden="true"></a><span class="co">    curve_xmin : float</span></span>
-<span id="cb471-42"><a href="git-advanced.html#cb471-42" aria-hidden="true"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
-<span id="cb471-43"><a href="git-advanced.html#cb471-43" aria-hidden="true"></a><span class="co">    curve_xmax : float</span></span>
-<span id="cb471-44"><a href="git-advanced.html#cb471-44" aria-hidden="true"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
-<span id="cb471-45"><a href="git-advanced.html#cb471-45" aria-hidden="true"></a><span class="co">    max_rank : int</span></span>
-<span id="cb471-46"><a href="git-advanced.html#cb471-46" aria-hidden="true"></a><span class="co">        Maximum word frequency rank.</span></span>
-<span id="cb471-47"><a href="git-advanced.html#cb471-47" aria-hidden="true"></a><span class="co">    alpha : float</span></span>
-<span id="cb471-48"><a href="git-advanced.html#cb471-48" aria-hidden="true"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
-<span id="cb471-49"><a href="git-advanced.html#cb471-49" aria-hidden="true"></a><span class="co">    ax : matplotlib axes</span></span>
-<span id="cb471-50"><a href="git-advanced.html#cb471-50" aria-hidden="true"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
-<span id="cb471-51"><a href="git-advanced.html#cb471-51" aria-hidden="true"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb471-52"><a href="git-advanced.html#cb471-52" aria-hidden="true"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
-<span id="cb471-53"><a href="git-advanced.html#cb471-53" aria-hidden="true"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
-<span id="cb471-54"><a href="git-advanced.html#cb471-54" aria-hidden="true"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span>
-<span id="cb471-55"><a href="git-advanced.html#cb471-55" aria-hidden="true"></a></span>
-<span id="cb471-56"><a href="git-advanced.html#cb471-56" aria-hidden="true"></a></span>
-<span id="cb471-57"><a href="git-advanced.html#cb471-57" aria-hidden="true"></a><span class="kw">def</span> main(args):</span>
-<span id="cb471-58"><a href="git-advanced.html#cb471-58" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb471-59"><a href="git-advanced.html#cb471-59" aria-hidden="true"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
-<span id="cb471-60"><a href="git-advanced.html#cb471-60" aria-hidden="true"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
-<span id="cb471-61"><a href="git-advanced.html#cb471-61" aria-hidden="true"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb471-62"><a href="git-advanced.html#cb471-62" aria-hidden="true"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], grid<span class="op">=</span><span class="va">True</span>, xlim<span class="op">=</span>args.xlim)</span>
-<span id="cb471-63"><a href="git-advanced.html#cb471-63" aria-hidden="true"></a></span>
-<span id="cb471-64"><a href="git-advanced.html#cb471-64" aria-hidden="true"></a>    alpha <span class="op">=</span> get_power_law_params(df[<span class="st">&#39;word_frequency&#39;</span>].to_numpy())</span>
-<span id="cb471-65"><a href="git-advanced.html#cb471-65" aria-hidden="true"></a>    <span class="bu">print</span>(<span class="st">&#39;alpha:&#39;</span>, alpha)</span>
-<span id="cb471-66"><a href="git-advanced.html#cb471-66" aria-hidden="true"></a>    <span class="co"># Since the ranks are already sorted, we can take the last one instead of</span></span>
-<span id="cb471-67"><a href="git-advanced.html#cb471-67" aria-hidden="true"></a>    <span class="co"># computing which row has the highest rank</span></span>
-<span id="cb471-68"><a href="git-advanced.html#cb471-68" aria-hidden="true"></a>    max_rank <span class="op">=</span> df[<span class="st">&#39;rank&#39;</span>].to_numpy()[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb471-69"><a href="git-advanced.html#cb471-69" aria-hidden="true"></a>    <span class="co"># Use the range of the data as the boundaries when drawing the power law curve</span></span>
-<span id="cb471-70"><a href="git-advanced.html#cb471-70" aria-hidden="true"></a>    curve_xmin <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">min</span>()</span>
-<span id="cb471-71"><a href="git-advanced.html#cb471-71" aria-hidden="true"></a>    curve_xmax <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">max</span>()</span>
-<span id="cb471-72"><a href="git-advanced.html#cb471-72" aria-hidden="true"></a></span>
-<span id="cb471-73"><a href="git-advanced.html#cb471-73" aria-hidden="true"></a>    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)</span>
-<span id="cb471-74"><a href="git-advanced.html#cb471-74" aria-hidden="true"></a>    ax.figure.savefig(args.outfile)</span>
-<span id="cb471-75"><a href="git-advanced.html#cb471-75" aria-hidden="true"></a></span>
-<span id="cb471-76"><a href="git-advanced.html#cb471-76" aria-hidden="true"></a></span>
-<span id="cb471-77"><a href="git-advanced.html#cb471-77" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb471-78"><a href="git-advanced.html#cb471-78" aria-hidden="true"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb471-79"><a href="git-advanced.html#cb471-79" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
-<span id="cb471-80"><a href="git-advanced.html#cb471-80" aria-hidden="true"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
-<span id="cb471-81"><a href="git-advanced.html#cb471-81" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
-<span id="cb471-82"><a href="git-advanced.html#cb471-82" aria-hidden="true"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
-<span id="cb471-83"><a href="git-advanced.html#cb471-83" aria-hidden="true"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
-<span id="cb471-84"><a href="git-advanced.html#cb471-84" aria-hidden="true"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
-<span id="cb471-85"><a href="git-advanced.html#cb471-85" aria-hidden="true"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb471-86"><a href="git-advanced.html#cb471-86" aria-hidden="true"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb471"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb471-1"><a href="git-advanced.html#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
+<span id="cb471-2"><a href="git-advanced.html#cb471-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-3"><a href="git-advanced.html#cb471-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
+<span id="cb471-4"><a href="git-advanced.html#cb471-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb471-5"><a href="git-advanced.html#cb471-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb471-6"><a href="git-advanced.html#cb471-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
+<span id="cb471-7"><a href="git-advanced.html#cb471-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-8"><a href="git-advanced.html#cb471-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-9"><a href="git-advanced.html#cb471-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
+<span id="cb471-10"><a href="git-advanced.html#cb471-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
+<span id="cb471-11"><a href="git-advanced.html#cb471-11" aria-hidden="true" tabindex="-1"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>) <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
+<span id="cb471-12"><a href="git-advanced.html#cb471-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> likelihood</span>
+<span id="cb471-13"><a href="git-advanced.html#cb471-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-14"><a href="git-advanced.html#cb471-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-15"><a href="git-advanced.html#cb471-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
+<span id="cb471-16"><a href="git-advanced.html#cb471-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
+<span id="cb471-17"><a href="git-advanced.html#cb471-17" aria-hidden="true" tabindex="-1"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood, bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
+<span id="cb471-18"><a href="git-advanced.html#cb471-18" aria-hidden="true" tabindex="-1"></a>                          args<span class="op">=</span>word_counts, method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
+<span id="cb471-19"><a href="git-advanced.html#cb471-19" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> mle.x</span>
+<span id="cb471-20"><a href="git-advanced.html#cb471-20" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb471-21"><a href="git-advanced.html#cb471-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> alpha</span>
+<span id="cb471-22"><a href="git-advanced.html#cb471-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-23"><a href="git-advanced.html#cb471-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-24"><a href="git-advanced.html#cb471-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> set_plot_params(param_file):</span>
+<span id="cb471-25"><a href="git-advanced.html#cb471-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Set the matplotlib rc parameters.&quot;&quot;&quot;</span></span>
+<span id="cb471-26"><a href="git-advanced.html#cb471-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> param_file:</span>
+<span id="cb471-27"><a href="git-advanced.html#cb471-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(param_file, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> reader:</span>
+<span id="cb471-28"><a href="git-advanced.html#cb471-28" aria-hidden="true" tabindex="-1"></a>            param_dict <span class="op">=</span> yaml.load(reader, Loader<span class="op">=</span>yaml.BaseLoader)</span>
+<span id="cb471-29"><a href="git-advanced.html#cb471-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb471-30"><a href="git-advanced.html#cb471-30" aria-hidden="true" tabindex="-1"></a>        param_dict <span class="op">=</span> {}</span>
+<span id="cb471-31"><a href="git-advanced.html#cb471-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param, value <span class="kw">in</span> param_dict.items():</span>
+<span id="cb471-32"><a href="git-advanced.html#cb471-32" aria-hidden="true" tabindex="-1"></a>        mpl.rcParams[param] <span class="op">=</span> value</span>
+<span id="cb471-33"><a href="git-advanced.html#cb471-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-34"><a href="git-advanced.html#cb471-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-35"><a href="git-advanced.html#cb471-35" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
+<span id="cb471-36"><a href="git-advanced.html#cb471-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb471-37"><a href="git-advanced.html#cb471-37" aria-hidden="true" tabindex="-1"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
+<span id="cb471-38"><a href="git-advanced.html#cb471-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-39"><a href="git-advanced.html#cb471-39" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb471-40"><a href="git-advanced.html#cb471-40" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb471-41"><a href="git-advanced.html#cb471-41" aria-hidden="true" tabindex="-1"></a><span class="co">    curve_xmin : float</span></span>
+<span id="cb471-42"><a href="git-advanced.html#cb471-42" aria-hidden="true" tabindex="-1"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
+<span id="cb471-43"><a href="git-advanced.html#cb471-43" aria-hidden="true" tabindex="-1"></a><span class="co">    curve_xmax : float</span></span>
+<span id="cb471-44"><a href="git-advanced.html#cb471-44" aria-hidden="true" tabindex="-1"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
+<span id="cb471-45"><a href="git-advanced.html#cb471-45" aria-hidden="true" tabindex="-1"></a><span class="co">    max_rank : int</span></span>
+<span id="cb471-46"><a href="git-advanced.html#cb471-46" aria-hidden="true" tabindex="-1"></a><span class="co">        Maximum word frequency rank.</span></span>
+<span id="cb471-47"><a href="git-advanced.html#cb471-47" aria-hidden="true" tabindex="-1"></a><span class="co">    alpha : float</span></span>
+<span id="cb471-48"><a href="git-advanced.html#cb471-48" aria-hidden="true" tabindex="-1"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
+<span id="cb471-49"><a href="git-advanced.html#cb471-49" aria-hidden="true" tabindex="-1"></a><span class="co">    ax : matplotlib axes</span></span>
+<span id="cb471-50"><a href="git-advanced.html#cb471-50" aria-hidden="true" tabindex="-1"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
+<span id="cb471-51"><a href="git-advanced.html#cb471-51" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb471-52"><a href="git-advanced.html#cb471-52" aria-hidden="true" tabindex="-1"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
+<span id="cb471-53"><a href="git-advanced.html#cb471-53" aria-hidden="true" tabindex="-1"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
+<span id="cb471-54"><a href="git-advanced.html#cb471-54" aria-hidden="true" tabindex="-1"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span>
+<span id="cb471-55"><a href="git-advanced.html#cb471-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-56"><a href="git-advanced.html#cb471-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-57"><a href="git-advanced.html#cb471-57" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(args):</span>
+<span id="cb471-58"><a href="git-advanced.html#cb471-58" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb471-59"><a href="git-advanced.html#cb471-59" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
+<span id="cb471-60"><a href="git-advanced.html#cb471-60" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
+<span id="cb471-61"><a href="git-advanced.html#cb471-61" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb471-62"><a href="git-advanced.html#cb471-62" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], grid<span class="op">=</span><span class="va">True</span>, xlim<span class="op">=</span>args.xlim)</span>
+<span id="cb471-63"><a href="git-advanced.html#cb471-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-64"><a href="git-advanced.html#cb471-64" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> get_power_law_params(df[<span class="st">&#39;word_frequency&#39;</span>].to_numpy())</span>
+<span id="cb471-65"><a href="git-advanced.html#cb471-65" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&#39;alpha:&#39;</span>, alpha)</span>
+<span id="cb471-66"><a href="git-advanced.html#cb471-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Since the ranks are already sorted, we can take the last one instead of</span></span>
+<span id="cb471-67"><a href="git-advanced.html#cb471-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># computing which row has the highest rank</span></span>
+<span id="cb471-68"><a href="git-advanced.html#cb471-68" aria-hidden="true" tabindex="-1"></a>    max_rank <span class="op">=</span> df[<span class="st">&#39;rank&#39;</span>].to_numpy()[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb471-69"><a href="git-advanced.html#cb471-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use the range of the data as the boundaries when drawing the power law curve</span></span>
+<span id="cb471-70"><a href="git-advanced.html#cb471-70" aria-hidden="true" tabindex="-1"></a>    curve_xmin <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">min</span>()</span>
+<span id="cb471-71"><a href="git-advanced.html#cb471-71" aria-hidden="true" tabindex="-1"></a>    curve_xmax <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">max</span>()</span>
+<span id="cb471-72"><a href="git-advanced.html#cb471-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-73"><a href="git-advanced.html#cb471-73" aria-hidden="true" tabindex="-1"></a>    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)</span>
+<span id="cb471-74"><a href="git-advanced.html#cb471-74" aria-hidden="true" tabindex="-1"></a>    ax.figure.savefig(args.outfile)</span>
+<span id="cb471-75"><a href="git-advanced.html#cb471-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-76"><a href="git-advanced.html#cb471-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb471-77"><a href="git-advanced.html#cb471-77" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb471-78"><a href="git-advanced.html#cb471-78" aria-hidden="true" tabindex="-1"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb471-79"><a href="git-advanced.html#cb471-79" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>,</span>
+<span id="cb471-80"><a href="git-advanced.html#cb471-80" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="st">&#39;-&#39;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
+<span id="cb471-81"><a href="git-advanced.html#cb471-81" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
+<span id="cb471-82"><a href="git-advanced.html#cb471-82" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
+<span id="cb471-83"><a href="git-advanced.html#cb471-83" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
+<span id="cb471-84"><a href="git-advanced.html#cb471-84" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
+<span id="cb471-85"><a href="git-advanced.html#cb471-85" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb471-86"><a href="git-advanced.html#cb471-86" aria-hidden="true" tabindex="-1"></a>    main(args)</span></code></pre></div>
 <p>We can then run the script to obtain the <span class="math inline">\(\alpha\)</span> value for <em>Dracula</em>
 and a new plot with a line fitted.</p>
 <pre class="shell"><code>python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png</code></pre>
@@ -968,7 +968,7 @@ Figure <a href="git-advanced.html#fig:git-advanced-dracula-fit">7.1</a> shows t
 <div class="figure" style="text-align: center"><span id="fig:git-advanced-dracula-fit"></span>
 <img src="figures/git-advanced/dracula-fit.png" alt="Word frequency distribution for 'Dracula'." width="100%" />
 <p class="caption">
-Figure 7.1: Word frequency distribution for ‘Dracula’.
+Figure 7.1: Word frequency distribution for ‘Dracula.’
 </p>
 </div>
 <p>The script appears to be working as we’d like,
@@ -1006,26 +1006,26 @@ that change will also go into the <code>fit</code> branch.
 For instance,
 we could add some additional information to one of our docstrings
 to make it clear what equations were used in estimating <span class="math inline">\(\alpha\)</span>.</p>
-<div class="sourceCode" id="cb484"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb484-1"><a href="git-advanced.html#cb484-1" aria-hidden="true"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
-<span id="cb484-2"><a href="git-advanced.html#cb484-2" aria-hidden="true"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb484-3"><a href="git-advanced.html#cb484-3" aria-hidden="true"></a><span class="co">    Get the power law parameters.</span></span>
-<span id="cb484-4"><a href="git-advanced.html#cb484-4" aria-hidden="true"></a></span>
-<span id="cb484-5"><a href="git-advanced.html#cb484-5" aria-hidden="true"></a><span class="co">    References</span></span>
-<span id="cb484-6"><a href="git-advanced.html#cb484-6" aria-hidden="true"></a><span class="co">    ----------</span></span>
-<span id="cb484-7"><a href="git-advanced.html#cb484-7" aria-hidden="true"></a><span class="co">    Moreno-Sanchez et al (2016) define alpha (Eq. 1),</span></span>
-<span id="cb484-8"><a href="git-advanced.html#cb484-8" aria-hidden="true"></a><span class="co">      beta (Eq. 2) and the maximum likelihood estimation (mle)</span></span>
-<span id="cb484-9"><a href="git-advanced.html#cb484-9" aria-hidden="true"></a><span class="co">      of beta (Eq. 6).</span></span>
-<span id="cb484-10"><a href="git-advanced.html#cb484-10" aria-hidden="true"></a></span>
-<span id="cb484-11"><a href="git-advanced.html#cb484-11" aria-hidden="true"></a><span class="co">    Moreno-Sanchez I, Font-Clos F, Corral A (2016)</span></span>
-<span id="cb484-12"><a href="git-advanced.html#cb484-12" aria-hidden="true"></a><span class="co">      Large-Scale Analysis of Zipf&#39;s Law in English Texts.</span></span>
-<span id="cb484-13"><a href="git-advanced.html#cb484-13" aria-hidden="true"></a><span class="co">      PLoS ONE 11(1): e0147073.</span></span>
-<span id="cb484-14"><a href="git-advanced.html#cb484-14" aria-hidden="true"></a><span class="co">      https://doi.org/10.1371/journal.pone.0147073</span></span>
-<span id="cb484-15"><a href="git-advanced.html#cb484-15" aria-hidden="true"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb484-16"><a href="git-advanced.html#cb484-16" aria-hidden="true"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood, bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
-<span id="cb484-17"><a href="git-advanced.html#cb484-17" aria-hidden="true"></a>                          args<span class="op">=</span>word_counts, method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
-<span id="cb484-18"><a href="git-advanced.html#cb484-18" aria-hidden="true"></a>    beta <span class="op">=</span> mle.x</span>
-<span id="cb484-19"><a href="git-advanced.html#cb484-19" aria-hidden="true"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb484-20"><a href="git-advanced.html#cb484-20" aria-hidden="true"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
+<div class="sourceCode" id="cb484"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb484-1"><a href="git-advanced.html#cb484-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
+<span id="cb484-2"><a href="git-advanced.html#cb484-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb484-3"><a href="git-advanced.html#cb484-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Get the power law parameters.</span></span>
+<span id="cb484-4"><a href="git-advanced.html#cb484-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb484-5"><a href="git-advanced.html#cb484-5" aria-hidden="true" tabindex="-1"></a><span class="co">    References</span></span>
+<span id="cb484-6"><a href="git-advanced.html#cb484-6" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb484-7"><a href="git-advanced.html#cb484-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Moreno-Sanchez et al (2016) define alpha (Eq. 1),</span></span>
+<span id="cb484-8"><a href="git-advanced.html#cb484-8" aria-hidden="true" tabindex="-1"></a><span class="co">      beta (Eq. 2) and the maximum likelihood estimation (mle)</span></span>
+<span id="cb484-9"><a href="git-advanced.html#cb484-9" aria-hidden="true" tabindex="-1"></a><span class="co">      of beta (Eq. 6).</span></span>
+<span id="cb484-10"><a href="git-advanced.html#cb484-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb484-11"><a href="git-advanced.html#cb484-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Moreno-Sanchez I, Font-Clos F, Corral A (2016)</span></span>
+<span id="cb484-12"><a href="git-advanced.html#cb484-12" aria-hidden="true" tabindex="-1"></a><span class="co">      Large-Scale Analysis of Zipf&#39;s Law in English Texts.</span></span>
+<span id="cb484-13"><a href="git-advanced.html#cb484-13" aria-hidden="true" tabindex="-1"></a><span class="co">      PLoS ONE 11(1): e0147073.</span></span>
+<span id="cb484-14"><a href="git-advanced.html#cb484-14" aria-hidden="true" tabindex="-1"></a><span class="co">      https://doi.org/10.1371/journal.pone.0147073</span></span>
+<span id="cb484-15"><a href="git-advanced.html#cb484-15" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb484-16"><a href="git-advanced.html#cb484-16" aria-hidden="true" tabindex="-1"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood, bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
+<span id="cb484-17"><a href="git-advanced.html#cb484-17" aria-hidden="true" tabindex="-1"></a>                          args<span class="op">=</span>word_counts, method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
+<span id="cb484-18"><a href="git-advanced.html#cb484-18" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> mle.x</span>
+<span id="cb484-19"><a href="git-advanced.html#cb484-19" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb484-20"><a href="git-advanced.html#cb484-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
 <pre class="shell"><code>$ git add bin/plotcounts.py
 $ git commit -m &quot;Adding Moreno-Sanchez et al (2016) reference&quot;</code></pre>
 <pre class="text"><code>[fit db1d03f] Adding Moreno-Sanchez et al (2016) reference
@@ -1382,7 +1382,7 @@ and all of our tests should pass.</p></li>
 </ol>
 <p>Most experienced developers use this
 <a href="glossary.html#branch_per_feature_workflow">branch-per-feature workflow</a>,
-but what exactly is a “feature”?
+but what exactly is a “feature?”
 These rules make sense for small projects:</p>
 <ol style="list-style-type: decimal">
 <li><p>Anything cosmetic that is only one or two lines long
@@ -1430,7 +1430,7 @@ who are all comfortable using Git,
 but if the project is larger,
 or if contributors are worried that they might make a mess in the <code>master</code> branch,
 the second approach is safer.</p>
-<p>Git itself doesn’t have any notion of a “main repository”,
+<p>Git itself doesn’t have any notion of a “main repository,”
 but <a href="glossary.html#forge">forges</a> like <a href="https://github.com">GitHub</a>,
 <a href="https://gitlab.com/">GitLab</a>,
 and <a href="https://bitbucket.org/">BitBucket</a> all encourage people
@@ -1576,7 +1576,7 @@ almost everyone uses <a href="glossary.html#pull_request">pull requests</a>.
 They aren’t part of Git itself,
 but are supported by all major online <a href="glossary.html#forge">forges</a>.</p>
 <p>A pull request is essentially a note saying,
-“Someone would like to merge branch A of repository B into branch X of repository Y”.
+“Someone would like to merge branch A of repository B into branch X of repository Y.”
 The pull request does not contain the changes,
 but instead points at two particular branches.
 That way,
@@ -1761,7 +1761,7 @@ the PR updates automatically.</p>
 when Amira looks at the PR again a few moments later she sees Sami’s changes
 (Figure <a href="git-advanced.html#fig:git-advanced-pull-request-pr-with-fix">7.16</a>).
 Satisfied,
-she goes back to the “Conversation” tab and clicks on “Merge”.
+she goes back to the “Conversation” tab and clicks on “Merge.”
 The icon at the top of the PR’s page changes text and color to show that the merge was successful
 (Figure <a href="git-advanced.html#fig:git-advanced-pull-request-successful-merge">7.17</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:git-advanced-pull-request-pr-with-fix"></span>
