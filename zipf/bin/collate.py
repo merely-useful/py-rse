@@ -30,8 +30,8 @@ def process_file(fname, word_counts):
 
 def main(args):
     """Run the command line program."""
-    log_level = logging.DEBUG if args.verbose else logging.WARNING
-    logging.basicConfig(level=log_level, filename=args.logfile)
+    log_lev = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(level=log_lev, filename=args.logfile)
     word_counts = Counter()
     logging.info('Processing files...')
     for fname in args.infiles:

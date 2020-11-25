@@ -49,4 +49,5 @@ settings :
 
 ## help : show this message.
 help :
-	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
+	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' \
+	| column -t -s ':'

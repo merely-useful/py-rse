@@ -355,12 +355,12 @@ but the tracked files haven't been \gref{committed}{commit}\index{Git commands!c
 We can do this using `git commit`:
 
 ```bash
-$ git commit -m "Add scripts, novels, word counts, and word rank plot"
+$ git commit -m "Add scripts, novels, word counts, and plots"
 ```
 
 ```text
 [master (root-commit) 31a216a] Add scripts, novels, word 
-    counts, and word rank plot
+    counts, and plots
  17 files changed, 240337 insertions(+)
  create mode 100644 bin/book_summary.sh
  create mode 100644 bin/collate.py
@@ -459,7 +459,7 @@ Following [these guidelines][desc-cmt-msgs] will help:
 > execute the following command:
 >
 > ```bash
-> git config --global core.editor "nano -w"
+> $ git config --global core.editor "nano -w"
 > ```
 
 ## Saving and Tracking Changes {#git-cmdline-changes}
@@ -480,8 +480,8 @@ $ pwd
 Let's use `plotcounts.py` to plot the word counts in `results/dracula.csv`:
 
 ```bash
-python bin/plotcounts.py results/dracula.csv \
-  --outfile results/dracula.png
+$ python bin/plotcounts.py results/dracula.csv --outfile
+  results/dracula.png
 ```
 
 If we check the status of our repository again,
@@ -535,7 +535,7 @@ commit 31a216a6119de9a8d2233e5e275af9a2967415af
 Author: Amira Khan <amira@zipf.org>
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
-    Add scripts, novels, word counts, and word rank plot
+    Add scripts, novels, word counts, and plots
 ```
 
 `git log` lists all commits made to a repository in reverse chronological order.
@@ -557,7 +557,7 @@ knitr::include_graphics("figures/git-cmdline/plot-initial.png")
 
 An alternative way to visually evaluate Zipf's Law is
 to plot the word frequency against rank on log-log axes.
-Let's change the line:
+Let's change the section:
 
 ```python
     ax = df.plot.scatter(x='word_frequency', 
@@ -620,9 +620,8 @@ index 13e7f38..a6005cd 100644
      df['rank'] = df['word_frequency'].rank(ascending=False, 
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', 
-                     y='inverse_rank',
-+    ax = df.plot.scatter(x='word_frequency', 
+     ax = df.plot.scatter(x='word_frequency', 
+-                         y='inverse_rank',
 +                         y='rank', loglog=True,
                           figsize=[12, 6], 
                           grid=True, 
@@ -648,21 +647,6 @@ If we break it down into pieces:
     plus or minus signs have not been changed, but are provided around the lines
     that have been changed to add context.
 
-To be specific,
-this `diff` tells us that this line in the file was removed:
-
-```python
-    df.plot.scatter(x='word_frequency', 
-                    y='inverse_rank',
-```
-
-and this line was added:
-
-```python
-    df.plot.scatter(x='word_frequency', 
-                    y='rank', loglog=True,
-```
-
 Git's default is to compare line by line,
 but it can be instructive to instead compare word by word
 using the `--word-diff` or `--color-words` options.
@@ -672,7 +656,7 @@ After reviewing our change
 we can commit it just as we did before:
 
 ```bash
-$ git commit -m "Edit to plot frequency against rank on log-log axes"
+$ git commit -m "Plot frequency against rank on log-log axes"
 ```
 
 ```text
@@ -701,11 +685,11 @@ Changes to be committed:
 ```
 
 ```bash
-$ git commit -m "Edit to plot frequency against rank on log-log axes"
+$ git commit -m "Plot frequency against rank on log-log axes"
 ```
 
 ```text
-[master b5176bf] Edit to plot frequency against rank on log-log axes
+[master b5176bf] Plot frequency against rank on log-log axes
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
@@ -736,8 +720,8 @@ if (knitr::is_latex_output()) {
 Let's take a look at our new plot (Figure \@ref(fig:git-cmdline-loglog-plot)):
 
 ```bash
-python bin/plotcounts.py results/dracula.csv \
-  --outfile results/dracula.png
+$ python bin/plotcounts.py results/dracula.csv --outfile
+  results/dracula.png
 ```
 
 ```{r git-cmdline-loglog-plot, echo=FALSE, fig.cap="Rank versus word frequency on log-log axes for 'Dracula'."}
@@ -768,8 +752,7 @@ Changes not staged for commit:
 
         modified:   results/dracula.png
 
-no changes added to commit (use "git add" and/or 
-"git commit -a")
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 Since `results/dracula.png` is a binary file rather than text,
@@ -966,7 +949,7 @@ commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
 Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
-    Edit to plot frequency against rank on log-log axes
+    Plot frequency against rank on log-log axes
 
 commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa
 Author: Amira Khan <amira@zipf.org>
@@ -978,7 +961,7 @@ commit 31a216a6119de9a8d2233e5e275af9a2967415af
 Author: Amira Khan <amira@zipf.org>
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
-    Add scripts, novels, word counts, and word rank plot
+    Add scripts, novels, word counts, and plots
 ```
 
 The commit in which we changed `plotcounts.py`
@@ -992,7 +975,7 @@ we get the same kind of details `git diff` provides
 to describe the changes in each commit:
 
 ```bash
-git log -p
+$ git log -p
 ```
 
 The first part of the output is shown below;
@@ -1066,10 +1049,9 @@ index a6005cd..04e824d 100644
      df['rank'] = df['word_frequency'].rank(ascending=False, 
                                             method='max')
 -    df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency',    
--                    y='rank', loglog=True,
-+    ax = df.plot.scatter(x='word_frequency', 
-+                         y='inverse_rank',
+     ax = df.plot.scatter(x='word_frequency',
+-                         y='inverse_rank',    
++                         y='rank', loglog=True,
                           figsize=[12, 6], 
                           grid=True, 
                           xlim=args.xlim)
@@ -1112,10 +1094,9 @@ index a6005cd..13e7f38 100644
      df['rank'] = df['word_frequency'].rank(ascending=False, 
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', 
--                    y='rank', loglog=True,
-+    ax = df.plot.scatter(x='word_frequency', 
-+                         y='inverse_rank',
+     ax = df.plot.scatter(x='word_frequency', 
+-                         y='inverse_rank',
++                         y='rank', loglog=True,
                           figsize=[12, 6], 
                           grid=True, 
                           xlim=args.xlim)
@@ -1135,7 +1116,7 @@ ommit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
 Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
-    Edit to plot frequency against rank on log-log axes
+    Plot frequency against rank on log-log axes
 
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
 index 13e7f38..a6005cd 100644
@@ -1147,10 +1128,9 @@ index 13e7f38..a6005cd 100644
      df['rank'] = df['word_frequency'].rank(ascending=False,
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', 
--                    y='inverse_rank',
-+    ax = df.plot.scatter(x='word_frequency', 
-+                         y='rank', loglog=True,
+     ax = df.plot.scatter(x='word_frequency',
+-                         y='inverse_rank',
++                         y='rank', loglog=True, 
                           figsize=[12, 6], 
                           grid=True, 
                           xlim=args.xlim)
@@ -1182,8 +1162,7 @@ Changes not staged for commit:
 
         modified:   bin/plotcounts.py
 
-no changes added to commit (use "git add" and/or 
-"git commit -a")
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 We can put things back the way they were in the last saved revision using `git checkout`:\index{Git commands!checkout}
@@ -1208,11 +1187,11 @@ $ head -12 bin/plotcounts.py | tail -4
     df['rank'] = df['word_frequency'].rank(ascending=False, 
                                            method='max')
     df['inverse_rank'] = 1 / df['rank']
-    df.plot.scatter(x='word_frequency', 
-                    y='rank', loglog=True,
-                    figsize=[12, 6], 
-                    grid=True, 
-                    xlim=args.xlim)
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='rank', loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)
 ```
 
 As its name suggests,
@@ -1271,11 +1250,11 @@ $ head -12 bin/plotcounts.py | tail -4
     df['rank'] = df['word_frequency'].rank(ascending=False, 
                                            method='max')
     df['inverse_rank'] = 1 / df['rank']
-    df.plot.scatter(x='word_frequency', 
-                    y='rank', loglog=True,
-                    figsize=[12, 6], 
-                    grid=True, 
-                    xlim=args.xlim)
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='rank', loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)
 ```
 
 Since we didn't commit the change
@@ -1465,9 +1444,9 @@ to recover the last committed version of her script?
 
 What is the output of the last command in the sequence below?
 
-```
+```bash
 $ cd zipf
-$ echo "Zipf's Law describes the relationship between the 
+$ echo "Zipf's Law describes the relationship between the
   frequency and rarity of words." > motivation.txt
 $ git add motivation.txt
 $ echo "Zipf's Law suggests the frequency of any word is 

@@ -138,7 +138,7 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     assert type(word_counts) == np.ndarray, \
-      'Input must be a numerical (numpy) array of word counts'
+        'Input must be a numerical (numpy) array of word counts'
     mle = minimize_scalar(nlog_likelihood,
                           bracket=(1 + 1e-10, 4),
                           args=word_counts,
@@ -207,6 +207,7 @@ We can then count the words by hand to construct the expected result:
 ```python
 from collections import Counter
 
+
 risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1,
   'then': 1, 'day': 1, 'came': 1, 'when': 1, 'remain': 1,
   'tight': 1, 'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
@@ -219,6 +220,7 @@ and use an assertion to check if it is what we expected:
 
 ```python
 import countwords
+
 
 with open('test_data/risk.txt', 'r') as reader:
     actual_result = countwords.count_words(reader)
@@ -248,7 +250,9 @@ we can create a `test_zipfs.py` script that contains the test we just developed:
 
 ```python
 from collections import Counter
+
 import countwords
+
 
 def test_word_count():
     """Test the counting of words.
@@ -312,6 +316,7 @@ with a constant of proportionality set to a hypothetical maximum word frequency 
 ```python
 import numpy as np
 
+
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1)) 
 ```
@@ -335,7 +340,7 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     assert type(word_counts) == np.ndarray, \
-      'Input must be a numerical (numpy) array of word counts'
+        'Input must be a numerical (numpy) array of word counts'
     mle = minimize_scalar(nlog_likelihood,
                           bracket=(1 + 1e-10, 4),
                           args=(word_counts),
@@ -356,6 +361,7 @@ import numpy as np
 import plotcounts
 import countwords
 
+
 def test_alpha():
     """Test the calculation of the alpha parameter.
     
@@ -374,6 +380,7 @@ def test_alpha():
     actual_alpha = plotcounts.get_power_law_params(word_counts)
     expected_alpha = 1.0
     assert actual_alpha == expected_alpha
+
 
 def test_word_count():
     #...as before...
@@ -485,6 +492,7 @@ import numpy as np
 import plotcounts
 import countwords
 
+
 def test_alpha():
     """Test the calculation of the alpha parameter.
     
@@ -503,6 +511,7 @@ def test_alpha():
     actual_alpha = plotcounts.get_power_law_params(word_counts)
     expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
+
 
 def test_word_count():
     #...as before...
@@ -551,7 +560,7 @@ If we want to check that a function called `func` raises an `ExpectedError` exce
 we can use the following template:
 
 ```python
-...set up fixture...
+#...set up fixture...
 try:
     actual = func(fixture)
     assert False, 'Expected function to raise exception'
@@ -589,7 +598,8 @@ we can instead write:
 ```python
 import pytest
 
-...set up fixture...
+
+#...set up fixture...
 with pytest.raises(ExpectedError):
     actual = func(fixture)
 ```
@@ -635,6 +645,7 @@ with a frequency distribution that corresponds to an \(\alpha\) of approximately
 ```python
 import numpy as np
 from randomwordgenerator import randomwordgenerator as rwg
+
 
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
@@ -1230,6 +1241,7 @@ preconditions and postconditions,
 ```python
 import geometry
 
+
 geometry.normalize_rectangle([2, 5, 3, 10])                                                             
 ```
 
@@ -1240,8 +1252,6 @@ geometry.normalize_rectangle([2, 5, 3, 10])
 but will fail for a tall, skinny rectangle:
 
 ```python
-import geometry
-
 geometry.normalize_rectangle([20, 15, 30, 20])
 ```
 
@@ -1300,25 +1310,29 @@ def update_counts(reader, word_counts):
 
 def main(args):
     """Run the command line program."""
-    log_level = logging.DEBUG if args.verbose else logging.WARNING
-    logging.basicConfig(level=log_level, filename=args.logfile)
+    log_lev = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(level=log_lev, filename=args.logfile)
     word_counts = Counter()
     logging.info('Processing files...')
     for fname in args.infiles:
         try:
             logging.debug(f'Reading in {fname}...')
             if fname[-4:] != '.csv':
-                msg = util.ERRORS['not_csv_suffix'].format(fname=fname)
-                raise OSError()
+                msg = util.ERRORS['not_csv_suffix'].format(
+                      fname=fname)
+                raise OSError(msg)
             with open(fname, 'r') as reader:
                 logging.debug('Computing word counts...')
                 update_counts(reader, word_counts)
         except FileNotFoundError:
-            logging.warning(f'{fname} not processed: File does not exist')
+            msg = f'{fname} not processed: File does not exist'
+            logging.warning(msg)
         except PermissionError:
-            logging.warning(f'{fname} not processed: No permission to read file')
+            msg = f'{fname} not processed: No permission to read'
+            logging.warning(msg)
         except Exception as error:
-            logging.warning(f'{fname} not processed: {error}')
+            msg = f'{fname} not processed: {error}'
+            logging.warning(msg)
     util.collection_to_csv(word_counts, num=args.num)
 
 

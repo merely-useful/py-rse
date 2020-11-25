@@ -10,7 +10,7 @@ import collate
 
 def test_alpha():
     """Test the calculation of the alpha parameter.
-    
+
     The test word counts satisfy the relationship,
       r = cf**(-1/alpha), where
       r is the rank,
@@ -20,7 +20,7 @@ def test_alpha():
     To generate test word counts for an expected alpha value
       of 1.0, a maximum word frequency of 600 is used
       (i.e. c = 600 and r ranges from 1 to 600)
-    """    
+    """
     max_freq = 600
     word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
     actual_alpha = plotcounts.get_power_law_params(word_counts)
@@ -30,7 +30,7 @@ def test_alpha():
 
 def test_word_count():
     """Test the counting of words.
-    
+
     The example poem is Risk, by Anais Nin.
     """
     risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1,
@@ -46,17 +46,17 @@ def test_word_count():
 
 
 def test_integration():
-    """Test the full word count to alpha parameter workflow."""    
+    """Test the full word count to alpha parameter workflow."""
     with open('test_data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     counts_array = np.array(list(word_counts_dict.values()))
     actual_alpha = plotcounts.get_power_law_params(counts_array)
     expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
-   
-   
+
+
 def test_regression():
-    """Regression test for Dracula."""    
+    """Regression test for Dracula."""
     with open('data/dracula.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     counts_array = np.array(list(word_counts_dict.values()))
