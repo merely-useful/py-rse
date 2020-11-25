@@ -86,7 +86,9 @@ Please only edit `index.Rmd` in the root directory or the `.Rmd` files in the `c
     directions in exercises.
     
 -   Code blocks with syntax highlighting can be created using the keywords
-    `python`, `bash`, or `makefile`.
+    `python`, `bash`, or `makefile`. The keyword `text` is for code blocks
+    without syntax highlighting and is mainly used to display the output from
+    code executed in a code block. 
 
 ## Coding {-}
 
