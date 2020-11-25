@@ -8,7 +8,7 @@ import argparse
 from collections import Counter
 import logging
 
-import utilities
+import utilities as util
 
 
 def update_counts(reader, word_counts):
@@ -21,7 +21,7 @@ def process_file(fname, word_counts):
     """Read file and update word counts"""
     logging.debug(f'Reading in {fname}...')
     if fname[-4:] != '.csv':
-        msg = utilities.ERRORS['not_csv_suffix'].format(fname=fname)
+        msg = util.ERRORS['not_csv_suffix'].format(fname=fname)
         raise OSError(msg)
     with open(fname, 'r') as reader:
         logging.debug('Computing word counts...')
@@ -46,7 +46,7 @@ def main(args):
         except Exception as error:
             msg = f'{fname} not processed: {error}'
             logging.warning(msg)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':

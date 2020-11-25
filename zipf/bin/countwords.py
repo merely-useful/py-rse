@@ -7,7 +7,7 @@ import argparse
 import string
 from collections import Counter
 
-import utilities
+import utilities as util
 
 
 def count_words(reader):
@@ -24,7 +24,7 @@ def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
