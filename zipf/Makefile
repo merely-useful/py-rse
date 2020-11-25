@@ -13,7 +13,8 @@ all : results/collated.png
 
 ## test-saveconfig : save plot configuration.
 test-saveconfig :
-	python $(PLOT) --saveconfig /tmp/test-saveconfig.yml --plotparams $(PARAMS)
+	python $(PLOT) --saveconfig /tmp/test-saveconfig.yml \
+	  --plotparams $(PARAMS)
 
 ## results/collated.png : plot the collated results.
 results/collated.png : results/collated.csv $(PARAMS)

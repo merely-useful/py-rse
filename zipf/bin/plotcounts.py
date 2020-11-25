@@ -100,11 +100,12 @@ def main(args):
                          grid=True,
                          xlim=args.xlim)
 
-    alpha = get_power_law_params(df['word_frequency'].to_numpy())
+    word_counts = df['word_frequency'].to_numpy()
+    alpha = get_power_law_params(word_counts)
     print('alpha:', alpha)
 
-    # Since the ranks are already sorted, we can take the last one
-    # instead of computing which row has the highest rank
+    # Since the ranks are already sorted, we can take the last
+    # one instead of computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
 
     # Use the range of the data as the boundaries
