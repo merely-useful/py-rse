@@ -98,7 +98,7 @@ please see Section \@ref(getting-started-install-software) for Windows installa
 To start,
 let's create a file called `Makefile` in the root of our project:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
@@ -128,7 +128,7 @@ and put the output in a CSV file in the `results` directory".
 
 To test our rule, run this command in the shell:
 
-```shell
+```bash
 $ make
 ```
 
@@ -180,7 +180,7 @@ make: `results/moby_dick.csv' is up to date.
 We can check that it is telling the truth by listing the files with their timestamps,
 ordered by how recently they have been updated:
 
-```shell
+```bash
 $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 ```
 
@@ -212,7 +212,7 @@ Our Makefile isn't particularly helpful so far,
 though it *does* already document exactly how to reproduce one specific result.
 Let's add another rule to it:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
@@ -238,7 +238,7 @@ which is already up to date.
 To update something else,
 we need to tell Make specifically what we want:
 
-```shell
+```bash
 $ make results/jane_eyre.csv
 ```
 
@@ -255,7 +255,7 @@ We do this by creating a \gref{phony target}{phony_target}\index{build target!ph
 that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
-```make
+```makefile
 all : results/moby_dick.csv results/jane_eyre.csv
 ```
 
@@ -281,7 +281,7 @@ so that we can start afresh.
 By convention this target is called `clean`,\index{build target!clean}
 and ours looks like this:
 
-```make
+```makefile
 # Remove all generated files.
 clean :
 	rm -f results/*
@@ -292,7 +292,7 @@ if it is present,
 `rm` won't complain if the files we have told it to remove are already gone.
 If we now run:
 
-```shell
+```bash
 $ make clean
 ```
 
@@ -305,7 +305,7 @@ Phony targets are very useful,
 but there is a catch.
 Try doing this:
 
-```shell
+```bash
 $ mkdir clean
 $ make clean
 ```
@@ -323,7 +323,7 @@ so no recipes are executed.
 We can unconfuse Make by putting this line at the top of Makefile
 to explicitly state which targets are phony:
 
-```make
+```makefile
 .PHONY : all clean
 ```
 
@@ -337,7 +337,7 @@ we should regenerate our results.
 To get Make to do that,
 we can add the program to the prerequisites for each result:
 
-```make
+```makefile
 # ...phony targets...
 
 # Regenerate results for "Moby Dick"
@@ -357,7 +357,7 @@ Alternatively,
 since `all` is the first target in our Makefile,
 Make will use it if we just type `make` on its own:
 
-```shell
+```bash
 $ touch bin/countwords.py
 $ make
 ```
@@ -392,7 +392,7 @@ The solution is the same one we use in programs:
 define and use variables.
 Let's create names for the word-counting script and the command used to run it:
 
-```make
+```makefile
 # ...phony targets...
 
 COUNT=bin/countwords.py
@@ -443,7 +443,7 @@ The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 It lets us turn this:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
@@ -451,7 +451,7 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 
 into this:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) data/moby_dick.txt > $@
@@ -468,7 +468,7 @@ The next step is to replace the explicit list of prerequisites in the recipe
 with the automatic variable `$^`,
 which means "all the prerequisites in the rule":
 
-```make
+```makefile
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $^ > $@
@@ -481,7 +481,7 @@ When Make expands the recipe,
 the resulting command tries to process the program `bin/countwords.py`
 as if it was a data file:
 
-```shell
+```bash
 python bin/countwords.py \
   data/moby_dick.txt bin/countwords.py > results/moby_dick.csv
 ```
@@ -490,7 +490,7 @@ Make solves this problem with another automatic variable `$<`,
 which mean "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
-```make
+```makefile
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
@@ -506,7 +506,7 @@ which matches zero or more characters in a filename.
 Whatever matches `%` in the target also matches in the prerequisites,
 so the rule:
 
-```make
+```makefile
 results/%.csv : data/%.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
 ```
@@ -517,14 +517,15 @@ which is why `$<` and `$@` are needed.
 
 With this rule in place, our entire Makefile is reduced to:
 
-```
+```makefile
 .PHONY: all clean
 
 COUNT=bin/countwords.py
 RUN_COUNT=python $(COUNT)
 
 # Regenerate all results.
-all : results/moby_dick.csv results/jane_eyre.csv results/time_machine.csv
+all : results/moby_dick.csv results/jane_eyre.csv \
+  results/time_machine.csv
 
 # Regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
@@ -538,7 +539,7 @@ clean :
 To test our shortened Makefile,
 let's delete all of the results files:
 
-```shell
+```bash
 $ make clean
 ```
 
@@ -548,7 +549,7 @@ rm -f results/*
 
 and then recreate them:
 
-```shell
+```bash
 $ make  # Same as `make all` as "all" is the first target
 ```
 
@@ -565,7 +566,7 @@ We can still rebuild individual files if we want,
 since Make will take the target filename we give on the command line
 and see if a pattern rule matches it:
 
-```shell
+```bash
 $ # The touch command updates a file's timestamp
 $ touch data/jane_eyre.txt
 $ make results/jane_eyre.csv
@@ -590,13 +591,13 @@ We can define a variable called `RESULTS`
 to be a list of all the results files
 using the same wildcards we would use in the shell:
 
-```make
+```makefile
 RESULTS=results/*.csv
 ```
 
 We can then rewrite `all` to depend on that list:
 
-```make
+```makefile
 # Regenerate all results.
 all : $(RESULTS)
 ```
@@ -611,7 +612,7 @@ What we really want is to generate the list of results files
 based on the list of books in the `data/` directory.
 We can create that list using Make's `wildcard` function:\index{functions (in Make)}
 
-```make
+```makefile
 DATA=$(wildcard data/*.txt)
 ```
 
@@ -625,7 +626,7 @@ To check that this line does the right thing,
 we can add another phony target called `settings`
 that uses the shell command `echo` to print the names and values of our variables:
 
-```make
+```makefile
 .PHONY: all clean settings
 
 # ...everything else...
@@ -638,7 +639,7 @@ settings :
 
 Let's run this:
 
-```shell
+```bash
 $ make settings
 ```
 
@@ -660,13 +661,13 @@ because Make shows us the command it's going to run before running it.
 Putting `@` before the command in the recipe prevents this,
 which makes the output easier to read:
 
-```make
+```makefile
 settings :
 	@echo COUNT: $(COUNT)
 	@echo DATA: $(DATA)
 ```
 
-```shell
+```bash
 $ make settings
 ```
 
@@ -703,14 +704,14 @@ which is our list of books' names.
 
 Let's check the `RESULTS` variable by adding another command to the `settings` target:
 
-```make
+```makefile
 settings :
 	@echo COUNT: $(COUNT)
 	@echo DATA: $(DATA)
 	@echo RESULTS: $(RESULTS)
 ```
 
-```shell
+```bash
 $ make settings
 ```
 
@@ -732,7 +733,7 @@ Since the phony target `all` depends on `$(RESULTS)`
 (i.e., all the files whose names appear in the variable `RESULTS`)
 we can regenerate all the results in one step:
 
-```shell
+```bash
 $ make clean
 ```
 
@@ -740,7 +741,7 @@ $ make clean
 rm -f results/*.csv
 ```
 
-```shell
+```bash
 $ make  # Same as `make all` since "all" is the first target
 ```
 
@@ -774,7 +775,7 @@ we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
 We could create another phony target called `help` that prints a list of available commands:
 
-```make
+```makefile
 .PHONY: all clean help settings
 
 # ...other definitions...
@@ -796,7 +797,7 @@ and then extract and display those comments when asked to.
 We'll use `##` (a double comment marker) to indicate the lines we want displayed
 and `grep` (Section \@ref(bash-advanced-find)) to pull these lines out of the file:
 
-```make
+```makefile
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
@@ -827,7 +828,7 @@ help :
 
 Let's test:
 
-```shell
+```bash
 $ make help
 ```
 
@@ -850,7 +851,7 @@ that depends on the results generated by `countwords.py`.
 To create it,
 we add or change these lines in our Makefile:
 
-```make
+```makefile
 # ...phony targets and previous variable definitions...
 
 COLLATE=bin/collate.py
@@ -893,7 +894,7 @@ Note that there is no `>` needed before the `$@`
 because `plotcounts.py` default is to write to a file
 rather than to `stdout`.
 
-```make
+```makefile
 # ...phony targets and previous variable definitions...
 
 PLOT=bin/plotcounts.py
@@ -917,7 +918,7 @@ settings :
 
 Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
 
-```shell
+```bash
 $ make all
 ```
 
@@ -942,7 +943,7 @@ It is a good habit to do this rather than using the asterisk wildcard to remove 
 since you might manually place files in the results directory
 and forget that these will be cleaned up when you run `make clean`.
 
-```make
+```makefile
 # ...phony targets and previous variable definitions...
 
 ## clean : remove all generated files.
@@ -973,7 +974,7 @@ If you want to go deeper,
 
 Our `Makefile` currently reads as follows:
 
-```make
+```makefile
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
@@ -1037,7 +1038,7 @@ What does this do and why is it useful?
 ### Print the title and author {#automate-ex-print}
 
 The build rule for regenerating the result for any book is currently:
-```make
+```makefile
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
 	python $(COUNT) $< > $@
@@ -1051,7 +1052,7 @@ and don't forget to update the settings build rule to include the `book_summary.
 If you've successfully made those changes,
 you should get the following output for *Dracula*:
 
-```shell
+```bash
 $ make -B results/dracula.csv
 ```
 
@@ -1072,7 +1073,7 @@ but does *not* regenerate `results/collated.csv`.
 
 What is wrong with writing the rule for `results/collated.csv` like this:
 
-```make
+```makefile
 results/collated.csv : results/*.csv
 	python $(COLLATE) $^ > $@
 ```
@@ -1084,7 +1085,7 @@ isn't the biggest problem.)
 
 We can format the documentation in our Makefile more readably using this command:
 
-```make
+```makefile
 ## help : show all commands.
 help :
 	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
