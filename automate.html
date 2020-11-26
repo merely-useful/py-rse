@@ -24,7 +24,7 @@
 <meta name="author" content="Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson" />
 
 
-<meta name="date" content="2020-11-25" />
+<meta name="date" content="2020-11-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -699,16 +699,19 @@ though we won’t continue to remind you.</p>
 <h2><span class="header-section-number">9.1</span> Updating a Single File</h2>
 <p>To start,
 let’s create a file called <code>Makefile</code> in the root of our project:</p>
-<pre class="make"><code># Regenerate results for &quot;Moby Dick&quot;
-results/moby_dick.csv : data/moby_dick.txt
-    python bin/countwords.py \
-      data/moby_dick.txt &gt; results/moby_dick.csv</code></pre>
+<div class="sourceCode" id="cb585"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb585-1"><a href="automate.html#cb585-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Moby Dick&quot;</span></span>
+<span id="cb585-2"><a href="automate.html#cb585-2" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt</span></span>
+<span id="cb585-3"><a href="automate.html#cb585-3" aria-hidden="true" tabindex="-1"></a>    python bin/countwords.py <span class="ch">\</span></span>
+<span id="cb585-4"><a href="automate.html#cb585-4" aria-hidden="true" tabindex="-1"></a>      data/moby_dick.txt &gt; results/moby_dick.csv</span></code></pre></div>
 <p>As in the shell and many other programming languages,
 <code>#</code> indicates that the first line is a comment.
 The second and third lines form a <a href="glossary.html#build_rule">build rule</a>:
 the <a href="glossary.html#build_target">target</a> of the rule is <code>results/moby_dick.csv</code>,
 its single <a href="glossary.html#prerequisite">prerequisite</a> is the file <code>data/moby_dick.txt</code>,
-and the two are separated by a single colon <code>:</code>.</p>
+and the two are separated by a single colon <code>:</code>.
+There is no limit on the length of statement lines in Makefiles,
+but to aid readability we have used a backslash (<code>\</code>) character to split
+what was quite a long third line.</p>
 <p>The target and prerequisite tell Make what depends on what.
 The line below them describes the <a href="glossary.html#build_recipe">recipe</a>
 that will update the target if it is out of date.
@@ -720,7 +723,7 @@ In the rule above,
 the recipe is “run <code>bin/countwords.py</code> on the raw data file
 and put the output in a CSV file in the <code>results</code> directory.”</p>
 <p>To test our rule, run this command in the shell:</p>
-<pre class="shell"><code>$ make</code></pre>
+<div class="sourceCode" id="cb586"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb586-1"><a href="automate.html#cb586-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span></span></code></pre></div>
 <p>Make automatically looks for a file called <code>Makefile</code>,
 follows the rules it contains,
 and prints the commands that were executed.
@@ -756,7 +759,7 @@ It tells us this by displaying the message:</p>
 <pre class="text"><code>make: `results/moby_dick.csv&#39; is up to date.</code></pre>
 <p>We can check that it is telling the truth by listing the files with their timestamps,
 ordered by how recently they have been updated:</p>
-<pre class="shell"><code>$ ls -l -t data/moby_dick.txt results/moby_dick.csv</code></pre>
+<div class="sourceCode" id="cb590"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb590-1"><a href="automate.html#cb590-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">ls</span> -l -t data/moby_dick.txt results/moby_dick.csv</span></code></pre></div>
 <pre class="text"><code>-rw-r--r-- 1 amira staff  219107 31 Dec 08:58 results/moby_dick.csv
 -rw-r--r-- 1 amira staff 1276201 31 Dec 08:58 data/moby_dick.txt</code></pre>
 <p>As a further test:</p>
@@ -782,15 +785,15 @@ we can tell Make to read recipes from that file using
 <p>Our Makefile isn’t particularly helpful so far,
 though it <em>does</em> already document exactly how to reproduce one specific result.
 Let’s add another rule to it:</p>
-<pre class="make"><code># Regenerate results for &quot;Moby Dick&quot;
-results/moby_dick.csv : data/moby_dick.txt
-    python bin/countwords.py \
-      data/moby_dick.txt &gt; results/moby_dick.csv
-
-# Regenerate results for &quot;Jane Eyre&quot;
-results/jane_eyre.csv : data/jane_eyre.txt
-    python bin/countwords.py \
-      data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+<div class="sourceCode" id="cb592"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb592-1"><a href="automate.html#cb592-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Moby Dick&quot;</span></span>
+<span id="cb592-2"><a href="automate.html#cb592-2" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt</span></span>
+<span id="cb592-3"><a href="automate.html#cb592-3" aria-hidden="true" tabindex="-1"></a>    python bin/countwords.py <span class="ch">\</span></span>
+<span id="cb592-4"><a href="automate.html#cb592-4" aria-hidden="true" tabindex="-1"></a>      data/moby_dick.txt &gt; results/moby_dick.csv</span>
+<span id="cb592-5"><a href="automate.html#cb592-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb592-6"><a href="automate.html#cb592-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Jane Eyre&quot;</span></span>
+<span id="cb592-7"><a href="automate.html#cb592-7" aria-hidden="true" tabindex="-1"></a><span class="dv">results/jane_eyre.csv :</span><span class="dt"> data/jane_eyre.txt</span></span>
+<span id="cb592-8"><a href="automate.html#cb592-8" aria-hidden="true" tabindex="-1"></a>    python bin/countwords.py <span class="ch">\</span></span>
+<span id="cb592-9"><a href="automate.html#cb592-9" aria-hidden="true" tabindex="-1"></a>      data/jane_eyre.txt &gt; results/jane_eyre.csv</span></code></pre></div>
 <p>When we run <code>make</code> it tells us:</p>
 <pre class="text"><code>make: `results/moby_dick.csv&#39; is up to date.</code></pre>
 <p>By default Make only attempts to update the first target it finds in the Makefile,
@@ -800,7 +803,7 @@ the first target is <code>results/moby_dick.csv</code>,
 which is already up to date.
 To update something else,
 we need to tell Make specifically what we want:</p>
-<pre class="shell"><code>$ make results/jane_eyre.csv</code></pre>
+<div class="sourceCode" id="cb594"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb594-1"><a href="automate.html#cb594-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> results/jane_eyre.csv</span></code></pre></div>
 <pre class="text"><code>python bin/countwords.py \
   data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
 <p>If we have to run <code>make</code> once for each result
@@ -810,7 +813,7 @@ we can add a rule to our Makefile to update all of our results at once.
 We do this by creating a <a href="glossary.html#phony_target">phony target</a>
 that doesn’t correspond to an actual file.
 Let’s add this line to the top of our Makefile:</p>
-<pre class="make"><code>all : results/moby_dick.csv results/jane_eyre.csv</code></pre>
+<div class="sourceCode" id="cb596"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb596-1"><a href="automate.html#cb596-1" aria-hidden="true" tabindex="-1"></a><span class="dv">all :</span><span class="dt"> results/moby_dick.csv results/jane_eyre.csv</span></span></code></pre></div>
 <p>There is no file called <code>all</code>,
 and this rule doesn’t have any recipes of its own,
 but when we run <code>make all</code>,
@@ -832,14 +835,14 @@ let’s add another target to our Makefile to delete all of the result files we 
 so that we can start afresh.
 By convention this target is called <code>clean</code>,
 and ours looks like this:</p>
-<pre class="make"><code># Remove all generated files.
-clean :
-    rm -f results/*</code></pre>
+<div class="sourceCode" id="cb597"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb597-1"><a href="automate.html#cb597-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove all generated files.</span></span>
+<span id="cb597-2"><a href="automate.html#cb597-2" aria-hidden="true" tabindex="-1"></a><span class="dv">clean :</span></span>
+<span id="cb597-3"><a href="automate.html#cb597-3" aria-hidden="true" tabindex="-1"></a>    rm -f results/*</span></code></pre></div>
 <p>The <code>-f</code> flag to <code>rm</code> means “force removal”:
 if it is present,
 <code>rm</code> won’t complain if the files we have told it to remove are already gone.
 If we now run:</p>
-<pre class="shell"><code>$ make clean</code></pre>
+<div class="sourceCode" id="cb598"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb598-1"><a href="automate.html#cb598-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> clean</span></code></pre></div>
 <p>Make will delete any results files we have.
 This is a lot safer than typing <code>rm -f results/*</code> at the command-line each time,
 because if we mistakenly put a space before the <code>*</code>
@@ -847,8 +850,8 @@ we would delete all of the files in the project’s root directory.</p>
 <p>Phony targets are very useful,
 but there is a catch.
 Try doing this:</p>
-<pre class="shell"><code>$ mkdir clean
-$ make clean</code></pre>
+<div class="sourceCode" id="cb599"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb599-1"><a href="automate.html#cb599-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">mkdir</span> clean</span>
+<span id="cb599-2"><a href="automate.html#cb599-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> clean</span></code></pre></div>
 <pre class="text"><code>make: `clean&#39; is up to date.</code></pre>
 <p>Since there is a directory called <code>clean</code>,
 Make thinks the target <code>clean</code> in the Makefile refers to this directory.
@@ -857,7 +860,7 @@ it can’t be out of date,
 so no recipes are executed.</p>
 <p>We can unconfuse Make by putting this line at the top of Makefile
 to explicitly state which targets are phony:</p>
-<pre class="make"><code>.PHONY : all clean</code></pre>
+<div class="sourceCode" id="cb601"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb601-1"><a href="automate.html#cb601-1" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY</span> <span class="ot">:</span><span class="dt"> all clean</span></span></code></pre></div>
 </div>
 <div id="automate-depend-programs" class="section level2" number="9.3">
 <h2><span class="header-section-number">9.3</span> Updating Files When Programs Change</h2>
@@ -868,24 +871,24 @@ If we change our program,
 we should regenerate our results.
 To get Make to do that,
 we can add the program to the prerequisites for each result:</p>
-<pre class="make"><code># ...phony targets...
-
-# Regenerate results for &quot;Moby Dick&quot;
-results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
-    python bin/countwords.py \
-    data/moby_dick.txt &gt; results/moby_dick.csv
-
-# Regenerate results for &quot;Jane Eyre&quot;
-results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
-    python bin/countwords.py \
-      data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+<div class="sourceCode" id="cb602"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb602-1"><a href="automate.html#cb602-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ...phony targets...</span></span>
+<span id="cb602-2"><a href="automate.html#cb602-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb602-3"><a href="automate.html#cb602-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Moby Dick&quot;</span></span>
+<span id="cb602-4"><a href="automate.html#cb602-4" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt bin/countwords.py</span></span>
+<span id="cb602-5"><a href="automate.html#cb602-5" aria-hidden="true" tabindex="-1"></a>    python bin/countwords.py <span class="ch">\</span></span>
+<span id="cb602-6"><a href="automate.html#cb602-6" aria-hidden="true" tabindex="-1"></a>    data/moby_dick.txt &gt; results/moby_dick.csv</span>
+<span id="cb602-7"><a href="automate.html#cb602-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb602-8"><a href="automate.html#cb602-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Jane Eyre&quot;</span></span>
+<span id="cb602-9"><a href="automate.html#cb602-9" aria-hidden="true" tabindex="-1"></a><span class="dv">results/jane_eyre.csv :</span><span class="dt"> data/jane_eyre.txt bin/countwords.py</span></span>
+<span id="cb602-10"><a href="automate.html#cb602-10" aria-hidden="true" tabindex="-1"></a>    python bin/countwords.py <span class="ch">\</span></span>
+<span id="cb602-11"><a href="automate.html#cb602-11" aria-hidden="true" tabindex="-1"></a>      data/jane_eyre.txt &gt; results/jane_eyre.csv</span></code></pre></div>
 <p>To run both of these rules,
 we can type <code>make all</code>.
 Alternatively,
 since <code>all</code> is the first target in our Makefile,
 Make will use it if we just type <code>make</code> on its own:</p>
-<pre class="shell"><code>$ touch bin/countwords.py
-$ make</code></pre>
+<div class="sourceCode" id="cb603"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb603-1"><a href="automate.html#cb603-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">touch</span> bin/countwords.py</span>
+<span id="cb603-2"><a href="automate.html#cb603-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span></span></code></pre></div>
 <pre class="text"><code>python bin/countwords.py \
   data/moby_dick.txt &gt; results/moby_dick.csv
 python bin/countwords.py \
@@ -911,18 +914,18 @@ makes them harder to understand.</p>
 <p>The solution is the same one we use in programs:
 define and use variables.
 Let’s create names for the word-counting script and the command used to run it:</p>
-<pre class="make"><code># ...phony targets...
-
-COUNT=bin/countwords.py
-RUN_COUNT=python $(COUNT)
-
-# Regenerate results for &quot;Moby Dick&quot;
-results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-    $(RUN_COUNT) data/moby_dick.txt &gt; results/moby_dick.csv
-
-# Regenerate results for &quot;Jane Eyre&quot;
-results/jane_eyre.csv : data/jane_eyre.txt $(COUNT)
-    $(RUN_COUNT) data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+<div class="sourceCode" id="cb605"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb605-1"><a href="automate.html#cb605-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ...phony targets...</span></span>
+<span id="cb605-2"><a href="automate.html#cb605-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb605-3"><a href="automate.html#cb605-3" aria-hidden="true" tabindex="-1"></a><span class="dt">COUNT</span><span class="ch">=</span><span class="st">bin/countwords.py</span></span>
+<span id="cb605-4"><a href="automate.html#cb605-4" aria-hidden="true" tabindex="-1"></a><span class="dt">RUN_COUNT</span><span class="ch">=</span><span class="st">python </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb605-5"><a href="automate.html#cb605-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb605-6"><a href="automate.html#cb605-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Moby Dick&quot;</span></span>
+<span id="cb605-7"><a href="automate.html#cb605-7" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb605-8"><a href="automate.html#cb605-8" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> data/moby_dick.txt &gt; results/moby_dick.csv</span>
+<span id="cb605-9"><a href="automate.html#cb605-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb605-10"><a href="automate.html#cb605-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Jane Eyre&quot;</span></span>
+<span id="cb605-11"><a href="automate.html#cb605-11" aria-hidden="true" tabindex="-1"></a><span class="dv">results/jane_eyre.csv :</span><span class="dt"> data/jane_eyre.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb605-12"><a href="automate.html#cb605-12" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> data/jane_eyre.txt &gt; results/jane_eyre.csv</span></code></pre></div>
 <p>Each definition takes the form <code>NAME=value</code>.
 Variables are written in upper case by convention
 so that they’ll stand out from filenames
@@ -956,13 +959,13 @@ we need to understand Make’s
 The first step is to use the very cryptic expression <code>$@</code> in the rule’s recipe
 to mean “the target of the rule.”
 It lets us turn this:</p>
-<pre class="make"><code># Regenerate results for &quot;Moby Dick&quot;
-results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-    $(RUN_COUNT) data/moby_dick.txt &gt; results/moby_dick.csv</code></pre>
+<div class="sourceCode" id="cb606"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb606-1"><a href="automate.html#cb606-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Moby Dick&quot;</span></span>
+<span id="cb606-2"><a href="automate.html#cb606-2" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb606-3"><a href="automate.html#cb606-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> data/moby_dick.txt &gt; results/moby_dick.csv</span></code></pre></div>
 <p>into this:</p>
-<pre class="make"><code># Regenerate results for &quot;Moby Dick&quot;
-results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-    $(RUN_COUNT) data/moby_dick.txt &gt; $@</code></pre>
+<div class="sourceCode" id="cb607"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb607-1"><a href="automate.html#cb607-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Moby Dick&quot;</span></span>
+<span id="cb607-2"><a href="automate.html#cb607-2" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb607-3"><a href="automate.html#cb607-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> data/moby_dick.txt &gt; <span class="ch">$@</span></span></code></pre></div>
 <p>Make defines a value of <code>$@</code> separately for each rule,
 so it always refers to that rule’s target.
 And yes,
@@ -972,23 +975,23 @@ but we’re stuck with it now.</p>
 <p>The next step is to replace the explicit list of prerequisites in the recipe
 with the automatic variable <code>$^</code>,
 which means “all the prerequisites in the rule”:</p>
-<pre class="make"><code># Regenerate results for &quot;Jane Eyre&quot;
-results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-    $(RUN_COUNT) $^ &gt; $@</code></pre>
+<div class="sourceCode" id="cb608"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb608-1"><a href="automate.html#cb608-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Jane Eyre&quot;</span></span>
+<span id="cb608-2"><a href="automate.html#cb608-2" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb608-3"><a href="automate.html#cb608-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> <span class="ch">$^</span> &gt; <span class="ch">$@</span></span></code></pre></div>
 <p>However,
 this doesn’t work.
 The rule’s prerequisites are the novel and the word-counting program.
 When Make expands the recipe,
 the resulting command tries to process the program <code>bin/countwords.py</code>
 as if it was a data file:</p>
-<pre class="shell"><code>python bin/countwords.py \
-  data/moby_dick.txt bin/countwords.py &gt; results/moby_dick.csv</code></pre>
+<div class="sourceCode" id="cb609"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb609-1"><a href="automate.html#cb609-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bin/countwords.py <span class="kw">\</span></span>
+<span id="cb609-2"><a href="automate.html#cb609-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">data/moby_dick.txt</span> bin/countwords.py <span class="op">&gt;</span> results/moby_dick.csv</span></code></pre></div>
 <p>Make solves this problem with another automatic variable <code>$&lt;</code>,
 which mean “only the first prerequisite.”
 Using it lets us rewrite our rule as:</p>
-<pre class="make"><code># Regenerate results for &quot;Jane Eyre&quot;
-results/moby_dick.csv : data/moby_dick.txt $(COUNT)
-    $(RUN_COUNT) $&lt; &gt; $@</code></pre>
+<div class="sourceCode" id="cb610"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb610-1"><a href="automate.html#cb610-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate results for &quot;Jane Eyre&quot;</span></span>
+<span id="cb610-2"><a href="automate.html#cb610-2" aria-hidden="true" tabindex="-1"></a><span class="dv">results/moby_dick.csv :</span><span class="dt"> data/moby_dick.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb610-3"><a href="automate.html#cb610-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> <span class="ch">$&lt;</span> &gt; <span class="ch">$@</span></span></code></pre></div>
 </div>
 <div id="automate-pattern" class="section level2" number="9.6">
 <h2><span class="header-section-number">9.6</span> Generic Rules</h2>
@@ -999,32 +1002,33 @@ using the <a href="glossary.html#wildcard">wildcard</a> <code>%</code>,
 which matches zero or more characters in a filename.
 Whatever matches <code>%</code> in the target also matches in the prerequisites,
 so the rule:</p>
-<pre class="make"><code>results/%.csv : data/%.txt $(COUNT)
-    $(RUN_COUNT) $&lt; &gt; $@</code></pre>
+<div class="sourceCode" id="cb611"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb611-1"><a href="automate.html#cb611-1" aria-hidden="true" tabindex="-1"></a><span class="dv">results/%.csv :</span><span class="dt"> data/%.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb611-2"><a href="automate.html#cb611-2" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> <span class="ch">$&lt;</span> &gt; <span class="ch">$@</span></span></code></pre></div>
 <p>will handle <em>Jane Eyre</em>, <em>Moby Dick</em>, <em>The Time Machine</em>, and every other novel in the <code>data</code> directory.
 %<code>cannot be used in rules' recipes, which is why</code><span class="math inline">\(&lt;` and `\)</span>@` are needed.</p>
 <p>With this rule in place, our entire Makefile is reduced to:</p>
-<pre><code>.PHONY: all clean
-
-COUNT=bin/countwords.py
-RUN_COUNT=python $(COUNT)
-
-# Regenerate all results.
-all : results/moby_dick.csv results/jane_eyre.csv results/time_machine.csv
-
-# Regenerate result for any book.
-results/%.csv : data/%.txt $(COUNT)
-    $(RUN_COUNT) $&lt; &gt; $@
-
-# Remove all generated files.
-clean :
-    rm -f results/*</code></pre>
+<div class="sourceCode" id="cb612"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb612-1"><a href="automate.html#cb612-1" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> all clean</span></span>
+<span id="cb612-2"><a href="automate.html#cb612-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb612-3"><a href="automate.html#cb612-3" aria-hidden="true" tabindex="-1"></a><span class="dt">COUNT</span><span class="ch">=</span><span class="st">bin/countwords.py</span></span>
+<span id="cb612-4"><a href="automate.html#cb612-4" aria-hidden="true" tabindex="-1"></a><span class="dt">RUN_COUNT</span><span class="ch">=</span><span class="st">python </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb612-5"><a href="automate.html#cb612-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb612-6"><a href="automate.html#cb612-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate all results.</span></span>
+<span id="cb612-7"><a href="automate.html#cb612-7" aria-hidden="true" tabindex="-1"></a><span class="dv">all :</span><span class="dt"> results/moby_dick.csv results/jane_eyre.csv </span><span class="ch">\</span></span>
+<span id="cb612-8"><a href="automate.html#cb612-8" aria-hidden="true" tabindex="-1"></a><span class="dt">  results/time_machine.csv</span></span>
+<span id="cb612-9"><a href="automate.html#cb612-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb612-10"><a href="automate.html#cb612-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate result for any book.</span></span>
+<span id="cb612-11"><a href="automate.html#cb612-11" aria-hidden="true" tabindex="-1"></a><span class="dv">results/%.csv :</span><span class="dt"> data/%.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb612-12"><a href="automate.html#cb612-12" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">RUN_COUNT</span><span class="ch">)</span> <span class="ch">$&lt;</span> &gt; <span class="ch">$@</span></span>
+<span id="cb612-13"><a href="automate.html#cb612-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb612-14"><a href="automate.html#cb612-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove all generated files.</span></span>
+<span id="cb612-15"><a href="automate.html#cb612-15" aria-hidden="true" tabindex="-1"></a><span class="dv">clean :</span></span>
+<span id="cb612-16"><a href="automate.html#cb612-16" aria-hidden="true" tabindex="-1"></a>    rm -f results/*</span></code></pre></div>
 <p>To test our shortened Makefile,
 let’s delete all of the results files:</p>
-<pre class="shell"><code>$ make clean</code></pre>
+<div class="sourceCode" id="cb613"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb613-1"><a href="automate.html#cb613-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> clean</span></code></pre></div>
 <pre class="text"><code>rm -f results/*</code></pre>
 <p>and then recreate them:</p>
-<pre class="shell"><code>$ make  # Same as `make all` as &quot;all&quot; is the first Makefile target</code></pre>
+<div class="sourceCode" id="cb615"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb615-1"><a href="automate.html#cb615-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span>  # Same as <span class="kw">`</span><span class="fu">make</span> all<span class="kw">`</span> as <span class="st">&quot;all&quot;</span> is the first target</span></code></pre></div>
 <pre class="text"><code>python bin/countwords.py \
   data/moby_dick.txt &gt; results/moby_dick.csv
 python bin/countwords.py \
@@ -1034,9 +1038,8 @@ python bin/countwords.py \
 <p>We can still rebuild individual files if we want,
 since Make will take the target filename we give on the command line
 and see if a pattern rule matches it:</p>
-<pre class="shell"><code>$ # The touch command updates a file&#39;s timestamp
-$ touch data/jane_eyre.txt
-$ make results/jane_eyre.csv</code></pre>
+<div class="sourceCode" id="cb617"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb617-1"><a href="automate.html#cb617-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">touch</span> data/jane_eyre.txt</span>
+<span id="cb617-2"><a href="automate.html#cb617-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> results/jane_eyre.csv</span></code></pre></div>
 <pre class="text"><code>python bin/countwords.py \
   data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
 </div>
@@ -1052,10 +1055,10 @@ and we just want to update them.
 We can define a variable called <code>RESULTS</code>
 to be a list of all the results files
 using the same wildcards we would use in the shell:</p>
-<pre class="make"><code>RESULTS=results/*.csv</code></pre>
+<div class="sourceCode" id="cb619"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb619-1"><a href="automate.html#cb619-1" aria-hidden="true" tabindex="-1"></a><span class="dt">RESULTS</span><span class="ch">=</span><span class="st">results/*.csv</span></span></code></pre></div>
 <p>We can then rewrite <code>all</code> to depend on that list:</p>
-<pre class="make"><code># Regenerate all results.
-all : $(RESULTS)</code></pre>
+<div class="sourceCode" id="cb620"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb620-1"><a href="automate.html#cb620-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regenerate all results.</span></span>
+<span id="cb620-2"><a href="automate.html#cb620-2" aria-hidden="true" tabindex="-1"></a><span class="dv">all :</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span></span></code></pre></div>
 <p>However,
 this only works if the results files already exist.
 If one doesn’t,
@@ -1064,7 +1067,7 @@ and Make won’t realize that we want to generate it.</p>
 <p>What we really want is to generate the list of results files
 based on the list of books in the <code>data/</code> directory.
 We can create that list using Make’s <code>wildcard</code> function:</p>
-<pre class="make"><code>DATA=$(wildcard data/*.txt)</code></pre>
+<div class="sourceCode" id="cb621"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb621-1"><a href="automate.html#cb621-1" aria-hidden="true" tabindex="-1"></a><span class="dt">DATA</span><span class="ch">=$(</span><span class="kw">wildcard</span><span class="st"> data/*.txt</span><span class="ch">)</span></span></code></pre></div>
 <p>This calls the function <code>wildcard</code> with the argument <code>data/*.txt</code>.
 The result is a list of all the text files in the <code>data</code> directory,
 just as we would get with <code>data/*.txt</code> in the shell.
@@ -1073,16 +1076,16 @@ but at least they have readable names.</p>
 <p>To check that this line does the right thing,
 we can add another phony target called <code>settings</code>
 that uses the shell command <code>echo</code> to print the names and values of our variables:</p>
-<pre class="make"><code>.PHONY: all clean settings
-
-# ...everything else...
-
-# Show variables&#39; values.
-settings :
-    echo COUNT: $(COUNT)
-    echo DATA: $(DATA)</code></pre>
+<div class="sourceCode" id="cb622"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb622-1"><a href="automate.html#cb622-1" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> all clean settings</span></span>
+<span id="cb622-2"><a href="automate.html#cb622-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb622-3"><a href="automate.html#cb622-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ...everything else...</span></span>
+<span id="cb622-4"><a href="automate.html#cb622-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb622-5"><a href="automate.html#cb622-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Show variables&#39; values.</span></span>
+<span id="cb622-6"><a href="automate.html#cb622-6" aria-hidden="true" tabindex="-1"></a><span class="dv">settings :</span></span>
+<span id="cb622-7"><a href="automate.html#cb622-7" aria-hidden="true" tabindex="-1"></a>    echo COUNT: <span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb622-8"><a href="automate.html#cb622-8" aria-hidden="true" tabindex="-1"></a>    echo DATA: <span class="ch">$(</span><span class="dt">DATA</span><span class="ch">)</span></span></code></pre></div>
 <p>Let’s run this:</p>
-<pre class="shell"><code>$ make settings</code></pre>
+<div class="sourceCode" id="cb623"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb623-1"><a href="automate.html#cb623-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> settings</span></code></pre></div>
 <pre class="text"><code>echo COUNT: bin/countwords.py
 COUNT: bin/countwords.py
 echo DATA: data/dracula.txt data/frankenstein.txt 
@@ -1097,10 +1100,10 @@ DATA: data/dracula.txt data/frankenstein.txt
 because Make shows us the command it’s going to run before running it.
 Putting <code>@</code> before the command in the recipe prevents this,
 which makes the output easier to read:</p>
-<pre class="make"><code>settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)</code></pre>
-<pre class="shell"><code>$ make settings</code></pre>
+<div class="sourceCode" id="cb625"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb625-1"><a href="automate.html#cb625-1" aria-hidden="true" tabindex="-1"></a><span class="dv">settings :</span></span>
+<span id="cb625-2"><a href="automate.html#cb625-2" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COUNT: </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb625-3"><a href="automate.html#cb625-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo DATA: </span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb626"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb626-1"><a href="automate.html#cb626-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> settings</span></code></pre></div>
 <pre class="text"><code>COUNT: bin/countwords.py
 DATA: data/dracula.txt data/frankenstein.txt 
   data/jane_eyre.txt data/moby_dick.txt 
@@ -1124,11 +1127,11 @@ Finally,
 the third argument is what to do the substitution in,
 which is our list of books’ names.</p>
 <p>Let’s check the <code>RESULTS</code> variable by adding another command to the <code>settings</code> target:</p>
-<pre class="make"><code>settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)
-    @echo RESULTS: $(RESULTS)</code></pre>
-<pre class="shell"><code>$ make settings</code></pre>
+<div class="sourceCode" id="cb629"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb629-1"><a href="automate.html#cb629-1" aria-hidden="true" tabindex="-1"></a><span class="dv">settings :</span></span>
+<span id="cb629-2"><a href="automate.html#cb629-2" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COUNT: </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb629-3"><a href="automate.html#cb629-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo DATA: </span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">)</span></span>
+<span id="cb629-4"><a href="automate.html#cb629-4" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo RESULTS: </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb630"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb630-1"><a href="automate.html#cb630-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> settings</span></code></pre></div>
 <pre class="text"><code>COUNT: bin/countwords.py
 DATA: data/dracula.txt data/frankenstein.txt data/jane_eyre.txt 
   data/moby_dick.txt data/sense_and_sensibility.txt 
@@ -1143,9 +1146,9 @@ and <code>RESULTS</code> automatically has the names of the corresponding result
 Since the phony target <code>all</code> depends on <code>$(RESULTS)</code>
 (i.e., all the files whose names appear in the variable <code>RESULTS</code>)
 we can regenerate all the results in one step:</p>
-<pre class="shell"><code>$ make clean</code></pre>
+<div class="sourceCode" id="cb632"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb632-1"><a href="automate.html#cb632-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> clean</span></code></pre></div>
 <pre class="text"><code>rm -f results/*.csv</code></pre>
-<pre class="shell"><code>$ make  # Same as `make all` since &quot;all&quot; is the first target in the Makefile</code></pre>
+<div class="sourceCode" id="cb634"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb634-1"><a href="automate.html#cb634-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span>  # Same as <span class="kw">`</span><span class="fu">make</span> all<span class="kw">`</span> since <span class="st">&quot;all&quot;</span> is the first target</span></code></pre></div>
 <pre class="text"><code>python bin/countwords.py \
   data/dracula.txt &gt; results/dracula.csv
 python bin/countwords.py \
@@ -1172,51 +1175,51 @@ If we run <code>make --help</code>,
 we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
 We could create another phony target called <code>help</code> that prints a list of available commands:</p>
-<pre class="make"><code>.PHONY: all clean help settings
-
-# ...other definitions...
-
-# Show help.
-help :
-    @echo &quot;all : regenerate all out-of-date results files.&quot;
-    @echo &quot;results/*.csv : regenerate a particular results file.&quot;
-    @echo &quot;clean : remove all generated files.&quot;
-    @echo &quot;settings : show the values of all variables.&quot;
-    @echo &quot;help : show this message.&quot;</code></pre>
+<div class="sourceCode" id="cb636"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb636-1"><a href="automate.html#cb636-1" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> all clean help settings</span></span>
+<span id="cb636-2"><a href="automate.html#cb636-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb636-3"><a href="automate.html#cb636-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ...other definitions...</span></span>
+<span id="cb636-4"><a href="automate.html#cb636-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb636-5"><a href="automate.html#cb636-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Show help.</span></span>
+<span id="cb636-6"><a href="automate.html#cb636-6" aria-hidden="true" tabindex="-1"></a><span class="dv">help :</span></span>
+<span id="cb636-7"><a href="automate.html#cb636-7" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;all : regenerate all out-of-date results files.&quot;</span></span>
+<span id="cb636-8"><a href="automate.html#cb636-8" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;results/*.csv : regenerate a particular results file.&quot;</span></span>
+<span id="cb636-9"><a href="automate.html#cb636-9" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;clean : remove all generated files.&quot;</span></span>
+<span id="cb636-10"><a href="automate.html#cb636-10" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;settings : show the values of all variables.&quot;</span></span>
+<span id="cb636-11"><a href="automate.html#cb636-11" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;help : show this message.&quot;</span></span></code></pre></div>
 <p>but sooner or later
 we will add a target or rule and forget to update this list.</p>
 <p>A better approach is to format some comments in a special way
 and then extract and display those comments when asked to.
 We’ll use <code>##</code> (a double comment marker) to indicate the lines we want displayed
 and <code>grep</code> (Section <a href="bash-advanced.html#bash-advanced-find">4.5</a>) to pull these lines out of the file:</p>
-<pre class="make"><code>.PHONY: all clean help settings
-
-COUNT=bin/countwords.py
-DATA=$(wildcard data/*.txt)
-RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
-
-## all : regenerate all results.
-all : $(RESULTS)
-
-## results/%.csv : regenerate result for any book.
-results/%.csv : data/%.txt $(COUNT)
-    python $(COUNT) $&lt; &gt; $@
-
-## clean : remove all generated files.
-clean :
-    rm -f results/*.csv
-
-## settings : show variables&#39; values.
-settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)
-    @echo RESULTS: $(RESULTS)
-
-## help : show this message.
-help :
-    @grep &#39;^##&#39; ./Makefile</code></pre>
+<div class="sourceCode" id="cb637"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb637-1"><a href="automate.html#cb637-1" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> all clean help settings</span></span>
+<span id="cb637-2"><a href="automate.html#cb637-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb637-3"><a href="automate.html#cb637-3" aria-hidden="true" tabindex="-1"></a><span class="dt">COUNT</span><span class="ch">=</span><span class="st">bin/countwords.py</span></span>
+<span id="cb637-4"><a href="automate.html#cb637-4" aria-hidden="true" tabindex="-1"></a><span class="dt">DATA</span><span class="ch">=$(</span><span class="kw">wildcard</span><span class="st"> data/*.txt</span><span class="ch">)</span></span>
+<span id="cb637-5"><a href="automate.html#cb637-5" aria-hidden="true" tabindex="-1"></a><span class="dt">RESULTS</span><span class="ch">=$(</span><span class="kw">patsubst</span><span class="st"> data/%.txt</span><span class="kw">,</span><span class="st">results/%.csv</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">))</span></span>
+<span id="cb637-6"><a href="automate.html#cb637-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb637-7"><a href="automate.html#cb637-7" aria-hidden="true" tabindex="-1"></a><span class="co">## all : regenerate all results.</span></span>
+<span id="cb637-8"><a href="automate.html#cb637-8" aria-hidden="true" tabindex="-1"></a><span class="dv">all :</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span></span>
+<span id="cb637-9"><a href="automate.html#cb637-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb637-10"><a href="automate.html#cb637-10" aria-hidden="true" tabindex="-1"></a><span class="co">## results/%.csv : regenerate result for any book.</span></span>
+<span id="cb637-11"><a href="automate.html#cb637-11" aria-hidden="true" tabindex="-1"></a><span class="dv">results/%.csv :</span><span class="dt"> data/%.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb637-12"><a href="automate.html#cb637-12" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span> <span class="ch">$&lt;</span> &gt; <span class="ch">$@</span></span>
+<span id="cb637-13"><a href="automate.html#cb637-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb637-14"><a href="automate.html#cb637-14" aria-hidden="true" tabindex="-1"></a><span class="co">## clean : remove all generated files.</span></span>
+<span id="cb637-15"><a href="automate.html#cb637-15" aria-hidden="true" tabindex="-1"></a><span class="dv">clean :</span></span>
+<span id="cb637-16"><a href="automate.html#cb637-16" aria-hidden="true" tabindex="-1"></a>    rm -f results/*.csv</span>
+<span id="cb637-17"><a href="automate.html#cb637-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb637-18"><a href="automate.html#cb637-18" aria-hidden="true" tabindex="-1"></a><span class="co">## settings : show variables&#39; values.</span></span>
+<span id="cb637-19"><a href="automate.html#cb637-19" aria-hidden="true" tabindex="-1"></a><span class="dv">settings :</span></span>
+<span id="cb637-20"><a href="automate.html#cb637-20" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COUNT: </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb637-21"><a href="automate.html#cb637-21" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo DATA: </span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">)</span></span>
+<span id="cb637-22"><a href="automate.html#cb637-22" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo RESULTS: </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span></span>
+<span id="cb637-23"><a href="automate.html#cb637-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb637-24"><a href="automate.html#cb637-24" aria-hidden="true" tabindex="-1"></a><span class="co">## help : show this message.</span></span>
+<span id="cb637-25"><a href="automate.html#cb637-25" aria-hidden="true" tabindex="-1"></a><span class="dv">help :</span></span>
+<span id="cb637-26"><a href="automate.html#cb637-26" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">grep </span><span class="st">&#39;^##&#39;</span><span class="fu"> ./Makefile</span></span></code></pre></div>
 <p>Let’s test:</p>
-<pre class="shell"><code>$ make help</code></pre>
+<div class="sourceCode" id="cb638"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb638-1"><a href="automate.html#cb638-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> help</span></code></pre></div>
 <pre class="text"><code>## all : regenerate all results.
 ## results/%.csv : regenerate result for any book.
 ## clean : remove all generated files.
@@ -1232,25 +1235,25 @@ The target is a file called <code>results/collated.csv</code>
 that depends on the results generated by <code>countwords.py</code>.
 To create it,
 we add or change these lines in our Makefile:</p>
-<pre class="make"><code># ...phony targets and previous variable definitions...
-
-COLLATE=bin/collate.py
-
-## all : regenerate all results.
-all : results/collated.csv
-
-## results/collated.csv : collate all results.
-results/collated.csv : $(RESULTS) $(COLLATE)
-    mkdir -p results  # Create dir if it doesn&#39;t exist
-    python $(COLLATE) $(RESULTS) &gt; $@
-
-## settings : show variables&#39; values.
-settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)
-    @echo RESULTS: $(RESULTS)
-    @echo COLLATE: $(COLLATE)
-    ...</code></pre>
+<div class="sourceCode" id="cb640"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb640-1"><a href="automate.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ...phony targets and previous variable definitions...</span></span>
+<span id="cb640-2"><a href="automate.html#cb640-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb640-3"><a href="automate.html#cb640-3" aria-hidden="true" tabindex="-1"></a><span class="dt">COLLATE</span><span class="ch">=</span><span class="st">bin/collate.py</span></span>
+<span id="cb640-4"><a href="automate.html#cb640-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb640-5"><a href="automate.html#cb640-5" aria-hidden="true" tabindex="-1"></a><span class="co">## all : regenerate all results.</span></span>
+<span id="cb640-6"><a href="automate.html#cb640-6" aria-hidden="true" tabindex="-1"></a><span class="dv">all :</span><span class="dt"> results/collated.csv</span></span>
+<span id="cb640-7"><a href="automate.html#cb640-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb640-8"><a href="automate.html#cb640-8" aria-hidden="true" tabindex="-1"></a><span class="co">## results/collated.csv : collate all results.</span></span>
+<span id="cb640-9"><a href="automate.html#cb640-9" aria-hidden="true" tabindex="-1"></a><span class="dv">results/collated.csv :</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span></span>
+<span id="cb640-10"><a href="automate.html#cb640-10" aria-hidden="true" tabindex="-1"></a>    mkdir -p results  <span class="co"># Create dir if it doesn&#39;t exist</span></span>
+<span id="cb640-11"><a href="automate.html#cb640-11" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span> &gt; <span class="ch">$@</span></span>
+<span id="cb640-12"><a href="automate.html#cb640-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb640-13"><a href="automate.html#cb640-13" aria-hidden="true" tabindex="-1"></a><span class="co">## settings : show variables&#39; values.</span></span>
+<span id="cb640-14"><a href="automate.html#cb640-14" aria-hidden="true" tabindex="-1"></a><span class="dv">settings :</span></span>
+<span id="cb640-15"><a href="automate.html#cb640-15" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COUNT: </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb640-16"><a href="automate.html#cb640-16" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo DATA: </span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">)</span></span>
+<span id="cb640-17"><a href="automate.html#cb640-17" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo RESULTS: </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span></span>
+<span id="cb640-18"><a href="automate.html#cb640-18" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COLLATE: </span><span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span></span>
+<span id="cb640-19"><a href="automate.html#cb640-19" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
 <p>The first two lines tell Make about the collation program,
 while the change to <code>all</code> tells it what the final target of our pipeline is.
 Since this target depends on the results files for single novels,
@@ -1269,27 +1272,27 @@ and update the <code>all</code> and <code>settings</code> rules accordingly.
 Note that there is no <code>&gt;</code> needed before the <code>$@</code>
 because <code>plotcounts.py</code> default is to write to a file
 rather than to <code>stdout</code>.</p>
-<pre class="make"><code># ...phony targets and previous variable definitions...
-
-PLOT=bin/plotcounts.py
-
-## all : regenerate all results.
-all : results/collated.png
-
-## results/collated.png: plot the collated results.
-results/collated.png : results/collated.csv
-    python $(PLOT) $&lt; --outfile $@
-
-## settings : show variables&#39; values.
-settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)
-    @echo RESULTS: $(RESULTS)
-    @echo COLLATE: $(COLLATE)
-    @echo PLOT: $(PLOT)
-    ...</code></pre>
+<div class="sourceCode" id="cb641"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb641-1"><a href="automate.html#cb641-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ...phony targets and previous variable definitions...</span></span>
+<span id="cb641-2"><a href="automate.html#cb641-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb641-3"><a href="automate.html#cb641-3" aria-hidden="true" tabindex="-1"></a><span class="dt">PLOT</span><span class="ch">=</span><span class="st">bin/plotcounts.py</span></span>
+<span id="cb641-4"><a href="automate.html#cb641-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb641-5"><a href="automate.html#cb641-5" aria-hidden="true" tabindex="-1"></a><span class="co">## all : regenerate all results.</span></span>
+<span id="cb641-6"><a href="automate.html#cb641-6" aria-hidden="true" tabindex="-1"></a><span class="dv">all :</span><span class="dt"> results/collated.png</span></span>
+<span id="cb641-7"><a href="automate.html#cb641-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb641-8"><a href="automate.html#cb641-8" aria-hidden="true" tabindex="-1"></a><span class="co">## results/collated.png: plot the collated results.</span></span>
+<span id="cb641-9"><a href="automate.html#cb641-9" aria-hidden="true" tabindex="-1"></a><span class="dv">results/collated.png :</span><span class="dt"> results/collated.csv</span></span>
+<span id="cb641-10"><a href="automate.html#cb641-10" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">PLOT</span><span class="ch">)</span> <span class="ch">$&lt;</span> --outfile <span class="ch">$@</span></span>
+<span id="cb641-11"><a href="automate.html#cb641-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb641-12"><a href="automate.html#cb641-12" aria-hidden="true" tabindex="-1"></a><span class="co">## settings : show variables&#39; values.</span></span>
+<span id="cb641-13"><a href="automate.html#cb641-13" aria-hidden="true" tabindex="-1"></a><span class="dv">settings :</span></span>
+<span id="cb641-14"><a href="automate.html#cb641-14" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COUNT: </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb641-15"><a href="automate.html#cb641-15" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo DATA: </span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">)</span></span>
+<span id="cb641-16"><a href="automate.html#cb641-16" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo RESULTS: </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span></span>
+<span id="cb641-17"><a href="automate.html#cb641-17" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COLLATE: </span><span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span></span>
+<span id="cb641-18"><a href="automate.html#cb641-18" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo PLOT: </span><span class="ch">$(</span><span class="dt">PLOT</span><span class="ch">)</span></span>
+<span id="cb641-19"><a href="automate.html#cb641-19" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
 <p>Running <code>make all</code> should now generate the new <code>collated.png</code> plot (Figure <a href="automate.html#fig:automate-collated">9.2</a>):</p>
-<pre class="shell"><code>$ make all</code></pre>
+<div class="sourceCode" id="cb642"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb642-1"><a href="automate.html#cb642-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> all</span></code></pre></div>
 <pre class="text"><code>python bin/collate.py results/time_machine.csv \
   results/moby_dick.csv results/jane_eyre.csv results/dracula.csv \
   results/sense_and_sensibility.csv results/sherlock_holmes.csv \
@@ -1309,11 +1312,11 @@ to only remove files created by the Makefile.
 It is a good habit to do this rather than using the asterisk wildcard to remove all files,
 since you might manually place files in the results directory
 and forget that these will be cleaned up when you run <code>make clean</code>.</p>
-<pre class="make"><code># ...phony targets and previous variable definitions...
-
-## clean : remove all generated files.
-clean :
-    rm $(RESULTS) results/collated.csv results/collated.png</code></pre>
+<div class="sourceCode" id="cb644"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb644-1"><a href="automate.html#cb644-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ...phony targets and previous variable definitions...</span></span>
+<span id="cb644-2"><a href="automate.html#cb644-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-3"><a href="automate.html#cb644-3" aria-hidden="true" tabindex="-1"></a><span class="co">## clean : remove all generated files.</span></span>
+<span id="cb644-4"><a href="automate.html#cb644-4" aria-hidden="true" tabindex="-1"></a><span class="dv">clean :</span></span>
+<span id="cb644-5"><a href="automate.html#cb644-5" aria-hidden="true" tabindex="-1"></a>    rm <span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span> results/collated.csv results/collated.png</span></code></pre></div>
 </div>
 <div id="automate-summary" class="section level2" number="9.10">
 <h2><span class="header-section-number">9.10</span> Summary</h2>
@@ -1336,45 +1339,45 @@ If you want to go deeper,
 <div id="automate-exercises" class="section level2" number="9.11">
 <h2><span class="header-section-number">9.11</span> Exercises</h2>
 <p>Our <code>Makefile</code> currently reads as follows:</p>
-<pre class="make"><code>.PHONY: all clean help settings
-
-COUNT=bin/countwords.py
-COLLATE=bin/collate.py
-PLOT=bin/plotcounts.py
-DATA=$(wildcard data/*.txt)
-RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
-
-## all : regenerate all results.
-all : results/collated.png
-
-## results/collated.png: plot the collated results.
-results/collated.png : results/collated.csv
-    python $(PLOT) $&lt; --outfile $@
-
-## results/collated.csv : collate all results.
-results/collated.csv : $(RESULTS) $(COLLATE)
-    @mkdir -p results
-    python $(COLLATE) $(RESULTS) &gt; $@
-
-## results/%.csv : regenerate result for any book.
-results/%.csv : data/%.txt $(COUNT)
-    python $(COUNT) $&lt; &gt; $@
-
-## clean : remove all generated files.
-clean :
-    rm $(RESULTS) results/collated.csv results/collated.png
-
-## settings : show variables&#39; values.
-settings :
-    @echo COUNT: $(COUNT)
-    @echo DATA: $(DATA)
-    @echo RESULTS: $(RESULTS)
-    @echo COLLATE: $(COLLATE)
-    @echo PLOT: $(PLOT)
-
-## help : show this message.
-help :
-    @grep &#39;^##&#39; ./Makefile</code></pre>
+<div class="sourceCode" id="cb645"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb645-1"><a href="automate.html#cb645-1" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> all clean help settings</span></span>
+<span id="cb645-2"><a href="automate.html#cb645-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-3"><a href="automate.html#cb645-3" aria-hidden="true" tabindex="-1"></a><span class="dt">COUNT</span><span class="ch">=</span><span class="st">bin/countwords.py</span></span>
+<span id="cb645-4"><a href="automate.html#cb645-4" aria-hidden="true" tabindex="-1"></a><span class="dt">COLLATE</span><span class="ch">=</span><span class="st">bin/collate.py</span></span>
+<span id="cb645-5"><a href="automate.html#cb645-5" aria-hidden="true" tabindex="-1"></a><span class="dt">PLOT</span><span class="ch">=</span><span class="st">bin/plotcounts.py</span></span>
+<span id="cb645-6"><a href="automate.html#cb645-6" aria-hidden="true" tabindex="-1"></a><span class="dt">DATA</span><span class="ch">=$(</span><span class="kw">wildcard</span><span class="st"> data/*.txt</span><span class="ch">)</span></span>
+<span id="cb645-7"><a href="automate.html#cb645-7" aria-hidden="true" tabindex="-1"></a><span class="dt">RESULTS</span><span class="ch">=$(</span><span class="kw">patsubst</span><span class="st"> data/%.txt</span><span class="kw">,</span><span class="st">results/%.csv</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">))</span></span>
+<span id="cb645-8"><a href="automate.html#cb645-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-9"><a href="automate.html#cb645-9" aria-hidden="true" tabindex="-1"></a><span class="co">## all : regenerate all results.</span></span>
+<span id="cb645-10"><a href="automate.html#cb645-10" aria-hidden="true" tabindex="-1"></a><span class="dv">all :</span><span class="dt"> results/collated.png</span></span>
+<span id="cb645-11"><a href="automate.html#cb645-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-12"><a href="automate.html#cb645-12" aria-hidden="true" tabindex="-1"></a><span class="co">## results/collated.png: plot the collated results.</span></span>
+<span id="cb645-13"><a href="automate.html#cb645-13" aria-hidden="true" tabindex="-1"></a><span class="dv">results/collated.png :</span><span class="dt"> results/collated.csv</span></span>
+<span id="cb645-14"><a href="automate.html#cb645-14" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">PLOT</span><span class="ch">)</span> <span class="ch">$&lt;</span> --outfile <span class="ch">$@</span></span>
+<span id="cb645-15"><a href="automate.html#cb645-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-16"><a href="automate.html#cb645-16" aria-hidden="true" tabindex="-1"></a><span class="co">## results/collated.csv : collate all results.</span></span>
+<span id="cb645-17"><a href="automate.html#cb645-17" aria-hidden="true" tabindex="-1"></a><span class="dv">results/collated.csv :</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span></span>
+<span id="cb645-18"><a href="automate.html#cb645-18" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">mkdir -p results</span></span>
+<span id="cb645-19"><a href="automate.html#cb645-19" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span> &gt; <span class="ch">$@</span></span>
+<span id="cb645-20"><a href="automate.html#cb645-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-21"><a href="automate.html#cb645-21" aria-hidden="true" tabindex="-1"></a><span class="co">## results/%.csv : regenerate result for any book.</span></span>
+<span id="cb645-22"><a href="automate.html#cb645-22" aria-hidden="true" tabindex="-1"></a><span class="dv">results/%.csv :</span><span class="dt"> data/%.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb645-23"><a href="automate.html#cb645-23" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span> <span class="ch">$&lt;</span> &gt; <span class="ch">$@</span></span>
+<span id="cb645-24"><a href="automate.html#cb645-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-25"><a href="automate.html#cb645-25" aria-hidden="true" tabindex="-1"></a><span class="co">## clean : remove all generated files.</span></span>
+<span id="cb645-26"><a href="automate.html#cb645-26" aria-hidden="true" tabindex="-1"></a><span class="dv">clean :</span></span>
+<span id="cb645-27"><a href="automate.html#cb645-27" aria-hidden="true" tabindex="-1"></a>    rm <span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span> results/collated.csv results/collated.png</span>
+<span id="cb645-28"><a href="automate.html#cb645-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-29"><a href="automate.html#cb645-29" aria-hidden="true" tabindex="-1"></a><span class="co">## settings : show variables&#39; values.</span></span>
+<span id="cb645-30"><a href="automate.html#cb645-30" aria-hidden="true" tabindex="-1"></a><span class="dv">settings :</span></span>
+<span id="cb645-31"><a href="automate.html#cb645-31" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COUNT: </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb645-32"><a href="automate.html#cb645-32" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo DATA: </span><span class="ch">$(</span><span class="dt">DATA</span><span class="ch">)</span></span>
+<span id="cb645-33"><a href="automate.html#cb645-33" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo RESULTS: </span><span class="ch">$(</span><span class="dt">RESULTS</span><span class="ch">)</span></span>
+<span id="cb645-34"><a href="automate.html#cb645-34" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo COLLATE: </span><span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span></span>
+<span id="cb645-35"><a href="automate.html#cb645-35" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">echo PLOT: </span><span class="ch">$(</span><span class="dt">PLOT</span><span class="ch">)</span></span>
+<span id="cb645-36"><a href="automate.html#cb645-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-37"><a href="automate.html#cb645-37" aria-hidden="true" tabindex="-1"></a><span class="co">## help : show this message.</span></span>
+<span id="cb645-38"><a href="automate.html#cb645-38" aria-hidden="true" tabindex="-1"></a><span class="dv">help :</span></span>
+<span id="cb645-39"><a href="automate.html#cb645-39" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">grep </span><span class="st">&#39;^##&#39;</span><span class="fu"> ./Makefile</span></span></code></pre></div>
 <p>A number of the exercises below ask you to make further edits to <code>Makefile</code>.</p>
 <div id="automate-ex-report-change" class="section level3" number="9.11.1">
 <h3><span class="header-section-number">9.11.1</span> Report results that would change</h3>
@@ -1398,16 +1401,16 @@ What does this do and why is it useful?</p>
 <div id="automate-ex-print" class="section level3" number="9.11.4">
 <h3><span class="header-section-number">9.11.4</span> Print the title and author</h3>
 <p>The build rule for regenerating the result for any book is currently:</p>
-<pre class="make"><code>## results/%.csv : regenerate result for any book.
-results/%.csv : data/%.txt $(COUNT)
-    python $(COUNT) $&lt; &gt; $@</code></pre>
+<div class="sourceCode" id="cb646"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb646-1"><a href="automate.html#cb646-1" aria-hidden="true" tabindex="-1"></a><span class="co">## results/%.csv : regenerate result for any book.</span></span>
+<span id="cb646-2"><a href="automate.html#cb646-2" aria-hidden="true" tabindex="-1"></a><span class="dv">results/%.csv :</span><span class="dt"> data/%.txt </span><span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span></span>
+<span id="cb646-3"><a href="automate.html#cb646-3" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">COUNT</span><span class="ch">)</span> <span class="ch">$&lt;</span> &gt; <span class="ch">$@</span></span></code></pre></div>
 <p>Add an extra line to the recipe that uses the <code>book_summary.sh</code> script
 to print the title and author of the book to the screen.
 Use <code>@bash</code> so that the command itself isn’t printed to the screen
 and don’t forget to update the settings build rule to include the <code>book_summary.sh</code> script.</p>
 <p>If you’ve successfully made those changes,
 you should get the following output for <em>Dracula</em>:</p>
-<pre class="shell"><code>$ make -B results/dracula.csv</code></pre>
+<div class="sourceCode" id="cb647"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb647-1"><a href="automate.html#cb647-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">make</span> -B results/dracula.csv</span></code></pre></div>
 <pre class="text"><code>Title: Dracula
 Author: Bram Stoker
 python bin/countwords.py data/dracula.txt &gt; results/dracula.csv</code></pre>
@@ -1422,17 +1425,18 @@ but does <em>not</em> regenerate <code>results/collated.csv</code>.</p>
 <div id="automate-ex-wildcard-perils" class="section level3" number="9.11.6">
 <h3><span class="header-section-number">9.11.6</span> The perils of shell wildcards</h3>
 <p>What is wrong with writing the rule for <code>results/collated.csv</code> like this:</p>
-<pre class="make"><code>results/collated.csv : results/*.csv
-    python $(COLLATE) $^ &gt; $@</code></pre>
+<div class="sourceCode" id="cb649"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb649-1"><a href="automate.html#cb649-1" aria-hidden="true" tabindex="-1"></a><span class="dv">results/collated.csv :</span><span class="dt"> results/*.csv</span></span>
+<span id="cb649-2"><a href="automate.html#cb649-2" aria-hidden="true" tabindex="-1"></a>    python <span class="ch">$(</span><span class="dt">COLLATE</span><span class="ch">)</span> <span class="ch">$^</span> &gt; <span class="ch">$@</span></span></code></pre></div>
 <p>(The fact that the result no longer depends on the program used to create it
 isn’t the biggest problem.)</p>
 </div>
 <div id="automate-ex-readable-docs" class="section level3" number="9.11.7">
 <h3><span class="header-section-number">9.11.7</span> Making documentation more readable</h3>
 <p>We can format the documentation in our Makefile more readably using this command:</p>
-<pre class="make"><code>## help : show all commands.
-help :
-    @grep -h -E &#39;^##&#39; ${MAKEFILE_LIST} | sed -e &#39;s/## //g&#39; | column -t -s &#39;:&#39;</code></pre>
+<div class="sourceCode" id="cb650"><pre class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb650-1"><a href="automate.html#cb650-1" aria-hidden="true" tabindex="-1"></a><span class="co">## help : show all commands.</span></span>
+<span id="cb650-2"><a href="automate.html#cb650-2" aria-hidden="true" tabindex="-1"></a><span class="dv">help :</span></span>
+<span id="cb650-3"><a href="automate.html#cb650-3" aria-hidden="true" tabindex="-1"></a>    <span class="ch">@</span><span class="fu">grep -h -E </span><span class="st">&#39;^##&#39;</span><span class="fu"> </span><span class="ch">${</span><span class="dt">MAKEFILE_LIST</span><span class="ch">}</span><span class="fu"> | sed -e </span><span class="st">&#39;s/## //g&#39;</span><span class="fu"> </span><span class="ch">\</span></span>
+<span id="cb650-4"><a href="automate.html#cb650-4" aria-hidden="true" tabindex="-1"></a><span class="fu">    | column -t -s </span><span class="st">&#39;:&#39;</span></span></code></pre></div>
 <p>Using <code>man</code> and online search,
 explain what every part of this recipe does.</p>
 </div>

@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-25"
+date: "2020-11-26"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -566,7 +566,7 @@ When Bash runs it presents us with a \gref{prompt}{prompt}\index{prompt (in Unix
 By default,
 this prompt is a simple dollar sign:
 
-```shell
+```bash
 $
 ```
 
@@ -585,7 +585,7 @@ we can customize the prompt to give us more information.
 
 Let's run a command to find out who the shell thinks we are:
 
-```shell
+```bash
 $ whoami
 ```
 
@@ -616,7 +616,7 @@ Most commands read and write files in the current working directory
 unless we tell them to do something else,
 so knowing where we are before running a command is important.
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -683,13 +683,14 @@ let's see what we have using the command `ls`\index{Unix commands!ls}
 (short for "listing"),
 which prints the names of the files and directories in the current directory:
 
-```shell
+```bash
 $ ls
 ```
 
 ```text
-Applications Documents    Library      Music        Public         todo.txt
-Desktop      Downloads    Movies       Pictures     zipf
+Applications Documents    Library      Music      Public
+todo.txt     Desktop      Downloads    Movies     Pictures
+zipf
 ```
 
 Again,
@@ -706,13 +707,13 @@ while a trailing `*` tell us something is a runnable program.
 Depending on our setup,
 the shell might also use colors to indicate whether each entry is a file or directory.
 
-```shell
+```bash
 $ ls -F
 ```
 
 ```text
-Applications/   Documents/    Library/      Music/        Public/        
-todo.txt        Desktop/      Downloads/    Movies/       Pictures/     
+Applications/   Documents/    Library/      Music/     Public/        
+todo.txt        Desktop/      Downloads/    Movies/    Pictures/     
 zipf/
 ```
 
@@ -735,7 +736,7 @@ For example,
 if we want to see what's in the `/Users` directory,
 we can type:
 
-```shell
+```bash
 $ ls /Users
 ```
 
@@ -747,7 +748,7 @@ We often call the file and directory names that we give to commands \gref{argume
 to distinguish them from the built-in options.
 We can combine options and arguments:
 
-```shell
+```bash
 $ ls -F /Users
 ```
 
@@ -760,7 +761,7 @@ before the names of any files or directories we want to work on,
 because once the command encounters something that *isn't* an option
 it assumes there aren't any more:
 
-```shell
+```bash
 $ ls /Users -F
 ```
 
@@ -776,7 +777,7 @@ amira   jun     sami
 > For example,
 > the following code actually *does* work on some Linux operating systems:
 >
-> ```shell
+> ```bash
 > $ ls /Users -F
 > ```
 >
@@ -790,20 +791,20 @@ Let's run `ls` again.
 Without any arguments,
 it shows us what's in our current working directory:
 
-```shell
+```bash
 $ ls -F
 ```
 
 ```text
-Applications/   Documents/    Library/      Music/        Public/   
-todo.txt        Desktop/      Downloads/    Movies/       Pictures/     
+Applications/   Documents/    Library/      Music/     Public/        
+todo.txt        Desktop/      Downloads/    Movies/    Pictures/     
 zipf/
 ```
 
 If we want to see what's in the `zipf` directory
 we can ask `ls` to list its contents:
 
-```shell
+```bash
 $ ls -F zipf
 ```
 
@@ -832,7 +833,7 @@ This name is a bit misleading because the command doesn't change the directory;
 instead, it changes the shell's idea of what directory we are in.
 Let's try it out:
 
-```shell
+```bash
 $ cd zipf
 ```
 
@@ -843,7 +844,7 @@ on the theory that they should only ask for our attention when they need it.
 To confirm that `cd` has done what we asked,
 we can use `pwd`:
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -851,7 +852,7 @@ $ pwd
 /Users/amira/zipf
 ```
 
-```shell
+```bash
 $ ls -F
 ```
 
@@ -865,7 +866,7 @@ data/
 > it will usually print an error message and (if we're lucky)
 > tersely remind us of what we should have done:
 >
-> ```shell
+> ```bash
 > $ cd -j
 > ```
 >
@@ -878,7 +879,7 @@ data/
 > if we get the syntax right but make a mistake in the name of a file or directory,
 > it will tell us that:
 >
-> ```shell
+> ```bash
 > $ cd whoops
 > ```
 >
@@ -890,7 +891,7 @@ We now know how to go down the directory tree,
 but how do we go up?
 This doesn't work:
 
-```shell
+```bash
 $ cd amira
 ```
 
@@ -903,7 +904,7 @@ because `amira` on its own is a relative path meaning
 To get back home,
 we can either use an absolute path:
 
-```shell
+```bash
 $ cd /Users/amira
 ```
 
@@ -913,7 +914,7 @@ The directory that contains the one we are in is called the \gref{parent directo
 and sure enough,
 `..` gets us there:
 
-```shell
+```bash
 $ cd ..
 $ pwd
 ```
@@ -928,7 +929,7 @@ We can ask `ls` to include it using the `-a` option,
 which stands for "all".
 Remembering that we are now in `/Users/amira`:
 
-```shell
+```bash
 $ ls -F -a
 ```
 
@@ -950,7 +951,7 @@ but we'll see some uses for it soon.
 > multiple options can be combined with a single `-`
 > and no spaces between the options:
 >
-> ```shell
+> ```bash
 > $ ls -Fa
 > ```
 >
@@ -992,7 +993,7 @@ while `cd ../Movies` will move us up from `zipf` and back down into `Movies`.
 
 What happens if we type `cd` on its own without giving a directory?
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -1000,7 +1001,7 @@ $ pwd
 /Users/amira/Movies
 ```
 
-```shell
+```bash
 $ cd
 $ pwd
 ```
@@ -1014,13 +1015,13 @@ No matter where we are,
 We can achieve the same thing using the special directory name `~`,\index{\char`\~\ (home directory)}\index{home directory!\char`\~\ (alias for)}
 which is a shortcut for our home directory:
 
-```shell
+```bash
 $ ls ~
 ```
 
 ```text
-Applications    Documents       Library         Music           Public
-todo.txt        Desktop         Downloads       Movies          Pictures        
+Applications    Documents    Library       Music      Public
+todo.txt        Desktop      Downloads     Movies     Pictures        
 zipf
 ```
 
@@ -1043,7 +1044,7 @@ but how do we create them?
 To find out,
 let's go back to our `zipf` directory:
 
-```shell
+```bash
 $ cd ~/zipf
 $ ls -F
 ```
@@ -1055,7 +1056,7 @@ data/
 To create a new directory,
 we use the command `mkdir` (short for **m**a**k**e **d**irectory):\index{Unix commands!mkdir}
 
-```shell
+```bash
 $ mkdir analysis
 ```
 
@@ -1063,7 +1064,7 @@ Since `analysis` is a relative path
 (i.e., does not have a leading slash)
 the new directory is created below the current working directory:
 
-```shell
+```bash
 $ ls -F
 ```
 
@@ -1105,7 +1106,7 @@ the files and directories themselves are the same.
 Since we just created the `analysis` directory,
 `ls` doesn't display anything when we ask for a listing of its contents:
 
-```shell
+```bash
 $ ls -F analysis
 ```
 
@@ -1113,7 +1114,7 @@ Let's change our working directory to `analysis` using `cd`,
 then use a very simple text editor called \gref{Nano}{nano_editor} to create a file called `draft.txt`\index{Nano editor}
 (Figure \@ref(fig:bash-basics-nano)):
 
-```shell
+```bash
 $ cd analysis
 $ nano draft.txt
 ```
@@ -1173,7 +1174,7 @@ we can use <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit the editor and return to the she
 Nano doesn't leave any output on the screen after it exits,
 but `ls` will show that we have indeed created a new file `draft.txt`:
 
-```shell
+```bash
 $ ls
 ```
 
@@ -1204,7 +1205,7 @@ draft.txt
 
 Let's go back to our `zipf` directory:
 
-```shell
+```bash
 cd ~/zipf
 ```
 
@@ -1212,7 +1213,7 @@ The `analysis` directory contains a file called `draft.txt`.
 That isn't a particularly informative name,
 so let's change it using `mv` (short for **m**o**v**e):\index{Unix commands!mv}
 
-```shell
+```bash
 $ mv analysis/draft.txt analysis/prior-work.txt
 ```
 
@@ -1221,7 +1222,7 @@ while the second is where it's to go.
 "Moving" `analysis/draft.txt` to `analysis/prior-work.txt`
 has the same effect as renaming the file:
 
-```shell
+```bash
 $ ls analysis
 ```
 
@@ -1243,19 +1244,19 @@ and it will move the file there.
 In this case,
 the directory we want is the special name `.` that we mentioned earlier:
 
-```shell
+```bash
 $ mv analysis/prior-work.txt .
 ```
 
 `ls` now shows us that `analysis` is empty:
 
-```shell
+```bash
 $ ls analysis
 ```
 
 and that our current directory now contains our file:
 
-```shell
+```bash
 $ ls
 ```
 
@@ -1267,7 +1268,7 @@ If we only want to check that the file exists,
 we can give its name to `ls`
 just like we can give the name of a directory:
 
-```shell
+```bash
 $ ls prior-work.txt
 ```
 
@@ -1281,7 +1282,7 @@ The `cp` command **c**o**p**ies files.\index{Unix commands!cp}
 It works like `mv` except it creates a file instead of moving an existing one
 (and no, we don't know why the creators of Unix seemed to be allergic to vowels):
 
-```shell
+```bash
 $ cp prior-work.txt analysis/section-1.txt
 ```
 
@@ -1289,7 +1290,7 @@ We can check that`cp` did the right thing
 by giving `ls` two arguments
 to ask it to list two things at once:
 
-```shell
+```bash
 $ ls prior-work.txt analysis/section-1.txt
 ```
 
@@ -1302,7 +1303,7 @@ If we leave off the second filename and ask it to show us a file and a directory
 (or multiple directories)
 it lists them one by one:
 
-```shell
+```bash
 $ ls prior-work.txt analysis
 ```
 
@@ -1317,7 +1318,7 @@ Copying a directory and everything it contains is a little more complicated.
 If we use `cp` on its own,
 we get an error message:
 
-```shell
+```bash
 $ cp analysis backup
 ```
 
@@ -1328,13 +1329,13 @@ cp: analysis is a directory (not copied).
 If we really want to copy everything,
 we must give `cp` the `-r` option (meaning \gref{recursive}{recursion}):
 
-```shell
+```bash
 $ cp -r analysis backup
 ```
 
 Once again we can check the result with `ls`:
 
-```shell
+```bash
 $ ls analysis backup
 ```
 
@@ -1351,13 +1352,13 @@ section-1.txt
 Let's tidy up by removing the `prior-work.txt` file we created in our `zipf` directory.
 The command to do this is `rm` (for **r**e**m**ove):\index{Unix commands!rm}
 
-```shell
+```bash
 $ rm prior-work.txt
 ```
 
 We can confirm the file is gone using `ls`:
 
-```shell
+```bash
 $ ls prior-work.txt
 ```
 
@@ -1377,7 +1378,7 @@ when we delete a file it really is gone.
 In a half-hearted attempt to stop us from erasing things accidentally,
 `rm` refuses to delete directories:
 
-```shell
+```bash
 $ rm analysis
 ```
 
@@ -1388,7 +1389,7 @@ rm: analysis: is a directory
 We can tell `rm` we really want to do this
 by giving it the recursive option `-r`:
 
-```shell
+```bash
 $ rm -r analysis
 ```
 
@@ -1406,7 +1407,7 @@ This options works the same way with `mv` and `cp`.
 `zipf/data` contains the text files for several ebooks
 from [Project Gutenberg][project-gutenberg]:
 
-```shell
+```bash
 $ ls data
 ```
 
@@ -1420,7 +1421,7 @@ jane_eyre.txt     time_machine.txt
 The `wc` command (short for **w**ord **c**ount)\index{Unix commands!wc}
 tells us how many lines, words, and letters there are in one file:
 
-```shell
+```bash
 $ wc data/moby_dick.txt
 ```
 
@@ -1439,7 +1440,7 @@ but that would be a lot of typing
 and we could easily make a mistake.
 We can't just give `wc` the name of the directory as we do with `ls`:
 
-```shell
+```bash
 $ wc data
 ```
 
@@ -1466,7 +1467,7 @@ data/moby_dick.txt
 
 while `data/s*.txt` only matches the two whose names begin with an 's':
 
-```shell
+```bash
 $ ls data/s*.txt
 ```
 
@@ -1479,7 +1480,7 @@ so they work exactly the same way for every command.
 This means that we can use them with `wc` to (for example)
 count the number of words in the books with names that contains an underscore:
 
-```shell
+```bash
 $ wc data/*_*.txt
 ```
 
@@ -1494,7 +1495,7 @@ $ wc data/*_*.txt
 
 or the number of words in Frankenstein:
 
-```shell
+```bash
 $ wc data/frank*.txt
 ```
 
@@ -1509,7 +1510,7 @@ it's possible for a wildcard expression to *not* match anything.
 In this case,
 the command will usually print an error message:
 
-```shell
+```bash
 $ wc data/*.csv
 ```
 
@@ -1522,7 +1523,7 @@ wc: data/*.csv: open: No such file or directory
 `wc` displays lines, words, and characters by default,
 but we can ask it to display only the number of lines:
 
-```shell
+```bash
 $ wc -l data/s*.txt
 ```
 
@@ -1536,7 +1537,7 @@ $ wc -l data/s*.txt
 We can use the `man` command (short for **man**ual)\index{Unix commands!man}\index{Unix shell!manual}
 to find out what they are:
 
-```shell
+```bash
 $ man wc
 ```
 
@@ -1681,7 +1682,7 @@ if `pwd` displays `/Users/backup`,
 and `-r` tells `ls` to display things in reverse order,
 what command(s) will result in the following output:
 
-```shell
+```bash
 doc/ data/ analysis/
 ```
 
@@ -1707,18 +1708,28 @@ Why would we want this protection when using `rm`?
 After running the following commands,
 Amira realizes that she put the (hypothetical) files `chapter1.dat` and `chapter2.dat` into the wrong folder:
 
-```shell
+```bash
 $ ls -F
+```
+```text
   processed/ raw/
+```
+
+```bash
 $ ls -F processed
+```
+```text
   chapter1.dat chapter2.dat appendix1.dat appendix2.dat
+```
+
+```bash
 $ cd raw/
 ```
 
 Fill in the blanks to move these files to the current folder
 (i.e., the one she is currently in):
 
-```shell
+```bash
 $ mv ___/chapter1.dat  ___/chapter2.dat ___
 ```
 
@@ -1740,7 +1751,7 @@ correct the mistake, which of the following commands could you use to do so?
 Assuming the following hypothetical files,
 what is the output of the closing `ls` command in the sequence shown below?
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -1748,7 +1759,7 @@ $ pwd
 /Users/amira/data
 ```
 
-```shell
+```bash
 $ ls
 ```
 
@@ -1756,7 +1767,7 @@ $ ls
 books.dat
 ```
 
-```shell
+```bash
 $ mkdir doc
 $ mv books.dat doc/
 $ cp doc/books.dat ../books-saved.dat
@@ -1774,14 +1785,14 @@ This exercises explores how `cp` responds when attempting to copy multiple thing
 
 What does `cp` do when given several filenames followed by a directory name?
 
-```shell
+```bash
 $ mkdir backup
 $ cp dracula.txt frankenstein.txt backup/
 ```
 
 What does `cp` do when given three or more file names?
 
-```shell
+```bash
 $ cp dracula.txt frankenstein.txt jane_eyre.txt
 ```
 
@@ -1802,7 +1813,7 @@ produce this output?
 Amira is working on a project and she sees that her files aren't very well
 organized:
 
-```shell
+```bash
 $ ls -F
 ```
 
@@ -1814,7 +1825,7 @@ The `books.txt` and `titles.txt` files contain output from her data
 analysis. What command(s) does she need to run
 to produce the output shown?
 
-```shell
+```bash
 $ ls -F
 ```
 
@@ -1822,7 +1833,7 @@ $ ls -F
 data/   results/
 ```
 
-```shell
+```bash
 $ ls results
 ```
 
@@ -1850,14 +1861,14 @@ Which of the following set of commands would achieve this objective?
 
 What would the other commands do?
 
-```shell
+```bash
 $ mkdir 2016-05-20
 $ mkdir 2016-05-20/data
 $ mkdir 2016-05-20/data/processed
 $ mkdir 2016-05-20/data/raw
 ```
 
-```shell
+```bash
 $ mkdir 2016-05-20
 $ cd 2016-05-20
 $ mkdir data
@@ -1865,12 +1876,12 @@ $ cd data
 $ mkdir raw processed
 ```
 
-```shell
+```bash
 $ mkdir 2016-05-20/data/raw
 $ mkdir 2016-05-20/data/processed
 ```
 
-```shell
+```bash
 $ mkdir 2016-05-20
 $ cd 2016-05-20
 $ mkdir data
@@ -1963,7 +1974,7 @@ the ease with which it lets us combine existing programs in new ways.
 Let's go into the `zipf/data` directory
 and count the number of lines in each file once again:
 
-```shell
+```bash
 $ cd ~/zipf/data
 $ wc -l *.txt
 ```
@@ -1986,7 +1997,7 @@ but what if there were eight thousand?
 
 Our first step toward a solution is to run this command:
 
-```shell
+```bash
 $ wc -l *.txt > lengths.txt
 ```
 
@@ -1999,7 +2010,7 @@ The shell creates this file if it doesn't exist,
 or overwrites it if it already exists.
 `ls lengths.txt` confirms that the file exists:
 
-```shell
+```bash
 $ ls lengths.txt
 ```
 
@@ -2012,7 +2023,7 @@ which is short for con**cat**enate
 (because if we give it the names of several files
 it will print them all in order):
 
-```shell
+```bash
 $ cat lengths.txt
 ```
 
@@ -2029,7 +2040,7 @@ $ cat lengths.txt
 
 We can now use `sort` to sort the lines in this file:
 
-```shell
+```bash
 $ sort lengths.txt
 ```
 
@@ -2057,7 +2068,7 @@ it sends its output to the screen just as `wc` did.
 We can therefore put the sorted list of lines in another temporary file called `sorted-lengths.txt`
 using `>` once again:
 
-```shell
+```bash
 $ sort lengths.txt > sorted-lengths.txt
 ```
 
@@ -2065,7 +2076,7 @@ $ sort lengths.txt > sorted-lengths.txt
 >
 > It's tempting to send the output of `sort` back to the file it reads:
 >
-> ```shell
+> ```bash
 > $ sort -n lengths.txt > lengths.txt
 > ```
 >
@@ -2079,14 +2090,14 @@ Creating intermediate files with names like `lengths.txt` and `sorted-lengths.tx
 but keeping track of those files and cleaning them up when they're no longer needed is a burden.
 Let's delete the two files we just created:
 
-```shell
+```bash
 rm lengths.txt sorted-lengths.txt
 ```
 
 We can produce the same result more safely and with less typing
 using a \gref{pipe}{pipe_shell}:\index{pipe (in Unix shell)}\index{Unix shell!pipe}
 
-```shell
+```bash
 $ wc -l *.txt | sort -n
 ```
 
@@ -2125,7 +2136,7 @@ For example,
 we can use the command `head` to get just the first three lines of sorted data,\index{Unix commands!head}
 which shows us the three shortest books:
 
-```shell
+```bash
 $ wc -l *.txt | sort -n | head -n 3
 ```
 
@@ -2206,7 +2217,7 @@ typing in a few lines of text,
 and then pressing <kbd>Ctrl</kbd>+<kbd>D</kbd> to signal the end of input .
 `sort` will then sort and print whatever we typed:
 
-```shell
+```bash
 $ sort
 one
 two
@@ -2243,7 +2254,7 @@ it just knows that it has to read, sort, and print.
 > but we don't give it a filename?
 > For example, what if we type:
 >
-> ```shell
+> ```bash
 > $ wc -l
 > ```
 >
@@ -2257,7 +2268,7 @@ it just knows that it has to read, sort, and print.
 > This mistake can be hard to spot,
 > particularly if we put the filename at the end of the pipeline:
 >
-> ```shell
+> ```bash
 > $ wc -l | sort moby_dick.txt
 > ```
 >
@@ -2275,7 +2286,7 @@ we can connect standard input to a file using `<`.\index{redirection (in Unix sh
 In the case of a single file,
 this has the same effect as providing the file's name to the command:
 
-```shell
+```bash
 $ wc < moby_dick.txt
 ```
 
@@ -2287,7 +2298,7 @@ If we try to use redirection with a wildcard,
 though,
 the shell *doesn't* concatenate all of the matching files:
 
-```shell
+```bash
 $ wc < *.txt
 ```
 
@@ -2298,7 +2309,7 @@ $ wc < *.txt
 It also doesn't print the error message to standard output,
 which we can prove by redirecting:
 
-```shell
+```bash
 $ wc < *.txt > all.txt
 ```
 
@@ -2306,7 +2317,7 @@ $ wc < *.txt > all.txt
 -bash: *.txt: ambiguous redirect
 ```
 
-```shell
+```bash
 $ cat all.txt
 ```
 
@@ -2338,7 +2349,7 @@ If we only cared about one file,
 we could write a pipeline to take the first 17 lines
 and then take the last 8 of those:
 
-```shell
+```bash
 $ head -n 17 sense_and_sensibility.txt | tail -n 8
 ```
 
@@ -2357,7 +2368,7 @@ If we try to use a wildcard to select files,
 we only get 8 lines of output,
 not the 16 we expect:
 
-```shell
+```bash
 $  head -n 17 s*.txt | tail -n 8
 ```
 
@@ -2376,7 +2387,7 @@ The problem is that `head` is producing a single stream of output
 containing 17 lines for each file
 (along with a header telling us the file's name):
 
-```shell
+```bash
 $ head -n 17 s*.txt
 ```
 
@@ -2423,7 +2434,7 @@ Language: English
 
 Let's try this instead:
 
-```shell
+```bash
 $ for filename in sense_and_sensibility.txt sherlock_holmes.txt
 > do
 >   head -n 17 $filename | tail -n 8
@@ -2498,7 +2509,7 @@ so we will break it down into pieces:
 It is very common to use a wildcard to select a set of files
 and then loop over that set to run commands:
 
-```shell
+```bash
 $ for filename in s*.txt
 > do
 >   head -n 17 $filename | tail -n 8
@@ -2536,7 +2547,7 @@ we have called our loop variable `filename`
 to make its purpose clear to human readers,
 but we could equally well write our loop as:
 
-```shell
+```bash
 $ for x in s*.txt
 > do
 >   head -n 17 $x | tail -n 8
@@ -2545,7 +2556,7 @@ $ for x in s*.txt
 
 or as:
 
-```shell
+```bash
 $ for username in s*.txt
 > do
 >   head -n 17 $username | tail -n 8
@@ -2567,7 +2578,7 @@ to go up and down in our command history as described earlier.
 Another is to use `history`\index{history (in Unix shell)}\index{Unix commands!history}
 to get a list of the last few hundred commands we have run:
 
-```shell
+```bash
 $ history
 ```
 
@@ -2580,11 +2591,11 @@ $ history
 We can use an exclamation mark `!` followed by a number
 to repeat a recent command:
 
-```shell
+```bash
 $ !552
 ```
 
-```shell
+```bash
 wc -l *.txt | sort -n | head -n 3
 ```
 
@@ -2619,8 +2630,9 @@ we will quickly notice that loops don't have to be broken across lines.
 Instead,
 their parts can be separated with semi-colons:
 
-```shell
-$ for filename in s*.txt ; do head -n 17 $filename | tail -n 8; done
+```bash
+$ for filename in s*.txt ; do head -n 17 $filename | tail -n 8;
+done
 ```
 
 This is fairly readable,
@@ -2631,7 +2643,7 @@ the multi-line format is much easier to read.
 For example,
 compare this:
 
-```shell
+```bash
 $ for filename in s*.txt
 > do
 >   echo $filename
@@ -2641,7 +2653,7 @@ $ for filename in s*.txt
 
 with this:
 
-```shell
+```bash
 $ for filename in s*.txt; do echo $filename; head -n 17 $filename |
   tail -n 8; done
 ```
@@ -2655,7 +2667,7 @@ Suppose we want to create a backup copy of each book whose name ends in "e".
 If we don't want to change the files' names,
 we can do this with `cp`:
 
-```shell
+```bash
 $ cd ~/zipf
 $ mkdir backup
 $ cp data/*e.txt backup
@@ -2682,13 +2694,13 @@ jane_eyre.txt  time_machine.txt
 But what if we want to append the extension `.bak` to the files' names?
 `cp` can do this for a single file:
 
-```shell
+```bash
 $ cp data/time_machine.txt backup/time_machine.txt.bak
 ```
 
 but not for all the files at once:
 
-```shell
+```bash
 $ cp data/*e.txt backup/*e.txt.bak
 ```
 
@@ -2700,7 +2712,7 @@ cp: target 'backup/*e.txt.bak' is not a directory
 after the shell expands the `*` wildcards,
 what we are actually asking `cp` to do is:
 
-```shell
+```bash
 $ cp data/jane_eyre.txt data/time_machine.txt backup/*e.bak
 ```
 
@@ -2716,7 +2728,7 @@ Instead,
 let's use a loop to copy files to the backup directory
 and append the `.bak` suffix:
 
-```shell
+```bash
 $ cd data
 $ for filename in *e.txt
 > do
@@ -2751,7 +2763,7 @@ We have seen the use of `>`, but there is a similar operator `>>` which works sl
 We'll learn about the differences between these two operators by printing some strings.
 We can use the `echo` command to print strings e.g.
 
-```shell
+```bash
 $ echo The echo command prints text
 ```
 
@@ -2761,13 +2773,13 @@ The echo command prints text
 
 Now test the commands below to reveal the difference between the two operators:
 
-```shell
+```bash
 $ echo hello > testfile01.txt
 ```
 
 and:
 
-```shell
+```bash
 $ echo hello >> testfile02.txt
 ```
 
@@ -2778,7 +2790,7 @@ Hint: Try executing each command twice in a row and then examining the output fi
 Given the following commands,
 what will be included in the file `extracted.txt`:
 
-```shell
+```bash
 $ head -n 3 dracula.txt > extracted.txt
 $ tail -n 2 dracula.txt >> extracted.txt
 ```
@@ -2844,7 +2856,7 @@ The Invisible Man,1897
 
 What text passes through each of the pipes and the final redirect in the pipeline below?
 
-```shell
+```bash
 $ cat titles.txt | head -n 5 | tail -n 3 | sort -r > final.txt
 ```
 
@@ -2854,7 +2866,7 @@ Hint: build the pipeline up one command at a time to test your understanding
 
 For the file `titles.txt` from the previous exercise, consider the following command:
 
-```shell
+```bash
 $ cut -d , -f 2 titles.txt
 ```
 
@@ -2886,7 +2898,7 @@ Suppose we want to preview the commands the following loop will execute
 without actually running those commands
 (`analyze` is a hypothetical command):
 
-```shell
+```bash
 $ for file in *.txt
 > do
 >   analyze $file > analyzed-$file
@@ -2896,7 +2908,7 @@ $ for file in *.txt
 What is the difference between the two loops below, and which one would we
 want to run?
 
-```shell
+```bash
 # Version 1
 $ for file in *.txt
 > do
@@ -2904,7 +2916,7 @@ $ for file in *.txt
 > done
 ```
 
-```shell
+```bash
 # Version 2
 $ for file in *.txt
 > do
@@ -2917,7 +2929,7 @@ $ for file in *.txt
 Given the files in `data/`,
 what is the output of the following code?
 
-```shell
+```bash
 $ for datafile in *.txt
 > do
 >    ls *.txt
@@ -2926,7 +2938,7 @@ $ for datafile in *.txt
 
 Now, what is the output of the following code?
 
-```shell
+```bash
 $ for datafile in *.txt
 > do
 >	ls $datafile
@@ -2939,7 +2951,7 @@ Why do these two loops give different outputs?
 
 What would be the output of running the following loop in your `data/` directory?
 
-```shell
+```bash
 $ for filename in d*
 > do
 >    ls $filename
@@ -2948,7 +2960,7 @@ $ for filename in d*
 
 How would the output differ from using this command instead?
 
-```shell
+```bash
 $ for filename in *d*
 > do
 >    ls $filename
@@ -2959,7 +2971,7 @@ $ for filename in *d*
 
 Consider running the following loop in the  `data/` directory:
 
-```shell
+```bash
 for book in *.txt
 > do
 >     echo $book
@@ -2969,7 +2981,7 @@ for book in *.txt
 
 Why would the following loop be preferable?
 
-```shell
+```bash
 for book in *.txt
 > do
 >     head -n 16 $book >> headers.txt
@@ -2980,7 +2992,7 @@ for book in *.txt
 
 If you run the command:
 
-```shell
+```bash
 $ history | tail -n 5 > recent.sh
 ```
 
@@ -3062,7 +3074,7 @@ but it is really just another kind of program.
 Let's start by creating a new directory for our runnable programs called `bin/`,
 consistent with the project structure described in Section \@ref(getting-started-organize).
 
-```shell
+```bash
 $ cd ~/zipf
 $ mkdir bin
 $ cd bin
@@ -3070,7 +3082,7 @@ $ cd bin
 
 Edit a new file called `book_summary.sh` to hold our shell script:
 
-```shell
+```bash
 $ nano book_summary.sh
 ```
 
@@ -3089,7 +3101,7 @@ we can save the file with <kbd>Ctrl</kbd>+<kbd>O</kbd>
 and exit with <kbd>Ctrl</kbd>+<kbd>X</kbd>.
 `ls` shows that our file now exists:
 
-```shell
+```bash
 $ ls
 ```
 
@@ -3101,7 +3113,7 @@ We can check the contents of the file using `cat book_summary.sh`.
 More importantly,
 we can now ask the shell to run this file:
 
-```shell
+```bash
 $ bash book_summary.sh
 ```
 
@@ -3121,7 +3133,7 @@ our script's output is exactly the same text we would get if we ran the command 
 If we want,
 we can pipe the output of our shell script to another command to count how many lines it contains:
 
-```shell
+```bash
 $ bash book_summary.sh | wc -l
 ```
 
@@ -3134,7 +3146,7 @@ The command `grep`\index{grep}\index{Unix commands!grep} finds and prints lines 
 We'll learn more about `grep` in Section \@ref(bash-advanced-grep),
 but for now we can edit the script:
 
-```shell
+```bash
 $ nano book_summary.sh
 ```
 
@@ -3147,7 +3159,7 @@ head -n 17 ../data/moby_dick.txt | tail -n 8 | grep Author
 Sure enough,
 when we run our modified script:
 
-```shell
+```bash
 $ bash book_summary.sh
 ```
 
@@ -3163,7 +3175,7 @@ just as we would pipe the output from any other program.
 Here,
 we count the number of words in the author line:
 
-```shell
+```bash
 $ bash book_summary.sh | wc -w
 ```
 
@@ -3189,7 +3201,7 @@ Inside a shell script,
 `$1` means "the first argument on the command line".
 If we now run our script like this:
 
-```shell
+```bash
 $ bash book_summary.sh ../data/moby_dick.txt
 ```
 
@@ -3197,7 +3209,7 @@ then `$1` is assigned `../data/moby_dick.txt`
 and get exactly the same output as before.
 If we give the script a different filename:
 
-```shell
+```bash
 $  bash book_summary.sh ../data/frankenstein.txt
 ```
 
@@ -3245,7 +3257,7 @@ which is assigned the value of the second command-line argument we give the scri
 
 Let's check that it works by asking for *Frankenstein*'s release date:
 
-```shell
+```bash
 $ bash book_summary.sh ../data/frankenstein.txt Release
 ```
 
@@ -3258,7 +3270,7 @@ Release Date: June 17, 2008 [EBook #84]
 Suppose we have just run a series of commands that did something useful,
 such as summarizing all books in a given directory:
 
-```shell
+```bash
 $ for x in ../data/*.txt
 > do 
 >   echo $x
@@ -3274,7 +3286,7 @@ $ ls
 ```text
 authors.txt        book_summary.sh      releases.txt
 ```
-```shell
+```bash
 $ mkdir ../results
 $ mv authors.txt releases.txt ../results
 ```
@@ -3285,7 +3297,7 @@ we can use `history` and redirection to save recent commands to a file.\index{sh
 For example,
 we can save the last six commands to `summarize_all_books.sh`:
 
-```shell
+```bash
 $ history 6 > summarize_all_books.sh
 $ cat summarize_all_books.sh
 ```
@@ -3326,7 +3338,7 @@ let's find lines that contain the word "Sherlock".
 Since there are likely to be hundreds of matches,
 we will pipe `grep`'s output to `head` to show only the first few:
 
-```shell
+```bash
 $ cd ~/zipf
 $ grep Sherlock data/sherlock_holmes.txt | head -n 5
 ```
@@ -3350,7 +3362,7 @@ since `grep` patterns are case-sensitive.
 If we wanted to make the search case-insensitive,
 we can add the option `-i`:
 
-```shell
+```bash
 $ grep -i sherlock data/sherlock_holmes.txt | head -n 5
 ```
 
@@ -3369,7 +3381,7 @@ because of the lines containing "SHERLOCK" near the top of the file.
 
 Next, let's search for the pattern `on`:
 
-```shell
+```bash
 $ grep on data/sherlock_holmes.txt | head -n 5
 ```
 
@@ -3387,7 +3399,7 @@ our pattern ("on") is part of a larger word such as "Conan".
 To restrict matching to lines containing `on` by itself,
 we can give `grep` the `-w` option (for "match words"):
 
-```shell
+```bash
 $ grep -w on data/sherlock_holmes.txt
 ```
 
@@ -3401,7 +3413,7 @@ on the right side of his top-hat to show where he has secreted
 
 What if we want to search for a phrase rather than a single word?
 
-```shell
+```bash
 $ grep on the data/sherlock_holmes.txt | head -n 5
 ```
 
@@ -3427,7 +3439,7 @@ to tell us which file those lines came from.
 If we want to give `grep` both words as a single argument,
 we must wrap them in quotation marks as before:
 
-```shell
+```bash
 $ grep "on the" data/sherlock_holmes.txt
 ```
 
@@ -3455,7 +3467,7 @@ pink-tinted note-paper which had been lying open upon the table.
 One of the most useful options for `grep` is `-n`,
 which numbers the lines that match the search:
 
-```shell
+```bash
 $ grep -n "on the" data/sherlock_holmes.txt
 ```
 
@@ -3471,7 +3483,7 @@ $ grep -n "on the" data/sherlock_holmes.txt
 in fact,
 that almost every letter of the alphabet means something to it:
 
-```shell
+```bash
 $ man grep
 ```
 
@@ -3497,7 +3509,7 @@ we can combine two options we've covered previously with `-v`
 to invert the match---i.e.,
 to print lines that *don't* match the pattern:
 
-```shell
+```bash
 $ grep -i -n -v the data/sherlock_holmes.txt
 ```
 
@@ -3519,7 +3531,7 @@ The easiest way to do this is usually to use wildcards.
 For example,
 this command counts how many lines contain "pain" in all of our books:
 
-```shell
+```bash
 $ grep -w pain data/*.txt | wc -l
 ```
 
@@ -3531,7 +3543,7 @@ Alternatively,
 the `-r` option (for "recursive") tells `grep` to search all of the files
 in or below a directory:
 
-```shell
+```bash
 $ grep -w -r pain data | wc -l
 ```
 
@@ -3545,7 +3557,7 @@ which are sets of letters, numbers, and symbols that define complex patterns.
 For example,
 this command finds lines that start with the letter 'T':
 
-```shell
+```bash
 $ grep -E "^T" data/sherlock_holmes.txt
 ```
 
@@ -3608,7 +3620,7 @@ As always,
 `.` on its own means the current working directory,
 which is where we want our search to start.
 
-```shell
+```bash
 $ cd ~/zipf
 $ find .
 ```
@@ -3635,7 +3647,7 @@ $ find .
 If we only want to find directories,
 we can tell `find` to show us things of type `d`:
 
-```shell
+```bash
 $ find . -type d
 ```
 
@@ -3649,7 +3661,7 @@ $ find . -type d
 If we change `-type d` to `-type f`
 we get a listing of all the files instead:
 
-```shell
+```bash
 $ find . -type f
 ```
 
@@ -3670,7 +3682,7 @@ $ find . -type f
 
 Now let's try matching by name:
 
-```shell
+```bash
 $ find . -name "*.txt"
 ```
 
@@ -3689,7 +3701,7 @@ $ find . -name "*.txt"
 Notice the quotes around `"*.txt"`.
 If we omit them and type:
 
-```shell
+```bash
 $ find . -name *.txt
 ```
 
@@ -3699,7 +3711,7 @@ Since there aren't any text files in the current directory,
 the expanded list is empty,
 so the shell tries to run the equivalent of
 
-```shell
+```bash
 $ find . -name
 ```
 
@@ -3712,7 +3724,7 @@ find: -name: requires additional arguments
 We have seen before how to combine commands using pipes.
 Let's use another technique to see how large our books are:
 
-```shell
+```bash
 $ wc -l $(find . -name "*.txt")
 ```
 
@@ -3735,7 +3747,7 @@ and then replaces `$(...)` with that command's output.
 Since the output of `find` is the paths to our text files,
 the shell constructs the command:
 
-```shell
+```bash
 $ wc -l ./results/releases.txt ... ./data/jane_eyre.txt
 ```
 
@@ -3750,7 +3762,7 @@ while the second looks for lines inside those files that match another pattern.
 For example,
 we can look for `Authors` in all our text files:
 
-```shell
+```bash
 $ grep "Author:" $(find . -name "*.txt")
 ```
 
@@ -3773,7 +3785,7 @@ $ grep "Author:" $(find . -name "*.txt")
 
 We can also use `$(...)` expansion to create a list of filenames to use in a loop:\index{loop (in Unix shell)!using command expansion}
 
-```shell
+```bash
 $ for file in $(find . -name "*.txt")
 > do
 > cp $file $file.bak
@@ -3805,7 +3817,7 @@ we can change how the shell and other programs behave.
 Let's run the command `set`\index{set (in Unix shell)}\index{Unix commands!set}
 and look at some of the variables the shell defines:
 
-```shell
+```bash
 $ set
 ```
 
@@ -3863,7 +3875,7 @@ it stops searching and runs what it has found.
 To show how this works,
 here are the components of `PATH` listed one per line:
 
-```shell
+```bash
 /Users/amira/bin
 /usr/local/git/bin
 /usr/bin
@@ -3891,7 +3903,7 @@ introduced at the end of Section \@ref(bash-tools-history).
 Let's look at the value of the variable `HOME`,\index{HOME variable (in Unix shell)}\index{Unix shell!HOME variable}
 which keeps track of our home directory:
 
-```shell
+```bash
 $ echo HOME
 ```
 
@@ -3903,7 +3915,7 @@ Whoops: this just prints "HOME", which isn't what we wanted.
 Instead,
 we need to run this:
 
-```shell
+```bash
 $ echo $HOME
 ```
 
@@ -3925,7 +3937,7 @@ Creating a variable is easy:\index{shell variable!creating}
 we assign a value to a name using "=",
 putting quotes around the value if it contains spaces or special characters:
 
-```shell
+```bash
 $ DEPARTMENT="Library Science"
 $ echo $DEPARTMENT
 ```
@@ -3936,7 +3948,7 @@ Library Science
 
 To change the value, we simply assign a new one:
 
-```shell
+```bash
 $ DEPARTMENT="Information Science"
 $ echo $DEPARTMENT
 ```
@@ -3983,7 +3995,7 @@ For example,
 we can define the alias `backup`
 to run `/bin/zback` with a specific set of arguments:
 
-```shell
+```bash
 alias backup=/bin/zback -v --nostir -R 20000 $HOME $BACKUP_DIR
 ```
 
@@ -3991,7 +4003,7 @@ Aliases can save us a lot of typing, and hence a lot of typing mistakes.
 The name of an alias can be the same as an existing command,
 so we can use them to change the behavior of a familiar command:
 
-```shell
+```bash
 # Long list format including hidden files
 alias ls='ls -la'
 
@@ -4019,13 +4031,13 @@ If your shell does not include that information and you would like to see it,
 or if your current prompt is too long and you'd like to shorten it,
 you can include a line in your `.bashrc` file that defines `$PS1`:
 
-```shell
+```bash
 PS1="\u \w $ "
 ```
 
 This changes the prompt to include your username and current working directory:
 
-```shell
+```bash
 amira ~/Desktop $
 ```
 
@@ -4064,7 +4076,7 @@ we have created several files that we won't need again.
 We can clean them up with the following commands;
 briefly explain what each line does.
 
-```shell
+```bash
 $ cd ~/zipf
 $ for file in $(find . -name "*.bak")
 > do
@@ -4078,15 +4090,15 @@ $ rm -r results
 
 Imagine you have a shell script called `script.sh` that contains:
 
-```shell
+```bash
 head -n $2 $1
 tail -n $3 $1
 ```
 
 With this script in your `data` directory, you type the following command:
 
-```shell
-bash script.sh '*.txt' 1 1
+```bash
+$ bash script.sh '*.txt' 1 1
 ```
 
 Which of the following outputs would you expect to see?
@@ -4104,7 +4116,7 @@ directory and a filename extension as its arguments, and prints
 out the name of the file with the most lines in that directory
 with that extension. For example:
 
-```shell
+```bash
 $ bash longest.sh data/ txt
 ```
 
@@ -4117,12 +4129,12 @@ For this question, consider your `data` directory once again.
 Explain what each of the following three scripts would do when run as
 `bash script1.sh *.txt`, `bash script2.sh *.txt`, and `bash script3.sh *.txt` respectively.
 
-```shell
+```bash
 # script1.sh
 echo *.*
 ```
 
-```shell
+```bash
 # script2.sh
 for filename in $1 $2 $3
 > do
@@ -4130,7 +4142,7 @@ for filename in $1 $2 $3
 > done
 ```
 
-```shell
+```bash
 # script3.sh
 echo $@.txt
 ```
@@ -4204,7 +4216,7 @@ but do *not* contain the word `machine`?
 
 Write a short explanatory comment for the following shell script:
 
-```shell
+```bash
 wc -l $(find . -name '*.dat') | sort -n
 ```
 
@@ -4304,7 +4316,7 @@ print(__name__)
 When we run this file directly,
 it will print `__main__`:
 
-```shell
+```bash
 $ python print_name.py
 ```
 
@@ -4317,14 +4329,20 @@ or from the Python interpreter,
 it will print the name of the file,
 i.e. `print_name`.
 
-```shell
+```bash
 $ python
+```
+```text
 Python 3.8.1 | packaged by conda-forge |  
 (default, Jan 29 2020, 14:55:04)
 [GCC 7.3.0] on linux
 Type "help", "copyright", "credits" or "license" 
 for more information.
+```
+```python
 >>> import print_name
+```
+```text
 print_name
 ```
 
@@ -4418,7 +4436,7 @@ in the `parser.add_argument` calls.
 If we run `script_template.py` at the command line
 the output shows us that `argparse` has successfully handled the arguments:
 
-```shell
+```bash
 $ python script_template.py in.csv out.png
 ```
 
@@ -4429,7 +4447,7 @@ Output file: out.png
 
 It also displays an error message if we give the program invalid arguments:
 
-```shell
+```bash
 $ python script_template.py in.csv
 ```
 
@@ -4443,7 +4461,7 @@ Finally,
 it automatically generates help information
 (which we can get using the `-h` option):
 
-```shell
+```bash
 $ python script_template.py -h
 ```
 
@@ -4547,25 +4565,26 @@ Let's try this out in an interactive Python session.
 (Remember, do not type the `>>>` prompt:
 Python provides this for us.)
 
-```shell
+```bash
 $ python
+```
+```text
 Python 3.8.1 | packaged by conda-forge | 
 (default, Jan 29 2020, 14:55:04)
 [GCC 7.3.0] on linux
 Type "help", "copyright", "credits" or "license" 
 for more information.
+```
+```python
 >>> import script_template
 >>> script_template.__doc__
 ```
-
 ```text
 'One-line description of what the script does.'
 ```
-
-```shell
+```python
 >>> help(script_template)
 ```
-
 ```text
 Help on module script_template:
 
@@ -4592,7 +4611,7 @@ we can use it to check Zipf's Law for our collection of classic English novels.
 We start by moving the template into the directory
 where we store our runnable programs (Section \@ref(getting-started-organize)):
 
-```shell
+```bash
 $ mv script_template.py ~/zipf/bin
 ```
 
@@ -4652,9 +4671,7 @@ import csv
 
 
 def collection_to_csv(collection):
-    """
-    Write out a collection of items and counts in csv format.
-    """
+    """Write out collection of items and counts in csv format."""
     collection = collection.most_common()
     writer = csv.writer(sys.stdout)
     writer.writerows(collection)
@@ -4671,9 +4688,7 @@ in which case we display the whole collection:
 
 ```python
 def collection_to_csv(collection, num=None):
-    """
-    Write out a collection of items and counts in csv format.
-    """
+    """Write out collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -4706,21 +4721,19 @@ and put it in the `bin` subdirectory of the `zipf` project:
 
 ```python
 """
-Count the occurrences of all words in a text and output 
-them in CSV format.
+Count the occurrences of all words in a text 
+and output them in CSV format.
 """
 
 import sys
-import string
 import argparse
+import string
 import csv
 from collections import Counter
 
 
 def collection_to_csv(collection, num=None):
-    """
-    Write out a collection of items and counts in csv format.
-    """
+    """Write out collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -4729,9 +4742,7 @@ def collection_to_csv(collection, num=None):
 
 
 def count_words(reader):
-    """
-    Count the occurrence of each word in a string.
-    """
+    """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
     stripped = [word.strip(string.punctuation) for word in chunks]
@@ -4751,10 +4762,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=str, 
                         help='Input file name')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to N most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -4768,7 +4777,7 @@ we can redirect with `>`.
 
 Let's take our program for a test drive:
 
-```shell
+```bash
 $ python bin/countwords.py data/dracula.txt -n 10
 ```
 
@@ -4814,10 +4823,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'), 
                         nargs='?', default='-', 
                         help='Input file name')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to N most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -4841,7 +4848,7 @@ After these changes,
 we can create a pipeline like this
 to count the words in the first 500 lines of a book:
 
-```shell
+```bash
 $ head -500 data/dracula.txt | python bin/countwords.py --num 10
 ```
 
@@ -4889,24 +4896,23 @@ we want to save the word counts to a CSV file for further analysis and plotting.
 Let's create a subdirectory to hold our results 
 (following the structure described in Section \@ref(getting-started-structure)):
 
-```shell
+```bash
 $ mkdir results
 ```
 
 and then save the counts for various files:
 
-```shell
-$ python bin/countwords.py data/dracula.txt > \
-  results/dracula.csv
+```bash
+$ python bin/countwords.py data/dracula.txt > results/dracula.csv
 ```
 
-```shell
-$ python bin/countwords.py data/moby_dick.txt > \
+```bash
+$ python bin/countwords.py data/moby_dick.txt >
   results/moby_dick.csv
 ```
 
-```shell
-$ python bin/countwords.py data/jane_eyre.txt > \
+```bash
+$ python bin/countwords.py data/jane_eyre.txt >
   results/jane_eyre.csv
 ```
 
@@ -4918,7 +4924,10 @@ Using the same template as before,
 we can write a program called `collate.py`:
 
 ```python
-"""Combine multiple word count CSV-files into a single cumulative count."""
+"""
+Combine multiple word count CSV-files
+into a single cumulative count.
+"""
 
 import sys
 import csv
@@ -4927,9 +4936,7 @@ from collections import Counter
 
 
 def collection_to_csv(collection, num=None):
-    """
-    Write out a collection of items and counts in csv format.
-    """
+    """Write out collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -4938,9 +4945,7 @@ def collection_to_csv(collection, num=None):
 
 
 def update_counts(reader, word_counts):
-    """
-    Update word counts with data from another reader/file.
-    """
+    """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
@@ -4958,10 +4963,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', 
                         help='Input file names')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to n most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -4986,8 +4989,8 @@ we will look in the exercises at how to combine this with reading from standard 
 Let's give `collate.py` a try
 (using `-n 10` to limit the number of lines of output):
 
-```shell
-$ python bin/collate.py results/dracula.csv \
+```bash
+$ python bin/collate.py results/dracula.csv
   results/moby_dick.csv results/jane_eyre.csv -n 10
 ```
 
@@ -5017,16 +5020,15 @@ Let's create a file called `utilities.py` in the `bin` directory
 that looks like this:
 
 ```python
-"""
-Collection of commonly used functions.
-"""
+"""Collection of commonly used functions."""
 
 import sys
 import csv
 
+
 def collection_to_csv(collection, num=None):
     """
-    Write out a collection of items and counts in csv format.
+    Write out collection of items and counts in csv format.
 
     Parameters
     ----------
@@ -5056,20 +5058,19 @@ After making this change,
 
 ```python
 """
-Count the occurrences of all words in a text and 
-write them to a CSV-file.
+Count the occurrences of all words in a text
+and write them to a CSV-file.
 """
 
-import re
 import argparse
+import string
 from collections import Counter
-import utilities
+
+import utilities as util
 
 
 def count_words(reader):
-    """
-    Count the occurrence of each word in a string.
-    """
+    """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
     stripped = [word.strip(string.punctuation) for word in chunks]
@@ -5081,7 +5082,7 @@ def count_words(reader):
 def main(args):
     """Run the command line program."""
     word_counts = count_words(args.infile)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
@@ -5089,10 +5090,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'), 
                         nargs='?', default='-', 
                         help='Input file name')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to n most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -5101,19 +5100,19 @@ if __name__ == '__main__':
 
 ```python
 """
-Combine multiple word count CSV-files into a single cumulative count.
+Combine multiple word count CSV-files
+into a single cumulative count.
 """
 
 import csv
 import argparse
 from collections import Counter
-import utilities
+
+import utilities as util
 
 
 def update_counts(reader, word_counts):
-    """
-    Update word counts with data from another reader/file.
-    """
+    """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
@@ -5124,17 +5123,15 @@ def main(args):
     for fn in args.infiles:
         with open(fn, 'r') as reader:
             update_counts(reader, word_counts)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', 
                         help='Input file names')
-    parser.add_argument(
-      '-n', '--num', type=int, default=None,
-      help='Limit output to n most frequent words'
-    )
+    parser.add_argument('-n', '--num', type=int, default=None,
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -5249,15 +5246,21 @@ When and why is this useful?
 A Python library called [glob][glob] can be used to create a list of files
 matching a pattern, much like the `ls` shell command.
 
-```shell
+```bash
 $ python
+```
+```text
 Python 3.8.1 | packaged by conda-forge | 
 (default, Jan 29 2020, 14:55:04)
 [GCC 7.3.0] on linux
 Type "help", "copyright", "credits" or "license" 
 for more information.
+```
+```python
 >>> import glob
 >>> glob.glob('data/*.txt')
+```
+```text
 ['data/moby_dick.txt', 'data/sense_and_sensibility.txt',
 'data/sherlock_holmes.txt', 'data/time_machine.txt',
 'data/frankenstein.txt', 'data/dracula.txt',
@@ -5272,7 +5275,7 @@ in that directory ending in that suffix.
 
 The help information for the new script should read as follows,
 
-```shell
+```bash
 $ python bin/my_ls.py -h
 ```
 
@@ -5291,7 +5294,7 @@ optional arguments:
 
 and an example of the output would be:
 
-```shell
+```bash
 $ python bin/my_ls.py data/ txt
 ```
 
@@ -5316,21 +5319,27 @@ and prints that information to the screen.
 
 Hint: String objects have a `count` method, e.g:
 
-```shell
+```bash
 $ python
+```
+```text
 Python 3.8.1 | packaged by conda-forge | 
 (default, Jan 29 2020, 14:55:04)
 [GCC 7.3.0] on linux
 Type "help", "copyright", "credits" or "license" 
 for more information.
+```
+```python
 >>> "Hello! Are you ok?".count('!')
+```
+```text
 1
 ```
 
 When you're done,
 the script should be able to accept an input file,
 
-```shell
+```bash
 $ python bin/sentence_endings.py data/dracula.txt
 ```
 
@@ -5342,7 +5351,7 @@ Number of ! is 752
 
 or standard input:
 
-```shell
+```bash
 $ head -500 data/dracula.txt | python bin/sentence_endings.py
 ```
 
@@ -5371,8 +5380,8 @@ The script should:
 When you are done,
 generate a plot of the word counts for *Jane Eyre*:
 
-```shell
-$ python bin/plotcounts.py results/jane_eyre.csv \
+```bash
+$ python bin/plotcounts.py results/jane_eyre.csv
   --outfile results/jane_eyre.png
 ```
 
@@ -5475,6 +5484,7 @@ it looks like this:
 """Plot word counts."""
 
 import argparse
+
 import pandas as pd
 
 
@@ -5514,7 +5524,7 @@ and `[options]` provide whatever additional information that subcommand needs.
 Using this syntax,
 the first thing we need to do is configure Git.\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
 
-```shell
+```bash
 $ git config --global user.name "Amira Khan"
 $ git config --global user.email "amira@zipf.org"
 ```
@@ -5536,7 +5546,7 @@ However,
 we can re-run them any time if we want to change our details.
 We can also check our settings using the `--list` option:
 
-```shell
+```bash
 $ git config --list
 ```
 
@@ -5557,13 +5567,13 @@ core.ignorecase=true
 > If we forget a Git command,
 > we can list which ones are available using `--help`:
 >
-> ```shell
+> ```bash
 > $ git --help
 > ```
 >
 > This option also gives us more information about specific commands:
 >
-> ```shell
+> ```bash
 > $ git config --help
 > ```
 
@@ -5573,7 +5583,7 @@ Once Git is configured,
 we can use it to track work on our Zipf's Law project.
 First, we need to make sure we are in the top-level directory of our project:
 
-```shell
+```bash
 $ cd ~/zipf
 $ ls
 ```
@@ -5587,7 +5597,7 @@ i.e.,
 a place where Git can store versions of our files.
 We do this using the `init` command with `.` to mean "the current directory":
 
-```shell
+```bash
 $ git init .
 ```
 
@@ -5597,7 +5607,7 @@ Initialized empty Git repository in /Users/amira/zipf/.git/
 
 `ls` seems to show that nothing has changed:
 
-```shell
+```bash
 $ ls
 ```
 
@@ -5608,7 +5618,7 @@ bin     data    results
 But if we add the `-a` flag to show everything,
 we can see that Git has created a hidden directory within `zipf` called `.git`:\index{Git!.git directory}
 
-```shell
+```bash
 $ ls -a
 ```
 
@@ -5623,7 +5633,7 @@ we will lose that history.
 We can check that everything is set up correctly
 by asking Git to tell us the status of our project:
 
-```shell
+```bash
 $ git status
 ```
 
@@ -5671,26 +5681,26 @@ To do this,
 we add things to the list of things Git is tracking using `git add`.\index{Git commands!add}
 We can do this for single files:
 
-```shell
+```bash
 $ git add bin/countwords.py
 ```
 
 or entire directories:
 
-```shell
+```bash
 $ git add bin
 ```
 
 The easiest thing to do with an existing project
 is to tell Git to add everything in the current directory using `.`:
 
-```shell
+```bash
 $ git add .
 ```
 
 We can then check the repository's status to see what files have been added:
 
-```shell
+```bash
 $ git status
 ```
 
@@ -5752,13 +5762,13 @@ but the tracked files haven't been \gref{committed}{commit}\index{Git commands!c
 (i.e., saved permanently in our project's history).
 We can do this using `git commit`:
 
-```shell
-$ git commit -m "Add scripts, novels, word counts, and word rank plot"
+```bash
+$ git commit -m "Add scripts, novels, word counts, and plots"
 ```
 
 ```text
 [master (root-commit) 31a216a] Add scripts, novels, word 
-    counts, and word rank plot
+    counts, and plots
  17 files changed, 240337 insertions(+)
  create mode 100644 bin/book_summary.sh
  create mode 100644 bin/collate.py
@@ -5795,7 +5805,7 @@ to remind us later what we did and why.
 we put it in double quotes because it contains spaces.)
 If we run `git status` now:
 
-```shell
+```bash
 $ git status
 ```
 
@@ -5856,8 +5866,8 @@ Following [these guidelines][desc-cmt-msgs] will help:
 > introduced in Chapter \@ref(bash-basics) instead,
 > execute the following command:
 >
-> ```shell
-> git config --global core.editor "nano -w"
+> ```bash
+> $ git config --global core.editor "nano -w"
 > ```
 
 ## Saving and Tracking Changes {#git-cmdline-changes}
@@ -5867,7 +5877,7 @@ The process to build on top of it is similar:
 first add the file, then commit changes.
 Let's check that we're in the right directory:
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -5877,15 +5887,15 @@ $ pwd
 
 Let's use `plotcounts.py` to plot the word counts in `results/dracula.csv`:
 
-```shell
-python bin/plotcounts.py results/dracula.csv \
-  --outfile results/dracula.png
+```bash
+$ python bin/plotcounts.py results/dracula.csv --outfile
+  results/dracula.png
 ```
 
 If we check the status of our repository again,
 Git tells us that we have a new file:
 
-```shell
+```bash
 $ git status
 ```
 
@@ -5904,7 +5914,7 @@ present (use "git add" to track)
 Git isn't tracking this file yet because we haven't told it to.
 Let's do that with `git add` and then commit our change:
 
-```shell
+```bash
 $ git add results/dracula.png
 $ git commit -m "Add plot of word counts for 'Dracula'"
 ```
@@ -5918,7 +5928,7 @@ $ git commit -m "Add plot of word counts for 'Dracula'"
 If we want to know what we've done recently,
 we can display the project's history using `git log`:\index{Git commands!log}
 
-```shell
+```bash
 $ git log
 ```
 
@@ -5933,7 +5943,7 @@ commit 31a216a6119de9a8d2233e5e275af9a2967415af
 Author: Amira Khan <amira@zipf.org>
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
-    Add scripts, novels, word counts, and word rank plot
+    Add scripts, novels, word counts, and plots
 ```
 
 `git log` lists all commits made to a repository in reverse chronological order.
@@ -5956,7 +5966,7 @@ which makes it hard to see what is happening with the other ten thousand or so w
 
 An alternative way to visually evaluate Zipf's Law is
 to plot the word frequency against rank on log-log axes.
-Let's change the line:
+Let's change the section:
 
 ```python
     ax = df.plot.scatter(x='word_frequency', 
@@ -5979,7 +5989,7 @@ to put `'rank'` on the y-axis and add `loglog=True`:
 When we run `git status` now,
 it prints:
 
-```shell
+```bash
 $ git status
 ```
 
@@ -6004,7 +6014,7 @@ let's review the changes using `git diff`.\index{Git commands!diff}\index{diff (
 This command shows us the differences between the current state of our repository
 and the most recently saved version:
 
-```shell
+```bash
 $ git diff
 ```
 
@@ -6019,9 +6029,8 @@ index 13e7f38..a6005cd 100644
      df['rank'] = df['word_frequency'].rank(ascending=False, 
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', 
-                     y='inverse_rank',
-+    ax = df.plot.scatter(x='word_frequency', 
+     ax = df.plot.scatter(x='word_frequency', 
+-                         y='inverse_rank',
 +                         y='rank', loglog=True,
                           figsize=[12, 6], 
                           grid=True, 
@@ -6047,21 +6056,6 @@ If we break it down into pieces:
     plus or minus signs have not been changed, but are provided around the lines
     that have been changed to add context.
 
-To be specific,
-this `diff` tells us that this line in the file was removed:
-
-```python
-    df.plot.scatter(x='word_frequency', 
-                    y='inverse_rank',
-```
-
-and this line was added:
-
-```python
-    df.plot.scatter(x='word_frequency', 
-                    y='rank', loglog=True,
-```
-
 Git's default is to compare line by line,
 but it can be instructive to instead compare word by word
 using the `--word-diff` or `--color-words` options.
@@ -6070,8 +6064,8 @@ These are particularly useful when running `git diff` on prose rather than code.
 After reviewing our change
 we can commit it just as we did before:
 
-```shell
-$ git commit -m "Edit to plot frequency against rank on log-log axes"
+```bash
+$ git commit -m "Plot frequency against rank on log-log axes"
 ```
 
 ```text
@@ -6086,7 +6080,7 @@ Whoops:
 we forgot to add the file to the set of things we want to commit.
 Let's do that and then try the commit again:
 
-```shell
+```bash
 $ git add bin/plotcounts.py
 $ git status
 ```
@@ -6099,12 +6093,12 @@ Changes to be committed:
         modified:   bin/plotcounts.py
 ```
 
-```shell
-$ git commit -m "Edit to plot frequency against rank on log-log axes"
+```bash
+$ git commit -m "Plot frequency against rank on log-log axes"
 ```
 
 ```text
-[master b5176bf] Edit to plot frequency against rank on log-log axes
+[master b5176bf] Plot frequency against rank on log-log axes
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
@@ -6131,9 +6125,9 @@ $ git commit -m "Edit to plot frequency against rank on log-log axes"
 
 Let's take a look at our new plot (Figure \@ref(fig:git-cmdline-loglog-plot)):
 
-```shell
-python bin/plotcounts.py results/dracula.csv \
-  --outfile results/dracula.png
+```bash
+$ python bin/plotcounts.py results/dracula.csv --outfile
+  results/dracula.png
 ```
 
 <div class="figure" style="text-align: center">
@@ -6165,8 +6159,7 @@ Changes not staged for commit:
 
         modified:   results/dracula.png
 
-no changes added to commit (use "git add" and/or 
-"git commit -a")
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 Since `results/dracula.png` is a binary file rather than text,
@@ -6192,7 +6185,7 @@ If we are sure we want to save all of our changes,
 we can add and commit in a single command
 by giving `git commit` the `-a` option:
 
-```shell
+```bash
 $ git commit -a -m "Update dracula plot"
 ```
 
@@ -6252,7 +6245,7 @@ and then copy that URL.
 Next,
 let's go into the local `zipf` repository and run this command:
 
-```shell
+```bash
 $ cd ~/zipf
 $ git remote add origin https://github.com/amira-khan/zipf.git
 ```
@@ -6269,7 +6262,7 @@ so we will stick with it.
 We can check that the command has worked by running `git remote -v`
 (where the `-v` option is short for **v**erbose):
 
-```shell
+```bash
 $ git remote -v
 ```
 
@@ -6287,7 +6280,7 @@ Now that we have configured a remote,
 we can \gref{push}{git_push} the work we have done so far\index{Git commands!push}\index{push (in Git)}
 to the repository on GitHub:
 
-```shell
+```bash
 $ git push origin master
 ```
 
@@ -6320,7 +6313,7 @@ along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline
 We can also \gref{pull}{git_pull} changes\index{Git commands!pull}\index{pull (in Git)}
 from the remote repository to the local one:
 
-```shell
+```bash
 $ git pull origin master
 ```
 
@@ -6366,7 +6359,7 @@ commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
 Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
-    Edit to plot frequency against rank on log-log axes
+    Plot frequency against rank on log-log axes
 
 commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa
 Author: Amira Khan <amira@zipf.org>
@@ -6378,7 +6371,7 @@ commit 31a216a6119de9a8d2233e5e275af9a2967415af
 Author: Amira Khan <amira@zipf.org>
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
-    Add scripts, novels, word counts, and word rank plot
+    Add scripts, novels, word counts, and plots
 ```
 
 The commit in which we changed `plotcounts.py`
@@ -6391,8 +6384,8 @@ If we add the `-p` option (short for **p**atch),
 we get the same kind of details `git diff` provides
 to describe the changes in each commit:
 
-```shell
-git log -p
+```bash
+$ git log -p
 ```
 
 The first part of the output is shown below;
@@ -6466,10 +6459,9 @@ index a6005cd..04e824d 100644
      df['rank'] = df['word_frequency'].rank(ascending=False, 
                                             method='max')
 -    df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency',    
--                    y='rank', loglog=True,
-+    ax = df.plot.scatter(x='word_frequency', 
-+                         y='inverse_rank',
+     ax = df.plot.scatter(x='word_frequency',
+-                         y='inverse_rank',    
++                         y='rank', loglog=True,
                           figsize=[12, 6], 
                           grid=True, 
                           xlim=args.xlim)
@@ -6497,7 +6489,7 @@ and gives us the difference to the previous saved version.
 We can also look at the differences between two saved versions
 by separating their identifiers with two dots `..` like this:
 
-```shell
+```bash
 $ git diff HEAD~1..HEAD~2
 ```
 
@@ -6512,10 +6504,9 @@ index a6005cd..13e7f38 100644
      df['rank'] = df['word_frequency'].rank(ascending=False, 
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', 
--                    y='rank', loglog=True,
-+    ax = df.plot.scatter(x='word_frequency', 
-+                         y='inverse_rank',
+     ax = df.plot.scatter(x='word_frequency', 
+-                         y='inverse_rank',
++                         y='rank', loglog=True,
                           figsize=[12, 6], 
                           grid=True, 
                           xlim=args.xlim)
@@ -6526,7 +6517,7 @@ If we want to see the changes made in a particular commit,
 we can use `git show`\index{Git commands!show}
 with an identifier and a file joined by a colon:
 
-```shell
+```bash
 $ git show HEAD~1:bin/plotcounts.py
 ```
 
@@ -6535,7 +6526,7 @@ ommit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
 Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
-    Edit to plot frequency against rank on log-log axes
+    Plot frequency against rank on log-log axes
 
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
 index 13e7f38..a6005cd 100644
@@ -6547,10 +6538,9 @@ index 13e7f38..a6005cd 100644
      df['rank'] = df['word_frequency'].rank(ascending=False,
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
--    df.plot.scatter(x='word_frequency', 
--                    y='inverse_rank',
-+    ax = df.plot.scatter(x='word_frequency', 
-+                         y='rank', loglog=True,
+     ax = df.plot.scatter(x='word_frequency',
+-                         y='inverse_rank',
++                         y='rank', loglog=True, 
                           figsize=[12, 6], 
                           grid=True, 
                           xlim=args.xlim)
@@ -6566,7 +6556,7 @@ before we add it or commit it.
 `git status` tells us that the file has been changed,
 but those changes haven't been \gref{staged}{git_stage}:\index{Git!staging area}
 
-```shell
+```bash
 $ git status
 ```
 
@@ -6582,13 +6572,12 @@ Changes not staged for commit:
 
         modified:   bin/plotcounts.py
 
-no changes added to commit (use "git add" and/or 
-"git commit -a")
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 We can put things back the way they were in the last saved revision using `git checkout`:\index{Git commands!checkout}
 
-```shell
+```bash
 $ git checkout HEAD bin/plotcounts.py
 $ git status
 ```
@@ -6600,7 +6589,7 @@ Your branch is up to date with 'origin/master'.
 nothing to commit, working tree clean
 ```
 
-```shell
+```bash
 $ head -12 bin/plotcounts.py | tail -4
 ```
 
@@ -6608,11 +6597,11 @@ $ head -12 bin/plotcounts.py | tail -4
     df['rank'] = df['word_frequency'].rank(ascending=False, 
                                            method='max')
     df['inverse_rank'] = 1 / df['rank']
-    df.plot.scatter(x='word_frequency', 
-                    y='rank', loglog=True,
-                    figsize=[12, 6], 
-                    grid=True, 
-                    xlim=args.xlim)
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='rank', loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)
 ```
 
 As its name suggests,
@@ -6621,7 +6610,7 @@ In this case,
 we told Git to recover the version of the file saved in the most recent commit.
 We can use a specific commit identifier rather than `HEAD` to go back as far as we want:
 
-```shell
+```bash
 $ git checkout 65b7e61 bin/countwords.py
 ```
 
@@ -6630,7 +6619,7 @@ Doing this does not change the history:
 Instead,
 it replaces the content of the file with the old content:
 
-```shell
+```bash
 $ git status
 ```
 
@@ -6648,7 +6637,7 @@ Notice that the changes have already been added to the staging area for new comm
 If we change our mind again,
 we can return the file to the state of the most recent commit using `git checkout`:
 
-```shell
+```bash
 $ git checkout HEAD bin/countwords.py
 $ git status
 ```
@@ -6663,7 +6652,7 @@ Changes to be committed:
         modified:   bin/plotcounts.py
 ```
 
-```shell
+```bash
 $ head -12 bin/plotcounts.py | tail -4
 ```
 
@@ -6671,11 +6660,11 @@ $ head -12 bin/plotcounts.py | tail -4
     df['rank'] = df['word_frequency'].rank(ascending=False, 
                                            method='max')
     df['inverse_rank'] = 1 / df['rank']
-    df.plot.scatter(x='word_frequency', 
-                    y='rank', loglog=True,
-                    figsize=[12, 6], 
-                    grid=True, 
-                    xlim=args.xlim)
+    ax = df.plot.scatter(x='word_frequency', 
+                         y='rank', loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)
 ```
 
 Since we didn't commit the change
@@ -6730,7 +6719,7 @@ Amira would also like to keep some notes on [Heaps' Law][heaps-law].
 Despite her colleagues' concerns,
 Amira creates a `heaps-law` project inside her `zipf` project as follows:
 
-```shell
+```bash
 $ cd ~/zipf         # go into zipf directory, which is a Git repo
 $ mkdir heaps-law   # make a subdirectory zipf/heaps-law
 $ cd heaps-law      # go into heaps-law subdirectory
@@ -6766,21 +6755,21 @@ Which output do you find easiest to understand?
 
 Which command(s) below would save changes to `myfile.txt` to a local Git repository?
 
-1. ```shell
+1. ```bash
    $ git commit -m "Add recent changes"
    ```
 
-2. ```shell
+2. ```bash
    $ git init myfile.txt
    $ git commit -m "Add recent changes"
    ```
 
-3. ```shell
+3. ```bash
    $ git add myfile.txt
    $ git commit -m "Add recent changes"
    ```
 
-4. ```shell
+4. ```bash
    $ git commit -m myfile.txt "Add recent changes"
    ```
 
@@ -6865,9 +6854,9 @@ to recover the last committed version of her script?
 
 What is the output of the last command in the sequence below?
 
-```
+```bash
 $ cd zipf
-$ echo "Zipf's Law describes the relationship between the 
+$ echo "Zipf's Law describes the relationship between the
   frequency and rarity of words." > motivation.txt
 $ git add motivation.txt
 $ echo "Zipf's Law suggests the frequency of any word is 
@@ -7006,7 +6995,7 @@ unless and until we explicitly combine them with work done in another branch.
 
 We can see what branches exist in a repository using this command:\index{Git commands!branch}
 
-```shell
+```bash
 $ git branch
 ```
 
@@ -7028,7 +7017,7 @@ we foreshadowed some experimental changes that we could try and make to `plotcou
 Making sure our project directory is our working directory,
 we can inspect our current `plotcounts.py`:
 
-```shell
+```bash
 $ cd ~/zipf
 $ cat bin/plotcounts.py
 ```
@@ -7037,25 +7026,34 @@ $ cat bin/plotcounts.py
 """Plot word counts."""
 
 import argparse
+
 import pandas as pd
 
 
 def main(args):
     """Run the command line program."""
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
-    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
+    ax = df.plot.scatter(x='word_frequency',
+                         y='rank', loglog=True,
+                         figsize=[12, 6],
+                         grid=True,
+                         xlim=args.xlim)
     ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?', default='-',
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str,
+                        default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+    parser.add_argument('--xlim', type=float, nargs=2,
+                        metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     args = parser.parse_args()
     main(args)
@@ -7079,13 +7077,13 @@ we can decide if we want to merge our changes back into the `master` branch.
 To create a new branch called `fit`,
 we run:
 
-```shell
+```bash
 $ git branch fit
 ```
 
 We can check that the branch exists by running `git branch` again:
 
-```shell
+```bash
 $ git branch
 ```
 
@@ -7101,7 +7099,7 @@ creating a new directory doesn't automatically move us into that directory.)
 As a further check,
 let's see what our repository's status is:
 
-```shell
+```bash
 $ git status
 ```
 
@@ -7113,7 +7111,7 @@ nothing to commit, working directory clean
 To switch to our new branch we can use the `checkout` command\index{Git commands!checkout}
 that we first saw in Section \@ref(git-cmdline-restore):
 
-```shell
+```bash
 $ git checkout fit
 $ git branch
 ```
@@ -7211,9 +7209,11 @@ the negative log likelihood function is:
 ```python
 import numpy as np
 
+
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
-    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1)
+                          - (1/(counts + 1))**(beta - 1)))
     return likelihood
 ```
 
@@ -7226,10 +7226,13 @@ we use Brent's Method with \(1 < \beta \leq 4\).
 ```python
 from scipy.optimize import minimize_scalar
 
+
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -7273,6 +7276,7 @@ we can update `plotcounts.py` so the entire script reads as follows:
 """Plot word counts."""
 
 import argparse
+
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize_scalar
@@ -7280,14 +7284,17 @@ from scipy.optimize import minimize_scalar
 
 def nlog_likelihood(beta, counts):
     """Log-likelihood function."""
-    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
+    likelihood = - np.sum(np.log((1/counts)**(beta - 1)
+                          - (1/(counts + 1))**(beta - 1)))
     return likelihood
 
 
 def get_power_law_params(word_counts):
     """Get the power law parameters."""
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -7297,7 +7304,8 @@ def set_plot_params(param_file):
     """Set the matplotlib rc parameters."""
     if param_file:
         with open(param_file, 'r') as reader:
-            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+            param_dict = yaml.load(reader,
+                                   Loader=yaml.BaseLoader)
     else:
         param_dict = {}
     for param, value in param_dict.items():
@@ -7328,17 +7336,26 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
 
 def main(args):
     """Run the command line program."""
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
-    ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                         figsize=[12, 6], grid=True, xlim=args.xlim)
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
+    ax = df.plot.scatter(x='word_frequency',
+                         y='rank', loglog=True,
+                         figsize=[12, 6],
+                         grid=True,
+                         xlim=args.xlim)
 
-    alpha = get_power_law_params(df['word_frequency'].to_numpy())
+    word_counts = df['word_frequency'].to_numpy()
+    alpha = get_power_law_params(word_counts)
     print('alpha:', alpha)
-    # Since the ranks are already sorted, we can take the last one instead of
-    # computing which row has the highest rank
+    
+    # Since the ranks are already sorted, we can take the last
+    # one instead of computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
-    # Use the range of the data as the boundaries when drawing the power law curve
+    
+    # Use the range of the data as the boundaries
+    # when drawing the power law curve
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
@@ -7348,11 +7365,14 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?', default='-',
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str,
+                        default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+    parser.add_argument('--xlim', type=float, nargs=2,
+                        metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     args = parser.parse_args()
     main(args)
@@ -7361,8 +7381,9 @@ if __name__ == '__main__':
 We can then run the script to obtain the \(\alpha\) value for *Dracula*
 and a new plot with a line fitted.
 
-```shell
-python bin/plotcounts.py results/dracula.csv --outfile results/dracula.png
+```bash
+$ python bin/plotcounts.py results/dracula.csv --outfile
+  results/dracula.png
 ```
 
 ```text
@@ -7383,7 +7404,7 @@ Figure \@ref(fig:git-advanced-dracula-fit) shows the plot.
 The script appears to be working as we'd like,
 so we can go ahead and commit our changes to the `fit` development branch:
 
-```shell
+```bash
 $ git add bin/plotcounts.py results/dracula.png
 $ git commit -m "Added fit to word count data"
 ```
@@ -7396,7 +7417,7 @@ $ git commit -m "Added fit to word count data"
 If we look at the last couple of commits using `git log`,
 we see our most recent change:
 
-```shell
+```bash
 $ git log --oneline -n 2
 ```
 
@@ -7408,7 +7429,7 @@ ffb5cee adding ignore file
 (We use `--oneline` and `-n 2` to shorten the log display.)
 But if we switch back to the `master` branch:
 
-```shell
+```bash
 $ git checkout master
 $ git branch
 ```
@@ -7421,7 +7442,7 @@ $ git branch
 and look at the log,
 our change is not there:
 
-```shell
+```bash
 $ git log --oneline -n 2
 ```
 
@@ -7434,7 +7455,7 @@ We have not lost our work:
 it just isn't included in this branch.
 We can prove this by switching back to the `fit` branch and checking the log again:
 
-```shell
+```bash
 $ git checkout fit
 $ git log --oneline -n 2
 ```
@@ -7467,14 +7488,16 @@ def get_power_law_params(word_counts):
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
 ```
 
-```shell
+```bash
 $ git add bin/plotcounts.py
 $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```
@@ -7489,7 +7512,7 @@ if we want to see the differences between two branches,
 we can use `git diff` with the same double-dot `..` syntax\index{Git commands!diff}
 used to view differences between two revisions:
 
-```shell
+```bash
 $ git diff master..fit
 ```
 
@@ -7508,7 +7531,8 @@ index 4501eaf..d57fd63 100644
 +
 +def nlog_likelihood(beta, counts):
 +    """Log-likelihood function."""
-+    likelihood = - np.sum(np.log((1/counts)**(beta - 1) - (1/(counts + 1))**(beta - 1)))
++    likelihood = - np.sum(np.log((1/counts)**(beta - 1)
++                          - (1/(counts + 1))**(beta - 1)))
 +    return likelihood
 +
 +
@@ -7527,8 +7551,10 @@ index 4501eaf..d57fd63 100644
 +      PLoS ONE 11(1): e0147073.
 +      https://doi.org/10.1371/journal.pone.0147073
 +    """
-+    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-+                          args=word_counts, method='brent')
++    mle = minimize_scalar(nlog_likelihood,
++                          bracket=(1 + 1e-10, 4),
++                          args=word_counts,
++                          method='brent')
 +    beta = mle.x
 +    alpha = 1 / (beta - 1)
 +    return alpha
@@ -7538,7 +7564,8 @@ index 4501eaf..d57fd63 100644
 +    """Set the matplotlib rc parameters."""
 +    if param_file:
 +        with open(param_file, 'r') as reader:
-+            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
++            param_dict = yaml.load(reader,
++                                   Loader=yaml.BaseLoader)
 +    else:
 +        param_dict = {}
 +    for param, value in param_dict.items():
@@ -7569,18 +7596,26 @@ index 4501eaf..d57fd63 100644
 
  def main(args):
 +    """Run the command line program.""" 
-     df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
--    df['inverse_rank'] = 1 / df['rank']
-     ax = df.plot.scatter(x='word_frequency', y='rank', loglog=True,
-                          figsize=[12, 6], grid=True, xlim=args.xlim)
+     df = pd.read_csv(args.infile, header=None,
+                      names=('word', 'word_frequency'))
+     df['rank'] = df['word_frequency'].rank(ascending=False,
+                                            method='max')
+     ax = df.plot.scatter(x='word_frequency',
+                          y='rank', loglog=True,
+                          figsize=[12, 6],
+                          grid=True,
+                          xlim=args.xlim)
 +
-+    alpha = get_power_law_params(df['word_frequency'].to_numpy())
++    word_counts = df['word_frequency'].to_numpy()
++    alpha = get_power_law_params(word_counts)
 +    print('alpha:', alpha)
-+    # Since the ranks are already sorted, we can take the last one instead of
-+    # computing which row has the highest rank
++
++    # Since the ranks are already sorted, we can take the last
++    # one instead of computing which row has the highest rank
 +    max_rank = df['rank'].to_numpy()[-1]
-+    # Use the range of the data as the boundaries when drawing the power law curve
++
++    # Use the range of the data as the boundaries
++    # when drawing the power law curve
 +    curve_xmin = df['word_frequency'].min()
 +    curve_xmax = df['word_frequency'].max()
 +
@@ -7619,7 +7654,7 @@ but the third option is simple, fast, and reliable.\index{Git commands!merge}\in
 To start,
 let's make sure we're in the `master` branch:
 
-```shell
+```bash
 $ git checkout master
 $ git branch
 ```
@@ -7632,14 +7667,15 @@ $ git branch
 We can now merge the changes in the `fit` branch into our current branch
 with a single command:
 
-```shell
+```bash
 $ git merge fit
 ```
 
 ```text
 Updating d77bc5c..db1d03f
 Fast-forward
- bin/plotcounts.py   |  76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ bin/plotcounts.py   |  76 ++++++++++++++++++++++++++++++++++++++
+                           ++++++++++++++++++++++-
  results/dracula.png | Bin 22351 -> 31378 bytes
  2 files changed, 75 insertions(+), 1 deletion(-)
 ```
@@ -7648,7 +7684,7 @@ Merging doesn't change the source branch `fit`,
 but once the merge is done,
 all of the changes made in `fit` are also in the history of `master`:
 
-```shell
+```bash
 $ git log --oneline -n 4
 ```
 
@@ -7669,7 +7705,7 @@ Now that we have merged all of the changes from `fit` into `master`
 there is no need to keep the `fit` branch,
 so we can delete it:
 
-```shell
+```bash
 $ git branch -d fit
 ```
 
@@ -7700,7 +7736,7 @@ To start,
 let's add a `README.md` file to the `master` branch
 containing just the project's title:
 
-```shell
+```bash
 $ nano README.md
 $ cat README.md
 ```
@@ -7709,7 +7745,7 @@ $ cat README.md
 # Zipf's Law
 ```
 
-```shell
+```bash
 $ git add README.md
 $ git commit -m "Initial commit of README file"
 ```
@@ -7725,7 +7761,7 @@ to work on improving the documentation for our code.
 We will use `git checkout -b` to create a new branch and switch to it
 in a single step:
 
-```shell
+```bash
 $ git checkout -b docs
 ```
 
@@ -7733,7 +7769,7 @@ $ git checkout -b docs
 Switched to a new branch 'docs'
 ```
 
-```shell
+```bash
 $ git branch
 ```
 
@@ -7752,7 +7788,7 @@ These Zipf's Law scripts tally the occurrences of words in text files
 and plot each word's rank versus its frequency.
 ```
 
-```
+```bash
 $ git add README.md
 $ git commit -m "Added repository overview"
 ```
@@ -7766,7 +7802,7 @@ In order to create a conflict,
 let's switch back to the `master` branch.
 The changes we made in the `docs` branch are not present:
 
-```shell
+```bash
 $ git checkout master
 ```
 
@@ -7774,7 +7810,7 @@ $ git checkout master
 Switched to branch 'master'
 ```
 
-```shell
+```bash
 $ cat README.md
 ```
 
@@ -7806,11 +7842,11 @@ We now have two branches,
 `master` and `docs`,
 in which we have changed `README.md` in different ways:
 
-```shell
+```bash
 $ git diff docs..master
 ```
 
-```text
+```diff
 diff --git a/README.md b/README.md
 index fd3de28..cf317ea 100644
 --- a/README.md
@@ -7828,7 +7864,7 @@ index fd3de28..cf317ea 100644
 When we try to merge `docs` into `master`,
 Git doesn't know which of these changes to keep:
 
-```shell
+```bash
 $ git merge docs master
 ```
 
@@ -7842,7 +7878,7 @@ If we look in `README.md`,
 we see that Git has kept both sets of changes,
 but has marked which came from where:
 
-```shell
+```bash
 $ cat README.md
 ```
 
@@ -7873,7 +7909,7 @@ Whatever we do,
 we must remove the `>>>`, `===`, and `<<<` markers.
 Let's combine the two sets of changes:
 
-```shell
+```bash
 $ nano README.md
 $ cat README.md
 ```
@@ -7892,7 +7928,7 @@ and plot each word's rank versus its frequency.
 We can now add the file and commit the change,
 just as we would after any other edit:
 
-```shell
+```bash
 $ git add README.md
 $ git commit -m "Merging README additions"
 ```
@@ -7904,7 +7940,7 @@ $ git commit -m "Merging README additions"
 Our branch's history now shows a single sequence of commits,
 with the `master` changes on top of the earlier `docs` changes:
 
-```shell
+```bash
 $ git log --oneline -n 4
 ```
 
@@ -7918,7 +7954,7 @@ b07c14a Initial commit of README file
 If we want to see what really happened,
 we can add the `--graph` option to `git log`:
 
-```shell
+```bash
 $ git log --oneline --graph -n 4
 ```
 
@@ -7933,7 +7969,7 @@ $ git log --oneline --graph -n 4
 
 At this point we can delete the `docs` branch:
 
-```shell
+```bash
 $ git branch -d docs
 ```
 
@@ -8080,7 +8116,7 @@ We will modify Sami's prompt to include their desktop user ID (`sami`)
 and working directory (initially `~`)
 to make it easier to follow what's happening:\index{Git commands!clone}
 
-```shell
+```bash
 sami:~ $ git clone https://github.com/sami-virtanen/zipf.git
 ```
 
@@ -8098,7 +8134,7 @@ i.e., `zipf`.
 When Sami goes into this directory and runs `ls` and `git log`,
 they see that all of the project's files and history are there:
 
-```shell
+```bash
 sami:~ $ cd zipf
 sami:~/zipf $ ls
 ```
@@ -8107,7 +8143,7 @@ sami:~/zipf $ ls
 README.md       bin             data             results
 ```
 
-```shell
+```bash
 sami:~/zipf $ git log --oneline -n 4
 ```
 
@@ -8121,7 +8157,7 @@ b07c14a Initial commit of README file
 Sami also sees that Git has automatically created a \gref{remote}{git_remote} for their repository\index{Git!remote}\index{remote (in Git)}
 that points back at their repository on GitHub:
 
-```shell
+```bash
 sami:~/zipf $ git remote -v
 ```
 
@@ -8133,7 +8169,7 @@ origin  https://github.com/sami-virtanen/zipf.git (push)
 Sami can pull changes from their fork and push work back there,
 but needs to do one more thing before getting the changes from Amira's repository:
 
-```shell
+```bash
 sami:~/zipf $ git remote add upstream https://github.com/amira-khan/zipf.git
 sami:~/zipf $ git remote -v
 ```
@@ -8157,7 +8193,7 @@ for example,
 that Amira has modified the project's `README.md` file to add Sami as a contributor.
 (Again, we show Amira's user ID and working directory in her prompt to make it clear who's doing what).
 
-```shell
+```bash
 amira:~/zipf $ pwd
 ```
 
@@ -8165,7 +8201,7 @@ amira:~/zipf $ pwd
 /Users/amira/zipf
 ```
 
-```shell
+```bash
 amira:~/zipf $ nano README.md
 amira:~/zipf $ cat README.md
 ```
@@ -8184,7 +8220,7 @@ and plot each word's rank versus its frequency.
 
 Amira commits her changes and pushes them to *her* repository on GitHub:
 
-```shell
+```bash
 amira:~/zipf $ git commit -a -m "Adding Sami as a contributor"
 ```
 
@@ -8193,7 +8229,7 @@ amira:~/zipf $ git commit -a -m "Adding Sami as a contributor"
  1 file changed, 1 insertion(+)
 ```
 
-```shell
+```bash
 amira:~/zipf $ git push origin master
 ```
 
@@ -8215,7 +8251,7 @@ Since Sami has created a remote that points at Amira's GitHub repository,
 though,
 they can easily pull those changes to their desktop:
 
-```shell
+```bash
 sami:~/zipf $ git pull upstream master
 ```
 
@@ -8279,7 +8315,7 @@ To see this in action,
 suppose Sami wants to add their email address to `README.md`.
 They create a new branch and switch to it:
 
-```shell
+```bash
 sami:~/zipf $ git checkout -b adding-email
 ```
 
@@ -8289,7 +8325,7 @@ Switched to a new branch 'adding-email'
 
 then make a change and commit it:
 
-```shell
+```bash
 sami:~/zipf $ nano README.md
 sami:~/zipf $ git commit -a -m "Adding my email address"
 ```
@@ -8299,11 +8335,11 @@ sami:~/zipf $ git commit -a -m "Adding my email address"
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
-```shell
+```bash
 sami:~/zipf $ git diff -r HEAD~1
 ```
 
-```text
+```diff
 diff --git a/README.md b/README.md
 index a55a9bb..eb24a3f 100644
 --- a/README.md
@@ -8320,7 +8356,7 @@ Sami's changes are only in their local repository.
 They cannot create a pull request until those changes are on GitHub,
 so they push their new branch to their repository on GitHub:
 
-```shell
+```bash
 sami:~/zipf $ git push origin adding-email
 ```
 
@@ -8486,7 +8522,7 @@ The icon at the top of the PR's page changes text and color to show that the mer
 To get those changes from GitHub to her desktop repository,
 Amira uses `git pull`:
 
-```shell
+```bash
 amira:~/zipf $ git pull origin master
 ```
 
@@ -8511,7 +8547,7 @@ though,
 if they also use `git pull` from their `upstream` repository (i.e., Amira's repository)
 so that they're sure to get any other changes that Amira may have merged:
 
-```shell
+```bash
 sami:~/zipf $ git checkout master
 ```
 
@@ -8521,7 +8557,7 @@ Your branch is ahead of 'origin/master' by 1 commit.
   (use "git push" to publish your local commits)
 ```
 
-```shell
+```bash
 sami:~/zipf $ git pull upstream master
 ```
 
@@ -8872,7 +8908,7 @@ We therefore recommend using one that other groups have drafted, refined, and te
 The [Contributor Covenant][covenant] is relevant for projects being developed online,
 such as those based on GitHub.
 
-```shell
+```bash
 $ cat CONDUCT.md
 ```
 
@@ -9148,7 +9184,7 @@ many projects have survived and thrived without this safeguard.
 We therefore recommend that projects choose the MIT license,
 it places the fewest restrictions on future action.
 
-```shell
+```bash
 $ cat LICENSE.md
 ```
 
@@ -10277,7 +10313,7 @@ please see Section \@ref(getting-started-install-software) for Windows installa
 To start,
 let's create a file called `Makefile` in the root of our project:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
@@ -10290,6 +10326,9 @@ The second and third lines form a \gref{build rule}{build_rule}:\index{build rul
 the \gref{target}{build_target}\index{build target} of the rule is `results/moby_dick.csv`,
 its single \gref{prerequisite}{prerequisite} is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
+There is no limit on the length of statement lines in Makefiles,
+but to aid readability we have used a backslash (`\`) character to split 
+what was quite a long third line.
 
 The target and prerequisite tell Make what depends on what.
 The line below them describes the \gref{recipe}{build_recipe}\index{build recipe}
@@ -10304,7 +10343,7 @@ and put the output in a CSV file in the `results` directory".
 
 To test our rule, run this command in the shell:
 
-```shell
+```bash
 $ make
 ```
 
@@ -10356,7 +10395,7 @@ make: `results/moby_dick.csv' is up to date.
 We can check that it is telling the truth by listing the files with their timestamps,
 ordered by how recently they have been updated:
 
-```shell
+```bash
 $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 ```
 
@@ -10388,7 +10427,7 @@ Our Makefile isn't particularly helpful so far,
 though it *does* already document exactly how to reproduce one specific result.
 Let's add another rule to it:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
@@ -10414,7 +10453,7 @@ which is already up to date.
 To update something else,
 we need to tell Make specifically what we want:
 
-```shell
+```bash
 $ make results/jane_eyre.csv
 ```
 
@@ -10431,7 +10470,7 @@ We do this by creating a \gref{phony target}{phony_target}\index{build target!ph
 that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
-```make
+```makefile
 all : results/moby_dick.csv results/jane_eyre.csv
 ```
 
@@ -10458,7 +10497,7 @@ so that we can start afresh.
 By convention this target is called `clean`,\index{build target!clean}
 and ours looks like this:
 
-```make
+```makefile
 # Remove all generated files.
 clean :
 	rm -f results/*
@@ -10469,7 +10508,7 @@ if it is present,
 `rm` won't complain if the files we have told it to remove are already gone.
 If we now run:
 
-```shell
+```bash
 $ make clean
 ```
 
@@ -10482,7 +10521,7 @@ Phony targets are very useful,
 but there is a catch.
 Try doing this:
 
-```shell
+```bash
 $ mkdir clean
 $ make clean
 ```
@@ -10500,7 +10539,7 @@ so no recipes are executed.
 We can unconfuse Make by putting this line at the top of Makefile
 to explicitly state which targets are phony:
 
-```make
+```makefile
 .PHONY : all clean
 ```
 
@@ -10514,7 +10553,7 @@ we should regenerate our results.
 To get Make to do that,
 we can add the program to the prerequisites for each result:
 
-```make
+```makefile
 # ...phony targets...
 
 # Regenerate results for "Moby Dick"
@@ -10534,7 +10573,7 @@ Alternatively,
 since `all` is the first target in our Makefile,
 Make will use it if we just type `make` on its own:
 
-```shell
+```bash
 $ touch bin/countwords.py
 $ make
 ```
@@ -10569,7 +10608,7 @@ The solution is the same one we use in programs:
 define and use variables.
 Let's create names for the word-counting script and the command used to run it:
 
-```make
+```makefile
 # ...phony targets...
 
 COUNT=bin/countwords.py
@@ -10620,7 +10659,7 @@ The first step is to use the very cryptic expression `$@` in the rule's recipe
 to mean "the target of the rule".
 It lets us turn this:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) data/moby_dick.txt > results/moby_dick.csv
@@ -10628,7 +10667,7 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 
 into this:
 
-```make
+```makefile
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) data/moby_dick.txt > $@
@@ -10645,7 +10684,7 @@ The next step is to replace the explicit list of prerequisites in the recipe
 with the automatic variable `$^`,
 which means "all the prerequisites in the rule":
 
-```make
+```makefile
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $^ > $@
@@ -10658,7 +10697,7 @@ When Make expands the recipe,
 the resulting command tries to process the program `bin/countwords.py`
 as if it was a data file:
 
-```shell
+```bash
 python bin/countwords.py \
   data/moby_dick.txt bin/countwords.py > results/moby_dick.csv
 ```
@@ -10667,7 +10706,7 @@ Make solves this problem with another automatic variable `$<`,
 which mean "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
-```make
+```makefile
 # Regenerate results for "Jane Eyre"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
@@ -10683,7 +10722,7 @@ which matches zero or more characters in a filename.
 Whatever matches `%` in the target also matches in the prerequisites,
 so the rule:
 
-```make
+```makefile
 results/%.csv : data/%.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
 ```
@@ -10694,14 +10733,15 @@ which is why `$<` and `$@` are needed.
 
 With this rule in place, our entire Makefile is reduced to:
 
-```
+```makefile
 .PHONY: all clean
 
 COUNT=bin/countwords.py
 RUN_COUNT=python $(COUNT)
 
 # Regenerate all results.
-all : results/moby_dick.csv results/jane_eyre.csv results/time_machine.csv
+all : results/moby_dick.csv results/jane_eyre.csv \
+  results/time_machine.csv
 
 # Regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
@@ -10715,7 +10755,7 @@ clean :
 To test our shortened Makefile,
 let's delete all of the results files:
 
-```shell
+```bash
 $ make clean
 ```
 
@@ -10725,8 +10765,8 @@ rm -f results/*
 
 and then recreate them:
 
-```shell
-$ make  # Same as `make all` as "all" is the first Makefile target
+```bash
+$ make  # Same as `make all` as "all" is the first target
 ```
 
 ```text
@@ -10742,8 +10782,7 @@ We can still rebuild individual files if we want,
 since Make will take the target filename we give on the command line
 and see if a pattern rule matches it:
 
-```shell
-$ # The touch command updates a file's timestamp
+```bash
 $ touch data/jane_eyre.txt
 $ make results/jane_eyre.csv
 ```
@@ -10767,13 +10806,13 @@ We can define a variable called `RESULTS`
 to be a list of all the results files
 using the same wildcards we would use in the shell:
 
-```make
+```makefile
 RESULTS=results/*.csv
 ```
 
 We can then rewrite `all` to depend on that list:
 
-```make
+```makefile
 # Regenerate all results.
 all : $(RESULTS)
 ```
@@ -10788,7 +10827,7 @@ What we really want is to generate the list of results files
 based on the list of books in the `data/` directory.
 We can create that list using Make's `wildcard` function:\index{functions (in Make)}
 
-```make
+```makefile
 DATA=$(wildcard data/*.txt)
 ```
 
@@ -10802,7 +10841,7 @@ To check that this line does the right thing,
 we can add another phony target called `settings`
 that uses the shell command `echo` to print the names and values of our variables:
 
-```make
+```makefile
 .PHONY: all clean settings
 
 # ...everything else...
@@ -10815,7 +10854,7 @@ settings :
 
 Let's run this:
 
-```shell
+```bash
 $ make settings
 ```
 
@@ -10837,13 +10876,13 @@ because Make shows us the command it's going to run before running it.
 Putting `@` before the command in the recipe prevents this,
 which makes the output easier to read:
 
-```make
+```makefile
 settings :
 	@echo COUNT: $(COUNT)
 	@echo DATA: $(DATA)
 ```
 
-```shell
+```bash
 $ make settings
 ```
 
@@ -10880,14 +10919,14 @@ which is our list of books' names.
 
 Let's check the `RESULTS` variable by adding another command to the `settings` target:
 
-```make
+```makefile
 settings :
 	@echo COUNT: $(COUNT)
 	@echo DATA: $(DATA)
 	@echo RESULTS: $(RESULTS)
 ```
 
-```shell
+```bash
 $ make settings
 ```
 
@@ -10909,7 +10948,7 @@ Since the phony target `all` depends on `$(RESULTS)`
 (i.e., all the files whose names appear in the variable `RESULTS`)
 we can regenerate all the results in one step:
 
-```shell
+```bash
 $ make clean
 ```
 
@@ -10917,8 +10956,8 @@ $ make clean
 rm -f results/*.csv
 ```
 
-```shell
-$ make  # Same as `make all` since "all" is the first target in the Makefile
+```bash
+$ make  # Same as `make all` since "all" is the first target
 ```
 
 ```text
@@ -10951,7 +10990,7 @@ we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
 We could create another phony target called `help` that prints a list of available commands:
 
-```make
+```makefile
 .PHONY: all clean help settings
 
 # ...other definitions...
@@ -10973,7 +11012,7 @@ and then extract and display those comments when asked to.
 We'll use `##` (a double comment marker) to indicate the lines we want displayed
 and `grep` (Section \@ref(bash-advanced-find)) to pull these lines out of the file:
 
-```make
+```makefile
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
@@ -11004,7 +11043,7 @@ help :
 
 Let's test:
 
-```shell
+```bash
 $ make help
 ```
 
@@ -11027,7 +11066,7 @@ that depends on the results generated by `countwords.py`.
 To create it,
 we add or change these lines in our Makefile:
 
-```make
+```makefile
 # ...phony targets and previous variable definitions...
 
 COLLATE=bin/collate.py
@@ -11070,7 +11109,7 @@ Note that there is no `>` needed before the `$@`
 because `plotcounts.py` default is to write to a file
 rather than to `stdout`.
 
-```make
+```makefile
 # ...phony targets and previous variable definitions...
 
 PLOT=bin/plotcounts.py
@@ -11094,7 +11133,7 @@ settings :
 
 Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
 
-```shell
+```bash
 $ make all
 ```
 
@@ -11120,7 +11159,7 @@ It is a good habit to do this rather than using the asterisk wildcard to remove 
 since you might manually place files in the results directory
 and forget that these will be cleaned up when you run `make clean`.
 
-```make
+```makefile
 # ...phony targets and previous variable definitions...
 
 ## clean : remove all generated files.
@@ -11151,7 +11190,7 @@ If you want to go deeper,
 
 Our `Makefile` currently reads as follows:
 
-```make
+```makefile
 .PHONY: all clean help settings
 
 COUNT=bin/countwords.py
@@ -11215,7 +11254,7 @@ What does this do and why is it useful?
 ### Print the title and author {#automate-ex-print}
 
 The build rule for regenerating the result for any book is currently:
-```make
+```makefile
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
 	python $(COUNT) $< > $@
@@ -11229,7 +11268,7 @@ and don't forget to update the settings build rule to include the `book_summary.
 If you've successfully made those changes,
 you should get the following output for *Dracula*:
 
-```shell
+```bash
 $ make -B results/dracula.csv
 ```
 
@@ -11250,7 +11289,7 @@ but does *not* regenerate `results/collated.csv`.
 
 What is wrong with writing the rule for `results/collated.csv` like this:
 
-```make
+```makefile
 results/collated.csv : results/*.csv
 	python $(COLLATE) $^ > $@
 ```
@@ -11262,10 +11301,11 @@ isn't the biggest problem.)
 
 We can format the documentation in our Makefile more readably using this command:
 
-```make
+```makefile
 ## help : show all commands.
 help :
-	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
+	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' \
+	| column -t -s ':'
 ```
 
 Using `man` and online search,
@@ -11445,7 +11485,8 @@ mpl.matplotlib_fname()
 ```
 
 ```text
-/Users/amira/opt/anaconda3/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc
+/Users/amira/opt/anaconda3/lib/python3.7/site-packages/matplotlib/
+mpl-data/matplotlibrc
 ```
 
 In this case the file is located in the Python installation directory (`anaconda3`).
@@ -11458,23 +11499,24 @@ The default size of the X and Y axis labels is "medium",
 as is the size of the tick labels:
 
 ```yaml
-#axes.labelsize       : medium  ## fontsize of the x any y labels
-#xtick.labelsize      : medium  ## fontsize of the tick labels
-#ytick.labelsize      : medium  ## fontsize of the tick labels
+#axes.labelsize    : medium  ## fontsize of the x any y labels
+#xtick.labelsize   : medium  ## fontsize of the tick labels
+#ytick.labelsize   : medium  ## fontsize of the tick labels
 ```
 
 We can uncomment those lines and change the sizes to "large" and "extra large":
 
 ```yaml
-axes.labelsize       : x-large  ## fontsize of the x any y labels
-xtick.labelsize      : large    ## fontsize of the tick labels
-ytick.labelsize      : large    ## fontsize of the tick labels
+axes.labelsize     : x-large  ## fontsize of the x any y labels
+xtick.labelsize    : large    ## fontsize of the tick labels
+ytick.labelsize    : large    ## fontsize of the tick labels
 ```
 and then re-generate the Jane Eyre plot with bigger labels
 (Figure \@ref(fig:configuration-jane-eyre-big-labels)):
 
 ```python
-$ python bin/plotcounts.py results/jane_eyre.csv --outfile results/jane_eyre.png
+$ python bin/plotcounts.py results/jane_eyre.csv --outfile
+  results/jane_eyre.png
 ```
 
 <div class="figure" style="text-align: center">
@@ -11534,11 +11576,11 @@ mpl.get_configdir()
 
 Once we've created the new sub-directory,
 
-```shell
+```bash
 $ mkdir /Users/amira/.matplotlib/stylelib
 ```
 
-we can add a new file called `/Users/amira/.matplotlib/stylelib/big-labels.mplstyle`
+we can add a new file called `big-labels.mplstyle`
 that has the same YAML format as the `matplotlibrc` file:
 
 ```python
@@ -11620,7 +11662,7 @@ we save the parameters we want to change in a file inside our project directory.
 We can call it anything,
 but `plotparams.yml` seems like it will be easy to remember:
 
-```python
+```yaml
 axes.labelsize   : x-large  ## fontsize of the x any y labels
 xtick.labelsize  : large    ## fontsize of the tick labels
 ytick.labelsize  : large    ## fontsize of the tick labels
@@ -11631,10 +11673,8 @@ instead of the user-specific style sheet directory,
 we need to add one new option to `plotcounts.py` to load it:
 
 ```python
-parser.add_argument(
-  '--plotparams', type=str, default=None,
-  help='YAML file containing matplotlib parameters'
-)
+parser.add_argument('--plotparams', type=str, default=None,
+                    help='matplotlib parameters (YAML file)')
 ```
 
 We can use Python's `yaml` library to read that file:
@@ -11662,7 +11702,9 @@ for (param, value) in param_dict.items():
 
 ```python
 """Plot word counts."""
+
 import argparse
+
 import yaml
 import numpy as np
 import pandas as pd
@@ -11682,7 +11724,8 @@ def set_plot_params(param_file):
     """Set the matplotlib parameters."""
     if param_file:
         with open(param_file, 'r') as reader:
-            param_dict = yaml.load(reader, Loader=yaml.BaseLoader)
+            param_dict = yaml.load(reader,
+                                   Loader=yaml.BaseLoader)
     else:
         param_dict = {}
     for param, value in param_dict.items():
@@ -11706,14 +11749,16 @@ def main(args):
                          grid=True, 
                          xlim=args.xlim)
 
-    alpha, beta = get_power_law_params(df['word_frequency'].to_numpy())
+    word_counts = df['word_frequency'].to_numpy()
+    alpha, beta = get_power_law_params(word_counts)
     print('alpha:', alpha)
 
-    # Since the ranks are already sorted, we can take the last one instead of
-    # computing which row has the highest rank
+    # Since the ranks are already sorted, we can take the last
+    # one instead of computing which row has the highest rank
     max_rank = df['rank'].to_numpy()[-1]
 
-    # Use the range of the data as the boundaries when drawing the power law curve
+    # Use the range of the data as the boundaries
+    # when drawing the power law curve
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
@@ -11725,8 +11770,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=argparse.FileType('r'), 
-                        nargs='?',
-                        default='-', 
+                        nargs='?', default='-', 
                         help='Word count csv file name')
     parser.add_argument('--outfile', type=str, 
                         default='plotcounts.png',
@@ -11735,7 +11779,7 @@ if __name__ == '__main__':
                         metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     parser.add_argument('--plotparams', type=str, default=None,
-                        help='YAML file with matplotlib parameters')
+                        help='matplotlib parameters (YAML file)')
     args = parser.parse_args()
     main(args)
 ```
@@ -11770,7 +11814,7 @@ but knowing what it entails allows us to make a conscious, thoughtful choice.
 In the `Makefile` created in Chapter \@ref(automate),
 the build rule involving `plotcounts.py` was defined as:
 
-```make
+```makefile
 ## results/collated.png: plot the collated results.
 results/collated.png : results/collated.csv
 	python $(PLOT) $< --outfile $@
@@ -12017,7 +12061,7 @@ The answer is that programmers can \gref{raise}{raise_exception} them explicitly
 for number in [1, 0, -1]:
     try:
         if number < 0:
-            raise ValueError(f'negative values not supported: {number}')
+            raise ValueError(f'no negatives: {number}')
         print(number)
     except ValueError as error:
         print(f'exception: {error}')
@@ -12026,7 +12070,7 @@ for number in [1, 0, -1]:
 ```text
 1
 0
-exception: negative values not supported: -1
+exception: no negatives: -1
 ```
 
 We can define our own exception types,
@@ -12077,8 +12121,8 @@ for example,
 if we try to read a file that does not exist,
 the `open` function throws a `FileNotFoundError`:
 
-```shell
-python bin/collate.py results/none.csv results/dracula.csv
+```bash
+$ python bin/collate.py results/none.csv results/dracula.csv
 ```
 
 ```text
@@ -12086,15 +12130,16 @@ Traceback (most recent call last):
   File "bin/collate.py", line 27, in <module>
     main(args)
   File "bin/collate.py", line 17, in main
-    with open(file_name, 'r') as reader:
-FileNotFoundError: [Errno 2] No such file or directory: 'results/none.csv'
+    with open(fname, 'r') as reader:
+FileNotFoundError: [Errno 2] No such file or directory:
+'results/none.csv'
 ```
 
 But what happens if we try to read a file that exists,
 but was not created by `countwords.py`?
 
 
-```shell
+```bash
 $ python bin/collate.py Makefile
 ```
 
@@ -12117,16 +12162,16 @@ raise an error with a useful explanation to what went wrong.
 We could achieve this by wrapping the call to `open` in a `try/except` clause:
 
 ```python
-for file_name in args.infiles:
+for fname in args.infiles:
     try:
-        with open(file_name, 'r') as reader:
+        with open(fname, 'r') as reader:
             update_counts(reader, word_counts)
     except ValueError as e:
-        print(f'{file_name} is not a CSV file.')
+        print(f'{fname} is not a CSV file.')
         print(f'ValueError: {e}')
 ```
 
-```shell
+```bash
 $ python bin/collate.py Makefile
 ```
 
@@ -12144,14 +12189,14 @@ A more precise approach in this case would be to throw an exception
 only if some other kind of file is specified as an input:
 
 ```python
-for file_name in args.infiles:
-    if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV file.')
-    with open(file_name, 'r') as reader:
+for fname in args.infiles:
+    if fname[-4:] != '.csv':
+        raise OSError(f'{fname} is not a CSV file.')
+    with open(fname, 'r') as reader:
         update_counts(reader, word_counts)
 ```
 
-```shell
+```bash
 $ python bin/collate.py Makefile
 ```
 
@@ -12160,7 +12205,7 @@ Traceback (most recent call last):
   File "bin/collate.py", line 29, in <module>
     main(args)
   File "bin/collate.py", line 18, in main
-    raise OSError(f'{file_name} is not a valid CSV file of word counts.')
+    raise OSError(f'{fname} is not a CSV file.')
 OSError: Makefile is not a CSV file.
 ```
 
@@ -12255,7 +12300,7 @@ this message could confuse someone who has comma-separated values saved in a `.t
 An even better message would therefore be:
 
 ```text
-OSError: The filename must end in `.csv`.
+OSError: File must end in .csv
 ```
 
 This message tells us exactly what the criteria are to avoid the error.
@@ -12307,40 +12352,40 @@ That last suggestion deserves a little elaboration.\index{error message!lookup t
 Most people write error messages directly in their code:
 
 ```python
-if file_name[-4:] != '.csv':
-    raise OSError(f'{file_name}: The filename must end in `.csv`')
+if fname[-4:] != '.csv':
+    raise OSError(f'{fname}: File must end in .csv')
 ```
 
 A better approach is to put all the error messages in a dictionary:
 
 ```python
-ERROR_MESSAGES = {
-    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-    'config_corrupted' : 'Configuration file {config_name} corrupted',
+ERRORS = {
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    'config_corrupted' : '{config_name} corrupted',
     # ...more error messages...
-}
+    }
 ```
 
 and then only use messages from that dictionary:
 
 ```python
-if file_name[-4:] != '.csv':
-    raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+if fname[-4:] != '.csv':
+    raise OSError(ERRORS['not_csv_suffix'].format(fname=fname))
 ```
 
 Doing this makes it much easier to ensure that messages are consistent.
 It also makes it much easier to give messages in the user's preferred language:
 
 ```python
-ERROR_MESSAGES = {
+ERRORS = {
   'en' : {
-    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-    'config_corrupted' : 'Configuration file {config_name} corrupted',
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    'config_corrupted' : '{config_name} corrupted',
     # ...more error messages in English...
   },
   'fr' : {
-    'not_csv_file_suffix' : '{file_name}: Le nom du fichier doit se terminer par `.csv`',
-    'config_corrupted' : f'Fichier de configuration {config_name} corrompu',
+    'not_csv_suffix' : '{fname}: Doit se terminer par .csv',
+    'config_corrupted' : f'{config_name} corrompu',
     # ...more error messages in French...
   }
   # ...other languages...
@@ -12350,7 +12395,7 @@ ERROR_MESSAGES = {
 The error report is then looked up and formatted as:
 
 ```python
-ERROR_MESSAGES[user_language]['not_csv_file_suffix'].format(file_name=file_name)
+ERRORS[user_language]['not_csv_suffix'].format(fname=fname)
 ```
 
 where `user_language` is a two-letter code for the user's preferred language.
@@ -12379,12 +12424,13 @@ We would probably wind up with code like this:
 ```python
 if LOG_LEVEL >= 0:
     print('Processing files...')
-for file_name in args.infiles:
+for fname in args.infiles:
     if LOG_LEVEL >= 1:
-        print(f'Reading in {file_name}...')
-    if file_name[-4:] != '.csv':
-        raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-    with open(file_name, 'r') as reader:
+        print(f'Reading in {fname}...')
+    if fname[-4:] != '.csv':
+        msg = ERRORS['not_csv_suffix'].format(fname=fname)
+        raise OSError(msg)
+    with open(fname, 'r') as reader:
         if LOG_LEVEL >= 1:
             print(f'Computing word counts...')
         update_counts(reader, word_counts)
@@ -12440,11 +12486,12 @@ import logging
 
 
 logging.info('Processing files...')
-for file_name in args.infiles:
-    logging.debug(f'Reading in {file_name}...')
-    if file_name[-4:] != '.csv':
-        raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-    with open(file_name, 'r') as reader:
+for fname in args.infiles:
+    logging.debug(f'Reading in {fname}...')
+    if fname[-4:] != '.csv':
+        msg = ERRORS['not_csv_suffix'].format(fname=fname)
+        raise OSError(msg)
+    with open(fname, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
 ```
@@ -12560,18 +12607,21 @@ such that the script now reads:
 
 ```python
 """
-Combine multiple word count CSV-files into a single cumulative count.
+Combine multiple word count CSV-files
+into a single cumulative count.
 """
+
 import csv
 import argparse
 from collections import Counter
 import logging
-import utilities
+
+import utilities as util
 
 
-ERROR_MESSAGES = {
-  'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-}
+ERRORS = {
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    }
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -12582,21 +12632,22 @@ def main(args):
     """Run the command line program."""
     word_counts = Counter()
     logging.info('Processing files...')
-    for file_name in args.infiles:
-        logging.debug(f'Reading in {file_name}...')
-        if file_name[-4:] != '.csv':
-            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-        with open(file_name, 'r') as reader:
+    for fname in args.infiles:
+        logging.debug(f'Reading in {fname}...')
+        if fname[-4:] != '.csv':
+            msg = ERRORS['not_csv_suffix'].format(fname=fname)
+            raise OSError(msg)
+        with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', 
                         help='Input file names')
     parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -12619,7 +12670,8 @@ Once finished,
 running `collate.py` with and without the `-v` flag should produce the following output:
 
 ```bash
-$ python bin/collate.py results/dracula.csv results/moby_dick.csv -n 5
+$ python bin/collate.py results/dracula.csv results/moby_dick.csv
+  -n 5
 ```
 ```text
 the,22559
@@ -12630,7 +12682,8 @@ a,7629
 ```
 
 ```bash
-$ python bin/collate.py results/dracula.csv results/moby_dick.csv -n 5 -v
+$ python bin/collate.py results/dracula.csv results/moby_dick.csv
+  -n 5 -v
 ```
 ```text
 INFO:root:Processing files...
@@ -12674,7 +12727,7 @@ the default name of `collate.log`.
 
 ### Error catalogs {#errors-ex-catalog}
 
-In Section \@ref(errors-messages) we started to define an error catalog called `ERROR_MESSAGES`.
+In Section \@ref(errors-messages) we started to define an error catalog called `ERRORS`.
 
 1. Read Appendix \@ref(style-pep8) and explain why we have used capital letters
    for the name of the catalog.
@@ -12686,7 +12739,7 @@ In Section \@ref(errors-messages) we started to define an error catalog called 
 3. There's a good chance we will eventually want to use the error messages we've defined
    in other scripts besides `collate.py`.
    To avoid duplication,
-   move `ERROR_MESSAGES` to the `utilities` module that was first created in
+   move `ERRORS` to the `utilities` module that was first created in
    Section \@ref(py-rse-py-scripting-modules).
 
 ### Tracebacks {#errors-ex-traceback}
@@ -12859,9 +12912,11 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     assert type(word_counts) == np.ndarray, \
-           'Input must be a numerical (numpy) array of word counts'
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=word_counts, method='brent')
+        'Input must be a numerical (numpy) array of word counts'
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=word_counts,
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -12905,7 +12960,7 @@ in order to write a unit test for the `count_words` function,
 we could use a piece of text small enough for us to count word frequencies by hand.
 Let's add the poem "Risk" by Anaïs Nin to our data:
 
-```shell
+```bash
 $ mkdir test_data
 $ cat test_data/risk.txt
 ```
@@ -12926,10 +12981,11 @@ We can then count the words by hand to construct the expected result:
 ```python
 from collections import Counter
 
+
 risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1,
-  'then': 1, 'day': 1, 'came': 1, 'when': 1, 'remain': 1, 'tight':
-  1, 'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1, 'painful': 1,
-  'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
+  'then': 1, 'day': 1, 'came': 1, 'when': 1, 'remain': 1,
+  'tight': 1, 'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
+  'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
 expected_result = Counter(risk_poem_counts)
 ```
 
@@ -12938,6 +12994,7 @@ and use an assertion to check if it is what we expected:
 
 ```python
 import countwords
+
 
 with open('test_data/risk.txt', 'r') as reader:
     actual_result = countwords.count_words(reader)
@@ -12967,7 +13024,9 @@ we can create a `test_zipfs.py` script that contains the test we just developed:
 
 ```python
 from collections import Counter
+
 import countwords
+
 
 def test_word_count():
     """Test the counting of words.
@@ -12992,18 +13051,19 @@ It then runs the tests in these files and summarizes their results.
 (If we only want to run the tests in a particular file,
 we can use the command `pytest path/to/test_file.py`.)
 
-```shell
+```bash
 $ pytest
 ```
 ```text
-====================== test session starts =======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+===================== test session starts ======================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
+pluggy-0.12.0
 rootdir: /Users/amira
 collected 1 item                                                               
 
-bin/test_zipfs.py .                                        [100%]
+bin/test_zipfs.py .                                      [100%]
 
-======================= 1 passed in 0.02s ========================
+====================== 1 passed in 0.02s =======================
 ```
 
 To add more tests,
@@ -13030,6 +13090,7 @@ with a constant of proportionality set to a hypothetical maximum word frequency 
 ```python
 import numpy as np
 
+
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1)) 
 ```
@@ -13053,9 +13114,11 @@ def get_power_law_params(word_counts):
       https://doi.org/10.1371/journal.pone.0147073
     """
     assert type(word_counts) == np.ndarray, \
-           'Input must be a numerical (numpy) array of word counts'
-    mle = minimize_scalar(nlog_likelihood, bracket=(1 + 1e-10, 4),
-                          args=(word_counts), method='brent')
+        'Input must be a numerical (numpy) array of word counts'
+    mle = minimize_scalar(nlog_likelihood,
+                          bracket=(1 + 1e-10, 4),
+                          args=(word_counts),
+                          method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
     return alpha
@@ -13065,11 +13128,13 @@ should give us a value of 1.0.
 To test this, we can add a second test to `test_zipfs.py`,
 
 ```python
-import numpy as np
 from collections import Counter
+
+import numpy as np
 
 import plotcounts
 import countwords
+
 
 def test_alpha():
     """Test the calculation of the alpha parameter.
@@ -13090,26 +13155,28 @@ def test_alpha():
     expected_alpha = 1.0
     assert actual_alpha == expected_alpha
 
+
 def test_word_count():
-    ...as before...
+    #...as before...
 ```
 
 Let's re-run both of our tests:
 
-```shell
+```bash
 $ pytest
 ```
 
 ```text
-====================== test session starts =======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+===================== test session starts ======================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
+pluggy-0.12.0
 rootdir: /Users/amira
 collected 2 items                                                              
 
-bin/test_zipfs.py F.                                       [100%]
+bin/test_zipfs.py F.                                     [100%]
 
-============================ FAILURES ============================
-___________________________ test_alpha ___________________________
+=========================== FAILURES ===========================
+__________________________ test_alpha __________________________
 
     def test_alpha():
         """Test the calculation of the alpha parameter.
@@ -13191,12 +13258,14 @@ If we are using `pytest`,
 we can check that values lie within this tolerance using `pytest.approx`:
 
 ```python
+from collections import Counter
+
 import pytest
 import numpy as np
-from collections import Counter
 
 import plotcounts
 import countwords
+
 
 def test_alpha():
     """Test the calculation of the alpha parameter.
@@ -13217,26 +13286,28 @@ def test_alpha():
     expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
 
+
 def test_word_count():
-    ...as before...
+    #...as before...
 ```
 
 When we re-run `pytest`,
 both tests now pass:
 
-```shell
+```bash
 $ pytest
 ```
 
 ```text
-====================== test session starts =======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+===================== test session starts ======================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
+pluggy-0.12.0
 rootdir: /Users/amira
 collected 2 items                                                              
 
-bin/test_zipfs.py ..                                       [100%]
+bin/test_zipfs.py ..                                     [100%]
 
-======================= 2 passed in 0.69s ========================
+====================== 2 passed in 0.69s =======================
 ```
 
 > **Testing Visualizations**
@@ -13263,7 +13334,7 @@ If we want to check that a function called `func` raises an `ExpectedError` exce
 we can use the following template:
 
 ```python
-...set up fixture...
+#...set up fixture...
 try:
     actual = func(fixture)
     assert False, 'Expected function to raise exception'
@@ -13301,7 +13372,8 @@ we can instead write:
 ```python
 import pytest
 
-...set up fixture...
+
+#...set up fixture...
 with pytest.raises(ExpectedError):
     actual = func(fixture)
 ```
@@ -13335,7 +13407,7 @@ Fortunately, a Python library called `randomwordgenerator` exists to do just tha
 We can install it and the `pypandoc` library it depends on
 using [`pip`][pip], the Python Package Installer: 
 
-```shell
+```bash
 $ pip install pypandoc
 $ pip install randomwordgenerator
 ```
@@ -13346,14 +13418,16 @@ with a frequency distribution that corresponds to an \(\alpha\) of approximately
 
 ```python
 import numpy as np
-from randomwordgenerator import randomwordgenerator
+from randomwordgenerator import randomwordgenerator as rwg
+
 
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
-random_words = randomwordgenerator.generate_random_words(n=max_freq)
+random_words = rwg.generate_random_words(n=max_freq)
 writer = open('test_data/random_words.txt', 'w')
 for index in range(max_freq):
-    word_sequence = f"{random_words[index]} " * int(word_counts[index])
+    count = int(word_counts[index])
+    word_sequence = f"{random_words[index]} " * count
     writer.write(word_sequence + '\n')
 writer.close()
 ```
@@ -13366,8 +13440,8 @@ def test_integration():
 
     with open('test_data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
-    word_counts_array = np.array(list(word_counts_dict.values()))
-    actual_alpha = plotcounts.get_power_law_params(word_counts_array)
+    counts_array = np.array(list(word_counts_dict.values()))
+    actual_alpha = plotcounts.get_power_law_params(counts_array)
     expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
 ```
@@ -13375,19 +13449,20 @@ def test_integration():
 Finally,
 we re-run `pytest` to check that the integration test passes:
 
-```shell
+```bash
 $ pytest
 ```
 
 ```text
-====================== test session starts =======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+===================== test session starts ======================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
+pluggy-0.12.0
 rootdir: /Users/amira
 collected 3 items                                                                                         
 
-bin/test_zipfs.py ...                                      [100%]
+bin/test_zipfs.py ...                                    [100%]
 
-======================== 3 passed in 0.48s =======================
+======================= 3 passed in 0.48s ======================
 ```
 
 
@@ -13420,25 +13495,26 @@ def test_regression():
 
     with open('data/dracula.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
-    word_counts_array = np.array(list(word_counts_dict.values()))
-    actual_alpha = plotcounts.get_power_law_params(word_counts_array)
+    counts_array = np.array(list(word_counts_dict.values()))
+    actual_alpha = plotcounts.get_power_law_params(counts_array)
     expected_alpha = pytest.approx(1.087, abs=0.001)
     assert actual_alpha == expected_alpha
 ```
 
-```shell
+```bash
 $ pytest
 ```
 
 ```text
-====================== test session starts =======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+===================== test session starts ======================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
+pluggy-0.12.0
 rootdir: /Users/amira
 collected 4 items                                                                                
 
-bin/test_zipfs.py ....                                     [100%]
+bin/test_zipfs.py ....                                   [100%]
 
-======================= 4 passed in 0.56s ========================
+====================== 4 passed in 0.56s =======================
 ```
 
 ## Test Coverage {#testing-coverage}
@@ -13449,26 +13525,27 @@ we can use a tool to check their \gref{code coverage}{code_coverage}.\index{code
 Most Python programmers use the `coverage` library,
 which we can once again install using `pip`:
 
-```shell
+```bash
 $ pip install coverage
 ```
 
 Once we have it,
 we can use it to run `pytest` on our behalf:
 
-```shell
+```bash
 $ coverage run -m pytest
 ```
 
 ```text
-====================================== test session starts =======================================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1, pluggy-0.12.0
+===================== test session starts ======================
+platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
+pluggy-0.12.0
 rootdir: /Users/amira
 collected 4 items                                                                                
 
-bin/test_zipfs.py ....                                                                     [100%]
+bin/test_zipfs.py ....                                   [100%]
 
-======================================= 4 passed in 0.72s ========================================
+====================== 4 passed in 0.72s =======================
 ```
 
 The `coverage` command doesn't display any information of its own,
@@ -13478,7 +13555,7 @@ it puts coverage data in a file called `.coverage` (with a leading `.`) in the c
 To display that data,
 we run:
 
-```shell
+```bash
 $ coverage report -m
 ```
 
@@ -13652,7 +13729,7 @@ The `python` key specifies the version or versions of Python to use,
 while the `script` key lists the commands to run---in this case, `pytest`.
 We can now go ahead and push the `.travis.yml` file to GitHub.
 
-```shell
+```bash
 $ git add .travis.yml 
 $ git commit -m "Initial commit of travis configuration file"
 ```
@@ -13661,7 +13738,7 @@ $ git commit -m "Initial commit of travis configuration file"
  1 file changed, 4 insertions(+)
  create mode 100644 .travis.yml
 ```
-```shell
+```bash
 $ git push origin master
 ```
 ```text
@@ -13734,7 +13811,7 @@ pyyaml
 
 We commit these changes to GitHub:
 
-```shell
+```bash
 $ git add .travis.yml requirements.txt
 $ git commit -m "Adding requirements"
 ```
@@ -13743,7 +13820,7 @@ $ git commit -m "Adding requirements"
  2 files changed, 16 insertions(+), 1 deletion(-)
  create mode 100644 requirements.txt
 ```
-```shell
+```bash
 $ git push origin master
 ```
 ```text
@@ -13904,7 +13981,9 @@ def normalize_rectangle(rect):
     (x0, y0) and (x1, y1) define the lower left and
     upper right corners of the rectangle, respectively."""
     
-    x0, y0, x1, y1 = rect  # insert preconditions before and after
+    # insert preconditions
+    x0, y0, x1, y1 = rect
+    # insert preconditions
     
     dx = x1 - x0
     dy = y1 - y0
@@ -13941,6 +14020,7 @@ preconditions and postconditions,
 ```python
 import geometry
 
+
 geometry.normalize_rectangle([2, 5, 3, 10])                                                             
 ```
 
@@ -13951,8 +14031,6 @@ geometry.normalize_rectangle([2, 5, 3, 10])
 but will fail for a tall, skinny rectangle:
 
 ```python
-import geometry
-
 geometry.normalize_rectangle([20, 15, 30, 20])
 ```
 
@@ -13963,10 +14041,12 @@ AssertionError                  Traceback (most recent call last)
 
 ~/Desktop/exercises/geometry.py in normalize_rectangle(rect)
      19 
-     20     assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
----> 21     assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
-     22 
-     23     return (0, 0, upper_x, upper_y)
+     20     assert 0 < upper_x <= 1.0, \
+     21         'Calculated upper X coordinate invalid'
+---> 22     assert 0 < upper_y <= 1.0, \
+     23         'Calculated upper Y coordinate invalid'
+     24 
+     25     return (0, 0, upper_x, upper_y)
 
 AssertionError: Calculated upper Y coordinate invalid
 ```
@@ -13989,13 +14069,16 @@ The relevant code appears in `main`:
 
 ```python
 """
-Combine multiple word count CSV-files into a single cumulative count.
+Combine multiple word count CSV-files
+into a single cumulative count.
 """
+
 import csv
 import argparse
 from collections import Counter
 import logging
-import utilities
+
+import utilities as util
 
 
 def update_counts(reader, word_counts):
@@ -14003,41 +14086,46 @@ def update_counts(reader, word_counts):
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
+
 def main(args):
     """Run the command line program."""
-    log_level = logging.DEBUG if args.verbose else logging.WARNING
-    logging.basicConfig(level=log_level, filename=args.logfile)
+    log_lev = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(level=log_lev, filename=args.logfile)
     word_counts = Counter()
     logging.info('Processing files...')
-    for file_name in args.infiles:
+    for fname in args.infiles:
         try:
-            logging.debug(f'Reading in {file_name}...')
-            if file_name[-4:] != '.csv':
-                raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-            with open(file_name, 'r') as reader:
+            logging.debug(f'Reading in {fname}...')
+            if fname[-4:] != '.csv':
+                msg = util.ERRORS['not_csv_suffix'].format(
+                      fname=fname)
+                raise OSError(msg)
+            with open(fname, 'r') as reader:
                 logging.debug('Computing word counts...')
                 update_counts(reader, word_counts)
         except FileNotFoundError:
-            logging.warning(f'{file_name} not processed: File does not exist')
+            msg = f'{fname} not processed: File does not exist'
+            logging.warning(msg)
         except PermissionError:
-            logging.warning(f'{file_name} not processed: No permission to read file')
+            msg = f'{fname} not processed: No permission to read'
+            logging.warning(msg)
         except Exception as error:
-            logging.warning(f'{file_name} not processed: {error}')
-    utilities.collection_to_csv(word_counts, num=args.num)
+            msg = f'{fname} not processed: {error}'
+            logging.warning(msg)
+    util.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', 
                         help='Input file names')
     parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
-    parser.add_argument(
-      '-v', '--verbose', action="store_true", 
-      default=False,
-      help="Change logging threshold from WARNING to DEBUG"
-    )
-    parser.add_argument('-l', '--logfile', type=str, 
-                        default='collate.log',
+                        help='Output only n most frequent words')
+    parser.add_argument('-v', '--verbose',
+                        action="store_true", default=False,
+                        help="Set logging level to DEBUG")
+    parser.add_argument('-l', '--logfile',
+                        type=str, default='collate.log',
                         help='Name of the log file')
     args = parser.parse_args()
     main(args)
@@ -14054,12 +14142,13 @@ to test whether the error handling in a program is working as expected (Section�
     `process_file` in place of the existing code):
 
 ```python
-def process_file(file_name, word_counts):
+def process_file(fname, word_counts):
     """Read file and update word counts"""
-    logging.debug(f'Reading in {file_name}...')
-    if file_name[-4:] != '.csv':
-        raise OSError(utilities.ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-    with open(file_name, 'r') as reader:
+    logging.debug(f'Reading in {fname}...')
+    if fname[-4:] != '.csv':
+        msg = util.ERRORS['not_csv_suffix'].format(fname=fname)
+        raise OSError(msg)
+    with open(fname, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
 ``` 
@@ -14074,7 +14163,7 @@ def process_file(file_name, word_counts):
     input file does not exist.  Run `pytest` to check that the new test passes.
 
 4.  Use the `coverage` library to check that the relevant commands in
-    `process_file` (specifically `raise OSError` and `open(file_name, 'r')`)
+    `process_file` (specifically `raise OSError` and `open(fname, 'r')`)
     were indeed tested.
 
 ### Testing with randomness {#testing-ex-random}
@@ -14350,7 +14439,7 @@ In order to document the software packages used in our analysis,
 we should archive a list of the names and version numbers of each software package.
 We can get version information for the Python packages we are using by running:
 
-```shell
+```bash
 $ pip freeze
 ```
 
@@ -14380,7 +14469,7 @@ a complete conda environment (Section \@ref(packaging-virtualenv);
 Appendix \@ref(anaconda-environments)),
 which can be saved as YAML using:
 
-```shell
+```bash
 $ conda env export > environment.yml
 $ cat environment.yml
 ```
@@ -14410,7 +14499,7 @@ $ conda env create -f environment.yml
 
 We can go ahead and add the `environment.yml` file to our GitHub repository:
 
-```shell
+```bash
 $ git add environment.yml
 $ git commit -m "Adding the conda environment file"
 $ git push origin master
@@ -14739,7 +14828,7 @@ Currently,
 both `collate.py` and `countwords.py` contains this line,
 
 ```python
-import utilities
+import utilities as util
 ```
 
 while `test_zipfs.py` contains:
@@ -14759,7 +14848,7 @@ or
 To remove this ambiguity we need to be explicit and write,
 
 ```python
-from zipf import utilities
+from zipf import utilities as util
 ```
 and
 
@@ -14778,7 +14867,7 @@ which require a little less typing
 and can sometimes make it easier to restructure very large projects:
 
 ```python
-from . import utilities
+from . import utilities as util
 ```
 
 Here,
@@ -14861,7 +14950,7 @@ To create a new virtual environment called `zipf` we run `conda create`,\index{v
 specifying the environment's name with the `-n` or `--name` flag
 and listing `python` as the base to build on:
 
-```shell
+```bash
 $ conda create -n zipf python
 ```
 
@@ -14900,14 +14989,14 @@ which checks for packages in these directories before checking the main installa
 
 We can switch to the `zipf` environment by running:\index{virtual environment (in Python)!switching}
 
-```shell
+```bash
 $ conda activate zipf
 ```
 
 Once we have done this,
 the `python` command runs the interpreter in `zipf/bin`:
 
-```shell
+```bash
 (zipf)$ which python
 ```
 
@@ -14929,11 +15018,11 @@ without affecting the underlying Python installation.
 When we are done,
 we can switch back to the default environment using `conda deactivate`:
 
-```shell
+```bash
 (zipf)$ conda deactivate
 
 ```
-```shell
+```bash
 $ which python
 ```
 
@@ -14946,7 +15035,7 @@ $ which python
 Let's install our package inside this virtual environment.\index{Python package!installation}
 First we re-activate it:
 
-```shell
+```bash
 $ conda activate zipf
 ```
 
@@ -15017,7 +15106,7 @@ because it will be installed as a dependency for `pandas` and `scipy`.\index{dep
 
 We can now install our package and all its dependencies in a single command:
 
-```shell
+```bash
 (zipf)$ pip install -e .
 ```
 
@@ -15032,7 +15121,9 @@ Collecting pandas
 Collecting scipy
   Downloading scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
      |████████████████████████████████| 26.1 MB 11.4 MB/s
-Requirement already satisfied: pyyaml in /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages (from zipf==0.1) (5.3.1)
+Requirement already satisfied: pyyaml in
+/home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages
+(from zipf==0.1) (5.3.1)
 Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
   Using cached pyparsing-2.4.6-py2.py3-none-any.whl (67 kB)
 Collecting python-dateutil>=2.1
@@ -15120,7 +15211,8 @@ def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -15128,7 +15220,7 @@ if __name__ == '__main__':
                         nargs='?', default='-', 
                         help='Input file name')
     parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -15144,16 +15236,18 @@ def parse_command_line():
                         nargs='?', default='-', 
                         help='Input file name')
     parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     return args
+
 
 def main():
     """Run the command line program."""
     args = parse_command_line()
     with args.infile as reader:
         word_counts = count_words(reader)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     main()
@@ -15162,7 +15256,7 @@ if __name__ == '__main__':
 Once we have made the corresponding change in `collate.py` and `plotcounts.py`,
 we can re-install our package:
 
-```shell
+```bash
 (zipf)$ pip install -e .
 ```
 
@@ -15188,7 +15282,8 @@ Requirement already satisfied: kiwisolver>=1.0.1 in
 Requirement already satisfied: numpy>=1.11 in 
   /usr/lib/python3.8/site-packages
   (from matplotlib->zipf==0.1) (1.18.2)
-Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,
+!=2.1.6,>=2.0.1 in
   /usr/lib/python3.8/site-packages 
   (from matplotlib->zipf==0.1) (2.4.6)
 Requirement already satisfied: python-dateutil>=2.1 in 
@@ -15218,8 +15313,8 @@ We can now use our commands directly from the terminal
 without writing the full path to the file
 and without prefixing it with `python`.
 
-```shell
-countwords data/dracula.txt -n 5
+```bash
+$ countwords data/dracula.txt -n 5
 ```
 
 ```text
@@ -15278,8 +15373,8 @@ we need to use `setuptools` to create
 a \gref{source distribution}{source_distribution}\index{source distribution (of Python package)}\index{Python package!source distribution}
 (known as an `sdist` in Python packaging jargon):
 
-```shell
-python setup.py sdist
+```bash
+$ python setup.py sdist
 ```
 
 ```text
@@ -15334,7 +15429,7 @@ but they are free to create.
 The preferred tool for uploading packages to PyPI is called [twine][twine],
 which we can install with:
 
-```shell
+```bash
 $ pip install twine
 ```
 
@@ -15342,7 +15437,7 @@ Following the [Python Packaging User Guide][pypi-user-guide],
 we can now upload our distributions from the `dist/` folder
 using the `--repository` option to specify the TestPyPI repository:
 
-```shell
+```bash
 $ twine upload --repository testpypi dist/*
 Enter your username: amirakhan
 Enter your password: *********
@@ -15366,7 +15461,7 @@ We can test that this has worked
 by creating a virtual environment
 and installing our package from TestPyPI:
 
-```shell
+```bash
 $ conda create -n zipf-test
 $ conda activate zipf-test
 (zipf-test)$ pip install --index-url https://test.pypi.org/simple zipf
@@ -15375,19 +15470,46 @@ $ conda activate zipf-test
 ```text
 Looking in indexes: https://test.pypi.org/simple
 Collecting zipf
-  Downloading https://test-files.pythonhosted.org/packages/aa/fb/352af20b6f/zipf-0.1.0.tar.gz (3.1 kB)
-Requirement already satisfied: matplotlib in /usr/lib/python3.8/site-packages (from zipf) (3.2.1)
-Requirement already satisfied: pandas in ./.local/lib/python3.8/site-packages (from zipf) (1.0.3)
-Requirement already satisfied: scipy in /usr/lib/python3.8/site-packages (from zipf) (1.4.1)
-Requirement already satisfied: pyyaml in /usr/lib/python3.8/site-packages (from zipf) (5.3.1)
-Requirement already satisfied: cycler>=0.10 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (0.10.0)
-Requirement already satisfied: kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (1.1.0)
-Requirement already satisfied: numpy>=1.11 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (1.18.2)
-Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (2.4.7)
-Requirement already satisfied: python-dateutil>=2.1 in /usr/lib/python3.8/site-packages (from matplotlib->zipf) (2.8.1)
-Requirement already satisfied: pytz>=2017.2 in /usr/lib/python3.8/site-packages (from pandas->zipf) (2019.3)
-Requirement already satisfied: six in /usr/lib/python3.8/site-packages (from cycler>=0.10->matplotlib->zipf) (1.14.0)
-Requirement already satisfied: setuptools in /usr/lib/python3.8/site-packages (from kiwisolver>=1.0.1->matplotlib->zipf) (46.1.3)
+  Downloading https://test-files.pythonhosted.org/packages/
+              aa/fb/352af20b6f/zipf-0.1.0.tar.gz (3.1 kB)
+Requirement already satisfied:
+matplotlib in /usr/lib/python3.8/site-packages
+(from zipf) (3.2.1)
+Requirement already satisfied:
+pandas in ./.local/lib/python3.8/site-packages
+(from zipf) (1.0.3)
+Requirement already satisfied:
+scipy in /usr/lib/python3.8/site-packages
+(from zipf) (1.4.1)
+Requirement already satisfied:
+pyyaml in /usr/lib/python3.8/site-packages
+(from zipf) (5.3.1)
+Requirement already satisfied:
+cycler>=0.10 in /usr/lib/python3.8/site-packages
+(from matplotlib->zipf) (0.10.0)
+Requirement already satisfied:
+kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages
+(from matplotlib->zipf) (1.1.0)
+Requirement already satisfied:
+numpy>=1.11 in /usr/lib/python3.8/site-packages
+(from matplotlib->zipf) (1.18.2)
+Requirement already satisfied:
+pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
+in /usr/lib/python3.8/site-packages
+(from matplotlib->zipf) (2.4.7)
+Requirement already satisfied:
+python-dateutil>=2.1 in /usr/lib/python3.8/site-packages
+(from matplotlib->zipf) (2.8.1)
+Requirement already satisfied:
+pytz>=2017.2 in /usr/lib/python3.8/site-packages
+(from pandas->zipf) (2019.3)
+Requirement already satisfied:
+six in /usr/lib/python3.8/site-packages
+(from cycler>=0.10->matplotlib->zipf) (1.14.0)
+Requirement already satisfied:
+setuptools in /usr/lib/python3.8/site-packages
+(from kiwisolver>=1.0.1->matplotlib->zipf)
+(46.1.3)
 Installing collected packages: zipf
     Running setup.py install for zipf ... done
 Successfully installed zipf-0.1.0
@@ -15439,7 +15561,7 @@ and examples of how to use it.
 We can include these elements in the `README.md` file we started in Chapter \@ref(git-advanced).
 At the moment it reads as follows:
 
-```shell
+```bash
 $ cat README.md
 ```
 
@@ -15465,7 +15587,7 @@ with complex indices and cross-links.
 GitHub recognizes files ending in `.rst` as reST files and displays them nicely,
 so our first task is to rename our existing file:
 
-```shell
+```bash
 $ git mv README.md README.rst
 ```
 
@@ -15474,7 +15596,7 @@ titles are underlined and overlined,
 section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented:
 
-```text
+```markdown
 The ``zipf`` package tallies the occurrences of words in text files
 and plots each word's rank versus its frequency
 together with a line for the theoretical distribution for Zipf's Law.
@@ -15547,7 +15669,7 @@ and can export that information to HTML format for hosting on the web.
 
 To start, let's install Sphinx and create a `docs/` directory at the top of our repository:
 
-```shell
+```bash
 $ pip install sphinx
 $ mkdir docs
 $ cd docs
@@ -15561,7 +15683,7 @@ the name of the project's author,
 and a release;
 we can use the default settings for everything else.
 
-```shell
+```bash
 $ sphinx-quickstart
 ```
 
@@ -15591,7 +15713,7 @@ Sphinx will then translate text that it generates into that
 language.
 
 For a list of supported codes, see
-https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
+https://www.sphinx-doc.org/en/master/usage/configuration.html
 > Project language [en]:
 
 Creating file /Users/amira/zipf/docs/conf.py.
@@ -15647,7 +15769,7 @@ we can now generate a Sphinx `autodoc` script
 that generates information about each of our modules
 and puts it in corresponding `.rst` files in the `docs/source` directory:
 
-```shell
+```bash
 sphinx-apidoc -o source/ ../zipf
 ```
 
@@ -15685,7 +15807,7 @@ If we click on the `Module Index` link we can access the documentation for the i
 The landing page for the website is the perfect place for the content of our README file,
 so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file to insert it:
 
-```text
+```markdown
 Welcome to Zipf's documentation!
 ==================================
 
@@ -15757,7 +15879,7 @@ We also need to create and save a
 [Read the Docs configuration file][readthedocs-config]
 in the root directory of our `zipf` package:
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -15765,7 +15887,7 @@ $ pwd
 /Users/amira/zipf
 ```
 
-```shell
+```bash
 $ cat .readthedocs.yml
 ```
 
@@ -15830,7 +15952,7 @@ to the associated GitHub repository
 containing a plain text citation that can be copied and pasted into email
 as well as entries formatted for various bibliographic systems like [BibTeX][bibtex].
 
-```shell
+```bash
 $ cat CITATION.md
 ```
 
@@ -15909,8 +16031,9 @@ and see how the Zipf's Law package would rate on each criteria.
 Each chapter in this book opens with a quote from the British author Terry Pratchett.
 This script `quotes.py` contains a function `random_quote` which prints a random Pratchett quote:
 
-```
+```python
 import random
+
 
 quote_list = ["It's still magic even if you know how it's done.",
               "Everything starts somewhere, "\
@@ -15925,10 +16048,10 @@ quote_list = ["It's still magic even if you know how it's done.",
               "of a diseased mind.",
               "+++ Divide By Cucumber Error. "\
               "Please Reinstall Universe And Reboot +++",
-              "It's got three keyboards and a hundred extra knobs, "\
-              "including twelve with ‘?' on them.",
-              "Evil begins when you begin to treat people as things.",
+              "It's got three keyboards and a hundred extra "\
+              "knobs, including twelve with ‘?' on them.",
              ]
+         
                          
 def random_quote():
     """Print a random Pratchett quote."""
@@ -15940,8 +16063,9 @@ and use `pip` to install a new package called `pratchett` into that environment.
 The package should contain `quotes.py`,
 and once the package has been installed the user should be able to run:
 
-```
+```python
 from pratchett import quotes
+
 
 quotes.random_quote()
 ```
@@ -17200,7 +17324,7 @@ The files/directories in each directory are sorted by time of last change.
 
 ### Exercise \@ref(bash-basics-ex-safe-rm) {-}
 
-```shell
+```bash
 $ rm: remove regular file 'thesis_backup/quotations.txt'? y
 ```
 
@@ -17212,7 +17336,7 @@ only the files that we want to remove.
 
 ### Exercise \@ref(bash-basics-ex-move-dot) {-}
 
-```shell
+```bash
 $ mv ../analyzed/sucrose.dat ../analyzed/maltose.dat .
 ```
 
@@ -17275,7 +17399,7 @@ This is the solution.
 
 ### Exercise \@ref(bash-basics-ex-organizing) {-}
 
-```shell
+```bash
 mv *.dat analyzed
 ```
 
@@ -17298,7 +17422,7 @@ as the 'data' directory.
 ### Exercise \@ref(bash-basics-ex-wildcard-expressions) {-}
 
 1. A solution using two wildcard expressions:
-    ```shell
+    ```bash
     $ ls *A.txt
     $ ls *B.txt
     ```
@@ -17357,7 +17481,7 @@ Try it in the `data-shell/molecules` directory!
 
 ### Exercise \@ref(bash-tools-ex-uniq-adjacent) {-}
 
-```shell
+```bash
 $ sort salmon.txt | uniq
 ```
 
@@ -17369,6 +17493,7 @@ With the `sort -r` command those 3 lines are sorted in reverse order and finally
 the output is redirected to a file `final.txt`.
 The content of this file can be checked by executing `cat final.txt`.
 The file should contain the following lines:
+
 ```text
 2012-11-06,rabbit
 2012-11-06,deer
@@ -17417,7 +17542,8 @@ Bash expands the wildcard `*.pdb` within the loop body (as well as
 before the loop starts) to match all files ending in `.pdb`
 and then lists them using `ls`.
 The expanded loop would look like this:
-```shell
+
+```bash
 $ for datafile in cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
 > do
 >	ls cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
@@ -17483,11 +17609,13 @@ have a record of the last command run in the event of a crash.
 
 ### Exercise \@ref(bash-advanced-ex-cleaning-up) {-}
 
-`$ cd ~/zipf`  
+```bash
+$ cd ~/zipf
+```  
 Change into the `zipf` directory,
 which is located in the home directory (designated by `~`).
 
-```shell
+```bash
 $ for file in $(find . -name "*.bak")
 > do
 >   rm $file
@@ -17495,10 +17623,14 @@ $ for file in $(find . -name "*.bak")
 ```
 Find all the files ending in `.bak` and remove them one by one.
 
-`$ rm bin/summarize_all_books.sh`  
+```bash
+$ rm bin/summarize_all_books.sh
+``` 
 Remove the `summarize_all_books.sh` script.
 
-`$ rm -r results`  
+```bash
+$ rm -r results
+```  
 Recursively remove each file in the `results` directory 
 and then remove the directory itself.
 (It is necessary to remove all the files first because you
@@ -17511,7 +17643,7 @@ The correct answer is 2.
 The special variables $1, $2 and $3 represent the command line arguments given to the
 script, such that the commands run are:
 
-```shell
+```bash
 $ head -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
 $ tail -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
 ```
@@ -17522,7 +17654,7 @@ script by `head` and `tail`.
 
 ### Exercise \@ref(bash-advanced-ex-longest-with-extension) {-}
 
-```text
+```bash
 # Shell script which takes two arguments:
 #    1. a directory name
 #    2. a file extension
@@ -17558,8 +17690,10 @@ The other options will also match "of" when part of another word.
 
 ### Exercise \@ref(bash-advanced-ex-year-script) {-}
 
-```text
-# Obtain unique years from multiple comma-delimited lists of titles and publication years
+```bash
+# Obtain unique years from multiple comma-delimited 
+# lists of titles and publication years
+#
 # Usage: bash year.sh file1.txt file2.txt ...
 
 for filename in $*
@@ -17570,7 +17704,7 @@ done
 
 ### Exercise \@ref(bash-advanced-ex-sense-sensibility) {-}
 
-```text
+```bash
 for sister in Harriet Marianne
 do
 	echo $sister:
@@ -17580,7 +17714,7 @@ done
 
 And alternative but slightly inferior solution is:
 
-```text
+```bash
 for sister in Harriet Marianne
 do
 	echo $sister:
@@ -17613,7 +17747,7 @@ do not match "temp", rather than searching the file names.
 
 Assuming that Ahmed's home is our working directory we type:
 
-```shell
+```bash
 $ find ./ -type f -mtime -1 -user ahmed
 ```
 
@@ -17653,7 +17787,8 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('dir', type=str, help='Directory')
-    parser.add_argument('suffix', type=str, help='File suffix (e.g. py, sh)')
+    parser.add_argument('suffix', type=str,
+                        help='File suffix (e.g. py, sh)')
     args = parser.parse_args()
     main(args)
 ```
@@ -17663,7 +17798,7 @@ if __name__ == '__main__':
 The `sentence_endings.py` script could read as follows:
 
 ```python
-"""Count the occurrence of different types of sentence endings."""
+"""Count the occurrence of different sentence endings."""
 
 import argparse
 
@@ -17678,8 +17813,9 @@ def main(args):
  
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Input file name')
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?', default='-',
+                        help='Input file name')
     args = parser.parse_args()
     main(args)
 ```
@@ -17692,26 +17828,34 @@ The `plotcounts.py` script should read as follows:
 """Plot word counts."""
 
 import argparse
+
 import pandas as pd
 
 
 def main(args):
     """Run the command line program."""
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
-    df['rank'] = df['word_frequency'].rank(ascending=False, method='max')
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
     df['inverse_rank'] = 1 / df['rank']
-    ax = df.plot.scatter(x='word_frequency', y='inverse_rank',
-                         figsize=[12, 6], grid=True)
+    ax = df.plot.scatter(x='word_frequency',
+                         y='inverse_rank',
+                         figsize=[12, 6],
+                         grid=True)
     ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Word count csv file name')
-    parser.add_argument('--outfile', type=str, default='plotcounts.png',
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?',ndefault='-',
+                        help='Word count csv file name')
+    parser.add_argument('--outfile', type=str,
+                        default='plotcounts.png',
                         help='Output image file name')
-    parser.add_argument('--xlim', type=float, nargs=2, metavar=('XMIN', 'XMAX'),
+    parser.add_argument('--xlim', type=float, nargs=2,
+                        metavar=('XMIN', 'XMAX'),
                         default=None, help='X-axis limits')
     args = parser.parse_args()
     main(args)
@@ -17741,7 +17885,8 @@ or both.
     
             example.txt
     
-    nothing added to commit but untracked files present (use "git add" to track)
+    nothing added to commit but untracked files present
+    (use "git add" to track)
     ```
 
 - Nothing has happened to the file, it still exists but Git no longer has it in
@@ -17842,7 +17987,7 @@ it actually creates the repository and then commits the `README.md` file.
 When we try to pull from the remote repository to our local repository,
 Git detects that their histories do not share a common origin and refuses to merge them.
 
-```shell
+```bash
 $ git pull origin master
 ```
 
@@ -18049,32 +18194,8 @@ The `CONDUCT.md` file should have contents that mimic those given in Section \@
 
 ### Exercise \@ref(teams-ex-boilerplate-license) {-}
 
-The newly created `LICENSE.md` should have something like this 
-(if MIT was chosen):
-
-```markdown
-# MIT License
-
-Copyright (c) YYYY YOUR NAME 
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+The newly created `LICENSE.md` should look something like the example
+MIT License shown in Section \@ref(teams-license-software).
 
 ### Exercise \@ref(teams-ex-contributing) {-}
 
@@ -18203,7 +18324,7 @@ It is useful for creating the output directories for build rules.
 
 The build rule for generated the result for any book should now be,
 
-```make
+```makefile
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
 	@bash $(SUMMARY) $<
@@ -18212,13 +18333,13 @@ results/%.csv : data/%.txt $(COUNT)
 
 where `SUMMARY` is defined earlier in the `Makefile` as
 
-```make
+```makefile
 SUMMARY=bin/book_summary.sh
 ```
 
 and the settings build rule now includes:
 
-```make
+```makefile
 @echo SUMMARY: $(SUMMARY)
 ```
 
@@ -18227,7 +18348,7 @@ and the settings build rule now includes:
 Since we already have a variable `RESULTS` that contains all of the results files,
 all we need is a phony target that depends on them:
 
-```make
+```makefile
 .PHONY: results # and all the other phony targets
 
 ## results : regenerate result for all books.
@@ -18238,7 +18359,7 @@ results : ${RESULTS}
 
 If we use a shell \gref{wildcard}{wildcard} in a rule like this:
 
-```make
+```makefile
 results/collated.csv : results/*.csv
 	python $(COLLATE) $^ > $@
 ```
@@ -18250,9 +18371,10 @@ the rule tells Make that the file depends on itself.
 
 Our rule is:
 
-```make
+```makefile
 help :
-        @grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
+    @grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' \
+    | column -t -s ':'
 ```
 
 -   The `-h` option to `grep` tells it *not* to print filenames,
@@ -18270,7 +18392,7 @@ help :
 
 The new `config.mk` file reads as follows:
 
-```
+```makefile
 COUNT=bin/countwords.py
 COLLATE=bin/collate.py
 PLOT=bin/plotcounts.py
@@ -18278,7 +18400,7 @@ PLOT=bin/plotcounts.py
 
 The contents of that file can then be included in the `Makefile`:
 
-```make
+```makefile
 .PHONY: results all clean help settings
 
 include config.mk
@@ -18293,7 +18415,7 @@ include config.mk
 
 The build rule involving `plotcounts.py` should now read,
 
-```make
+```makefile
 ## results/collated.png: plot the collated results.
 results/collated.png : results/collated.csv $(PARAMS)
 	python $(PLOT) $< --outfile $@ --plotparams $(word 2,$^)
@@ -18303,7 +18425,7 @@ where `PARAMS` is defined earlier in the `Makefile`
 along with all the other variables and
 also included later in the settings build rule:
 
-```make
+```makefile
 COUNT=bin/countwords.py
 COLLATE=bin/collate.py
 PARAMS=bin/plotparams.yml
@@ -18313,7 +18435,7 @@ DATA=$(wildcard data/*.txt)
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 ```
 
-```make
+```makefile
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
@@ -18336,7 +18458,8 @@ import matplotlib.pyplot as plt
 
 Define the new `--style` option:
 ```python
-parser.add_argument('--style', type=str, choices=plt.style.available,
+parser.add_argument('--style', type=str,
+                    choices=plt.style.available,
                     default=None, help='matplotlib style')
 ```
 
@@ -18351,7 +18474,8 @@ def main(args):
 3. Add `nargs='*'` to the definition of the `--style` option:
 
 ```python
-parser.add_argument('--style', type=str, nargs='*', choices=plt.style.available,
+parser.add_argument('--style', type=str, nargs='*',
+                    choices=plt.style.available,
                     default=None, help='matplotlib style')
 ```
 
@@ -18383,7 +18507,8 @@ def main(args):
     if args.saveconfig:
         save_configuration(args.saveconfig, mpl.rcParams)
         return
-    df = pd.read_csv(args.infile, header=None, names=('word', 'word_frequency'))
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
     # ...carry on producing plot...
 
 
@@ -18401,10 +18526,11 @@ we might use something different.
 We also save the configuration to `/tmp` rather than to our project directory
 to keep it out of version control's way:
 
-```python
+```makefile
 ## test-saveconfig : save plot configuration.
 test-saveconfig :
-	python $(PLOT) --saveconfig /tmp/test-saveconfig.yml --plotparams $(PARAMS)
+	python $(PLOT) --saveconfig /tmp/test-saveconfig.yml \
+	  --plotparams $(PARAMS)
 ```
 
 The output is over 400 lines long,
@@ -18478,8 +18604,9 @@ which is a lot better than nothing.
 Add a new command line argument to `collate.py`,
 
 ```python
-parser.add_argument('-v', '--verbose', action="store_true", default=False,
-                    help="Change logging threshold from WARNING to DEBUG")
+parser.add_argument('-v', '--verbose',
+                    action="store_true", default=False,
+                    help="Set logging level to DEBUG")
 ```
 
 and two new lines to the beginning of the `main` function,
@@ -18492,45 +18619,57 @@ logging.basicConfig(level=log_level)
 such that the full `collate.py` script now reads as follows:
 
 ```python
-"""Combine multiple word count CSV-files into a single cumulative count."""
+"""
+Combine multiple word count CSV-files
+into a single cumulative count.
+"""
+
 import csv
 import argparse
 from collections import Counter
 import logging
-import utilities
+
+import utilities as util
 
 
-ERROR_MESSAGES = {
-    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-}
+ERRORS = {
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    }
+
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
+
 def main(args):
     """Run the command line program."""
-    log_level = logging.DEBUG if args.verbose else logging.WARNING
-    logging.basicConfig(level=log_level)
+    log_lev = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(level=log_lev)
     word_counts = Counter()
     logging.info('Processing files...')
-    for file_name in args.infiles:
-        logging.debug(f'Reading in {file_name}...')
-        if file_name[-4:] != '.csv':
-            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-        with open(file_name, 'r') as reader:
+    for fname in args.infiles:
+        logging.debug(f'Reading in {fname}...')
+        msg = ERRORS['not_csv_suffix'].format(fname=fname)
+        if fname[-4:] != '.csv':
+            raise OSError(msg)
+        with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
-    parser.add_argument('-v', '--verbose', action="store_true", default=False,
-                        help="Change logging threshold from WARNING to DEBUG")
+    parser.add_argument('infiles', type=str, nargs='*',
+                        help='Input file names')
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
+                        help='Output only n most frequent words')
+    parser.add_argument('-v', '--verbose',
+                        action="store_true", default=False,
+                        help="Set logging level to DEBUG")
     args = parser.parse_args()
     main(args)
 ```
@@ -18540,7 +18679,8 @@ if __name__ == '__main__':
 Add a new command line argument to `collate.py`,
 
 ```python
-parser.add_argument('-l', '--logfile', type=str, default='collate.log',
+parser.add_argument('-l', '--logfile',
+                    type=str, default='collate.log',
                     help='Name of the log file')
 ```
 
@@ -18554,46 +18694,59 @@ logging.basicConfig(level=log_level, filename=args.logfile)
 such that the `collate.py` script now reads as follows:
 
 ```python
-"""Combine multiple word count CSV-files into a single cumulative count."""
+"""
+Combine multiple word count CSV-files
+into a single cumulative count.
+"""
+
 import csv
 import argparse
 from collections import Counter
 import logging
-import utilities
+
+import utilities as util
 
 
-ERROR_MESSAGES = {
-    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-}
+ERRORS = {
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    }
+
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
 
+
 def main(args):
     """Run the command line program."""
-    log_level = logging.DEBUG if args.verbose else logging.WARNING
-    logging.basicConfig(level=log_level, filename=args.logfile)
+    log_lev = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(level=log_lev, filename=args.logfile)
     word_counts = Counter()
     logging.info('Processing files...')
-    for file_name in args.infiles:
-        logging.debug(f'Reading in {file_name}...')
-        if file_name[-4:] != '.csv':
-            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-        with open(file_name, 'r') as reader:
+    for fname in args.infiles:
+        logging.debug(f'Reading in {fname}...')
+        if fname[-4:] != '.csv':
+            msg = ERRORS['not_csv_suffix'].format(fname=fname)
+            raise OSError(msg)
+        with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infiles', type=str, nargs='*', help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
-    parser.add_argument('-v', '--verbose', action="store_true", default=False,
-                        help="Change logging threshold from WARNING to DEBUG")
-    parser.add_argument('-l', '--logfile', type=str, default='collate.log',
+    parser.add_argument('infiles', type=str, nargs='*', 
+                        help='Input file names')
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
+                        help='Output only n most frequent words')
+    parser.add_argument('-v', '--verbose',
+                        action="store_true", default=False,
+                        help="Set logging level to DEBUG")
+    parser.add_argument('-l', '--logfile',
+                        type=str, default='collate.log',
                         help='Name of the log file')
     args = parser.parse_args()
     main(args)
@@ -18605,36 +18758,41 @@ if __name__ == '__main__':
    should now read as follows:
 
 ```python
-for file_name in args.infiles:
+for fname in args.infiles:
     try:
-        logging.debug(f'Reading in {file_name}...')
-        if file_name[-4:] != '.csv':
-            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-        with open(file_name, 'r') as reader:
+        logging.debug(f'Reading in {fname}...')
+        if fname[-4:] != '.csv':
+            msg = ERRORS['not_csv_suffix'].format(fname=fname)
+            raise OSError(msg)
+        with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
     except Exception as error:
-        logging.warning(f'{file_name} not processed: {error}')
+        logging.warning(f'{fname} not processed: {error}')
 ```
 
 2. The loop in `collate.py` that reads/processes each input file
    should now read as follows:
 
 ```python
-for file_name in args.infiles:
+for fname in args.infiles:
     try:
-        logging.debug(f'Reading in {file_name}...')
-        if file_name[-4:] != '.csv':
-            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-        with open(file_name, 'r') as reader:
+        logging.debug(f'Reading in {fname}...')
+        if fname[-4:] != '.csv':
+            msg = ERRORS['not_csv_suffix'].format(fname=fname)
+            raise OSError(msg)
+        with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
     except FileNotFoundError:
-        logging.warning(f'{file_name} not processed: File does not exist')
+        msg = f'{fname} not processed: File does not exist'
+        logging.warning(msg)
     except PermissionError:
-        logging.warning(f'{file_name} not processed: No permission to read file')
+        msg = f'{fname} not processed: No permission to read'
+        logging.warning(msg)
     except Exception as error:
-        logging.warning(f'{file_name} not processed: {error}')
+        msg = f'{fname} not processed: {error}'
+        logging.warning(msg)
 ```
 
 ### Exercise \@ref(errors-ex-catalog) {-}
@@ -18685,8 +18843,10 @@ assert y0 < y1, 'Invalid Y coordinates'
 2. Remove the comment about inserting postconditions and add the following
 
 ```python
-assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
-assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
+assert 0 < upper_x <= 1.0, \
+  'Calculated upper X coordinate invalid'
+assert 0 < upper_y <= 1.0, \
+  'Calculated upper Y coordinate invalid'
 ```
 
 3. The problem is that the following section of `normalize_rectangle`
@@ -18721,7 +18881,7 @@ def test_short_wide():
     assert actual_result == expected_result
     
 def test_negative_coordinates():
-    """Test normalization of rectangle with negative coordinates."""
+    """Test rectangle normalization with negative coordinates."""
     rect = [-2, 5, -1, 10]
     expected_result = (0, 0, 0.2, 1.0)
     actual_result = geometry.normalize_rectangle(rect)
@@ -18734,7 +18894,7 @@ def test_negative_coordinates():
 
 ```python
 try:
-    process_file(file_name, word_counts)
+    process_file(fname, word_counts)
 except FileNotFoundError:
 # ... the other exceptions
 ```
@@ -18752,10 +18912,10 @@ Define the new unit test:
 ```python
 def test_not_csv_error():
     """Error handling test for csv check"""
-    file_name = 'data/dracula.txt'
+    fname = 'data/dracula.txt'
     word_counts = Counter()
     with pytest.raises(OSError):
-        collate.process_file(file_name, word_counts)
+        collate.process_file(fname, word_counts)
 ```
 
 3. The following unit test needs to be added to `test_zipfs.py`.
@@ -18763,24 +18923,24 @@ def test_not_csv_error():
 ```python
 def test_missing_file_error():
     """Error handling test for missing file"""
-    file_name = 'fake_file.csv'
+    fname = 'fake_file.csv'
     word_counts = Counter()
     with pytest.raises(FileNotFoundError):
-        collate.process_file(file_name, word_counts)
+        collate.process_file(fname, word_counts)
 ```
 
 4. The following sequence of commands is required to test the code coverage.
 
 Generate the html report:
 
-```shell
+```bash
 $ coverage run -m pytest
 $ coverage html
 ```
 
 Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
 The lines of `process_files` that include the `raise OSError` and
-`open(file_name, 'r')` commands should appear in green after clicking the green "run" box
+`open(fname, 'r')` commands should appear in green after clicking the green "run" box
 in the top left hand corner of the page.
  
 ### Exercise \@ref(testing-ex-random) {-}
@@ -19040,7 +19200,7 @@ Andrew has therefore posted a conda installation package to Anaconda Cloud
 (Figure \@ref(fig:anaconda-windspharm-ajdawson))
 so that users can install windspharm using conda:
 
-```shell 
+```bash 
 $ conda install -c ajdawson windspharm
 ```
 
@@ -19063,7 +19223,7 @@ version of each installation package on Anaconda Cloud.
 You can therefore expand the selection of packages available via `conda install`
 beyond the chosen few thousand by adding the conda-forge channel to your conda configuration:
 
-```shell
+```bash
 $ conda config --add channels conda-forge
 ```
 
@@ -19370,7 +19530,7 @@ but does not change the way Python interprets them---when it encounters `a * b
 for example,
 Python still does the multiplication before the addition.
 
-**Put two blank links between each function definition.**
+**Put two blank lines between each function definition.**
 
 This helps the eye see where one ends and the next begins,
 though the fact that functions always start in the first column helps as well.
@@ -19527,19 +19687,25 @@ print('number', n)
 
 When we run:
 
-```shell
-pycodestyle count_stops.py
+```bash
+$ pycodestyle count_stops.py
 ```
 
 it prints:
 
 ```text
-src/style/count_stops_before.py:3:1: E302 expected 2 blank lines, found 1
-src/style/count_stops_before.py:11:24: E712 comparison to True should be 'if cond is True:' or 'if cond:'
-src/style/count_stops_before.py:12:13: E101 indentation contains mixed spaces and tabs
-src/style/count_stops_before.py:12:13: W191 indentation contains tabs
-src/style/count_stops_before.py:15:1: E305 expected 2 blank lines after class or function definition, found 1
-src/style/count_stops_before.py:15:1: E402 module level import not at top of file
+src/style/count_stops_before.py:3:1:
+E302 expected 2 blank lines, found 1
+src/style/count_stops_before.py:11:24:
+E712 comparison to True should be 'if cond is True:' or 'if cond:'
+src/style/count_stops_before.py:12:13:
+E101 indentation contains mixed spaces and tabs
+src/style/count_stops_before.py:12:13:
+W191 indentation contains tabs
+src/style/count_stops_before.py:15:1:
+E305 expected 2 blank lines after class or function definition, found 1
+src/style/count_stops_before.py:15:1:
+E402 module level import not at top of file
 ```
 
 which tells us that:
@@ -19744,14 +19910,16 @@ they make it harder to get complex assignments wrong.
 For example:
 
 ```python
-samples[least_factor_index, max(current_offset, offset_limit)] *= scaling_factor
+samples[least_factor_index,
+        max(current_offset, offset_limit)] *= scaling_factor
 ```
 
 is less difficult to read than the equivalent expression:
 
 ```python
 samples[least_factor_index, max(current_offset, offset_limit)] = \
-    scaling_factor * samples[least_factor_index, max(current_limit, offset_limit)]
+    scaling_factor * samples[least_factor_index,
+                             max(current_limit, offset_limit)]
 ```
 
 (The proof of this claim is that you probably didn't notice
@@ -20870,7 +21038,7 @@ In the example below,
 the remote machine's command prompt is `moon>`
 instead of `$` to make it clearer which machine is doing what.
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -20878,12 +21046,12 @@ $ pwd
 /Users/amira
 ```
 
-```shell
+```bash
 $ ssh amira@moon.euphoric.edu
 Password: ********
 ```
 
-```shell
+```bash
 moon> hostname
 ```
 
@@ -20891,7 +21059,7 @@ moon> hostname
 moon
 ```
 
-```shell
+```bash
 moon> pwd
 ```
 
@@ -20899,7 +21067,7 @@ moon> pwd
 /Users/amira
 ```
 
-```shell
+```bash
 moon> ls -F
 ```
 
@@ -20907,11 +21075,11 @@ moon> ls -F
 bin/     cheese.txt   dark_side/   rocks.cfg
 ```
 
-```shell
+```bash
 moon> exit
 ```
 
-```shell
+```bash
 $ pwd
 ```
 
@@ -20930,7 +21098,7 @@ For example,
 this command copies our latest results to the backup server in the basement,
 printing out its progress as it does so:
 
-```shell
+```bash
 $ scp results.dat amira@backupserver:backups/results-2019-11-11.dat
 Password: ********
 ```
@@ -20950,21 +21118,21 @@ target, for a remote copy, is also the  home directory.
 
 This means that 
 
-```shell
+```bash
 $ scp results.dat amira@backupserver:
 ```
 
 would copy `results.dat` into our home directory on `backupserver`, however, if we did not
 have the colon to inform `scp` of the remote machine, we would still have a valid command
 
-```shell
+```bash
 $ scp results.dat amira@backupserver
 ```
 
 but now we have merely created a file called `amira@backupserver` on our local machine,
 as we would have done with `cp`.
 
-```shell
+```bash
 $ cp results.dat amira@backupserver
 ```
 
@@ -20973,7 +21141,7 @@ we just use the `-r` option to signal that we want copying to be recursively.
 For example,
 this command copies all of our results from the backup server to our laptop:
 
-```shell
+```bash
 $ scp -r amira@backupserver:backups ./backups
 Password: ********
 ```
@@ -20993,7 +21161,7 @@ Suppose we want to check whether we have already created the file
 Instead of logging in and then typing `ls`,
 we could do this:
 
-```shell
+```bash
 $ ssh amira@backupserver "ls results*"
 Password: ********
 ```
@@ -21028,7 +21196,7 @@ private key from the public one.
 We might already have an SSH key pair on your machine.
 We can check by moving to your `.ssh` directory and listing the contents.
 
-```shell
+```bash
 $ cd ~/.ssh
 $ ls
 ```
@@ -21040,7 +21208,7 @@ If we don't see `id_rsa.pub`,
 this command will generate a new key pair.
 (Make sure to replace `your@email.com` with your own email address.)
 
-```shell
+```bash
 $ ssh-keygen -t rsa -C "your@email.com"
 ```
 
@@ -21089,7 +21257,7 @@ We now need to place a copy of our public key on
 any servers we would like to to connect to.
 Display the contents of our public key file with `cat`:
 
-```shell
+```bash
 $ cat ~/.ssh/id_rsa.pub
 ```
 
@@ -21104,14 +21272,14 @@ gqJrilwSoC5rGjgp93iu0H8T6+mEHGRQe84Nk1y5lESSWIbn6P636Bl3uQ== your@email.com
 Copy the contents of the output,
 then log in to the remote server as usual:
 
-```shell
+```bash
 $ ssh amira@moon.euphoric.edu
 Password: ********
 ```
 
 Paste the copied content at the end of `~/.ssh/authorized_keys`. 
 
-```shell
+```bash
 moon> nano ~/.ssh/authorized_keys
 ```
 
@@ -21119,11 +21287,11 @@ After appending the content,
 log out of the remote machine and try to log in again.
 If we set up the SSH key correctly we won't need to type our password:
 
-```shell
+```bash
 moon> exit
 ```
 
-```shell
+```bash
 $ ssh amira@moon.euphoric.edu
 ```
 
@@ -21147,7 +21315,7 @@ for the `ssh` command.
 Firstly, we check that we have a `.ssh/` directory on another remote
 machine, `comet`
 
-```shell
+```bash
 $ ssh amira@comet "ls -ld ~/.ssh"
 Password: ********
 ```
@@ -21159,12 +21327,12 @@ ls: cannot access /Users/amira/.ssh: No such file or directory
 Oops:
 we should create the directory and check that it's there:
 
-```shell
+```bash
 $ ssh amira@comet "mkdir ~/.ssh"
 Password: ********
 ```
 
-```shell
+```bash
 $ ssh amira@comet "ls -ld ~/.ssh"
 Password: ********
 ```
@@ -21183,7 +21351,7 @@ for the user, and not accessible by others.
 
 Let's alter the permissions on the directory:
 
-```shell
+```bash
 $ ssh amira@comet "chmod 700 ~/.ssh; ls -ld ~/.ssh"
 Password: ********
 ```
@@ -21201,7 +21369,7 @@ copy our public key over as the initial `~/.ssh/authorized_keys`,
 and of course, we will use `scp` to do this, even though we don't
 yet have passwordless SSH access set up.
 
-```shell
+```bash
 $ scp ~/.ssh/id_rsa.pub amira@comet:.ssh/authorized_keys
 Password: ********
 ```
@@ -21216,7 +21384,7 @@ the remote machine, also serves to indicate that we no longer
 need to use our password, because we now have what's needed
 to use SSH without it.
 
-```shell
+```bash
 $ ssh amira@comet "ls -l ~/.ssh"
 ```
 
@@ -21228,7 +21396,7 @@ Whilst the authorized keys file is not considered to be highly sensitive,
 (after all, it contains public keys), we alter the permissions to match
 the man page's recommendations
 
-```shell
+```bash
 $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 ```
 

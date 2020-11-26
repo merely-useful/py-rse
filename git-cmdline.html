@@ -24,7 +24,7 @@
 <meta name="author" content="Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson" />
 
 
-<meta name="date" content="2020-11-25" />
+<meta name="date" content="2020-11-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -678,38 +678,39 @@ over the course of this chapter
 we will edit it to produce more informative plots.
 Initially,
 it looks like this:</p>
-<div class="sourceCode" id="cb362"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb362-1"><a href="git-cmdline.html#cb362-1" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
-<span id="cb362-2"><a href="git-cmdline.html#cb362-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb362-3"><a href="git-cmdline.html#cb362-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
-<span id="cb362-4"><a href="git-cmdline.html#cb362-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb362-5"><a href="git-cmdline.html#cb362-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb362-6"><a href="git-cmdline.html#cb362-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb362-7"><a href="git-cmdline.html#cb362-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(args):</span>
-<span id="cb362-8"><a href="git-cmdline.html#cb362-8" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, </span>
-<span id="cb362-9"><a href="git-cmdline.html#cb362-9" aria-hidden="true" tabindex="-1"></a>                     names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
-<span id="cb362-10"><a href="git-cmdline.html#cb362-10" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, </span>
-<span id="cb362-11"><a href="git-cmdline.html#cb362-11" aria-hidden="true" tabindex="-1"></a>                                           method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
-<span id="cb362-12"><a href="git-cmdline.html#cb362-12" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;inverse_rank&#39;</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> df[<span class="st">&#39;rank&#39;</span>]</span>
-<span id="cb362-13"><a href="git-cmdline.html#cb362-13" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
-<span id="cb362-14"><a href="git-cmdline.html#cb362-14" aria-hidden="true" tabindex="-1"></a>                         y<span class="op">=</span><span class="st">&#39;inverse_rank&#39;</span>,</span>
-<span id="cb362-15"><a href="git-cmdline.html#cb362-15" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], </span>
-<span id="cb362-16"><a href="git-cmdline.html#cb362-16" aria-hidden="true" tabindex="-1"></a>                         grid<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb362-17"><a href="git-cmdline.html#cb362-17" aria-hidden="true" tabindex="-1"></a>    ax.figure.savefig(args.outfile)</span>
-<span id="cb362-18"><a href="git-cmdline.html#cb362-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb362-19"><a href="git-cmdline.html#cb362-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb362-20"><a href="git-cmdline.html#cb362-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb362-21"><a href="git-cmdline.html#cb362-21" aria-hidden="true" tabindex="-1"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb362-22"><a href="git-cmdline.html#cb362-22" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), </span>
-<span id="cb362-23"><a href="git-cmdline.html#cb362-23" aria-hidden="true" tabindex="-1"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>, </span>
-<span id="cb362-24"><a href="git-cmdline.html#cb362-24" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
-<span id="cb362-25"><a href="git-cmdline.html#cb362-25" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, </span>
-<span id="cb362-26"><a href="git-cmdline.html#cb362-26" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
-<span id="cb362-27"><a href="git-cmdline.html#cb362-27" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
-<span id="cb362-28"><a href="git-cmdline.html#cb362-28" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, </span>
-<span id="cb362-29"><a href="git-cmdline.html#cb362-29" aria-hidden="true" tabindex="-1"></a>                        metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
-<span id="cb362-30"><a href="git-cmdline.html#cb362-30" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
-<span id="cb362-31"><a href="git-cmdline.html#cb362-31" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb362-32"><a href="git-cmdline.html#cb362-32" aria-hidden="true" tabindex="-1"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb377"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb377-1"><a href="git-cmdline.html#cb377-1" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
+<span id="cb377-2"><a href="git-cmdline.html#cb377-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb377-3"><a href="git-cmdline.html#cb377-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
+<span id="cb377-4"><a href="git-cmdline.html#cb377-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb377-5"><a href="git-cmdline.html#cb377-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb377-6"><a href="git-cmdline.html#cb377-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb377-7"><a href="git-cmdline.html#cb377-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb377-8"><a href="git-cmdline.html#cb377-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(args):</span>
+<span id="cb377-9"><a href="git-cmdline.html#cb377-9" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>, </span>
+<span id="cb377-10"><a href="git-cmdline.html#cb377-10" aria-hidden="true" tabindex="-1"></a>                     names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
+<span id="cb377-11"><a href="git-cmdline.html#cb377-11" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>, </span>
+<span id="cb377-12"><a href="git-cmdline.html#cb377-12" aria-hidden="true" tabindex="-1"></a>                                           method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
+<span id="cb377-13"><a href="git-cmdline.html#cb377-13" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;inverse_rank&#39;</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> df[<span class="st">&#39;rank&#39;</span>]</span>
+<span id="cb377-14"><a href="git-cmdline.html#cb377-14" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
+<span id="cb377-15"><a href="git-cmdline.html#cb377-15" aria-hidden="true" tabindex="-1"></a>                         y<span class="op">=</span><span class="st">&#39;inverse_rank&#39;</span>,</span>
+<span id="cb377-16"><a href="git-cmdline.html#cb377-16" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], </span>
+<span id="cb377-17"><a href="git-cmdline.html#cb377-17" aria-hidden="true" tabindex="-1"></a>                         grid<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb377-18"><a href="git-cmdline.html#cb377-18" aria-hidden="true" tabindex="-1"></a>    ax.figure.savefig(args.outfile)</span>
+<span id="cb377-19"><a href="git-cmdline.html#cb377-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb377-20"><a href="git-cmdline.html#cb377-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb377-21"><a href="git-cmdline.html#cb377-21" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb377-22"><a href="git-cmdline.html#cb377-22" aria-hidden="true" tabindex="-1"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb377-23"><a href="git-cmdline.html#cb377-23" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>), </span>
+<span id="cb377-24"><a href="git-cmdline.html#cb377-24" aria-hidden="true" tabindex="-1"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>, </span>
+<span id="cb377-25"><a href="git-cmdline.html#cb377-25" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
+<span id="cb377-26"><a href="git-cmdline.html#cb377-26" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>, </span>
+<span id="cb377-27"><a href="git-cmdline.html#cb377-27" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
+<span id="cb377-28"><a href="git-cmdline.html#cb377-28" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
+<span id="cb377-29"><a href="git-cmdline.html#cb377-29" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>, </span>
+<span id="cb377-30"><a href="git-cmdline.html#cb377-30" aria-hidden="true" tabindex="-1"></a>                        metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
+<span id="cb377-31"><a href="git-cmdline.html#cb377-31" aria-hidden="true" tabindex="-1"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
+<span id="cb377-32"><a href="git-cmdline.html#cb377-32" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb377-33"><a href="git-cmdline.html#cb377-33" aria-hidden="true" tabindex="-1"></a>    main(args)</span></code></pre></div>
 <div id="git-cmdline-setup" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Setting Up</h2>
 <p>We write Git commands as <code>git VERB [options]</code>,
@@ -717,8 +718,8 @@ where the <a href="glossary.html#subcommand">subcommand</a> <code>VERB</code> te
 and <code>[options]</code> provide whatever additional information that subcommand needs.
 Using this syntax,
 the first thing we need to do is configure Git.</p>
-<pre class="shell"><code>$ git config --global user.name &quot;Amira Khan&quot;
-$ git config --global user.email &quot;amira@zipf.org&quot;</code></pre>
+<div class="sourceCode" id="cb378"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb378-1"><a href="git-cmdline.html#cb378-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> config --global user.name <span class="st">&quot;Amira Khan&quot;</span></span>
+<span id="cb378-2"><a href="git-cmdline.html#cb378-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> config --global user.email <span class="st">&quot;amira@zipf.org&quot;</span></span></code></pre></div>
 <p>(Please use your own name and email address instead of the one shown.)
 Here,
 <code>config</code> is the verb
@@ -734,7 +735,7 @@ so these two commands only need to be run once.
 However,
 we can re-run them any time if we want to change our details.
 We can also check our settings using the <code>--list</code> option:</p>
-<pre class="shell"><code>$ git config --list</code></pre>
+<div class="sourceCode" id="cb379"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb379-1"><a href="git-cmdline.html#cb379-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> config --list</span></code></pre></div>
 <pre class="text"><code>user.name=Amira Khan
 user.email=amira@zipf.org
 core.autocrlf=input
@@ -748,9 +749,9 @@ core.ignorecase=true
 <p><strong>Git Help and Manual</strong></p>
 <p>If we forget a Git command,
 we can list which ones are available using <code>--help</code>:</p>
-<pre class="shell"><code>$ git --help</code></pre>
+<div class="sourceCode" id="cb381"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb381-1"><a href="git-cmdline.html#cb381-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> --help</span></code></pre></div>
 <p>This option also gives us more information about specific commands:</p>
-<pre class="shell"><code>$ git config --help</code></pre>
+<div class="sourceCode" id="cb382"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb382-1"><a href="git-cmdline.html#cb382-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> config --help</span></code></pre></div>
 </blockquote>
 </div>
 <div id="git-cmdline-repos" class="section level2" number="6.2">
@@ -758,28 +759,28 @@ we can list which ones are available using <code>--help</code>:</p>
 <p>Once Git is configured,
 we can use it to track work on our Zipf’s Law project.
 First, we need to make sure we are in the top-level directory of our project:</p>
-<pre class="shell"><code>$ cd ~/zipf
-$ ls</code></pre>
+<div class="sourceCode" id="cb383"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb383-1"><a href="git-cmdline.html#cb383-1" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> ~/zipf</span>
+<span id="cb383-2"><a href="git-cmdline.html#cb383-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">ls</span></span></code></pre></div>
 <pre class="text"><code> bin       data      results</code></pre>
 <p>We want to make this directory a <a href="glossary.html#repository">repository</a>,
 i.e.,
 a place where Git can store versions of our files.
 We do this using the <code>init</code> command with <code>.</code> to mean “the current directory”:</p>
-<pre class="shell"><code>$ git init .</code></pre>
+<div class="sourceCode" id="cb385"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb385-1"><a href="git-cmdline.html#cb385-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> init .</span></code></pre></div>
 <pre class="text"><code>Initialized empty Git repository in /Users/amira/zipf/.git/</code></pre>
 <p><code>ls</code> seems to show that nothing has changed:</p>
-<pre class="shell"><code>$ ls</code></pre>
+<div class="sourceCode" id="cb387"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb387-1"><a href="git-cmdline.html#cb387-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">ls</span></span></code></pre></div>
 <pre class="text"><code>bin     data    results</code></pre>
 <p>But if we add the <code>-a</code> flag to show everything,
 we can see that Git has created a hidden directory within <code>zipf</code> called <code>.git</code>:</p>
-<pre class="shell"><code>$ ls -a</code></pre>
+<div class="sourceCode" id="cb389"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb389-1"><a href="git-cmdline.html#cb389-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">ls</span> -a</span></code></pre></div>
 <pre class="text"><code>.       ..      .git    bin     data    results</code></pre>
 <p>Git stores information about the project in this special subdirectory.
 If we ever delete it,
 we will lose that history.</p>
 <p>We can check that everything is set up correctly
 by asking Git to tell us the status of our project:</p>
-<pre class="shell"><code>$ git status</code></pre>
+<div class="sourceCode" id="cb391"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb391-1"><a href="git-cmdline.html#cb391-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 
 No commits yet
@@ -819,14 +820,14 @@ we can tell Git to start recording its history.
 To do this,
 we add things to the list of things Git is tracking using <code>git add</code>.
 We can do this for single files:</p>
-<pre class="shell"><code>$ git add bin/countwords.py</code></pre>
+<div class="sourceCode" id="cb393"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb393-1"><a href="git-cmdline.html#cb393-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> add bin/countwords.py</span></code></pre></div>
 <p>or entire directories:</p>
-<pre class="shell"><code>$ git add bin</code></pre>
+<div class="sourceCode" id="cb394"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb394-1"><a href="git-cmdline.html#cb394-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> add bin</span></code></pre></div>
 <p>The easiest thing to do with an existing project
 is to tell Git to add everything in the current directory using <code>.</code>:</p>
-<pre class="shell"><code>$ git add .</code></pre>
+<div class="sourceCode" id="cb395"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb395-1"><a href="git-cmdline.html#cb395-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> add .</span></code></pre></div>
 <p>We can then check the repository’s status to see what files have been added:</p>
-<pre class="shell"><code>$ git status</code></pre>
+<div class="sourceCode" id="cb396"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb396-1"><a href="git-cmdline.html#cb396-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 
 No commits yet
@@ -880,9 +881,9 @@ We will explore this issue further in Chapter <a href="provenance.html#provenan
 but the tracked files haven’t been <a href="glossary.html#commit">committed</a>
 (i.e., saved permanently in our project’s history).
 We can do this using <code>git commit</code>:</p>
-<pre class="shell"><code>$ git commit -m &quot;Add scripts, novels, word counts, and word rank plot&quot;</code></pre>
+<div class="sourceCode" id="cb398"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb398-1"><a href="git-cmdline.html#cb398-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Add scripts, novels, word counts, and plots&quot;</span></span></code></pre></div>
 <pre class="text"><code>[master (root-commit) 31a216a] Add scripts, novels, word 
-    counts, and word rank plot
+    counts, and plots
  17 files changed, 240337 insertions(+)
  create mode 100644 bin/book_summary.sh
  create mode 100644 bin/collate.py
@@ -915,7 +916,7 @@ to remind us later what we did and why.
 (Once again,
 we put it in double quotes because it contains spaces.)
 If we run <code>git status</code> now:</p>
-<pre class="shell"><code>$ git status</code></pre>
+<div class="sourceCode" id="cb400"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb400-1"><a href="git-cmdline.html#cb400-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <p>the output tells us that
 all of our existing work is tracked and up to date:</p>
 <pre class="text"><code>On branch master
@@ -966,7 +967,7 @@ is one of the most frequently read questions on Stack Overflow.)</p>
 <p>To configure Git to use the <code>nano</code> editor
 introduced in Chapter <a href="bash-basics.html#bash-basics">2</a> instead,
 execute the following command:</p>
-<pre class="shell"><code>git config --global core.editor &quot;nano -w&quot;</code></pre>
+<div class="sourceCode" id="cb402"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb402-1"><a href="git-cmdline.html#cb402-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> config --global core.editor <span class="st">&quot;nano -w&quot;</span></span></code></pre></div>
 </blockquote>
 </div>
 <div id="git-cmdline-changes" class="section level2" number="6.5">
@@ -975,14 +976,14 @@ execute the following command:</p>
 The process to build on top of it is similar:
 first add the file, then commit changes.
 Let’s check that we’re in the right directory:</p>
-<pre class="shell"><code>$ pwd</code></pre>
+<div class="sourceCode" id="cb403"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb403-1"><a href="git-cmdline.html#cb403-1" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">pwd</span></span></code></pre></div>
 <pre class="text"><code>/Users/amira/zipf</code></pre>
 <p>Let’s use <code>plotcounts.py</code> to plot the word counts in <code>results/dracula.csv</code>:</p>
-<pre class="shell"><code>python bin/plotcounts.py results/dracula.csv \
-  --outfile results/dracula.png</code></pre>
+<div class="sourceCode" id="cb405"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb405-1"><a href="git-cmdline.html#cb405-1" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">python</span> bin/plotcounts.py results/dracula.csv --outfile</span>
+<span id="cb405-2"><a href="git-cmdline.html#cb405-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">results/dracula.png</span></span></code></pre></div>
 <p>If we check the status of our repository again,
 Git tells us that we have a new file:</p>
-<pre class="shell"><code>$ git status</code></pre>
+<div class="sourceCode" id="cb406"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb406-1"><a href="git-cmdline.html#cb406-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 Untracked files:
   (use &quot;git add &lt;file&gt;...&quot; to include in what will 
@@ -994,14 +995,14 @@ nothing added to commit but untracked files
 present (use &quot;git add&quot; to track)</code></pre>
 <p>Git isn’t tracking this file yet because we haven’t told it to.
 Let’s do that with <code>git add</code> and then commit our change:</p>
-<pre class="shell"><code>$ git add results/dracula.png
-$ git commit -m &quot;Add plot of word counts for &#39;Dracula&#39;&quot;</code></pre>
+<div class="sourceCode" id="cb408"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb408-1"><a href="git-cmdline.html#cb408-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> add results/dracula.png</span>
+<span id="cb408-2"><a href="git-cmdline.html#cb408-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Add plot of word counts for &#39;Dracula&#39;&quot;</span></span></code></pre></div>
 <pre class="text"><code>[master 65b7e61] Add plot of word counts for &#39;Dracula&#39;
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 results/dracula.png</code></pre>
 <p>If we want to know what we’ve done recently,
 we can display the project’s history using <code>git log</code>:</p>
-<pre class="shell"><code>$ git log</code></pre>
+<div class="sourceCode" id="cb410"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb410-1"><a href="git-cmdline.html#cb410-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> log</span></code></pre></div>
 <pre class="text"><code>commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa (HEAD -&gt; master)
 Author: Amira Khan &lt;amira@zipf.org&gt;
 Date:   Thu Feb 20 10:46:19 2020 -0800
@@ -1012,7 +1013,7 @@ commit 31a216a6119de9a8d2233e5e275af9a2967415af
 Author: Amira Khan &lt;amira@zipf.org&gt;
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
-    Add scripts, novels, word counts, and word rank plot</code></pre>
+    Add scripts, novels, word counts, and plots</code></pre>
 <p><code>git log</code> lists all commits made to a repository in reverse chronological order.
 The listing for each commit includes
 the commit’s <a href="glossary.html#full_identifier_git">full identifier</a>
@@ -1032,21 +1033,21 @@ Figure 6.2: Inverse rank versus word frequency for ‘Dracula.’
 </div>
 <p>An alternative way to visually evaluate Zipf’s Law is
 to plot the word frequency against rank on log-log axes.
-Let’s change the line:</p>
-<div class="sourceCode" id="cb397"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb397-1"><a href="git-cmdline.html#cb397-1" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
-<span id="cb397-2"><a href="git-cmdline.html#cb397-2" aria-hidden="true" tabindex="-1"></a>                         y<span class="op">=</span><span class="st">&#39;inverse_rank&#39;</span>,</span>
-<span id="cb397-3"><a href="git-cmdline.html#cb397-3" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], </span>
-<span id="cb397-4"><a href="git-cmdline.html#cb397-4" aria-hidden="true" tabindex="-1"></a>                         grid<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb397-5"><a href="git-cmdline.html#cb397-5" aria-hidden="true" tabindex="-1"></a>                         xlim<span class="op">=</span>args.xlim)</span></code></pre></div>
+Let’s change the section:</p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb412-1"><a href="git-cmdline.html#cb412-1" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
+<span id="cb412-2"><a href="git-cmdline.html#cb412-2" aria-hidden="true" tabindex="-1"></a>                         y<span class="op">=</span><span class="st">&#39;inverse_rank&#39;</span>,</span>
+<span id="cb412-3"><a href="git-cmdline.html#cb412-3" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], </span>
+<span id="cb412-4"><a href="git-cmdline.html#cb412-4" aria-hidden="true" tabindex="-1"></a>                         grid<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb412-5"><a href="git-cmdline.html#cb412-5" aria-hidden="true" tabindex="-1"></a>                         xlim<span class="op">=</span>args.xlim)</span></code></pre></div>
 <p>to put <code>'rank'</code> on the y-axis and add <code>loglog=True</code>:</p>
-<div class="sourceCode" id="cb398"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb398-1"><a href="git-cmdline.html#cb398-1" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
-<span id="cb398-2"><a href="git-cmdline.html#cb398-2" aria-hidden="true" tabindex="-1"></a>                         y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb398-3"><a href="git-cmdline.html#cb398-3" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], </span>
-<span id="cb398-4"><a href="git-cmdline.html#cb398-4" aria-hidden="true" tabindex="-1"></a>                         grid<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb398-5"><a href="git-cmdline.html#cb398-5" aria-hidden="true" tabindex="-1"></a>                         xlim<span class="op">=</span>args.xlim)</span></code></pre></div>
+<div class="sourceCode" id="cb413"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb413-1"><a href="git-cmdline.html#cb413-1" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
+<span id="cb413-2"><a href="git-cmdline.html#cb413-2" aria-hidden="true" tabindex="-1"></a>                         y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb413-3"><a href="git-cmdline.html#cb413-3" aria-hidden="true" tabindex="-1"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>], </span>
+<span id="cb413-4"><a href="git-cmdline.html#cb413-4" aria-hidden="true" tabindex="-1"></a>                         grid<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb413-5"><a href="git-cmdline.html#cb413-5" aria-hidden="true" tabindex="-1"></a>                         xlim<span class="op">=</span>args.xlim)</span></code></pre></div>
 <p>When we run <code>git status</code> now,
 it prints:</p>
-<pre class="shell"><code>$ git status</code></pre>
+<div class="sourceCode" id="cb414"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb414-1"><a href="git-cmdline.html#cb414-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 Changes not staged for commit:
   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
@@ -1064,25 +1065,24 @@ though,
 let’s review the changes using <code>git diff</code>.
 This command shows us the differences between the current state of our repository
 and the most recently saved version:</p>
-<pre class="shell"><code>$ git diff</code></pre>
-<div class="sourceCode" id="cb402"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb402-1"><a href="git-cmdline.html#cb402-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
-<span id="cb402-2"><a href="git-cmdline.html#cb402-2" aria-hidden="true" tabindex="-1"></a>index 13e7f38..a6005cd 100644</span>
-<span id="cb402-3"><a href="git-cmdline.html#cb402-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
-<span id="cb402-4"><a href="git-cmdline.html#cb402-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
-<span id="cb402-5"><a href="git-cmdline.html#cb402-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -8,7 +8,7 @@ def main(args):</span></span>
-<span id="cb402-6"><a href="git-cmdline.html#cb402-6" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
-<span id="cb402-7"><a href="git-cmdline.html#cb402-7" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
-<span id="cb402-8"><a href="git-cmdline.html#cb402-8" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
-<span id="cb402-9"><a href="git-cmdline.html#cb402-9" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
-<span id="cb402-10"><a href="git-cmdline.html#cb402-10" aria-hidden="true" tabindex="-1"></a>     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span>
-<span id="cb402-11"><a href="git-cmdline.html#cb402-11" aria-hidden="true" tabindex="-1"></a><span class="st">-    df.plot.scatter(x=&#39;word_frequency&#39;, </span></span>
-<span id="cb402-12"><a href="git-cmdline.html#cb402-12" aria-hidden="true" tabindex="-1"></a>                     y=&#39;inverse_rank&#39;,</span>
-<span id="cb402-13"><a href="git-cmdline.html#cb402-13" aria-hidden="true" tabindex="-1"></a><span class="va">+    ax = df.plot.scatter(x=&#39;word_frequency&#39;, </span></span>
-<span id="cb402-14"><a href="git-cmdline.html#cb402-14" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;rank&#39;, loglog=True,</span></span>
-<span id="cb402-15"><a href="git-cmdline.html#cb402-15" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
-<span id="cb402-16"><a href="git-cmdline.html#cb402-16" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
-<span id="cb402-17"><a href="git-cmdline.html#cb402-17" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
-<span id="cb402-18"><a href="git-cmdline.html#cb402-18" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
+<div class="sourceCode" id="cb416"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb416-1"><a href="git-cmdline.html#cb416-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> diff</span></code></pre></div>
+<div class="sourceCode" id="cb417"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb417-1"><a href="git-cmdline.html#cb417-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
+<span id="cb417-2"><a href="git-cmdline.html#cb417-2" aria-hidden="true" tabindex="-1"></a>index 13e7f38..a6005cd 100644</span>
+<span id="cb417-3"><a href="git-cmdline.html#cb417-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
+<span id="cb417-4"><a href="git-cmdline.html#cb417-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
+<span id="cb417-5"><a href="git-cmdline.html#cb417-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -8,7 +8,7 @@ def main(args):</span></span>
+<span id="cb417-6"><a href="git-cmdline.html#cb417-6" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
+<span id="cb417-7"><a href="git-cmdline.html#cb417-7" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
+<span id="cb417-8"><a href="git-cmdline.html#cb417-8" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
+<span id="cb417-9"><a href="git-cmdline.html#cb417-9" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
+<span id="cb417-10"><a href="git-cmdline.html#cb417-10" aria-hidden="true" tabindex="-1"></a>     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span>
+<span id="cb417-11"><a href="git-cmdline.html#cb417-11" aria-hidden="true" tabindex="-1"></a>     ax = df.plot.scatter(x=&#39;word_frequency&#39;, </span>
+<span id="cb417-12"><a href="git-cmdline.html#cb417-12" aria-hidden="true" tabindex="-1"></a><span class="st">-                         y=&#39;inverse_rank&#39;,</span></span>
+<span id="cb417-13"><a href="git-cmdline.html#cb417-13" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;rank&#39;, loglog=True,</span></span>
+<span id="cb417-14"><a href="git-cmdline.html#cb417-14" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
+<span id="cb417-15"><a href="git-cmdline.html#cb417-15" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
+<span id="cb417-16"><a href="git-cmdline.html#cb417-16" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
+<span id="cb417-17"><a href="git-cmdline.html#cb417-17" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
 <p>The output is cryptic,
 even by the standards of the Unix command line,
 because it is actually a series of commands telling editors and other tools
@@ -1101,20 +1101,13 @@ while a plus sign <code>+</code> shows a line that is being added. Lines without
 plus or minus signs have not been changed, but are provided around the lines
 that have been changed to add context.</li>
 </ol>
-<p>To be specific,
-this <code>diff</code> tells us that this line in the file was removed:</p>
-<div class="sourceCode" id="cb403"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb403-1"><a href="git-cmdline.html#cb403-1" aria-hidden="true" tabindex="-1"></a>    df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
-<span id="cb403-2"><a href="git-cmdline.html#cb403-2" aria-hidden="true" tabindex="-1"></a>                    y<span class="op">=</span><span class="st">&#39;inverse_rank&#39;</span>,</span></code></pre></div>
-<p>and this line was added:</p>
-<div class="sourceCode" id="cb404"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb404-1"><a href="git-cmdline.html#cb404-1" aria-hidden="true" tabindex="-1"></a>    df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>, </span>
-<span id="cb404-2"><a href="git-cmdline.html#cb404-2" aria-hidden="true" tabindex="-1"></a>                    y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span></code></pre></div>
 <p>Git’s default is to compare line by line,
 but it can be instructive to instead compare word by word
 using the <code>--word-diff</code> or <code>--color-words</code> options.
 These are particularly useful when running <code>git diff</code> on prose rather than code.</p>
 <p>After reviewing our change
 we can commit it just as we did before:</p>
-<pre class="shell"><code>$ git commit -m &quot;Edit to plot frequency against rank on log-log axes&quot;</code></pre>
+<div class="sourceCode" id="cb418"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb418-1"><a href="git-cmdline.html#cb418-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Plot frequency against rank on log-log axes&quot;</span></span></code></pre></div>
 <pre class="text"><code>On branch master
 Changes not staged for commit:
         modified:   bin/plotcounts.py
@@ -1123,15 +1116,15 @@ no changes added to commit</code></pre>
 <p>Whoops:
 we forgot to add the file to the set of things we want to commit.
 Let’s do that and then try the commit again:</p>
-<pre class="shell"><code>$ git add bin/plotcounts.py
-$ git status</code></pre>
+<div class="sourceCode" id="cb420"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb420-1"><a href="git-cmdline.html#cb420-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> add bin/plotcounts.py</span>
+<span id="cb420-2"><a href="git-cmdline.html#cb420-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 Changes to be committed:
   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
 
         modified:   bin/plotcounts.py</code></pre>
-<pre class="shell"><code>$ git commit -m &quot;Edit to plot frequency against rank on log-log axes&quot;</code></pre>
-<pre class="text"><code>[master b5176bf] Edit to plot frequency against rank on log-log axes
+<div class="sourceCode" id="cb422"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb422-1"><a href="git-cmdline.html#cb422-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Plot frequency against rank on log-log axes&quot;</span></span></code></pre></div>
+<pre class="text"><code>[master b5176bf] Plot frequency against rank on log-log axes
  1 file changed, 1 insertion(+), 1 deletion(-)</code></pre>
 <blockquote>
 <p><strong>The Staging Area</strong></p>
@@ -1156,8 +1149,8 @@ Figure 6.3: The staging area in Git.
 </p>
 </div>
 <p>Let’s take a look at our new plot (Figure <a href="git-cmdline.html#fig:git-cmdline-loglog-plot">6.4</a>):</p>
-<pre class="shell"><code>python bin/plotcounts.py results/dracula.csv \
-  --outfile results/dracula.png</code></pre>
+<div class="sourceCode" id="cb424"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb424-1"><a href="git-cmdline.html#cb424-1" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">python</span> bin/plotcounts.py results/dracula.csv --outfile</span>
+<span id="cb424-2"><a href="git-cmdline.html#cb424-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">results/dracula.png</span></span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:git-cmdline-loglog-plot"></span>
 <img src="figures/git-cmdline/plot-loglog.png" alt="Rank versus word frequency on log-log axes for 'Dracula'." width="100%" />
 <p class="caption">
@@ -1186,15 +1179,14 @@ Changes not staged for commit:
 
         modified:   results/dracula.png
 
-no changes added to commit (use &quot;git add&quot; and/or 
-&quot;git commit -a&quot;)</code></pre>
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</code></pre>
 <p>Since <code>results/dracula.png</code> is a binary file rather than text,
 <code>git diff</code> can’t show what has changed.
 It therefore simply tells us that the new file is different from the old one:</p>
-<div class="sourceCode" id="cb413"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb413-1"><a href="git-cmdline.html#cb413-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/results/dracula.png b/results/dracula.png</span></span>
-<span id="cb413-2"><a href="git-cmdline.html#cb413-2" aria-hidden="true" tabindex="-1"></a>index d8162ac..e9fe7f8 100644</span>
-<span id="cb413-3"><a href="git-cmdline.html#cb413-3" aria-hidden="true" tabindex="-1"></a>Binary files a/results/dracula.png and </span>
-<span id="cb413-4"><a href="git-cmdline.html#cb413-4" aria-hidden="true" tabindex="-1"></a>b/results/dracula.png differ</span></code></pre></div>
+<div class="sourceCode" id="cb426"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb426-1"><a href="git-cmdline.html#cb426-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/results/dracula.png b/results/dracula.png</span></span>
+<span id="cb426-2"><a href="git-cmdline.html#cb426-2" aria-hidden="true" tabindex="-1"></a>index d8162ac..e9fe7f8 100644</span>
+<span id="cb426-3"><a href="git-cmdline.html#cb426-3" aria-hidden="true" tabindex="-1"></a>Binary files a/results/dracula.png and </span>
+<span id="cb426-4"><a href="git-cmdline.html#cb426-4" aria-hidden="true" tabindex="-1"></a>b/results/dracula.png differ</span></code></pre></div>
 <p>This is one of the biggest weaknesses of Git
 (and other version control systems):
 they are built to handle text.
@@ -1205,7 +1197,7 @@ programmers fixed this years ago.</p>
 <p>If we are sure we want to save all of our changes,
 we can add and commit in a single command
 by giving <code>git commit</code> the <code>-a</code> option:</p>
-<pre class="shell"><code>$ git commit -a -m &quot;Update dracula plot&quot;</code></pre>
+<div class="sourceCode" id="cb427"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb427-1"><a href="git-cmdline.html#cb427-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> commit -a -m <span class="st">&quot;Update dracula plot&quot;</span></span></code></pre></div>
 <pre class="text"><code>[master d77bc5c] Update dracula plot
  1 file changed, 0 insertions(+), 0 deletions(-)
  rewrite results/dracula.png (99%)</code></pre>
@@ -1257,8 +1249,8 @@ explain the steps required.</p>
 </blockquote>
 <p>Next,
 let’s go into the local <code>zipf</code> repository and run this command:</p>
-<pre class="shell"><code>$ cd ~/zipf
-$ git remote add origin https://github.com/amira-khan/zipf.git</code></pre>
+<div class="sourceCode" id="cb429"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb429-1"><a href="git-cmdline.html#cb429-1" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> ~/zipf</span>
+<span id="cb429-2"><a href="git-cmdline.html#cb429-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> remote add origin https://github.com/amira-khan/zipf.git</span></code></pre></div>
 <p>Make sure to use the URL for your repository instead of the one shown:
 the only difference should be that it includes your username instead of <code>amira-khan</code>.</p>
 <p>A Git remote is like a bookmark:
@@ -1269,7 +1261,7 @@ but <code>origin</code> is Git’s default,
 so we will stick with it.
 We can check that the command has worked by running <code>git remote -v</code>
 (where the <code>-v</code> option is short for <strong>v</strong>erbose):</p>
-<pre class="shell"><code>$ git remote -v</code></pre>
+<div class="sourceCode" id="cb430"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb430-1"><a href="git-cmdline.html#cb430-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> remote -v</span></code></pre></div>
 <pre class="text"><code>origin  https://github.com/amira-khan/zipf.git (fetch)
 origin  https://github.com/amira-khan/zipf.git (push)</code></pre>
 <p>Git displays two lines because it’s actually possible to set up a remote
@@ -1279,7 +1271,7 @@ so we won’t explore this possibility any further.</p>
 <p>Now that we have configured a remote,
 we can <a href="glossary.html#git_push">push</a> the work we have done so far
 to the repository on GitHub:</p>
-<pre class="shell"><code>$ git push origin master</code></pre>
+<div class="sourceCode" id="cb432"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb432-1"><a href="git-cmdline.html#cb432-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> push origin master</span></code></pre></div>
 <p>This may prompt us to enter our username and password;
 once we do that,
 Git prints a few lines of administrative information:</p>
@@ -1304,7 +1296,7 @@ Figure 6.6: Viewing the repository’s history on GitHub.
 </div>
 <p>We can also <a href="glossary.html#git_pull">pull</a> changes
 from the remote repository to the local one:</p>
-<pre class="shell"><code>$ git pull origin master</code></pre>
+<div class="sourceCode" id="cb434"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb434-1"><a href="git-cmdline.html#cb434-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> pull origin master</span></code></pre></div>
 <pre class="text"><code>From https://github.com/amira-khan/zipf
  * branch            master     -&gt; FETCH_HEAD
 Already up-to-date.</code></pre>
@@ -1342,7 +1334,7 @@ commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
 Author: Amira Khan &lt;amira@zipf.org&gt;
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
-    Edit to plot frequency against rank on log-log axes
+    Plot frequency against rank on log-log axes
 
 commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa
 Author: Amira Khan &lt;amira@zipf.org&gt;
@@ -1354,7 +1346,7 @@ commit 31a216a6119de9a8d2233e5e275af9a2967415af
 Author: Amira Khan &lt;amira@zipf.org&gt;
 Date:   Wed Feb 19 15:39:04 2020 -0800
 
-    Add scripts, novels, word counts, and word rank plot</code></pre>
+    Add scripts, novels, word counts, and plots</code></pre>
 <p>The commit in which we changed <code>plotcounts.py</code>
 has the absolute identifier <code>b5176bfd2ce9650ad5e79e117cd68a666c9cdabc</code>,
 but we can use <code>b5176bf</code> to reference it in almost all situations.</p>
@@ -1363,7 +1355,7 @@ it doesn’t tell us exactly what changes were made in each commit.
 If we add the <code>-p</code> option (short for <strong>p</strong>atch),
 we get the same kind of details <code>git diff</code> provides
 to describe the changes in each commit:</p>
-<pre class="shell"><code>git log -p</code></pre>
+<div class="sourceCode" id="cb437"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb437-1"><a href="git-cmdline.html#cb437-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> log -p</span></code></pre></div>
 <p>The first part of the output is shown below;
 we have truncated the rest,
 since it is very long:</p>
@@ -1385,55 +1377,54 @@ to examine the differences between files at any stage in the repository’s hist
 Let’s explore this with the <code>plotcounts.py</code> file.
 We no longer need the line of code in <code>plotcounts.py</code>
 that calculates the inverse rank:</p>
-<div class="sourceCode" id="cb426"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb426-1"><a href="git-cmdline.html#cb426-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;inverse_rank&#39;</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> df[<span class="st">&#39;rank&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb439"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb439-1"><a href="git-cmdline.html#cb439-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;inverse_rank&#39;</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> df[<span class="st">&#39;rank&#39;</span>]</span></code></pre></div>
 <p>If we delete that line from <code>bin/plotcounts.py</code>,
 <code>git diff</code> on its own will show
 the difference between the file as it is now and the most recent version:</p>
-<div class="sourceCode" id="cb427"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb427-1"><a href="git-cmdline.html#cb427-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
-<span id="cb427-2"><a href="git-cmdline.html#cb427-2" aria-hidden="true" tabindex="-1"></a>index a6005cd..d085f22 100644</span>
-<span id="cb427-3"><a href="git-cmdline.html#cb427-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
-<span id="cb427-4"><a href="git-cmdline.html#cb427-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
-<span id="cb427-5"><a href="git-cmdline.html#cb427-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -7,7 +7,6 @@ def main(args):</span></span>
-<span id="cb427-6"><a href="git-cmdline.html#cb427-6" aria-hidden="true" tabindex="-1"></a>     &quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span>
-<span id="cb427-7"><a href="git-cmdline.html#cb427-7" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
-<span id="cb427-8"><a href="git-cmdline.html#cb427-8" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
-<span id="cb427-9"><a href="git-cmdline.html#cb427-9" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
-<span id="cb427-10"><a href="git-cmdline.html#cb427-10" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
-<span id="cb427-11"><a href="git-cmdline.html#cb427-11" aria-hidden="true" tabindex="-1"></a><span class="st">-    df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span></span>
-<span id="cb427-12"><a href="git-cmdline.html#cb427-12" aria-hidden="true" tabindex="-1"></a>     ax = df.plot.scatter(x=&#39;word_frequency&#39;,</span>
-<span id="cb427-13"><a href="git-cmdline.html#cb427-13" aria-hidden="true" tabindex="-1"></a>                          y=&#39;rank&#39;, loglog=True,</span>
-<span id="cb427-14"><a href="git-cmdline.html#cb427-14" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
-<span id="cb427-15"><a href="git-cmdline.html#cb427-15" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
-<span id="cb427-16"><a href="git-cmdline.html#cb427-16" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
-<span id="cb427-17"><a href="git-cmdline.html#cb427-17" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
+<div class="sourceCode" id="cb440"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb440-1"><a href="git-cmdline.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
+<span id="cb440-2"><a href="git-cmdline.html#cb440-2" aria-hidden="true" tabindex="-1"></a>index a6005cd..d085f22 100644</span>
+<span id="cb440-3"><a href="git-cmdline.html#cb440-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
+<span id="cb440-4"><a href="git-cmdline.html#cb440-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
+<span id="cb440-5"><a href="git-cmdline.html#cb440-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -7,7 +7,6 @@ def main(args):</span></span>
+<span id="cb440-6"><a href="git-cmdline.html#cb440-6" aria-hidden="true" tabindex="-1"></a>     &quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span>
+<span id="cb440-7"><a href="git-cmdline.html#cb440-7" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
+<span id="cb440-8"><a href="git-cmdline.html#cb440-8" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
+<span id="cb440-9"><a href="git-cmdline.html#cb440-9" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
+<span id="cb440-10"><a href="git-cmdline.html#cb440-10" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
+<span id="cb440-11"><a href="git-cmdline.html#cb440-11" aria-hidden="true" tabindex="-1"></a><span class="st">-    df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span></span>
+<span id="cb440-12"><a href="git-cmdline.html#cb440-12" aria-hidden="true" tabindex="-1"></a>     ax = df.plot.scatter(x=&#39;word_frequency&#39;,</span>
+<span id="cb440-13"><a href="git-cmdline.html#cb440-13" aria-hidden="true" tabindex="-1"></a>                          y=&#39;rank&#39;, loglog=True,</span>
+<span id="cb440-14"><a href="git-cmdline.html#cb440-14" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
+<span id="cb440-15"><a href="git-cmdline.html#cb440-15" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
+<span id="cb440-16"><a href="git-cmdline.html#cb440-16" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
+<span id="cb440-17"><a href="git-cmdline.html#cb440-17" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
 <p><code>git diff b5176bf</code>,
 on the other hand,
 shows the difference between the current state
 and the commit referenced by the short identifier:</p>
-<div class="sourceCode" id="cb428"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb428-1"><a href="git-cmdline.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
-<span id="cb428-2"><a href="git-cmdline.html#cb428-2" aria-hidden="true" tabindex="-1"></a>index a6005cd..04e824d 100644</span>
-<span id="cb428-3"><a href="git-cmdline.html#cb428-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
-<span id="cb428-4"><a href="git-cmdline.html#cb428-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
-<span id="cb428-5"><a href="git-cmdline.html#cb428-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -7,8 +7,7 @@ def main(args):</span></span>
-<span id="cb428-6"><a href="git-cmdline.html#cb428-6" aria-hidden="true" tabindex="-1"></a>     &quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span>
-<span id="cb428-7"><a href="git-cmdline.html#cb428-7" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
-<span id="cb428-8"><a href="git-cmdline.html#cb428-8" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
-<span id="cb428-9"><a href="git-cmdline.html#cb428-9" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
-<span id="cb428-10"><a href="git-cmdline.html#cb428-10" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
-<span id="cb428-11"><a href="git-cmdline.html#cb428-11" aria-hidden="true" tabindex="-1"></a><span class="st">-    df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span></span>
-<span id="cb428-12"><a href="git-cmdline.html#cb428-12" aria-hidden="true" tabindex="-1"></a><span class="st">-    df.plot.scatter(x=&#39;word_frequency&#39;,    </span></span>
-<span id="cb428-13"><a href="git-cmdline.html#cb428-13" aria-hidden="true" tabindex="-1"></a><span class="st">-                    y=&#39;rank&#39;, loglog=True,</span></span>
-<span id="cb428-14"><a href="git-cmdline.html#cb428-14" aria-hidden="true" tabindex="-1"></a><span class="va">+    ax = df.plot.scatter(x=&#39;word_frequency&#39;, </span></span>
-<span id="cb428-15"><a href="git-cmdline.html#cb428-15" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;inverse_rank&#39;,</span></span>
-<span id="cb428-16"><a href="git-cmdline.html#cb428-16" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
-<span id="cb428-17"><a href="git-cmdline.html#cb428-17" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
-<span id="cb428-18"><a href="git-cmdline.html#cb428-18" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
-<span id="cb428-19"><a href="git-cmdline.html#cb428-19" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span>
-<span id="cb428-20"><a href="git-cmdline.html#cb428-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb428-21"><a href="git-cmdline.html#cb428-21" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/results/dracula.png b/results/dracula.png</span></span>
-<span id="cb428-22"><a href="git-cmdline.html#cb428-22" aria-hidden="true" tabindex="-1"></a>index d8162ac..e9fe7f8 100644</span>
-<span id="cb428-23"><a href="git-cmdline.html#cb428-23" aria-hidden="true" tabindex="-1"></a>Binary files a/results/dracula.png and </span>
-<span id="cb428-24"><a href="git-cmdline.html#cb428-24" aria-hidden="true" tabindex="-1"></a>b/results/dracula.png differ</span></code></pre></div>
+<div class="sourceCode" id="cb441"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb441-1"><a href="git-cmdline.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
+<span id="cb441-2"><a href="git-cmdline.html#cb441-2" aria-hidden="true" tabindex="-1"></a>index a6005cd..04e824d 100644</span>
+<span id="cb441-3"><a href="git-cmdline.html#cb441-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
+<span id="cb441-4"><a href="git-cmdline.html#cb441-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
+<span id="cb441-5"><a href="git-cmdline.html#cb441-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -7,8 +7,7 @@ def main(args):</span></span>
+<span id="cb441-6"><a href="git-cmdline.html#cb441-6" aria-hidden="true" tabindex="-1"></a>     &quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span>
+<span id="cb441-7"><a href="git-cmdline.html#cb441-7" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
+<span id="cb441-8"><a href="git-cmdline.html#cb441-8" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
+<span id="cb441-9"><a href="git-cmdline.html#cb441-9" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
+<span id="cb441-10"><a href="git-cmdline.html#cb441-10" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
+<span id="cb441-11"><a href="git-cmdline.html#cb441-11" aria-hidden="true" tabindex="-1"></a><span class="st">-    df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span></span>
+<span id="cb441-12"><a href="git-cmdline.html#cb441-12" aria-hidden="true" tabindex="-1"></a>     ax = df.plot.scatter(x=&#39;word_frequency&#39;,</span>
+<span id="cb441-13"><a href="git-cmdline.html#cb441-13" aria-hidden="true" tabindex="-1"></a><span class="st">-                         y=&#39;inverse_rank&#39;,    </span></span>
+<span id="cb441-14"><a href="git-cmdline.html#cb441-14" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;rank&#39;, loglog=True,</span></span>
+<span id="cb441-15"><a href="git-cmdline.html#cb441-15" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
+<span id="cb441-16"><a href="git-cmdline.html#cb441-16" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
+<span id="cb441-17"><a href="git-cmdline.html#cb441-17" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
+<span id="cb441-18"><a href="git-cmdline.html#cb441-18" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span>
+<span id="cb441-19"><a href="git-cmdline.html#cb441-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb441-20"><a href="git-cmdline.html#cb441-20" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/results/dracula.png b/results/dracula.png</span></span>
+<span id="cb441-21"><a href="git-cmdline.html#cb441-21" aria-hidden="true" tabindex="-1"></a>index d8162ac..e9fe7f8 100644</span>
+<span id="cb441-22"><a href="git-cmdline.html#cb441-22" aria-hidden="true" tabindex="-1"></a>Binary files a/results/dracula.png and </span>
+<span id="cb441-23"><a href="git-cmdline.html#cb441-23" aria-hidden="true" tabindex="-1"></a>b/results/dracula.png differ</span></code></pre></div>
 <p>Note that you may need to use something other than <code>b5176bf</code>,
 since Git may have assigned your commit a different unique identifier.
 Note also that we have <em>not</em> committed this change:
@@ -1448,53 +1439,51 @@ and gives us the difference to the previous saved version.
 <code>git diff HEAD~2</code> goes back two revisions and so on.
 We can also look at the differences between two saved versions
 by separating their identifiers with two dots <code>..</code> like this:</p>
-<pre class="shell"><code>$ git diff HEAD~1..HEAD~2</code></pre>
-<div class="sourceCode" id="cb430"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb430-1"><a href="git-cmdline.html#cb430-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
-<span id="cb430-2"><a href="git-cmdline.html#cb430-2" aria-hidden="true" tabindex="-1"></a>index a6005cd..13e7f38 100644</span>
-<span id="cb430-3"><a href="git-cmdline.html#cb430-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
-<span id="cb430-4"><a href="git-cmdline.html#cb430-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
-<span id="cb430-5"><a href="git-cmdline.html#cb430-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -8,7 +8,7 @@ def main(args):</span></span>
-<span id="cb430-6"><a href="git-cmdline.html#cb430-6" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
-<span id="cb430-7"><a href="git-cmdline.html#cb430-7" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
-<span id="cb430-8"><a href="git-cmdline.html#cb430-8" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
-<span id="cb430-9"><a href="git-cmdline.html#cb430-9" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
-<span id="cb430-10"><a href="git-cmdline.html#cb430-10" aria-hidden="true" tabindex="-1"></a>     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span>
-<span id="cb430-11"><a href="git-cmdline.html#cb430-11" aria-hidden="true" tabindex="-1"></a><span class="st">-    df.plot.scatter(x=&#39;word_frequency&#39;, </span></span>
-<span id="cb430-12"><a href="git-cmdline.html#cb430-12" aria-hidden="true" tabindex="-1"></a><span class="st">-                    y=&#39;rank&#39;, loglog=True,</span></span>
-<span id="cb430-13"><a href="git-cmdline.html#cb430-13" aria-hidden="true" tabindex="-1"></a><span class="va">+    ax = df.plot.scatter(x=&#39;word_frequency&#39;, </span></span>
-<span id="cb430-14"><a href="git-cmdline.html#cb430-14" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;inverse_rank&#39;,</span></span>
-<span id="cb430-15"><a href="git-cmdline.html#cb430-15" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
-<span id="cb430-16"><a href="git-cmdline.html#cb430-16" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
-<span id="cb430-17"><a href="git-cmdline.html#cb430-17" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
-<span id="cb430-18"><a href="git-cmdline.html#cb430-18" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb442-1"><a href="git-cmdline.html#cb442-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> diff HEAD~1..HEAD~2</span></code></pre></div>
+<div class="sourceCode" id="cb443"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb443-1"><a href="git-cmdline.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
+<span id="cb443-2"><a href="git-cmdline.html#cb443-2" aria-hidden="true" tabindex="-1"></a>index a6005cd..13e7f38 100644</span>
+<span id="cb443-3"><a href="git-cmdline.html#cb443-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
+<span id="cb443-4"><a href="git-cmdline.html#cb443-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
+<span id="cb443-5"><a href="git-cmdline.html#cb443-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -8,7 +8,7 @@ def main(args):</span></span>
+<span id="cb443-6"><a href="git-cmdline.html#cb443-6" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
+<span id="cb443-7"><a href="git-cmdline.html#cb443-7" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
+<span id="cb443-8"><a href="git-cmdline.html#cb443-8" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, </span>
+<span id="cb443-9"><a href="git-cmdline.html#cb443-9" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
+<span id="cb443-10"><a href="git-cmdline.html#cb443-10" aria-hidden="true" tabindex="-1"></a>     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span>
+<span id="cb443-11"><a href="git-cmdline.html#cb443-11" aria-hidden="true" tabindex="-1"></a>     ax = df.plot.scatter(x=&#39;word_frequency&#39;, </span>
+<span id="cb443-12"><a href="git-cmdline.html#cb443-12" aria-hidden="true" tabindex="-1"></a><span class="st">-                         y=&#39;inverse_rank&#39;,</span></span>
+<span id="cb443-13"><a href="git-cmdline.html#cb443-13" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;rank&#39;, loglog=True,</span></span>
+<span id="cb443-14"><a href="git-cmdline.html#cb443-14" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
+<span id="cb443-15"><a href="git-cmdline.html#cb443-15" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
+<span id="cb443-16"><a href="git-cmdline.html#cb443-16" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
+<span id="cb443-17"><a href="git-cmdline.html#cb443-17" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
 <p>If we want to see the changes made in a particular commit,
 we can use <code>git show</code>
 with an identifier and a file joined by a colon:</p>
-<pre class="shell"><code>$ git show HEAD~1:bin/plotcounts.py</code></pre>
-<div class="sourceCode" id="cb432"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb432-1"><a href="git-cmdline.html#cb432-1" aria-hidden="true" tabindex="-1"></a>ommit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc</span>
-<span id="cb432-2"><a href="git-cmdline.html#cb432-2" aria-hidden="true" tabindex="-1"></a>Author: Amira Khan &lt;amira@zipf.org&gt;</span>
-<span id="cb432-3"><a href="git-cmdline.html#cb432-3" aria-hidden="true" tabindex="-1"></a>Date:   Thu Feb 20 11:18:33 2020 -0800</span>
-<span id="cb432-4"><a href="git-cmdline.html#cb432-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb432-5"><a href="git-cmdline.html#cb432-5" aria-hidden="true" tabindex="-1"></a>    Edit to plot frequency against rank on log-log axes</span>
-<span id="cb432-6"><a href="git-cmdline.html#cb432-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb432-7"><a href="git-cmdline.html#cb432-7" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
-<span id="cb432-8"><a href="git-cmdline.html#cb432-8" aria-hidden="true" tabindex="-1"></a>index 13e7f38..a6005cd 100644</span>
-<span id="cb432-9"><a href="git-cmdline.html#cb432-9" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
-<span id="cb432-10"><a href="git-cmdline.html#cb432-10" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
-<span id="cb432-11"><a href="git-cmdline.html#cb432-11" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -8,7 +8,7 @@ def main(args):</span></span>
-<span id="cb432-12"><a href="git-cmdline.html#cb432-12" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
-<span id="cb432-13"><a href="git-cmdline.html#cb432-13" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
-<span id="cb432-14"><a href="git-cmdline.html#cb432-14" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False,</span>
-<span id="cb432-15"><a href="git-cmdline.html#cb432-15" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
-<span id="cb432-16"><a href="git-cmdline.html#cb432-16" aria-hidden="true" tabindex="-1"></a>     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span>
-<span id="cb432-17"><a href="git-cmdline.html#cb432-17" aria-hidden="true" tabindex="-1"></a><span class="st">-    df.plot.scatter(x=&#39;word_frequency&#39;, </span></span>
-<span id="cb432-18"><a href="git-cmdline.html#cb432-18" aria-hidden="true" tabindex="-1"></a><span class="st">-                    y=&#39;inverse_rank&#39;,</span></span>
-<span id="cb432-19"><a href="git-cmdline.html#cb432-19" aria-hidden="true" tabindex="-1"></a><span class="va">+    ax = df.plot.scatter(x=&#39;word_frequency&#39;, </span></span>
-<span id="cb432-20"><a href="git-cmdline.html#cb432-20" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;rank&#39;, loglog=True,</span></span>
-<span id="cb432-21"><a href="git-cmdline.html#cb432-21" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
-<span id="cb432-22"><a href="git-cmdline.html#cb432-22" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
-<span id="cb432-23"><a href="git-cmdline.html#cb432-23" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
-<span id="cb432-24"><a href="git-cmdline.html#cb432-24" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
+<div class="sourceCode" id="cb444"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb444-1"><a href="git-cmdline.html#cb444-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> show HEAD~1:bin/plotcounts.py</span></code></pre></div>
+<div class="sourceCode" id="cb445"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb445-1"><a href="git-cmdline.html#cb445-1" aria-hidden="true" tabindex="-1"></a>ommit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc</span>
+<span id="cb445-2"><a href="git-cmdline.html#cb445-2" aria-hidden="true" tabindex="-1"></a>Author: Amira Khan &lt;amira@zipf.org&gt;</span>
+<span id="cb445-3"><a href="git-cmdline.html#cb445-3" aria-hidden="true" tabindex="-1"></a>Date:   Thu Feb 20 11:18:33 2020 -0800</span>
+<span id="cb445-4"><a href="git-cmdline.html#cb445-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb445-5"><a href="git-cmdline.html#cb445-5" aria-hidden="true" tabindex="-1"></a>    Plot frequency against rank on log-log axes</span>
+<span id="cb445-6"><a href="git-cmdline.html#cb445-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb445-7"><a href="git-cmdline.html#cb445-7" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
+<span id="cb445-8"><a href="git-cmdline.html#cb445-8" aria-hidden="true" tabindex="-1"></a>index 13e7f38..a6005cd 100644</span>
+<span id="cb445-9"><a href="git-cmdline.html#cb445-9" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
+<span id="cb445-10"><a href="git-cmdline.html#cb445-10" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
+<span id="cb445-11"><a href="git-cmdline.html#cb445-11" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -8,7 +8,7 @@ def main(args):</span></span>
+<span id="cb445-12"><a href="git-cmdline.html#cb445-12" aria-hidden="true" tabindex="-1"></a>     df = pd.read_csv(args.infile, header=None, </span>
+<span id="cb445-13"><a href="git-cmdline.html#cb445-13" aria-hidden="true" tabindex="-1"></a>                      names=(&#39;word&#39;, &#39;word_frequency&#39;))</span>
+<span id="cb445-14"><a href="git-cmdline.html#cb445-14" aria-hidden="true" tabindex="-1"></a>     df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False,</span>
+<span id="cb445-15"><a href="git-cmdline.html#cb445-15" aria-hidden="true" tabindex="-1"></a>                                            method=&#39;max&#39;)</span>
+<span id="cb445-16"><a href="git-cmdline.html#cb445-16" aria-hidden="true" tabindex="-1"></a>     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]</span>
+<span id="cb445-17"><a href="git-cmdline.html#cb445-17" aria-hidden="true" tabindex="-1"></a>     ax = df.plot.scatter(x=&#39;word_frequency&#39;,</span>
+<span id="cb445-18"><a href="git-cmdline.html#cb445-18" aria-hidden="true" tabindex="-1"></a><span class="st">-                         y=&#39;inverse_rank&#39;,</span></span>
+<span id="cb445-19"><a href="git-cmdline.html#cb445-19" aria-hidden="true" tabindex="-1"></a><span class="va">+                         y=&#39;rank&#39;, loglog=True, </span></span>
+<span id="cb445-20"><a href="git-cmdline.html#cb445-20" aria-hidden="true" tabindex="-1"></a>                          figsize=[12, 6], </span>
+<span id="cb445-21"><a href="git-cmdline.html#cb445-21" aria-hidden="true" tabindex="-1"></a>                          grid=True, </span>
+<span id="cb445-22"><a href="git-cmdline.html#cb445-22" aria-hidden="true" tabindex="-1"></a>                          xlim=args.xlim)</span>
+<span id="cb445-23"><a href="git-cmdline.html#cb445-23" aria-hidden="true" tabindex="-1"></a>     ax.figure.savefig(args.outfile)</span></code></pre></div>
 </div>
 <div id="git-cmdline-restore" class="section level2" number="6.8">
 <h2><span class="header-section-number">6.8</span> Restoring Old Versions of Files</h2>
@@ -1504,7 +1493,7 @@ Suppose we change our mind about the last update to <code>bin/plotcounts.py</cod
 before we add it or commit it.
 <code>git status</code> tells us that the file has been changed,
 but those changes haven’t been <a href="glossary.html#git_stage">staged</a>:</p>
-<pre class="shell"><code>$ git status</code></pre>
+<div class="sourceCode" id="cb446"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb446-1"><a href="git-cmdline.html#cb446-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 Your branch is up to date with &#39;origin/master&#39;.
 
@@ -1516,35 +1505,34 @@ Changes not staged for commit:
 
         modified:   bin/plotcounts.py
 
-no changes added to commit (use &quot;git add&quot; and/or 
-&quot;git commit -a&quot;)</code></pre>
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</code></pre>
 <p>We can put things back the way they were in the last saved revision using <code>git checkout</code>:</p>
-<pre class="shell"><code>$ git checkout HEAD bin/plotcounts.py
-$ git status</code></pre>
+<div class="sourceCode" id="cb448"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb448-1"><a href="git-cmdline.html#cb448-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> checkout HEAD bin/plotcounts.py</span>
+<span id="cb448-2"><a href="git-cmdline.html#cb448-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 Your branch is up to date with &#39;origin/master&#39;.
 
 nothing to commit, working tree clean</code></pre>
-<pre class="shell"><code>$ head -12 bin/plotcounts.py | tail -4</code></pre>
+<div class="sourceCode" id="cb450"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb450-1"><a href="git-cmdline.html#cb450-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">head</span> -12 bin/plotcounts.py <span class="kw">|</span> <span class="fu">tail</span> -4</span></code></pre></div>
 <pre class="text"><code>    df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, 
                                            method=&#39;max&#39;)
     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]
-    df.plot.scatter(x=&#39;word_frequency&#39;, 
-                    y=&#39;rank&#39;, loglog=True,
-                    figsize=[12, 6], 
-                    grid=True, 
-                    xlim=args.xlim)</code></pre>
+    ax = df.plot.scatter(x=&#39;word_frequency&#39;, 
+                         y=&#39;rank&#39;, loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)</code></pre>
 <p>As its name suggests,
 <code>git checkout</code> checks out (i.e., restores) an old version of a file.
 In this case,
 we told Git to recover the version of the file saved in the most recent commit.
 We can use a specific commit identifier rather than <code>HEAD</code> to go back as far as we want:</p>
-<pre class="shell"><code>$ git checkout 65b7e61 bin/countwords.py</code></pre>
+<div class="sourceCode" id="cb452"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb452-1"><a href="git-cmdline.html#cb452-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> checkout 65b7e61 bin/countwords.py</span></code></pre></div>
 <p>Doing this does not change the history:
 <code>git log</code> still shows our four commits.
 Instead,
 it replaces the content of the file with the old content:</p>
-<pre class="shell"><code>$ git status</code></pre>
+<div class="sourceCode" id="cb453"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb453-1"><a href="git-cmdline.html#cb453-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 Your branch is up to date with &#39;origin/master&#39;.
 
@@ -1555,8 +1543,8 @@ Changes to be committed:
 <p>Notice that the changes have already been added to the staging area for new commits.
 If we change our mind again,
 we can return the file to the state of the most recent commit using <code>git checkout</code>:</p>
-<pre class="shell"><code>$ git checkout HEAD bin/countwords.py
-$ git status</code></pre>
+<div class="sourceCode" id="cb455"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb455-1"><a href="git-cmdline.html#cb455-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> checkout HEAD bin/countwords.py</span>
+<span id="cb455-2"><a href="git-cmdline.html#cb455-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 Your branch is up to date with &#39;origin/master&#39;.
 
@@ -1564,15 +1552,15 @@ Changes to be committed:
   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
 
         modified:   bin/plotcounts.py</code></pre>
-<pre class="shell"><code>$ head -12 bin/plotcounts.py | tail -4</code></pre>
+<div class="sourceCode" id="cb457"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb457-1"><a href="git-cmdline.html#cb457-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">head</span> -12 bin/plotcounts.py <span class="kw">|</span> <span class="fu">tail</span> -4</span></code></pre></div>
 <pre class="text"><code>    df[&#39;rank&#39;] = df[&#39;word_frequency&#39;].rank(ascending=False, 
                                            method=&#39;max&#39;)
     df[&#39;inverse_rank&#39;] = 1 / df[&#39;rank&#39;]
-    df.plot.scatter(x=&#39;word_frequency&#39;, 
-                    y=&#39;rank&#39;, loglog=True,
-                    figsize=[12, 6], 
-                    grid=True, 
-                    xlim=args.xlim)</code></pre>
+    ax = df.plot.scatter(x=&#39;word_frequency&#39;, 
+                         y=&#39;rank&#39;, loglog=True,
+                         figsize=[12, 6], 
+                         grid=True, 
+                         xlim=args.xlim)</code></pre>
 <p>Since we didn’t commit the change
 that removed the line that calculates the inverse rank,
 that work is now lost:
@@ -1619,10 +1607,10 @@ We will explore these in the next chapter.</p>
 Amira would also like to keep some notes on <a href="https://en.wikipedia.org/wiki/Heaps%27_law">Heaps’ Law</a>.
 Despite her colleagues’ concerns,
 Amira creates a <code>heaps-law</code> project inside her <code>zipf</code> project as follows:</p>
-<pre class="shell"><code>$ cd ~/zipf         # go into zipf directory, which is a Git repo
-$ mkdir heaps-law   # make a subdirectory zipf/heaps-law
-$ cd heaps-law      # go into heaps-law subdirectory
-$ git heaps-law     # make heaps-law a Git repository</code></pre>
+<div class="sourceCode" id="cb460"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb460-1"><a href="git-cmdline.html#cb460-1" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> ~/zipf         # go into zipf directory, which is a Git repo</span>
+<span id="cb460-2"><a href="git-cmdline.html#cb460-2" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">mkdir</span> heaps-law   # make a subdirectory zipf/heaps-law</span>
+<span id="cb460-3"><a href="git-cmdline.html#cb460-3" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> heaps-law      # go into heaps-law subdirectory</span>
+<span id="cb460-4"><a href="git-cmdline.html#cb460-4" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> heaps-law     # make heaps-law a Git repository</span></code></pre></div>
 <p>Is the <code>git init</code> command that she runs inside the <code>heaps-law</code> subdirectory
 required for tracking files stored there?</p>
 </div>
@@ -1652,12 +1640,12 @@ Which output do you find easiest to understand?</p>
 <h3><span class="header-section-number">6.11.4</span> Committing changes</h3>
 <p>Which command(s) below would save changes to <code>myfile.txt</code> to a local Git repository?</p>
 <ol style="list-style-type: decimal">
-<li><pre class="shell"><code>   $ git commit -m &quot;Add recent changes&quot;</code></pre></li>
-<li><pre class="shell"><code>   $ git init myfile.txt
-   $ git commit -m &quot;Add recent changes&quot;</code></pre></li>
-<li><pre class="shell"><code>   $ git add myfile.txt
-   $ git commit -m &quot;Add recent changes&quot;</code></pre></li>
-<li><pre class="shell"><code>   $ git commit -m myfile.txt &quot;Add recent changes&quot;</code></pre></li>
+<li><div class="sourceCode" id="cb461"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb461-1"><a href="git-cmdline.html#cb461-1" aria-hidden="true" tabindex="-1"></a>   $ <span class="fu">git</span> commit -m <span class="st">&quot;Add recent changes&quot;</span></span></code></pre></div></li>
+<li><div class="sourceCode" id="cb462"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb462-1"><a href="git-cmdline.html#cb462-1" aria-hidden="true" tabindex="-1"></a>   $ <span class="fu">git</span> init myfile.txt</span>
+<span id="cb462-2"><a href="git-cmdline.html#cb462-2" aria-hidden="true" tabindex="-1"></a>   $ <span class="fu">git</span> commit -m <span class="st">&quot;Add recent changes&quot;</span></span></code></pre></div></li>
+<li><div class="sourceCode" id="cb463"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb463-1"><a href="git-cmdline.html#cb463-1" aria-hidden="true" tabindex="-1"></a>   $ <span class="fu">git</span> add myfile.txt</span>
+<span id="cb463-2"><a href="git-cmdline.html#cb463-2" aria-hidden="true" tabindex="-1"></a>   $ <span class="fu">git</span> commit -m <span class="st">&quot;Add recent changes&quot;</span></span></code></pre></div></li>
+<li><div class="sourceCode" id="cb464"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb464-1"><a href="git-cmdline.html#cb464-1" aria-hidden="true" tabindex="-1"></a>   $ <span class="fu">git</span> commit -m myfile.txt <span class="st">&quot;Add recent changes&quot;</span></span></code></pre></div></li>
 </ol>
 </div>
 <div id="git-cmdline-ex-multiple" class="section level3" number="6.11.5">
@@ -1743,15 +1731,15 @@ to recover the last committed version of her script?</p>
 <div id="git-cmdline-ex-history" class="section level3" number="6.11.14">
 <h3><span class="header-section-number">6.11.14</span> Workflow and history</h3>
 <p>What is the output of the last command in the sequence below?</p>
-<pre><code>$ cd zipf
-$ echo &quot;Zipf&#39;s Law describes the relationship between the 
-  frequency and rarity of words.&quot; &gt; motivation.txt
-$ git add motivation.txt
-$ echo &quot;Zipf&#39;s Law suggests the frequency of any word is 
-  inversely proportional to its rank.&quot; &gt; motivation.txt
-$ git commit -m &quot;Motivate project&quot;
-$ git checkout HEAD motivation.txt
-$ cat motivation.txt</code></pre>
+<div class="sourceCode" id="cb465"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb465-1"><a href="git-cmdline.html#cb465-1" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">cd</span> zipf</span>
+<span id="cb465-2"><a href="git-cmdline.html#cb465-2" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">echo</span> <span class="st">&quot;Zipf&#39;s Law describes the relationship between the</span></span>
+<span id="cb465-3"><a href="git-cmdline.html#cb465-3" aria-hidden="true" tabindex="-1"></a><span class="st">  frequency and rarity of words.&quot;</span> <span class="op">&gt;</span> motivation.txt</span>
+<span id="cb465-4"><a href="git-cmdline.html#cb465-4" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> add motivation.txt</span>
+<span id="cb465-5"><a href="git-cmdline.html#cb465-5" aria-hidden="true" tabindex="-1"></a>$ <span class="bu">echo</span> <span class="st">&quot;Zipf&#39;s Law suggests the frequency of any word is </span></span>
+<span id="cb465-6"><a href="git-cmdline.html#cb465-6" aria-hidden="true" tabindex="-1"></a><span class="st">  inversely proportional to its rank.&quot;</span> <span class="op">&gt;</span> motivation.txt</span>
+<span id="cb465-7"><a href="git-cmdline.html#cb465-7" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Motivate project&quot;</span></span>
+<span id="cb465-8"><a href="git-cmdline.html#cb465-8" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">git</span> checkout HEAD motivation.txt</span>
+<span id="cb465-9"><a href="git-cmdline.html#cb465-9" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">cat</span> motivation.txt</span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li></li>
 </ol>

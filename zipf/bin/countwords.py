@@ -1,9 +1,13 @@
-"""Count the occurrences of all words in a text and output them in CSV format."""
+"""
+Count the occurrences of all words in a text
+and output them in CSV format.
+"""
 
-import string
 import argparse
+import string
 from collections import Counter
-import utilities
+
+import utilities as util
 
 
 def count_words(reader):
@@ -20,14 +24,15 @@ def main(args):
     """Run the command line program."""
     with args.infile as reader:
         word_counts = count_words(reader)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infile', type=argparse.FileType('r'), nargs='?',
-                        default='-', help='Input file name')
+    parser.add_argument('infile', type=argparse.FileType('r'),
+                        nargs='?', default='-',
+                        help='Input file name')
     parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)

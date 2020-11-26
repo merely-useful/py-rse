@@ -4,13 +4,14 @@ import sys
 import csv
 
 
-ERROR_MESSAGES = {
-    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-}
+ERRORS = {
+    'not_csv_suffix': '{fname}: File must end in .csv',
+    }
+
 
 def collection_to_csv(collection, num=None):
     """
-    Write out a collection of items and counts in csv format.
+    Write out collection of items and counts in csv format.
 
     Parameters
     ----------
