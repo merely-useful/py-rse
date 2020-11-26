@@ -152,7 +152,7 @@ The answer is that programmers can \gref{raise}{raise_exception} them explicitly
 for number in [1, 0, -1]:
     try:
         if number < 0:
-            raise ValueError(f'negative values not supported: {number}')
+            raise ValueError(f'no negatives: {number}')
         print(number)
     except ValueError as error:
         print(f'exception: {error}')
@@ -161,7 +161,7 @@ for number in [1, 0, -1]:
 ```text
 1
 0
-exception: negative values not supported: -1
+exception: no negatives: -1
 ```
 
 We can define our own exception types,
@@ -212,8 +212,8 @@ for example,
 if we try to read a file that does not exist,
 the `open` function throws a `FileNotFoundError`:
 
-```shell
-python bin/collate.py results/none.csv results/dracula.csv
+```bash
+$ python bin/collate.py results/none.csv results/dracula.csv
 ```
 
 ```text
@@ -221,15 +221,16 @@ Traceback (most recent call last):
   File "bin/collate.py", line 27, in <module>
     main(args)
   File "bin/collate.py", line 17, in main
-    with open(file_name, 'r') as reader:
-FileNotFoundError: [Errno 2] No such file or directory: 'results/none.csv'
+    with open(fname, 'r') as reader:
+FileNotFoundError: [Errno 2] No such file or directory:
+'results/none.csv'
 ```
 
 But what happens if we try to read a file that exists,
 but was not created by `countwords.py`?
 
 
-```shell
+```bash
 $ python bin/collate.py Makefile
 ```
 
@@ -252,16 +253,16 @@ raise an error with a useful explanation to what went wrong.
 We could achieve this by wrapping the call to `open` in a `try/except` clause:
 
 ```python
-for file_name in args.infiles:
+for fname in args.infiles:
     try:
-        with open(file_name, 'r') as reader:
+        with open(fname, 'r') as reader:
             update_counts(reader, word_counts)
     except ValueError as e:
-        print(f'{file_name} is not a CSV file.')
+        print(f'{fname} is not a CSV file.')
         print(f'ValueError: {e}')
 ```
 
-```shell
+```bash
 $ python bin/collate.py Makefile
 ```
 
@@ -279,14 +280,14 @@ A more precise approach in this case would be to throw an exception
 only if some other kind of file is specified as an input:
 
 ```python
-for file_name in args.infiles:
-    if file_name[-4:] != '.csv':
-        raise OSError(f'{file_name} is not a CSV file.')
-    with open(file_name, 'r') as reader:
+for fname in args.infiles:
+    if fname[-4:] != '.csv':
+        raise OSError(f'{fname} is not a CSV file.')
+    with open(fname, 'r') as reader:
         update_counts(reader, word_counts)
 ```
 
-```shell
+```bash
 $ python bin/collate.py Makefile
 ```
 
@@ -295,7 +296,7 @@ Traceback (most recent call last):
   File "bin/collate.py", line 29, in <module>
     main(args)
   File "bin/collate.py", line 18, in main
-    raise OSError(f'{file_name} is not a valid CSV file of word counts.')
+    raise OSError(f'{fname} is not a CSV file.')
 OSError: Makefile is not a CSV file.
 ```
 
@@ -389,7 +390,7 @@ this message could confuse someone who has comma-separated values saved in a `.t
 An even better message would therefore be:
 
 ```text
-OSError: The filename must end in `.csv`.
+OSError: File must end in .csv
 ```
 
 This message tells us exactly what the criteria are to avoid the error.
@@ -441,40 +442,40 @@ That last suggestion deserves a little elaboration.\index{error message!lookup t
 Most people write error messages directly in their code:
 
 ```python
-if file_name[-4:] != '.csv':
-    raise OSError(f'{file_name}: The filename must end in `.csv`')
+if fname[-4:] != '.csv':
+    raise OSError(f'{fname}: File must end in .csv')
 ```
 
 A better approach is to put all the error messages in a dictionary:
 
 ```python
-ERROR_MESSAGES = {
-    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-    'config_corrupted' : 'Configuration file {config_name} corrupted',
+ERRORS = {
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    'config_corrupted' : '{config_name} corrupted',
     # ...more error messages...
-}
+    }
 ```
 
 and then only use messages from that dictionary:
 
 ```python
-if file_name[-4:] != '.csv':
-    raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
+if fname[-4:] != '.csv':
+    raise OSError(ERRORS['not_csv_suffix'].format(fname=fname))
 ```
 
 Doing this makes it much easier to ensure that messages are consistent.
 It also makes it much easier to give messages in the user's preferred language:
 
 ```python
-ERROR_MESSAGES = {
+ERRORS = {
   'en' : {
-    'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-    'config_corrupted' : 'Configuration file {config_name} corrupted',
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    'config_corrupted' : '{config_name} corrupted',
     # ...more error messages in English...
   },
   'fr' : {
-    'not_csv_file_suffix' : '{file_name}: Le nom du fichier doit se terminer par `.csv`',
-    'config_corrupted' : f'Fichier de configuration {config_name} corrompu',
+    'not_csv_suffix' : '{fname}: Doit se terminer par .csv',
+    'config_corrupted' : f'{config_name} corrompu',
     # ...more error messages in French...
   }
   # ...other languages...
@@ -484,7 +485,7 @@ ERROR_MESSAGES = {
 The error report is then looked up and formatted as:
 
 ```python
-ERROR_MESSAGES[user_language]['not_csv_file_suffix'].format(file_name=file_name)
+ERRORS[user_language]['not_csv_suffix'].format(fname=fname)
 ```
 
 where `user_language` is a two-letter code for the user's preferred language.
@@ -513,12 +514,13 @@ We would probably wind up with code like this:
 ```python
 if LOG_LEVEL >= 0:
     print('Processing files...')
-for file_name in args.infiles:
+for fname in args.infiles:
     if LOG_LEVEL >= 1:
-        print(f'Reading in {file_name}...')
-    if file_name[-4:] != '.csv':
-        raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-    with open(file_name, 'r') as reader:
+        print(f'Reading in {fname}...')
+    if fname[-4:] != '.csv':
+        msg = ERRORS['not_csv_suffix'].format(fname=fname)
+        raise OSError(msg)
+    with open(fname, 'r') as reader:
         if LOG_LEVEL >= 1:
             print(f'Computing word counts...')
         update_counts(reader, word_counts)
@@ -574,11 +576,12 @@ import logging
 
 
 logging.info('Processing files...')
-for file_name in args.infiles:
-    logging.debug(f'Reading in {file_name}...')
-    if file_name[-4:] != '.csv':
-        raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-    with open(file_name, 'r') as reader:
+for fname in args.infiles:
+    logging.debug(f'Reading in {fname}...')
+    if fname[-4:] != '.csv':
+        msg = ERRORS['not_csv_suffix'].format(fname=fname)
+        raise OSError(msg)
+    with open(fname, 'r') as reader:
         logging.debug('Computing word counts...')
         update_counts(reader, word_counts)
 ```
@@ -694,18 +697,21 @@ such that the script now reads:
 
 ```python
 """
-Combine multiple word count CSV-files into a single cumulative count.
+Combine multiple word count CSV-files
+into a single cumulative count.
 """
+
 import csv
 import argparse
 from collections import Counter
 import logging
-import utilities
+
+import utilities as util
 
 
-ERROR_MESSAGES = {
-  'not_csv_file_suffix' : '{file_name}: The filename must end in `.csv`',
-}
+ERRORS = {
+    'not_csv_suffix' : '{fname}: File must end in .csv',
+    }
 
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
@@ -716,21 +722,22 @@ def main(args):
     """Run the command line program."""
     word_counts = Counter()
     logging.info('Processing files...')
-    for file_name in args.infiles:
-        logging.debug(f'Reading in {file_name}...')
-        if file_name[-4:] != '.csv':
-            raise OSError(ERROR_MESSAGES['not_csv_file_suffix'].format(file_name=file_name))
-        with open(file_name, 'r') as reader:
+    for fname in args.infiles:
+        logging.debug(f'Reading in {fname}...')
+        if fname[-4:] != '.csv':
+            msg = ERRORS['not_csv_suffix'].format(fname=fname)
+            raise OSError(msg)
+        with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
-    utilities.collection_to_csv(word_counts, num=args.num)
+    util.collection_to_csv(word_counts, num=args.num)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*', 
                         help='Input file names')
     parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Limit output to N most frequent words')
+                        help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -753,7 +760,8 @@ Once finished,
 running `collate.py` with and without the `-v` flag should produce the following output:
 
 ```bash
-$ python bin/collate.py results/dracula.csv results/moby_dick.csv -n 5
+$ python bin/collate.py results/dracula.csv results/moby_dick.csv
+  -n 5
 ```
 ```text
 the,22559
@@ -764,7 +772,8 @@ a,7629
 ```
 
 ```bash
-$ python bin/collate.py results/dracula.csv results/moby_dick.csv -n 5 -v
+$ python bin/collate.py results/dracula.csv results/moby_dick.csv
+  -n 5 -v
 ```
 ```text
 INFO:root:Processing files...
@@ -808,7 +817,7 @@ the default name of `collate.log`.
 
 ### Error catalogs {#errors-ex-catalog}
 
-In Section \@ref(errors-messages) we started to define an error catalog called `ERROR_MESSAGES`.
+In Section \@ref(errors-messages) we started to define an error catalog called `ERRORS`.
 
 1. Read Appendix \@ref(style-pep8) and explain why we have used capital letters
    for the name of the catalog.
@@ -820,7 +829,7 @@ In Section \@ref(errors-messages) we started to define an error catalog called 
 3. There's a good chance we will eventually want to use the error messages we've defined
    in other scripts besides `collate.py`.
    To avoid duplication,
-   move `ERROR_MESSAGES` to the `utilities` module that was first created in
+   move `ERRORS` to the `utilities` module that was first created in
    Section \@ref(py-rse-py-scripting-modules).
 
 ### Tracebacks {#errors-ex-traceback}

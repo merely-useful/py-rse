@@ -84,6 +84,11 @@ Please only edit `index.Rmd` in the root directory or the `.Rmd` files in the `c
     rather than British spelling and grammar). We also use first person plural
     ("we") in exposition, but speak directly to the reader ("you") when giving
     directions in exercises.
+    
+-   Code blocks with syntax highlighting can be created using the keywords
+    `python`, `bash`, `diff`, `markdown` or `makefile`.
+    The keyword `text` isfor code blocks without syntax highlighting and
+    is mainly used to display the output from code executed in a code block. 
 
 ## Coding {-}
 
