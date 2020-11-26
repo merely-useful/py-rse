@@ -4,32 +4,55 @@
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
 
-We live in an imperfect world.
-Our code will inevitably contain bugs,
-and people will misunderstand how to use our programs correctly.
-To resolve these issues as effectively as possible
-we should plan from the start to catch and handle errors in our programs.
-In this chapter,
-we will explore how such errors are represented
-and what we should do with them.
-Before diving into the details of each section below,
-it is helpful to have an overview of how the error handling process.
+We are imperfect people living in an imperfect world.
+People will misunderstand how to use our programs,
+and those programs will inevitably contain bugs.
+We should therefore plan from the start to detect and handle errors.
+This chapter will explore how to do this.
 
-When a program encounters an error during execution
-it is often referred to as an *exception* from the normal behavior.
-Such errors can occur for various reasons and in this chapter,
-we will see the difference between *internal* and *external* errors.
-An example of and internal error would be an unsupported option being passed to a function,
-and an external error could be trying to read a file that does not exist.
-Once an exception is encountered,
-it is important that the program communicates the cause of the error
-via an informative error message,
+Before diving into the details,
+it is helpful to have an overview of the error handling process.
+Something that goes wrong while a program is running
+is sometimes referred to as an \gref{exception}{exception} from normal behavior.\index{exception}
+Generally speaking,
+we distinguish between \gref{internal errors}{internal_error},\index{error!internal}\index{internal error}
+such as calling a function with `None` instead of a list,
+and \gref{external errors}{external_error},
+such as trying to read a file that doesn't exist.
+Internal errors are mistakes in the program itself;
+they should be prevented by doing unit testing (Chapter \@ref(testing)),
+but software is always used in new ways in the real world,
+and those new ways can trigger unanticipated bugs.
+
+When an internal error occurs,
+the only thing we can do in most cases is report it and halt the program.
+If a function has been passed `None` instead of a valid list,
+for example,
+the odds are good that one of our data structures is corrupted.
+We can try to guess what the problem is and take corrective action,
+but our guess will often be wrong
+and our attempt to correct the problem might actually make things worse.
+
+External errors,\index{error!external}\index{external error}
+on the other hand,
+are usually caused by interactions between the program and the outside world:
+a user may mis-type a filename,
+the network might be down,
+and so on.
+Section \@ref(testing-failure) describes some ways to test that
+software will do the right thing when this happens,
+but we still need to catch and handle these errors when they arise.
+For example,
+if a user mis-types her password,
+prompting her to try again would be friendlier than
+requiring her to restart the program.
+
+No matter why an exception occurs,
+the program should communicate the cause
 so that the user can take the appropriate action to fix it.
-Not all errors can be resolved immediately,
-so it is important to keep a log of the error messages.
-Logging error messages to a file facilitates troubleshooting
-because it is easier to trace back what has gone wrong,
-and also to share the full error report with others.
+Since some problems can't be resolved immediately,
+the program should save error messages to a file
+to aid troubleshooting and to share with other people when filing a bug.
 
 The Zipf's Law project should now include:
 
@@ -61,7 +84,7 @@ zipf/
 
 ## Exceptions {#errors-exceptions}
 
-Most modern programming languages use \gref{exceptions}{exception} for error handling.\index{exception}
+Most modern programming languages use \gref{exceptions}{exception} for error handling.
 As the name suggests,
 an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
@@ -327,54 +350,23 @@ What we *should* do is check that there are two columns separated by a comma,
 that the first column contains strings,
 and that the second is numerical.
 
-## Kinds of Errors {#errors-kind}
-
-The "`if` then `raise`" approach is sometimes referred to as "look before you leap",
-while the `try/except` approach obeys the old adage that
-"it's easier to ask for forgiveness than permission".
-The first approach is more precise,
-but has the shortcoming that programmers can't anticipate everything that can go wrong when running a program,
-so there should always be an `except` somewhere
-to deal with unexpected cases.
-
-Generally speaking,
-we should distinguish between \gref{internal errors}{internal_error},\index{error!internal}\index{internal error}
-such as calling a function with `None` instead of a list,
-and \gref{external errors}{external_error},
-such as trying to read a file that doesn't exist.
-Internal errors should be prevented by doing unit testing (Chapter \@ref(testing)),
-but software is always used in new ways in the real world,
-and those new ways can trigger unanticipated bugs.
-When an internal error occurs,
-the only thing we can do in most cases is report it and halt the program.
-If a function has been passed `None` instead of a valid list,
-for example,
-the odds are good that one of our data structures is corrupted.
-We can try to guess what the problem is and take corrective action,
-but our guess will often be wrong
-and our attempt to correct the problem might actually make things worse.
-
-External errors,\index{error!external}\index{external error}
-on the other hand,
-are usually caused by interactions between the program and the outside world:
-a user may mis-type a filename,
-the network might be down,
-and so on.
-Section \@ref(testing-failure) describes some ways to test that
-software will do the right thing when this happens,
-but we still need to catch and handle these errors when they arise.
-For example,
-if a user mis-types her password,
-prompting her to try again would be friendlier than
-requiring her to restart the program.
-
-The one rule we should *always* follow is to check for errors as early as possible
-so that we don't waste the user's time.
-Few things are as frustrating as being told at the end of an hour-long calculation
-that the program doesn't have permission to write to an output directory.
-It's a little extra work to check things like this up front,
-but the larger your program or the longer it runs,
-the more useful those checks will be.
+> **Kinds of Errors**
+>
+> The "`if` then `raise`" approach is sometimes referred to as "look before you leap",
+> while the `try/except` approach obeys the old adage that
+> "it's easier to ask for forgiveness than permission".
+> The first approach is more precise,
+> but has the shortcoming that programmers can't anticipate everything that can go wrong when running a program,
+> so there should always be an `except` somewhere
+> to deal with unexpected cases.
+>
+> The one rule we should *always* follow is to check for errors as early as possible
+> so that we don't waste the user's time.
+> Few things are as frustrating as being told at the end of an hour-long calculation
+> that the program doesn't have permission to write to an output directory.
+> It's a little extra work to check things like this up front,
+> but the larger your program or the longer it runs,
+> the more useful those checks will be.
 
 ## Writing Useful Error Messages {#errors-messages}
 
