@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-26"
+date: "2020-11-27"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -5562,6 +5562,11 @@ core.ignorecase=true
 ...
 ```
 
+Depending on your operating system and version of Git, 
+your configuration list may look a bit different.
+Most of these differences shouldn't matter right now,
+as long as your user name and email are accurate.
+
 > **Git Help and Manual**
 >
 > If we forget a Git command,
@@ -5658,20 +5663,6 @@ present (use "git add" to track)
 while "Untracked files" means Git has noticed that
 there are things in `bin/`, `data/` and `results/`
 that it is not yet keeping track of.
-
-> **Hints from Git**
->
-> After executing Git commands,
-> you may see messages output that differ slightly from what is printed here.
-> For example, 
-> you may see a reference to `git restore` after executing the command above.
-> This is because newer versions of Git (>=2.23.0) 
-> include commands that streamline some common tasks. 
-> The commands presented here will still work,
-> and you can consider any deviation you see to be a reminder
-> to continue checking the documentation (e.g., `git restore --help`) 
-> to learn how new features can help your workflow.
-
 
 ## Adding Existing Work {#git-cmdline-add-existing}
 
@@ -5954,6 +5945,16 @@ the commit's author,
 when it was created,
 and the commit message that we wrote.
 
+> **Scrolling through logs**
+> Our log this time isn't very long, 
+> so you were likely able to see it printed to your screen without needing to scroll.
+> When you begin working with longer logs
+> (like later in this chapter),
+> you'll notice that the commits are shown in a pager program, 
+> as you saw in Section \@ref(bash-basics-help) with manual pages.
+> You can apply the same keystrokes to scroll through the log
+> and exit the paging program.\index{Unix shell!paging program}\index{paging program (in Unix shell)}
+
 The plot we have made is shown in Figure \@ref(fig:git-cmdline-initial-plot).
 It could be better:
 most of the visual space is devoted to a few very common words,
@@ -6006,6 +6007,25 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 The last line tells us that
 a file Git already knows about has been modified.
+
+> **Hints from Git**
+>
+> After executing Git commands,
+> you may see output that differs slightly from what is shown here.
+> For example, 
+> you may see a suggestion for `git checkout` 
+> in place of `git restore` after executing the code above,
+> which means you're running an different version of Git.
+> As with most tasks in coding,
+> there are often multiple commands to accomplish the same action with Git.
+> This chapter will show output from Git version 2.29.
+> If you see something different in your Git output,
+> you can try the commands we present here,
+> or follow the suggestions included in the output you see.
+> When in doubt, 
+> check the documentation (e.g., `git checkout --help`) 
+> if you get stuck.
+
 To save those changes in the repository's history,
 we must `git add` and then `git commit`.
 Before we do,
@@ -6195,6 +6215,15 @@ $ git commit -a -m "Update dracula plot"
  rewrite results/dracula.png (99%)
 ```
 
+The Git commands we've covered so far (`git add`, `git commit`, `git diff`)
+represent the tasks you perform in a basic Git workflow in a local repository 
+(Figure \@ref(fig:git-cmdline-remote)a).
+
+<div class="figure" style="text-align: center">
+<img src="figures/git-cmdline/git-remote.png" alt="Commands included in basic Git workflows." width="100%" />
+<p class="caption">(\#fig:git-cmdline-remote)Commands included in basic Git workflows.</p>
+</div>
+
 ## Synchronizing with Other Repositories {#git-cmdline-remotes}
 
 Sooner or later our computer will experience a hardware failure,
@@ -6326,10 +6355,19 @@ Already up-to-date.
 Pulling has no effect in this case
 because the two repositories are already synchronized.
 
-<div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/git-remote.png" alt="FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?" width="100%" />
-<p class="caption">(\#fig:git-cmdline-remote)FIXME: Do we need a figure similar to this (removing some of the commands that aren't relevant to this chapter)?</p>
-</div>
+> **Fetching**
+> The second line in the remote configuration we viewed earlier is labeled `push`,
+> which makes sense given the command we used (`git push`)
+> to upload changes from our local to remote repositories.
+> Why is the other line labeled `fetch` instead of `pull`?
+> Fetching and pulling both download new data from a remote repository,
+> but only pulling integrates those changes into your local repository's version history.
+> Because `git fetch` doesn't alter your local files, 
+> it's used to view changes between local and remote versions.\index{Git commands!fetch}
+
+The Git commands we've covered in this section (`git pull`, `git push`)
+are the main tasks associated with incorporating remote repositories into your workflow 
+(Figure \@ref(fig:git-cmdline-remote)b).
 
 ## Exploring History {#git-cmdline-history}
 
@@ -6515,14 +6553,14 @@ index a6005cd..13e7f38 100644
 
 If we want to see the changes made in a particular commit,
 we can use `git show`\index{Git commands!show}
-with an identifier and a file joined by a colon:
+with an identifier and a file name:
 
 ```bash
-$ git show HEAD~1:bin/plotcounts.py
+$ git show HEAD~1 bin/plotcounts.py
 ```
 
 ```diff
-ommit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
+commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
 Author: Amira Khan <amira@zipf.org>
 Date:   Thu Feb 20 11:18:33 2020 -0800
 
@@ -6546,6 +6584,17 @@ index 13e7f38..a6005cd 100644
                           xlim=args.xlim)
      ax.figure.savefig(args.outfile)
 ```
+
+If we wanted to view the contents of a file
+at a given point in the version history, 
+we could use the same command,
+but separating the identifier and file with a colon:
+
+```shell
+$ git show HEAD~1:bin/plotcounts.py
+```
+
+This allows us to look through the file using a paging program.
 
 ## Restoring Old Versions of Files {#git-cmdline-restore}
 
@@ -6575,10 +6624,12 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-We can put things back the way they were in the last saved revision using `git checkout`:\index{Git commands!checkout}
+We can put things back the way they were in the last saved revision 
+using `git restore`,\index{Git commands!restore}
+as the screen output suggests:
 
 ```bash
-$ git checkout HEAD bin/plotcounts.py
+$ git restore bin/plotcounts.py
 $ git status
 ```
 
@@ -6588,6 +6639,22 @@ Your branch is up to date with 'origin/master'.
 
 nothing to commit, working tree clean
 ```
+
+As its name suggests,
+`git restore` restores an earlier version of a file.
+In this case,
+we used it to recover the version of the file in the most recent commit.
+
+> **Checking Out with Git**
+> If you're running a different version of Git,
+> you may see a suggestion for `git checkout` instead of `git restore`.
+> As of Git version 2.29,
+> `git restore` is still an experimental command.
+> `git checkout` is a generally used to switch among versions of working files.
+> `git checkout HEAD bin/plotcounts.py` is equivalent to the last command run.\index{Git commands!checkout}
+
+We can confirm the file has been restored
+by printing the relevant lines of the file:
 
 ```bash
 $ head -12 bin/plotcounts.py | tail -4
@@ -6604,10 +6671,8 @@ $ head -12 bin/plotcounts.py | tail -4
                          xlim=args.xlim)
 ```
 
-As its name suggests,
-`git checkout` checks out (i.e., restores) an old version of a file.
-In this case,
-we told Git to recover the version of the file saved in the most recent commit.
+Because `git restore` is designed to restore working files, 
+we'll need to use `git checkout` to revert to earlier versions of files.\index{Git commands!checkout}
 We can use a specific commit identifier rather than `HEAD` to go back as far as we want:
 
 ```bash
@@ -6635,10 +6700,10 @@ Changes to be committed:
 
 Notice that the changes have already been added to the staging area for new commits.
 If we change our mind again,
-we can return the file to the state of the most recent commit using `git checkout`:
+we can return the file to the state of the most recent commit using `git reset`:\index{Git commands!reset}
 
 ```bash
-$ git checkout HEAD bin/countwords.py
+$ git reset HEAD bin/countwords.py
 $ git status
 ```
 
@@ -6671,6 +6736,13 @@ Since we didn't commit the change
 that removed the line that calculates the inverse rank,
 that work is now lost:
 Git can only go back and forth between committed versions of files.
+
+This section has demonstrated a few different ways to view differences among versions,
+and to work with those changes (Figure \@ref(fig:git-cmdline-remote)c). 
+These commands can operate on either individual files or entire commits,
+and the behavior of them can sometimes differ based on your version of Git.
+Remember to reference documentation,
+and use `git status` and `git log` frequently to understand your workflow.
 
 ## Ignoring Files {#git-cmdline-ignore}
 
@@ -7010,6 +7082,17 @@ The asterisk `*` indicates that it is currently active,
 i.e.,
 that all changes we make will take place in this branch by default.
 (The active branch is like the \gref{current working directory}{current_working_directory} in the shell.)
+
+> **Default branches**
+> 
+> In mid-2020,
+> GitHub changed the name of the default branch
+> (the first branch created when a repository is initialized) 
+> from "master" to "main."
+> Owners of repositories may also change the name of the default branch. 
+> This means that the name of the default branch may be different among repositories
+> based on when and where it was created,
+> as well as who manages it.
 
 In the previous chapter,
 we foreshadowed some experimental changes that we could try and make to `plotcounts.py`.
