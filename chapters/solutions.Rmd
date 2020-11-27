@@ -1533,6 +1533,61 @@ for fname in args.infiles:
         logging.warning(msg)
 ```
 
+### Exercise \@ref(errors-ex-error-handling) {-}
+
+1. The `try/except` block in `collate.py` should read begin as follows:
+
+```python
+try:
+    process_file(fname, word_counts)
+except FileNotFoundError:
+# ... the other exceptions
+```
+
+2. The following additions need to be made to `test_zipfs.py`.
+
+Import the `collate` library:
+
+```python
+import collate
+```
+
+Define the new unit test:
+
+```python
+def test_not_csv_error():
+    """Error handling test for csv check"""
+    fname = 'data/dracula.txt'
+    word_counts = Counter()
+    with pytest.raises(OSError):
+        collate.process_file(fname, word_counts)
+```
+
+3. The following unit test needs to be added to `test_zipfs.py`.
+
+```python
+def test_missing_file_error():
+    """Error handling test for missing file"""
+    fname = 'fake_file.csv'
+    word_counts = Counter()
+    with pytest.raises(FileNotFoundError):
+        collate.process_file(fname, word_counts)
+```
+
+4. The following sequence of commands is required to test the code coverage.
+
+Generate the html report:
+
+```bash
+$ coverage run -m pytest
+$ coverage html
+```
+
+Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
+The lines of `process_files` that include the `raise OSError` and
+`open(fname, 'r')` commands should appear in green after clicking the green "run" box
+in the top left hand corner of the page.
+
 ### Exercise \@ref(errors-ex-catalog) {-}
 
 1. The convention is to use `ALL_CAPS_WITH_UNDERSCORES` when defining global variables.
@@ -1625,61 +1680,6 @@ def test_negative_coordinates():
     actual_result = geometry.normalize_rectangle(rect)
     assert actual_result == expected_result
 ```
-
-### Exercise \@ref(testing-ex-error-handling) {-}
-
-1. The `try/except` block in `collate.py` should read begin as follows:
-
-```python
-try:
-    process_file(fname, word_counts)
-except FileNotFoundError:
-# ... the other exceptions
-```
-
-2. The following additions need to be made to `test_zipfs.py`.
-
-Import the `collate` library:
-
-```python
-import collate
-```
-
-Define the new unit test:
-
-```python
-def test_not_csv_error():
-    """Error handling test for csv check"""
-    fname = 'data/dracula.txt'
-    word_counts = Counter()
-    with pytest.raises(OSError):
-        collate.process_file(fname, word_counts)
-```
-
-3. The following unit test needs to be added to `test_zipfs.py`.
-
-```python
-def test_missing_file_error():
-    """Error handling test for missing file"""
-    fname = 'fake_file.csv'
-    word_counts = Counter()
-    with pytest.raises(FileNotFoundError):
-        collate.process_file(fname, word_counts)
-```
-
-4. The following sequence of commands is required to test the code coverage.
-
-Generate the html report:
-
-```bash
-$ coverage run -m pytest
-$ coverage html
-```
-
-Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
-The lines of `process_files` that include the `raise OSError` and
-`open(fname, 'r')` commands should appear in green after clicking the green "run" box
-in the top left hand corner of the page.
 
 ### Exercise \@ref(testing-ex-random) {-}
 

@@ -22,7 +22,7 @@ including assertions, unit tests, integration tests, and regression tests.
 > contributed to making the financial crash of 2008 even worse
 > for millions of people [@Borw2013].
 
-Our Zipf's Law project files are structured as they were at the end of the previous chapter:
+Here's the current structure of our Zipf's Law project files:
 
 ```text
 zipf/
@@ -550,64 +550,6 @@ bin/test_zipfs.py ..                                     [100%]
 > Unless we suspect that the plotting library contains bugs,
 > the correct data should always produce the correct plot.
 
-## Testing Error Handling {#testing-failure}
-
-An alarm isn't much use if it doesn't go off when it's supposed to.
-Equally,
-if a function doesn't raise an exception when it should (Section \@ref(errors-exceptions)),
-errors can easily slip past us.
-If we want to check that a function called `func` raises an `ExpectedError` exception\index{testing!error handling}\index{exception!testing}
-we can use the following template:
-
-```python
-#...set up fixture...
-try:
-    actual = func(fixture)
-    assert False, 'Expected function to raise exception'
-except ExpectedError as error:
-    pass
-except Exception as error:
-    assert False, 'Function raised the wrong exception'
-```
-
-This template has three cases:
-
-1.  If the call to `func` returns a value without throwing an exception
-    then something has gone wrong,
-    so we `assert False` (which always fails).
-
-2.  If `func` raises the error it's supposed to
-    then we go into the first `except` branch
-    *without* triggering the `assert` immediately below the function call.
-    The code in this `except` branch could check that
-    the exception contains the right error message,
-    but in this case it does nothing
-    (which in Python is written `pass`).
-
-3.  Finally,
-    if the function raises the wrong kind of exception
-    we also `assert False`.
-    Checking this case might seem overly cautious,
-    but if the function raises the wrong kind of exception,
-    users could easily fail to catch it.
-
-This pattern is so common that `pytest` provides support for it.
-Instead of the eight lines in our original example,
-we can instead write:
-
-```python
-import pytest
-
-
-#...set up fixture...
-with pytest.raises(ExpectedError):
-    actual = func(fixture)
-```
-
-The argument to `pytest.raises` is the type of exception we expect.
-The call to the function then goes in the body of the `with` statement.
-We will explore `pytest.raises` further in the exercises.
-
 ## Integration Testing {#testing-integration}
 
 Our Zipf's Law analysis has two steps:
@@ -690,7 +632,6 @@ bin/test_zipfs.py ...                                    [100%]
 
 ======================= 3 passed in 0.48s ======================
 ```
-
 
 ## Regression Testing {#testing-regression}
 
@@ -1095,7 +1036,7 @@ TDD's advocates claim that this leads to better code because:
 
 These arguments are plausible.
 However,
-studies such as @Fucc2016 and @Fucc2017 don't support them:
+studies such as [@Fucc2016; @Fucc2017] don't support them:
 in practice,
 writing tests first or last doesn't appear to affect productivity.
 What *does* have an impact is working in small, interleaved increments,
@@ -1281,111 +1222,6 @@ Once fixed, you should be able to successfully run
 
 5. Add a couple more unit tests to `test_geometry.py`.
 Explain the rationale behind each test.
-
-### Test error handling {#testing-ex-error-handling}
-
-In Chapter \@ref(errors), we modified `collate.py` to handle
-different types of errors associated with reading input files.
-The relevant code appears in `main`:
-
-```python
-"""
-Combine multiple word count CSV-files
-into a single cumulative count.
-"""
-
-import csv
-import argparse
-from collections import Counter
-import logging
-
-import utilities as util
-
-
-def update_counts(reader, word_counts):
-    """Update word counts with data from another reader/file."""
-    for word, count in csv.reader(reader):
-        word_counts[word] += int(count)
-
-
-def main(args):
-    """Run the command line program."""
-    log_lev = logging.DEBUG if args.verbose else logging.WARNING
-    logging.basicConfig(level=log_lev, filename=args.logfile)
-    word_counts = Counter()
-    logging.info('Processing files...')
-    for fname in args.infiles:
-        try:
-            logging.debug(f'Reading in {fname}...')
-            if fname[-4:] != '.csv':
-                msg = util.ERRORS['not_csv_suffix'].format(
-                      fname=fname)
-                raise OSError(msg)
-            with open(fname, 'r') as reader:
-                logging.debug('Computing word counts...')
-                update_counts(reader, word_counts)
-        except FileNotFoundError:
-            msg = f'{fname} not processed: File does not exist'
-            logging.warning(msg)
-        except PermissionError:
-            msg = f'{fname} not processed: No permission to read'
-            logging.warning(msg)
-        except Exception as error:
-            msg = f'{fname} not processed: {error}'
-            logging.warning(msg)
-    util.collection_to_csv(word_counts, num=args.num)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('infiles', type=str, nargs='*',
-                        help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
-                        help='Output only n most frequent words')
-    parser.add_argument('-v', '--verbose',
-                        action="store_true", default=False,
-                        help="Set logging level to DEBUG")
-    parser.add_argument('-l', '--logfile',
-                        type=str, default='collate.log',
-                        help='Name of the log file')
-    args = parser.parse_args()
-    main(args)
-```
-
-In this chapter we discussed using `pytest.raises`
-to test whether the error handling in a program is working as expected (Section \@ref(testing-failure)).
-
-1.  It is difficult to write a simple unit test for the lines of code dedicated
-    to reading input files, because `main` is a long function that requires
-    command line arguments as input.  Edit `collate.py` so that the six lines of
-    code responsible for processing an input file appear in their own function
-    that reads as follows (i.e. once you are done, `main` should call
-    `process_file` in place of the existing code):
-
-```python
-def process_file(fname, word_counts):
-    """Read file and update word counts"""
-    logging.debug(f'Reading in {fname}...')
-    if fname[-4:] != '.csv':
-        msg = util.ERRORS['not_csv_suffix'].format(fname=fname)
-        raise OSError(msg)
-    with open(fname, 'r') as reader:
-        logging.debug('Computing word counts...')
-        update_counts(reader, word_counts)
-```
-
-2.  Add a unit test to `test_zipfs.py` that uses `pytest.raises` to check that
-    the new `collate.process_file` function raises an `OSError` if the input
-    file does not end in `.csv`.  Run `pytest` to check that the new test
-    passes.
-
-3.  Add a unit test to `test_zipfs.py` that uses `pytest.raises` to check that
-    the new `collate.process_file` function raises a `FileNotFoundError` if the
-    input file does not exist.  Run `pytest` to check that the new test passes.
-
-4.  Use the `coverage` library to check that the relevant commands in
-    `process_file` (specifically `raise OSError` and `open(fname, 'r')`)
-    were indeed tested.
 
 ### Testing with randomness {#testing-ex-random}
 
