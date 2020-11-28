@@ -369,7 +369,7 @@ because it is the only file beginning in "d".
 Version 2 results in the following,
 because these files all contain a "d" with zero or more characters before and after:
 
-```bash
+```text
 README.md
 dracula.txt
 moby_dick.txt
@@ -429,23 +429,17 @@ cannot remove a non-empty directory.)
 
 ### Exercise \@ref(bash-advanced-ex-script-variables) {-}
 
-FIXME
+Running this script with the given parameters will print
+the first and last line from each file in the directory ending in `.txt`.
 
-The correct answer is 2.
-
-The special variables $1, $2 and $3 represent the command line arguments given to the
-script, such that the commands run are:
-
-```bash
-$ head -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
-$ tail -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
-```
-
-The shell does not expand `'*.pdb'` because it is enclosed by quote marks.
-As such, the first argument to the script is `'*.pdb'` which gets expanded within the
-script by `head` and `tail`.
+1. No: this answer misinterprets the lines printed
+2. Yes
+3. No: this answer includes the wrong files
+4. No: leaving off the quotation marks would result in an error
 
 ### Exercise \@ref(bash-advanced-ex-longest-with-extension) {-}
+
+One possible script (`longest.sh`) to accomplish this task:
 
 ```bash
 # Shell script which takes two arguments:
@@ -453,35 +447,36 @@ script by `head` and `tail`.
 #    2. a file extension
 # and prints the name of the file in that directory
 # with the most lines which matches the file extension.
+#
+# Usage: bash longest.sh directory/ txt
 
 wc -l $1/*.$2 | sort -n | tail -n 2 | head -n 1
 ```
 
 ### Exercise \@ref(bash-advanced-ex-reading-scripts) {-}
 
-FIXME
-
-In each case, the shell expands the wildcard in `*.pdb` before passing the resulting
-list of file names as arguments to the script.
-
-Script 1 would print out a list of all files containing a dot in their name.
-The arguments passed to the script are not actually used anywhere in the script.
-
-Script 2 would print the contents of the first 3 files with a `.pdb` file extension.
-`$1`, `$2`, and `$3` refer to the first, second, and third argument respectively.
-
-Script 3 would print all the arguments to the script (i.e. all the `.pdb` files),
-followed by `.pdb`.
-`$@` refers to *all* the arguments given to a shell script.
-
-```text
-cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
-```
+1. `script1.sh` will print the names of all files in the directory on a single line,
+e.g. `README.md dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt script1.sh sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt`.
+Although `*.txt` is included when running the script,
+the commands run by the script do not reference `$1`.
+2. `script2.sh` will print the contents of the first three files ending in `.txt`;
+the three variables (`$1`, `$2`, `$3`) refer to the first, second, and third argument
+entered after the script, respectively.
+3. `script3.sh` will print the name of each file ending in `.txt`,
+since `$@` refers to *all* the arguments (e.g. filenames) given to a shell script.
+The list of files would be followed by `.txt`:
+`dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt.txt`
 
 ### Exercise \@ref(bash-advanced-ex-using-grep) {-}
 
-The correct answer is 3, because the `-w` option looks only for whole-word matches.
-The other options will also match "of" when part of another word.
+1. No: this command extracts any line containing "he", 
+either as a word or within a word.
+2. No: this results in the same output as the answer for #1.
+`-E` allows the search term to represent an extended regular expression,
+but the search term is simple enough that it doesn't make a difference in the result.
+3. Yes: `-w` means to return only matches for the word "he".
+4. No: `-i` means to invert the search result;
+this would return all lines *except* the one we desire.
 
 ### Exercise \@ref(bash-advanced-ex-year-script) {-}
 
@@ -499,40 +494,45 @@ done
 
 ### Exercise \@ref(bash-advanced-ex-sense-sensibility) {-}
 
+One possible solution:
+
 ```bash
-for sister in Harriet Marianne
+for sister in Elinor Marianne
 do
 	echo $sister:
->	grep -ow $sister sense_and_sensibility.txt | wc -l
+	grep -o -w $sister sense_and_sensibility.txt | wc -l
 done
 ```
 
-And alternative but slightly inferior solution is:
+The `-o` option prints only the matching part of a line.
+
+An alternative (but possibly less accurate)
+solution is:
 
 ```bash
-for sister in Harriet Marianne
+for sister in Elinor Marianne
 do
 	echo $sister:
->	grep -ocw $sister sense_and_sensibility.txt
+	grep -o -c -w $sister sense_and_sensibility.txt
 done
 ```
 
-This solution is inferior because `grep -c` only reports the number of lines matched.
+This solution is potentially less accurate
+because `grep -c` only reports the number of lines matched.
 The total number of matches reported by this method
 will be lower if there is more than one match per line.
 
 ### Exercise \@ref(bash-advanced-ex-match-subtract) {-}
 
-FIXME
-
-The correct answer is 1. Putting the match expression in quotes prevents the shell
-expanding it, so it gets passed to the `find` command.
-
-Option 2 is incorrect because the shell expands `*s.txt` instead of passing the wildcard
-expression to `find`.
-
-Option 3 is incorrect because it searches the contents of the files for lines which
-do not match "temp", rather than searching the file names.
+1. Yes: this returns `data/jane_eyre.txt`.
+2. Maybe: This option may work on your computer,
+but may not behave consistently across all shells 
+because expansion of the wildcard (`*e.txt`) may prevent piping from working correctly.
+We recommend enclosing `*e.txt` in quotation marks,
+as in answer 1.
+3. No: this searches the contents of files for lines matching "machine",
+rather than the file names.
+4. See above.
 
 ### Exercise \@ref(bash-advanced-ex-reading-find) {-}
 
@@ -542,12 +542,12 @@ do not match "temp", rather than searching the file names.
 
 ### Exercise \@ref(bash-advanced-ex-find-tests) {-}
 
-FIXME
-
-Assuming that Ahmed's home is our working directory we type:
+The following command works if your working directory is `Desktop/`
+and you replace "username" with that of your current computer.
+`-mtime` needs to be negative because it is referencing a day prior to the current date.
 
 ```bash
-$ find ./ -type f -mtime -1 -user ahmed
+$ find . -type f -mtime -1 -user username
 ```
 
 ## Chapter \@ref(scripting) {.unnumbered .unlisted}
