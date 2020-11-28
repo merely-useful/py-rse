@@ -12,26 +12,29 @@ instead of `5369`.
 
 ### Exercise \@ref(bash-basics-ex-ls-rt) {-}
 
-The files/directories in each directory are sorted by time of last change.
+The command `ls -R -t` results in the contents of 
+each directory sorted by time of last change.
 
 ### Exercise \@ref(bash-basics-ex-paths) {-}
 
 1. No: `.` stands for the current directory.
 2. No: `/` stands for the root directory.
-3. No: Amanda's home directory is `/Users/amanda`.
+3. No: Amira's home directory is `/Users/Amira`.
 4. No: this goes up two levels, i.e. ends in `/Users`.
 5. Yes: `~` stands for the user's home directory, in this case `/Users/amanda`.
 6. No: this would navigate into a directory `home` in the current directory if it exists.
-7. Yes: unnecessarily complicated, but correct.
+7. No: this would navigate into a directory `home` inside her home directory
 8. Yes: shortcut to go back to the user's home directory.
 9. Yes: goes up one level.
+10. Yes: same as the previous answer, but with an unnecessary . (indicating current directory)
 
 ### Exercise \@ref(bash-basics-ex-resolve-rel-path) {-}
 
 1. No: there *is* a directory `backup` in `/Users`.
 2. No: this is the content of `Users/thing/backup`,
    but with `..` we asked for one level further up.
-3. No: see previous explanation.
+3. No: same as previous explanation, but results shown as directories
+(which is what the `-F` option specifies).
 4. Yes: `../backup/` refers to `/Users/backup/`.
 
 ### Exercise \@ref(bash-basics-ex-reading-ls) {-}
@@ -43,22 +46,20 @@ The files/directories in each directory are sorted by time of last change.
 
 ### Exercise \@ref(bash-basics-ex-touch) {-}
 
-1.  The `touch` command updated a file's timestamp.
-    If no file exists with the given name, `touch` will create one.
-    You can observe this newly generated file by typing `ls` at the
-    command line prompt. `my_file.txt` can also be viewed in your
-    GUI file explorer.
+The `touch` command updates a file's timestamp.
+If no file exists with the given name, `touch` will create one.
+Assuming you don't already have `my_file.txt` in your working directory,
+`touch my_file.txt` will create the file.
+When you inspect the file with `ls -l`, note that the size of
+`my_file.txt` is 0 bytes.  In other words, it contains no data.
+If you open `my_file.txt` using your text editor it is blank.
 
-2.  When you inspect the file with `ls -l`, note that the size of
-    `my_file.txt` is 0 bytes.  In other words, it contains no data.
-    If you open `my_file.txt` using your text editor it is blank.
-
-3.  Some programs do not generate output files themselves, but
-    instead require that empty files have already been generated.
-    When the program is run, it searches for an existing file to
-    populate with its output.  The touch command allows you to
-    efficiently generate a blank text file to be used by such
-    programs.
+Some programs do not generate output files themselves, but
+instead require that empty files have already been generated.
+When the program is run, it searches for an existing file to
+populate with its output.  The touch command allows you to
+efficiently generate a blank text file to be used by such
+programs.
 
 ### Exercise \@ref(bash-basics-ex-safe-rm) {-}
 
@@ -75,7 +76,7 @@ only the files that we want to remove.
 ### Exercise \@ref(bash-basics-ex-move-dot) {-}
 
 ```bash
-$ mv ../analyzed/sucrose.dat ../analyzed/maltose.dat .
+$ mv ../chapter1.dat ../chapter2.dat .
 ```
 
 Recall that `..` refers to the parent directory (i.e. one above the current directory)
@@ -86,103 +87,121 @@ and that `.` refers to the current directory.
 1. No.  While this would create a file with the correct name,
 the incorrectly named file still exists in the directory and would need to be deleted.
 2. Yes, this would work to rename the file.
-3. No, the period(.) indicates where to move the file, but does not provide a new file name;
+3. No, the period (.) indicates where to move the file, but does not provide a new file name;
 identical file names cannot be created.
-4. No, the period(.) indicates where to copy the file, but does not provide a new file name;
+4. No, the period (.) indicates where to copy the file, but does not provide a new file name;
 identical file names cannot be created.
 
 ### Exercise \@ref(bash-basics-ex-last-ls) {-}
 
-We start in the `/Users/jamie/data` directory, and create a new folder called `recombine`.
-The second line moves (`mv`) the file `proteins.dat` to the new folder (`recombine`).
-The third line makes a copy of the file we just moved.  The tricky part here is where the file was
-copied to.  Recall that `..` means "go up a level", so the copied file is now in `/Users/jamie`.
+We start in the `/Users/amira/data` directory, 
+containing a single file, `books.dat`.
+We create a new folder called `doc`,
+move (`mv`) the file `books.dat` to the new folder (`doc`).
+Then we make a copy (`cp`) of the file we just moved named `books-saved.dat`.  
+The tricky part here is the location of the copied file.
+Recall that `..` means "go up a level", so the copied file is now in `/Users/amira`.
 Notice that `..` is interpreted with respect to the current working
 directory, **not** with respect to the location of the file being copied.
-So, the only thing that will show using ls (in `/Users/jamie/data`) is the recombine folder.
+So, the only thing that will show using ls (in `/Users/amira/data`) is the `doc` folder.
 
-1. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
+1. No, `books-saved.dat` is located at `/Users/amira`
 2. Yes
-3. No, see explanation above.  `proteins.dat` is located at `/Users/jamie/data/recombine`
-4. No, see explanation above.  `proteins-saved.dat` is located at `/Users/jamie`
+3. No, `books.dat` is located at `/Users/amira/data/doc`
+4. No, `books-saved.dat` is located at `/Users/amira`
 
 ### Exercise \@ref(bash-basics-ex-copy-multi) {-}
 
 If given more than one file name followed by a directory name (i.e. the destination directory must
 be the last argument), `cp` copies the files to the named directory.
 
-If given three file names, `cp` throws an error such as the one below, because it is expecting a directory
-name as the last argument.
-
-```text
-cp: target 'morse.txt' is not a directory
-```
+If given three file names, 
+`cp` throws an error because it is expecting a directory name as the last argument.
 
 ### Exercise \@ref(bash-basics-ex-ls-match) {-}
 
-The solution is `3.`
+1. Yes: shows all files whose names contain two different characters (`?`) 
+followed by the letter `n`,
+then zero or more characters (`*`) followed by `txt`.
 
-`1.` shows all files whose names contain zero or more characters (`*`) followed by the letter `t`,
-then zero or more characters (`*`) followed by `ane.pdb`.
-This gives `ethane.pdb  methane.pdb  octane.pdb  pentane.pdb`.
+2. No: shows all files whose names start with zero or more characters (`*`) 
+followed by `e_`,
+zero or more characters (`*`), 
+then `txt`. 
+The output includes the two desired books, but also `time_machine.txt`.
 
-`2.` shows all files whose names start with zero or more characters (`*`) followed by the letter `t`,
-then a single character (`?`), then `ne.` followed by zero or more characters (`*`).
-This will give us `octane.pdb` and `pentane.pdb` but doesn't match anything which ends in `thane.pdb`.
+3. No: shows all files whose names start with zero or more characters (`*`) 
+followed by `n`,
+zero or more characters (`*`), 
+then `txt`. 
+The output includes the two desired books, 
+but also `frankenstein.txt` and `time_machine.txt`.
 
-`3.` fixes the problems of option 2 by matching two characters (`??`) between `t` and `ne`.
-This is the solution.
-
-`4.` only shows files starting with `ethane.`.
+4. No: shows all files whose names start with zero or more characters (`*`) 
+followed by `n`,
+a single character `?`,
+`e`,
+zero or more characters (`*`), 
+then `txt`. 
+The output shows `frankenstein.txt` and `sense_and_sensibility.txt`.
 
 ### Exercise \@ref(bash-basics-ex-organizing) {-}
 
 ```bash
-mv *.dat analyzed
+mv *.txt data
 ```
 
-Jamie needs to move her files `fructose.dat` and `sucrose.dat` to the `analyzed` directory.
-The shell will expand *.dat to match all .dat files in the current directory.
-The `mv` command then moves the list of .dat files to the "analyzed" directory.
+Amira needs to move her files `books.txt` and `titles.txt` to the `data` directory.
+The shell will expand `*.txt` to match all `.txt` files in the current directory.
+The `mv` command then moves the list of `.txt` files to the `data` directory.
 
 ### Exercise \@ref(bash-basics-ex-reproduce-structure) {-}
 
-The first two sets of commands achieve this objective.
-The first set uses relative paths to create the top level directory before
-the subdirectories.
+1. Yes, this accurately recreates the directory structure
 
-The third set of commands will give an error because `mkdir` won't create a subdirectory
-of a non-existant directory: the intermediate level folders must be created first.
+2. Yes, this accurately recreates the directory structure
 
-The final set of commands generates the 'raw' and 'processed' directories at the same level
-as the 'data' directory.
+3. No.
+The first line of this code set gives an error,
+`mkdir: 2016-05-20/data: No such file or directory`.
+`mkdir` won't create a subdirectory for a directory that doesn't yet exist 
+(unless you use an option like `-p` that explicitly creates parent directories).
+
+4. No, this creates `raw` and `processed` directories at the same level as `data`:
+
+2016-05-20
+    ├── data
+    ├── processed
+    └── raw
 
 ### Exercise \@ref(bash-basics-ex-wildcard-expressions) {-}
 
 1. A solution using two wildcard expressions:
     ```bash
-    $ ls *A.txt
-    $ ls *B.txt
+    $ ls s*.txt
+    $ ls t*.txt
     ```
-2. The output from the new commands is separated because there are two commands.
-3. When there are no files ending in `A.txt`, or there are no files ending in
-`B.txt`.
+2. The code from the answer to question 1 is not provided as a single set,
+since two lines of code must be run separately.
+3. When there are no files beginning with `s` and ending in `.txt`, 
+or when there are no files beginning with `t` and ending in `.txt`, 
+
 
 ### Exercise \@ref(bash-basics-ex-remove-unneeded) {-}
 
-1. This would remove `.txt` files with one-character names
-2. This is correct answer
-3. The shell would expand `*` to match everything in the current directory,
+1. No: this would remove only `.csv` files with one-character names
+2. Yes: this removes only files ending in `.csv`.
+3. No: the shell would expand `*` to match everything in the current directory,
 so the command would try to remove all matched files and an additional
-file called `.txt`
-4. The shell would expand `*.*` to match all files with any extension,
-so this command would delete all files
+file called `.csv`
+4. No: the shell would expand `*.*` to match all files with any extension,
+so this command would delete all files in the current directory.
 
 ### Exercise \@ref(bash-basics-ex-other-wildcards) {-}
 
 `novel-????-[ab]*.{txt,pdf}` matches:
 
--   Files whose names started with the letters `novel-`,
+-   Files whose names start with `novel-`,
 -   which is then followed by exactly four characters
     (since each `?` matches one character),
 -   followed by another literal `-`,
@@ -194,48 +213,62 @@ so this command would delete all files
 
 ### Exercise \@ref(bash-tools-ex-redirect-append) {-}
 
-In the first example with `>`, the string "hello" is written to `testfile01.txt`,
+`echo hello > testfile01.txt` writes the string "hello" to `testfile01.txt`,
 but the file gets overwritten each time we run the command.
 
-We see from the second example that the `>>` operator also writes "hello" to a file
-(in this case`testfile02.txt`),
+`echo hello >> testfile02.txt` writes "hello" to `testfile02.txt`,
 but appends the string to the file if it already exists (i.e. when we run it for the second time).
 
 ### Exercise \@ref(bash-tools-ex-append-data) {-}
 
-Option 3 is correct.
-For option 1 to be correct we would only run the `head` command.
-For option 2 to be correct we would only run the `tail` command.
-For option 4 to be correct we would have to pipe the output of `head` into `tail -n 2`
-by doing `head -n 3 animals.txt | tail -n 2 > animals-subset.txt`
+1. No: this results from only running the first line of code (`head`).
+2. No: this results from only running the second line of code (`tail`)
+3. Yes: the first line writes the first three lines of `dracula.txt`,
+the second line appends the last two lines of `dracula.txt` to the same file.
+4. No: we would need to pipe the commands to obtain this answer (`head -n 3 dracula.txt | tail -n 2 > extracted.txt`
 
 ### Exercise \@ref(bash-tools-ex-piping) {-}
 
-Option 4 is the solution.
-The pipe character `|` is used to feed the standard output from one process to
-the standard input of another.
-`>` is used to redirect standard output to a file.
-Try it in the `data-shell/molecules` directory!
+Try running each line of code in the `data` directory!
+
+1. No: this incorrectly uses redirect (`>`), 
+and will result in an error.
+2. No: the number of lines desired for `head` is reported incorrectly;
+this will result in an error.
+3. No: this will extract the first three files from the `wc` results,
+which have not yet been sorted into length of lines.
+4. Yes: this output correctly orders and connects each of the commands.
 
 ### Exercise \@ref(bash-tools-ex-uniq-adjacent) {-}
 
-```bash
-$ sort salmon.txt | uniq
-```
+To obtain a list of unique results from these data,
+we need to run `sort genres.txt | uniq`.
+It makes sense that `uniq` is almost always run after using `sort`,
+because that allows a computer to compare only adjacent lines.
+If `uniq` did not compare only adjacent lines,
+it would require comparing each line to all other lines,
+For a small set of comparisons,
+this doesn't matter much,
+but this isn't always possible for large files.
 
 ### Exercise \@ref(bash-tools-ex-reading-pipes) {-}
 
-The `head` command extracts the first 5 lines from `animals.txt`.
-Then, the last 3 lines are extracted from the previous 5 by using the `tail` command.
-With the `sort -r` command those 3 lines are sorted in reverse order and finally,
-the output is redirected to a file `final.txt`.
-The content of this file can be checked by executing `cat final.txt`.
-The file should contain the following lines:
+When used on a single file,
+`cat` prints the contents of that file to the screen.
+In this case,
+the contents of `titles.txt` are sent as input to `head -n 5`,
+so the first five lines of `titles.txt` is output.
+These five lines are used as the input for `tail -n 3`,
+which results in lines 3-5 as output.
+This is used as input to the final command,
+which sorts them in reverse order.
+These results are written to the file `final.txt`,
+the contents of which are:
 
 ```text
-2012-11-06,rabbit
-2012-11-06,deer
-2012-11-05,raccoon
+Wuthering Heights,1847
+Moby Dick,1851
+Jane Eyre,1847
 ```
 
 ### Exercise \@ref(bash-tools-ex-pipe-construction) {-}
@@ -244,97 +277,116 @@ The file should contain the following lines:
 
 -   breaking the string into pieces wherever it finds a separator (`-d ,`),
 which in this case is a comma, and
--   keeping one or more of the resulting fields (`-f 2`).
+-   keeping one or more of the resulting fields/columns (`-f 2`).
 
-Any single character can be used as a separator,
-but there is no way to escape characters:
-for example, if the string `a,"b,c",d` is split on commas,
-all three commas take effect.
+In this case, 
+the output is only the dates from `titles.txt`,
+since this is in the second column.
 
 ### Exercise \@ref(bash-tools-ex-which-pipe) {-}
 
-Option 4 is the correct answer.
-If you have difficulty understanding why,
+1. No: this sorts by the book title
+2. No: this results in an error because `sort` is being used incorrectly
+3. No: there are duplicate dates in the output because they have not been sorted first
+4. Yes: this results in the output shown below.
+5. No: this extracts the desired data (below), 
+but then counts the number of lines,
+resulting in the incorrect answer.
+
+```text
+   1 1811
+   1 1818
+   2 1847
+   1 1851
+   1 1892
+   1 1895
+   2 1897
+```
+
+If you have difficulty understanding the answers above,
 try running the commands or sub-sections of the pipelines
 (e.g., the code between pipes).
-Make sure you are in the `data-shell/data` directory.
 
 ### Exercise \@ref(bash-tools-ex-loop-dry-run) {-}
 
-The second version is the one we want to run.
-This prints to screen everything enclosed in the quote marks, expanding the
-loop variable name because we have prefixed it with a dollar sign.
+The difference between the versions is whether the code after `echo`
+is inside quotation marks.
 
-The first version redirects the output from the command `echo analyze $file` to
-a file, `analyzed-$file`. A series of files is generated: `analyzed-cubane.pdb`,
-`analyzed-ethane.pdb` etc.
+Version 2 will allow us to preview the commands.
+This prints to screen everything enclosed in the quotation marks,
+expanding the loop variable name (prefixed with `$`).
+
+The first version redirects the output from `echo analyze $file` 
+to a file (`analyzed-$file`). 
+This doesn't allow us to preview the commands,
+but instead creates files (`analyzed-$file`),
+containing the text `analyze $file`.
 
 Try both versions for yourself to see the output! Be sure to open the
-`analyzed-*.pdb` files to view their contents.
+`analyzed-*` files to view their contents.
 
 ### Exercise \@ref(bash-tools-ex-loop-variables) {-}
 
-The first code block gives the same output on each iteration through
+Version 1 gives the same output on each iteration through
 the loop.
-Bash expands the wildcard `*.pdb` within the loop body (as well as
-before the loop starts) to match all files ending in `.pdb`
+Bash expands the wildcard `*.txt` to match all files ending in `.txt`
 and then lists them using `ls`.
-The expanded loop would look like this:
+The expanded loop would look like this
+(we'll only show the first two data files):
 
 ```bash
-$ for datafile in cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
+$ for datafile in dracula.txt  frankenstein.txt ...
 > do
->	ls cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> done
+>	ls dracula.txt  frankenstein.txt ...
 ```
 
 ```text
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
+dracula.txt  frankenstein.txt ...
+dracula.txt  frankenstein.txt ...
+...
 ```
 
-The second code block lists a different file on each loop iteration.
+Version 2 lists a different file on each loop iteration.
 The value of the `datafile` variable is evaluated using `$datafile`,
 and then listed using `ls`.
 
 ```text
-cubane.pdb
-ethane.pdb
-methane.pdb
-octane.pdb
-pentane.pdb
-propane.pdb
+dracula.txt
+frankenstein.txt
+jane_eyre.txt
+moby_dick.txt
+sense_and_sensibility.txt
+sherlock_holmes.txt
+time_machine.txt
 ```
 
 ### Exercise \@ref(bash-tools-ex-limiting-file-sets) {-}
 
-**Part 1**
+Version 1 results in only `dracula.txt` output, 
+because it is the only file beginning in "d".
 
-4 is the correct answer. `*` matches zero or more characters, so any file name starting with
-the letter c, followed by zero or more other characters will be matched.
+Version 2 results in the following,
+because these files all contain a "d" with zero or more characters before and after:
 
-**Part 2**
-
-4 is the correct answer. `*` matches zero or more characters, so a file name with zero or more
-characters before a letter c and zero or more characters after the letter c will be matched.
+```text
+README.md
+dracula.txt
+moby_dick.txt
+sense_and_sensibility.txt
+```
 
 ### Exercise \@ref(bash-tools-ex-loop-save) {-}
 
-**Part 1**
+Both versions write the first 16 lines (`head -n 16`) 
+of each book to a file (`headers.txt`).
 
-1. The text from each file in turn gets written to the `alkanes.pdb` file.
-However, the file gets overwritten on each loop iteration, so the final content of `alkanes.pdb`
-is the text from the `propane.pdb` file.
+Version 1 results in the text from each file being overwritten in each iteration
+because of use of `>` as a redirect.
 
-**Part 2**
-
-3 is the correct answer. `>>` appends to a file, rather than overwriting it with the redirected
-output from a command.
-Given the output from the `cat` command has been redirected, nothing is printed to the screen.
+Version 2 uses `>>`,
+which appends the lines to the existing file.
+This is preferable because the final `headers.txt` 
+includes the first 16 lines from all files.
 
 ### Exercise \@ref(bash-tools-ex-history-order) {-}
 
@@ -376,21 +428,17 @@ cannot remove a non-empty directory.)
 
 ### Exercise \@ref(bash-advanced-ex-script-variables) {-}
 
-The correct answer is 2.
+Running this script with the given parameters will print
+the first and last line from each file in the directory ending in `.txt`.
 
-The special variables $1, $2 and $3 represent the command line arguments given to the
-script, such that the commands run are:
-
-```bash
-$ head -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
-$ tail -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
-```
-
-The shell does not expand `'*.pdb'` because it is enclosed by quote marks.
-As such, the first argument to the script is `'*.pdb'` which gets expanded within the
-script by `head` and `tail`.
+1. No: this answer misinterprets the lines printed
+2. Yes
+3. No: this answer includes the wrong files
+4. No: leaving off the quotation marks would result in an error
 
 ### Exercise \@ref(bash-advanced-ex-longest-with-extension) {-}
+
+One possible script (`longest.sh`) to accomplish this task:
 
 ```bash
 # Shell script which takes two arguments:
@@ -398,33 +446,36 @@ script by `head` and `tail`.
 #    2. a file extension
 # and prints the name of the file in that directory
 # with the most lines which matches the file extension.
+#
+# Usage: bash longest.sh directory/ txt
 
 wc -l $1/*.$2 | sort -n | tail -n 2 | head -n 1
 ```
 
 ### Exercise \@ref(bash-advanced-ex-reading-scripts) {-}
 
-In each case, the shell expands the wildcard in `*.pdb` before passing the resulting
-list of file names as arguments to the script.
-
-Script 1 would print out a list of all files containing a dot in their name.
-The arguments passed to the script are not actually used anywhere in the script.
-
-Script 2 would print the contents of the first 3 files with a `.pdb` file extension.
-`$1`, `$2`, and `$3` refer to the first, second, and third argument respectively.
-
-Script 3 would print all the arguments to the script (i.e. all the `.pdb` files),
-followed by `.pdb`.
-`$@` refers to *all* the arguments given to a shell script.
-
-```text
-cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
-```
+1. `script1.sh` will print the names of all files in the directory on a single line,
+e.g. `README.md dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt script1.sh sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt`.
+Although `*.txt` is included when running the script,
+the commands run by the script do not reference `$1`.
+2. `script2.sh` will print the contents of the first three files ending in `.txt`;
+the three variables (`$1`, `$2`, `$3`) refer to the first, second, and third argument
+entered after the script, respectively.
+3. `script3.sh` will print the name of each file ending in `.txt`,
+since `$@` refers to *all* the arguments (e.g. filenames) given to a shell script.
+The list of files would be followed by `.txt`:
+`dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt.txt`
 
 ### Exercise \@ref(bash-advanced-ex-using-grep) {-}
 
-The correct answer is 3, because the `-w` option looks only for whole-word matches.
-The other options will also match "of" when part of another word.
+1. No: this command extracts any line containing "he", 
+either as a word or within a word.
+2. No: this results in the same output as the answer for #1.
+`-E` allows the search term to represent an extended regular expression,
+but the search term is simple enough that it doesn't make a difference in the result.
+3. Yes: `-w` means to return only matches for the word "he".
+4. No: `-i` means to invert the search result;
+this would return all lines *except* the one we desire.
 
 ### Exercise \@ref(bash-advanced-ex-year-script) {-}
 
@@ -442,38 +493,45 @@ done
 
 ### Exercise \@ref(bash-advanced-ex-sense-sensibility) {-}
 
+One possible solution:
+
 ```bash
-for sister in Harriet Marianne
+for sister in Elinor Marianne
 do
 	echo $sister:
->	grep -ow $sister sense_and_sensibility.txt | wc -l
+	grep -o -w $sister sense_and_sensibility.txt | wc -l
 done
 ```
 
-And alternative but slightly inferior solution is:
+The `-o` option prints only the matching part of a line.
+
+An alternative (but possibly less accurate)
+solution is:
 
 ```bash
-for sister in Harriet Marianne
+for sister in Elinor Marianne
 do
 	echo $sister:
->	grep -ocw $sister sense_and_sensibility.txt
+	grep -o -c -w $sister sense_and_sensibility.txt
 done
 ```
 
-This solution is inferior because `grep -c` only reports the number of lines matched.
+This solution is potentially less accurate
+because `grep -c` only reports the number of lines matched.
 The total number of matches reported by this method
 will be lower if there is more than one match per line.
 
 ### Exercise \@ref(bash-advanced-ex-match-subtract) {-}
 
-The correct answer is 1. Putting the match expression in quotes prevents the shell
-expanding it, so it gets passed to the `find` command.
-
-Option 2 is incorrect because the shell expands `*s.txt` instead of passing the wildcard
-expression to `find`.
-
-Option 3 is incorrect because it searches the contents of the files for lines which
-do not match "temp", rather than searching the file names.
+1. Yes: this returns `data/jane_eyre.txt`.
+2. Maybe: This option may work on your computer,
+but may not behave consistently across all shells 
+because expansion of the wildcard (`*e.txt`) may prevent piping from working correctly.
+We recommend enclosing `*e.txt` in quotation marks,
+as in answer 1.
+3. No: this searches the contents of files for lines matching "machine",
+rather than the file names.
+4. See above.
 
 ### Exercise \@ref(bash-advanced-ex-reading-find) {-}
 
@@ -483,10 +541,12 @@ do not match "temp", rather than searching the file names.
 
 ### Exercise \@ref(bash-advanced-ex-find-tests) {-}
 
-Assuming that Ahmed's home is our working directory we type:
+The following command works if your working directory is `Desktop/`
+and you replace "username" with that of your current computer.
+`-mtime` needs to be negative because it is referencing a day prior to the current date.
 
 ```bash
-$ find ./ -type f -mtime -1 -user ahmed
+$ find . -type f -mtime -1 -user username
 ```
 
 ## Chapter \@ref(scripting) {.unnumbered .unlisted}
