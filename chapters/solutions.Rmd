@@ -1335,6 +1335,109 @@ The first solution prevents the problem;
 the second detects it,
 which is a lot better than nothing.
 
+## Chapter \@ref(testing) {.unnumbered .unlisted}
+
+### Exercise \@ref(testing-ex-explain-assertions) {-}
+
+-   The first assertion checks that the input sequence `values` is not empty.
+    An empty sequence such as `[]` will make it fail.
+
+-   The second assertion checks that each value in the list can be turned into an integer.
+    Input such as `[1, 2,'c', 3]` will make it fail.
+
+-   The third assertion checks that the total of the list is greater than 0.
+    Input such as `[-10, 2, 3]` will make it fail.
+
+### Exercise \@ref(testing-ex-rectangles) {-}
+
+1. Remove the comment about inserting preconditions and add the following:
+
+```python
+assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
+x0, y0, x1, y1 = rect
+assert x0 < x1, 'Invalid X coordinates'
+assert y0 < y1, 'Invalid Y coordinates'
+```
+
+2. Remove the comment about inserting postconditions and add the following
+
+```python
+assert 0 < upper_x <= 1.0, \
+  'Calculated upper X coordinate invalid'
+assert 0 < upper_y <= 1.0, \
+  'Calculated upper Y coordinate invalid'
+```
+
+3. The problem is that the following section of `normalize_rectangle`
+should read `float(dy) / dx`, not `float(dx) / dy`.
+
+```python
+if dx > dy:
+    scaled = float(dx) / dy
+```
+
+4. `test_geometry.py` should read as follows:
+
+```python
+import geometry
+
+def test_tall_skinny():
+    """Test normalization of a tall, skinny rectangle."""
+    rect = [20, 15, 30, 20]
+    expected_result = (0, 0, 1.0, 0.5)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+```
+
+5. Other tests might include (but are not limited to):
+
+```python
+def test_short_wide():
+    """Test normalization of a short, wide rectangle."""
+    rect = [2, 5, 3, 10]
+    expected_result = (0, 0, 0.2, 1.0)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+
+def test_negative_coordinates():
+    """Test rectangle normalization with negative coordinates."""
+    rect = [-2, 5, -1, 10]
+    expected_result = (0, 0, 0.2, 1.0)
+    actual_result = geometry.normalize_rectangle(rect)
+    assert actual_result == expected_result
+```
+
+### Exercise \@ref(testing-ex-random) {-}
+
+There are three approaches to testing when pseudo-random numbers are involved:
+
+1.  Run the function once with a known \gref{seed}{seed},
+    check and record its output,
+    and then compare the output of subsequent runs to that saved output.
+    (Basically, if the function does the same thing it did the first time, we trust it.)
+
+2.  Replace the \gref{pseudo-random number generator}{prng} with a function of our own
+    that generates a predictable series of values.
+    For example,
+    if we are randomly partitioning a list into two equal halves,
+    we could instead use a function that puts odd-numbered values in one partition
+    and even-numbered values in another
+    (which is a legal but unlikely outcome of truly random partitioning).
+
+3.  Instead of checking for an exact result,
+    check that the result lies within certain bounds,
+    just as we would with the result of a physical experiment.
+
+### Exercise \@ref(testing-ex-relative-error) {-}
+
+This result seems counter-intuitive to many people because relative error is a measure of a single value,
+but in this case we are looking at a distribution of values:
+each result is off by 0.1 compared to a range of 0--2,
+which doesn't "feel" infinite.
+In this case,
+a better measure might be the largest \gref{absolute error}{absolute_error}
+divided by the standard deviation of the data.
+
 ## Chapter \@ref(errors) {.unnumbered .unlisted}
 
 ### Exercise \@ref(errors-ex-set-level) {-}
@@ -1533,100 +1636,7 @@ for fname in args.infiles:
         logging.warning(msg)
 ```
 
-### Exercise \@ref(errors-ex-catalog) {-}
-
-1. The convention is to use `ALL_CAPS_WITH_UNDERSCORES` when defining global variables.
-
-2. Python's f-strings interpolate variables that are in scope:
-   there is no easy way to interpolate values from a lookup table.
-   In contrast,
-   `str.format` can be given any number of named keyword arguments (Appendix \@ref(style)),
-   so we can look up a string and then interpolate whatever values we want.
-
-3. Once `ERROR_MESSAGES` has been moved to the `utilities` module
-   all references to it in `collate.py` must be updated to `utilities.ERROR_MESSAGES`.
-
-### Exercise \@ref(errors-ex-traceback) {-}
-
-A \gref{traceback}{traceback} is an object that records where an exception was
-raised), what \gref{stack frames}{stack_frame} were on the
-[call stack](#call_stack) when the error occurred, and other details that are
-helpful for debugging. Python's [traceback][python-traceback] library can be
-used to get and print information from these objects.
-
-## Chapter \@ref(testing) {.unnumbered .unlisted}
-
-### Exercise \@ref(testing-ex-explain-assertions) {-}
-
--   The first assertion checks that the input sequence `values` is not empty.
-    An empty sequence such as `[]` will make it fail.
-
--   The second assertion checks that each value in the list can be turned into an integer.
-    Input such as `[1, 2,'c', 3]` will make it fail.
-
--   The third assertion checks that the total of the list is greater than 0.
-    Input such as `[-10, 2, 3]` will make it fail.
-
-### Exercise \@ref(testing-ex-rectangles) {-}
-
-1. Remove the comment about inserting preconditions and add the following:
-
-```python
-assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
-x0, y0, x1, y1 = rect
-assert x0 < x1, 'Invalid X coordinates'
-assert y0 < y1, 'Invalid Y coordinates'
-```
-
-2. Remove the comment about inserting postconditions and add the following
-
-```python
-assert 0 < upper_x <= 1.0, \
-  'Calculated upper X coordinate invalid'
-assert 0 < upper_y <= 1.0, \
-  'Calculated upper Y coordinate invalid'
-```
-
-3. The problem is that the following section of `normalize_rectangle`
-should read `float(dy) / dx`, not `float(dx) / dy`.
-
-```python
-if dx > dy:
-    scaled = float(dx) / dy
-```
-
-4. `test_geometry.py` should read as follows:
-
-```python
-import geometry
-
-def test_tall_skinny():
-    """Test normalization of a tall, skinny rectangle."""
-    rect = [20, 15, 30, 20]
-    expected_result = (0, 0, 1.0, 0.5)
-    actual_result = geometry.normalize_rectangle(rect)
-    assert actual_result == expected_result
-```
-
-5. Other tests might include (but are not limited to):
-
-```python
-def test_short_wide():
-    """Test normalization of a short, wide rectangle."""
-    rect = [2, 5, 3, 10]
-    expected_result = (0, 0, 0.2, 1.0)
-    actual_result = geometry.normalize_rectangle(rect)
-    assert actual_result == expected_result
-
-def test_negative_coordinates():
-    """Test rectangle normalization with negative coordinates."""
-    rect = [-2, 5, -1, 10]
-    expected_result = (0, 0, 0.2, 1.0)
-    actual_result = geometry.normalize_rectangle(rect)
-    assert actual_result == expected_result
-```
-
-### Exercise \@ref(testing-ex-error-handling) {-}
+### Exercise \@ref(errors-ex-error-handling) {-}
 
 1. The `try/except` block in `collate.py` should read begin as follows:
 
@@ -1681,36 +1691,26 @@ The lines of `process_files` that include the `raise OSError` and
 `open(fname, 'r')` commands should appear in green after clicking the green "run" box
 in the top left hand corner of the page.
 
-### Exercise \@ref(testing-ex-random) {-}
+### Exercise \@ref(errors-ex-catalog) {-}
 
-There are three approaches to testing when pseudo-random numbers are involved:
+1. The convention is to use `ALL_CAPS_WITH_UNDERSCORES` when defining global variables.
 
-1.  Run the function once with a known \gref{seed}{seed},
-    check and record its output,
-    and then compare the output of subsequent runs to that saved output.
-    (Basically, if the function does the same thing it did the first time, we trust it.)
+2. Python's f-strings interpolate variables that are in scope:
+   there is no easy way to interpolate values from a lookup table.
+   In contrast,
+   `str.format` can be given any number of named keyword arguments (Appendix \@ref(style)),
+   so we can look up a string and then interpolate whatever values we want.
 
-2.  Replace the \gref{pseudo-random number generator}{prng} with a function of our own
-    that generates a predictable series of values.
-    For example,
-    if we are randomly partitioning a list into two equal halves,
-    we could instead use a function that puts odd-numbered values in one partition
-    and even-numbered values in another
-    (which is a legal but unlikely outcome of truly random partitioning).
+3. Once `ERROR_MESSAGES` has been moved to the `utilities` module
+   all references to it in `collate.py` must be updated to `utilities.ERROR_MESSAGES`.
 
-3.  Instead of checking for an exact result,
-    check that the result lies within certain bounds,
-    just as we would with the result of a physical experiment.
+### Exercise \@ref(errors-ex-traceback) {-}
 
-### Exercise \@ref(testing-ex-relative-error) {-}
-
-This result seems counter-intuitive to many people because relative error is a measure of a single value,
-but in this case we are looking at a distribution of values:
-each result is off by 0.1 compared to a range of 0--2,
-which doesn't "feel" infinite.
-In this case,
-a better measure might be the largest \gref{absolute error}{absolute_error}
-divided by the standard deviation of the data.
+A \gref{traceback}{traceback} is an object that records where an exception was
+raised), what \gref{stack frames}{stack_frame} were on the
+[call stack](#call_stack) when the error occurred, and other details that are
+helpful for debugging. Python's [traceback][python-traceback] library can be
+used to get and print information from these objects.
 
 ## Chapter \@ref(provenance) {.unnumbered .unlisted}
 
