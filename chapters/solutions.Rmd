@@ -1,7 +1,5 @@
 # Solutions {#solutions}
 
-FIXME: add preamble that there are often multiple solutions?
-
 ## Chapter \@ref(bash-basics) {.unnumbered .unlisted}
 
 ### Exercise \@ref(bash-basics-ex-more-ls) {-}
@@ -215,52 +213,62 @@ so this command would delete all files in the current directory.
 
 ### Exercise \@ref(bash-tools-ex-redirect-append) {-}
 
-In the first example with `>`, the string "hello" is written to `testfile01.txt`,
+`echo hello > testfile01.txt` writes the string "hello" to `testfile01.txt`,
 but the file gets overwritten each time we run the command.
 
-We see from the second example that the `>>` operator also writes "hello" to a file
-(in this case`testfile02.txt`),
+`echo hello >> testfile02.txt` writes "hello" to `testfile02.txt`,
 but appends the string to the file if it already exists (i.e. when we run it for the second time).
 
 ### Exercise \@ref(bash-tools-ex-append-data) {-}
-FIXME
-Option 3 is correct.
-For option 1 to be correct we would only run the `head` command.
-For option 2 to be correct we would only run the `tail` command.
-For option 4 to be correct we would have to pipe the output of `head` into `tail -n 2`
-by doing `head -n 3 animals.txt | tail -n 2 > animals-subset.txt`
+
+1. No: this results from only running the first line of code (`head`).
+2. No: this results from only running the second line of code (`tail`)
+3. Yes: the first line writes the first three lines of `dracula.txt`,
+the second line appends the last two lines of `dracula.txt` to the same file.
+4. No: we would need to pipe the commands to obtain this answer (`head -n 3 dracula.txt | tail -n 2 > extracted.txt`
 
 ### Exercise \@ref(bash-tools-ex-piping) {-}
 
-Option 4 is the solution.
-The pipe character `|` is used to feed the standard output from one process to
-the standard input of another.
-`>` is used to redirect standard output to a file.
-Try it in the `data` directory!
+Try running each line of code in the `data` directory!
+
+1. No: this incorrectly uses redirect (`>`), 
+and will result in an error.
+2. No: the number of lines desired for `head` is reported incorrectly;
+this will result in an error.
+3. No: this will extract the first three files from the `wc` results,
+which have not yet been sorted into length of lines.
+4. Yes: this output correctly orders and connects each of the commands.
 
 ### Exercise \@ref(bash-tools-ex-uniq-adjacent) {-}
 
-```bash
-$ sort genres.txt | uniq
-```
-
-FIXME: explanation
+To obtain a list of unique results from these data,
+we need to run `sort genres.txt | uniq`.
+It makes sense that `uniq` is almost always run after using `sort`,
+because that allows a computer to compare only adjacent lines.
+If `uniq` did not compare only adjacent lines,
+it would require comparing each line to all other lines,
+For a small set of comparisons,
+this doesn't matter much,
+but this isn't always possible for large files.
 
 ### Exercise \@ref(bash-tools-ex-reading-pipes) {-}
 
-FIXME
-
-The `head` command extracts the first 5 lines from `animals.txt`.
-Then, the last 3 lines are extracted from the previous 5 by using the `tail` command.
-With the `sort -r` command those 3 lines are sorted in reverse order and finally,
-the output is redirected to a file `final.txt`.
-The content of this file can be checked by executing `cat final.txt`.
-The file should contain the following lines:
+When used on a single file,
+`cat` prints the contents of that file to the screen.
+In this case,
+the contents of `titles.txt` are sent as input to `head -n 5`,
+so the first five lines of `titles.txt` is output.
+These five lines are used as the input for `tail -n 3`,
+which results in lines 3-5 as output.
+This is used as input to the final command,
+which sorts them in reverse order.
+These results are written to the file `final.txt`,
+the contents of which are:
 
 ```text
-2012-11-06,rabbit
-2012-11-06,deer
-2012-11-05,raccoon
+Wuthering Heights,1847
+Moby Dick,1851
+Jane Eyre,1847
 ```
 
 ### Exercise \@ref(bash-tools-ex-pipe-construction) {-}
@@ -269,105 +277,117 @@ The file should contain the following lines:
 
 -   breaking the string into pieces wherever it finds a separator (`-d ,`),
 which in this case is a comma, and
--   keeping one or more of the resulting fields (`-f 2`).
+-   keeping one or more of the resulting fields/columns (`-f 2`).
 
-Any single character can be used as a separator,
-but there is no way to escape characters:
-for example, if the string `a,"b,c",d` is split on commas,
-all three commas take effect.
+In this case, 
+the output is only the dates from `titles.txt`,
+since this is in the second column.
 
 ### Exercise \@ref(bash-tools-ex-which-pipe) {-}
 
-Option 4 is the correct answer.
-If you have difficulty understanding why,
+1. No: this sorts by the book title
+2. No: this results in an error because `sort` is being used incorrectly
+3. No: there are duplicate dates in the output because they have not been sorted first
+4. Yes: this results in the output shown below.
+5. No: this extracts the desired data (below), 
+but then counts the number of lines,
+resulting in the incorrect answer.
+
+```
+text
+   1 1811
+   1 1818
+   2 1847
+   1 1851
+   1 1892
+   1 1895
+   2 1897
+```
+
+If you have difficulty understanding the answers above,
 try running the commands or sub-sections of the pipelines
 (e.g., the code between pipes).
-Make sure you are in the `data` directory.
 
 ### Exercise \@ref(bash-tools-ex-loop-dry-run) {-}
 
-FIXME
+The difference between the versions is whether the code after `echo`
+is inside quotation marks.
 
-The second version is the one we want to run.
-This prints to screen everything enclosed in the quote marks, expanding the
-loop variable name because we have prefixed it with a dollar sign.
+Version 2 will allow us to preview the commands.
+This prints to screen everything enclosed in the quotation marks,
+expanding the loop variable name (prefixed with `$`).
 
-The first version redirects the output from the command `echo analyze $file` to
-a file, `analyzed-$file`. A series of files is generated: `analyzed-cubane.pdb`,
-`analyzed-ethane.pdb` etc.
+The first version redirects the output from `echo analyze $file` 
+to a file (`analyzed-$file`). 
+This doesn't allow us to preview the commands,
+but instead creates files (`analyzed-$file`),
+containing the text `analyze $file`.
 
 Try both versions for yourself to see the output! Be sure to open the
-`analyzed-*.pdb` files to view their contents.
+`analyzed-*` files to view their contents.
 
 ### Exercise \@ref(bash-tools-ex-loop-variables) {-}
 
-FIXME
-
-The first code block gives the same output on each iteration through
+Version 1 gives the same output on each iteration through
 the loop.
-Bash expands the wildcard `*.pdb` within the loop body (as well as
-before the loop starts) to match all files ending in `.pdb`
+Bash expands the wildcard `*.txt` to match all files ending in `.txt`
 and then lists them using `ls`.
-The expanded loop would look like this:
+The expanded loop would look like this
+(we'll only show the first two data files):
 
 ```bash
-$ for datafile in cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
+$ for datafile in dracula.txt  frankenstein.txt ...
 > do
->	ls cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-> done
+>	ls dracula.txt  frankenstein.txt ...
 ```
 
 ```text
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
-cubane.pdb  ethane.pdb  methane.pdb  octane.pdb  pentane.pdb  propane.pdb
+dracula.txt  frankenstein.txt ...
+dracula.txt  frankenstein.txt ...
+...
 ```
 
-The second code block lists a different file on each loop iteration.
+Version 2 lists a different file on each loop iteration.
 The value of the `datafile` variable is evaluated using `$datafile`,
 and then listed using `ls`.
 
 ```text
-cubane.pdb
-ethane.pdb
-methane.pdb
-octane.pdb
-pentane.pdb
-propane.pdb
+dracula.txt
+frankenstein.txt
+jane_eyre.txt
+moby_dick.txt
+sense_and_sensibility.txt
+sherlock_holmes.txt
+time_machine.txt
 ```
 
 ### Exercise \@ref(bash-tools-ex-limiting-file-sets) {-}
 
-FIXME
+Version 1 results in only `dracula.txt` output, 
+because it is the only file beginning in "d".
 
-**Part 1**
+Version 2 results in the following,
+because these files all contain a "d" with zero or more characters before and after:
 
-4 is the correct answer. `*` matches zero or more characters, so any file name starting with
-the letter c, followed by zero or more other characters will be matched.
-
-**Part 2**
-
-4 is the correct answer. `*` matches zero or more characters, so a file name with zero or more
-characters before a letter c and zero or more characters after the letter c will be matched.
+```bash
+README.md
+dracula.txt
+moby_dick.txt
+sense_and_sensibility.txt
+```
 
 ### Exercise \@ref(bash-tools-ex-loop-save) {-}
 
-FIXME
+Both versions write the first 16 lines (`head -n 16`) 
+of each book to a file (`headers.txt`).
 
-**Part 1**
+Version 1 results in the text from each file being overwritten in each iteration
+because of use of `>` as a redirect.
 
-1. The text from each file in turn gets written to the `alkanes.pdb` file.
-However, the file gets overwritten on each loop iteration, so the final content of `alkanes.pdb`
-is the text from the `propane.pdb` file.
-
-**Part 2**
-
-3 is the correct answer. `>>` appends to a file, rather than overwriting it with the redirected
-output from a command.
-Given the output from the `cat` command has been redirected, nothing is printed to the screen.
+Version 2 uses `>>`,
+which appends the lines to the existing file.
+This is preferable because the final `headers.txt` 
+includes the first 16 lines from all files.
 
 ### Exercise \@ref(bash-tools-ex-history-order) {-}
 
