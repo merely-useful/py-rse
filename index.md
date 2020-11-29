@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-28"
+date: "2020-11-29"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -17281,19 +17281,6 @@ and is intended to help instructors who want to use this curriculum.
 -   Use \gref{YAML}{yaml_glossary} or some other standard syntax to write configuration files.
 -   Save configuration information to make your research \gref{reproducible}{reproducible_research}.
 
-## Handling Errors
-
-
--   Signal errors by \gref{raising exceptions}{raise_exception}.
--   Use `try`/`except` blocks to \gref{catch}{catch_exception} and handle exceptions.
--   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
--   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
--   Write error messages that help users figure out what to do to fix the problem.
--   Store error messages in a lookup table to ensure consistency.
--   Use a \gref{logging framework}{logging_framework} instead of `print` statements to report program activity.
--   Separate logging messages into `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` levels.
--   Use `logging.basicConfig` to define basic logging parameters.
-
 ## Testing Software
 
 
@@ -17306,6 +17293,19 @@ and is intended to help instructors who want to use this curriculum.
 -   A \gref{test framework}{test_framework} finds and runs tests written in a prescribed fashion and reports their results.
 -   Test \gref{coverage}{code_coverage} is the fraction of lines of code that are executed by a set of tests.
 -   \gref{Continuous integration}{continuous_integration} re-builds and/or re-tests software every time something changes.
+
+## Handling Errors
+
+
+-   Signal errors by \gref{raising exceptions}{raise_exception}.
+-   Use `try`/`except` blocks to \gref{catch}{catch_exception} and handle exceptions.
+-   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
+-   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
+-   Write error messages that help users figure out what to do to fix the problem.
+-   Store error messages in a lookup table to ensure consistency.
+-   Use a \gref{logging framework}{logging_framework} instead of `print` statements to report program activity.
+-   Separate logging messages into `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL` levels.
+-   Use `logging.basicConfig` to define basic logging parameters.
 
 ## Tracking Provenance
 
