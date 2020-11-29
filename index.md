@@ -17070,6 +17070,16 @@ and is intended to help instructors who want to use this curriculum.
 -   Describe the four levels of configuration typically used by robust software.
 -   Create a configuration file using \gref{YAML}{yaml}.
 
+## Testing Software
+
+
+-   Explain three different goals for testing software.
+-   Add \gref{assertions}{assertion} to a program to check that it is operating correctly.
+-   Write and run unit tests using `pytest`.
+-   Determine the \gref{coverage}{code_coverage} of those tests and identify untested portions of code.
+-   Explain \gref{continuous integration}{continuous_integration} and implement it using [Travis CI][travis-ci].
+-   Describe and contrast \gref{test-driven development}{tdd} and checking-driven development.
+
 ## Handling Errors
 
 
@@ -17082,16 +17092,6 @@ and is intended to help instructors who want to use this curriculum.
 -   Explain the advantages of using a \gref{logging framework}{logging_framework} rather than `print` statements.
 -   Describe the five standard logging levels and explain what each should be used for.
 -   Create, configure, and use a simple logger.
-
-## Testing Software
-
-
--   Explain three different goals for testing software.
--   Add \gref{assertions}{assertion} to a program to check that it is operating correctly.
--   Write and run unit tests using `pytest`.
--   Determine the \gref{coverage}{code_coverage} of those tests and identify untested portions of code.
--   Explain \gref{continuous integration}{continuous_integration} and implement it using [Travis CI][travis-ci].
--   Describe and contrast \gref{test-driven development}{tdd} and checking-driven development.
 
 ## Tracking Provenance
 
