@@ -270,13 +270,13 @@ to researchers worldwide.
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
 
-As with any research project,
-one of the first steps in our Zipf's Law analysis
-involves collecting/downloading the research data
-and installing the required software.
+As with many research projects,
+the first step in our Zipf's Law analysis
+is to download the research data
+and install the required software.
 Before doing that,
 it's worth taking a moment to think about
-how we are going to organise everything.
+how we are going to organize everything.
 We will soon have a number of books from [Project Gutenberg][project-gutenberg]
 in the form of a series of text files,
 plots we've produced showing the word frequency distribution in each book,
@@ -405,16 +405,15 @@ and packaging (Chapter \@ref(packaging)).
 
 ## Downloading the Data {#getting-started-download-data}
 
-The data files used in the book have been archived
-at an online repository called Figshare (covered in Section \@ref(provenance-data-where)).
-They can be accessed at the following URL:
-<https://doi.org/10.6084/m9.figshare.13040516>
+The data files used in the book are archived
+at an online repository called Figshare (which we discuss in detail in Section \@ref(provenance-data-where))
+and can be accessed at <https://doi.org/10.6084/m9.figshare.13040516>.
 
 We can download a zip file containing the data files by clicking
-"download all" at the URL above,
-before unzipping the contents into a new `zipf/data` directory
+"download all" at this URL
+and then unzipping the contents into a new `zipf/data` directory
 (also called a \gref{folder}{folder})
-following the project structure described above.
+that follows the project structure described above.
 Here's how things look once we're done:
 
 ```text
@@ -432,8 +431,7 @@ zipf/
 
 ## Installing the Software {#getting-started-install-software}
 
-In order to conduct our Zipf's Law analysis,
-we need to have the following software installed:
+In order to conduct our analysis we need to install the following software:
 
 1. A \gref{Bash shell}{shell}
 2. \gref{Git}{git} version control
@@ -441,20 +439,18 @@ we need to have the following software installed:
 4 [Python 3][python] (via the Anaconda distribution)
 5. [GNU Make][gnu-make]
 
-Comprehensive software installation instructions for Windows, Mac and Linux operating systems
+Comprehensive software installation instructions for Windows, Mac, and Linux operating systems
 (with video tutorials) are maintained by [The Carpentries][carpentries]
-as part of their workshop website template:
-<https://carpentries.github.io/workshop-template/#setup>
-
+as part of their workshop website template at <https://carpentries.github.io/workshop-template/#setup>.
 We can follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
 
-If Make isn't installed on your computer (check by typing `make -v` into the Bash shell),
-then it can be installed as follows:
+You can check if Make is already on your computer by typing `make -v` into the Bash shell.
+If it is not, you can install it as follows:
 
 - *Linux (Debian/Ubuntu)*: Install it from the Bash shell using `sudo apt-get install make`.
 - *Mac*: Install [Xcode][xcode] (via the App Store).
 - *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
-  Master of Data Science at the University of British Columbia.
+  Master of Data Science program at the University of British Columbia.
 
 > **conda in the shell on Windows**
 >
@@ -465,8 +461,10 @@ then it can be installed as follows:
 
 ## Summary {#getting-started-summary}
 
-With our project structure decided, data downloaded and software installed,
-we are now ready to start exploring our data.
+Now that our project structure is set up,
+our data is downloaded,
+and our software is installed,
+we are ready to start our analysis.
 
 ## Exercises {#getting-started-exercises}
 
@@ -502,7 +500,7 @@ store data,
 run programs,
 talk with each other,
 and interact with people.
-They do the last of these in many different ways,
+They do the interacting in many different ways,
 of which \gref{graphical user interfaces}{gui} (GUI) are the most widely used.
 The computer displays icons to show our files and programs,
 and we tell it to copy or run those by clicking with a mouse.
@@ -562,9 +560,12 @@ on how to install and launch the shell on your computer.
 
 ## Exploring Files and Directories {#bash-basics-explore}
 
-When Bash runs it presents us with a \gref{prompt}{prompt}\index{prompt (in Unix shell)} to indicate that it is waiting for input.
-By default,
-this prompt is a simple dollar sign:
+Our first shell commands will let us explore our folders and files,
+and will also introduce us to several conventions that most Unix tools follow.
+To start,
+when Bash runs it presents us with a \gref{prompt}{prompt}\index{prompt (in Unix shell)}
+to indicate that it is waiting for us to type something.
+This prompt is a simple dollar sign by default:
 
 ```bash
 $
@@ -1279,8 +1280,7 @@ prior-work.txt
 ## Copying Files and Directories {#bash-basics-copy}
 
 The `cp` command **c**o**p**ies files.\index{Unix commands!cp}
-It works like `mv` except it creates a file instead of moving an existing one
-(and no, we don't know why the creators of Unix seemed to be allergic to vowels):
+It works like `mv` except it creates a file instead of moving an existing one:
 
 ```bash
 $ cp prior-work.txt analysis/section-1.txt
@@ -1608,8 +1608,7 @@ is unlikely to think to look for `wc`.
 
 ## Summary {#bash-basics-summary}
 
-The original Unix shell was created in 1971,
-and will soon celebrate its fiftieth anniversary.
+The original Unix shell is celebrating its fiftieth anniversary.
 Its commands may be cryptic,
 but few programs have remained in daily use for so long.
 The next chapter will explore how we can use the tools it gives us
@@ -1988,10 +1987,8 @@ zipf/
 
 ## Combining Commands {#bash-tools-pipe}
 
-Now that we know a few basic commands,
-we can introduce one of the shell's most powerful features:
-the ease with which it lets us combine existing programs in new ways.
-Let's go into the `zipf/data` directory
+To see how the shell lets us combine commands,
+let's go into the `zipf/data` directory
 and count the number of lines in each file once again:
 
 ```bash
@@ -2591,8 +2588,7 @@ increase the odds of misunderstanding.
 ## Redoing Things {#bash-tools-history}
 
 Loops are useful if we know in advance what we want to repeat,
-but if we have already run commands,
-we can still repeat.
+but we can also repeat commands that we have run recently.
 One way is to use <kbd>↑</kbd> and <kbd>↓</kbd>
 to go up and down in our command history as described earlier.
 Another is to use `history`\index{history (in Unix shell)}\index{Unix commands!history}
@@ -2763,7 +2759,7 @@ jane_eyre.txt.bak  time_machine.txt.bak
 
 ## Summary {#bash-tools-summary}
 
-The secret to the shell's success is the way it combines a few powerful ideas with pipes and loops.
+The shell's greatest strength is the way it combines a few powerful ideas with pipes and loops.
 The next chapter will show how we can make our work more reproducible
 by saving commands in files that we can run over and over again.
 
@@ -3214,7 +3210,7 @@ $ bash book_summary.sh | wc -w
 
 ## Making Scripts More Versatile {#bash-advanced-params}
 
-Getting the name of the author for only one of the books isn't all that useful.
+Getting the name of the author for only one of the books isn't particularly useful.
 What we really want is a way to get the name of the author from any of our files.
 Let's edit `book_summary.sh` again
 and replace `../data/moby_dick.txt` with
@@ -4409,8 +4405,8 @@ but we can use whatever name we want.
 
 ## Handling Command-Line Options {#scripting-options}
 
-The first thing the main function usually does
-is parse any options the user gave the program on the command line.\index{option (of Python program)}\index{Python!option}
+The main function in a program usually starts by
+parsing any options the user gave on the command line.\index{option (of Python program)}\index{Python!option}
 The most commonly used library for doing this in Python is [`argparse`][argparse],
 which can handle options with or without arguments,
 convert arguments from strings to numbers or other types,
@@ -4509,11 +4505,11 @@ optional arguments:
 
 ## Documentation {#scripting-docstrings}
 
-Our template is a good starting point,
-but we can make one improvement right away.
+Our program template is a good starting point,
+but we improve it right away
+by adding a bit of documentation.\index{Python!documenting}
 To demonstrate,
-let's write a function that doubles a number,
-but add a bit of documentation:\index{Python!documenting}
+let's write a function that doubles a number:
 
 ```python
 def double(num):
@@ -4825,7 +4821,7 @@ it,2141
 
 ## Pipelining {#scripting-pipeline}
 
-Most of the Unix commands we have seen so far follow a useful convention:
+Most Unix commands follow a useful convention:
 if the user doesn't specify the names of any input files,
 they read from standard input.\index{standard input!in Python}
 Similarly,
@@ -5440,10 +5436,10 @@ the solution to this exercise is used in following chapters.
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
 
-A \gref{version control system}{version_control_system} records changes to files\index{version control}
-and helps people share their work with each other.
+A \gref{version control system}{version_control_system} tracks changes to files\index{version control}
+and helps people share those changes with each other.
 These things can be done by emailing files to colleagues
-or by using "track changes" in Microsoft Word and Google Docs,
+or by using Microsoft Word and Google Docs,
 but version control does both more accurately and efficiently.
 Originally developed to support software development,
 over the past fifteen years it has become the cornerstone
@@ -5547,9 +5543,9 @@ if __name__ == '__main__':
 
 ## Setting Up {#git-cmdline-setup}
 
-We write Git commands as `git VERB [options]`,
-where the \gref{subcommand}{subcommand} `VERB` tells Git what we want to do
-and `[options]` provide whatever additional information that subcommand needs.
+We write Git commands as `git verb options`,
+where the \gref{subcommand}{subcommand} `verb` tells Git what we want to do
+and `options` provide whatever additional information that subcommand needs.
 Using this syntax,
 the first thing we need to do is configure Git.\index{Git!configuration}\index{configuration!Git}\index{Git commands!config}
 
@@ -5615,7 +5611,7 @@ as long as your user name and email are accurate.
 
 Once Git is configured,
 we can use it to track work on our Zipf's Law project.
-First, we need to make sure we are in the top-level directory of our project:
+Let's make sure we are in the top-level directory of our project:
 
 ```bash
 $ cd ~/zipf
@@ -7041,8 +7037,7 @@ What does each line of the output show?
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
 
-Git would be worth using if all it did was keep track of our work,
-but two of its more advanced features allow us to do much more.
+Two of Git's advanced features let us to do much more than just track our work.
 \gref{Branches}{git_branch} let us work on multiple things simultaneously in a single repository;
 \gref{pull requests}{pull_request} (PRs) let us submit our work for review,
 get feedback,
@@ -7301,14 +7296,14 @@ and intercept \(\log(c)\).
 Our goal is to estimate the value of \(\alpha\);
 we'll see later that \(c\) is completely defined.
 
-In order to determine the best method for estimating \(\alpha\) we turn to @Moreno2016,
+In order to determine the best method for estimating \(\alpha\) we turn to @More2016,
 which suggests using a method called \gref{maximum likelihood estimation}{maximum_likelihood_estimation}.\index{maximum likelihood estimation}
 The likelihood function is the probability of our observed data
 as a function of the parameters in the statistical model that we assume generated it.
 We estimate the parameters in the model by choosing them to maximize this likelihood;
 computationally,
 it is often easier to minimize the negative log likelihood function.
-@Moreno2016 define the likelihood using a parameter \(\beta\),
+@More2016 define the likelihood using a parameter \(\beta\),
 which is related to the \(\alpha\) parameter in our definition of Zipf's Law
 through \(\alpha = \tfrac{1}{\beta-1}\).
 Under their model,
@@ -7332,7 +7327,7 @@ def nlog_likelihood(beta, counts):
 Obtaining an estimate of \(\beta\) (and thus \(\alpha\))
 then becomes a numerical optimization problem,
 for which we can use the `scipy.optimize` library.
-Again following @Moreno2016,
+Again following @More2016,
 we use Brent's Method with \(1 < \beta \leq 4\).
 
 ```python
@@ -7381,7 +7376,7 @@ and \(-1 / \alpha\) the exponent in the power law.
 
 ## Verifying Zipf's Law {#git-advanced-zipf-verify}
 
-Now that we have defined the functions required to fit a curve to our word count plots,
+Now that we can fit a curve to our word count plots,
 we can update `plotcounts.py` so the entire script reads as follows:
 
 ```python
@@ -7754,7 +7749,7 @@ Binary files a/results/dracula.png and b/results/dracula.png differ
 
 ## Merging {#git-advanced-merge}
 
-Now that we are happy with our curve fitting we have three options:
+We could proceed in three ways at this point:
 
 1.  Add our changes to `plotcounts.py` once again in the `master` branch.
 2.  Stop working in `master` and start using the `fit` branch for future development.
@@ -8101,8 +8096,7 @@ once the documentation is updated.
 
 ## A Branch-Based Workflow {#git-advanced-workflow}
 
-Now that we're familiar with the core concepts and commands for branching,
-we need to consider how best to incorporate them into our regular coding practice.
+What is the best way to incorporate branching into our regular coding practice?
 If we are working on our own computer,
 this workflow will help us keep track of what we are doing:
 
@@ -8939,16 +8933,15 @@ who may continue to do the bulk of the coding and data analysis throughout its e
 As projects become larger,
 though,
 they eventually need more contributors to sustain them.
-Involving more people also increases the functionality and robustness of the code,
+Involving more people also improves the functionality and robustness of the code,
 since newcomers bring their own expertise or see old problems in new ways.
+
 In order to leverage a group's expertise,
-though,
 a project must do more than *allow* people to contribute:
 its leaders must communicate that the project *wants* contributions,
 and that newcomers are welcome and valued [@Shol2019].\index{project!inclusivity}\index{inclusivity}
-
-But saying "the door is open" is not enough,
-since many potential contributors have painful personal experience of being less welcome than others.
+Saying "the door is open" is not enough:
+many potential contributors have painful personal experience of being less welcome than others.
 In order to create a truly welcoming environment for everyone,
 the project must explicitly acknowledge that some people are treated unfairly
 and actively take steps to remedy this.
@@ -8992,18 +8985,21 @@ and to ensure an inclusive culture [@Lee1962].
 
 ## Establish a Code of Conduct {#teams-coc}
 
-A Code of Conduct has four purposes:\index{Code of Conduct (for project)}\index{project!Code of Conduct}
+The starting point for making a project more inclusive is
+to establish a Code of Conduct.\index{Code of Conduct (for project)}\index{project!Code of Conduct}
+This does four things:
 
-1.  To promote fairness within a group.
-2.  To reassure members of marginalized groups
+1.  It promotes fairness within a group.
+2.  It reassures members of marginalized groups
     who have experienced harassment or unwelcoming behavior before
     that this project takes inclusion seriously.
-3.  To ensure that everyone knows what the rules are.
+3.  It ensures that everyone knows what the rules are.
     (This is particularly important when people come from different cultural backgrounds.)
-4.  To prevent anyone who misbehaves from pretending that
+4.  It prevents anyone who misbehaves from pretending that
     they didn't know what they did was unacceptable.
 
-A Code of Conduct makes it easier for people to contribute
+More generally,
+a Code of Conduct makes it easier for people to contribute
 by reducing uncertainty about what behaviors are acceptable.
 Some people may push back claiming that it's unnecessary,
 or that it infringes freedom of speech,
@@ -9013,7 +9009,7 @@ If having a Code of Conduct leads to them going elsewhere,
 that will probably make the project run more smoothly.
 
 By convention,
-we can add a Code of Conduct to our project
+we add a Code of Conduct to our project
 by creating a file called `CONDUCT.md` in the project's root directory.\index{project files!CONDUCT}
 Writing a Code of Conduct that is both comprehensive and readable is hard.
 We therefore recommend using one that other groups have drafted, refined, and tested.
@@ -9266,9 +9262,8 @@ that is also in the project's root directory.
 
 ### Software {#teams-license-software}
 
-Before choosing a license for our software,
-we need to understand the difference between
-the two main kinds of license.\index{open source license}
+In order to choose the right license for our software,
+we need to understand the difference between two kinds of license.\index{open source license}
 The \gref{MIT License}{mit_license}\index{MIT License}\index{open source license!MIT License}
 (and its close sibling the BSD License)\index{BSD License}\index{open source license!BSD License}
 say that people can do whatever they want to with the software as long as they cite the original source,
@@ -9395,8 +9390,10 @@ so that everyone can read them (and cite them).
 
 ## Planning {#teams-planning}
 
+Codes of conduct and licenses are a project's constitution,
+but how do contributors know what they should actually be doing on any given day?
 Whether we are working by ourselves or with a group of people,
-we should use an \gref{issue tracking system}{issue_tracking_system}
+the best way to manage this is to use an \gref{issue tracking system}{issue_tracking_system}
 to keep track of tasks we need to complete or problems we need to fix.
 \gref{Issues}{issue} are sometimes called \gref{tickets}{ticket},\index{project!issue}\index{issue (in project)}
 so issue tracking systems are sometimes called \gref{ticketing systems}{ticketing_system}.\index{issue tracking system}
@@ -9467,8 +9464,10 @@ people create three kinds of issues:
 
 ## Bug Reports {#teams-bugs}
 
-A well-written \gref{bug report}{bug_report} is more likely to get a fast response,\index{bug report!style}
-and is more likely to get a response actually addresses the issue [@Bett2008].
+One steady supply of work in any active project is \gref{bug reports}{bug_report}.
+Unsurprisingly,
+a well-written bug report is more likely to get a fast response\index{bug report!style}
+that actually addresses the problem [@Bett2008].
 To write a good bug report:
 
 1.  Make sure the problem actually *is* a bug.
@@ -9546,6 +9545,9 @@ and should be enforced by the project's Code of Conduct\index{Code of Conduct (f
 
 ## Labeling Issues {#teams-labels}
 
+The bigger or older a project gets,
+the harder it is to find things---unless, that is,
+the project's members put in a bit of work to make things findable [@Lin2020].
 Issue trackers let project members add \gref{labels}{issue_label} to issues\index{issue (in project)!label}
 to make things easier to search and organize.
 Labels are also often called \gref{tags}{tag};\index{tags (for issues in project)}
@@ -9659,6 +9661,9 @@ without having to wait for someone to respond to email
 
 ## Prioritizing {#teams-prioritize}
 
+Between bug reports, feature requests, and general cleanup,
+there is always more work to do than time to do it,
+so every project needs some way to figure out what to focus on.
 Labeling issues helps with \gref{triage}{triage},\index{triage (issues of project)}\index{project!triage (issues)}
 which is the process of deciding what is a priority and what isn't.
 This is never an easy job for software projects
@@ -9901,9 +9906,11 @@ and only allowing the moderator to unmute people.
 
 ## Making Decisions {#teams-martha}
 
-Every team has a power structure:
-the only question is
-whether it's formal or informal---in other words,
+The purpose of a well-run meeting is to make decisions,
+so sooner or later,
+the members of a project must decide who has a say in what.
+The first step is to acknowledge that every team has a power structure:
+the question is whether it's formal or informal---in other words,
 whether it's accountable or unaccountable [@Free1972].
 The latter can work for groups of up to half a dozen people
 in which everyone knows everyone else.
@@ -9975,12 +9982,12 @@ Who gets to vote?
 
 ## Make All This Obvious to Newcomers {#teams-documentation}
 
-If your team has agreed on a project structure,
+Rules that people don't know about can't help them.
+Once your team agrees on a project structure,
 a workflow,
 how to get items on a meeting agenda,
-or how you will make decisions,
-take the time to document this for newcomers.
-
+or how to make decisions,
+you should therefore take the time to document this for newcomers.
 This information may be included as sections in the existing `README` file\index{project files!README}
 or put into files of their own:
 
@@ -10015,9 +10022,9 @@ you did *your* part,
 but Sylvie didn't finish her stuff until the very last minute,
 which meant that no one else had time to spot the two big mistakes she'd made.
 As for Cho,
-well, he didn't deliver at all---again.
+he didn't deliver at all---again.
 If something doesn't change,
-it might be time to look for a new project.
+contributors are going to start looking for a new project.
 
 Conflicts like this come up all the time.\index{conflict!in teams}
 Broadly speaking, there are four ways we can deal with them:
@@ -10409,7 +10416,7 @@ Make works as follows:
     and run all of the commands it needs to in the right order.
 
 This chapter uses a version of Make called [GNU Make][gnu-make].
-It comes with macOS and Linux;
+It comes with MacOS and Linux;
 please see Section \@ref(getting-started-install-software) for Windows installation instructions.
 
 > **Keep Tracking With Version Control**
@@ -10422,8 +10429,9 @@ please see Section \@ref(getting-started-install-software) for Windows installa
 
 ## Updating a Single File {#automate-single-file}
 
-To start,
-let's create a file called `Makefile` in the root of our project:
+To start automating our analysis,
+let's create a file called `Makefile` in the root of our project
+and add the following:
 
 ```makefile
 # Regenerate results for "Moby Dick"
@@ -10438,9 +10446,9 @@ The second and third lines form a \gref{build rule}{build_rule}:\index{build rul
 the \gref{target}{build_target}\index{build target} of the rule is `results/moby_dick.csv`,
 its single \gref{prerequisite}{prerequisite} is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
-There is no limit on the length of statement lines in Makefiles,
+(There is no limit on the length of statement lines in Makefiles,
 but to aid readability we have used a backslash (`\`) character to split
-what was quite a long third line.
+what was quite a long third line.)
 
 The target and prerequisite tell Make what depends on what.
 The line below them describes the \gref{recipe}{build_recipe}\index{build recipe}
@@ -10535,9 +10543,8 @@ As a further test:
 
 ## Managing Multiple Files {#automate-multiple}
 
-Our Makefile isn't particularly helpful so far,
-though it *does* already document exactly how to reproduce one specific result.
-Let's add another rule to it:
+Our Makefile documents exactly how to reproduce one specific result.
+Let's add another rule to reproduce another result:
 
 ```makefile
 # Regenerate results for "Moby Dick"
@@ -10657,8 +10664,8 @@ to explicitly state which targets are phony:
 
 ## Updating Files When Programs Change {#automate-depend-programs}
 
-Our current Makefile says that each result file depends only on the corresponding data file.
-That's not actually true:
+Our current Makefile says that each result file depends on the corresponding data file.
+That's not entirely true:
 each result also depends on the program used to generate it.
 If we change our program,
 we should regenerate our results.
@@ -11171,8 +11178,8 @@ The exercises will explore how to format this more readably.
 
 ## Automating Entire Analyses {#automate-pipeline}
 
-To finish our example,
-we will automatically generate a collated list of word frequencies.
+To finish our discussion of Make,
+let's automatically generate a collated list of word frequencies.
 The target is a file called `results/collated.csv`
 that depends on the results generated by `countwords.py`.
 To create it,
@@ -11281,7 +11288,6 @@ clean :
 
 ## Summary {#automate-summary}
 
-The first version of Make was written in 1976.
 Its reliance on shell commands instead of direct calls to functions in Python or R
 sometimes makes it clumsy to use.
 However,
@@ -11289,7 +11295,7 @@ that also makes it very flexible:
 a single Makefile can run shell commands and programs written in a variety of languages,
 which makes it a great way to assemble pipelines out of whatever is lying around.
 
-Programmers have created many replacements for it in the decades since then---so many,
+Programmers have created many replacements for it in the 45 years since it was first created---so many,
 in fact,
 that none have attracted enough users to displace it.
 If you would like to explore them,
@@ -11516,9 +11522,10 @@ zipf/
 
 ## Configuration File Formats {#config-formats}
 
-Programmers have invented far too many formats for configuration files,
-so please do not create one of your own.
-One possibility is to write the configuration as a Python module
+Programmers have invented far too many formats for configuration files;
+rather than creating one of your own,
+you should adopt some widely-used approach.
+One is to write the configuration as a Python module
 and load it as if it was a library.
 This is clever,
 but means that tools in other languages can't process it.
@@ -11585,7 +11592,8 @@ Let's consider these options one by one.
 
 ## The Global Configuration File {#config-global}
 
-Our first option is to edit the system-wide Matplotlib runtime configuration file,\index{configuration!global}
+Our first configuration possibility
+is to edit the system-wide Matplotlib runtime configuration file,\index{configuration!global}
 which is called `matplotlibrc`.
 When we import Matplotlib,
 it uses this file to set the default characteristics of the plot.
@@ -11654,6 +11662,8 @@ a one-line change in `matplotlibrc` can prevent a lot of failed jobs.
 
 ## The User Configuration File {#config-user}
 
+If we don't want to change the configuration for everyone,
+we can change it for just ourself.
 Matplotlib defines several carefully-designed styles for plots:\index{configuration!user}
 
 ```python
@@ -11767,7 +11777,7 @@ if we want to tweak other aspects of the plot.
 
 ## A Job Control File {#config-job-file}
 
-The final option---the one we will actually adopt in this case--- is
+The final option for configuring our plots---the one we will actually adopt in this case--- is
 to pass a YAML file full of Matplotlib parameters to `plotcounts.py`.\index{configuration!file}
 First,
 we save the parameters we want to change in a file inside our project directory.
@@ -12037,7 +12047,7 @@ including assertions, unit tests, integration tests, and regression tests.
 > Geoffrey Chang,
 > had to retract five published papers---three from
 > the journal *Science*---because his code had
-> inadvertently flipped two columns of data [@Miller2006].
+> inadvertently flipped two columns of data [@Mill2006].
 > More recently, a simple calculation mistake in a paper by Reinhart and Rogoff
 > contributed to making the financial crash of 2008 even worse
 > for millions of people [@Borw2013].
@@ -12170,6 +12180,8 @@ def get_power_law_params(word_counts):
 
 ## Unit Testing {#testing-unit}
 
+Catching errors is good, but preventing them is better,
+so responsible programmers test their code.
 As the name suggests,
 a \gref{unit test}{unit_test}\index{unit test}\index{testing!unit test}
 checks the correctness of a single unit of software.
@@ -12457,8 +12469,7 @@ rather than stopping at the first assertion failure as a regular Python script w
 
 ## Testing Floating-Point Values {#testing-numeric}
 
-Looking at the output,
-we can see that while `test_alpha` failed,
+The output above shows that that while `test_alpha` failed,
 the `actual_alpha` value of 0.9951524579316625 was very close to the expected value of 1.0.
 After a bit of thought,
 we decide that this isn't actually a failure:
@@ -12664,6 +12675,7 @@ we don't know the expected result:
 it's not practical to count the words in *Dracula* by hand,
 and even if we tried,
 the odds are good that we'd make a mistake.
+
 For this kind of situation we can use
 \gref{regression testing}{regression_testing}.\index{testing!regression test}\index{regression test}
 Rather than assuming that the test author knows what the expected result should be,
@@ -12706,7 +12718,9 @@ bin/test_zipfs.py ....                                   [100%]
 
 ## Test Coverage {#testing-coverage}
 
-How much of our code do the tests we have written so far actually check?
+How much of our code do the tests we have written check?
+More importantly,
+what parts of our code \emph{aren't} being tested (yet)?
 To find out,
 we can use a tool to check their \gref{code coverage}{code_coverage}.\index{code coverage (of testing)}\index{testing!code coverage}
 Most Python programmers use the `coverage` library,
@@ -13293,7 +13307,7 @@ and what might be a better way to measure error in this case?
 
 We are imperfect people living in an imperfect world.
 People will misunderstand how to use our programs,
-and even if we test thoroughly using the techniques of Chapter \@ref(testing),
+and even if we test thoroughly as described in the previous chapter,
 those programs might still contain bugs.
 We should therefore plan from the start to detect and handle errors.
 
@@ -13653,13 +13667,12 @@ and that the second is numerical.
 
 ## Writing Useful Error Messages {#errors-messages}
 
-The error message shown in Figure \@ref(fig:errors-error-message) is not helpful:\index{error message!writing helpful}
-
 <div class="figure" style="text-align: center">
 <img src="figures/scripting/error-message.png" alt="An unhelpful error message." width="60%" />
 <p class="caption">(\#fig:errors-error-message)An unhelpful error message.</p>
 </div>
 
+The error message shown in Figure \@ref(fig:errors-error-message) is not helpful.\index{error message!writing helpful}
 Having `collate.py` print the message below would be equally unfriendly:
 
 ```text
@@ -14296,13 +14309,9 @@ We have now developed, automated, and tested
 a workflow for plotting the word count distribution for classic novels.
 In the normal course of events,
 we would include the outputs from that workflow (e.g., our figures and \(\alpha\) values)
-in a report.
-Here we use the term "report" to include research papers,
-summaries for clients,
-or anything else that is shorter than a book
-and aimed at people other than its creators.
+in a research paper or a report for a consulting client.
 
-But modern publishing involves much more than producing a printable PDF
+But modern publishing involves much more than producing a PDF
 and making it available on a preprint server such as [arXiv][arxiv] or [bioRxiv][biorxiv].
 It also entails providing the data underpinning the report
 and the code used to do the analysis:\index{reproducible research}
@@ -14315,7 +14324,7 @@ and the code used to do the analysis:\index{reproducible research}
 >
 > --- Jonathan Buckheit and David Donoho, paraphrasing Jon Claerbout, in @Buck1995
 
-While some reports, datasets, software packages, and/or analysis scripts
+While some reports, datasets, software packages, and analysis scripts
 can't be published without violating personal or commercial confidentiality,
 every researcher's default should be to make all these as widely available as possible.
 Publishing it under an open license (Section \@ref(teams-license)) is the first step;
@@ -14489,12 +14498,11 @@ and probably need the attention of a professional archivist.
 ## Code Provenance {#provenance-code}
 
 Our Zipf's Law analysis represents a typical data science project
-in that we've written some code (in the form of a series of Python scripts)
-that leverages other pre-existing software packages (matplotlib, numpy, etc)
-in order to produce the key results of a report (the word distribution plots).\index{publishing!software}
-Documenting the details of a computational workflow like this
-in an open, transparent and reproducible manner
-typically requires that three key items are archived:
+in that we've written some code
+that leverages other pre-existing software packages
+in order to produce the key results of a report.\index{publishing!software}
+To make a computational workflow like this open, transparent and reproducible
+we must archive three key items:
 
 1.  A copy of any **analysis scripts or notebooks** used to produce the key results
     presented in the report.
@@ -14671,7 +14679,7 @@ most readers are not looking to exactly re-run a decade old analysis:
 they just want to be able to figure out what was run
 and what the important decisions were,
 which is sometimes referred to as \gref{inspectability}{inspectability}\index{inspectability}
-[@Gil2016; @Brown2017].
+[@Gil2016; @Brow2017].
 While exact repeatability has a short shelf-life,
 inspectability is the enduring legacy of a well-documented computational analysis.
 
@@ -14751,9 +14759,9 @@ Browse the repository and answer the following questions:
 
 To get a feel for the different approaches to code provenance, repeat steps 1-3 with the following:
 
-* [The figshare page][irving-figshare] that accompanies the paper @Irving2019.
+* [The figshare page][irving-figshare] that accompanies the paper @Irvi2019.
 
-* The GitHub repo [blab/h3n2-reassortment][blab-h3n2-reassortment] that accompanies the paper @Potter2019.
+* The GitHub repo [blab/h3n2-reassortment][blab-h3n2-reassortment] that accompanies the paper @Pott2019.
 
 ### Making permanent links {#provenance-ex-permanent-links}
 
@@ -14813,7 +14821,7 @@ How would you go about publishing the code associated with that project
 > --- Terry Pratchett\index{Pratchett, Terry}
 
 The more software we write,
-the more we think of a programming language as a way to build and combine libraries.
+the more we come to think of programming languages as a way to build and combine libraries.
 Every widely-used language now has an online repository
 from which people can download and install those libraries.
 This lesson shows you how to use Python's tools to create and share libraries of your own.
@@ -15114,7 +15122,7 @@ $ which python
 
 ## Installing a Development Package {#packaging-installing}
 
-Let's install our package inside this virtual environment.\index{Python package!installation}
+Let's install our package in this virtual environment.\index{Python package!installation}
 First we re-activate it:
 
 ```bash
@@ -15447,10 +15455,11 @@ and will vary from computer to computer.
 
 ## Distributing Packages {#packaging-distribute}
 
-Now that our package can be installed,
-we should distribute it so that anyone can run `pip install zipf`\index{Python package!distribution}
-and start use it.
-To do this,
+An installable package is most useful
+if we distribute it so that anyone who wants it
+can run `pip install zipf`\index{Python package!distribution}
+and get it.
+To make this possible,
 we need to use `setuptools` to create
 a \gref{source distribution}{source_distribution}\index{source distribution (of Python package)}\index{Python package!source distribution}
 (known as an `sdist` in Python packaging jargon):
@@ -15615,7 +15624,7 @@ we can go through the same process to put it on the main [PyPI][pypi] repository
 
 ## Documenting Packages {#packaging-document}
 
-Now that our package has been distributed for others to use,
+Now that our package has been distributed,
 we need to think about whether we have provided sufficient documentation.
 Docstrings (Section \@ref(scripting-docstrings)) and READMEs
 are sufficient to describe most simple packages,
@@ -16183,7 +16192,6 @@ quotes.random_quote()
 > --- Terry Pratchett\index{Pratchett, Terry}
 
 We have come a long way since we first met Amira, Jun, and Sami in Section \@ref(intro-personas).
-
 Amira now has her scripts, data sets and reports organized,
 in version control,
 and on GitHub.
@@ -19178,7 +19186,7 @@ For [borstlab/reversephi_paper][borstlab-reversephi]:
     but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)".
     A zip file of this release could be downloaded with the link <https://github.com/borstlab/reversephi_paper/archive/v1.0.zip>.
 
-For [the figshare page][irving-figshare] that accompanies the paper @Irving2019:
+For [the figshare page][irving-figshare] that accompanies the paper @Irvi2019:
 
 1. The figshare page includes a "Software environment" section.  To re-create the `conda` environment you would need the file `environment.yml`.
 
