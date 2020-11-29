@@ -19,3 +19,4 @@ Khan, A., and Virtanen, S., 2020. Zipf: A Python package for word count analysis
         doi={10.21105/jois.02317},
         url={https://doi.org/10.21105/jois.02317},
     }
+    
