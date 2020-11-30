@@ -21,8 +21,8 @@ zipf/
 ├── .gitignore
 ├── bin
 │   ├── book_summary.sh
-│   ├── countwords.py
 │   ├── collate.py
+│   ├── countwords.py
 │   ├── plotcounts.py
 │   ├── script_template.py
 │   └── utilities.py
@@ -483,8 +483,9 @@ $ git commit -m "Added fit to word count data"
 ```
 
 ```text
-[fit 3ff8195] Added fit to word count data
- 2 files changed, 62 insertions(+), 1 deletion(-)
+[fit efdbb24] Added fit to word count data
+ 2 files changed, 69 insertions(+)
+ rewrite results/dracula.png (99%)
 ```
 
 If we look at the last couple of commits using `git log`,
@@ -495,8 +496,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-3ff8195 Added fit to word count data
-ffb5cee adding ignore file
+efdbb24 (HEAD -> fit) Added fit to word count data
+0da7260 (master) removing inverse rank
 ```
 
 (We use `--oneline` and `-n 2` to shorten the log display.)
@@ -508,8 +509,8 @@ $ git branch
 ```
 
 ```text
-* master
   fit
+* master
 ```
 
 and look at the log,
@@ -520,8 +521,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-ffb5cee adding ignore file
-d77bc5c Update dracula plot
+0da7260 (HEAD -> master) removing inverse rank
+d18d401 ignoring __pycache__
 ```
 
 We have not lost our work:
@@ -534,8 +535,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-3ff8195 Added fit to word count data
-d77bc5c Update dracula plot
+efdbb24 (HEAD -> fit) Added fit to word count data
+0da7260 (master) removing inverse rank
 ```
 
 We can also look inside `plotcounts.py` and see our changes.
@@ -576,7 +577,7 @@ $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```
 
 ```text
-[fit db1d03f] Adding Moreno-Sanchez et al (2016) reference
+[fit b0b6115] Adding Moreno-Sanchez et al (2016) reference
  1 file changed, 14 insertions(+), 1 deletion(-)
 ```
 
@@ -589,14 +590,15 @@ used to view differences between two revisions:
 $ git diff master..fit
 ```
 
-```text
+```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index 4501eaf..d57fd63 100644
+index 67fb209..431752d 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -1,15 +1,89 @@
- """Plot word counts."""
+@@ -2,7 +2,74 @@
+ 
  import argparse
+ 
 +import numpy as np
  import pandas as pd
 +from scipy.optimize import minimize_scalar
@@ -665,16 +667,10 @@ index 4501eaf..d57fd63 100644
 +    xvals = np.arange(curve_xmin, curve_xmax)
 +    yvals = max_rank * (xvals**(-1 / alpha))
 +    ax.loglog(xvals, yvals, color='grey')
-
-
+ 
+ 
  def main(args):
-+    """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
-                                            method='max')
-     ax = df.plot.scatter(x='word_frequency',
-                          y='rank', loglog=True,
+@@ -16,6 +83,21 @@ def main(args):
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
@@ -694,10 +690,10 @@ index 4501eaf..d57fd63 100644
 +
 +    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
      ax.figure.savefig(args.outfile)
-
-
+ 
+ 
 diff --git a/results/dracula.png b/results/dracula.png
-index d34c46d..1c42702 100644
+index 57a7b70..5f10271 100644
 Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
@@ -745,12 +741,13 @@ $ git merge fit
 ```
 
 ```text
-Updating d77bc5c..db1d03f
+Updating 0da7260..b0b6115
 Fast-forward
- bin/plotcounts.py   |  76 ++++++++++++++++++++++++++++++++++++++
-                           ++++++++++++++++++++++-
- results/dracula.png | Bin 22351 -> 31378 bytes
- 2 files changed, 75 insertions(+), 1 deletion(-)
+ bin/plotcounts.py   |  82 ++++++++++++++++++++++++++++++++++++++
+                           ++++++++++++++++++++++++++++++++++++++
+                           ++++++
+ results/dracula.png | Bin 23291 -> 38757 bytes
+ 2 files changed, 82 insertions(+)
 ```
 
 Merging doesn't change the source branch `fit`,
@@ -762,13 +759,13 @@ $ git log --oneline -n 4
 ```
 
 ```text
-db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
-3ff8195 Added fit to word count data
-ffb5cee adding ignore file
-d77bc5c Update dracula plot
+b0b6115 (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
+efdbb24 Added fit to word count data
+0da7260 removing inverse rank
+d18d401 ignoring __pycache__
 ```
 
-Note that Git automatically creates a new commit (in this case, `db1d03f`)
+Note that Git automatically creates a new commit (in this case, `b0b6115`)
 to represent the merge.
 If we now run `git diff master..fit`,
 Git doesn't print anything
@@ -783,7 +780,7 @@ $ git branch -d fit
 ```
 
 ```text
-Deleted branch fit (was db1d03f).
+Deleted branch fit (was b0b6115).
 ```
 
 > **Not Just the Command Line**
@@ -806,11 +803,11 @@ but if we are going to use branches,
 we must learn how to merge conflicts.
 
 To start,
-let's add a `README.md` file to the `master` branch
-containing just the project's title:
+use `nano` to add the project's title to
+a new file called `README.md` in the `master` branch,
+which we can the view:
 
 ```bash
-$ nano README.md
 $ cat README.md
 ```
 
@@ -824,8 +821,8 @@ $ git commit -m "Initial commit of README file"
 ```
 
 ```text
-[master b07c14a] Initial commit of README file
- 1 file changed, 1 insertion(+)
+[master 8afd72f] Initial commit of README file
+ 1 file changed, 2 insertions(+)
  create mode 100644 README.md
 ```
 
@@ -867,8 +864,8 @@ $ git commit -m "Added repository overview"
 ```
 
 ```text
-[docs a41a6ea] Added repository overview
- 1 file changed, 3 insertions(+)
+[docs cfcf5e5] Added repository overview
+ 1 file changed, 2 insertions(+)
 ```
 
 In order to create a conflict,
@@ -907,8 +904,8 @@ $ git commit -m "Added contributor list"
 ```
 
 ```text
-[master a102c83] Added contributor list
- 1 file changed, 4 insertions(+)
+[master 83e9077] Added contributor list
+ 1 file changed, 3 insertions(+)
 ```
 
 We now have two branches,
@@ -921,12 +918,12 @@ $ git diff docs..master
 
 ```diff
 diff --git a/README.md b/README.md
-index fd3de28..cf317ea 100644
+index f40e895..71f67db 100644
 --- a/README.md
 +++ b/README.md
 @@ -1,4 +1,5 @@
  # Zipf's Law
-
+ 
 -These Zipf's Law scripts tally the occurrences of words in text files
 -and plot each word's rank versus its frequency.
 +## Contributors
@@ -980,12 +977,8 @@ edit this part of the file to combine them,
 or write something new.
 Whatever we do,
 we must remove the `>>>`, `===`, and `<<<` markers.
-Let's combine the two sets of changes:
-
-```bash
-$ nano README.md
-$ cat README.md
-```
+Let's combine the two sets of changes
+so the resulting file reads:
 
 ```text
 # Zipf's Law
@@ -1007,7 +1000,7 @@ $ git commit -m "Merging README additions"
 ```
 
 ```text
-[master 4ffeaa4] Merging README additions
+[master 289b8e3] Merging README additions
 ```
 
 Our branch's history now shows a single sequence of commits,
@@ -1018,10 +1011,10 @@ $ git log --oneline -n 4
 ```
 
 ```text
-4ffeaa4 (HEAD -> master) Merging README additions
-a102c83 Added contributors list
-a41a6ea (docs) Added repository overview
-b07c14a Initial commit of README file
+289b8e3 (HEAD -> master) Merging README additions
+83e9077 Added contributor list
+cfcf5e5 (docs) Added repository overview
+8afd72f Initial commit of README file
 ```
 
 If we want to see what really happened,
@@ -1032,12 +1025,12 @@ $ git log --oneline --graph -n 4
 ```
 
 ```text
-*   4ffeaa4 (HEAD -> master) Merging README additions
-|\
-| * a41a6ea (docs) Added repository overview
-* | a102c83 Added contributors list
-|/
-* b07c14a Initial commit of README file
+*   289b8e3 (HEAD -> master) Merging README additions
+|\  
+| * cfcf5e5 (docs) Added repository overview
+* | 83e9077 Added contributor list
+|/  
+* 8afd72f Initial commit of README file
 ```
 
 At this point we can delete the `docs` branch:
@@ -1047,7 +1040,7 @@ $ git branch -d docs
 ```
 
 ```text
-Deleted branch docs (was 4ffeaa4).
+Deleted branch docs (was cfcf5e5).
 ```
 
 Alternatively,
@@ -1059,6 +1052,13 @@ do our editing
 to work on the code),
 and then merge *from* `docs` *to* `master`
 once the documentation is updated.
+
+> **Remember to Push**
+>
+> If you are using a remote repository,
+> don't forget to use `git push`
+> to keep your version on GitHub up to date
+> with your local version.
 
 ## A Branch-Based Workflow {#git-advanced-workflow}
 
@@ -1192,11 +1192,12 @@ sami:~ $ git clone https://github.com/sami-virtanen/zipf.git
 
 ```text
 Cloning into 'zipf'...
-remote: Enumerating objects: 60, done.
-remote: Counting objects: 100% (60/60), done.
-remote: Compressing objects: 100% (42/42), done.
-remote: Total 60 (delta 17), reused 59 (delta 16), pack-reused 0
-Unpacking objects: 100% (60/60), done.
+remote: Enumerating objects: 64, done.
+remote: Counting objects: 100% (64/64), done.
+remote: Compressing objects: 100% (43/43), done.
+remote: Total 64 (delta 19), reused 64 (delta 19), pack-reused 0
+Receiving objects: 100% (64/64), 2.20 MiB | 2.99 MiB/s, done.
+Resolving deltas: 100% (19/19), done.
 ```
 
 This command creates a new directory with the same name as the project,
@@ -1218,10 +1219,11 @@ sami:~/zipf $ git log --oneline -n 4
 ```
 
 ```text
-4ffeaa4 (HEAD -> master) Merging README additions
-a102c83 Added contributors list
-a41a6ea Added repository overview
-b07c14a Initial commit of README file
+289b8e3 (HEAD -> master, origin/master, origin/HEAD) 
+        Merging README additions
+83e9077 Added contributor list
+cfcf5e5 Added repository overview
+8afd72f Initial commit of README file
 ```
 
 Sami also sees that Git has automatically created a \gref{remote}{git_remote} for their repository\index{Git!remote}\index{remote (in Git)}
@@ -1261,20 +1263,7 @@ Sami is finally set up.
 Suppose,
 for example,
 that Amira has modified the project's `README.md` file to add Sami as a contributor.
-(Again, we show Amira's user ID and working directory in her prompt to make it clear who's doing what).
-
-```bash
-amira:~/zipf $ pwd
-```
-
-```text
-/Users/amira/zipf
-```
-
-```bash
-amira:~/zipf $ nano README.md
-amira:~/zipf $ cat README.md
-```
+(Again, we show Amira's user ID and working directory in her prompt to make it clear who's doing what):
 
 ```text
 # Zipf's Law
@@ -1295,7 +1284,7 @@ amira:~/zipf $ git commit -a -m "Adding Sami as a contributor"
 ```
 
 ```text
-[master 766c2cd] Adding Sami as a contributor
+[master 7945489] Adding Sami as a contributor
  1 file changed, 1 insertion(+)
 ```
 
@@ -1308,11 +1297,11 @@ Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
-Total 3 (delta 2), reused 0 (delta 0)
+Writing objects: 100% (3/3), 316 bytes | 316.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 To https://github.com/amira-khan/zipf.git
-   b0c3fc6..766c2cd  master -> master
+   289b8e3..7945489  master -> master
 ```
 
 Amira's changes are now on her desktop and in her GitHub repository
@@ -1330,11 +1319,11 @@ remote: Enumerating objects: 5, done.
 remote: Counting objects: 100% (5/5), done.
 remote: Compressing objects: 100% (1/1), done.
 remote: Total 3 (delta 2), reused 3 (delta 2), pack-reused 0
-Unpacking objects: 100% (3/3), done.
+Unpacking objects: 100% (3/3), 296 bytes | 74.00 KiB/s, done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
  * [new branch]      master     -> upstream/master
-Updating 1c63b8b..893fc9f
+Updating 289b8e3..7945489
 Fast-forward
  README.md | 1 +
  1 file changed, 1 insertion(+)
@@ -1396,27 +1385,26 @@ Switched to a new branch 'adding-email'
 then make a change and commit it:
 
 ```bash
-sami:~/zipf $ nano README.md
 sami:~/zipf $ git commit -a -m "Adding my email address"
 ```
 
 ```text
-[master b8938eb] Adding my email address
+[adding-email 2a4ac8c] Adding my email address
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
 ```bash
-sami:~/zipf $ git diff -r HEAD~1
+sami:~/zipf $ git diff HEAD~1
 ```
 
 ```diff
 diff --git a/README.md b/README.md
-index a55a9bb..eb24a3f 100644
+index e8281ee..e1bf630 100644
 --- a/README.md
 +++ b/README.md
 @@ -6,4 +6,4 @@ and plot each word's rank versus its frequency.
  ## Contributors
-
+ 
  - Amira Khan <amira@zipf.org>
 -- Sami Virtanen
 +- Sami Virtanen <sami@zipf.org>
@@ -1435,13 +1423,13 @@ Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
-Total 3 (delta 2), reused 0 (delta 0)
+Writing objects: 100% (3/3), 317 bytes | 317.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-remote:
+remote: 
 remote: Create a pull request for 'adding-email' on GitHub by visiting:
 remote:      https://github.com/sami-virtanen/zipf/pull/new/adding-email
-remote:
+remote: 
 To https://github.com/sami-virtanen/zipf.git
  * [new branch]      adding-email -> adding-email
 ```
@@ -1491,15 +1479,13 @@ knitr::include_graphics("figures/git-advanced/fill-in-pull-request.png")
 knitr::include_graphics("figures/git-advanced/new-pull-request.png")
 ```
 
-Some time later,
-Amira checks her repository and sees that there is a pull request
+Amira's repository now shows a new pull request
 (Figure \@ref(fig:git-advanced-pull-request-viewing)).
 Clicking on the "Pull requests" tab brings up a list of PRs
 (Figure \@ref(fig:git-advanced-pull-request-list))
 and clicking on the pull request link itself displays its details
-(Figure \@ref(fig:git-advanced-pull-request-details)),
-Which appears identical to the details seen by .
-
+(Figure \@ref(fig:git-advanced-pull-request-details)).
+Sami and Amira can both see and interact with these pages.
 
 ```{r git-advanced-pull-request-viewing, echo=FALSE, fig.cap="Viewing a pull request."}
 knitr::include_graphics("figures/git-advanced/viewing-new-pull-request.png")
@@ -1524,7 +1510,7 @@ she clicks on the "Files changed" tab to see what Sami has changed
 knitr::include_graphics("figures/git-advanced/pr-changes.png")
 ```
 
-If she moves her mouse over particular lines,\index{Git!pull request!reviewing}\index{reviewing (Git pull request})\index{code review!pull request}
+If she moves her mouse over particular lines,\index{Git!pull request!reviewing}\index{reviewing (Git pull request)}\index{code review!pull request}
 a white-on-blue cross appears near the numbers to indicate that she can add comments
 (Figure \@ref(fig:git-advanced-pull-request-comment-marker)).
 She clicks on the marker beside her own name and writes a comment:
@@ -1583,14 +1569,9 @@ amira:~/zipf $ git pull origin master
 ```
 
 ```text
-remote: Enumerating objects: 9, done.
-remote: Counting objects: 100% (9/9), done.
-remote: Compressing objects: 100% (5/5), done.
-remote: Total 7 (delta 4), reused 4 (delta 2), pack-reused 0
-Unpacking objects: 100% (7/7), done.
 From https://github.com/amira-khan/zipf
-   893fc9f..4bf4b68  master     -> origin/master
-Updating 893fc9f..4bf4b68
+ * branch            master     -> FETCH_HEAD
+Updating 7945489..e4008f0
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
@@ -1609,8 +1590,7 @@ sami:~/zipf $ git checkout master
 
 ```text
 Switched to branch 'master'
-Your branch is ahead of 'origin/master' by 1 commit.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 ```
 
 ```bash
@@ -1618,18 +1598,26 @@ sami:~/zipf $ git pull upstream master
 ```
 
 ```text
-remote: Enumerating objects: 8, done.
-remote: Counting objects: 100% (8/8), done.
-remote: Compressing objects: 100% (2/2), done.
-remote: Total 4 (delta 2), reused 3 (delta 2), pack-reused 0
-Unpacking objects: 100% (4/4), done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
-   893fc9f..4bf4b68  master     -> upstream/master
-Updating 893fc9f..4bf4b68
+Updating 7945489..e4008f0
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
+```
+
+Finally,
+Sami can push their changes back to the `master` branch
+in their own remote repository:
+
+```bash
+sami:~/zipf $ git push origin master
+```
+
+```text
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/sami-virtanen/zipf.git
+   7945489..e4008f0  master -> master
 ```
 
 All four repositories are now synchronized.
