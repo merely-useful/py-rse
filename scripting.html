@@ -24,7 +24,7 @@
 <meta name="author" content="Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson" />
 
 
-<meta name="date" content="2020-11-29" />
+<meta name="date" content="2020-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -657,7 +657,7 @@ When we run a Python file as a standalone program,
 on the other hand,
 <code>__name__</code> is always set to the special string <code>"__main__"</code>.
 To illustrate this,
-let’s create the file <code>print_name.py</code>
+let’s consider a script named <code>print_name.py</code>
 that prints the value of the <code>__name__</code> variable:</p>
 <div class="sourceCode" id="cb304"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb304-1"><a href="scripting.html#cb304-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="va">__name__</span>)</span></code></pre></div>
 <p>When we run this file directly,
@@ -727,6 +727,12 @@ Let’s create a short Python program called <code>script_template.py</code>:</p
 <span id="cb313-15"><a href="scripting.html#cb313-15" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output file name&#39;</span>)</span>
 <span id="cb313-16"><a href="scripting.html#cb313-16" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
 <span id="cb313-17"><a href="scripting.html#cb313-17" aria-hidden="true" tabindex="-1"></a>    main(args)</span></code></pre></div>
+<blockquote>
+<p><strong>Empty Lines, Again</strong></p>
+<p>As we discussed in the last chapter for shell scripts,
+remember to end your Python scripts in a newline character
+(which we view as an empty line).</p>
+</blockquote>
 <p>If <code>script_template.py</code> is run as a standalone program at the command line
 then <code>__name__ == '__main__'</code> is true,
 so the program uses <code>argparse</code> to create an argument parser.
@@ -1023,7 +1029,7 @@ This makes it easy to use the command in a pipeline.</p>
 <p>Our program always sends its output to standard output;
 as noted above,
 we can always redirect it to a file with <code>&gt;</code>.
-If we want it to read from standard input,
+If we want <code>countwords.py</code> to read from standard input,
 we only need to change the handling of <code>infile</code> in the argument parser
 and simplify <code>main</code> to match:</p>
 <div class="sourceCode" id="cb343"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb343-1"><a href="scripting.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(args):</span>
@@ -1058,7 +1064,7 @@ this is another Unix convention that many programs follow.</p></li>
 <p>After these changes,
 we can create a pipeline like this
 to count the words in the first 500 lines of a book:</p>
-<div class="sourceCode" id="cb344"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb344-1"><a href="scripting.html#cb344-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">head</span> -500 data/dracula.txt <span class="kw">|</span> <span class="ex">python</span> bin/countwords.py --num 10</span></code></pre></div>
+<div class="sourceCode" id="cb344"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb344-1"><a href="scripting.html#cb344-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">head</span> -n 500 data/dracula.txt <span class="kw">|</span> <span class="ex">python</span> bin/countwords.py --num 10</span></code></pre></div>
 <pre class="text"><code>the,227
 and,121
 of,116
@@ -1102,6 +1108,9 @@ Let’s create a subdirectory to hold our results
 <span id="cb349-2"><a href="scripting.html#cb349-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">results/moby_dick.csv</span></span></code></pre></div>
 <div class="sourceCode" id="cb350"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb350-1"><a href="scripting.html#cb350-1" aria-hidden="true" tabindex="-1"></a>$ <span class="ex">python</span> bin/countwords.py data/jane_eyre.txt <span class="op">&gt;</span></span>
 <span id="cb350-2"><a href="scripting.html#cb350-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">results/jane_eyre.csv</span></span></code></pre></div>
+<p>As in the previous chapter,
+we’ve split long lines of to code onto separate lines for formatting purposes;
+each of the three code chunks above should be run as a single line of code.</p>
 <p>Now that we can get word counts for individual books
 we can collate the counts for several books.
 This can be done using a loop that adds up the counts of a word
@@ -1356,6 +1365,8 @@ using the Pandas library:</p>
 Figure 5.1: Word frequency distribution for ‘Jane Eyre.’
 </p>
 </div>
+<p>You’ll build on this code to create a plotting script for your project
+in Exercise <a href="scripting.html#scripting-ex-better-plotting">5.11.4</a>.</p>
 </div>
 <div id="scripting-summary" class="section level2" number="5.10">
 <h2><span class="header-section-number">5.10</span> Summary</h2>
@@ -1431,6 +1442,7 @@ data/moby_dick.txt
 data/sense_and_sensibility.txt
 data/sherlock_holmes.txt
 data/time_machine.txt</code></pre>
+<p>Note: we will not be including this script in subsequent chapters.</p>
 </div>
 <div id="scripting-ex-sentence-endings" class="section level3" number="5.11.3">
 <h3><span class="header-section-number">5.11.3</span> Sentence ending punctuation</h3>
@@ -1456,10 +1468,11 @@ the script should be able to accept an input file,</p>
 Number of ? is 492
 Number of ! is 752</code></pre>
 <p>or standard input:</p>
-<div class="sourceCode" id="cb374"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb374-1"><a href="scripting.html#cb374-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">head</span> -500 data/dracula.txt <span class="kw">|</span> <span class="ex">python</span> bin/sentence_endings.py</span></code></pre></div>
+<div class="sourceCode" id="cb374"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb374-1"><a href="scripting.html#cb374-1" aria-hidden="true" tabindex="-1"></a>$ <span class="fu">head</span> -n 500 data/dracula.txt <span class="kw">|</span> <span class="ex">python</span> bin/sentence_endings.py</span></code></pre></div>
 <pre class="text"><code>Number of . is 148
 Number of ? is 8
 Number of ! is 8</code></pre>
+<p>Note: we will not be including this script in subsequent chapters.</p>
 </div>
 <div id="scripting-ex-better-plotting" class="section level3" number="5.11.4">
 <h3><span class="header-section-number">5.11.4</span> A better plotting program</h3>

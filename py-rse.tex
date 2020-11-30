@@ -197,7 +197,7 @@
 \makeatother
 \subtitle{Building software that makes research possible}
 \author{Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson}
-\date{2020-11-29}
+\date{2020-11-30}
 
 \begin{document}
 \maketitle
@@ -2808,6 +2808,8 @@ the value 3 is not input to \texttt{head}.
 Instead, it is associated with the option \texttt{-n}.
 Many options take values like this,
 such as the names of input files or the background color to use in a plot.
+Some versions of \texttt{head} may allow you to use \texttt{head\ -3} as a shortcut,
+though this can be confusing if other options are included.
 \end{quote}
 
 We could always redirect the output to a file
@@ -3197,7 +3199,7 @@ so we will break it down into pieces:
 \end{enumerate}
 
 \begin{quote}
-\textbf{Continuation prompts may differ too}
+\textbf{Continuation Prompts May Differ Too}
 
 As mentioned in Chapter~\ref{bash-basics},
 there is variation in how different shells look and operate.
@@ -3357,12 +3359,12 @@ their parts can be separated with semi-colons:
 \end{Shaded}
 
 This is fairly readable,
-although even experienced users have a tendency to put the semi-colon after \texttt{do} instead of before it.
-If our loop contains multiple commands,
-though,
-the multi-line format is much easier to read.
+though it becomes more challenging if our for loop includes multiple commands.
 For example,
-compare this:
+we may choose to include the \texttt{echo} command,
+which prints its arguments to the screen,
+so we can keep track of progress or for debugging.
+Compare this:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3383,8 +3385,19 @@ with this:
 \end{Highlighting}
 \end{Shaded}
 
-(The \texttt{echo} command simply prints its arguments to the screen.
-It is often used to keep track of progress or for debugging.)
+Even experienced users have a tendency to (incorrectly)
+put the semi-colon after \texttt{do} instead of before it.
+If our loop contains multiple commands,
+though,
+the multi-line format is much easier to read and troubleshoot.
+Note that (depending on the size of your shell window)
+the format separated by semi-colons may be printed onto more than one line,
+as shown in the previous code example.
+You can tell whether code entered into your shell
+is intended to be run as a single line based on the prompt:
+both the original command prompt (\texttt{\$}) and the continuation prompt (\texttt{\textgreater{}})
+indicate the code is on separate lines;
+the absence of either in shell commands indicates it is a single line of code.
 
 \hypertarget{bash-tools-autoname}{%
 \section{Creating New Filenames Automatically}\label{bash-tools-autoname}}
@@ -3937,6 +3950,20 @@ head -n 17 ../data/moby_dick.txt | tail -n 8
 Note that we do \emph{not} put the \texttt{\$} prompt at the front of the line.
 We have been showing that to highlight interactive commands,
 but in this case we are putting the command in a file rather than running it immediately.
+
+\begin{quote}
+\textbf{Empty Line at the End of a File?}
+
+You'll often see scripts from many languages that end in an empty line.
+What you are seeing, though,
+is the last line of code ending in a newline character.
+This indicates to the computer that the code has ended.
+While this newline character is not \emph{required} for shell scripts to work,
+and sometimes isn't shown by coding tools,
+it does make it easier to view and modify scripts.
+When you are copying code from this book,
+remember to add an empty line at the end!\index{whitespace}
+\end{quote}
 
 Once we have added this line,
 we can save the file with Ctrl+O
@@ -5317,7 +5344,7 @@ When we run a Python file as a standalone program,
 on the other hand,
 \texttt{\_\_name\_\_} is always set to the special string \texttt{"\_\_main\_\_"}.
 To illustrate this,
-let's create the file \texttt{print\_name.py}
+let's consider a script named \texttt{print\_name.py}
 that prints the value of the \texttt{\_\_name\_\_} variable:
 
 \begin{Shaded}
@@ -5439,6 +5466,14 @@ Let's create a short Python program called \texttt{script\_template.py}:
 \NormalTok{    main(args)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{quote}
+\textbf{Empty Lines, Again}
+
+As we discussed in the last chapter for shell scripts,
+remember to end your Python scripts in a newline character
+(which we view as an empty line).\index{whitespace}
+\end{quote}
 
 If \texttt{script\_template.py} is run as a standalone program at the command line
 then \texttt{\_\_name\_\_\ ==\ \textquotesingle{}\_\_main\_\_\textquotesingle{}} is true,
@@ -5882,7 +5917,7 @@ This makes it easy to use the command in a pipeline.
 Our program always sends its output to standard output;\index{standard output!in Python}
 as noted above,
 we can always redirect it to a file with \texttt{\textgreater{}}.
-If we want it to read from standard input,
+If we want \texttt{countwords.py} to read from standard input,
 we only need to change the handling of \texttt{infile} in the argument parser
 and simplify \texttt{main} to match:
 
@@ -5931,7 +5966,7 @@ to count the words in the first 500 lines of a book:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}500 data/dracula.txt }\KeywordTok{|} \ExtensionTok{python}\NormalTok{ bin/countwords.py {-}{-}num 10}
+\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}n 500 data/dracula.txt }\KeywordTok{|} \ExtensionTok{python}\NormalTok{ bin/countwords.py {-}{-}num 10}
 \end{Highlighting}
 \end{Shaded}
 
@@ -6010,6 +6045,10 @@ and then save the counts for various files:
   \ExtensionTok{results/jane\_eyre.csv}
 \end{Highlighting}
 \end{Shaded}
+
+As in the previous chapter,
+we've split long lines of to code onto separate lines for formatting purposes;
+each of the three code chunks above should be run as a single line of code.
 
 Now that we can get word counts for individual books
 we can collate the counts for several books.
@@ -6316,6 +6355,9 @@ using the Pandas library:
 \caption{Word frequency distribution for 'Jane Eyre'.}\label{fig:scripting-repl}
 \end{figure}
 
+You'll build on this code to create a plotting script for your project
+in Exercise \ref{scripting-ex-better-plotting}.
+
 \hypertarget{scripting-summary}{%
 \section{Summary}\label{scripting-summary}}
 
@@ -6440,6 +6482,8 @@ data/sherlock_holmes.txt
 data/time_machine.txt
 \end{verbatim}
 
+Note: we will not be including this script in subsequent chapters.
+
 \hypertarget{scripting-ex-sentence-endings}{%
 \subsection{Sentence ending punctuation}\label{scripting-ex-sentence-endings}}
 
@@ -6495,7 +6539,7 @@ or standard input:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}500 data/dracula.txt }\KeywordTok{|} \ExtensionTok{python}\NormalTok{ bin/sentence\_endings.py}
+\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}n 500 data/dracula.txt }\KeywordTok{|} \ExtensionTok{python}\NormalTok{ bin/sentence\_endings.py}
 \end{Highlighting}
 \end{Shaded}
 
@@ -6504,6 +6548,8 @@ Number of . is 148
 Number of ? is 8
 Number of ! is 8
 \end{verbatim}
+
+Note: we will not be including this script in subsequent chapters.
 
 \hypertarget{scripting-ex-better-plotting}{%
 \subsection{A better plotting program}\label{scripting-ex-better-plotting}}
@@ -7991,7 +8037,7 @@ by printing the relevant lines of the file:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}12 bin/plotcounts.py }\KeywordTok{|} \FunctionTok{tail}\NormalTok{ {-}4}
+\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}n 12 bin/plotcounts.py }\KeywordTok{|} \FunctionTok{tail}\NormalTok{ {-}4}
 \end{Highlighting}
 \end{Shaded}
 
@@ -8060,7 +8106,7 @@ Changes to be committed:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}12 bin/plotcounts.py }\KeywordTok{|} \FunctionTok{tail}\NormalTok{ {-}4}
+\NormalTok{$ }\FunctionTok{head}\NormalTok{ {-}n 12 bin/plotcounts.py }\KeywordTok{|} \FunctionTok{tail}\NormalTok{ {-}4}
 \end{Highlighting}
 \end{Shaded}
 
@@ -20230,6 +20276,19 @@ and is intended to help instructors who want to use this curriculum.
 \hypertarget{solutions}{%
 \chapter{Solutions}\label{solutions}}
 
+The exercises included in this book represent a wide variety of problems,
+from multiple choice questions to larger coding tasks.
+It's relatively straightforward to indicate a correct answer for the former,
+though there may be unanticipated cases in which the specific software version
+you're using leads to alternative answers being preferable.
+It's even more difficult to identify the ``right'' answer for the latter,
+since there are often many ways to accomplish the same task with code.
+Here we present possible solutions that the authors generally agree represent ``good'' code,
+but we encourage you to explore additional approaches.
+
+Commits noted in a solution reference \href{https://github.com/amira-khan/zipf}{Amira's \texttt{zipf} repository on GitHub},
+which allow you to see the specific lines of a file modified to arrive at the answer.
+
 \hypertarget{chapter-refbash-basics}{%
 \section*{Chapter~\ref{bash-basics}}\label{chapter-refbash-basics}}
 
@@ -21038,16 +21097,22 @@ and you replace ``username'' with that of your current computer.
 \subsection*{Exercise~\ref{scripting-ex-command-line}}\label{exercise-refscripting-ex-command-line}}
 
 
-Running Python statement directly from the command line is useful as a basic calculator
-and for simple string operations.
-Since anything more complicated than that usually requires more than one statement,
-it is often convenient to separate commands with semi-colons, as in:
+Running a Python statement directly from the command line is useful as a basic calculator
+and for simple string operations,
+since these commands occur in one line of code.
+More complicated commands will require multiple statements;
+when run using \texttt{python\ -c},
+statements must be separated by semi-colons:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{$ python }\OperatorTok{{-}}\NormalTok{c }\StringTok{"import math; print(math.log(123))"}
 \end{Highlighting}
 \end{Shaded}
+
+Multiple statements,
+therefore,
+quickly become more troublesome to run in this manner.
 
 \hypertarget{exercise-refscripting-ex-glob-ls}{%
 \subsection*{Exercise~\ref{scripting-ex-glob-ls}}\label{exercise-refscripting-ex-glob-ls}}
@@ -21117,7 +21182,10 @@ The \texttt{sentence\_endings.py} script could read as follows:
 \subsection*{Exercise~\ref{scripting-ex-better-plotting}}\label{exercise-refscripting-ex-better-plotting}}
 
 
-The \texttt{plotcounts.py} script should read as follows:
+While there may be other ways for \texttt{plotcounts.py}
+to meet the requirements of the exercise,
+we'll be using this script in subsequent chapters so
+we recommend that the script reads as follows:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -23064,6 +23132,10 @@ zipf/
     └── utilities.py
 \end{verbatim}
 
+You can view the complete project,
+including the version history,
+in \href{https://github.com/amira-khan/zipf}{Amira's \texttt{zipf} repository on GitHub}.
+
 Each file was introduced and subsequently modified
 in the following chapters, sections and exercises:
 
@@ -23183,7 +23255,7 @@ along with others borrowed from ``\href{https://github.com/jennybc/code-smells-a
 
 Python doesn't actually require consistent indentation
 so long as each block is indented the same amount,
-which means that this is legal:
+which means that this is legal:\index{whitespace}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -23289,6 +23361,12 @@ Python still does the multiplication before the addition.
 
 This helps the eye see where one ends and the next begins,
 though the fact that functions always start in the first column helps as well.
+
+\textbf{Add an empty line at the end of the script.}
+
+Ending a file in a newline character is required for some other programming languages.
+Although it's not required for Python code to function,
+it does make it easier to view and edit code.\index{whitespace}
 
 \hypertarget{naming}{%
 \subsection{Naming}\label{naming}}

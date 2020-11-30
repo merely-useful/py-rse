@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-29"
+date: "2020-11-30"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -2170,6 +2170,8 @@ $ wc -l *.txt | sort -n | head -n 3
 > Instead, it is associated with the option `-n`.
 > Many options take values like this,
 > such as the names of input files or the background color to use in a plot.
+> Some versions of `head` may allow you to use `head -3` as a shortcut,
+> though this can be confusing if other options are included.
 
 We could always redirect the output to a file
 by adding `> shortest.txt` to the end of the pipeline,
@@ -2514,7 +2516,7 @@ so we will break it down into pieces:
     The continuation prompt `>` has nothing to do with redirection;
     it's used because there are only so many punctuation symbols available.
 
-> **Continuation prompts may differ too**
+> **Continuation Prompts May Differ Too**
 >
 > As mentioned in Chapter \@ref(bash-basics),
 > there is variation in how different shells look and operate.
@@ -2652,12 +2654,12 @@ done
 ```
 
 This is fairly readable,
-although even experienced users have a tendency to put the semi-colon after `do` instead of before it.
-If our loop contains multiple commands,
-though,
-the multi-line format is much easier to read.
+though it becomes more challenging if our for loop includes multiple commands.
 For example,
-compare this:
+we may choose to include the `echo` command,
+which prints its arguments to the screen,
+so we can keep track of progress or for debugging.
+Compare this:
 
 ```bash
 $ for filename in s*.txt
@@ -2674,8 +2676,19 @@ $ for filename in s*.txt; do echo $filename; head -n 17 $filename |
   tail -n 8; done
 ```
 
-(The `echo` command simply prints its arguments to the screen.
-It is often used to keep track of progress or for debugging.)
+Even experienced users have a tendency to (incorrectly) 
+put the semi-colon after `do` instead of before it.
+If our loop contains multiple commands,
+though,
+the multi-line format is much easier to read and troubleshoot.
+Note that (depending on the size of your shell window)
+the format separated by semi-colons may be printed onto more than one line,
+as shown in the previous code example.
+You can tell whether code entered into your shell 
+is intended to be run as a single line based on the prompt:
+both the original command prompt (`$`) and the continuation prompt (`>`) 
+indicate the code is on separate lines;
+the absence of either in shell commands indicates it is a single line of code.
 
 ## Creating New Filenames Automatically {#bash-tools-autoname}
 
@@ -3120,6 +3133,18 @@ head -n 17 ../data/moby_dick.txt | tail -n 8
 Note that we do *not* put the `$` prompt at the front of the line.
 We have been showing that to highlight interactive commands,
 but in this case we are putting the command in a file rather than running it immediately.
+
+> **Empty Line at the End of a File?**
+> 
+> You'll often see scripts from many languages that end in an empty line.
+> What you are seeing, though,
+> is the last line of code ending in a newline character.
+> This indicates to the computer that the code has ended. 
+> While this newline character is not *required* for shell scripts to work,
+> and sometimes isn't shown by coding tools,
+> it does make it easier to view and modify scripts.
+> When you are copying code from this book,
+> remember to add an empty line at the end!\index{whitespace}
 
 Once we have added this line,
 we can save the file with <kbd>Ctrl</kbd>+<kbd>O</kbd>
@@ -4331,7 +4356,7 @@ When we run a Python file as a standalone program,
 on the other hand,
 `__name__` is always set to the special string `"__main__"`.
 To illustrate this,
-let's create the file `print_name.py`
+let's consider a script named `print_name.py`
 that prints the value of the `__name__` variable:
 
 ```python
@@ -4435,6 +4460,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
     main(args)
 ```
+
+> **Empty Lines, Again**
+> 
+> As we discussed in the last chapter for shell scripts,
+> remember to end your Python scripts in a newline character
+> (which we view as an empty line).\index{whitespace}
 
 If `script_template.py` is run as a standalone program at the command line
 then `__name__ == '__main__'` is true,
@@ -4832,7 +4863,7 @@ This makes it easy to use the command in a pipeline.
 Our program always sends its output to standard output;\index{standard output!in Python}
 as noted above,
 we can always redirect it to a file with `>`.
-If we want it to read from standard input,
+If we want `countwords.py` to read from standard input,
 we only need to change the handling of `infile` in the argument parser
 and simplify `main` to match:
 
@@ -4874,7 +4905,7 @@ we can create a pipeline like this
 to count the words in the first 500 lines of a book:
 
 ```bash
-$ head -500 data/dracula.txt | python bin/countwords.py --num 10
+$ head -n 500 data/dracula.txt | python bin/countwords.py --num 10
 ```
 
 ```text
@@ -4940,6 +4971,10 @@ $ python bin/countwords.py data/moby_dick.txt >
 $ python bin/countwords.py data/jane_eyre.txt >
   results/jane_eyre.csv
 ```
+
+As in the previous chapter,
+we've split long lines of to code onto separate lines for formatting purposes;
+each of the three code chunks above should be run as a single line of code.
 
 Now that we can get word counts for individual books
 we can collate the counts for several books.
@@ -5226,6 +5261,9 @@ fig.savefig('results/jane_eyre.png')
 <p class="caption">(\#fig:scripting-repl)Word frequency distribution for 'Jane Eyre'.</p>
 </div>
 
+You'll build on this code to create a plotting script for your project
+in Exercise \@ref(scripting-ex-better-plotting).
+
 ## Summary {#scripting-summary}
 
 Why is building a simple command-line tool so complex?
@@ -5333,6 +5371,8 @@ data/sherlock_holmes.txt
 data/time_machine.txt
 ```
 
+Note: we will not be including this script in subsequent chapters.
+
 ### Sentence ending punctuation {#scripting-ex-sentence-endings}
 
 Our `countwords.py` script strips the punctuation from a text,
@@ -5377,7 +5417,7 @@ Number of ! is 752
 or standard input:
 
 ```bash
-$ head -500 data/dracula.txt | python bin/sentence_endings.py
+$ head -n 500 data/dracula.txt | python bin/sentence_endings.py
 ```
 
 ```text
@@ -5385,6 +5425,8 @@ Number of . is 148
 Number of ? is 8
 Number of ! is 8
 ```
+
+Note: we will not be including this script in subsequent chapters.
 
 ### A better plotting program {#scripting-ex-better-plotting}
 
@@ -6682,7 +6724,7 @@ We can confirm the file has been restored
 by printing the relevant lines of the file:
 
 ```bash
-$ head -12 bin/plotcounts.py | tail -4
+$ head -n 12 bin/plotcounts.py | tail -4
 ```
 
 ```text
@@ -6743,7 +6785,7 @@ Changes to be committed:
 ```
 
 ```bash
-$ head -12 bin/plotcounts.py | tail -4
+$ head -n 12 bin/plotcounts.py | tail -4
 ```
 
 ```text
@@ -17352,6 +17394,19 @@ and is intended to help instructors who want to use this curriculum.
 
 # Solutions {#solutions}
 
+The exercises included in this book represent a wide variety of problems,
+from multiple choice questions to larger coding tasks.
+It's relatively straightforward to indicate a correct answer for the former,
+though there may be unanticipated cases in which the specific software version
+you're using leads to alternative answers being preferable.
+It's even more difficult to identify the "right" answer for the latter,
+since there are often many ways to accomplish the same task with code.
+Here we present possible solutions that the authors generally agree represent "good" code,
+but we encourage you to explore additional approaches.
+
+Commits noted in a solution reference [Amira's `zipf` repository on GitHub][amira-repo],
+which allow you to see the specific lines of a file modified to arrive at the answer.
+
 ## Chapter \@ref(bash-basics) {.unnumbered .unlisted}
 
 ### Exercise \@ref(bash-basics-ex-more-ls) {-}
@@ -17905,14 +17960,20 @@ $ find . -type f -mtime -1 -user username
 
 ### Exercise \@ref(scripting-ex-command-line) {-}
 
-Running Python statement directly from the command line is useful as a basic calculator
-and for simple string operations.
-Since anything more complicated than that usually requires more than one statement,
-it is often convenient to separate commands with semi-colons, as in:
+Running a Python statement directly from the command line is useful as a basic calculator
+and for simple string operations,
+since these commands occur in one line of code.
+More complicated commands will require multiple statements;
+when run using `python -c`,
+statements must be separated by semi-colons:
 
 ```python
 $ python -c "import math; print(math.log(123))"
 ```
+
+Multiple statements,
+therefore,
+quickly become more troublesome to run in this manner.
 
 ### Exercise \@ref(scripting-ex-glob-ls) {-}
 
@@ -17972,7 +18033,10 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(scripting-ex-better-plotting) {-}
 
-The `plotcounts.py` script should read as follows:
+While there may be other ways for `plotcounts.py` 
+to meet the requirements of the exercise,
+we'll be using this script in subsequent chapters so
+we recommend that the script reads as follows:
 
 ```python
 """Plot word counts."""
@@ -19472,6 +19536,10 @@ zipf/
     └── utilities.py
 ```
 
+You can view the complete project,
+including the version history,
+in [Amira's `zipf` repository on GitHub][amira-repo].
+
 Each file was introduced and subsequently modified
 in the following chapters, sections and exercises:
 
@@ -19592,7 +19660,7 @@ along with others borrowed from "[Code Smells and Feels][code-smells-and-feels]"
 
 Python doesn't actually require consistent indentation
 so long as each block is indented the same amount,
-which means that this is legal:
+which means that this is legal:\index{whitespace}
 
 ```python
 def transpose(original):
@@ -19684,6 +19752,12 @@ Python still does the multiplication before the addition.
 
 This helps the eye see where one ends and the next begins,
 though the fact that functions always start in the first column helps as well.
+
+**Add an empty line at the end of the script.**
+
+Ending a file in a newline character is required for some other programming languages.
+Although it's not required for Python code to function,
+it does make it easier to view and edit code.\index{whitespace}
 
 ### Naming
 
@@ -21562,6 +21636,7 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 <!--chapter:end:references.Rmd-->
 
 
+[amira-repo]: https://github.com/amira-khan/zipf
 [anaconda]: https://www.anaconda.com/
 [anaconda-cloud]: https://anaconda.org/
 [anaconda-docs]: https://docs.anaconda.com/anaconda/
