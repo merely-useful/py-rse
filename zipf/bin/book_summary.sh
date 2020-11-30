@@ -1,4 +1,3 @@
-# Get title and author information from a Project Gutenberg eBook.
-# Usage: bash book_summary.sh /path/to/file.txt
-head -n 10 $1 | tail -n 1
-head -n 12 $1 | tail -n 1
+# Get desired information from a Project Gutenberg eBook.
+# Usage: bash book_summary.sh /path/to/file.txt what_to_look_for
+head -n 17 $1 | tail -n 8 | grep $2
