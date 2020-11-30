@@ -697,56 +697,97 @@ or both.
 
 ### Exercise \@ref(git-cmdline-ex-unsave) {-}
 
-- `git status` now shows:
+`git status` now shows:
 
-    ```bash
-    On branch book
-    Untracked files:
-      (use "git add <file>..." to include in what will be committed)
+```text
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	example.txt
 
-            example.txt
+nothing added to commit but untracked files present (use "git add" to track)
+```
 
-    nothing added to commit but untracked files present
-    (use "git add" to track)
-    ```
-
-- Nothing has happened to the file, it still exists but Git no longer has it in
-the staging area.
+Nothing has happened to the file;
+it still exists but Git no longer has it in the staging area.
+`git rm --cached` is equivalent to `git restore --staged`.
+With newer versions of Git,
+older commands will still work,
+and you may encounter references to them when reading help documentation.
 
 ### Exercise \@ref(git-cmdline-ex-word-diff) {-}
 
-Using `git diff --word-diff` might be easier since it shows exactly what has been
+If we make a few changes to `.gitignore` such that it now reads:
+
+```text
+__pycache__ this is a change
+
+this is another change
+```
+
+Then `git diff` would show:
+
+```diff
+diff --git a/.gitignore b/.gitignore
+index bee8a64..5c83419 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,3 @@
+-__pycache__
++__pycache__ this is a change
++
++this is another change
+```
+
+Whereas `git diff --word-diff` shows:
+
+```diff
+diff --git a/.gitignore b/.gitignore
+index bee8a64..5c83419 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,3 @@
+__pycache__ {+this is a change+}
+
+{+this is another change+}
+```
+
+Depending on the nature of the changes you are viewing,
+the latter may be easier to interpret 
+since it shows exactly what has been
 changed.
 
 ### Exercise \@ref(git-cmdline-ex-commit) {-}
 
-1.  Would only create a commit if files have already been staged.
-2.  Would try to create a new repository.
-3.  Is correct: first add the file to the staging area, then commit.
-4.  Would try to commit a file "my recent changes" with the message myfile.txt.
-
-### Exercise \@ref(git-cmdline-ex-multiple) {-}
-
-1.  Change `names.txt` and `old-computers.txt` using an editor like Nano.
-2.  Add both files to the staging area with `git add *.txt`.
-3.  Check that both files are there with `git status`.
-4.  Commit both files at once with `git commit`.
+1.  Maybe: would only create a commit if the file has already been staged.
+2.  No: would try to create a new repository,
+which results in an error if a repository already exists.
+3.  Yes: first adds the file to the staging area, then commits.
+4.  No: would result in an error,
+as it would try to commit a file "my recent changes" with the message "myfile.txt".
 
 ### Exercise \@ref(git-cmdline-ex-bio) {-}
 
 1.  Go into your home directory with `cd ~`.
 2.  Create a new folder called `bio` with `mkdir bio`.
-3.  Go into it with `cd bio`.
+3.  Make the repository your working directory with `cd bio`.
 4.  Turn it into a repository with `git init`.
-5.  Create your biography using Nano or another text editor.
+5.  Create your biography using `nano` or another text editor.
 6.  Add it and commit it in a single step with `git commit -a -m "Some message"`.
 7.  Modify the file.
 8.  Use `git diff` to see the differences.
 
+### Exercise \@ref(git-cmdline-ex-multiple) {-}
+
+1.  Create `about.txt` and `project-members.txt` using an editor like `nano`.
+2.  Add both files to the staging area with `git add *.txt`,
+or `git add about.txt project-members.txt`.
+3.  Check that both files are there with `git status`.
+4.  Commit both files at once with `git commit -m "Some message"`.
+
 ### Exercise \@ref(git-cmdline-ex-ignore-nested) {-}
 
-To ignore only the contents of `results/plots`,
-add this line to `.gitignore`:
+Add this line to `.gitignore`:
 
 ```text
 results/plots/
@@ -774,7 +815,8 @@ copies the full identifier of the commit to the clipboard.
 In the shell,
 `git log` shows the full commit identifier for each commit.
 
-The middle button shows all of the changes that were made in that particular commit;
+The middle button (with seven letters and numbers)
+shows all of the changes that were made in that particular commit;
 green shaded lines indicate additions and red lines indicate removals.
 We can show the same thing in the shell using `git diff`
 or `git diff FROM..TO`
@@ -790,7 +832,9 @@ we need to remember to put the repository back to the right state afterward.
 ### Exercise \@ref(git-cmdline-ex-timestamp) {-}
 
 GitHub displays timestamps in a human-readable relative format
-(i.e. "22 hours ago" or "three weeks ago").
+(i.e. "22 hours ago" or "three weeks ago"),
+since this makes it easy for anyone in any time zone
+to know what changes have been made recently.
 However, if we hover over the timestamp
 we can see the exact time at which the last change to the file occurred.
 
@@ -829,70 +873,64 @@ Please check the contents of the local and remote repositories carefully before 
 
 ### Exercise \@ref(git-cmdline-ex-recover) {-}
 
-The answer is (5)-Both 2 and 4.
-
 The `checkout` command restores files from the repository,
 overwriting the files in our working directory.
-Answers 2 and 4 both restore the latest version in the repository of the file `data_cruncher.sh`.
-Answer 2 uses `HEAD` to indicate the latest,
-while answer 4 uses the unique ID of the last commit,
-which is what `HEAD` means.
+`HEAD` indicates the latest version.
 
-Answer 3 gets the version of `data_cruncher.sh` from the commit before `HEAD`,
-which is not what we want.
-
-Answer 1 can be dangerous:
+1. No: this can be dangerous;
 without a filename,
 `git checkout` will restore all files in the current directory (and all directories below it)
 to their state at the commit specified.
 This command will restore `data_cruncher.sh` to the latest commit version,
 but will also reset any other files we have changed to that version,
 which will erase any unsaved changes you may have made to those files.
+2. Yes: this restores the latest version of only the desired file.
+3. No: this gets the version of `data_cruncher.sh` from the commit before `HEAD`,
+which is not what we want.
+4. Yes: the unique ID (identifier) of the last commit is what `HEAD` means.
 
 ### Exercise \@ref(git-cmdline-ex-history) {-}
 
-The answer is 2.
+The answer is 1.
 
-The command `git add history.txt` adds the current version of `history.txt` to the staging area.
-The changes to the file from the second `echo` command are only applied to the working copy,
+The command `git add motivation.txt` adds the current version of `motivation.txt` to the staging area.
+The subsequent changes to the file from the second `echo` command are only applied to the working copy,
 not the version in the staging area.
 
 As a result,
-when `git commit -m "Origins of ENIAC"` is executed,
-the version of `history.txt` committed to the repository is the one from the staging area
-with only one line.
+when `git commit -m "Motivate project"` is executed,
+the version of `motivation.txt` committed to the repository is the content from the first `echo`.
 
 However,
-the working copy still has the second line.
-(`git status` will show that the file is modified.)
-`git checkout HEAD history.txt` therefore replaces the working copy with
-the most recently committed version of `history.txt`,
-so `cat history.txt` prints:
-
-```text
-ENIAC was the world's first general-purpose electronic computer.
-```
+the working copy still has the output from the second `echo`;
+`git status` would show that the file is modified.
+`git checkout HEAD motivation.txt` therefore replaces the working copy with
+the most recently committed version of `motivation.txt`
+(the content of the first `echo`).
 
 ### Exercise \@ref(git-cmdline-ex-diff) {-}
 
-1. `git diff HEAD~9 bin/plotcounts.py` compares what has changed between the
-current `bin/plotcounts.py` and the same file 9 commits ago.
-2.  The previous Git command takes the state of the file at each point and then
-compares them.
-3.  `git diff HEAD bin/plotcounts.py` compares what has been changed in
-`bin/plotcounts.py` with the previous commit.
+1. Compares what has changed between the
+current `bin/plotcounts.py` and the same file nine commits ago.
+2.  It returns an error: 
+`fatal: ambiguous argument 'HEAD~9': unknown revision or path not in the working tree.`
+We don't have enough commits in history for the command to properly execute.
+3.  It compares changes (either staged or unstaged)
+to the most recent commit.
 
 ### Exercise \@ref(git-cmdline-ex-unstage) {-}
 
-Using `git checkout` on a staged file does not unstage it. That's
-because the changes are in the staging area and checkout would affect
+No, using `git checkout` on a staged file does not unstage it.
+The changes are in the staging area and checkout would affect
 the working directory.
 
 ### Exercise \@ref(git-cmdline-ex-blame) {-}
 
-Each line of output corresponds to a line in the file, who was last
-to modify the line, when that change was made, and what the file name was
-or is called.
+Each line of output corresponds to a line in the file, 
+and includes the commit identifier,
+who last modified the line,
+when that change was made,
+and what is included on that line.
 
 ## Chapter \@ref(git-advanced) {.unnumbered .unlisted}
 
