@@ -16256,10 +16256,6 @@ quotes.random_quote()
 
 # Finale {#finale}
 
-> So much universe, and so little time.
->
-> --- Terry Pratchett\index{Pratchett, Terry}
-
 We have come a long way since we first met Amira, Jun, and Sami in Section \@ref(intro-personas).
 Amira now has her scripts, data sets and reports organized,
 in version control,
@@ -16301,20 +16297,42 @@ He's added better error handling so he and his
 users get better information when something goes wrong,
 he's implemented some testing strategies to give him and his users confidence his code works, and
 he's improved his documentation.
+Jun has also added a license, a Code of Conduct and contributing guidelines to his project repo,
+and has already had a contribution that fixes some typos in the documentation.
 
-Jun has also added a license, a Code of Conduct and contributing guidelines to his project repo.
-He's already had a contribution that fixes some typos
-in the documentation.
+## Why We Wrote This Book
 
 Shell scripts,
 branching,
 automated workflows,
-healthy team dynamics,
-clean code that has been tested, documented, and packaged---all of these take time to learn,
-but they have all made us and thousands of our colleagues more productive.
-We hope you have enjoyed reading;
+healthy team dynamics---they all take time to learn,
+but they enable researchers to get more done in less time and with less pain,
+and that's why we wrote this book.
+The climate crisis is the greatest threat our species has faced since civilization began.
+The COVID-19 pandemic has shown just how ill-prepared we are to deal with problems of that magnitude,
+or with the suspicion and disinformation that now poisons every public discussion online.
+
+Every hour that a researcher *doesn't* waste wrestling with software
+is an hour they can spend solving a new problem;
+every meeting that ends early with a clear decision
+frees up time to explain to the public what we actually know and why it matters.
+We don't expect this book to change the world,
+but we hope that knowing how to write, test, document, package, and share your work
+will give you a slightly better chance of doing so.
+We hope you have enjoyed reading what we have written;
 if so,
-we'd enjoy hearing from you.
+we would enjoy hearing from you.
+
+-   Damien Irving (<https://damienirving.github.io/>)
+-   Kate Hertweck (<https://katehertweck.com/>)
+-   Luke Johnston (<https://cv.lukewjohnston.com/>)
+-   Joel Ostblom (<https://joelostblom.com/>)
+-   Charlotte Wickham (<https://www.cwick.co.nz/>)
+-   Greg Wilson (<https://third-bit.com>)
+
+> So much universe, and so little time.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 <!--chapter:end:chapters/finale.Rmd-->
 
