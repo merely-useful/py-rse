@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-11-30"
+date: "2020-12-02"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -129,7 +129,7 @@ Sami Virtanen
     this guide will teach them how to build and run data pipelines
     so that they can pass those skills on to their users.
 
-## Syllabus {#intro-syllabus}
+## What You Will Learn {#intro-syllabus}
 
 Rather than simply providing reference material about good coding practices,
 the book follows Amira and Sami as they work together to write an actual software package
