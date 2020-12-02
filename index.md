@@ -5363,7 +5363,7 @@ that takes as input a directory and suffix (e.g. py, txt, md, sh)
 and outputs a list of the files (sorted alphabetically)
 in that directory ending in that suffix.
 
-The help information for the new script should read as follows,
+The help information for the new script should read as follows:
 
 ```bash
 $ python bin/my_ls.py -h
@@ -5429,7 +5429,7 @@ for more information.
 ```
 
 When you're done,
-the script should be able to accept an input file,
+the script should be able to accept an input file:
 
 ```bash
 $ python bin/sentence_endings.py data/dracula.txt
@@ -6851,7 +6851,7 @@ This file can contain filenames like `thesis.pdf`
 or \gref{wildcard}{wildcard} patterns like `*.dat`.\index{wildcard!in .gitignore}
 Each must be on a line of its own,
 and Git will ignore anything that matches any of these lines.
-For now we only need one entry in our `.gitignore` file,
+For now we only need one entry in our `.gitignore` file:
 
 ```text
 __pycache__
@@ -7415,7 +7415,7 @@ def get_power_law_params(word_counts):
 ```
 
 We can then plot the fitted curve on the plot axes (`ax`)
-defined in the `plotcounts.py` script,
+defined in the `plotcounts.py` script:
 
 ```python
 def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
@@ -11765,7 +11765,7 @@ mpl.get_configdir()
 /Users/amira/.matplotlib
 ```
 
-Once we've created the new sub-directory,
+Once we've created the new sub-directory:
 
 ```bash
 $ mkdir /Users/amira/.matplotlib/stylelib
@@ -12452,7 +12452,7 @@ def get_power_law_params(word_counts):
 ```
 
 should give us a value of 1.0.
-To test this, we can add a second test to `test_zipfs.py`,
+To test this, we can add a second test to `test_zipfs.py`:
 
 ```python
 from collections import Counter
@@ -13285,7 +13285,7 @@ Add a \gref{postcondition}{postcondition} to check that this is true.
 Do the same for the new `y1` coordinate, `upper_y`.
 
 Running `normalize_rectangle` for a short, wide rectangle should pass your new
-preconditions and postconditions,
+preconditions and postconditions:
 
 ```python
 import geometry
@@ -14984,7 +14984,7 @@ To make the Zipf's Law project work as a Python package,
 we only need to make one important change to the code itself:
 changing the syntax for how we import our own modules.
 Currently,
-both `collate.py` and `countwords.py` contains this line,
+both `collate.py` and `countwords.py` contains this line:
 
 ```python
 import utilities as util
@@ -15004,7 +15004,7 @@ because it is not clear whether we mean
 or
 "import a file in our local directory called `utilities.py`"
 (which is what we want).
-To remove this ambiguity we need to be explicit and write,
+To remove this ambiguity we need to be explicit and write:
 
 ```python
 from zipf import utilities as util
@@ -17468,7 +17468,7 @@ It is useful for creating the output directories for build rules.
 
 ### Exercise \@ref(automate-ex-print) {-}
 
-The build rule for generated the result for any book should now be,
+The build rule for generated the result for any book should now be:
 
 ```makefile
 ## results/%.csv : regenerate result for any book.
@@ -17559,7 +17559,7 @@ include config.mk
 
 ### Exercise \@ref(config-ex-build-plotparams) {-}
 
-The build rule involving `plotcounts.py` should now read,
+The build rule involving `plotcounts.py` should now read:
 
 ```makefile
 ## results/collated.png: plot the collated results.
@@ -17850,7 +17850,7 @@ divided by the standard deviation of the data.
 
 ### Exercise \@ref(errors-ex-set-level) {-}
 
-Add a new command line argument to `collate.py`,
+Add a new command line argument to `collate.py`:
 
 ```python
 parser.add_argument('-v', '--verbose',
@@ -17858,7 +17858,7 @@ parser.add_argument('-v', '--verbose',
                     help="Set logging level to DEBUG")
 ```
 
-and two new lines to the beginning of the `main` function,
+and two new lines to the beginning of the `main` function:
 
 ```python
 log_level = logging.DEBUG if args.verbose else logging.WARNING
@@ -17925,7 +17925,7 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(errors-ex-logging-output) {-}
 
-Add a new command line argument to `collate.py`,
+Add a new command line argument to `collate.py`:
 
 ```python
 parser.add_argument('-l', '--logfile',
@@ -17934,7 +17934,7 @@ parser.add_argument('-l', '--logfile',
 ```
 
 and pass the name of the log file to `logging.basicConfig`
-using the `filename` argument,
+using the `filename` argument:
 
 ```python
 logging.basicConfig(level=log_level, filename=args.logfile)
@@ -18995,14 +18995,14 @@ In the same way that the default directory into which we are placed when running
 a shell on a remote machine is our home directory on that machine, the default
 target, for a remote copy, is also the  home directory.
 
-This means that,
+This means that:
 
 ```bash
 $ scp results.dat amira@backupserver:
 ```
 
 would copy `results.dat` into our home directory on `backupserver`, however, if we did not
-have the colon to inform `scp` of the remote machine, we would still have a valid command,
+have the colon to inform `scp` of the remote machine, we would still have a valid command:
 
 ```bash
 $ scp results.dat amira@backupserver
