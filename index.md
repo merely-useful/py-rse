@@ -5363,7 +5363,7 @@ that takes as input a directory and suffix (e.g. py, txt, md, sh)
 and outputs a list of the files (sorted alphabetically)
 in that directory ending in that suffix.
 
-The help information for the new script should read as follows,
+The help information for the new script should read as follows:
 
 ```bash
 $ python bin/my_ls.py -h
@@ -5429,7 +5429,7 @@ for more information.
 ```
 
 When you're done,
-the script should be able to accept an input file,
+the script should be able to accept an input file:
 
 ```bash
 $ python bin/sentence_endings.py data/dracula.txt
@@ -6851,7 +6851,7 @@ This file can contain filenames like `thesis.pdf`
 or \gref{wildcard}{wildcard} patterns like `*.dat`.\index{wildcard!in .gitignore}
 Each must be on a line of its own,
 and Git will ignore anything that matches any of these lines.
-For now we only need one entry in our `.gitignore` file,
+For now we only need one entry in our `.gitignore` file:
 
 ```text
 __pycache__
@@ -7415,7 +7415,7 @@ def get_power_law_params(word_counts):
 ```
 
 We can then plot the fitted curve on the plot axes (`ax`)
-defined in the `plotcounts.py` script,
+defined in the `plotcounts.py` script:
 
 ```python
 def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
@@ -11765,7 +11765,7 @@ mpl.get_configdir()
 /Users/amira/.matplotlib
 ```
 
-Once we've created the new sub-directory,
+Once we've created the new sub-directory:
 
 ```bash
 $ mkdir /Users/amira/.matplotlib/stylelib
@@ -12452,7 +12452,7 @@ def get_power_law_params(word_counts):
 ```
 
 should give us a value of 1.0.
-To test this, we can add a second test to `test_zipfs.py`,
+To test this, we can add a second test to `test_zipfs.py`:
 
 ```python
 from collections import Counter
@@ -13285,7 +13285,7 @@ Add a \gref{postcondition}{postcondition} to check that this is true.
 Do the same for the new `y1` coordinate, `upper_y`.
 
 Running `normalize_rectangle` for a short, wide rectangle should pass your new
-preconditions and postconditions,
+preconditions and postconditions:
 
 ```python
 import geometry
@@ -14984,7 +14984,7 @@ To make the Zipf's Law project work as a Python package,
 we only need to make one important change to the code itself:
 changing the syntax for how we import our own modules.
 Currently,
-both `collate.py` and `countwords.py` contains this line,
+both `collate.py` and `countwords.py` contains this line:
 
 ```python
 import utilities as util
@@ -15004,7 +15004,7 @@ because it is not clear whether we mean
 or
 "import a file in our local directory called `utilities.py`"
 (which is what we want).
-To remove this ambiguity we need to be explicit and write,
+To remove this ambiguity we need to be explicit and write:
 
 ```python
 from zipf import utilities as util
@@ -16256,10 +16256,6 @@ quotes.random_quote()
 
 # Finale {#finale}
 
-> So much universe, and so little time.
->
-> --- Terry Pratchett\index{Pratchett, Terry}
-
 We have come a long way since we first met Amira, Jun, and Sami in Section \@ref(intro-personas).
 Amira now has her scripts, data sets and reports organized,
 in version control,
@@ -16301,20 +16297,42 @@ He's added better error handling so he and his
 users get better information when something goes wrong,
 he's implemented some testing strategies to give him and his users confidence his code works, and
 he's improved his documentation.
+Jun has also added a license, a Code of Conduct and contributing guidelines to his project repo,
+and has already had a contribution that fixes some typos in the documentation.
 
-Jun has also added a license, a Code of Conduct and contributing guidelines to his project repo.
-He's already had a contribution that fixes some typos
-in the documentation.
+## Why We Wrote This Book
 
 Shell scripts,
 branching,
 automated workflows,
-healthy team dynamics,
-clean code that has been tested, documented, and packaged---all of these take time to learn,
-but they have all made us and thousands of our colleagues more productive.
-We hope you have enjoyed reading;
+healthy team dynamics---they all take time to learn,
+but they enable researchers to get more done in less time and with less pain,
+and that's why we wrote this book.
+The climate crisis is the greatest threat our species has faced since civilization began.
+The COVID-19 pandemic has shown just how ill-prepared we are to deal with problems of that magnitude,
+or with the suspicion and disinformation that now poisons every public discussion online.
+
+Every hour that a researcher *doesn't* waste wrestling with software
+is an hour they can spend solving a new problem;
+every meeting that ends early with a clear decision
+frees up time to explain to the public what we actually know and why it matters.
+We don't expect this book to change the world,
+but we hope that knowing how to write, test, document, package, and share your work
+will give you a slightly better chance of doing so.
+We hope you have enjoyed reading what we have written;
 if so,
-we'd enjoy hearing from you.
+we would enjoy hearing from you.
+
+-   Damien Irving (<https://damienirving.github.io/>)
+-   Kate Hertweck (<https://katehertweck.com/>)
+-   Luke Johnston (<https://lukewjohnston.com/>)
+-   Joel Ostblom (<https://joelostblom.com/>)
+-   Charlotte Wickham (<https://www.cwick.co.nz/>)
+-   Greg Wilson (<https://third-bit.com>)
+
+> So much universe, and so little time.
+>
+> --- Terry Pratchett\index{Pratchett, Terry}
 
 <!--chapter:end:chapters/finale.Rmd-->
 
@@ -17468,7 +17486,7 @@ It is useful for creating the output directories for build rules.
 
 ### Exercise \@ref(automate-ex-print) {-}
 
-The build rule for generated the result for any book should now be,
+The build rule for generated the result for any book should now be:
 
 ```makefile
 ## results/%.csv : regenerate result for any book.
@@ -17559,7 +17577,7 @@ include config.mk
 
 ### Exercise \@ref(config-ex-build-plotparams) {-}
 
-The build rule involving `plotcounts.py` should now read,
+The build rule involving `plotcounts.py` should now read:
 
 ```makefile
 ## results/collated.png: plot the collated results.
@@ -17850,7 +17868,7 @@ divided by the standard deviation of the data.
 
 ### Exercise \@ref(errors-ex-set-level) {-}
 
-Add a new command line argument to `collate.py`,
+Add a new command line argument to `collate.py`:
 
 ```python
 parser.add_argument('-v', '--verbose',
@@ -17858,7 +17876,7 @@ parser.add_argument('-v', '--verbose',
                     help="Set logging level to DEBUG")
 ```
 
-and two new lines to the beginning of the `main` function,
+and two new lines to the beginning of the `main` function:
 
 ```python
 log_level = logging.DEBUG if args.verbose else logging.WARNING
@@ -17925,7 +17943,7 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(errors-ex-logging-output) {-}
 
-Add a new command line argument to `collate.py`,
+Add a new command line argument to `collate.py`:
 
 ```python
 parser.add_argument('-l', '--logfile',
@@ -17934,7 +17952,7 @@ parser.add_argument('-l', '--logfile',
 ```
 
 and pass the name of the log file to `logging.basicConfig`
-using the `filename` argument,
+using the `filename` argument:
 
 ```python
 logging.basicConfig(level=log_level, filename=args.logfile)
@@ -18995,14 +19013,14 @@ In the same way that the default directory into which we are placed when running
 a shell on a remote machine is our home directory on that machine, the default
 target, for a remote copy, is also the  home directory.
 
-This means that,
+This means that:
 
 ```bash
 $ scp results.dat amira@backupserver:
 ```
 
 would copy `results.dat` into our home directory on `backupserver`, however, if we did not
-have the colon to inform `scp` of the remote machine, we would still have a valid command,
+have the colon to inform `scp` of the remote machine, we would still have a valid command:
 
 ```bash
 $ scp results.dat amira@backupserver
