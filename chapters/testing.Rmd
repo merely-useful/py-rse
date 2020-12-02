@@ -45,6 +45,8 @@ zipf/
 │   ├── dracula.txt
 │   └── ...
 └── results
+    ├── collated.csv
+    ├── collated.png
     ├── dracula.csv
     ├── dracula.png
     └── ...
@@ -158,15 +160,16 @@ checks the correctness of a single unit of software.
 Exactly what constitutes a "unit" is subjective,
 but it typically means the behavior of a single function in one situation.
 In our Zipf's Law software,
-the `count_words` function in `wordcounts.py` is
+the `count_words` function in `countwords.py` is
 a good candidate for unit testing:
 
 ```
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
-    findwords = re.compile(r"\w+", re.IGNORECASE)
-    word_list = re.findall(findwords, text)
+    chunks = text.split()
+    stripped = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in stripped if word]
     word_counts = Counter(word_list)
     return word_counts
 ```
@@ -189,6 +192,7 @@ we could use a piece of text small enough for us to count word frequencies by ha
 Let's add the poem "Risk" by Anaïs Nin to our data:
 
 ```bash
+$ cd ~/zipf
 $ mkdir test_data
 $ cat test_data/risk.txt
 ```
@@ -217,10 +221,12 @@ risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1,
 expected_result = Counter(risk_poem_counts)
 ```
 
-We then generate the actual result by calling `word_counts`,
+We then generate the actual result by calling `countwords`,
 and use an assertion to check if it is what we expected:
 
 ```python
+import sys
+sys.path.append('/Users/amira/zipf/bin')
 import countwords
 
 
@@ -232,6 +238,19 @@ assert actual_result == expected_result
 There's no output,
 which means the assertion (and test) passed.
 (Remember, assertions only do something if the condition is false.)
+
+> **Appending the import path**
+>
+> The last code chunk included `sys.path.append`,
+> which allowed us to import scripts from elsewhere than 
+> our current working directory.
+> This isn't a perfect solution,
+> but works well enough for quick tests while developing code,
+> especially since the tool we'll use for the 
+> rest of the chapter handles this issue for us.
+> [Import statements][python-import] are notoriously tricky,
+> but we'll learn better methods for organizing our code for 
+> function imports in Chapter \@ref(packaging).
 
 ## Testing Frameworks {#testing-framework}
 
@@ -284,8 +303,8 @@ $ pytest
 ```
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 1 item
 
@@ -331,11 +350,13 @@ Passing this test fixture to `get_power_law_params` in `plotcounts.py`:
 def get_power_law_params(word_counts):
     """
     Get the power law parameters.
+
     References
     ----------
     Moreno-Sanchez et al (2016) define alpha (Eq. 1),
       beta (Eq. 2) and the maximum likelihood estimation (mle)
       of beta (Eq. 6).
+
     Moreno-Sanchez I, Font-Clos F, Corral A (2016)
       Large-Scale Analysis of Zipf's Law in English Texts.
       PLoS ONE 11(1): e0147073.
@@ -345,7 +366,7 @@ def get_power_law_params(word_counts):
         'Input must be a numerical (numpy) array of word counts'
     mle = minimize_scalar(nlog_likelihood,
                           bracket=(1 + 1e-10, 4),
-                          args=(word_counts),
+                          args=word_counts,
                           method='brent')
     beta = mle.x
     alpha = 1 / (beta - 1)
@@ -396,8 +417,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
 
@@ -408,13 +429,13 @@ __________________________ test_alpha __________________________
 
     def test_alpha():
         """Test the calculation of the alpha parameter.
-
+    
         The test word counts satisfy the relationship,
           r = cf**(-1/alpha), where
           r is the rank,
           f the word count, and
           c is a constant of proportionality.
-
+    
         To generate test word counts for an expected alpha value of
           1.0, a maximum word frequency of 600 is used
           (i.e. c = 600 and r ranges from 1 to 600)
@@ -426,10 +447,11 @@ __________________________ test_alpha __________________________
 >       assert actual_alpha == expected_alpha
 E       assert 0.9951524579316625 == 1.0
 
-bin/test_zipfs.py:24: AssertionError
+bin/test_zipfs.py:26: AssertionError
 ==================== short test summary info =====================
 FAILED bin/test_zipfs.py::test_alpha - assert 0.99515245793 == 1.0
-================== 1 failed, 1 passed in 0.85s ===================
+================== 1 failed, 1 passed in 3.98s ===================
+
 ```
 
 The output tells us that one test failed but the other test passed.
@@ -527,8 +549,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
 
@@ -572,31 +594,32 @@ might be a text file with a word frequency distribution that has a known \(\alph
 In order to create this text fixture,
 we need a way to generate random words.
 
-Fortunately, a Python library called `randomwordgenerator` exists to do just that.
-We can install it and the `pypandoc` library it depends on
-using [`pip`][pip], the Python Package Installer:
+Fortunately, a Python library called 
+[`RandomWordGenerator`](https://github.com/AbhishekSalian/Random-Word-Generator) 
+exists to do just that.
+We can install it using [`pip`][pip], the Python Package Installer:
 
 ```bash
-$ pip install pypandoc
-$ pip install randomwordgenerator
+$ pip install Random-Word-Generator
 ```
 
 Borrowing from the word count distribution we created for `test_alpha`,
-we can then create a text file full of random words
+we can use the following code to create a text file full of random words
 with a frequency distribution that corresponds to an \(\alpha\) of approximately 1.0:
 
 ```python
 import numpy as np
-from randomwordgenerator import randomwordgenerator as rwg
+from RandomWordGenerator import RandomWord
 
 
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
-random_words = rwg.generate_random_words(n=max_freq)
+rw = RandomWord()
+random_words = rw.getList(num_of_words=max_freq)
 writer = open('test_data/random_words.txt', 'w')
 for index in range(max_freq):
     count = int(word_counts[index])
-    word_sequence = f"{random_words[index]} " * count
+    word_sequence = f'{random_words[index]} ' * count
     writer.write(word_sequence + '\n')
 writer.close()
 ```
@@ -606,7 +629,6 @@ We can then add this integration test to `test_zipfs.py`:
 ```python
 def test_integration():
     """Test the full word count to alpha parameter workflow."""
-
     with open('test_data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     counts_array = np.array(list(word_counts_dict.values()))
@@ -624,8 +646,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 3 items
 
@@ -661,7 +683,6 @@ Let's use that value to add a regression test to `test_zipfs.py`:
 ```python
 def test_regression():
     """Regression test for Dracula."""
-
     with open('data/dracula.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     counts_array = np.array(list(word_counts_dict.values()))
@@ -676,8 +697,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
 
@@ -709,8 +730,8 @@ $ coverage run -m pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
 
@@ -731,21 +752,20 @@ $ coverage report -m
 ```
 
 ```text
-Name            Stmts   Miss  Cover   Missing
----------------------------------------------
-countwords.py      20      8    60%   19-21, 25-31
-plotcounts.py      46     27    41%   41-47, 67-69, 74-90, 94-104
-test_zipfs.py      32      0   100%
-utilities.py        7      4    43%   24-27
----------------------------------------------
-TOTAL             105     39    63%
+bin/countwords.py      20      7    65%   25-26, 30-37
+bin/plotcounts.py      58     37    36%   48-55, 75-77, 81-82, 
+                                          86-118, 121-139
+bin/test_zipfs.py      31      0   100%
+bin/utilities.py        8      5    38%   18-22
+-------------------------------------------------
+TOTAL                 117     49    58%
 ```
 
 This summary shows us that
 some lines of `countwords.py` or `plotcounts.py`
 were not executed when we ran the tests:
 in fact,
-only 60% and 41% of the lines were run respectively.
+only 65% and 36% of the lines were run respectively.
 This makes sense,
 since much of the code in those scripts
 is devoted to handling command line arguments or file I/O
@@ -794,7 +814,7 @@ Luckily,
 we can usually put test cases into groups.
 For example,
 when testing a function that summarizes a table full of data,
-it's probably enough to check that it handles table with:
+it's probably enough to check that it handles tables with:
 
 -   no rows
 -   only one row
@@ -902,8 +922,8 @@ $ git add .travis.yml
 $ git commit -m "Initial commit of travis configuration file"
 ```
 ```text
-[master 71084f7] Initial commit of travis file
- 1 file changed, 4 insertions(+)
+[master 46cd2d8] Initial commit of travis configuration file
+ 1 file changed, 7 insertions(+)
  create mode 100644 .travis.yml
 ```
 ```bash
@@ -913,11 +933,12 @@ $ git push origin master
 Enumerating objects: 4, done.
 Counting objects: 100% (4/4), done.
 Delta compression using up to 4 threads
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 339 bytes | 67.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
 To https://github.com/amira-khan/zipf.git
-   1f0590b..71084f7  master -> master
+   65aee17..46cd2d8  master -> master
 ```
 
 When this commit reaches GitHub,
@@ -983,22 +1004,23 @@ $ git add .travis.yml requirements.txt
 $ git commit -m "Adding requirements"
 ```
 ```text
-[master d96593f] Adding requirements
- 2 files changed, 16 insertions(+), 1 deletion(-)
+[master 4917a19] Adding requirements
+ 2 files changed, 9 insertions(+)
  create mode 100644 requirements.txt
 ```
 ```bash
 $ git push origin master
 ```
 ```text
-Enumerating objects: 4, done.
-Counting objects: 100% (4/4), done.
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
 Delta compression using up to 4 threads
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 445 bytes | 74.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
 To https://github.com/amira-khan/zipf.git
-   1f0590b..71084f7  master -> master
+   46cd2d8..4917a19  master -> master
 ```
 
 Travis CI automatically runs again.
@@ -1166,7 +1188,8 @@ def normalize_rectangle(rect):
 ```
 
 In order to answer the following questions,
-cut and paste the `normalize_rectangle` function into a new file called `geometry.py` and
+cut and paste the `normalize_rectangle` function into a new file called `geometry.py` 
+(outside of your `zipf` project) and
 save that file in a new directory called `exercises`.
 
 1. To ensure that the inputs to `normalize_rectangle` are valid,

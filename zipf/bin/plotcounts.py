@@ -28,7 +28,7 @@ def get_power_law_params(word_counts):
       of beta (Eq. 6).
 
     Moreno-Sanchez I, Font-Clos F, Corral A (2016)
-      Large-Scale Analysis of Zipf’s Law in English Texts.
+      Large-Scale Analysis of Zipf's Law in English Texts.
       PLoS ONE 11(1): e0147073.
       https://doi.org/10.1371/journal.pone.0147073
     """
