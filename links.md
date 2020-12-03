@@ -10,7 +10,6 @@
 [blab-h3n2-reassortment]: https://github.com/blab/h3n2-reassortment
 [book-repo]: https://github.com/merely-useful/py-rse/
 [borstlab-reversephi]: https://github.com/borstlab/reversephi_paper/
-[capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [carpentries-install-instructions]: https://carpentries.github.io/workshop-template/#setup
@@ -29,7 +28,6 @@
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [drake]: https://ropenscilabs.github.io/drake-manual/
 [dryad]: https://datadryad.org/
-[dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [explainshell]: http://explainshell.com
 [fair-questionnaire]: https://ardc.edu.au/resources/working-with-data/fair-data/fair-self-assessment-tool
@@ -97,11 +95,10 @@
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [sphinx]: https://www.sphinx-doc.org/en/master/
-[srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-git]: http://swcarpentry.github.io/git-novice/
-[swc-make]: https://github.com/swcarpentry/make-novice
+[swc-make]: http://swcarpentry.github.io/make-novice/
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
 [theoj]: https://joss.theoj.org/
