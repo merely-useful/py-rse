@@ -13,10 +13,10 @@ The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
 just like other command-line tools [@Tasc2017].
 
-In this chapter we will develop a command-line Python program\index{Python!command line}
-that handles input and output in the same way as other shell commands,
+In this chapter we will develop some command-line Python programs\index{Python!command line}
+that handle input and output in the same way as other shell commands,
 can be controlled by several option flags,
-and provides useful information when things go wrong.
+and provide useful information when things go wrong.
 The result will have more scaffolding than useful application code,
 but that scaffolding stays more or less the same as programs get larger.
 
@@ -183,8 +183,8 @@ If `script_template.py` is run as a standalone program at the command line
 then `__name__ == '__main__'` is true,
 so the program uses `argparse` to create an argument parser.
 It then specifies that it expects two command-line arguments:
-and input filename (`infile`) and output filename (`outfile`).
-The program uses `parse_args()` to parse the actual command-line arguments given by the user
+an input filename (`infile`) and output filename (`outfile`).
+The program uses `parser.parse_args()` to parse the actual command-line arguments given by the user
 and stores the result in a variable called `args`,
 which it passes to `main`.
 That function can then get the values using the names specified
@@ -375,7 +375,7 @@ We talk more about what to put in a docstring in Appendix \@ref(documentation).
 ## Counting Words {#scripting-wordcount}
 
 Now that we have a template for command-line Python programs,
-we can use it to check Zipf's Law for our collection of classic English novels.
+we can use it to check Zipf's Law for our collection of classic novels.
 We start by moving the template into the directory
 where we store our runnable programs (Section \@ref(getting-started-organize)):
 
@@ -432,7 +432,7 @@ Counter({'the': 8036, 'and': 5896, 'i': 4712, 'to': 4540,
 If we want the word counts in a format like CSV for easier processing,
 we can write another small function that takes our `Counter` object,
 orders its contents from most to least frequent,
-and then writes it to standard output as CSV:
+and then writes it to \gref{standard output}{stdout} as CSV:
 
 ```python
 import csv
@@ -536,10 +536,9 @@ if __name__ == '__main__':
     main(args)
 ```
 
-Note that we have replaced the `'outfile'` argument with an optional `-n` (or `--num`) flag
-to control how much output is printed
-and modified `collection_to_csv` so that it always prints to standard output
-(Section \@ref(bash-tools-stdio)).
+Note that we have replaced the `'outfile'` argument from our template script
+with an optional `-n` (or `--num`) flag to control how much output is printed
+and modified `collection_to_csv` so that it always prints to standard output.
 If we want that output in a file,
 we can redirect with `>`.
 
@@ -564,12 +563,13 @@ it,2141
 
 ## Pipelining {#scripting-pipeline}
 
-Most Unix commands follow a useful convention:
+As discussed in Section \@ref(bash-tools-stdio),
+most Unix commands follow a useful convention:
 if the user doesn't specify the names of any input files,
-they read from standard input.\index{standard input!in Python}
+they read from \gref{standard input}{stdin}.\index{standard input!in Python}
 Similarly,
 if no output file is specified,
-the command sends its results to standard output.
+the command sends its results to \gref{standard output}{stdout}.
 This makes it easy to use the command in a pipeline.
 
 Our program always sends its output to standard output;\index{standard output!in Python}
@@ -617,7 +617,7 @@ we can create a pipeline like this
 to count the words in the first 500 lines of a book:
 
 ```bash
-$ head -n 500 data/dracula.txt | python bin/countwords.py --num 10
+$ head -n 500 data/dracula.txt | python bin/countwords.py --n 10
 ```
 
 ```text
@@ -754,9 +754,6 @@ we have called the option `infiles` (plural)
 and specified `nargs='*'`
 to tell `argparse` that we will accept zero or more filenames.
 We must then open the files ourselves.
-Passing the filename rather than having `argparse` read its content automatically
-is also useful when doing things like moving or coping files;
-we will look in the exercises at how to combine this with reading from standard input.
 
 Let's give `collate.py` a try
 (using `-n 10` to limit the number of lines of output):
@@ -948,7 +945,7 @@ Mathematically, this might be written as
 "word frequency is proportional to 1/rank."
 
 The following code plots the word frequency against the inverse rank
-using the Pandas library:
+using the [pandas][pandas] library:
 
 ```python
 import pandas as pd
@@ -968,7 +965,7 @@ fig = scatplot.get_figure()
 fig.savefig('results/jane_eyre.png')
 ```
 
-```{r scripting-repl, echo=FALSE, fig.cap="Word frequency distribution for 'Jane Eyre'."}
+```{r scripting-repl, echo=FALSE, fig.cap="Word frequency distribution for Jane Eyre."}
 knitr::include_graphics("figures/scripting/jane-eyre.png")
 ```
 
@@ -1156,11 +1153,19 @@ The script should:
 3. Include an optional `--xlim` argument so that the user can change the x-axis bounds.
 
 When you are done,
-generate a plot of the word counts for *Jane Eyre*:
+generate a plot for *Jane Eyre* by passing the word counts to `plotcounts.py`
+via a CSV file:
 
 ```bash
 $ python bin/plotcounts.py results/jane_eyre.csv
   --outfile results/jane_eyre.png
+```
+
+and by standard input:
+
+```bash
+$ python bin/countwords.py data/jane_eyre.txt | python
+  bin/plotcounts.py --outfile results/jane_eyre.png
 ```
 
 Note:

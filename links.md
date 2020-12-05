@@ -72,6 +72,7 @@
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
 [our-research]: http://ourresearch.org/
+[pandas]: https://pandas.pydata.org/
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pip]: https://pypi.org/project/pip/
