@@ -57,7 +57,7 @@
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
-[irving-figshare]: https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3
+[irving-figshare]: https://doi.org/10.6084/m9.figshare.7575830
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
