@@ -10,34 +10,38 @@ and even if we test thoroughly as described in the previous chapter,
 those programs might still contain bugs.
 We should therefore plan from the start to detect and handle errors.
 
+Something that goes wrong while a program is running
+is sometimes referred to as an exception from normal behavior.
 Generally speaking,
-we distinguish between two types of error.
+we distinguish between two types of errors/exceptions.
 \gref{Internal errors}{internal_error},\index{error!internal}\index{internal error}
 are mistakes in the program itself,
 such as calling a function with `None` instead of a list.
-\gref{External errors}{external_error} are usually caused by interactions
-between the program and the outside world:
+\gref{External errors}{external_error}\index{external error} are usually caused
+by interactions between the program and the outside world:
 a user may mis-type a filename,
 the network might be down,
 and so on.
 
-When a program encounters an internal error,
-we'd typically like it to stop immediately
-and provide an informative error message.
-Unfortunately, one or both of those things doesn't always happen.
-The default error messages for many packages can be very cryptic (especially for non-experts),
-and they can be even more confusing if they aren't triggered right away
-but instead two or three or four steps down the track.
-For external errors,
-we often don't want the program to stop when an error occurs.
+When an internal error occurs,
+the only thing we can do in most cases is report it and halt the program.
+For the function that has been passed `None` instead of a valid list,
+for example,
+the odds are good that one of our data structures is corrupted.
+We can try to guess what the problem is and take corrective action,
+but our guess will often be wrong
+and our attempt to correct the problem might actually make things worse.
+When an external error occurs on the other hand,
+we don't always want the program to stop.
 If a user mis-types her password,
-prompting her to try again would be friendlier than
-requiring her to restart the program.
+handling the error by prompting her to try again
+would be friendlier than halting and requiring her to restart the program.
 
-This chapter looks at how we can catch, classify and handle errors.
+This chapter looks at how we can raise, catch and handle errors.
 We consider how to write useful error messages,
-and how to make our programs log information as they are running
-so that when something goes wrong we can figure out what it was.
+and how to make our programs log those messages
+along with other useful information as they are running,
+so that it's easier to figure out what happened when something goes wrong.
 
 The Zipf's Law project should now include:
 
@@ -672,7 +676,7 @@ By default,
 `basicConfig` re-opens the file we specify in \gref{append mode}{append_mode};\index{append mode}
 we can use `filemode='w'` to overwrite the existing log data.
 Overwriting is useful during debugging,
-but we should think twice before doing in production,
+but we should think twice before doing it in production,
 since the information we throw away often turns out to be
 exactly what we need to find a bug.
 
@@ -768,10 +772,12 @@ ERRORS = {
     'not_csv_suffix' : '{fname}: File must end in .csv',
     }
 
+
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
+
 
 def main(args):
     """Run the command line program."""
@@ -786,6 +792,7 @@ def main(args):
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
     util.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
