@@ -92,6 +92,7 @@
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
+[scipy-optimize]: https://docs.scipy.org/doc/scipy/reference/optimize.html
 [setuptools]: https://setuptools.readthedocs.io/
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
