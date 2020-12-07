@@ -1,4 +1,4 @@
--   Use [setuptools][setuptools] to build and distribute Python packages.
+-   Use [`setuptools`][setuptools] to build and distribute Python packages.
 -   Create a directory named `mypackage` containing a `setup.py` script
     as well as a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.

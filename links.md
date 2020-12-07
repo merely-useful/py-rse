@@ -94,6 +94,7 @@
 [scientific-data]: https://www.nature.com/sdata/
 [scipy-optimize]: https://docs.scipy.org/doc/scipy/reference/optimize.html
 [setuptools]: https://setuptools.readthedocs.io/
+[setuptools-setup-args]: https://packaging.python.org/guides/distributing-packages-using-setuptools/#setup-args
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [sphinx]: https://www.sphinx-doc.org/en/master/
