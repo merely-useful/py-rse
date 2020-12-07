@@ -65,6 +65,9 @@
 [make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [matplotlib-style-tutorial]: https://matplotlib.org/tutorials/introductory/customizing.html
+[meili-grant]: https://www.nsf.gov/awardsearch/showAward?AWD_ID=1228602
+[meili-migration-article]: https://www.fmreview.org/fragilestates/meili
+[meili-review-article]: https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
 [orcid-registration]: https://orcid.org/register
