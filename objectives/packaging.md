@@ -1,10 +1,8 @@
--   Create a Python package using [setuptools][setuptools].
--   Distribute that package via [TestPyPI][testpypi].
--   Install that package and others using [pip][pip].
+-   Create a Python package using [`setuptools`][setuptools].
 -   Create and use a \gref{virtual environment}{virtual_environment} to manage Python package installations.
+-   Install a Python package using [`pip`][pip].
+-   Distribute that package via [TestPyPI][testpypi].
 -   Write a README file for a Python package.
--   Explain the different kinds of audiences for package documentation.
 -   Use [Sphinx][sphinx] to create and preview documentation for a package.
--   Create a GitHub release for a Python package using \gref{semantic versioning}{semantic_versioning}.
 -   Explain where and how to obtain a \gref{DOI}{doi} for a software release.
 -   Describe some academic journals that publish software papers.
