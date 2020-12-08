@@ -57,7 +57,7 @@ A package consists of one or more Python source files\index{Python package!struc
 in a specific directory structure
 combined with installation instructions for the computer.
 Python packages can come from various sources:
-some are distributed with Python itself,
+some are distributed with Python itself as part of the language's [standard library][python-standard-library],
 but anyone can create one,
 and there are thousands that can be downloaded and installed from online repositories.
 
@@ -153,7 +153,7 @@ Here,
 the `.` signals that `utilities` exists in the current directory.
 
 Python has several ways to build an installable package.\index{Python package!building}
-We will show how to use [setuptools][setuptools],\index{setuptools (in Python)}\index{Python!setuptools}
+We will show how to use [`setuptools`][setuptools],\index{setuptools (in Python)}\index{Python!setuptools}
 which is the lowest common denominator
 and will allow everyone,
 regardless of what Python distribution they have,
@@ -224,7 +224,7 @@ Virtual environments also help with package development:
     By installing and running our package in a completely empty environment,
     we can ensure that we're not accidentally relying on other packages being installed.
 
-We can manage virtual environments using [conda][conda] (Appendix \@ref(anaconda)).
+We can manage virtual environments using [`conda`][conda] (Appendix \@ref(anaconda)).
 To create a new virtual environment called `zipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
 and listing `python` as the base to build on:
@@ -239,7 +239,7 @@ Solving environment: done
 
 ## Package Plan ##
 
-  environment location: /home/amira/anaconda3/envs/zipf
+  environment location: /Users/amira/opt/anaconda3/envs/zipf
 
 ...
 
@@ -260,10 +260,10 @@ Executing transaction: done
 #     $ conda deactivate
 ```
 
-`conda` creates the directory `~/anaconda3/envs/zipf`,
+`conda` creates the directory `~/opt/anaconda3/envs/zipf`,
 which contains the subdirectories needed for a minimal Python installation,
 such as `bin` and `lib`.
-It also creates `~/anaconda3/envs/zipf/bin/python`,
+It also creates `~/opt/anaconda3/envs/zipf/bin/python`,
 which checks for packages in these directories before checking the main installation.
 
 We can switch to the `zipf` environment by running:\index{virtual environment (in Python)!switching}
@@ -280,7 +280,7 @@ the `python` command runs the interpreter in `zipf/bin`:
 ```
 
 ```text
-/home/amira/anaconda3/envs/zipf/bin/python
+/Users/amira/opt/anaconda3/envs/zipf/bin/python
 ```
 
 Notice that every shell command displays `(zipf)` when that virtual environment is active.
@@ -292,7 +292,7 @@ using virtual environment names that match the names of your projects
 quickly becomes essential.
 
 We can now install packages safely.
-Everything we install will go into `zipf` virtual environment
+Everything we install will go into the `zipf` virtual environment
 without affecting the underlying Python installation.
 When we are done,
 we can switch back to the default environment using `conda deactivate`:
@@ -320,19 +320,15 @@ $ conda activate zipf
 
 Next,
 we go into the upper `zipf` directory that contains our `setup.py` file
-and install our package using `pip install -e .`.
-The `-e` option indicates that we want to to install the package in "editable" mode,
-which means that any changes we make in the package code are directly available to use
-without having to reinstall the package;
-the `.` means "install from the current directory":
+and install our package:
 
-```text
+```bash
 (zipf)$ cd zipf
 (zipf)$ pip install -e .
 ```
 
 ```text
-Processing /home/amira/proj/py-rse/zipf/zipf
+Processing /Users/amira/proj/py-rse/zipf/zipf
 Building wheels for collected packages: zipf
   Building wheel for zipf (setup.py) ... done
   Created wheel for zipf: filename=zipf-0.1.0-py3-none-any.whl
@@ -343,7 +339,12 @@ Installing collected packages: zipf
 Successfully installed zipf-0.1.0
 ```
 
-If we look in `~/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
+The `-e` option indicates that we want to install the package in "editable" mode,
+which means that any changes we make in the package code are directly available to use
+without having to reinstall the package;
+the `.` means "install from the current directory".
+
+If we look in `~/opt/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
 we can see the `zipf` package beside all the other locally-installed packages.
 If we try to use the package at this stage,
 though,
@@ -380,7 +381,7 @@ because it will be installed as a dependency for `pandas` and `scipy`.\index{dep
 > It is good practice to specify the versions of our dependencies
 > and even better to specify version ranges.
 > For example, if we have only tested our package on pandas version 1.0.1,
-> we could put `pandas==1.0.1` or `pandas>=1.0.1` instead of just `pandas`
+> we could put `pandas==1.1.2` or `pandas>=1.1.2` instead of just `pandas`
 > in the list argument passed to the `install_requires` parameter.
 
 We can now install our package and all its dependencies in a single command:
@@ -390,7 +391,7 @@ We can now install our package and all its dependencies in a single command:
 ```
 
 ```text
-Obtaining file:///home/amira/zipf
+Obtaining file:///Users/amira/zipf
 Collecting matplotlib
   Downloading matplotlib-3.2.1-cp37-cp37m-manylinux1_x86_64.whl (12.4 MB)
      |████████████████████████████████| 12.4 MB 1.9 MB/s
@@ -401,7 +402,7 @@ Collecting scipy
   Downloading scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
      |████████████████████████████████| 26.1 MB 11.4 MB/s
 Requirement already satisfied: pyyaml in
-/home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages
+/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
 (from zipf==0.1) (5.3.1)
 Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
   Using cached pyparsing-2.4.6-py2.py3-none-any.whl (67 kB)
@@ -416,10 +417,10 @@ Collecting numpy>=1.11
   Downloading numpy-1.18.2-cp37-cp37m-manylinux1_x86_64.whl (20.2 MB)
      |████████████████████████████████| 20.2 MB 16.3 MB/s
 Requirement already satisfied: pytz>=2017.2 in
-  /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages
+  /Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
   (from pandas->zipf==0.1) (2019.3)
 Requirement already satisfied: six>=1.5 in
-  /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages
+  /Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
   (from python-dateutil>=2.1->matplotlib->zipf==0.1) (1.14.0)
 Installing collected packages: pyparsing, python-dateutil,
   kiwisolver, cycler, numpy, matplotlib, pandas, scipy, zipf
@@ -447,7 +448,7 @@ utilities.collection_to_csv(...)
 
 However,
 the useful command-line scripts that we used to count and plot word counts
-are no longer accessible directly from the terminal.
+are no longer accessible directly from the Unix shell.
 Fortunately,
 the `setuptools` package allows us to install programs along with the package.\index{Python package!installing programs}
 These programs are placed beside those of other packages.
@@ -479,7 +480,7 @@ setup(
 The right side of the `=` operator is the location of a function,
 written as `package.module:function`;
 the left side is the name we want to use to call this function from the command line.
-In this case we want to call each module's `main`,
+In this case, we want to call each module's `main` function,
 which as it stands requires an input argument `args`
 containing the command-line arguments given by the user (Section \@ref(scripting-options)).
 For example,
@@ -505,7 +506,7 @@ if __name__ == '__main__':
 ```
 
 We can't pass any arguments to `main` when we define entry points in our `setup.py` file,
-so we need to change this slightly:
+so we need to change our script slightly:
 
 ```python
 def parse_command_line():
@@ -532,6 +533,9 @@ if __name__ == '__main__':
     main()
 ```
 
+The new `parse_command_line` function handles the command line arguments,
+so that `main()` no longer requires any input arguments.
+
 Once we have made the corresponding change in `collate.py` and `plotcounts.py`,
 we can re-install our package:
 
@@ -542,11 +546,11 @@ we can re-install our package:
 ```text
 Defaulting to user installation because normal site-packages is
   not writeable
-Obtaining file:///home/amira/zipf
+Obtaining file:///Users/amira/zipf
 Requirement already satisfied: matplotlib in
   /usr/lib/python3.8/site-packages (from zipf==0.1) (3.2.1)
 Requirement already satisfied: pandas in
-  /home/amira/.local/lib/python3.8/site-packages
+  /Users/amira/.local/lib/python3.8/site-packages
   (from zipf==0.1) (1.0.3)
 Requirement already satisfied: scipy in
   /usr/lib/python3.8/site-packages (from zipf==0.1) (1.4.1)
@@ -588,7 +592,7 @@ rather than re-fetching them from online repositories.
 (If we hadn't used the `-e` option to make the package immediately editable,
 we would have to uninstall it before reinstalling it during development.)
 
-We can now use our commands directly from the terminal
+We can now use our commands directly from the Unix shell
 without writing the full path to the file
 and without prefixing it with `python`.
 
@@ -620,7 +624,7 @@ these tools copy packages into the Python installation's `site-packages` directo
 but this is not the only place Python searches.
 Just as the `PATH` environment in the shell contains a list of directories
 that the shell searches for programs it can execute (Section \@ref(bash-advanced-vars)),
-the Python variable `sys.path` contains a list of the directories it searches.
+the Python variable `sys.path` contains a list of the directories it searches (Section \@ref(testing-unit)).
 We can look at this list inside the interpreter:
 
 ```python
@@ -630,12 +634,12 @@ sys.path
 
 ```
 ['',
-'/home/amira/anaconda3/envs/zipf/lib/python37.zip',
-'/home/amira/anaconda3/envs/zipf/lib/python3.7',
-'/home/amira/anaconda3/envs/zipf/lib/python3.7/lib-dynload',
-'/home/amira/.local/lib/python3.7/site-packages',
-'/home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages',
-'/home/amira/zipf']
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python37.zip',
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7',
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/lib-dynload',
+'/Users/amira/.local/lib/python3.7/site-packages',
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages',
+'/Users/amira/zipf']
 ```
 
 The empty string at the start of the list means "the current directory".
@@ -701,7 +705,7 @@ the standard repository for Python packages.
 Before doing that,
 though,
 we can put `zipf` on [TestPyPI][testpypi],
-which lets us test distribution of our package\index{Python package!testing distribution}
+which lets us test the distribution of our package\index{Python package!testing distribution}
 without having things appear in the main PyPI repository.
 We must have an account,
 but they are free to create.
@@ -714,14 +718,24 @@ $ pip install twine
 ```
 
 Following the [Python Packaging User Guide][pypi-user-guide],
-we can now upload our distributions from the `dist/` folder
+we can now register for an account at the [TestPyPI website][testpypi]
+and then upload our distributions from the `dist/` folder
 using the `--repository` option to specify the TestPyPI repository:
 
 ```bash
 $ twine upload --repository testpypi dist/*
+```
+
+```text
+Uploading distributions to https://test.pypi.org/legacy/
+```
+
+```bash
 Enter your username: amirakhan
 Enter your password: *********
-Uploading distributions to https://test.pypi.org/legacy/
+```
+
+```text
 Uploading zipf-0.1.0.tar.gz
 100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
 
@@ -732,6 +746,11 @@ https://test.pypi.org/project/zipf/0.1/
 ```{r packaging-testpypi, echo=FALSE, fig.cap="Our new project on TestPyPI."}
 knitr::include_graphics("figures/packaging/testpypi.png")
 ```
+and view the results at the new test project webpage
+(Figure \@ref(fig:packaging-testpypi)).\index{Python package!project page}\index{project page (of Python package)}
+In the exercises,
+we will explore additional metadata that can be added to `setup.py`
+so that it appears on the project webpage.
 
 We have now uploaded both types of distribution,
 allowing people to use the wheel distribution if their system supports it
@@ -743,7 +762,8 @@ and installing our package from TestPyPI:
 ```bash
 $ conda create -n zipf-test
 $ conda activate zipf-test
-(zipf-test)$ pip install --index-url https://test.pypi.org/simple zipf
+(zipf-test)$ pip install --index-url
+  https://test.pypi.org/simple zipf
 ```
 
 ```text
@@ -797,8 +817,7 @@ Successfully installed zipf-0.1.0
 Once again,
 `pip` takes advantage of the fact that some packages already existing on our system
 and doesn't download them again.
-Once we are happy with how our package appears in TestPyPI
-(including its [project page][zipf-project-page]),\index{Python package!project page}\index{project page (of Python package)}
+Once we are happy with our package at TestPyPI,
 we can go through the same process to put it on the main [PyPI][pypi] repository.
 
 > **conda installation packages**
@@ -876,9 +895,9 @@ section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented:
 
 ```markdown
-The ``zipf`` package tallies the occurrences of words in text files
-and plots each word's rank versus its frequency
-together with a line for the theoretical distribution for Zipf's Law.
+The ``zipf`` package tallies the occurrences of words in text
+files and plots each word's rank versus its frequency together 
+with a line for the theoretical distribution for Zipf's Law.
 
 Motivation
 ----------
@@ -893,7 +912,8 @@ frequent word, etc."`
 — `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
 
 Many books are available to download in plain text format
-from sites such as `Project Gutenberg <https://www.gutenberg.org/>`_,
+from sites such as
+`Project Gutenberg <https://www.gutenberg.org/>`_,
 so we created this package to qualitatively explore how well
 different books align with the word frequencies predicted by
 Zipf's Law.
@@ -1143,7 +1163,7 @@ Read The Docs will then build the documentation
 and host the resulting files.
 
 For this to work,
-all of the source files
+all of the source files generated by Sphinx
 need to be checked into your GitHub repository:
 in our case,
 this means `docs/source/*.rst`,
@@ -1269,11 +1289,14 @@ if only in small ways.
 
 ## Exercises
 
-### Fixing warnings {#packaging-ex-fixing-warnings}
+### Package metadata {#packaging-ex-metadata}
 
-When we ran `python setup.py sdist` in Section \@ref(packaging-distribute),
-`setup.py` warned us about some missing metadata.
-Review its output and then fix the problem.
+In a number of places on our TestPyPI webpage,
+it says that no project description was provided (Figure \@ref(fig:packaging-testpypi)).
+How could we edit our `setup.py` file to include a description?
+What other metadata would you add?
+
+Hint: The [`setup() args` documentation][setuptools-setup-args] might be useful.
 
 ### Separating requirements {#packaging-ex-separating-requirements}
 
@@ -1290,16 +1313,6 @@ The [Journal of Open Source Software][theoj] has a [checklist][theoj-checklist]
 that reviewers must follow when assessing a submitted software paper.
 Run through the checklist (skipping the criteria related to the software paper)
 and see how the Zipf's Law package would rate on each criteria.
-
-### Staying up to date {#packaging-ex-up-to-date}
-
-1.  Run `pip list` to get a list of the Python packages you have installed.
-    How many are there?
-
-2.  Run `pip list -o` to get a list of packages that are out of date.
-    (This may take a few seconds.)
-    How many are there,
-    and how can you update them?
 
 ### Packaging quotations {#packaging-ex-pratchett}
 

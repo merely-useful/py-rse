@@ -10,7 +10,6 @@
 [blab-h3n2-reassortment]: https://github.com/blab/h3n2-reassortment
 [book-repo]: https://github.com/merely-useful/py-rse/
 [borstlab-reversephi]: https://github.com/borstlab/reversephi_paper/
-[capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [carpentries-install-instructions]: https://carpentries.github.io/workshop-template/#setup
@@ -29,7 +28,6 @@
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [drake]: https://ropenscilabs.github.io/drake-manual/
 [dryad]: https://datadryad.org/
-[dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [explainshell]: http://explainshell.com
 [fair-questionnaire]: https://ardc.edu.au/resources/working-with-data/fair-data/fair-self-assessment-tool
@@ -59,7 +57,7 @@
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
-[irving-figshare]: https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3
+[irving-figshare]: https://doi.org/10.6084/m9.figshare.7575830
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -67,6 +65,9 @@
 [make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [matplotlib-style-tutorial]: https://matplotlib.org/tutorials/introductory/customizing.html
+[meili-grant]: https://www.nsf.gov/awardsearch/showAward?AWD_ID=1228602
+[meili-migration-article]: https://www.fmreview.org/fragilestates/meili
+[meili-review-article]: https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
 [orcid-registration]: https://orcid.org/register
@@ -74,6 +75,7 @@
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
 [our-research]: http://ourresearch.org/
+[pandas]: https://pandas.pydata.org/
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pip]: https://pypi.org/project/pip/
@@ -93,15 +95,16 @@
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
+[scipy-optimize]: https://docs.scipy.org/doc/scipy/reference/optimize.html
 [setuptools]: https://setuptools.readthedocs.io/
+[setuptools-setup-args]: https://packaging.python.org/guides/distributing-packages-using-setuptools/#setup-args
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [sphinx]: https://www.sphinx-doc.org/en/master/
-[srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-git]: http://swcarpentry.github.io/git-novice/
-[swc-make]: https://github.com/swcarpentry/make-novice
+[swc-make]: http://swcarpentry.github.io/make-novice/
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
 [theoj]: https://joss.theoj.org/
