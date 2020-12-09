@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-12-02"
+date: "2020-12-09"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -50,8 +50,8 @@ Our approach to research software engineering is based on three related concepts
     with access to the data and software can feasibly reproduce results, both to
     check them and to build on them. 
 
--   \gref{Sustainable}{sustainable_software} software: The ease with which to
-    maintain and extend it rather than to replace it.  Sustainability isn't
+-   \gref{Sustainable software}{sustainable_software}: The ease with which to
+    maintain and extend it rather than to replace it. Sustainability isn't
     just a property of the software: it also depends on the skills and culture
     of its users.
 
@@ -111,7 +111,7 @@ Amira Khan
     but has no formal training in programming.
     Amira would like to tidy up the scripts, data sets, and reports she has created
     in order to share them with her colleagues.
-    These lessons will show her how to do this and what "done" looks like.
+    These lessons will show her how to do this.
 
 Jun Hsu
 :   completed an [Insight Data Science][insight] fellowship last year after doing a PhD in Geology
@@ -147,17 +147,16 @@ in any arbitrary body of text.
 In the process of writing and publishing a Python package to verify Zipf's Law,
 we will show you how to:
 
+-   Organize small and medium-sized data science projects.
 -   Use the Unix shell to efficiently manage your data and code.
 -   Write Python programs that can be used on the command line.
--   Write and review code to make it readable as well as correct.
 -   Use Git and GitHub to track and share your work.
 -   Work productively in a small team where everyone is welcome.
 -   Use Make to automate complex workflows.
 -   Enable users to configure your software without modifying it directly.
--   Find, handle, and fix errors in your code.
 -   Test your software and know which parts have not yet been tested.
+-   Find, handle, and fix errors in your code.
 -   Publish your code and research in open and reproducible ways.
--   Organize small and medium-sized data science projects.
 -   Create Python packages that can be installed in standard ways.
 
 ## Using this Book  {#intro-using}
@@ -186,7 +185,7 @@ and key points (Appendix \@ref(keypoints)) for each chapter.
 
 ## Contributing and Re-Use
 
-The source for the book is found on the [`py-rse` GitHub repository](https://github.com/merely-useful/py-rse) and
+The source for the book can be found at the [`py-rse` GitHub repository](https://github.com/merely-useful/py-rse) and
 any corrections, additions, or contributions are very welcome.
 Everyone whose work is included will be credited in the acknowledgements.
 Check out our
@@ -208,7 +207,7 @@ as long as there is attribution to this source.
 ## Acknowledgments {#intro-ack}
 
 This book owes its existence to
-everyone we met through [the Carpentries][carpentries].
+everyone we met through [The Carpentries][carpentries].
 We are also grateful to [Insight Data Science][insight] for sponsoring the early stages of this work,
 to the authors of @Nobl2009, @Hadd2010, @Wils2014, @Scop2015, @Tasc2017, @Wils2017, @Brow2018, @Deve2018, @Shol2019, @Wils2019
 and to everyone who has contributed, including Madeleine Bonsma-Fisher,
@@ -220,21 +219,21 @@ and Elizabeth Wickes.
 
 -   Many of the explanations and exercises in Chapters \@ref(bash-basics)--\@ref(bash-advanced)
     have been adapted from Software Carpentry's lesson
-    [The Unix Shell][swc-shell-novice].
+    [*The Unix Shell*][swc-shell-novice].
 
 -   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
     have been adapted from Software Carpentry's lesson
-    [Version Control with Git][swc-git] and an
+    [*Version Control with Git*][swc-git] and an
     [adaptation/extension of that lesson][uwm-git-lesson] maintained by
     the University of Wisconsin-Madison Data Science Hub.
 
--   Chapter \@ref(automate) is based on the [Software Carpentry lesson on Make][swc-make]
-    maintained by [Gerard Capes][capes-gerard]
-    and on [Jonathan Dursi][dursi-jonathan]'s
-    [introduction to pattern rules][dursi-pattern-rules].
+-   Chapter \@ref(automate) is based on Software Carpentry's lesson
+    [*Automation and Make*][swc-make]
+    and on Jonathan Dursi's
+    [*Introduction to Pattern Rules*][dursi-pattern-rules].
 
--   Chapter \@ref(packaging) is based in part on [Python 102][python-102]
-    by [Ashwin Srinath][srinath-ashwin].
+-   Chapter \@ref(packaging) is based in part on [*Python 102*][python-102]
+    by Ashwin Srinath.
 
 ## Dedications
 
@@ -251,7 +250,7 @@ To my parents Judy and John
 who taught me to love books and everything I can learn from them.  
 --- Kate  
    
-To Joshua.
+To Joshua.  
 --- Charlotte  
    
 To Brent Gorda  
@@ -324,7 +323,7 @@ zipf/
 │   ├── book_summary.sh
 │   ├── collate.py
 │   ├── countwords.py
-|   └── ...
+│   └── ...
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
@@ -336,7 +335,7 @@ zipf/
 │   ├── collated.csv
 │   ├── dracula.csv
 │   ├── dracula.png
-|   └── ...
+│   └── ...
 └── ...
 ```
 
@@ -356,7 +355,7 @@ open source or otherwise:
 
 -   `CONTRIBUTING` explains how to contribute to the project. We'll add it in Section \@ref(teams-documentation).
 
--   `CONDUCT` is the project's code of conduct. We'll add it in Section \@ref(teams-coc).
+-   `CONDUCT` is the project's Code of Conduct. We'll add it in Section \@ref(teams-coc).
 
 -   `CITATION` explains how to cite the software. We'll add it in Section \@ref(packaging-software-journals).
 
@@ -401,15 +400,17 @@ the directories in the repository's root are organized according to purpose:
 This structure works well for many computational research projects and
 we encourage its use beyond just this book.
 We will add some more folders and files not directly addressed by @Nobl2009
-when we talk about provenance (Chapter \@ref(provenance)),
-testing (Chapter \@ref(testing)),
+when we talk about testing (Chapter \@ref(testing)),
+provenance (Chapter \@ref(provenance)),
 and packaging (Chapter \@ref(packaging)).
 
 ## Downloading the Data {#getting-started-download-data}
 
 The data files used in the book are archived
 at an online repository called Figshare (which we discuss in detail in Section \@ref(provenance-data-where))
-and can be accessed at <https://doi.org/10.6084/m9.figshare.13040516>.
+and can be accessed at:
+
+<https://doi.org/10.6084/m9.figshare.13040516>
 
 We can download a zip file containing the data files by clicking
 "download all" at this URL
@@ -438,12 +439,15 @@ In order to conduct our analysis we need to install the following software:
 1. A \gref{Bash shell}{shell}
 2. \gref{Git}{git} version control
 3. A text editor
-4 [Python 3][python] (via the Anaconda distribution)
+4. [Python 3][python] (via the Anaconda distribution)
 5. [GNU Make][gnu-make]
 
 Comprehensive software installation instructions for Windows, Mac, and Linux operating systems
 (with video tutorials) are maintained by [The Carpentries][carpentries]
-as part of their workshop website template at <https://carpentries.github.io/workshop-template/#setup>.
+as part of their workshop website template at:
+
+<https://carpentries.github.io/workshop-template/#setup>
+
 We can follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
 
 You can check if Make is already on your computer by typing `make -v` into the Bash shell.
@@ -482,7 +486,7 @@ before progressing to the next chapter.
 
 - Make tidiness a habit, rather than cleaning up your project files later.
 - Include a few standard files in all your projects, such as README, LICENSE, CONTRIBUTING, CONDUCT and CITATION.
-- Put runnable in a `bin/` directory.
+- Put runnable code in a `bin/` directory.
 - Put raw/original data in a `data/` directory and never modify it.
 - Put results in a `results/` directory. This includes cleaned-up data and figures (i.e. everything created using what's in `bin` and `data`).
 - Put documentation and manuscripts in a `docs/` directory.
@@ -577,7 +581,7 @@ However,
 different shells may use a different symbol:
 in particular,
 the `zsh` shell that is the default on newer version of MacOS uses `%`.
-As we'll see in Chapter \@ref(bash-advanced),
+As we'll see in Section \@ref(bash-advanced-vars),
 we can customize the prompt to give us more information.
 
 > **Don't Type the Dollar Sign**
@@ -643,7 +647,7 @@ it looks like Figure \@ref(fig:bash-basics-filesystem).
 </div>
 
 At the top is the \gref{root directory}{root_directory} that holds everything else,\index{root directory}
-which we can refer to using a slash character, `/` on its own.
+which we can refer to using a slash character `/` on its own.
 Inside that directory are several other directories,
 including `bin` (where some built-in programs are stored),
 `data` (for miscellaneous data files),
@@ -691,9 +695,9 @@ $ ls
 ```
 
 ```text
-Applications Documents    Library      Music      Public
-todo.txt     Desktop      Downloads    Movies     Pictures
-zipf
+Applications   Downloads     Music        opt
+Desktop        Library       Pictures     todo.txt
+Documents      Movies        Public       zipf
 ```
 
 Again,
@@ -706,7 +710,7 @@ Options are exactly like arguments to a function in R or Python;
 in this case,
 `-F` tells `ls` to decorate its output to show what things are.
 A trailing `/` indicates a directory,
-while a trailing `*` tell us something is a runnable program.
+while a trailing `*` tells us something is a runnable program.
 Depending on our setup,
 the shell might also use colors to indicate whether each entry is a file or directory.
 
@@ -715,9 +719,9 @@ $ ls -F
 ```
 
 ```text
-Applications/   Documents/    Library/      Music/     Public/
-todo.txt        Desktop/      Downloads/    Movies/    Pictures/
-zipf/
+Applications/   Downloads/     Music/        opt/
+Desktop/        Library/       Pictures/     todo.txt
+Documents/      Movies/        Public/       zipf/
 ```
 
 Here,
@@ -799,9 +803,9 @@ $ ls -F
 ```
 
 ```text
-Applications/   Documents/    Library/      Music/     Public/
-todo.txt        Desktop/      Downloads/    Movies/    Pictures/
-zipf/
+Applications/   Downloads/     Music/        opt/
+Desktop/        Library/       Pictures/     todo.txt
+Documents/      Movies/        Public/       zipf/
 ```
 
 If we want to see what's in the `zipf` directory
@@ -937,9 +941,10 @@ $ ls -F -a
 ```
 
 ```text
-./        Applications/   Documents/    Library/    Music/
-Public/   todo.txt        ../           Desktop/    Downloads/
-Movies/   Pictures/       zipf/
+./              Documents/     Music/        todo.txt
+../             Downloads/     Pictures/     zipf/
+Applications/   Library/       Public/ 
+Desktop/        Movies/        opt/
 ```
 
 The output also shows another special directory called `.` (a single period),\index{path!.}\index{. (current working directory)}
@@ -1023,9 +1028,9 @@ $ ls ~
 ```
 
 ```text
-Applications    Documents    Library       Music      Public
-todo.txt        Desktop      Downloads     Movies     Pictures
-zipf
+Applications   Downloads     Music        opt
+Desktop        Library       Pictures     todo.txt
+Documents      Movies        Public       zipf
 ```
 
 (`ls` doesn't show any trailing slashes here because we haven't used `-F`.)
@@ -1060,10 +1065,10 @@ To create a new directory,
 we use the command `mkdir` (short for **m**a**k**e **d**irectory):\index{Unix commands!mkdir}
 
 ```bash
-$ mkdir analysis
+$ mkdir docs
 ```
 
-Since `analysis` is a relative path
+Since `docs` is a relative path
 (i.e., does not have a leading slash)
 the new directory is created below the current working directory:
 
@@ -1072,13 +1077,12 @@ $ ls -F
 ```
 
 ```text
-analysis/  data/
-
+data/  docs/
 ```
 
 Using the shell to create a directory is no different than using a graphical tool.
 If we look at the current directory with our computer's file browser
-we will see the `analysis` directory there too.
+we will see the `docs` directory there too.
 The shell and the file explorer are two different ways of interacting with the files;
 the files and directories themselves are the same.
 
@@ -1106,19 +1110,19 @@ the files and directories themselves are the same.
 > we can surround the name in quotes (`""`).
 > For example, `ls "My Thesis"` will work where `ls My Thesis` does not.
 
-Since we just created the `analysis` directory,
+Since we just created the `docs` directory,
 `ls` doesn't display anything when we ask for a listing of its contents:
 
 ```bash
-$ ls -F analysis
+$ ls -F docs
 ```
 
-Let's change our working directory to `analysis` using `cd`,
+Let's change our working directory to `docs` using `cd`,
 then use a very simple text editor called \gref{Nano}{nano_editor} to create a file called `draft.txt`\index{Nano editor}
 (Figure \@ref(fig:bash-basics-nano)):
 
 ```bash
-$ cd analysis
+$ cd docs
 $ nano draft.txt
 ```
 
@@ -1212,21 +1216,21 @@ Let's go back to our `zipf` directory:
 cd ~/zipf
 ```
 
-The `analysis` directory contains a file called `draft.txt`.
+The `docs` directory contains a file called `draft.txt`.
 That isn't a particularly informative name,
 so let's change it using `mv` (short for **m**o**v**e):\index{Unix commands!mv}
 
 ```bash
-$ mv analysis/draft.txt analysis/prior-work.txt
+$ mv docs/draft.txt docs/prior-work.txt
 ```
 
 The first argument tells `mv` what we are "moving",
 while the second is where it's to go.
-"Moving" `analysis/draft.txt` to `analysis/prior-work.txt`
+"Moving" `docs/draft.txt` to `docs/prior-work.txt`
 has the same effect as renaming the file:
 
 ```bash
-$ ls analysis
+$ ls docs
 ```
 
 ```text
@@ -1248,13 +1252,13 @@ In this case,
 the directory we want is the special name `.` that we mentioned earlier:
 
 ```bash
-$ mv analysis/prior-work.txt .
+$ mv docs/prior-work.txt .
 ```
 
-`ls` now shows us that `analysis` is empty:
+`ls` now shows us that `docs` is empty:
 
 ```bash
-$ ls analysis
+$ ls docs
 ```
 
 and that our current directory now contains our file:
@@ -1264,7 +1268,7 @@ $ ls
 ```
 
 ```text
-analysis/  data/  prior-work.txt
+data/  docs/  prior-work.txt
 ```
 
 If we only want to check that the file exists,
@@ -1285,19 +1289,19 @@ The `cp` command **c**o**p**ies files.\index{Unix commands!cp}
 It works like `mv` except it creates a file instead of moving an existing one:
 
 ```bash
-$ cp prior-work.txt analysis/section-1.txt
+$ cp prior-work.txt docs/section-1.txt
 ```
 
-We can check that`cp` did the right thing
+We can check that `cp` did the right thing
 by giving `ls` two arguments
 to ask it to list two things at once:
 
 ```bash
-$ ls prior-work.txt analysis/section-1.txt
+$ ls prior-work.txt docs/section-1.txt
 ```
 
 ```text
-analysis/section-1.txt  prior-work.txt
+docs/section-1.txt  prior-work.txt
 ```
 
 Notice that `ls` shows the output in alphabetical order.
@@ -1306,13 +1310,13 @@ If we leave off the second filename and ask it to show us a file and a directory
 it lists them one by one:
 
 ```bash
-$ ls prior-work.txt analysis
+$ ls prior-work.txt docs
 ```
 
 ```text
 prior-work.txt
 
-analysis:
+docs:
 section-1.txt
 ```
 
@@ -1321,7 +1325,7 @@ If we use `cp` on its own,
 we get an error message:
 
 ```bash
-$ cp analysis backup
+$ cp docs backup
 ```
 
 ```text
@@ -1332,17 +1336,17 @@ If we really want to copy everything,
 we must give `cp` the `-r` option (meaning \gref{recursive}{recursion}):
 
 ```bash
-$ cp -r analysis backup
+$ cp -r docs backup
 ```
 
 Once again we can check the result with `ls`:
 
 ```bash
-$ ls analysis backup
+$ ls docs backup
 ```
 
 ```text
-analysis/:
+docs/:
 section-1.txt
 
 backup/:
@@ -1394,18 +1398,18 @@ In a half-hearted attempt to stop us from erasing things accidentally,
 `rm` refuses to delete directories:
 
 ```bash
-$ rm analysis
+$ rm docs
 ```
 
 ```text
-rm: analysis: is a directory
+rm: docs: is a directory
 ```
 
 We can tell `rm` we really want to do this
 by giving it the recursive option `-r`:
 
 ```bash
-$ rm -r analysis
+$ rm -r docs
 ```
 
 `rm -r` should be used with great caution:
@@ -1415,7 +1419,7 @@ to get `rm` to ask us to confirm each deletion.
 As a halfway measure,
 we can use `-v` (for **v**erbose)
 to get `rm` to print a message for each file it deletes.
-This options works the same way with `mv` and `cp`.
+This option works the same way with `mv` and `cp`.
 
 ## Wildcards {#bash-basics-wildcard}
 
@@ -1450,7 +1454,7 @@ $ wc data/moby_dick.txt
 > if two words are connected by a long dash---like "dash" and "like"
 > in this sentence---then `wc` will count them as one word.
 
-We could run `wc` more times to count find out how many lines there are in the other files,
+We could run `wc` more times to find out how many lines there are in the other files,
 but that would be a lot of typing
 and we could easily make a mistake.
 We can't just give `wc` the name of the directory as we do with `ls`:
@@ -1626,8 +1630,8 @@ is unlikely to think to look for `wc`.
 The original Unix shell is celebrating its fiftieth anniversary.
 Its commands may be cryptic,
 but few programs have remained in daily use for so long.
-The next chapter will explore how we can use the tools it gives us
-to create new tools of our own.
+The next chapter will explore how we can combine and repeat commands
+in order to create powerful, efficient workflows.
 
 ## Exercises {#bash-basics-exercises}
 
@@ -1658,7 +1662,7 @@ format to view timestamps.
 
 ### Absolute and relative paths {#bash-basics-ex-paths}
 
-Starting from a hypothetical directory located at `/Users/amira/data`,
+Starting from `/Users/amira/data`,
 which of the following commands could Amira use to navigate to her home directory,
 which is `/Users/amira`?
 
@@ -1714,37 +1718,40 @@ When might you want to create a file this way?
 ### Using `rm` safely {#bash-basics-ex-safe-rm}
 
 What would happen if you executed `rm -i my_file.txt`
-on a hypothetical file?
+on the file created in the previous exercise?
 Why would we want this protection when using `rm`?
 
 ### Moving to the current folder {#bash-basics-ex-move-dot}
 
 After running the following commands,
-Amira realizes that she put the (hypothetical) files `chapter1.dat` and `chapter2.dat` into the wrong folder:
+Amira realizes that she put the (hypothetical) files `chapter1.txt` and `chapter2.txt` into the wrong folder:
 
 ```bash
 $ ls -F
 ```
 ```text
-  processed/ raw/
+  data/  docs/
 ```
 
 ```bash
-$ ls -F processed
+$ ls -F data
 ```
 ```text
-  chapter1.dat chapter2.dat appendix1.dat appendix2.dat
+README.md			frankenstein.txt		sherlock_holmes.txt
+chapter1.txt		jane_eyre.txt			time_machine.txt
+chapter2.txt		moby_dick.txt
+dracula.txt			sense_and_sensibility.txt
 ```
 
 ```bash
-$ cd raw/
+$ cd docs
 ```
 
 Fill in the blanks to move these files to the current folder
 (i.e., the one she is currently in):
 
 ```bash
-$ mv ___/chapter1.dat  ___/chapter2.dat ___
+$ mv ___/chapter1.txt  ___/chapter2.txt ___
 ```
 
 ### Renaming files {#bash-basics-ex-renaming-files}
@@ -1795,7 +1802,7 @@ $ ls
 
 ### Copy with multiple filenames {#bash-basics-ex-copy-multi}
 
-This exercises explores how `cp` responds when attempting to copy multiple things.
+This exercise explores how `cp` responds when attempting to copy multiple things.
 
 What does `cp` do when given several filenames followed by a directory name?
 
@@ -1863,7 +1870,7 @@ structure from your previous experiment so you can add new data.
 Assume that the previous experiment is in a folder called `2016-05-18`,
 which contains a `data` folder that in turn contains folders named `raw` and
 `processed` that contain data files.  The goal is to copy the folder structure
-of the `2016-05-18-data` folder into a folder called `2016-05-20`
+of `2016-05-18/data` into a folder called `2016-05-20`
 so that your final directory structure looks like this:
 
 	2016-05-20/
@@ -1920,11 +1927,7 @@ Imagine you forgot about this.
     that do not use the `[]` syntax? *Hint*: You may need more than one
     expression.
 
-2.  The expression that you found and the expression from the lesson match the
-    same set of files in this example. What is the small difference between the
-    outputs?
-
-3.  Under what circumstances would your new expression produce an error message
+2.  Under what circumstances would your new expression produce an error message
     where the original one would not?
 
 ### Removing unneeded files {#bash-basics-ex-remove-unneeded}
@@ -1959,7 +1962,8 @@ explain in plain language what (hypothetical) files the expression `novel-????-[
 -   An \gref{absolute path}{absolute_path} specifies a location from the root of the filesystem.
 -   A \gref{relative path}{relative_path} specifies a location in the filesystem starting from the current directory.
 -   `cd` changes the current working directory.
--   `..` means the \gref{parent directory}{parent_directory}; `.` on its own means the current directory.
+-   `..` means the \gref{parent directory}{parent_directory}.
+-   `.` on its own means the current directory.
 -   `mkdir` creates a new directory.
 -   `cp` copies a file.
 -   `rm` removes (deletes) a file.
@@ -2040,15 +2044,6 @@ instead,
 everything that would have appeared has gone into the file `lengths.txt`.
 The shell creates this file if it doesn't exist,
 or overwrites it if it already exists.
-`ls lengths.txt` confirms that the file exists:
-
-```bash
-$ ls lengths.txt
-```
-
-```text
-lengths.txt
-```
 
 We can print the contents of `lengths.txt` using `cat`,\index{Unix commands!cat}
 which is short for con**cat**enate
@@ -3062,12 +3057,12 @@ before running them. Why do you think it does this?
 -   `tail` displays the last few lines of its input.
 -   `sort` sorts its inputs.
 -   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
--   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
+-   Use `history` to display recent commands and `!number` to repeat a command by number.
 -   Every process in Unix has an input channel called \gref{standard input}{stdin}
     and an output channel called \gref{standard output}{stdin}.
 -   `>` redirects a command's output to a file, overwriting any existing content.
 -   `>>` appends a command's output to a file.
--   `<` operator redirects input to a command
+-   `<` operator redirects input to a command.
 -   A \gref{pipe}{pipe_shell} `|` sends the output of the command on the left to the input of the command on the right.
 -   A `for` loop repeats commands once for every thing in a list.
 -   Every `for` loop  must have a variable to refer to the thing it is currently operating on
@@ -3271,7 +3266,7 @@ $ bash book_summary.sh ../data/moby_dick.txt
 ```
 
 then `$1` is assigned `../data/moby_dick.txt`
-and get exactly the same output as before.
+and we get exactly the same output as before.
 If we give the script a different filename:
 
 ```bash
@@ -3465,7 +3460,7 @@ To restrict matching to lines containing `on` by itself,
 we can give `grep` the `-w` option (for "match words"):
 
 ```bash
-$ grep -w on data/sherlock_holmes.txt
+$ grep -w on data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
@@ -3505,7 +3500,7 @@ If we want to give `grep` both words as a single argument,
 we must wrap them in quotation marks as before:
 
 ```bash
-$ grep "on the" data/sherlock_holmes.txt
+$ grep "on the" data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
@@ -3533,7 +3528,7 @@ One of the most useful options for `grep` is `-n`,
 which numbers the lines that match the search:
 
 ```bash
-$ grep -n "on the" data/sherlock_holmes.txt
+$ grep -n "on the" data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
@@ -3575,7 +3570,7 @@ to invert the match---i.e.,
 to print lines that *don't* match the pattern:
 
 ```bash
-$ grep -i -n -v the data/sherlock_holmes.txt
+$ grep -i -n -v the data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
@@ -3623,7 +3618,7 @@ For example,
 this command finds lines that start with the letter 'T':
 
 ```bash
-$ grep -E "^T" data/sherlock_holmes.txt
+$ grep -E "^T" data/sherlock_holmes.txt | head -n 5
 ```
 
 ```text
@@ -3894,7 +3889,7 @@ HOSTNAME=TURING
 HOSTTYPE=i686
 NUMBER_OF_PROCESSORS=4
 OS=Windows_NT
-PATH=/Users/amira/bin:/usr/local/git/bin:/usr/bin:
+PATH=/Users/amira/opt/anaconda3/bin:/usr/bin:
   /bin:/usr/sbin:/sbin:/usr/local/bin
 PWD=/Users/amira
 UID=1000
@@ -3941,8 +3936,7 @@ To show how this works,
 here are the components of `PATH` listed one per line:
 
 ```bash
-/Users/amira/bin
-/usr/local/git/bin
+/Users/amira/opt/anaconda3/bin
 /usr/bin
 /bin
 /usr/sbin
@@ -3991,9 +3985,8 @@ $ echo $HOME
 As with loop variables (Section \@ref(bash-tools-loops)),
 the dollar sign before the variable names tells the shell
 that we want the variable's value.
-This works just like wildcard expansion
-the shell replaces the variable's name with its value
-*before* running the command we've asked for.
+This works just like wildcard expansion---the shell replaces
+the variable's name with its value *before* running the command we've asked for.
 Thus,
 `echo $HOME` becomes `echo /Users/amira`,
 which displays the right thing.
@@ -4126,13 +4119,9 @@ while @Jans2014 looks specifically at how to process data on the command line.
 
 ## Exercises {#bash-advanced-exercises}
 
-Many of the exercises below have been adapted from Software Carpentry's lesson
-[The Unix Shell][swc-shell-novice].
 As with the previous chapter,
 extra files and directories created during these exercises
 may need to be removed when you are done.
-The following chapter relies on the execution of the commands
-in the first exercise below.
 
 ### Cleaning up {#bash-advanced-ex-cleaning-up}
 
@@ -4328,10 +4317,10 @@ The easiest way to do this is often
 to turn our code into a standalone program that can be run in the Unix shell
 just like other command-line tools [@Tasc2017].
 
-In this chapter we will develop a command-line Python program\index{Python!command line}
-that handles input and output in the same way as other shell commands,
+In this chapter we will develop some command-line Python programs\index{Python!command line}
+that handle input and output in the same way as other shell commands,
 can be controlled by several option flags,
-and provides useful information when things go wrong.
+and provide useful information when things go wrong.
 The result will have more scaffolding than useful application code,
 but that scaffolding stays more or less the same as programs get larger.
 
@@ -4498,8 +4487,8 @@ If `script_template.py` is run as a standalone program at the command line
 then `__name__ == '__main__'` is true,
 so the program uses `argparse` to create an argument parser.
 It then specifies that it expects two command-line arguments:
-and input filename (`infile`) and output filename (`outfile`).
-The program uses `parse_args()` to parse the actual command-line arguments given by the user
+an input filename (`infile`) and output filename (`outfile`).
+The program uses `parser.parse_args()` to parse the actual command-line arguments given by the user
 and stores the result in a variable called `args`,
 which it passes to `main`.
 That function can then get the values using the names specified
@@ -4690,7 +4679,7 @@ We talk more about what to put in a docstring in Appendix \@ref(documentation).
 ## Counting Words {#scripting-wordcount}
 
 Now that we have a template for command-line Python programs,
-we can use it to check Zipf's Law for our collection of classic English novels.
+we can use it to check Zipf's Law for our collection of classic novels.
 We start by moving the template into the directory
 where we store our runnable programs (Section \@ref(getting-started-organize)):
 
@@ -4747,7 +4736,7 @@ Counter({'the': 8036, 'and': 5896, 'i': 4712, 'to': 4540,
 If we want the word counts in a format like CSV for easier processing,
 we can write another small function that takes our `Counter` object,
 orders its contents from most to least frequent,
-and then writes it to standard output as CSV:
+and then writes it to \gref{standard output}{stdout} as CSV:
 
 ```python
 import csv
@@ -4851,10 +4840,9 @@ if __name__ == '__main__':
     main(args)
 ```
 
-Note that we have replaced the `'outfile'` argument with an optional `-n` (or `--num`) flag
-to control how much output is printed
-and modified `collection_to_csv` so that it always prints to standard output
-(Section \@ref(bash-tools-stdio)).
+Note that we have replaced the `'outfile'` argument from our template script
+with an optional `-n` (or `--num`) flag to control how much output is printed
+and modified `collection_to_csv` so that it always prints to standard output.
 If we want that output in a file,
 we can redirect with `>`.
 
@@ -4879,12 +4867,13 @@ it,2141
 
 ## Pipelining {#scripting-pipeline}
 
-Most Unix commands follow a useful convention:
+As discussed in Section \@ref(bash-tools-stdio),
+most Unix commands follow a useful convention:
 if the user doesn't specify the names of any input files,
-they read from standard input.\index{standard input!in Python}
+they read from \gref{standard input}{stdin}.\index{standard input!in Python}
 Similarly,
 if no output file is specified,
-the command sends its results to standard output.
+the command sends its results to \gref{standard output}{stdout}.
 This makes it easy to use the command in a pipeline.
 
 Our program always sends its output to standard output;\index{standard output!in Python}
@@ -4932,7 +4921,7 @@ we can create a pipeline like this
 to count the words in the first 500 lines of a book:
 
 ```bash
-$ head -n 500 data/dracula.txt | python bin/countwords.py --num 10
+$ head -n 500 data/dracula.txt | python bin/countwords.py --n 10
 ```
 
 ```text
@@ -5069,9 +5058,6 @@ we have called the option `infiles` (plural)
 and specified `nargs='*'`
 to tell `argparse` that we will accept zero or more filenames.
 We must then open the files ourselves.
-Passing the filename rather than having `argparse` read its content automatically
-is also useful when doing things like moving or coping files;
-we will look in the exercises at how to combine this with reading from standard input.
 
 Let's give `collate.py` a try
 (using `-n 10` to limit the number of lines of output):
@@ -5263,7 +5249,7 @@ Mathematically, this might be written as
 "word frequency is proportional to 1/rank."
 
 The following code plots the word frequency against the inverse rank
-using the Pandas library:
+using the [pandas][pandas] library:
 
 ```python
 import pandas as pd
@@ -5284,8 +5270,8 @@ fig.savefig('results/jane_eyre.png')
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/scripting/jane-eyre.png" alt="Word frequency distribution for 'Jane Eyre'." width="100%" />
-<p class="caption">(\#fig:scripting-repl)Word frequency distribution for 'Jane Eyre'.</p>
+<img src="figures/scripting/jane-eyre.png" alt="Word frequency distribution for Jane Eyre." width="100%" />
+<p class="caption">(\#fig:scripting-repl)Word frequency distribution for Jane Eyre.</p>
 </div>
 
 You'll build on this code to create a plotting script for your project
@@ -5472,11 +5458,19 @@ The script should:
 3. Include an optional `--xlim` argument so that the user can change the x-axis bounds.
 
 When you are done,
-generate a plot of the word counts for *Jane Eyre*:
+generate a plot for *Jane Eyre* by passing the word counts to `plotcounts.py`
+via a CSV file:
 
 ```bash
 $ python bin/plotcounts.py results/jane_eyre.csv
   --outfile results/jane_eyre.png
+```
+
+and by standard input:
+
+```bash
+$ python bin/countwords.py data/jane_eyre.txt | python
+  bin/plotcounts.py --outfile results/jane_eyre.png
 ```
 
 Note:
@@ -5514,11 +5508,11 @@ Originally developed to support software development,
 over the past fifteen years it has become the cornerstone
 of \gref{reproducible research}{reproducible_research}.\index{reproducible research!version control}
 
-A version control system stores a master copy of your code in a repository,
+Version control works by storing a master copy of your code in a repository,
 which you can't edit directly.
 Instead, you check out a working copy of the code,
 edit that code, then commit changes back to the repository.
-In this way, the system records a complete revision history (i.e. of every commit),
+In this way, version control records a complete revision history (i.e. of every commit),
 so that you can retrieve and compare previous versions at any time.
 This is useful from an individual viewpoint,
 because you don't need to store multiple (but slightly different) copies of the same script
@@ -5714,7 +5708,7 @@ $ ls
 bin     data    results
 ```
 
-But if we add the `-a` flag to show everything,
+but if we add the `-a` flag to show everything,
 we can see that Git has created a hidden directory within `zipf` called `.git`:\index{Git!.git directory}
 
 ```bash
@@ -6040,6 +6034,7 @@ when it was created,
 and the commit message that we wrote.
 
 > **Scrolling through logs**
+>
 > Our log this time isn't very long, 
 > so you were likely able to see it printed to your screen without needing to scroll.
 > When you begin working with longer logs
@@ -6055,8 +6050,8 @@ most of the visual space is devoted to a few very common words,
 which makes it hard to see what is happening with the other ten thousand or so words.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for 'Dracula'." width="100%" />
-<p class="caption">(\#fig:git-cmdline-initial-plot)Inverse rank versus word frequency for 'Dracula'.</p>
+<img src="figures/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for Dracula." width="100%" />
+<p class="caption">(\#fig:git-cmdline-initial-plot)Inverse rank versus word frequency for Dracula.</p>
 </div>
 
 An alternative way to visually evaluate Zipf's Law is
@@ -6330,6 +6325,7 @@ which we can do by linking our local repository
 to one stored on a hosting service such as [GitHub][github].
 
 > **Where's My Repository?**
+>
 > So far we've worked with repositories located on your own computer,
 > which we'll also refer to as local or desktop repositories.
 > The alternative is hosting repositories on GitHub or another server,
@@ -6345,7 +6341,7 @@ Next,
 we need to connect our desktop repository with the one on GitHub.
 We do this by making the GitHub repository a \gref{remote}{remote_repository}\index{Git!remote}\index{remote (in Git)}
 of the local repository.
-The home page of the repository on GitHub includes the string we need to identify it
+The home page of our new repository on GitHub includes the string we need to identify it
 (Figure \@ref(fig:git-cmdline-repo-link)).
 
 <div class="figure" style="text-align: center">
@@ -6450,6 +6446,7 @@ Pulling has no effect in this case
 because the two repositories are already synchronized.
 
 > **Fetching**
+>
 > The second line in the remote configuration we viewed earlier is labeled `push`,
 > which makes sense given the command we used (`git push`)
 > to upload changes from our local to remote repositories.
@@ -6740,6 +6737,7 @@ In this case,
 we used it to recover the version of the file in the most recent commit.
 
 > **Checking Out with Git**
+>
 > If you're running a different version of Git,
 > you may see a suggestion for `git checkout` instead of `git restore`.
 > As of Git version 2.29,
@@ -6939,25 +6937,35 @@ Which command(s) below would save changes to `myfile.txt` to a local Git reposit
    $ git commit -m myfile.txt "Add recent changes"
    ```
 
-### Committing multiple files {#git-cmdline-ex-multiple}
-
-The staging area can hold changes from any number of files
-that you want to commit as a single snapshot.
-
-1.  Create a new file `about.txt` and add a one sentence summary of the project.
-
-2.  Create another new file `project-members.txt`
-    and add your name.
-
-3.  Add changes from both files to the staging area
-    and commit those changes.
-
 ### Write your biography {#git-cmdline-ex-bio}
 
 1.  Create a new Git repository on your computer called `bio`.
 2.  Write a three-line biography for yourself in a file called `me.txt` and commit your changes.
 3.  Modify one line and add a fourth line.
 4.  Display the differences between the file's original state and its updated state.
+
+### Committing multiple files {#git-cmdline-ex-multiple}
+
+The staging area can hold changes from any number of files
+that you want to commit as a single snapshot.
+From your new `bio` directory:
+
+1.  Create another new file `employment.txt`
+    and add the details of your most recent job.
+
+2.  Add the new changes to both `me.txt` and `employment.txt` to the staging area
+    and commit those changes.
+
+### GitHub timestamps {#git-cmdline-ex-timestamp}
+
+1.  Create a remote repository on GitHub for your new `bio` repository.
+2.  Push the contents of your local repository to the remote.
+3.  Make another change to your local repository
+    (e.g. by editing `me.txt` or `employment.txt`)
+    and push these changes as well.
+4.  Go to the repo you just created on GitHub and check the timestamps of the files.
+
+How does GitHub record times, and why?
 
 ### Ignoring nested files {#git-cmdline-ex-ignore-nested}
 
@@ -6978,15 +6986,6 @@ find and click on the text that says "NN commits" (where "NN" is some number).
 Hover over and click on the three buttons to the right of each commit.
 What information can you gather/explore from these buttons?
 How would you get that same information in the shell?
-
-### GitHub timestamps {#git-cmdline-ex-timestamp}
-
-1.  Create a remote repository on GitHub.
-2.  Push the contents of your local repository to the remote.
-3.  Make changes to your local repository and push these changes as well.
-4.  Go to the repo you just created on GitHub and check the timestamps of the files.
-
-How does GitHub record times, and why?
 
 ### Push versus commit {#git-cmdline-ex-push-commit}
 
@@ -7028,7 +7027,7 @@ $ git add motivation.txt
 $ echo "Zipf's Law suggests the frequency of any word is
   inversely proportional to its rank." > motivation.txt
 $ git commit -m "Motivate project"
-$ git checkout HEAD motivation.txt
+$ git restore motivation.txt
 $ cat motivation.txt
 ```
 
@@ -7362,7 +7361,7 @@ log rank is then \[
 This suggests that the points on our log-log plot should fall on a straight line
 with a slope of \(- \tfrac{1}{\alpha}\)
 and intercept \(\log(c)\).
-Our goal is to estimate the value of \(\alpha\);
+To fit a line to our word count data we therefore need to estimate the value of \(\alpha\);
 we'll see later that \(c\) is completely defined.
 
 In order to determine the best method for estimating \(\alpha\) we turn to @More2016,
@@ -7395,7 +7394,7 @@ def nlog_likelihood(beta, counts):
 
 Obtaining an estimate of \(\beta\) (and thus \(\alpha\))
 then becomes a numerical optimization problem,
-for which we can use the `scipy.optimize` library.
+for which we can use the [`scipy.optimize`][scipy-optimize] library.
 Again following @More2016,
 we use Brent's Method with \(1 < \beta \leq 4\).
 
@@ -7573,8 +7572,8 @@ as often as the second most frequent word,
 Figure \@ref(fig:git-advanced-dracula-fit) shows the plot.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-advanced/dracula-fit.png" alt="Word frequency distribution for 'Dracula'." width="100%" />
-<p class="caption">(\#fig:git-advanced-dracula-fit)Word frequency distribution for 'Dracula'.</p>
+<img src="figures/git-advanced/dracula-fit.png" alt="Word frequency distribution for Dracula." width="100%" />
+<p class="caption">(\#fig:git-advanced-dracula-fit)Word frequency distribution for Dracula.</p>
 </div>
 
 The script appears to be working as we'd like,
@@ -9083,7 +9082,7 @@ by creating a file called `CONDUCT.md` in the project's root directory.\index{pr
 Writing a Code of Conduct that is both comprehensive and readable is hard.
 We therefore recommend using one that other groups have drafted, refined, and tested.
 The [Contributor Covenant][covenant] is relevant for projects being developed online,
-such as those based on GitHub.
+such as those based on GitHub:
 
 ```bash
 $ cat CONDUCT.md
@@ -9246,7 +9245,7 @@ since rules are meaningless without a method to enforce them;
 > The Contributor Covenant works well for interactions that are largely online,
 > which is the case for many research software projects.
 > The best option for in-person events is
-> the [model code of conduct][model-coc] from the [Geek Feminism Wiki][geek-feminism],
+> the [model Code of Conduct][model-coc] from the [Geek Feminism Wiki][geek-feminism],
 > which is used by many open source organizations and conferences.
 > If your project is sited at a university or within a company,
 > it may already have Code of Conduct:
@@ -9358,7 +9357,7 @@ without contributing anything back.
 The last thirty years have shown that this restriction isn't necessary:
 many projects have survived and thrived without this safeguard.
 We therefore recommend that projects choose the MIT license,
-it places the fewest restrictions on future action.
+as it places the fewest restrictions on future action.
 
 ```bash
 $ cat LICENSE.md
@@ -10295,7 +10294,8 @@ they will be presented with a link to the CONTRIBUTING file
 ### File an issue {#teams-ex-file-issue}
 
 Create a feature request issue in your Zipf's Law project repository
-to ask that exceptions be added to `countwords.py`.
+to ask that unit tests be written for `countwords.py`
+(we will do this in Chapter \@ref(testing)).
 
 ### Label issues {#teams-ex-label}
 
@@ -10457,7 +10457,7 @@ Now that the project's main building blocks are in place,
 we're ready to automate our analysis using a build manager.
 We will use a program called [Make][gnu-make]\index{Make} to do this
 so that every time we add a new book to our data,
-we can create new plots and update our fits with a single command.
+we can create a new plot of the word count distribution with a single command.
 Make works as follows:
 
 1.  Every time the \gref{operating system}{operating_system} creates, reads, or changes a file,
@@ -10515,9 +10515,9 @@ The second and third lines form a \gref{build rule}{build_rule}:\index{build rul
 the \gref{target}{build_target}\index{build target} of the rule is `results/moby_dick.csv`,
 its single \gref{prerequisite}{prerequisite} is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
-(There is no limit on the length of statement lines in Makefiles,
+There is no limit on the length of statement lines in Makefiles,
 but to aid readability we have used a backslash (`\`) character to split
-what was quite a long third line.)
+the lengthy third line in this example.
 
 The target and prerequisite tell Make what depends on what.
 The line below them describes the \gref{recipe}{build_recipe}\index{build recipe}
@@ -10747,7 +10747,7 @@ we can add the program to the prerequisites for each result:
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
 	python bin/countwords.py \
-    data/moby_dick.txt > results/moby_dick.csv
+      data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
@@ -10891,7 +10891,7 @@ python bin/countwords.py \
 ```
 
 Make solves this problem with another automatic variable `$<`,
-which mean "only the first prerequisite".
+which means "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
 ```makefile
@@ -10915,8 +10915,8 @@ results/%.csv : data/%.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
 ```
 
-will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data` directory.
-%` cannot be used in rules' recipes,
+will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data/` directory.
+`%` cannot be used in rules' recipes,
 which is why `$<` and `$@` are needed.
 
 With this rule in place, our entire Makefile is reduced to:
@@ -11172,7 +11172,7 @@ particularly as we start to add more steps like merging data files and generatin
 
 ## Documenting a Makefile {#automate-doc}
 
-Every well-behaved program should tell people how to use it @Tasc2017.
+Every well-behaved program should tell people how to use it [@Tasc2017].
 If we run `make --help`,
 we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
@@ -11295,7 +11295,7 @@ we can also add the `plotcounts.py` script to this workflow
 and update the `all` and `settings` rules accordingly.
 Note that there is no `>` needed before the `$@`
 because `plotcounts.py` default is to write to a file
-rather than to `stdout`.
+rather than to [standard output][stdout].
 
 ```makefile
 # ...phony targets and previous variable definitions...
@@ -11357,14 +11357,14 @@ clean :
 
 ## Summary {#automate-summary}
 
-Its reliance on shell commands instead of direct calls to functions in Python or R
+Make's reliance on shell commands instead of direct calls to functions in Python or R
 sometimes makes it clumsy to use.
 However,
 that also makes it very flexible:
 a single Makefile can run shell commands and programs written in a variety of languages,
 which makes it a great way to assemble pipelines out of whatever is lying around.
 
-Programmers have created many replacements for it in the 45 years since it was first created---so many,
+Programmers have created many replacements for Make in the 45 years since it was first created---so many,
 in fact,
 that none have attracted enough users to displace it.
 If you would like to explore them,
@@ -11553,8 +11553,8 @@ but being able to read a complete set of options from a file
 is a big boost to reproducibility.
 
 In this chapter,
-we'll explore approaches for configuring our project,
-and apply one approach to our Zipf's Law project.
+we'll explore a number approaches for configuring our Zipf's Law project,
+and ultimately decide to apply one of them.
 That project should now contain:
 
 ```text
@@ -11602,14 +11602,14 @@ but means that tools in other languages can't process it.
 A second option is [Windows INI format][ini-format],\index{Windows INI format}
 which is laid out like this:
 
-```text
-[section_1]
-key_1=value_1
-key_2=value_2
+```ini
+[section1]
+key1=value1
+key2=value2
 
-[section_2]
-key_3=value_3
-key_4=value_4
+[section2]
+key3=value3
+key4=value4
 ```
 
 INI files are simple to read and write,
@@ -11644,8 +11644,8 @@ but they will need to be bigger
 if we want to include the figure in a slideshow or report.
 
 <div class="figure" style="text-align: center">
-<img src="figures/config/jane-eyre-default.png" alt="Word frequency distribution for 'Jane Eyre' with default label sizes." width="100%" />
-<p class="caption">(\#fig:configuration-jane-eyre-default)Word frequency distribution for 'Jane Eyre' with default label sizes.</p>
+<img src="figures/config/jane-eyre-default.png" alt="Word frequency distribution for Jane Eyre with default label sizes." width="100%" />
+<p class="caption">(\#fig:configuration-jane-eyre-default)Word frequency distribution for Jane Eyre with default label sizes.</p>
 </div>
 
 We could use any of the overlay options described above
@@ -11700,7 +11700,7 @@ axes.labelsize     : x-large  ## fontsize of the x any y labels
 xtick.labelsize    : large    ## fontsize of the tick labels
 ytick.labelsize    : large    ## fontsize of the tick labels
 ```
-and then re-generate the Jane Eyre plot with bigger labels
+and then re-generate the *Jane Eyre* plot with bigger labels
 (Figure \@ref(fig:configuration-jane-eyre-big-labels)):
 
 ```python
@@ -11709,13 +11709,13 @@ $ python bin/plotcounts.py results/jane_eyre.csv --outfile
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/config/jane-eyre-big-labels.png" alt="Word frequency distribution for 'Jane Eyre' with larger labels." width="100%" />
-<p class="caption">(\#fig:configuration-jane-eyre-big-labels)Word frequency distribution for 'Jane Eyre' with larger labels.</p>
+<img src="figures/config/jane-eyre-big-labels.png" alt="Word frequency distribution for Jane Eyre with larger labels." width="100%" />
+<p class="caption">(\#fig:configuration-jane-eyre-big-labels)Word frequency distribution for Jane Eyre with larger labels.</p>
 </div>
 
 This does what we want,
 but is usually the wrong approach.
-Since `matplotlibrc` file sets system-wide defaults,
+Since the `matplotlibrc` file sets system-wide defaults,
 we will now have big labels by default for all plotting we do in future,
 which we may not want.
 Secondly,
@@ -11795,7 +11795,7 @@ it doesn't solve the problem of ensuring that other people can reproduce our plo
 
 ## Adding Command-Line Options {#config-command-line}
 
-The third way to change the plot's properties\index{configuration!command-line option}
+A third way to change the plot's properties\index{configuration!command-line option}
 is to add some new command-line arguments to `plotcounts.py`.
 The `choices` parameter of `add_argument` lets us tell `argparse`
 that the user is only allowed to specify a value from a predefined list:
@@ -12042,11 +12042,16 @@ when using the `--style` option.
 
 ### Saving configurations {#config-ex-saveload}
 
-Add an option `--saveconfig filename` to `plotcounts.py`
+1. Add an option `--saveconfig filename` to `plotcounts.py`
 that writes all of its configuration to a file.
 Make sure this option saves *all* of the configuration,
 including any defaults that the user hasn't changed.
-How would this option make your work more reproducible?
+
+2. Add a new target `test-saveconfig` to the `Makefile`
+created in Chapter \@ref(automate) to test that the new option
+is working.
+
+3. How would this new `--saveconfig` option make your work more reproducible?
 
 ### Using INI syntax {#config-ex-ini}
 
@@ -12055,7 +12060,7 @@ for our plot parameters configuration file
 (i.e. `plotparams.ini` instead of `plotparams.yml`)
 that file would read as follows:
 
-```text
+```ini
 [AXES]
 axes.labelsize=x-large
 
@@ -12107,11 +12112,12 @@ We have written software to count and analyze the words in classic texts,
 but how can we be sure it's producing reliable results?
 The short is answer is that we can't---not completely---but
 we can test its behavior against our expectations to decide if we are sure enough.
-This chapter therefore explores ways to do this,
+This chapter explores ways to do this,
 including assertions, unit tests, integration tests, and regression tests.
 
 > **A Scientist's Nightmare**
 >
+> Why is testing research software important?
 > A successful early career researcher in protein crystallography,
 > Geoffrey Chang,
 > had to retract five published papers---three from
@@ -12120,6 +12126,7 @@ including assertions, unit tests, integration tests, and regression tests.
 > More recently, a simple calculation mistake in a paper by Reinhart and Rogoff
 > contributed to making the financial crash of 2008 even worse
 > for millions of people [@Borw2013].
+> Testing helps to catch errors like these.
 
 Here's the current structure of our Zipf's Law project files:
 
@@ -12165,11 +12172,12 @@ For example,
 this code halts as soon as the loop encounters an impossible word frequency:
 
 ```python
+frequencies = [13, 10, 2, -4, 5, 6, 25]
 total = 0.0
-for freq in frequencies[:10]:
+for freq in frequencies[:5]:
     assert freq >= 0.0, 'Word frequencies must be non-negative'
     total += freq
-print('total frequency of first 10 words:', total)
+print('total frequency of first 5 words:', total)
 ```
 
 ```text
@@ -12177,10 +12185,10 @@ print('total frequency of first 10 words:', total)
 AssertionError                  Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
       2 total = 0.0
-      3 for freq in frequencies[:10]:
+      3 for freq in frequencies[:5]:
 ----> 4     assert freq >= 0.0, 'Word frequencies must be non-negative'
       5     total += freq
-      6 print('total frequency of first 10 words:', total)
+      6 print('total frequency of first 5 words:', total)
 
 AssertionError: Word frequencies must be non-negative
 ```
@@ -12260,12 +12268,13 @@ In our Zipf's Law software,
 the `count_words` function in `wordcounts.py` is
 a good candidate for unit testing:
 
-```
+```python
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
-    findwords = re.compile(r"\w+", re.IGNORECASE)
-    word_list = re.findall(findwords, text)
+    chunks = text.split()
+    stripped = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in stripped if word]
     word_counts = Counter(word_list)
     return word_counts
 ```
@@ -12285,9 +12294,10 @@ the function will typically process.
 For instance,
 in order to write a unit test for the `count_words` function,
 we could use a piece of text small enough for us to count word frequencies by hand.
-Let's add the poem "Risk" by Anaïs Nin to our data:
+Let's add the poem *Risk* by Anaïs Nin to our data:
 
 ```bash
+$ cd ~/zipf
 $ mkdir test_data
 $ cat test_data/risk.txt
 ```
@@ -12401,11 +12411,11 @@ the other critical part of our code is the calculation of the \(\alpha\) paramet
 Earlier we defined a power law relating \(\alpha\)
 to the word frequency \(f\),
 the word rank \(r\),
-and a constant of proportionality \(c\) (Section \@ref(git-advanced-theory)).\[
+and a constant of proportionality \(c\) (Section \@ref(git-advanced-theory)):\[
 r = cf^{\frac{-1}{\alpha}}
 \]
 We also noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
-Setting \(\alpha\) to one and re-arranging the power law gives us\[
+Setting \(\alpha\) to one and re-arranging the power law gives us:\[
 c = f/r
 \]
 
@@ -12420,37 +12430,19 @@ import numpy as np
 
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+print(word_counts)
+```
+
+```text
+[600. 300. 200. 150. 120. 100.  85.  75.  66.  60.  54.  50.
+  46.  42.  40.  37.  35.  33.  31.  30.  28.  27.  26.  25.
+ ...
+   1.   1.   1.   1.   1.   1.   1.   1.   1.   1.   1.   1.]
 ```
 
 (We use `np.floor` to round down to the nearest whole number,
 because we can't have fractional word counts.)
-Passing this test fixture to `get_power_law_params` in `plotcounts.py`:
-
-```python
-def get_power_law_params(word_counts):
-    """
-    Get the power law parameters.
-    References
-    ----------
-    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
-      beta (Eq. 2) and the maximum likelihood estimation (mle)
-      of beta (Eq. 6).
-    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
-      Large-Scale Analysis of Zipf's Law in English Texts.
-      PLoS ONE 11(1): e0147073.
-      https://doi.org/10.1371/journal.pone.0147073
-    """
-    assert type(word_counts) == np.ndarray, \
-        'Input must be a numerical (numpy) array of word counts'
-    mle = minimize_scalar(nlog_likelihood,
-                          bracket=(1 + 1e-10, 4),
-                          args=(word_counts),
-                          method='brent')
-    beta = mle.x
-    alpha = 1 / (beta - 1)
-    return alpha
-```
-
+Passing this test fixture to `get_power_law_params` in `plotcounts.py`
 should give us a value of 1.0.
 To test this, we can add a second test to `test_zipfs.py`:
 
@@ -13129,7 +13121,7 @@ Many programmers are passionate advocates of a practice called
 Rather than writing code and then writing tests,
 they write the tests first and then write just enough code to make those tests pass.
 Once the code is working,
-they clean it up (Section \@ref(style-refactor)) and then move on to the next task.
+they clean it up (Appendix \@ref(style-refactor)) and then move on to the next task.
 TDD's advocates claim that this leads to better code because:
 
 1.  Writing tests clarifies what the code is actually supposed to do.
@@ -13274,7 +13266,7 @@ cut and paste the `normalize_rectangle` function into a new file called `geometr
 save that file in a new directory called `exercises`.
 
 1. To ensure that the inputs to `normalize_rectangle` are valid,
-add \gref{preconditions}{precondition} to check that
+add \gref{preconditions}{precondition} to check that:
 (a) `rect` contains 4 coordinates,
 (b) the width of the rectangle is a positive, non-zero value (i.e. `x0 < x1`), and
 (c) the height of the rectangle is a positive, non-zero value (i.e. `y0 < y1`).
@@ -13383,14 +13375,15 @@ We should therefore plan from the start to detect and handle errors.
 Something that goes wrong while a program is running
 is sometimes referred to as an \gref{exception}{exception} from normal behavior.\index{exception}
 Generally speaking,
-we distinguish between \gref{internal errors}{internal_error},\index{error!internal}\index{internal error}
-such as calling a function with `None` instead of a list,
-and \gref{external errors}{external_error},
-such as trying to read a file that doesn't exist.
-Internal errors are mistakes in the program itself;
-they should be prevented by doing unit testing,
-but software is always used in new ways in the real world,
-and those new ways can trigger unanticipated bugs.
+we distinguish between two types of errors/exceptions.
+\gref{Internal errors}{internal_error},\index{error!internal}\index{internal error}
+are mistakes in the program itself,
+such as calling a function with `None` instead of a list.
+\gref{External errors}{external_error}\index{external error} are usually caused
+by interactions between the program and the outside world:
+a user may mis-type a filename,
+the network might be down,
+and so on.
 
 When an internal error occurs,
 the only thing we can do in most cases is report it and halt the program.
@@ -13400,24 +13393,17 @@ the odds are good that one of our data structures is corrupted.
 We can try to guess what the problem is and take corrective action,
 but our guess will often be wrong
 and our attempt to correct the problem might actually make things worse.
+When an external error occurs on the other hand,
+we don't always want the program to stop.
+If a user mis-types her password,
+handling the error by prompting her to try again
+would be friendlier than halting and requiring her to restart the program.
 
-External errors,\index{error!external}\index{external error}
-on the other hand,
-are usually caused by interactions between the program and the outside world:
-a user may mis-type a filename,
-the network might be down,
-and so on.
-For example,
-if a user mis-types her password,
-prompting her to try again would be friendlier than
-requiring her to restart the program.
-
-No matter why an exception occurs,
-the program should communicate the cause
-so that the user can take the appropriate action to fix it.
-Since some problems can't be resolved immediately,
-the program should save error messages to a file
-to aid troubleshooting and to share with other people when filing a bug.
+This chapter looks at how we can raise, catch and handle errors.
+We consider how to write useful error messages,
+and how to make our programs log those messages
+along with other useful information as they are running,
+so that it's easier to figure out what happened when something goes wrong.
 
 The Zipf's Law project should now include:
 
@@ -13449,7 +13435,7 @@ zipf/
 
 ## Exceptions {#errors-exceptions}
 
-Most modern programming languages use \gref{exceptions}{exception} for error handling.
+Most modern programming languages use exceptions for error handling.
 As the name suggests,
 an exception is a way to represent an exceptional or unusual occurrence
 that doesn't fit neatly into the program's expected operation.
@@ -14054,7 +14040,7 @@ By default,
 `basicConfig` re-opens the file we specify in \gref{append mode}{append_mode};\index{append mode}
 we can use `filemode='w'` to overwrite the existing log data.
 Overwriting is useful during debugging,
-but we should think twice before doing in production,
+but we should think twice before doing it in production,
 since the information we throw away often turns out to be
 exactly what we need to find a bug.
 
@@ -14150,10 +14136,12 @@ ERRORS = {
     'not_csv_suffix' : '{fname}: File must end in .csv',
     }
 
+
 def update_counts(reader, word_counts):
     """Update word counts with data from another reader/file."""
     for word, count in csv.reader(reader):
         word_counts[word] += int(count)
+
 
 def main(args):
     """Run the command line program."""
@@ -14168,6 +14156,7 @@ def main(args):
             logging.debug('Computing word counts...')
             update_counts(reader, word_counts)
     util.collection_to_csv(word_counts, num=args.num)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -14490,7 +14479,7 @@ should follow the FAIR Principles.
 
 The [FAIR Principles][go-fair] describe what research data should look like.\index{FAIR Principles}\index{publishing!FAIR Principles}
 They are still aspirational for most researchers,
-but tell us what to aim for [@Good2014, @Mich2015, @Hart2016, @Broc2019, @Tier2020].
+but tell us what to aim for [@Good2014; @Mich2015; @Hart2016; @Broc2019; @Tier2020].
 The most immediately important elements of the FAIR Principles are outlined below.
 
 #### Data should be *findable*.
@@ -14584,8 +14573,9 @@ we must archive three key items:
 Unfortunately,
 librarians, publishers, and regulatory bodies are still trying to determine
 the best way to document and archive material like this,
-so there is not yet anything like the FAIR Principles.
-The best advice we can give is presented below.
+so a widely accepted set of FAIR Principles for research software
+are still under development [@Lamp2020].
+In the meantime, the best advice we can give is presented below.
 It involves adding information about the software environment
 and data processing steps to a GitHub repository that contains
 the analysis scripts/notebooks,
@@ -14713,7 +14703,7 @@ are too case-specific to be of broad interest.
 To fully capture the provenance of the results presented in a report,
 these analysis scripts and/or notebooks
 (along with the details of the associated software environment and data processing steps)
-can be archived with a repository like [Figshare][figshare] or [Zenodo][zenodo],
+can simply be archived with a repository like [Figshare][figshare] or [Zenodo][zenodo],
 which specialize in storing the long tail of research projects
 (i.e., supplementary figures, data, and code).
 Uploading a zip file of analysis scripts to the repository is a valid option,
@@ -14803,7 +14793,7 @@ Fill in the questionnaire for a dataset you have published or that you use often
 
 ### Evaluate a project's data provenance {#provenance-ex-understand-project}
 
-*This exercise is modified from @Wick2016 and explores the dataset from @Meil2015.
+*This exercise is modified from @Wick2016 and explores the dataset from @Meil2016.
 Go to the dataset's page <http://doi.org/10.3886/E17507V2> and download the files.
 You will need to make an ICPSER account and agree to their data agreement before you can download.*
 
@@ -14818,19 +14808,19 @@ then review the spreadsheet file and the coded response file.
 
 ### Evaluate a project's code provenance {#provenance-ex-eval-code}
 
-The GitHub repository [borstlab/reversephi_paper][borstlab-reversephi] provides the code and data for the paper @Leon2017.
+The GitHub repository [`borstlab/reversephi_paper`][borstlab-reversephi] provides the code and data for the paper @Leon2017.
 Browse the repository and answer the following questions:
 
 1.  Where is the software environment described? What files would you need to recreate the software environment?
 2.  Where are the data processing steps described? How could you re-create the results included in the manuscript?
 3.  How are the scripts and data archived?
-    I.e. Where can you download the version of the code and data as it was when the manuscript was published?
+    i.e. Where can you download the version of the code and data as it was when the manuscript was published?
 
 To get a feel for the different approaches to code provenance, repeat steps 1-3 with the following:
 
 * [The figshare page][irving-figshare] that accompanies the paper @Irvi2019.
 
-* The GitHub repo [blab/h3n2-reassortment][blab-h3n2-reassortment] that accompanies the paper @Pott2019.
+* The GitHub repo [`blab/h3n2-reassortment`][blab-h3n2-reassortment] that accompanies the paper @Pott2019.
 
 ### Making permanent links {#provenance-ex-permanent-links}
 
@@ -14854,9 +14844,10 @@ of your release?
 > to get a DOI through the Zenodo/GitHub integration
 > (Section \@ref(provenance-code-scripts)).
 > We are stopping short of getting the DOI here,
-> to avoid many DOIs pointing to the same code,
-> that is associated with different authors (you),
-> and that isn't associated with a publication
+> since nobody reading this book needs to formally cite
+> or archive the example Zipf's Law software we've been developing. 
+> Also, if every reader of the book generated a DOI,
+> we'd have many DOIs pointing to the same code!
 
 ### Publishing your code {#provenance-ex-publish-code}
 
@@ -14937,7 +14928,7 @@ A package consists of one or more Python source files\index{Python package!struc
 in a specific directory structure
 combined with installation instructions for the computer.
 Python packages can come from various sources:
-some are distributed with Python itself,
+some are distributed with Python itself as part of the language's [standard library][python-standard-library],
 but anyone can create one,
 and there are thousands that can be downloaded and installed from online repositories.
 
@@ -15033,7 +15024,7 @@ Here,
 the `.` signals that `utilities` exists in the current directory.
 
 Python has several ways to build an installable package.\index{Python package!building}
-We will show how to use [setuptools][setuptools],\index{setuptools (in Python)}\index{Python!setuptools}
+We will show how to use [`setuptools`][setuptools],\index{setuptools (in Python)}\index{Python!setuptools}
 which is the lowest common denominator
 and will allow everyone,
 regardless of what Python distribution they have,
@@ -15104,7 +15095,7 @@ Virtual environments also help with package development:
     By installing and running our package in a completely empty environment,
     we can ensure that we're not accidentally relying on other packages being installed.
 
-We can manage virtual environments using [conda][conda] (Appendix \@ref(anaconda)).
+We can manage virtual environments using [`conda`][conda] (Appendix \@ref(anaconda)).
 To create a new virtual environment called `zipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
 and listing `python` as the base to build on:
@@ -15119,7 +15110,7 @@ Solving environment: done
 
 ## Package Plan ##
 
-  environment location: /home/amira/anaconda3/envs/zipf
+  environment location: /Users/amira/opt/anaconda3/envs/zipf
 
 ...
 
@@ -15140,10 +15131,10 @@ Executing transaction: done
 #     $ conda deactivate
 ```
 
-`conda` creates the directory `~/anaconda3/envs/zipf`,
+`conda` creates the directory `~/opt/anaconda3/envs/zipf`,
 which contains the subdirectories needed for a minimal Python installation,
 such as `bin` and `lib`.
-It also creates `~/anaconda3/envs/zipf/bin/python`,
+It also creates `~/opt/anaconda3/envs/zipf/bin/python`,
 which checks for packages in these directories before checking the main installation.
 
 We can switch to the `zipf` environment by running:\index{virtual environment (in Python)!switching}
@@ -15160,7 +15151,7 @@ the `python` command runs the interpreter in `zipf/bin`:
 ```
 
 ```text
-/home/amira/anaconda3/envs/zipf/bin/python
+/Users/amira/opt/anaconda3/envs/zipf/bin/python
 ```
 
 Notice that every shell command displays `(zipf)` when that virtual environment is active.
@@ -15172,7 +15163,7 @@ using virtual environment names that match the names of your projects
 quickly becomes essential.
 
 We can now install packages safely.
-Everything we install will go into `zipf` virtual environment
+Everything we install will go into the `zipf` virtual environment
 without affecting the underlying Python installation.
 When we are done,
 we can switch back to the default environment using `conda deactivate`:
@@ -15200,19 +15191,15 @@ $ conda activate zipf
 
 Next,
 we go into the upper `zipf` directory that contains our `setup.py` file
-and install our package using `pip install -e .`.
-The `-e` option indicates that we want to to install the package in "editable" mode,
-which means that any changes we make in the package code are directly available to use
-without having to reinstall the package;
-the `.` means "install from the current directory":
+and install our package:
 
-```text
+```bash
 (zipf)$ cd zipf
 (zipf)$ pip install -e .
 ```
 
 ```text
-Processing /home/amira/proj/py-rse/zipf/zipf
+Processing /Users/amira/proj/py-rse/zipf/zipf
 Building wheels for collected packages: zipf
   Building wheel for zipf (setup.py) ... done
   Created wheel for zipf: filename=zipf-0.1.0-py3-none-any.whl
@@ -15223,7 +15210,12 @@ Installing collected packages: zipf
 Successfully installed zipf-0.1.0
 ```
 
-If we look in `~/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
+The `-e` option indicates that we want to install the package in "editable" mode,
+which means that any changes we make in the package code are directly available to use
+without having to reinstall the package;
+the `.` means "install from the current directory".
+
+If we look in `~/opt/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
 we can see the `zipf` package beside all the other locally-installed packages.
 If we try to use the package at this stage,
 though,
@@ -15260,7 +15252,7 @@ because it will be installed as a dependency for `pandas` and `scipy`.\index{dep
 > It is good practice to specify the versions of our dependencies
 > and even better to specify version ranges.
 > For example, if we have only tested our package on pandas version 1.0.1,
-> we could put `pandas==1.0.1` or `pandas>=1.0.1` instead of just `pandas`
+> we could put `pandas==1.1.2` or `pandas>=1.1.2` instead of just `pandas`
 > in the list argument passed to the `install_requires` parameter.
 
 We can now install our package and all its dependencies in a single command:
@@ -15270,7 +15262,7 @@ We can now install our package and all its dependencies in a single command:
 ```
 
 ```text
-Obtaining file:///home/amira/zipf
+Obtaining file:///Users/amira/zipf
 Collecting matplotlib
   Downloading matplotlib-3.2.1-cp37-cp37m-manylinux1_x86_64.whl (12.4 MB)
      |████████████████████████████████| 12.4 MB 1.9 MB/s
@@ -15281,7 +15273,7 @@ Collecting scipy
   Downloading scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
      |████████████████████████████████| 26.1 MB 11.4 MB/s
 Requirement already satisfied: pyyaml in
-/home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages
+/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
 (from zipf==0.1) (5.3.1)
 Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
   Using cached pyparsing-2.4.6-py2.py3-none-any.whl (67 kB)
@@ -15296,10 +15288,10 @@ Collecting numpy>=1.11
   Downloading numpy-1.18.2-cp37-cp37m-manylinux1_x86_64.whl (20.2 MB)
      |████████████████████████████████| 20.2 MB 16.3 MB/s
 Requirement already satisfied: pytz>=2017.2 in
-  /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages
+  /Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
   (from pandas->zipf==0.1) (2019.3)
 Requirement already satisfied: six>=1.5 in
-  /home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages
+  /Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
   (from python-dateutil>=2.1->matplotlib->zipf==0.1) (1.14.0)
 Installing collected packages: pyparsing, python-dateutil,
   kiwisolver, cycler, numpy, matplotlib, pandas, scipy, zipf
@@ -15327,7 +15319,7 @@ utilities.collection_to_csv(...)
 
 However,
 the useful command-line scripts that we used to count and plot word counts
-are no longer accessible directly from the terminal.
+are no longer accessible directly from the Unix shell.
 Fortunately,
 the `setuptools` package allows us to install programs along with the package.\index{Python package!installing programs}
 These programs are placed beside those of other packages.
@@ -15359,7 +15351,7 @@ setup(
 The right side of the `=` operator is the location of a function,
 written as `package.module:function`;
 the left side is the name we want to use to call this function from the command line.
-In this case we want to call each module's `main`,
+In this case, we want to call each module's `main` function,
 which as it stands requires an input argument `args`
 containing the command-line arguments given by the user (Section \@ref(scripting-options)).
 For example,
@@ -15385,7 +15377,7 @@ if __name__ == '__main__':
 ```
 
 We can't pass any arguments to `main` when we define entry points in our `setup.py` file,
-so we need to change this slightly:
+so we need to change our script slightly:
 
 ```python
 def parse_command_line():
@@ -15412,6 +15404,9 @@ if __name__ == '__main__':
     main()
 ```
 
+The new `parse_command_line` function handles the command line arguments,
+so that `main()` no longer requires any input arguments.
+
 Once we have made the corresponding change in `collate.py` and `plotcounts.py`,
 we can re-install our package:
 
@@ -15422,11 +15417,11 @@ we can re-install our package:
 ```text
 Defaulting to user installation because normal site-packages is
   not writeable
-Obtaining file:///home/amira/zipf
+Obtaining file:///Users/amira/zipf
 Requirement already satisfied: matplotlib in
   /usr/lib/python3.8/site-packages (from zipf==0.1) (3.2.1)
 Requirement already satisfied: pandas in
-  /home/amira/.local/lib/python3.8/site-packages
+  /Users/amira/.local/lib/python3.8/site-packages
   (from zipf==0.1) (1.0.3)
 Requirement already satisfied: scipy in
   /usr/lib/python3.8/site-packages (from zipf==0.1) (1.4.1)
@@ -15468,7 +15463,7 @@ rather than re-fetching them from online repositories.
 (If we hadn't used the `-e` option to make the package immediately editable,
 we would have to uninstall it before reinstalling it during development.)
 
-We can now use our commands directly from the terminal
+We can now use our commands directly from the Unix shell
 without writing the full path to the file
 and without prefixing it with `python`.
 
@@ -15500,7 +15495,7 @@ these tools copy packages into the Python installation's `site-packages` directo
 but this is not the only place Python searches.
 Just as the `PATH` environment in the shell contains a list of directories
 that the shell searches for programs it can execute (Section \@ref(bash-advanced-vars)),
-the Python variable `sys.path` contains a list of the directories it searches.
+the Python variable `sys.path` contains a list of the directories it searches (Section \@ref(testing-unit)).
 We can look at this list inside the interpreter:
 
 ```python
@@ -15510,12 +15505,12 @@ sys.path
 
 ```
 ['',
-'/home/amira/anaconda3/envs/zipf/lib/python37.zip',
-'/home/amira/anaconda3/envs/zipf/lib/python3.7',
-'/home/amira/anaconda3/envs/zipf/lib/python3.7/lib-dynload',
-'/home/amira/.local/lib/python3.7/site-packages',
-'/home/amira/anaconda3/envs/zipf/lib/python3.7/site-packages',
-'/home/amira/zipf']
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python37.zip',
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7',
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/lib-dynload',
+'/Users/amira/.local/lib/python3.7/site-packages',
+'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages',
+'/Users/amira/zipf']
 ```
 
 The empty string at the start of the list means "the current directory".
@@ -15581,7 +15576,7 @@ the standard repository for Python packages.
 Before doing that,
 though,
 we can put `zipf` on [TestPyPI][testpypi],
-which lets us test distribution of our package\index{Python package!testing distribution}
+which lets us test the distribution of our package\index{Python package!testing distribution}
 without having things appear in the main PyPI repository.
 We must have an account,
 but they are free to create.
@@ -15594,14 +15589,24 @@ $ pip install twine
 ```
 
 Following the [Python Packaging User Guide][pypi-user-guide],
-we can now upload our distributions from the `dist/` folder
+we can now register for an account at the [TestPyPI website][testpypi]
+and then upload our distributions from the `dist/` folder
 using the `--repository` option to specify the TestPyPI repository:
 
 ```bash
 $ twine upload --repository testpypi dist/*
+```
+
+```text
+Uploading distributions to https://test.pypi.org/legacy/
+```
+
+```bash
 Enter your username: amirakhan
 Enter your password: *********
-Uploading distributions to https://test.pypi.org/legacy/
+```
+
+```text
 Uploading zipf-0.1.0.tar.gz
 100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
 
@@ -15613,6 +15618,11 @@ https://test.pypi.org/project/zipf/0.1/
 <img src="figures/packaging/testpypi.png" alt="Our new project on TestPyPI." width="100%" />
 <p class="caption">(\#fig:packaging-testpypi)Our new project on TestPyPI.</p>
 </div>
+and view the results at the new test project webpage
+(Figure \@ref(fig:packaging-testpypi)).\index{Python package!project page}\index{project page (of Python package)}
+In the exercises,
+we will explore additional metadata that can be added to `setup.py`
+so that it appears on the project webpage.
 
 We have now uploaded both types of distribution,
 allowing people to use the wheel distribution if their system supports it
@@ -15624,7 +15634,8 @@ and installing our package from TestPyPI:
 ```bash
 $ conda create -n zipf-test
 $ conda activate zipf-test
-(zipf-test)$ pip install --index-url https://test.pypi.org/simple zipf
+(zipf-test)$ pip install --index-url
+  https://test.pypi.org/simple zipf
 ```
 
 ```text
@@ -15678,8 +15689,7 @@ Successfully installed zipf-0.1.0
 Once again,
 `pip` takes advantage of the fact that some packages already existing on our system
 and doesn't download them again.
-Once we are happy with how our package appears in TestPyPI
-(including its [project page][zipf-project-page]),\index{Python package!project page}\index{project page (of Python package)}
+Once we are happy with our package at TestPyPI,
 we can go through the same process to put it on the main [PyPI][pypi] repository.
 
 > **conda installation packages**
@@ -15757,9 +15767,9 @@ section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented:
 
 ```markdown
-The ``zipf`` package tallies the occurrences of words in text files
-and plots each word's rank versus its frequency
-together with a line for the theoretical distribution for Zipf's Law.
+The ``zipf`` package tallies the occurrences of words in text
+files and plots each word's rank versus its frequency together 
+with a line for the theoretical distribution for Zipf's Law.
 
 Motivation
 ----------
@@ -15774,7 +15784,8 @@ frequent word, etc."`
 — `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
 
 Many books are available to download in plain text format
-from sites such as `Project Gutenberg <https://www.gutenberg.org/>`_,
+from sites such as
+`Project Gutenberg <https://www.gutenberg.org/>`_,
 so we created this package to qualitatively explore how well
 different books align with the word frequencies predicted by
 Zipf's Law.
@@ -16028,7 +16039,7 @@ Read The Docs will then build the documentation
 and host the resulting files.
 
 For this to work,
-all of the source files
+all of the source files generated by Sphinx
 need to be checked into your GitHub repository:
 in our case,
 this means `docs/source/*.rst`,
@@ -16154,11 +16165,14 @@ if only in small ways.
 
 ## Exercises
 
-### Fixing warnings {#packaging-ex-fixing-warnings}
+### Package metadata {#packaging-ex-metadata}
 
-When we ran `python setup.py sdist` in Section \@ref(packaging-distribute),
-`setup.py` warned us about some missing metadata.
-Review its output and then fix the problem.
+In a number of places on our TestPyPI webpage,
+it says that no project description was provided (Figure \@ref(fig:packaging-testpypi)).
+How could we edit our `setup.py` file to include a description?
+What other metadata would you add?
+
+Hint: The [`setup() args` documentation][setuptools-setup-args] might be useful.
 
 ### Separating requirements {#packaging-ex-separating-requirements}
 
@@ -16175,16 +16189,6 @@ The [Journal of Open Source Software][theoj] has a [checklist][theoj-checklist]
 that reviewers must follow when assessing a submitted software paper.
 Run through the checklist (skipping the criteria related to the software paper)
 and see how the Zipf's Law package would rate on each criteria.
-
-### Staying up to date {#packaging-ex-up-to-date}
-
-1.  Run `pip list` to get a list of the Python packages you have installed.
-    How many are there?
-
-2.  Run `pip list -o` to get a list of packages that are out of date.
-    (This may take a few seconds.)
-    How many are there,
-    and how can you update them?
 
 ### Packaging quotations {#packaging-ex-pratchett}
 
@@ -16233,7 +16237,7 @@ quotes.random_quote()
 ## Key Points {#packaging-keypoints}
 
 
--   Use [setuptools][setuptools] to build and distribute Python packages.
+-   Use [`setuptools`][setuptools] to build and distribute Python packages.
 -   Create a directory named `mypackage` containing a `setup.py` script
     as well as a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
@@ -16242,9 +16246,6 @@ quotes.random_quote()
 -   Use [`pip`][pip] to install Python packages.
 -   The default respository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
--   Decide whether your documentation is for \gref{novices}{novice},
-    \gref{competent practitioners}{competent_practitioner}, and/or \gref{experts}{expert}.
--   Use \gref{docstrings}{docstring} to document modules and functions.
 -   Use a README file for package-level documentation.
 -   Use [Sphinx][sphinx] to generate documentation for a package.
 -   Use [Read The Docs][readthedocs] to host package documentation online.
@@ -16285,7 +16286,6 @@ their undergraduate studies,
 but they have a new appreciation for their importance in research projects.
 They've reworked their Git and Make workshops to use examples of data pipelines,
 and have been getting rave reviews from participants.
-
 Sami has also gained an appreciation
 for the importance of provenance
 of both data and code in research.
@@ -16329,6 +16329,7 @@ we would enjoy hearing from you.
 -   Joel Ostblom (<https://joelostblom.com/>)
 -   Charlotte Wickham (<https://www.cwick.co.nz/>)
 -   Greg Wilson (<https://third-bit.com>)
+
 
 > So much universe, and so little time.
 >
@@ -16377,21 +16378,21 @@ each directory sorted by time of last change.
 1. No: `.` stands for the current directory.
 2. No: `/` stands for the root directory.
 3. No: Amira's home directory is `/Users/Amira`.
-4. No: this goes up two levels, i.e. ends in `/Users`.
-5. Yes: `~` stands for the user's home directory, in this case `/Users/amanda`.
-6. No: this would navigate into a directory `home` in the current directory if it exists.
-7. No: this would navigate into a directory `home` inside her home directory
-8. Yes: shortcut to go back to the user's home directory.
-9. Yes: goes up one level.
-10. Yes: same as the previous answer, but with an unnecessary . (indicating current directory)
+4. No: This goes up two levels, i.e. ends in `/Users`.
+5. Yes: `~` stands for the user's home directory, in this case `/Users/amira`.
+6. No: This would navigate into a directory `home` in the current directory if it exists.
+7. Yes: Starting from the home directory `~`, this command goes into `data` then back (using `..`) to the home directory.
+8. Yes: Shortcut to go back to the user's home directory.
+9. Yes: Goes up one level.
+10. Yes: Same as the previous answer, but with an unnecessary `.` (indicating current directory)
 
 ### Exercise \@ref(bash-basics-ex-resolve-rel-path) {-}
 
-1. No: there *is* a directory `backup` in `/Users`.
-2. No: this is the content of `Users/thing/backup`,
+1. No: There *is* a directory `backup` in `/Users`.
+2. No: This is the content of `Users/sami/backup`,
    but with `..` we asked for one level further up.
-3. No: same as previous explanation, but results shown as directories
-(which is what the `-F` option specifies).
+3. No: Same as previous explanation, but results shown as directories
+   (which is what the `-F` option specifies).
 4. Yes: `../backup/` refers to `/Users/backup/`.
 
 ### Exercise \@ref(bash-basics-ex-reading-ls) {-}
@@ -16399,7 +16400,7 @@ each directory sorted by time of last change.
  1. No: `pwd` is not the name of a directory.
  2. Yes: `ls` without directory argument lists files and directories
     in the current directory.
- 3. Yes: uses the absolute path explicitly.
+ 3. Yes: Uses the absolute path explicitly.
 
 ### Exercise \@ref(bash-basics-ex-touch) {-}
 
@@ -16421,7 +16422,7 @@ programs.
 ### Exercise \@ref(bash-basics-ex-safe-rm) {-}
 
 ```bash
-$ rm: remove regular file 'thesis_backup/quotations.txt'? y
+$ remove my_file.txt? y
 ```
 
 The `-i` option will prompt before (every) removal
@@ -16433,7 +16434,7 @@ only the files that we want to remove.
 ### Exercise \@ref(bash-basics-ex-move-dot) {-}
 
 ```bash
-$ mv ../chapter1.dat ../chapter2.dat .
+$ mv ../data/chapter1.txt ../data/chapter2.txt .
 ```
 
 Recall that `..` refers to the parent directory (i.e. one above the current directory)
@@ -16441,12 +16442,12 @@ and that `.` refers to the current directory.
 
 ### Exercise \@ref(bash-basics-ex-renaming-files) {-}
 
-1. No.  While this would create a file with the correct name,
+1. No: While this would create a file with the correct name,
 the incorrectly named file still exists in the directory and would need to be deleted.
-2. Yes, this would work to rename the file.
-3. No, the period (.) indicates where to move the file, but does not provide a new file name;
+2. Yes: This would work to rename the file.
+3. No: The period (`.`) indicates where to move the file, but does not provide a new file name;
 identical file names cannot be created.
-4. No, the period (.) indicates where to copy the file, but does not provide a new file name;
+4. No: The period (`.`) indicates where to copy the file, but does not provide a new file name;
 identical file names cannot be created.
 
 ### Exercise \@ref(bash-basics-ex-last-ls) {-}
@@ -16462,10 +16463,10 @@ Notice that `..` is interpreted with respect to the current working
 directory, **not** with respect to the location of the file being copied.
 So, the only thing that will show using ls (in `/Users/amira/data`) is the `doc` folder.
 
-1. No, `books-saved.dat` is located at `/Users/amira`
-2. Yes
-3. No, `books.dat` is located at `/Users/amira/data/doc`
-4. No, `books-saved.dat` is located at `/Users/amira`
+1. No: `books-saved.dat` is located at `/Users/amira`
+2. Yes.
+3. No: `books.dat` is located at `/Users/amira/data/doc`
+4. No: `books-saved.dat` is located at `/Users/amira`
 
 ### Exercise \@ref(bash-basics-ex-copy-multi) {-}
 
@@ -16477,24 +16478,24 @@ If given three file names,
 
 ### Exercise \@ref(bash-basics-ex-ls-match) {-}
 
-1. Yes: shows all files whose names contain two different characters (`?`) 
+1. Yes: Shows all files whose names contain two different characters (`?`) 
 followed by the letter `n`,
 then zero or more characters (`*`) followed by `txt`.
 
-2. No: shows all files whose names start with zero or more characters (`*`) 
+2. No: Shows all files whose names start with zero or more characters (`*`) 
 followed by `e_`,
 zero or more characters (`*`), 
 then `txt`. 
 The output includes the two desired books, but also `time_machine.txt`.
 
-3. No: shows all files whose names start with zero or more characters (`*`) 
+3. No: Shows all files whose names start with zero or more characters (`*`) 
 followed by `n`,
 zero or more characters (`*`), 
 then `txt`. 
 The output includes the two desired books, 
 but also `frankenstein.txt` and `time_machine.txt`.
 
-4. No: shows all files whose names start with zero or more characters (`*`) 
+4. No: Shows all files whose names start with zero or more characters (`*`) 
 followed by `n`,
 a single character `?`,
 `e`,
@@ -16505,7 +16506,7 @@ The output shows `frankenstein.txt` and `sense_and_sensibility.txt`.
 ### Exercise \@ref(bash-basics-ex-organizing) {-}
 
 ```bash
-mv *.txt data
+$ mv *.txt data
 ```
 
 Amira needs to move her files `books.txt` and `titles.txt` to the `data` directory.
@@ -16514,44 +16515,48 @@ The `mv` command then moves the list of `.txt` files to the `data` directory.
 
 ### Exercise \@ref(bash-basics-ex-reproduce-structure) {-}
 
-1. Yes, this accurately recreates the directory structure
+1. Yes: This accurately recreates the directory structure.
 
-2. Yes, this accurately recreates the directory structure
+2. Yes: This accurately recreates the directory structure.
 
-3. No.
-The first line of this code set gives an error,
-`mkdir: 2016-05-20/data: No such file or directory`.
-`mkdir` won't create a subdirectory for a directory that doesn't yet exist 
-(unless you use an option like `-p` that explicitly creates parent directories).
+3. No: The first line of this code set gives an error:
 
-4. No, this creates `raw` and `processed` directories at the same level as `data`:
+   ```text
+   mkdir: 2016-05-20/data: No such file or directory
+   ```
+   `mkdir` won't create a subdirectory for a directory that doesn't yet exist 
+   (unless you use an option like `-p` that explicitly creates parent directories).
 
-2016-05-20
-    ├── data
-    ├── processed
-    └── raw
+4. No: This creates `raw` and `processed` directories at the same level as `data`:
+
+   ```text
+   2016-05-20/
+       ├── data
+       ├── processed
+       └── raw
+   ```
 
 ### Exercise \@ref(bash-basics-ex-wildcard-expressions) {-}
 
 1. A solution using two wildcard expressions:
+
     ```bash
     $ ls s*.txt
     $ ls t*.txt
     ```
-2. The code from the answer to question 1 is not provided as a single set,
-since two lines of code must be run separately.
-3. When there are no files beginning with `s` and ending in `.txt`, 
+
+2. When there are no files beginning with `s` and ending in `.txt`, 
 or when there are no files beginning with `t` and ending in `.txt`, 
 
 
 ### Exercise \@ref(bash-basics-ex-remove-unneeded) {-}
 
-1. No: this would remove only `.csv` files with one-character names
-2. Yes: this removes only files ending in `.csv`.
-3. No: the shell would expand `*` to match everything in the current directory,
+1. No: This would remove only `.csv` files with one-character names.
+2. Yes: This removes only files ending in `.csv`.
+3. No: The shell would expand `*` to match everything in the current directory,
 so the command would try to remove all matched files and an additional
-file called `.csv`
-4. No: the shell would expand `*.*` to match all files with any extension,
+file called `.csv`.
+4. No: The shell would expand `*.*` to match all files with any extension,
 so this command would delete all files in the current directory.
 
 ### Exercise \@ref(bash-basics-ex-other-wildcards) {-}
@@ -16578,28 +16583,33 @@ but appends the string to the file if it already exists (i.e. when we run it for
 
 ### Exercise \@ref(bash-tools-ex-append-data) {-}
 
-1. No: this results from only running the first line of code (`head`).
-2. No: this results from only running the second line of code (`tail`)
-3. Yes: the first line writes the first three lines of `dracula.txt`,
+1. No: This results from only running the first line of code (`head`).
+2. No: This results from only running the second line of code (`tail`).
+3. Yes: The first line writes the first three lines of `dracula.txt`,
 the second line appends the last two lines of `dracula.txt` to the same file.
-4. No: we would need to pipe the commands to obtain this answer (`head -n 3 dracula.txt | tail -n 2 > extracted.txt`
+4. No: We would need to pipe the commands to obtain this answer (`head -n 3 dracula.txt | tail -n 2 > extracted.txt`).
 
 ### Exercise \@ref(bash-tools-ex-piping) {-}
 
-Try running each line of code in the `data` directory!
+Try running each line of code in the `data` directory.
 
-1. No: this incorrectly uses redirect (`>`), 
+1. No: This incorrectly uses redirect (`>`), 
 and will result in an error.
-2. No: the number of lines desired for `head` is reported incorrectly;
+2. No: The number of lines desired for `head` is reported incorrectly;
 this will result in an error.
-3. No: this will extract the first three files from the `wc` results,
+3. No: This will extract the first three files from the `wc` results,
 which have not yet been sorted into length of lines.
-4. Yes: this output correctly orders and connects each of the commands.
+4. Yes: This output correctly orders and connects each of the commands.
 
 ### Exercise \@ref(bash-tools-ex-uniq-adjacent) {-}
 
 To obtain a list of unique results from these data,
-we need to run `sort genres.txt | uniq`.
+we need to run:
+
+```bash
+$ sort genres.txt | uniq
+```
+
 It makes sense that `uniq` is almost always run after using `sort`,
 because that allows a computer to compare only adjacent lines.
 If `uniq` did not compare only adjacent lines,
@@ -16640,13 +16650,29 @@ In this case,
 the output is only the dates from `titles.txt`,
 since this is in the second column.
 
+```bash
+$ cut -d , -f 2 titles.txt
+```
+
+```text
+1811
+1818
+1847
+1847
+1851
+1892
+1895
+1897
+1897
+```
+
 ### Exercise \@ref(bash-tools-ex-which-pipe) {-}
 
-1. No: this sorts by the book title
-2. No: this results in an error because `sort` is being used incorrectly
-3. No: there are duplicate dates in the output because they have not been sorted first
-4. Yes: this results in the output shown below.
-5. No: this extracts the desired data (below), 
+1. No: This sorts by the book title.
+2. No: This results in an error because `sort` is being used incorrectly.
+3. No: There are duplicate dates in the output because they have not been sorted first.
+4. Yes: This results in the output shown below.
+5. No: This extracts the desired data (below), 
 but then counts the number of lines,
 resulting in the incorrect answer.
 
@@ -16679,7 +16705,7 @@ This doesn't allow us to preview the commands,
 but instead creates files (`analyzed-$file`),
 containing the text `analyze $file`.
 
-Try both versions for yourself to see the output! Be sure to open the
+Try both versions for yourself to see the output. Be sure to open the
 `analyzed-*` files to view their contents.
 
 ### Exercise \@ref(bash-tools-ex-loop-variables) {-}
@@ -16788,10 +16814,10 @@ cannot remove a non-empty directory.)
 Running this script with the given parameters will print
 the first and last line from each file in the directory ending in `.txt`.
 
-1. No: this answer misinterprets the lines printed
-2. Yes
-3. No: this answer includes the wrong files
-4. No: leaving off the quotation marks would result in an error
+1. No: This answer misinterprets the lines printed.
+2. Yes.
+3. No: This answer includes the wrong files.
+4. No: Leaving off the quotation marks would result in an error.
 
 ### Exercise \@ref(bash-advanced-ex-longest-with-extension) {-}
 
@@ -16825,9 +16851,9 @@ The list of files would be followed by `.txt`:
 
 ### Exercise \@ref(bash-advanced-ex-using-grep) {-}
 
-1. No: this command extracts any line containing "he", 
+1. No: This command extracts any line containing "he", 
 either as a word or within a word.
-2. No: this results in the same output as the answer for #1.
+2. No: This results in the same output as the answer for #1.
 `-E` allows the search term to represent an extended regular expression,
 but the search term is simple enough that it doesn't make a difference in the result.
 3. Yes: `-w` means to return only matches for the word "he".
@@ -16880,21 +16906,21 @@ will be lower if there is more than one match per line.
 
 ### Exercise \@ref(bash-advanced-ex-match-subtract) {-}
 
-1. Yes: this returns `data/jane_eyre.txt`.
+1. Yes: This returns `data/jane_eyre.txt`.
 2. Maybe: This option may work on your computer,
 but may not behave consistently across all shells 
 because expansion of the wildcard (`*e.txt`) may prevent piping from working correctly.
 We recommend enclosing `*e.txt` in quotation marks,
 as in answer 1.
-3. No: this searches the contents of files for lines matching "machine",
+3. No: This searches the contents of files for lines matching "machine",
 rather than the file names.
 4. See above.
 
 ### Exercise \@ref(bash-advanced-ex-reading-find) {-}
 
-1. Find all files with a `.dat` extension recursively from the current directory
-2. Count the number of lines each of these files contains
-3. Sort the output from step 2. numerically
+1. Find all files with a `.dat` extension recursively from the current directory.
+2. Count the number of lines each of these files contains.
+3. Sort the output from step 2 numerically.
 
 ### Exercise \@ref(bash-advanced-ex-find-tests) {-}
 
@@ -17040,20 +17066,20 @@ or both.
 
 ### Exercise \@ref(git-cmdline-ex-unsave) {-}
 
-- `git status` now shows:
+`git status` now shows:
 
-    ```bash
-    On branch book
-    Untracked files:
-      (use "git add <file>..." to include in what will be committed)
+```bash
+On branch book
+Untracked files:
+(use "git add <file>..." to include in what will be committed)
 
-            example.txt
+    example.txt
 
-    nothing added to commit but untracked files present
-    (use "git add" to track)
-    ```
+nothing added to commit but untracked files present
+(use "git add" to track)
+```
 
-- Nothing has happened to the file, it still exists but Git no longer has it in
+Nothing has happened to the file, it still exists but Git no longer has it in
 the staging area.
 
 ### Exercise \@ref(git-cmdline-ex-word-diff) {-}
@@ -17063,17 +17089,10 @@ changed.
 
 ### Exercise \@ref(git-cmdline-ex-commit) {-}
 
-1.  Would only create a commit if files have already been staged.
-2.  Would try to create a new repository.
-3.  Is correct: first add the file to the staging area, then commit.
-4.  Would try to commit a file "my recent changes" with the message myfile.txt.
-
-### Exercise \@ref(git-cmdline-ex-multiple) {-}
-
-1.  Change `names.txt` and `old-computers.txt` using an editor like Nano.
-2.  Add both files to the staging area with `git add *.txt`.
-3.  Check that both files are there with `git status`.
-4.  Commit both files at once with `git commit`.
+1.  No: This would only create a commit if files have already been staged.
+2.  No: This would try to create a new repository.
+3.  Yes: First add the file to the staging area, then commit.
+4.  No: This would try to commit a file "my recent changes" with the message myfile.txt.
 
 ### Exercise \@ref(git-cmdline-ex-bio) {-}
 
@@ -17085,6 +17104,13 @@ changed.
 6.  Add it and commit it in a single step with `git commit -a -m "Some message"`.
 7.  Modify the file.
 8.  Use `git diff` to see the differences.
+
+### Exercise \@ref(git-cmdline-ex-multiple) {-}
+
+1.  Create `employment.txt` using an editor like Nano.
+2.  Add both `me.txt` and `employment.txt` to the staging area with `git add *.txt`.
+3.  Check that both files are there with `git status`.
+4.  Commit both files at once with `git commit`.
 
 ### Exercise \@ref(git-cmdline-ex-ignore-nested) {-}
 
@@ -17194,32 +17220,33 @@ which will erase any unsaved changes you may have made to those files.
 
 ### Exercise \@ref(git-cmdline-ex-history) {-}
 
-The answer is 2.
+The answer is 1.
 
-The command `git add history.txt` adds the current version of `history.txt` to the staging area.
+The command `git add motivation.txt` adds the current version of `motivation.txt` to the staging area.
 The changes to the file from the second `echo` command are only applied to the working copy,
 not the version in the staging area.
 
 As a result,
-when `git commit -m "Origins of ENIAC"` is executed,
-the version of `history.txt` committed to the repository is the one from the staging area
+when `git commit -m "Motivate project"` is executed,
+the version of `motivation.txt` committed to the repository is the one from the staging area
 with only one line.
 
 However,
 the working copy still has the second line.
 (`git status` will show that the file is modified.)
-`git checkout HEAD history.txt` therefore replaces the working copy with
-the most recently committed version of `history.txt`,
-so `cat history.txt` prints:
+`git restore motivation.txt` therefore replaces the working copy with
+the most recently committed version of `motivation.txt`,
+so `cat motivation.txt` prints:
 
 ```text
-ENIAC was the world's first general-purpose electronic computer.
+Zipf's Law describes the relationship between the frequency and
+rarity of words.
 ```
 
 ### Exercise \@ref(git-cmdline-ex-diff) {-}
 
-1. `git diff HEAD~9 bin/plotcounts.py` compares what has changed between the
-current `bin/plotcounts.py` and the same file 9 commits ago.
+1. `git diff HEAD~2 bin/plotcounts.py` compares what has changed between the
+current `bin/plotcounts.py` and the same file 2 commits ago.
 2.  The previous Git command takes the state of the file at each point and then
 compares them.
 3.  `git diff HEAD bin/plotcounts.py` compares what has been changed in
@@ -17368,10 +17395,13 @@ The text in the `README.md` might look something like:
 ```text
 ## Contributing
 
-Interested in contributing? Check out the [CONTRIBUTING.md](CONTRIBUTING.md)
-file for guidelines on how to contribute. Please note that this project
-is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By
-contributing to this project, you agree to abide by its terms.
+Interested in contributing?
+Check out the [CONTRIBUTING.md](CONTRIBUTING.md)
+file for guidelines on how to contribute.
+Please note that this project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By contributing to this project,
+you agree to abide by its terms.
 ```
 
 Your `CONTRIBUTING.md` file might look something like the following:
@@ -17379,16 +17409,19 @@ Your `CONTRIBUTING.md` file might look something like the following:
 ```text
 # Contributing
 
-Thank you for your interest in contributing to the Zipf's Law package!
+Thank you for your interest
+in contributing to the Zipf's Law package!
 
-If you are new to the package and/or collaborative code development on GitHub,
+If you are new to the package and/or
+collaborative code development on GitHub,
 feel free to discuss any suggested changes via issue or email.
 We can then walk you through the pull request process if need be.
 As the project grows,
 we intend to develop more detailed guidelines for submitting
 bug reports and feature requests.
 
-We also have a code of conduct (see [`CONDUCT.md`](CONDUCT.md)).
+We also have a code of conduct
+(see [`CONDUCT.md`](CONDUCT.md)).
 Please follow it in all your interactions with the project.
 ```
 
@@ -17615,19 +17648,16 @@ settings :
 
 1. Make the following additions to `plotcounts.py`:
 
-Import `matplotlib.pyplot`:
 ```python
 import matplotlib.pyplot as plt
 ```
 
-Define the new `--style` option:
 ```python
 parser.add_argument('--style', type=str,
                     choices=plt.style.available,
                     default=None, help='matplotlib style')
 ```
 
-Use the style at the top of the `main` function:
 ```python
 def main(args):
     """Run the command line program."""
@@ -17729,6 +17759,7 @@ which in turn gives us a starting point for debugging if we need to.
 ```python
 import configparser
 
+
 def set_plot_params(param_file):
     """Set the matplotlib parameters."""
     if param_file:
@@ -17776,7 +17807,7 @@ which is a lot better than nothing.
 
 ### Exercise \@ref(testing-ex-rectangles) {-}
 
-1. Remove the comment about inserting preconditions and add the following:
+1. Remove the comments about inserting preconditions and add the following:
 
 ```python
 assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
@@ -17807,6 +17838,7 @@ if dx > dy:
 ```python
 import geometry
 
+
 def test_tall_skinny():
     """Test normalization of a tall, skinny rectangle."""
     rect = [20, 15, 30, 20]
@@ -17824,6 +17856,7 @@ def test_short_wide():
     expected_result = (0, 0, 0.2, 1.0)
     actual_result = geometry.normalize_rectangle(rect)
     assert actual_result == expected_result
+
 
 def test_negative_coordinates():
     """Test rectangle normalization with negative coordinates."""
@@ -18066,56 +18099,50 @@ for fname in args.infiles:
 
 1. The `try/except` block in `collate.py` should read begin as follows:
 
-```python
-try:
-    process_file(fname, word_counts)
-except FileNotFoundError:
-# ... the other exceptions
-```
+   ```python
+   try:
+       process_file(fname, word_counts)
+   except FileNotFoundError:
+   # ... the other exceptions
+   ```
 
 2. The following additions need to be made to `test_zipfs.py`.
 
-Import the `collate` library:
+   ```python
+   import collate
+   ```
 
-```python
-import collate
-```
-
-Define the new unit test:
-
-```python
-def test_not_csv_error():
-    """Error handling test for csv check"""
-    fname = 'data/dracula.txt'
-    word_counts = Counter()
-    with pytest.raises(OSError):
-        collate.process_file(fname, word_counts)
-```
+   ```python
+   def test_not_csv_error():
+       """Error handling test for csv check"""
+       fname = 'data/dracula.txt'
+       word_counts = Counter()
+       with pytest.raises(OSError):
+           collate.process_file(fname, word_counts)
+   ```
 
 3. The following unit test needs to be added to `test_zipfs.py`.
 
-```python
-def test_missing_file_error():
-    """Error handling test for missing file"""
-    fname = 'fake_file.csv'
-    word_counts = Counter()
-    with pytest.raises(FileNotFoundError):
-        collate.process_file(fname, word_counts)
-```
+   ```python
+   def test_missing_file_error():
+       """Error handling test for missing file"""
+       fname = 'fake_file.csv'
+       word_counts = Counter()
+       with pytest.raises(FileNotFoundError):
+           collate.process_file(fname, word_counts)
+   ```
 
 4. The following sequence of commands is required to test the code coverage.
 
-Generate the html report:
+   ```bash
+   $ coverage run -m pytest
+   $ coverage html
+   ```
 
-```bash
-$ coverage run -m pytest
-$ coverage html
-```
-
-Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
-The lines of `process_files` that include the `raise OSError` and
-`open(fname, 'r')` commands should appear in green after clicking the green "run" box
-in the top left hand corner of the page.
+   Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
+   The lines of `process_files` that include the `raise OSError` and
+   `open(fname, 'r')` commands should appear in green after clicking the green "run" box
+   in the top left hand corner of the page.
 
 ### Exercise \@ref(errors-ex-catalog) {-}
 
@@ -18166,28 +18193,32 @@ Where did you agree and disagree, and why?
 4.  We can search the dataset name and authorname trying to find this.
     A search for "National Science Foundation (1228602)",
     which is the grant information,
-    finds the grant page <https://www.nsf.gov/awardsearch/showAward?AWD_ID=1228602>.
+    finds the [grant page][meili-grant].
     Two articles are linked there,
     but both the DOI links are broken.
     We can search with the citation for each paper to find them.
-    The Forced Migration article can be found at <https://www.fmreview.org/fragilestates/meili>
-    but uses a different subset of interviews and does not mention demographics nor links to the deposited dataset.
-    The Boston College Law Review article at <https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr>
+    The [Forced Migration article][meili-migration-article]
+    uses a different subset of interviews and does not mention demographics
+    nor links to the deposited dataset.
+    The [Boston College Law Review article][meili-review-article]
     has the same two problems of different data and no dataset citation.
 
-    Searching more broadly through Meili's work, we can find <http://dx.doi.org/10.2139/ssrn.2668259>.
-    This lists the dataset as a footnote and reports the 51 interviews with demographic data on reported gender of the interviewees.
+    Searching more broadly through Meili's work, we can find @Meil2015.
+    This lists the dataset as a footnote and reports the 51 interviews
+    with demographic data on reported gender of the interviewees.
     This paper lists data collection as 2010-2014,
     while the other two say 2010-2013.
-    We might come to a conclusion that this extra year is where the extra 9 interviews come in,
+    We might come to a conclusion that this extra year
+    is where the extra 9 interviews come in,
     but that difference is not explained anywhere.
 
 ### Exercise \@ref(provenance-ex-eval-code) {-}
 
-For [borstlab/reversephi_paper][borstlab-reversephi]:
+For [`borstlab/reversephi_paper`][borstlab-reversephi]:
 
 1.  The software requirements are documented in `README.md`.
-    In addition to the tools used in the `zipf/` project (Python, Make and Git), the project also requires ImageMagick.
+    In addition to the tools used in the `zipf/` project (Python, Make and Git),
+    the project also requires ImageMagick.
     No information on installing ImageMagick or a required version of ImageMagick is provided.
 
     To re-create the `conda` environment you would need the file `my_environment.yml`.
@@ -18198,30 +18229,43 @@ For [borstlab/reversephi_paper][borstlab-reversephi]:
 
 3.  There doesn't seem to be a DOI for the archived code and data,
     but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)".
-    A zip file of this release could be downloaded with the link <https://github.com/borstlab/reversephi_paper/archive/v1.0.zip>.
+    A zip file of this release could be downloaded from GitHub.
 
 For [the figshare page][irving-figshare] that accompanies the paper @Irvi2019:
 
-1. The figshare page includes a "Software environment" section.  To re-create the `conda` environment you would need the file `environment.yml`.
+1. The figshare page includes a "Software environment" section.
+   To re-create the `conda` environment you would need the file `environment.yml`.
 
-2.
-    > `"figure*_log.txt"` are log files for each figure in the paper. These files show the computational steps performed in generating the figure, in the form of a list of commands executed at the command line.
+2. `figure*_log.txt` are log files for each figure in the paper.
+   These files show the computational steps performed in generating the figure,
+   in the form of a list of commands executed at the command line.
 
-    > "code.zip" is a version controlled (using git) file directory containing the code written to perform the analysis (i.e. it contains the scripts referred to in the log files). This code can also be found at https://github.com/DamienIrving/ocean-analysis.
+   `code.zip` is a version controlled (using git) file directory
+   containing the code written to perform the analysis
+   (i.e. it contains the scripts referred to in the log files).
+   This code can also be found on GitHub.
 
 3. The figshare page itself is the archive, and includes a version history for the contents.
 
-For the GitHub repo [blab/h3n2-reassortment][blab-h3n2-reassortment]:
+For the GitHub repo [`blab/h3n2-reassortment`][blab-h3n2-reassortment]:
 
-1. `README.md` includes an "Install requirements" section that describes setting up the `conda` environment using the file `h3n2_reassortment.yaml`.
+1. `README.md` includes an "Install requirements" section
+   that describes setting up the `conda` environment using the file `h3n2_reassortment.yaml`.
 
-    The analysis also depends on components from Nextstrain. Instructions for cloning them from GitHub are provided.
+    The analysis also depends on components from Nextstrain.
+    Instructions for cloning them from GitHub are provided.
 
-2. The code seems to be spread across the directories `jupyter_notebooks`, `hyphy`, `flu_epidemiology`, and `src`, but it isn't clear what order the code should be run in, or how the components depend on each other.
+2. The code seems to be spread across the directories `jupyter_notebooks`, `hyphy`,
+   `flu_epidemiology`, and `src`, but it isn't clear what order the code should be run in,
+   or how the components depend on each other.
 
-3. The data itself is not archived, but links are provided in the "Install requirements" section of `README.md` to documents that describe how to obtain the data. Some intermediate data is also provided in the `data/` directory.
+3. The data itself is not archived, but links are provided
+   in the "Install requirements" section of `README.md` to
+   documents that describe how to obtain the data.
+   Some intermediate data is also provided in the `data/` directory.
 
-    The GitHub repo has a release with files "that are up-to-date with the version of the manuscript that was submitted to Virus Evolution on 31 January 2019."
+   The GitHub repo has a release with files "that are up-to-date with the version
+   of the manuscript that was submitted to Virus Evolution on 31 January 2019."
 
 ### Exercise \@ref(provenance-ex-permanent-links) {-}
 
@@ -18230,8 +18274,8 @@ For the GitHub repo [blab/h3n2-reassortment][blab-h3n2-reassortment]:
 ### Exercise \@ref(provenance-ex-release) {-}
 
 You'll know you've completed this exercise when you have a URL
-that points to ZIP archive for a specific release of your repository on GitHub,
-e.g. `https://github.com/DamienIrving/zipf/archive/KhanVirtanen2020.zip`
+that points to zip archive for a specific release of your repository on GitHub,
+e.g. `https://github.com/amira-khan/zipf/archive/KhanVirtanen2020.zip`
 
 ### Exercise \@ref(provenance-ex-publish-code) {-}
 
@@ -18246,10 +18290,16 @@ Some steps to publishing your project's code would be:
 
 ## Chapter \@ref(packaging) {.unnumbered .unlisted}
 
-### Exercise \@ref(packaging-ex-fixing-warnings) {-}
+### Exercise \@ref(packaging-ex-metadata) {-}
 
-Depending on how well the package was setup before running `python setup.py sdist`,
-there will be either very few warnings, or a lot.
+A `description` and `long_description` argument need to be provided
+when the `setup` function is called in `setup.py`.
+On the TestPyPI webpage,
+the user interface displays description in the grey banner
+and long_description in the section named "Project Description".
+
+Other metadata that might be added includes the author email address,
+software license details and a link to the documentation at Read The Docs.
 
 ### Exercise \@ref(packaging-ex-separating-requirements) {-}
 
@@ -18261,20 +18311,64 @@ pytest
 
 ### Exercise \@ref(packaging-ex-software-review) {-}
 
-Depending on what was done before using the checklist, there will be either
-very little that needs to be updated or a lot. If this course was followed,
-most items would be checked off of the list.
+The answers to the relevant questions from the checklist are shown below.
 
-### Exercise \@ref(packaging-ex-up-to-date) {-}
+Repository: Is the source code for this software available at the repository url?
 
-Depending on how often you update your Python packages, you will have very little
-or a lot to update.
+  - Yes. The source code is available at PyPI.
+
+License: Does the repository contain a plain-text LICENSE file
+with the contents of an OSI approved software license?
+
+  - Yes. Our GitHub repository contains LICENSE.md (Section \@ref(teams-license-software)).
+
+Installation: Does installation proceed as outlined in the documentation?
+
+  - Yes. Our README says the package can be installed via pip.
+   
+Functionality: Have the functional claims of the software been confirmed?
+
+  - Yes. The command line programs `countwords`, `collate`, and `plotcounts`
+    perform as described in the README. 
+
+A statement of need: Do the authors clearly state what problems the software
+is designed to solve and who the target audience is?
+
+  - Yes. The "Motivation" section of the README explains this.
+
+Installation instructions: Is there a clearly-stated list of dependencies?
+Ideally these should be handled with an automated package management solution.
+
+  - Yes. In our `setup.py` file the `install_requires` argument lists dependencies.
+
+Example usage: Do the authors include examples of how to use the software
+(ideally to solve real-world analysis problems).
+
+  - Yes. There are examples in the README.
+
+Functionality documentation: Is the core functionality of the software documented
+to a satisfactory level (e.g., API method documentation)?
+
+  - Yes. This information is available on Read The Docs.
+
+Automated tests: Are there automated tests or manual steps described
+so that the functionality of the software can be verified?
+
+  - We have units tests written and available (`test_zipfs.py`),
+    but our documentation needs to be updated to tell people
+    to run `pytest` in order to manually run those tests.
+
+Community guidelines: Are there clear guidelines for third parties wishing
+to 1) Contribute to the software 2) Report issues or problems
+with the software 3) Seek support?
+
+  - Yes. Our CONTRIBUTING file explains this (Section \@ref(teams-documentation)).
 
 ### Exercise \@ref(packaging-ex-pratchett) {-}
 
 The directory tree for the `pratchett` package is:
 
-```
+```text
 pratchett
 ├── pratchett
 │   └── quotes.py
@@ -18285,7 +18379,7 @@ pratchett
 `README.md` should contain a basic description of the package and how to install/use it,
 while `setup.py` should contain:
 
-```
+```python
 from setuptools import setup
 
 
@@ -18301,7 +18395,7 @@ The following sequence of commands will create the development environment,
 activate it,
 and then install the package:
 
-```
+```bash
 $ conda create -n pratchett python
 $ conda activate pratchett
 (pratchett)$ cd pratchett
@@ -18471,14 +18565,12 @@ and is intended to help instructors who want to use this curriculum.
 ## Creating Packages with Python
 
 
--   Create a Python package using [setuptools][setuptools].
--   Distribute that package via [TestPyPI][testpypi].
--   Install that package and others using [pip][pip].
+-   Create a Python package using [`setuptools`][setuptools].
 -   Create and use a \gref{virtual environment}{virtual_environment} to manage Python package installations.
+-   Install a Python package using [`pip`][pip].
+-   Distribute that package via [TestPyPI][testpypi].
 -   Write a README file for a Python package.
--   Explain the different kinds of audiences for package documentation.
 -   Use [Sphinx][sphinx] to create and preview documentation for a package.
--   Create a GitHub release for a Python package using \gref{semantic versioning}{semantic_versioning}.
 -   Explain where and how to obtain a \gref{DOI}{doi} for a software release.
 -   Describe some academic journals that publish software papers.
 
@@ -18494,7 +18586,7 @@ and is intended to help instructors who want to use this curriculum.
 
 - Make tidiness a habit, rather than cleaning up your project files later.
 - Include a few standard files in all your projects, such as README, LICENSE, CONTRIBUTING, CONDUCT and CITATION.
-- Put runnable in a `bin/` directory.
+- Put runnable code in a `bin/` directory.
 - Put raw/original data in a `data/` directory and never modify it.
 - Put results in a `results/` directory. This includes cleaned-up data and figures (i.e. everything created using what's in `bin` and `data`).
 - Put documentation and manuscripts in a `docs/` directory.
@@ -18513,7 +18605,8 @@ and is intended to help instructors who want to use this curriculum.
 -   An \gref{absolute path}{absolute_path} specifies a location from the root of the filesystem.
 -   A \gref{relative path}{relative_path} specifies a location in the filesystem starting from the current directory.
 -   `cd` changes the current working directory.
--   `..` means the \gref{parent directory}{parent_directory}; `.` on its own means the current directory.
+-   `..` means the \gref{parent directory}{parent_directory}.
+-   `.` on its own means the current directory.
 -   `mkdir` creates a new directory.
 -   `cp` copies a file.
 -   `rm` removes (deletes) a file.
@@ -18531,12 +18624,12 @@ and is intended to help instructors who want to use this curriculum.
 -   `tail` displays the last few lines of its input.
 -   `sort` sorts its inputs.
 -   Use the up-arrow key to scroll up through previous commands to edit and repeat them.
--   Use \gref{`history`}{command_history} to display recent commands and `!number` to repeat a command by number.
+-   Use `history` to display recent commands and `!number` to repeat a command by number.
 -   Every process in Unix has an input channel called \gref{standard input}{stdin}
     and an output channel called \gref{standard output}{stdin}.
 -   `>` redirects a command's output to a file, overwriting any existing content.
 -   `>>` appends a command's output to a file.
--   `<` operator redirects input to a command
+-   `<` operator redirects input to a command.
 -   A \gref{pipe}{pipe_shell} `|` sends the output of the command on the left to the input of the command on the right.
 -   A `for` loop repeats commands once for every thing in a list.
 -   Every `for` loop  must have a variable to refer to the thing it is currently operating on
@@ -18686,7 +18779,7 @@ and is intended to help instructors who want to use this curriculum.
 ## Creating Packages with Python
 
 
--   Use [setuptools][setuptools] to build and distribute Python packages.
+-   Use [`setuptools`][setuptools] to build and distribute Python packages.
 -   Create a directory named `mypackage` containing a `setup.py` script
     as well as a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
@@ -18695,9 +18788,6 @@ and is intended to help instructors who want to use this curriculum.
 -   Use [`pip`][pip] to install Python packages.
 -   The default respository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
--   Decide whether your documentation is for \gref{novices}{novice},
-    \gref{competent practitioners}{competent_practitioner}, and/or \gref{experts}{expert}.
--   Use \gref{docstrings}{docstring} to document modules and functions.
 -   Use a README file for package-level documentation.
 -   Use [Sphinx][sphinx] to generate documentation for a package.
 -   Use [Read The Docs][readthedocs] to host package documentation online.
@@ -20282,10 +20372,10 @@ Thank our reviewers.
 
 And finally:
 
-Don't let people break these rules just because they're frequent contributors or in positions of power.
-:   The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
-    The main figures in a project should be *more* respectful than everyone else
-    in order to show what standards everyone else is expected to meet.
+**Don't let anyone break these rules just because they're frequent contributors or in positions of power.**
+The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
+The main figures in a project should be *more* respectful than everyone else
+in order to show what standards everyone else is expected to meet.
 
 ## Python Features {#style-features}
 
@@ -21693,7 +21783,6 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [blab-h3n2-reassortment]: https://github.com/blab/h3n2-reassortment
 [book-repo]: https://github.com/merely-useful/py-rse/
 [borstlab-reversephi]: https://github.com/borstlab/reversephi_paper/
-[capes-gerard]: https://github.com/gcapes
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [carpentries-install-instructions]: https://carpentries.github.io/workshop-template/#setup
@@ -21712,7 +21801,6 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
 [drake]: https://ropenscilabs.github.io/drake-manual/
 [dryad]: https://datadryad.org/
-[dursi-jonathan]: https://www.dursi.ca/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [explainshell]: http://explainshell.com
 [fair-questionnaire]: https://ardc.edu.au/resources/working-with-data/fair-data/fair-self-assessment-tool
@@ -21742,7 +21830,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
 [insight]: https://www.insightdatascience.com/
-[irving-figshare]: https://figshare.com/articles/Anthropogenic_aerosols_greenhouse_gases_and_the_uptake_and_storage_of_excess_heat_in_the_climate_system_supplementary_metadata/7575830/3
+[irving-figshare]: https://doi.org/10.6084/m9.figshare.7575830
 [jors]: https://openresearchsoftware.metajnl.com/
 [jupyter]: https://jupyter.org/
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -21750,6 +21838,9 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [make-string-functions]: https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [matplotlib-style-tutorial]: https://matplotlib.org/tutorials/introductory/customizing.html
+[meili-grant]: https://www.nsf.gov/awardsearch/showAward?AWD_ID=1228602
+[meili-migration-article]: https://www.fmreview.org/fragilestates/meili
+[meili-review-article]: https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
 [orcid-registration]: https://orcid.org/register
@@ -21757,6 +21848,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [osf]: https://osf.io/
 [osi-license-list]: https://opensource.org/licenses
 [our-research]: http://ourresearch.org/
+[pandas]: https://pandas.pydata.org/
 [pep-8]: https://www.python.org/dev/peps/pep-0008/
 [pep-8-hobgoblin]: https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
 [pip]: https://pypi.org/project/pip/
@@ -21776,15 +21868,16 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
 [scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
+[scipy-optimize]: https://docs.scipy.org/doc/scipy/reference/optimize.html
 [setuptools]: https://setuptools.readthedocs.io/
+[setuptools-setup-args]: https://packaging.python.org/guides/distributing-packages-using-setuptools/#setup-args
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [sphinx]: https://www.sphinx-doc.org/en/master/
-[srinath-ashwin]: https://ccit.clemson.edu/research/researcher-profiles/ashwin-srinath/
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-git]: http://swcarpentry.github.io/git-novice/
-[swc-make]: https://github.com/swcarpentry/make-novice
+[swc-make]: http://swcarpentry.github.io/make-novice/
 [swc-shell-novice]: http://swcarpentry.github.io/shell-novice/
 [testpypi]: https://test.pypi.org
 [theoj]: https://joss.theoj.org/
