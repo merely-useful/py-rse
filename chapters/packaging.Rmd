@@ -85,8 +85,6 @@ and that contains the package's source files.
 It is initially a little confusing to have two directories with the same name,
 but most Python projects follow this convention because
 it makes it easier to set up the project for installation.
-We can get this structure in our Zipf's Law project
-by renaming `zipf/bin` to `zipf`.
 
 > **`__init__.py`**
 >
@@ -100,57 +98,33 @@ by renaming `zipf/bin` to `zipf`.
 > but since Python 3.3 it is only needed
 > if we want to run some code as the package is being imported.
 
-To make the Zipf's Law project work as a Python package,
-we only need to make one important change to the code itself:
-changing the syntax for how we import our own modules.
-Currently,
-both `collate.py` and `countwords.py` contains this line:
+If we want to make our Zipf's Law software available as a Python package,
+we need to follow the generic folder hierarchy.
+A quick search of the [Python Package Index (PyPI)][pypi]
+reveals that the package name `zipf` is already taken,
+so we will need to use something different.
+Let's use `pyzipf` and update our directory names accordingly:
 
-```python
-import utilities as util
+```bash
+$ mv ~/zipf ~/pyzipf
+$ cd ~/pyzipf
+$ mv bin pyzipf
 ```
 
-while `test_zipfs.py` contains:
-
-```python
-import plotcounts
-import countwords
-```
-
-These are called
-\gref{implicit relative imports}{implicit_relative_import},\index{Python!import!implicit relative}\index{implicit relative import (in Python)}
-because it is not clear whether we mean
-"import a Python package called `utilities`"
-or
-"import a file in our local directory called `utilities.py`"
-(which is what we want).
-To remove this ambiguity we need to be explicit and write:
-
-```python
-from zipf import utilities as util
-```
-and
-
-```python
-from zipf import plotcounts
-from zipf import countwords
-```
-
-These are \gref{absolute imports}{absolute_import}\index{Python!import!absolute}\index{absolute import (in Python)}
-since we are specifying the full location of `utilities`, `plotcounts` and `countwords`
-inside the `zipf` package.
-Absolute imports are the preferred way for parts of a package to import other parts,
-but we can also use
-\gref{explicit relative imports}{explicit_relative_import},\index{Python!import!explicit relative}\index{explicit relative import (in Python)}
-which require a little less typing
-and can sometimes make it easier to restructure very large projects:
-
-```python
-from . import utilities as util
-```
-
-Here,
-the `.` signals that `utilities` exists in the current directory.
+> **Updating GitHub**
+>
+> We won't do it in this case
+> (because it would break links/references from earlier in the book),
+> but now that we've decided to name our package is `pyzipf`,
+> we would normally update the name of our GitHub repository to match.
+> After changing the name at the GitHub website,
+> we would need to update our `git remote` so that our 
+> local repository could still be synchronized with GitHub: 
+>
+> ```bash
+> $ git remote set-url origin 
+>   https://github.com/amira-khan/pyzipf.git  
+> ```
 
 Python has several ways to build an installable package.\index{Python package!building}
 We will show how to use [`setuptools`][setuptools],\index{setuptools (in Python)}\index{Python!setuptools}
@@ -169,10 +143,10 @@ from setuptools import setup
 
 
 setup(
-    name='zipf',
+    name='pyzipf',
     version='0.1.0',
     author='Amira Khan',
-    packages=['zipf'])
+    packages=['pyzipf'])
 ```
 
 The `name` and `author` parameters are self-explanatory.
@@ -225,12 +199,12 @@ Virtual environments also help with package development:
     we can ensure that we're not accidentally relying on other packages being installed.
 
 We can manage virtual environments using [`conda`][conda] (Appendix \@ref(anaconda)).
-To create a new virtual environment called `zipf` we run `conda create`,\index{virtual environment (in Python)!creating}
+To create a new virtual environment called `pyzipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
 and listing `python` as the base to build on:
 
 ```bash
-$ conda create -n zipf python
+$ conda create -n pyzipf python
 ```
 
 ```text
@@ -239,7 +213,7 @@ Solving environment: done
 
 ## Package Plan ##
 
-  environment location: /Users/amira/opt/anaconda3/envs/zipf
+  environment location: /Users/amira/opt/anaconda3/envs/pyzipf
 
 ...
 
@@ -253,37 +227,47 @@ Executing transaction: done
 #
 # To activate this environment, use
 #
-#     $ conda activate zipf
+#     $ conda activate pyzipf
 #
 # To deactivate an active environment, use
 #
 #     $ conda deactivate
 ```
 
-`conda` creates the directory `~/opt/anaconda3/envs/zipf`,
+`conda` creates the directory `~/opt/anaconda3/envs/pyzipf`,
 which contains the subdirectories needed for a minimal Python installation,
 such as `bin` and `lib`.
-It also creates `~/opt/anaconda3/envs/zipf/bin/python`,
+It also creates `~/opt/anaconda3/envs/pyzipf/bin/python`,
 which checks for packages in these directories before checking the main installation.
 
-We can switch to the `zipf` environment by running:\index{virtual environment (in Python)!switching}
+>**Anaconda location variations**
+>
+> The default location for Anaconda differs between operating systems.
+> Our examples show the default location on MacOS (`/Users/amira/opt/anaconda3`),
+> but on Linux it is typically `/home/amira/anaconda3` and
+> on Windows it might be `C:\Documents and Settings\amira\anaconda3`
+> or `C:\Users\amira\anaconda3` (depending on the version of Windows).
+> During the installation process users can also choose a custom location
+> if they like (Section \@ref(getting-started-install-software)).
+
+We can switch to the `pyzipf` environment by running:\index{virtual environment (in Python)!switching}
 
 ```bash
-$ conda activate zipf
+$ conda activate pyzipf
 ```
 
 Once we have done this,
-the `python` command runs the interpreter in `zipf/bin`:
+the `python` command runs the interpreter in `pyzipf/bin`:
 
 ```bash
-(zipf)$ which python
+(pyzipf)$ which python
 ```
 
 ```text
-/Users/amira/opt/anaconda3/envs/zipf/bin/python
+/Users/amira/opt/anaconda3/envs/pyzipf/bin/python
 ```
 
-Notice that every shell command displays `(zipf)` when that virtual environment is active.
+Notice that every shell command displays `(pyzipf)` when that virtual environment is active.
 Between Git branches and virtual environments,
 it can be very easy to lose track of what exactly we are working on and with.
 Prompts like this can make it a little less confusing;
@@ -292,15 +276,15 @@ using virtual environment names that match the names of your projects
 quickly becomes essential.
 
 We can now install packages safely.
-Everything we install will go into the `zipf` virtual environment
+Everything we install will go into the `pyzipf` virtual environment
 without affecting the underlying Python installation.
 When we are done,
 we can switch back to the default environment using `conda deactivate`:
 
 ```bash
-(zipf)$ conda deactivate
-
+(pyzipf)$ conda deactivate
 ```
+
 ```bash
 $ which python
 ```
@@ -315,28 +299,28 @@ Let's install our package in this virtual environment.\index{Python package!inst
 First we re-activate it:
 
 ```bash
-$ conda activate zipf
+$ conda activate pyzipf
 ```
 
 Next,
-we go into the upper `zipf` directory that contains our `setup.py` file
+we go into the upper `pyzipf` directory that contains our `setup.py` file
 and install our package:
 
 ```bash
-(zipf)$ cd zipf
-(zipf)$ pip install -e .
+(pyzipf)$ cd ~/pyzipf
+(pyzipf)$ pip install -e .
 ```
 
 ```text
-Processing /Users/amira/proj/py-rse/zipf/zipf
-Building wheels for collected packages: zipf
-  Building wheel for zipf (setup.py) ... done
-  Created wheel for zipf: filename=zipf-0.1.0-py3-none-any.whl
+Processing /Users/amira/pyzipf
+Building wheels for collected packages: pyzipf
+  Building wheel for pyzipf (setup.py) ... done
+  Created wheel for pyzipf: filename=pyzipf-0.1.0-py3-none-any.whl
     size=4574 sha256=b7d645f1d07775
   Stored in directory: /tmp/pip-ephem-wheel/wheels/a8/a6/0e/8b2a5cb
-Successfully built zipf
-Installing collected packages: zipf
-Successfully installed zipf-0.1.0
+Successfully built pyzipf
+Installing collected packages: pyzipf
+Successfully installed pyzipf-0.1.0
 ```
 
 The `-e` option indicates that we want to install the package in "editable" mode,
@@ -344,8 +328,8 @@ which means that any changes we make in the package code are directly available 
 without having to reinstall the package;
 the `.` means "install from the current directory".
 
-If we look in `~/opt/anaconda3/envs/zipf/lib/python3.8/site-packages/`,
-we can see the `zipf` package beside all the other locally-installed packages.
+If we look in `~/opt/anaconda3/envs/pyzipf/lib/python3.8/site-packages/`,
+we can see the `pyzipf` package beside all the other locally-installed packages.
 If we try to use the package at this stage,
 though,
 Python will complain that some of the packages it depends on,
@@ -361,10 +345,10 @@ from setuptools import setup
 
 
 setup(
-    name='zipf',
+    name='pyzipf',
     version='0.1',
     author='Amira Khan',
-    packages=['zipf'],
+    packages=['pyzipf'],
     install_requires=[
         'matplotlib',
         'pandas',
@@ -387,11 +371,11 @@ because it will be installed as a dependency for `pandas` and `scipy`.\index{dep
 We can now install our package and all its dependencies in a single command:
 
 ```bash
-(zipf)$ pip install -e .
+(pyzipf)$ pip install -e .
 ```
 
 ```text
-Obtaining file:///Users/amira/zipf
+Obtaining file:///Users/amira/pyzipf
 Collecting matplotlib
   Downloading matplotlib-3.2.1-cp37-cp37m-manylinux1_x86_64.whl (12.4 MB)
      |████████████████████████████████| 12.4 MB 1.9 MB/s
@@ -402,8 +386,8 @@ Collecting scipy
   Downloading scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
      |████████████████████████████████| 26.1 MB 11.4 MB/s
 Requirement already satisfied: pyyaml in
-/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
-(from zipf==0.1) (5.3.1)
+/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages
+(from pyzipf==0.1) (5.3.1)
 Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
   Using cached pyparsing-2.4.6-py2.py3-none-any.whl (67 kB)
 Collecting python-dateutil>=2.1
@@ -417,17 +401,17 @@ Collecting numpy>=1.11
   Downloading numpy-1.18.2-cp37-cp37m-manylinux1_x86_64.whl (20.2 MB)
      |████████████████████████████████| 20.2 MB 16.3 MB/s
 Requirement already satisfied: pytz>=2017.2 in
-  /Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
-  (from pandas->zipf==0.1) (2019.3)
+  /Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages
+  (from pandas->pyzipf==0.1) (2019.3)
 Requirement already satisfied: six>=1.5 in
-  /Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages
-  (from python-dateutil>=2.1->matplotlib->zipf==0.1) (1.14.0)
+  /Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages
+  (from python-dateutil>=2.1->matplotlib->pyzipf==0.1) (1.14.0)
 Installing collected packages: pyparsing, python-dateutil,
-  kiwisolver, cycler, numpy, matplotlib, pandas, scipy, zipf
-  Running setup.py develop for zipf
+  kiwisolver, cycler, numpy, matplotlib, pandas, scipy, pyzipf
+  Running setup.py develop for pyzipf
 Successfully installed cycler-0.10.0 kiwisolver-1.2.0
   matplotlib-3.2.1 numpy-1.18.2 pandas-1.0.3 pyparsing-2.4.6
-  python-dateutil-2.8.1 scipy-1.4.1 zipf
+  python-dateutil-2.8.1 scipy-1.4.1 pyzipf
 ```
 
 (The precise output of this command will change
@@ -440,7 +424,7 @@ to use the function in `utilities`,
 we would write:
 
 ```python
-from zipf import utilities
+from pyzipf import utilities
 
 
 utilities.collection_to_csv(...)
@@ -460,10 +444,10 @@ from setuptools import setup
 
 
 setup(
-    name='zipf',
+    name='pyzipf',
     version='0.1',
     author='Amira Khan',
-    packages=['zipf'],
+    packages=['pyzipf'],
     install_requires=[
         'matplotlib',
         'pandas',
@@ -472,9 +456,9 @@ setup(
         'pytest'],
     entry_points={
         'console_scripts': [
-            'countwords = zipf.countwords:main',
-            'collate = zipf.collate:main',
-            'plotcounts = zipf.plotcounts:main']})
+            'countwords = pyzipf.countwords:main',
+            'collate = pyzipf.collate:main',
+            'plotcounts = pyzipf.plotcounts:main']})
 ```
 
 The right side of the `=` operator is the location of a function,
@@ -540,50 +524,50 @@ Once we have made the corresponding change in `collate.py` and `plotcounts.py`,
 we can re-install our package:
 
 ```bash
-(zipf)$ pip install -e .
+(pyzipf)$ pip install -e .
 ```
 
 ```text
 Defaulting to user installation because normal site-packages is
   not writeable
-Obtaining file:///Users/amira/zipf
+Obtaining file:///Users/amira/pyzipf
 Requirement already satisfied: matplotlib in
-  /usr/lib/python3.8/site-packages (from zipf==0.1) (3.2.1)
+  /usr/lib/python3.8/site-packages (from pyzipf==0.1) (3.2.1)
 Requirement already satisfied: pandas in
   /Users/amira/.local/lib/python3.8/site-packages
-  (from zipf==0.1) (1.0.3)
+  (from pyzipf==0.1) (1.0.3)
 Requirement already satisfied: scipy in
-  /usr/lib/python3.8/site-packages (from zipf==0.1) (1.4.1)
+  /usr/lib/python3.8/site-packages (from pyzipf==0.1) (1.4.1)
 Requirement already satisfied: pyyaml in
-  /usr/lib/python3.8/site-packages (from zipf==0.1) (5.3.1)
+  /usr/lib/python3.8/site-packages (from pyzipf==0.1) (5.3.1)
 Requirement already satisfied: cycler>=0.10 in
   /usr/lib/python3.8/site-packages
-  (from matplotlib->zipf==0.1) (0.10.0)
+  (from matplotlib->pyzipf==0.1) (0.10.0)
 Requirement already satisfied: kiwisolver>=1.0.1 in
   /usr/lib/python3.8/site-packages
-  (from matplotlib->zipf==0.1) (1.1.0)
+  (from matplotlib->pyzipf==0.1) (1.1.0)
 Requirement already satisfied: numpy>=1.11 in
   /usr/lib/python3.8/site-packages
-  (from matplotlib->zipf==0.1) (1.18.2)
+  (from matplotlib->pyzipf==0.1) (1.18.2)
 Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,
 !=2.1.6,>=2.0.1 in
   /usr/lib/python3.8/site-packages
-  (from matplotlib->zipf==0.1) (2.4.6)
+  (from matplotlib->pyzipf==0.1) (2.4.6)
 Requirement already satisfied: python-dateutil>=2.1 in
   /usr/lib/python3.8/site-packages
-  (from matplotlib->zipf==0.1) (2.8.1)
+  (from matplotlib->pyzipf==0.1) (2.8.1)
 Requirement already satisfied: pytz>=2017.2 in
   /usr/lib/python3.8/site-packages
-  (from pandas->zipf==0.1) (2019.3)
+  (from pandas->pyzipf==0.1) (2019.3)
 Requirement already satisfied: six in
   /usr/lib/python3.8/site-packages
-  (from cycler>=0.10->matplotlib->zipf==0.1) (1.14.0)
+  (from cycler>=0.10->matplotlib->pyzipf==0.1) (1.14.0)
 Requirement already satisfied: setuptools in
   /usr/lib/python3.8/site-packages
-  (from kiwisolver>=1.0.1->matplotlib->zipf==0.1) (46.1.3)
-Installing collected packages: zipf
-  Running setup.py develop for zipf
-Successfully installed zipf
+  (from kiwisolver>=1.0.1->matplotlib->pyzipf==0.1) (46.1.3)
+Installing collected packages: pyzipf
+  Running setup.py develop for pyzipf
+Successfully installed pyzipf
 ```
 
 The output looks slightly different than the first run
@@ -597,7 +581,7 @@ without writing the full path to the file
 and without prefixing it with `python`.
 
 ```bash
-$ countwords data/dracula.txt -n 5
+(pyzipf)$ countwords data/dracula.txt -n 5
 ```
 
 ```text
@@ -632,14 +616,14 @@ import sys
 sys.path
 ```
 
-```
+```text
 ['',
-'/Users/amira/opt/anaconda3/envs/zipf/lib/python37.zip',
-'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7',
-'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/lib-dynload',
+'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python37.zip',
+'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7',
+'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/lib-dynload',
 '/Users/amira/.local/lib/python3.7/site-packages',
-'/Users/amira/opt/anaconda3/envs/zipf/lib/python3.7/site-packages',
-'/Users/amira/zipf']
+'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages',
+'/Users/amira/pyzipf']
 ```
 
 The empty string at the start of the list means "the current directory".
@@ -648,9 +632,28 @@ and will vary from computer to computer.
 
 ## Distributing Packages {#packaging-distribute}
 
+> **Look But Don't Execute**
+>
+> In this section we upload the `pyzipf` package
+> to TestPyPI and PyPI:
+>
+> <https://test.pypi.org/project/pyzipf>
+>
+> <https://pypi.org/project/pyzipf/>
+>
+> You won't be able to execute the `twine upload`
+> commands exactly as shown
+> (because Amira has already uploaded the `pyzipf` package),
+> but the general sequence of commands in this section
+> is an excellent resource to refer back to when you are
+> uploading your own packages.
+> If you want to try uploading your own `pyzipf` package via `twine`,
+> you could edit the project name to include your name (e.g. `pyzipf-yourname`)
+> and use the TestPyPI repository for the upload.
+
 An installable package is most useful
 if we distribute it so that anyone who wants it
-can run `pip install zipf`\index{Python package!distribution}
+can run `pip install pyzipf`\index{Python package!distribution}
 and get it.
 To make this possible,
 we need to use `setuptools` to create
@@ -658,53 +661,53 @@ a \gref{source distribution}{source_distribution}\index{source distribution (of 
 (known as an `sdist` in Python packaging jargon):
 
 ```bash
-$ python setup.py sdist
+(pyzipf)$ python setup.py sdist
 ```
 
 ```text
 running sdist
 running egg_info
-writing zipf.egg-info/PKG-INFO
-writing dependency_links to zipf.egg-info/dependency_links.txt
-writing entry points to zipf.egg-info/entry_points.txt
-writing requirements to zipf.egg-info/requires.txt
-writing top-level names to zipf.egg-info/top_level.txt
-package init file 'zipf/__init__.py' not found (or not a regular file)
-reading manifest file 'zipf.egg-info/SOURCES.txt'
-writing manifest file 'zipf.egg-info/SOURCES.txt'
+writing pyzipf.egg-info/PKG-INFO
+writing dependency_links to pyzipf.egg-info/dependency_links.txt
+writing entry points to pyzipf.egg-info/entry_points.txt
+writing requirements to pyzipf.egg-info/requires.txt
+writing top-level names to pyzipf.egg-info/top_level.txt
+package init file 'pyzipf/__init__.py' not found (or not a regular file)
+reading manifest file 'pyzipf.egg-info/SOURCES.txt'
+writing manifest file 'pyzipf.egg-info/SOURCES.txt'
 running check
 warning: check: missing required meta-data: url
 
 warning: check: missing meta-data: if 'author' supplied,
   'author_email' must be supplied too
 
-creating zipf-0.1.0
-creating zipf-0.1.0/zipf
-creating zipf-0.1.0/zipf.egg-info
-copying files to zipf-0.1.0...
-copying README.md -> zipf-0.1.0
-copying setup.py -> zipf-0.1.0
-copying zipf/collate.py -> zipf-0.1.0/zipf
-copying zipf/countwords.py -> zipf-0.1.0/zipf
-copying zipf/plotcounts.py -> zipf-0.1.0/zipf
-copying zipf/utilities.py -> zipf-0.1.0/zipf
-copying zipf.egg-info/PKG-INFO -> zipf-0.1.0/zipf.egg-info
-copying zipf.egg-info/SOURCES.txt -> zipf-0.1.0/zipf.egg-info
-copying zipf.egg-info/dependency_links.txt -> zipf-0.1.0/zipf.egg-info
-copying zipf.egg-info/entry_points.txt -> zipf-0.1.0/zipf.egg-info
-copying zipf.egg-info/requires.txt -> zipf-0.1.0/zipf.egg-info
-copying zipf.egg-info/top_level.txt -> zipf-0.1.0/zipf.egg-info
-Writing zipf-0.1.0/setup.cfg
+creating pyzipf-0.1.0
+creating pyzipf-0.1.0/pyzipf
+creating pyzipf-0.1.0/pyzipf.egg-info
+copying files to pyzipf-0.1.0...
+copying README.md -> pyzipf-0.1.0
+copying setup.py -> pyzipf-0.1.0
+copying pyzipf/collate.py -> pyzipf-0.1.0/pyzipf
+copying pyzipf/countwords.py -> pyzipf-0.1.0/pyzipf
+copying pyzipf/plotcounts.py -> pyzipf-0.1.0/pyzipf
+copying pyzipf/utilities.py -> pyzipf-0.1.0/pyzipf
+copying pyzipf.egg-info/PKG-INFO -> pyzipf-0.1.0/pyzipf.egg-info
+copying pyzipf.egg-info/SOURCES.txt -> pyzipf-0.1.0/pyzipf.egg-info
+copying pyzipf.egg-info/dependency_links.txt -> pyzipf-0.1.0/pyzipf.egg-info
+copying pyzipf.egg-info/entry_points.txt -> pyzipf-0.1.0/pyzipf.egg-info
+copying pyzipf.egg-info/requires.txt -> pyzipf-0.1.0/pyzipf.egg-info
+copying pyzipf.egg-info/top_level.txt -> pyzipf-0.1.0/pyzipf.egg-info
+Writing pyzipf-0.1.0/setup.cfg
 creating dist
 Creating tar archive
-removing 'zipf-0.1.0' (and everything under it)
+removing 'pyzipf-0.1.0' (and everything under it)
 ```
 
 These distribution files can now be distributed via [PyPI][pypi],
 the standard repository for Python packages.
 Before doing that,
 though,
-we can put `zipf` on [TestPyPI][testpypi],
+we can put `pyzipf` on [TestPyPI][testpypi],
 which lets us test the distribution of our package\index{Python package!testing distribution}
 without having things appear in the main PyPI repository.
 We must have an account,
@@ -714,7 +717,7 @@ The preferred tool for uploading packages to PyPI is called [twine][twine],
 which we can install with:
 
 ```bash
-$ pip install twine
+(pyzipf)$ pip install twine
 ```
 
 Following the [Python Packaging User Guide][pypi-user-guide],
@@ -736,11 +739,11 @@ Enter your password: *********
 ```
 
 ```text
-Uploading zipf-0.1.0.tar.gz
+Uploading pyzipf-0.1.0.tar.gz
 100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
 
 View at:
-https://test.pypi.org/project/zipf/0.1/
+https://test.pypi.org/project/pyzipf/0.1/
 ```
 
 ```{r packaging-testpypi, echo=FALSE, fig.cap="Our new project on TestPyPI."}
@@ -760,58 +763,58 @@ by creating a virtual environment
 and installing our package from TestPyPI:
 
 ```bash
-$ conda create -n zipf-test
-$ conda activate zipf-test
-(zipf-test)$ pip install --index-url
-  https://test.pypi.org/simple zipf
+(pyzipf)$ conda create -n pyzipf-test
+$ conda activate pyzipf-test
+(pyzipf-test)$ pip install --index-url
+  https://test.pypi.org/simple pyzipf
 ```
 
 ```text
 Looking in indexes: https://test.pypi.org/simple
-Collecting zipf
+Collecting pyzipf
   Downloading https://test-files.pythonhosted.org/packages/
-              aa/fb/352af20b6f/zipf-0.1.0.tar.gz (3.1 kB)
+              aa/fb/352af20b6f/pyzipf-0.1.0.tar.gz (3.1 kB)
 Requirement already satisfied:
 matplotlib in /usr/lib/python3.8/site-packages
-(from zipf) (3.2.1)
+(from pyzipf) (3.2.1)
 Requirement already satisfied:
 pandas in ./.local/lib/python3.8/site-packages
-(from zipf) (1.0.3)
+(from pyzipf) (1.0.3)
 Requirement already satisfied:
 scipy in /usr/lib/python3.8/site-packages
-(from zipf) (1.4.1)
+(from pyzipf) (1.4.1)
 Requirement already satisfied:
 pyyaml in /usr/lib/python3.8/site-packages
-(from zipf) (5.3.1)
+(from pyzipf) (5.3.1)
 Requirement already satisfied:
 cycler>=0.10 in /usr/lib/python3.8/site-packages
-(from matplotlib->zipf) (0.10.0)
+(from matplotlib->pyzipf) (0.10.0)
 Requirement already satisfied:
 kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages
-(from matplotlib->zipf) (1.1.0)
+(from matplotlib->pyzipf) (1.1.0)
 Requirement already satisfied:
 numpy>=1.11 in /usr/lib/python3.8/site-packages
-(from matplotlib->zipf) (1.18.2)
+(from matplotlib->pyzipf) (1.18.2)
 Requirement already satisfied:
 pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
 in /usr/lib/python3.8/site-packages
-(from matplotlib->zipf) (2.4.7)
+(from matplotlib->pyzipf) (2.4.7)
 Requirement already satisfied:
 python-dateutil>=2.1 in /usr/lib/python3.8/site-packages
-(from matplotlib->zipf) (2.8.1)
+(from matplotlib->pyzipf) (2.8.1)
 Requirement already satisfied:
 pytz>=2017.2 in /usr/lib/python3.8/site-packages
-(from pandas->zipf) (2019.3)
+(from pandas->pyzipf) (2019.3)
 Requirement already satisfied:
 six in /usr/lib/python3.8/site-packages
-(from cycler>=0.10->matplotlib->zipf) (1.14.0)
+(from cycler>=0.10->matplotlib->pyzipf) (1.14.0)
 Requirement already satisfied:
 setuptools in /usr/lib/python3.8/site-packages
-(from kiwisolver>=1.0.1->matplotlib->zipf)
+(from kiwisolver>=1.0.1->matplotlib->pyzipf)
 (46.1.3)
-Installing collected packages: zipf
-    Running setup.py install for zipf ... done
-Successfully installed zipf-0.1.0
+Installing collected packages: pyzipf
+    Running setup.py install for pyzipf ... done
+Successfully installed pyzipf-0.1.0
 ```
 
 Once again,
@@ -895,7 +898,7 @@ section headings are underlined,
 and code blocks are set off with two colons (`::`) and indented:
 
 ```markdown
-The ``zipf`` package tallies the occurrences of words in text
+The ``pyzipf`` package tallies the occurrences of words in text
 files and plots each word's rank versus its frequency together 
 with a line for the theoretical distribution for Zipf's Law.
 
@@ -921,7 +924,7 @@ Zipf's Law.
 Installation
 ------------
 
-``pip install zipf``
+``pip install pyzipf``
 
 Usage
 -----
@@ -998,14 +1001,24 @@ You have two options for placing the build directory for Sphinx
 output. Either, you use a directory "_build" within the root
 path, or you separate "source" and "build" directories within the
 root path.
-> Separate source and build directories (y/n) [n]: n
+```
 
+```bash
+> Separate source and build directories (y/n) [n]: n
+```
+
+```text
 The project name will occur in several places in the built
 documentation.
-> Project name: zipf
+```
+
+```bash
+> Project name: pyzipf
 > Author name(s): Amira Khan
 > Project release []: 0.1
+```
 
+```text
 If the documents are to be written in a language other than
 English, you can select a language here by its language code.
 Sphinx will then translate text that it generates into that
@@ -1013,17 +1026,22 @@ language.
 
 For a list of supported codes, see
 https://www.sphinx-doc.org/en/master/usage/configuration.html
-> Project language [en]:
+```
 
-Creating file /Users/amira/zipf/docs/conf.py.
-Creating file /Users/amira/zipf/docs/index.rst.
-Creating file /Users/amira/zipf/docs/Makefile.
-Creating file /Users/amira/zipf/docs/make.bat.
+```bash
+> Project language [en]:
+```
+
+```text
+Creating file /Users/amira/pyzipf/docs/conf.py.
+Creating file /Users/amira/pyzipf/docs/index.rst.
+Creating file /Users/amira/pyzipf/docs/Makefile.
+Creating file /Users/amira/pyzipf/docs/make.bat.
 
 Finished: An initial directory structure has been created.
 
 You should now populate your master file
-/Users/amira/zipf/docs/index.rst and create other documentation
+/Users/amira/pyzipf/docs/index.rst and create other documentation
 source files. Use the Makefile to build the docs, like so:
    make builder
 where "builder" is one of the supported builders, e.g. HTML,
@@ -1045,7 +1063,7 @@ The first change relates to the "path setup" section near the head of the file:
 ```
 
 Relative to the `docs/` directory,
-our modules (i.e. `countwords.py`, `utilities.py`, etc) are located in the `../zipf` directory.
+our modules (i.e. `countwords.py`, `utilities.py`, etc) are located in the `../pyzipf` directory.
 We therefore need to uncomment the relevant lines of the path setup section in `conf.py`
 to tell Sphinx where those modules are:
 
@@ -1053,7 +1071,7 @@ to tell Sphinx where those modules are:
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../zipf'))
+sys.path.insert(0, os.path.abspath('../pyzipf'))
 ```
 
 We will also change the "general configuration" section
@@ -1069,7 +1087,7 @@ that generates information about each of our modules
 and puts it in corresponding `.rst` files in the `docs/source` directory:
 
 ```bash
-sphinx-apidoc -o source/ ../zipf
+sphinx-apidoc -o source/ ../pyzipf
 ```
 
 ```text
@@ -1104,7 +1122,7 @@ The landing page for the website is the perfect place for the content of our REA
 so we can add the line `.. include:: ../README.rst` to the `docs/index.rst` file to insert it:
 
 ```markdown
-Welcome to Zipf's documentation!
+Welcome to pyzipf's documentation!
 ==================================
 
 .. include:: ../README.rst
@@ -1157,7 +1175,8 @@ Read The Docs integrates with GitHub
 so that documentation is automatically re-built
 every time updates are pushed to the project's GitHub repository.\index{continuous integration!for documentation}
 If we register for Read The Docs with our GitHub account,
-we can import a project from our GitHub repository.
+we can login at the Read The Docs website and
+import a project from our GitHub repository.
 Read The Docs will then build the documentation
 (using `make html` just as we did earlier)
 and host the resulting files.
@@ -1172,14 +1191,14 @@ this means `docs/source/*.rst`,
 and `docs/index.rst`.
 We also need to create and save a
 [Read the Docs configuration file][readthedocs-config]
-in the root directory of our `zipf` package:
+in the root directory of our `pyzipf` package:
 
 ```bash
 $ pwd
 ```
 
 ```text
-/Users/amira/zipf
+/Users/amira/pyzipf
 ```
 
 ```bash
@@ -1211,8 +1230,10 @@ The configuration file uses the now-familiar \gref{YAML}{yaml} format\index{YAML
 (Section \@ref(config-formats) and Appendix \@ref(yaml))
 to specify the location of the Sphinx configuration script (`docs/conf.py`)
 and the dependencies for our package (`requirements.txt`).
-If we named our project `zipf-docs`,
-our documentation is now available at `https://zipf-docs.readthedocs.io/en/latest/`.
+
+Amira has gone through this process and the documentation is now available at:
+
+<https://pyzipf.readthedocs.io/>
 
 ## Software Journals {#packaging-software-journals}
 
@@ -1254,17 +1275,17 @@ $ cat CITATION.md
 ```text
 # Citation
 
-If you use the Zipf package for work/research presented in a
+If you use the pyzipf package for work/research presented in a
 publication, we ask that you please cite:
 
-Khan, A., and Virtanen, S., 2020. Zipf: A Python package for word
+Khan, A., and Virtanen, S., 2020. pyzipf: A Python package for word
 count analysis. *Journal of Important Software*, 5(51), 2317,
 https://doi.org/10.21105/jois.02317
 
 ### BibTeX entry
 
     @article{Khan2020,
-        title={Zipf: A Python package for word count analysis.},
+        title={pyzipf: A Python package for word count analysis.},
         author={Khan, Amira and Virtanen, Sami},
         journal={Journal of Important Software},
         volume={5},
