@@ -32,7 +32,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'),
                         nargs='?', default='-',
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
