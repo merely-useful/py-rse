@@ -23,8 +23,8 @@ but being able to read a complete set of options from a file
 is a big boost to reproducibility.
 
 In this chapter,
-we'll explore approaches for configuring our project,
-and apply one approach to our Zipf's Law project.
+we'll explore a number approaches for configuring our Zipf's Law project,
+and ultimately decide to apply one of them.
 That project should now contain:
 
 ```text
@@ -74,14 +74,14 @@ but means that tools in other languages can't process it.
 A second option is [Windows INI format][ini-format],\index{Windows INI format}
 which is laid out like this:
 
-```text
-[section_1]
-key_1=value_1
-key_2=value_2
+```ini
+[section1]
+key1=value1
+key2=value2
 
-[section_2]
-key_3=value_3
-key_4=value_4
+[section2]
+key3=value3
+key4=value4
 ```
 
 INI files are simple to read and write,
@@ -115,7 +115,7 @@ The labels on our *Jane Eyre* word frequency plot are fine for viewing on screen
 but they will need to be bigger
 if we want to include the figure in a slideshow or report.
 
-```{r configuration-jane-eyre-default, echo=FALSE, fig.cap="Word frequency distribution for 'Jane Eyre' with default label sizes."}
+```{r configuration-jane-eyre-default, echo=FALSE, fig.cap="Word frequency distribution for Jane Eyre with default label sizes."}
 knitr::include_graphics("figures/config/jane-eyre-default.png")
 ```
 
@@ -171,7 +171,7 @@ axes.labelsize     : x-large  ## fontsize of the x any y labels
 xtick.labelsize    : large    ## fontsize of the tick labels
 ytick.labelsize    : large    ## fontsize of the tick labels
 ```
-and then re-generate the Jane Eyre plot with bigger labels
+and then re-generate the *Jane Eyre* plot with bigger labels
 (Figure \@ref(fig:configuration-jane-eyre-big-labels)):
 
 ```python
@@ -179,13 +179,13 @@ $ python bin/plotcounts.py results/jane_eyre.csv --outfile
   results/jane_eyre.png
 ```
 
-```{r configuration-jane-eyre-big-labels, echo=FALSE, fig.cap="Word frequency distribution for 'Jane Eyre' with larger labels."}
+```{r configuration-jane-eyre-big-labels, echo=FALSE, fig.cap="Word frequency distribution for Jane Eyre with larger labels."}
 knitr::include_graphics("figures/config/jane-eyre-big-labels.png")
 ```
 
 This does what we want,
 but is usually the wrong approach.
-Since `matplotlibrc` file sets system-wide defaults,
+Since the `matplotlibrc` file sets system-wide defaults,
 we will now have big labels by default for all plotting we do in future,
 which we may not want.
 Secondly,
@@ -235,7 +235,7 @@ mpl.get_configdir()
 /Users/amira/.matplotlib
 ```
 
-Once we've created the new sub-directory,
+Once we've created the new sub-directory:
 
 ```bash
 $ mkdir /Users/amira/.matplotlib/stylelib
@@ -265,7 +265,7 @@ it doesn't solve the problem of ensuring that other people can reproduce our plo
 
 ## Adding Command-Line Options {#config-command-line}
 
-The third way to change the plot's properties\index{configuration!command-line option}
+A third way to change the plot's properties\index{configuration!command-line option}
 is to add some new command-line arguments to `plotcounts.py`.
 The `choices` parameter of `add_argument` lets us tell `argparse`
 that the user is only allowed to specify a value from a predefined list:
@@ -512,11 +512,16 @@ when using the `--style` option.
 
 ### Saving configurations {#config-ex-saveload}
 
-Add an option `--saveconfig filename` to `plotcounts.py`
+1. Add an option `--saveconfig filename` to `plotcounts.py`
 that writes all of its configuration to a file.
 Make sure this option saves *all* of the configuration,
 including any defaults that the user hasn't changed.
-How would this option make your work more reproducible?
+
+2. Add a new target `test-saveconfig` to the `Makefile`
+created in Chapter \@ref(automate) to test that the new option
+is working.
+
+3. How would this new `--saveconfig` option make your work more reproducible?
 
 ### Using INI syntax {#config-ex-ini}
 
@@ -525,7 +530,7 @@ for our plot parameters configuration file
 (i.e. `plotparams.ini` instead of `plotparams.yml`)
 that file would read as follows:
 
-```text
+```ini
 [AXES]
 axes.labelsize=x-large
 

@@ -54,7 +54,7 @@ Now that the project's main building blocks are in place,
 we're ready to automate our analysis using a build manager.
 We will use a program called [Make][gnu-make]\index{Make} to do this
 so that every time we add a new book to our data,
-we can create new plots and update our fits with a single command.
+we can create a new plot of the word count distribution with a single command.
 Make works as follows:
 
 1.  Every time the \gref{operating system}{operating_system} creates, reads, or changes a file,
@@ -112,9 +112,9 @@ The second and third lines form a \gref{build rule}{build_rule}:\index{build rul
 the \gref{target}{build_target}\index{build target} of the rule is `results/moby_dick.csv`,
 its single \gref{prerequisite}{prerequisite} is the file `data/moby_dick.txt`,
 and the two are separated by a single colon `:`.
-(There is no limit on the length of statement lines in Makefiles,
+There is no limit on the length of statement lines in Makefiles,
 but to aid readability we have used a backslash (`\`) character to split
-what was quite a long third line.)
+the lengthy third line in this example.
 
 The target and prerequisite tell Make what depends on what.
 The line below them describes the \gref{recipe}{build_recipe}\index{build recipe}
@@ -344,7 +344,7 @@ we can change our prerequisites to for each result:
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
 	python bin/countwords.py \
-    	data/moby_dick.txt > results/moby_dick.csv
+      data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
@@ -489,7 +489,7 @@ python bin/countwords.py \
 ```
 
 Make solves this problem with another automatic variable `$<`,
-which mean "only the first prerequisite".
+which means "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
 ```makefile
@@ -513,8 +513,8 @@ results/%.csv : data/%.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
 ```
 
-will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data` directory.
-%` cannot be used in rules' recipes,
+will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data/` directory.
+`%` cannot be used in rules' recipes,
 which is why `$<` and `$@` are needed.
 
 With this rule in place, our entire Makefile is reduced to:
@@ -782,7 +782,7 @@ particularly as we start to add more steps like merging data files and generatin
 
 ## Documenting a Makefile {#automate-doc}
 
-Every well-behaved program should tell people how to use it @Tasc2017.
+Every well-behaved program should tell people how to use it [@Tasc2017].
 If we run `make --help`,
 we get a (very) long list of options that Make understands,
 but nothing about our specific workflow.
@@ -906,7 +906,7 @@ we can also add the `plotcounts.py` script to this workflow
 and update the `all` and `settings` rules accordingly.
 Note that there is no `>` needed before the `$@`
 because `plotcounts.py` default is to write to a file
-rather than to `stdout`.
+rather than to [standard output][stdout].
 
 ```makefile
 # ...phony targets and previous variable definitions...
@@ -968,14 +968,14 @@ clean :
 
 ## Summary {#automate-summary}
 
-Its reliance on shell commands instead of direct calls to functions in Python or R
+Make's reliance on shell commands instead of direct calls to functions in Python or R
 sometimes makes it clumsy to use.
 However,
 that also makes it very flexible:
 a single Makefile can run shell commands and programs written in a variety of languages,
 which makes it a great way to assemble pipelines out of whatever is lying around.
 
-Programmers have created many replacements for it in the 45 years since it was first created---so many,
+Programmers have created many replacements for Make in the 45 years since it was first created---so many,
 in fact,
 that none have attracted enough users to displace it.
 If you would like to explore them,

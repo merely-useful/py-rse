@@ -8,7 +8,8 @@
 -   An \gref{absolute path}{absolute_path} specifies a location from the root of the filesystem.
 -   A \gref{relative path}{relative_path} specifies a location in the filesystem starting from the current directory.
 -   `cd` changes the current working directory.
--   `..` means the \gref{parent directory}{parent_directory}; `.` on its own means the current directory.
+-   `..` means the \gref{parent directory}{parent_directory}.
+-   `.` on its own means the current directory.
 -   `mkdir` creates a new directory.
 -   `cp` copies a file.
 -   `rm` removes (deletes) a file.

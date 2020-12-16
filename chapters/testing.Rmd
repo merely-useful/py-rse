@@ -8,11 +8,12 @@ We have written software to count and analyze the words in classic texts,
 but how can we be sure it's producing reliable results?
 The short is answer is that we can't---not completely---but
 we can test its behavior against our expectations to decide if we are sure enough.
-This chapter therefore explores ways to do this,
+This chapter explores ways to do this,
 including assertions, unit tests, integration tests, and regression tests.
 
 > **A Scientist's Nightmare**
 >
+> Why is testing research software important?
 > A successful early career researcher in protein crystallography,
 > Geoffrey Chang,
 > had to retract five published papers---three from
@@ -21,6 +22,7 @@ including assertions, unit tests, integration tests, and regression tests.
 > More recently, a simple calculation mistake in a paper by Reinhart and Rogoff
 > contributed to making the financial crash of 2008 even worse
 > for millions of people [@Borw2013].
+> Testing helps to catch errors like these.
 
 Here's the current structure of our Zipf's Law project files:
 
@@ -68,11 +70,12 @@ For example,
 this code halts as soon as the loop encounters an impossible word frequency:
 
 ```python
+frequencies = [13, 10, 2, -4, 5, 6, 25]
 total = 0.0
-for freq in frequencies[:10]:
+for freq in frequencies[:5]:
     assert freq >= 0.0, 'Word frequencies must be non-negative'
     total += freq
-print('total frequency of first 10 words:', total)
+print('total frequency of first 5 words:', total)
 ```
 
 ```text
@@ -80,10 +83,10 @@ print('total frequency of first 10 words:', total)
 AssertionError                  Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
       2 total = 0.0
-      3 for freq in frequencies[:10]:
+      3 for freq in frequencies[:5]:
 ----> 4     assert freq >= 0.0, 'Word frequencies must be non-negative'
       5     total += freq
-      6 print('total frequency of first 10 words:', total)
+      6 print('total frequency of first 5 words:', total)
 
 AssertionError: Word frequencies must be non-negative
 ```
@@ -163,7 +166,7 @@ In our Zipf's Law software,
 the `count_words` function in `countwords.py` is
 a good candidate for unit testing:
 
-```
+```python
 def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
@@ -189,7 +192,7 @@ the function will typically process.
 For instance,
 in order to write a unit test for the `count_words` function,
 we could use a piece of text small enough for us to count word frequencies by hand.
-Let's add the poem "Risk" by Anaïs Nin to our data:
+Let's add the poem *Risk* by Anaïs Nin to our data:
 
 ```bash
 $ cd ~/zipf
@@ -321,11 +324,11 @@ the other critical part of our code is the calculation of the \(\alpha\) paramet
 Earlier we defined a power law relating \(\alpha\)
 to the word frequency \(f\),
 the word rank \(r\),
-and a constant of proportionality \(c\) (Section \@ref(git-advanced-theory)).\[
+and a constant of proportionality \(c\) (Section \@ref(git-advanced-theory)):\[
 r = cf^{\frac{-1}{\alpha}}
 \]
 We also noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
-Setting \(\alpha\) to one and re-arranging the power law gives us\[
+Setting \(\alpha\) to one and re-arranging the power law gives us:\[
 c = f/r
 \]
 
@@ -340,41 +343,21 @@ import numpy as np
 
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+print(word_counts)
+```
+
+```text
+[600. 300. 200. 150. 120. 100.  85.  75.  66.  60.  54.  50.
+  46.  42.  40.  37.  35.  33.  31.  30.  28.  27.  26.  25.
+ ...
+   1.   1.   1.   1.   1.   1.   1.   1.   1.   1.   1.   1.]
 ```
 
 (We use `np.floor` to round down to the nearest whole number,
 because we can't have fractional word counts.)
-Passing this test fixture to `get_power_law_params` in `plotcounts.py`:
-
-```python
-def get_power_law_params(word_counts):
-    """
-    Get the power law parameters.
-
-    References
-    ----------
-    Moreno-Sanchez et al (2016) define alpha (Eq. 1),
-      beta (Eq. 2) and the maximum likelihood estimation (mle)
-      of beta (Eq. 6).
-
-    Moreno-Sanchez I, Font-Clos F, Corral A (2016)
-      Large-Scale Analysis of Zipf's Law in English Texts.
-      PLoS ONE 11(1): e0147073.
-      https://doi.org/10.1371/journal.pone.0147073
-    """
-    assert type(word_counts) == np.ndarray, \
-        'Input must be a numerical (numpy) array of word counts'
-    mle = minimize_scalar(nlog_likelihood,
-                          bracket=(1 + 1e-10, 4),
-                          args=word_counts,
-                          method='brent')
-    beta = mle.x
-    alpha = 1 / (beta - 1)
-    return alpha
-```
-
+Passing this test fixture to `get_power_law_params` in `plotcounts.py`
 should give us a value of 1.0.
-To test this, we can add a second test to `test_zipfs.py`,
+To test this, we can add a second test to `test_zipfs.py`:
 
 ```python
 from collections import Counter
@@ -1076,7 +1059,7 @@ Many programmers are passionate advocates of a practice called
 Rather than writing code and then writing tests,
 they write the tests first and then write just enough code to make those tests pass.
 Once the code is working,
-they clean it up (Section \@ref(style-refactor)) and then move on to the next task.
+they clean it up (Appendix \@ref(style-refactor)) and then move on to the next task.
 TDD's advocates claim that this leads to better code because:
 
 1.  Writing tests clarifies what the code is actually supposed to do.
@@ -1222,7 +1205,7 @@ cut and paste the `normalize_rectangle` function into a new file called `geometr
 save that file in a new directory called `exercises`.
 
 1. To ensure that the inputs to `normalize_rectangle` are valid,
-add \gref{preconditions}{precondition} to check that
+add \gref{preconditions}{precondition} to check that:
 (a) `rect` contains 4 coordinates,
 (b) the width of the rectangle is a positive, non-zero value (i.e. `x0 < x1`), and
 (c) the height of the rectangle is a positive, non-zero value (i.e. `y0 < y1`).
@@ -1233,7 +1216,7 @@ Add a \gref{postcondition}{postcondition} to check that this is true.
 Do the same for the new `y1` coordinate, `upper_y`.
 
 Running `normalize_rectangle` for a short, wide rectangle should pass your new
-preconditions and postconditions,
+preconditions and postconditions:
 
 ```python
 import geometry

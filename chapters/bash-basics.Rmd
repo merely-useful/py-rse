@@ -83,7 +83,7 @@ However,
 different shells may use a different symbol:
 in particular,
 the `zsh` shell that is the default on newer version of MacOS uses `%`.
-As we'll see in Chapter \@ref(bash-advanced),
+As we'll see in Section \@ref(bash-advanced-vars),
 we can customize the prompt to give us more information.
 
 > **Don't Type the Dollar Sign**
@@ -148,7 +148,7 @@ knitr::include_graphics("figures/bash-basics/sample-filesystem.png")
 ```
 
 At the top is the \gref{root directory}{root_directory} that holds everything else,\index{root directory}
-which we can refer to using a slash character, `/` on its own.
+which we can refer to using a slash character `/` on its own.
 Inside that directory are several other directories,
 including `bin` (where some built-in programs are stored),
 `data` (for miscellaneous data files),
@@ -196,9 +196,9 @@ $ ls
 ```
 
 ```text
-Applications Documents    Library      Music      Public
-todo.txt     Desktop      Downloads    Movies     Pictures
-zipf
+Applications   Downloads     Music        opt
+Desktop        Library       Pictures     todo.txt
+Documents      Movies        Public       zipf
 ```
 
 Again,
@@ -211,7 +211,7 @@ Options are exactly like arguments to a function in R or Python;
 in this case,
 `-F` tells `ls` to decorate its output to show what things are.
 A trailing `/` indicates a directory,
-while a trailing `*` tell us something is a runnable program.
+while a trailing `*` tells us something is a runnable program.
 Depending on our setup,
 the shell might also use colors to indicate whether each entry is a file or directory.
 
@@ -220,9 +220,9 @@ $ ls -F
 ```
 
 ```text
-Applications/   Documents/    Library/      Music/     Public/
-todo.txt        Desktop/      Downloads/    Movies/    Pictures/
-zipf/
+Applications/   Downloads/     Music/        opt/
+Desktop/        Library/       Pictures/     todo.txt
+Documents/      Movies/        Public/       zipf/
 ```
 
 Here,
@@ -304,9 +304,9 @@ $ ls -F
 ```
 
 ```text
-Applications/   Documents/    Library/      Music/     Public/
-todo.txt        Desktop/      Downloads/    Movies/    Pictures/
-zipf/
+Applications/   Downloads/     Music/        opt/
+Desktop/        Library/       Pictures/     todo.txt
+Documents/      Movies/        Public/       zipf/
 ```
 
 If we want to see what's in the `zipf` directory
@@ -442,9 +442,10 @@ $ ls -F -a
 ```
 
 ```text
-./        Applications/   Documents/    Library/    Music/
-Public/   todo.txt        ../           Desktop/    Downloads/
-Movies/   Pictures/       zipf/
+./              Documents/     Music/        todo.txt
+../             Downloads/     Pictures/     zipf/
+Applications/   Library/       Public/ 
+Desktop/        Movies/        opt/
 ```
 
 The output also shows another special directory called `.` (a single period),\index{path!.}\index{. (current working directory)}
@@ -528,9 +529,9 @@ $ ls ~
 ```
 
 ```text
-Applications    Documents    Library       Music      Public
-todo.txt        Desktop      Downloads     Movies     Pictures
-zipf
+Applications   Downloads     Music        opt
+Desktop        Library       Pictures     todo.txt
+Documents      Movies        Public       zipf
 ```
 
 (`ls` doesn't show any trailing slashes here because we haven't used `-F`.)
@@ -565,10 +566,10 @@ To create a new directory,
 we use the command `mkdir` (short for **m**a**k**e **d**irectory):\index{Unix commands!mkdir}
 
 ```bash
-$ mkdir analysis
+$ mkdir docs
 ```
 
-Since `analysis` is a relative path
+Since `docs` is a relative path
 (i.e., does not have a leading slash)
 the new directory is created below the current working directory:
 
@@ -577,13 +578,12 @@ $ ls -F
 ```
 
 ```text
-analysis/  data/
-
+data/  docs/
 ```
 
 Using the shell to create a directory is no different than using a graphical tool.
 If we look at the current directory with our computer's file browser
-we will see the `analysis` directory there too.
+we will see the `docs` directory there too.
 The shell and the file explorer are two different ways of interacting with the files;
 the files and directories themselves are the same.
 
@@ -611,19 +611,19 @@ the files and directories themselves are the same.
 > we can surround the name in quotes (`""`).
 > For example, `ls "My Thesis"` will work where `ls My Thesis` does not.
 
-Since we just created the `analysis` directory,
+Since we just created the `docs` directory,
 `ls` doesn't display anything when we ask for a listing of its contents:
 
 ```bash
-$ ls -F analysis
+$ ls -F docs
 ```
 
-Let's change our working directory to `analysis` using `cd`,
+Let's change our working directory to `docs` using `cd`,
 then use a very simple text editor called \gref{Nano}{nano_editor} to create a file called `draft.txt`\index{Nano editor}
 (Figure \@ref(fig:bash-basics-nano)):
 
 ```bash
-$ cd analysis
+$ cd docs
 $ nano draft.txt
 ```
 
@@ -716,21 +716,21 @@ Let's go back to our `zipf` directory:
 cd ~/zipf
 ```
 
-The `analysis` directory contains a file called `draft.txt`.
+The `docs` directory contains a file called `draft.txt`.
 That isn't a particularly informative name,
 so let's change it using `mv` (short for **m**o**v**e):\index{Unix commands!mv}
 
 ```bash
-$ mv analysis/draft.txt analysis/prior-work.txt
+$ mv docs/draft.txt docs/prior-work.txt
 ```
 
 The first argument tells `mv` what we are "moving",
 while the second is where it's to go.
-"Moving" `analysis/draft.txt` to `analysis/prior-work.txt`
+"Moving" `docs/draft.txt` to `docs/prior-work.txt`
 has the same effect as renaming the file:
 
 ```bash
-$ ls analysis
+$ ls docs
 ```
 
 ```text
@@ -752,13 +752,13 @@ In this case,
 the directory we want is the special name `.` that we mentioned earlier:
 
 ```bash
-$ mv analysis/prior-work.txt .
+$ mv docs/prior-work.txt .
 ```
 
-`ls` now shows us that `analysis` is empty:
+`ls` now shows us that `docs` is empty:
 
 ```bash
-$ ls analysis
+$ ls docs
 ```
 
 and that our current directory now contains our file:
@@ -768,7 +768,7 @@ $ ls
 ```
 
 ```text
-analysis/  data/  prior-work.txt
+data/  docs/  prior-work.txt
 ```
 
 If we only want to check that the file exists,
@@ -789,19 +789,19 @@ The `cp` command **c**o**p**ies files.\index{Unix commands!cp}
 It works like `mv` except it creates a file instead of moving an existing one:
 
 ```bash
-$ cp prior-work.txt analysis/section-1.txt
+$ cp prior-work.txt docs/section-1.txt
 ```
 
-We can check that`cp` did the right thing
+We can check that `cp` did the right thing
 by giving `ls` two arguments
 to ask it to list two things at once:
 
 ```bash
-$ ls prior-work.txt analysis/section-1.txt
+$ ls prior-work.txt docs/section-1.txt
 ```
 
 ```text
-analysis/section-1.txt  prior-work.txt
+docs/section-1.txt  prior-work.txt
 ```
 
 Notice that `ls` shows the output in alphabetical order.
@@ -810,13 +810,13 @@ If we leave off the second filename and ask it to show us a file and a directory
 it lists them one by one:
 
 ```bash
-$ ls prior-work.txt analysis
+$ ls prior-work.txt docs
 ```
 
 ```text
 prior-work.txt
 
-analysis:
+docs:
 section-1.txt
 ```
 
@@ -825,7 +825,7 @@ If we use `cp` on its own,
 we get an error message:
 
 ```bash
-$ cp analysis backup
+$ cp docs backup
 ```
 
 ```text
@@ -836,22 +836,35 @@ If we really want to copy everything,
 we must give `cp` the `-r` option (meaning \gref{recursive}{recursion}):
 
 ```bash
-$ cp -r analysis backup
+$ cp -r docs backup
 ```
 
 Once again we can check the result with `ls`:
 
 ```bash
-$ ls analysis backup
+$ ls docs backup
 ```
 
 ```text
-analysis/:
+docs/:
 section-1.txt
 
 backup/:
 section-1.txt
 ```
+
+> **Copying Files to and from Remote Computers**
+>
+> For many researchers,
+> a motivation for learning how to use the shell
+> is that it's often the only way to connect to a remote computer
+> (e.g. located at a supercomputing facility or in a university department).
+>
+> Similar to the `cp` command,
+> there exists a **s**ecure **c**o**p**y (`scp`) command for
+> copying files between computers.
+> See Appendix \@ref(ssh) for details, including how to set up
+> a secure connection to a remote computer via the shell.
 
 ## Deleting Files and Directories {#bash-basics-rm}
 
@@ -885,18 +898,18 @@ In a half-hearted attempt to stop us from erasing things accidentally,
 `rm` refuses to delete directories:
 
 ```bash
-$ rm analysis
+$ rm docs
 ```
 
 ```text
-rm: analysis: is a directory
+rm: docs: is a directory
 ```
 
 We can tell `rm` we really want to do this
 by giving it the recursive option `-r`:
 
 ```bash
-$ rm -r analysis
+$ rm -r docs
 ```
 
 `rm -r` should be used with great caution:
@@ -906,7 +919,7 @@ to get `rm` to ask us to confirm each deletion.
 As a halfway measure,
 we can use `-v` (for **v**erbose)
 to get `rm` to print a message for each file it deletes.
-This options works the same way with `mv` and `cp`.
+This option works the same way with `mv` and `cp`.
 
 ## Wildcards {#bash-basics-wildcard}
 
@@ -941,7 +954,7 @@ $ wc data/moby_dick.txt
 > if two words are connected by a long dash---like "dash" and "like"
 > in this sentence---then `wc` will count them as one word.
 
-We could run `wc` more times to count find out how many lines there are in the other files,
+We could run `wc` more times to find out how many lines there are in the other files,
 but that would be a lot of typing
 and we could easily make a mistake.
 We can't just give `wc` the name of the directory as we do with `ls`:
@@ -1116,8 +1129,8 @@ is unlikely to think to look for `wc`.
 The original Unix shell is celebrating its fiftieth anniversary.
 Its commands may be cryptic,
 but few programs have remained in daily use for so long.
-The next chapter will explore how we can use the tools it gives us
-to create new tools of our own.
+The next chapter will explore how we can combine and repeat commands
+in order to create powerful, efficient workflows.
 
 ## Exercises {#bash-basics-exercises}
 
@@ -1148,7 +1161,7 @@ format to view timestamps.
 
 ### Absolute and relative paths {#bash-basics-ex-paths}
 
-Starting from a hypothetical directory located at `/Users/amira/data`,
+Starting from `/Users/amira/data`,
 which of the following commands could Amira use to navigate to her home directory,
 which is `/Users/amira`?
 
@@ -1203,37 +1216,40 @@ When might you want to create a file this way?
 ### Using `rm` safely {#bash-basics-ex-safe-rm}
 
 What would happen if you executed `rm -i my_file.txt`
-on a hypothetical file?
+on the file created in the previous exercise?
 Why would we want this protection when using `rm`?
 
 ### Moving to the current folder {#bash-basics-ex-move-dot}
 
 After running the following commands,
-Amira realizes that she put the (hypothetical) files `chapter1.dat` and `chapter2.dat` into the wrong folder:
+Amira realizes that she put the (hypothetical) files `chapter1.txt` and `chapter2.txt` into the wrong folder:
 
 ```bash
 $ ls -F
 ```
 ```text
-  processed/ raw/
+  data/  docs/
 ```
 
 ```bash
-$ ls -F processed
+$ ls -F data
 ```
 ```text
-  chapter1.dat chapter2.dat appendix1.dat appendix2.dat
+README.md			frankenstein.txt		sherlock_holmes.txt
+chapter1.txt		jane_eyre.txt			time_machine.txt
+chapter2.txt		moby_dick.txt
+dracula.txt			sense_and_sensibility.txt
 ```
 
 ```bash
-$ cd raw/
+$ cd docs
 ```
 
 Fill in the blanks to move these files to the current folder
 (i.e., the one she is currently in):
 
 ```bash
-$ mv ___/chapter1.dat  ___/chapter2.dat ___
+$ mv ___/chapter1.txt  ___/chapter2.txt ___
 ```
 
 ### Renaming files {#bash-basics-ex-renaming-files}
@@ -1284,7 +1300,7 @@ $ ls
 
 ### Copy with multiple filenames {#bash-basics-ex-copy-multi}
 
-This exercises explores how `cp` responds when attempting to copy multiple things.
+This exercise explores how `cp` responds when attempting to copy multiple things.
 
 What does `cp` do when given several filenames followed by a directory name?
 
@@ -1352,7 +1368,7 @@ structure from your previous experiment so you can add new data.
 Assume that the previous experiment is in a folder called `2016-05-18`,
 which contains a `data` folder that in turn contains folders named `raw` and
 `processed` that contain data files.  The goal is to copy the folder structure
-of the `2016-05-18-data` folder into a folder called `2016-05-20`
+of `2016-05-18/data` into a folder called `2016-05-20`
 so that your final directory structure looks like this:
 
 	2016-05-20/
@@ -1409,11 +1425,7 @@ Imagine you forgot about this.
     that do not use the `[]` syntax? *Hint*: You may need more than one
     expression.
 
-2.  The expression that you found and the expression from the lesson match the
-    same set of files in this example. What is the small difference between the
-    outputs?
-
-3.  Under what circumstances would your new expression produce an error message
+2.  Under what circumstances would your new expression produce an error message
     where the original one would not?
 
 ### Removing unneeded files {#bash-basics-ex-remove-unneeded}
