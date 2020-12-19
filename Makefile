@@ -56,7 +56,7 @@ html : _book/index.html
 
 _book/index.html : ${SOURCE} glossary/glossary-html.lua $(wildcard includes/*.html)
 	rm -f py-rse.Rmd
-	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook'); warnings()"
+	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::gitbook', quiet = TRUE); warnings()"
 	cp -r ${EXTRA} _book
 
 #-------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ pdf : _book/py-rse.pdf
 
 _book/py-rse.pdf : ${SOURCE} $(wildcard includes/*.tex)
 	rm -f py-rse.Rmd
-	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book'); warnings()"
+	Rscript -e "options(bookdown.render.file_scope = FALSE); bookdown::render_book(input='index.Rmd', output_format='bookdown::pdf_book', quiet = TRUE); warnings()"
 
 #-------------------------------------------------------------------------------
 
