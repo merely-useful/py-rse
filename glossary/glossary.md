@@ -162,7 +162,7 @@
 **documentation generator**<a id="documentation_generator"></a>
 :   A software tool that extracts specially-formatted comments or \gref{dostrings}{docstring} from code and generates cross-referenced developer documentation.
 
-**Digital Object Identifier**<a id="doi"></a>
+**Digital Object Identifier (DOI)**<a id="doi"></a>
 :   A unique persistent identifier for a book, paper, report, dataset, software release, or other digital artefact. See also: [ORCID](#orcid)
 
 **down-vote**<a id="down_vote"></a>
@@ -195,7 +195,7 @@
 **false beginner**<a id="false_beginner"></a>
 :   Someone whose previous knowledge allows them to learn (or re-learn) something more quickly.  False beginners start at the same point as true beginners (i.e., a pre-test will show the same proficiency) but can move much more quickly.
 
-**Frequently Asked Questions**<a id="faq"></a>
+**Frequently Asked Questions (FAQs)**<a id="faq"></a>
 :   A curated list of questions commonly asked about a subject, along with answers.
 
 **feature request**<a id="feature_request"></a>
@@ -264,7 +264,7 @@
 **GNU Public License**<a id="gpl"></a>
 :   A \gref{license}{license} that allows people to re-use software as long as they distribute the source of their changes.
 
-**graphical user interface**<a id="gui"></a>
+**Graphical User Interface (GUI)**<a id="gui"></a>
 :   A user interface that relies on windows, menus, pointers, and other graphical elements, as opposed to a \gref{command-line interface}{cli} or voice-driven interface.
 
 **hitchhiker**<a id="hitchhiker"></a>
@@ -309,7 +309,7 @@
 **issue tracking system**<a id="issue_tracking_system"></a>
 :   Similar to a \gref{bug tracking system}{bug\_tracker} in that it tracks \gref{"issues"}{issue} made to a \gref{repository}{repository}, usually in the form of \gref{feature requests}{feature\_request}, \gref{bug reports}{bug\_report}, or some other to-do item.
 
-**JavaScript Object Notation**<a id="json"></a>
+**JSON**<a id="json"></a>
 :   A way to represent data by combining basic values like numbers and character strings in \gref{lists}{list} and \gref{key/value}{dictionary} structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like \gref{XML}{xml}, it is unencumbered by a syntax for comments or ways to define a \gref{schema}{schema}.
 
 **kebab case**<a id="kebab_case"></a>
@@ -360,7 +360,7 @@
 **Nano (editor)**<a id="nano_editor"></a>
 :   A very simple text editor found on most Unix systems.
 
-**non-governmental organization**<a id="ngo"></a>
+**Non-Governmental Organization (NGO)**<a id="ngo"></a>
 :   An organization that is not affiliated with the government, but does the sorts of public service work that governments often do.
 
 **novice**<a id="novice"></a>
@@ -670,7 +670,7 @@
 :   A system for managing changes made to software during its development. See also: [Git](#git)
 
 **virtual environment**<a id="virtual_environment"></a>
-:   In \gref{Python}{python}, the `virtualenv` \gref{package}{package} allows you to create virtual, disposable, \gref{Python}{python} software environments containing only the packages and versions of packages you want to use for a particular project or task, and to install new packages into the environment without affecting other virtual environments, or the system-wide default environment.
+:   In \gref{Python}{python}, the `conda` or `virtualenv` \gref{packages}{package} allow you to create virtual, disposable, \gref{Python}{python} software environments containing only the packages and versions of packages you want to use for a particular project or task, and to install new packages into the environment without affecting other virtual environments, or the system-wide default environment.
 
 **virtual machine**<a id="virtual_machine"></a>
 :   A program that pretends to be a computer. This may seem a bit redundant, but VMs are quick to create and start up, and changes made inside the virtual machine are contained within that VM so we can install new \gref{packages}{package} or run a completely different operating system without affecting the underlying computer.
