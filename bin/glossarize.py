@@ -4,13 +4,17 @@
 
 
 import sys
+import re
 import yaml
+
+
+MARKDOWN_REF = re.compile(r'\[(.+?)\]\(#(.+?)\)', re.DOTALL + re.MULTILINE)
 
 
 def main():
     '''Main driver.'''
     with open(sys.argv[1], 'r') as reader:
-        terms = set([x.strip() for x in reader])
+        terms = {x.strip() for x in reader}
     glossary = yaml.load(sys.stdin, Loader=yaml.FullLoader)
     crossref = {entry['slug']:entry for entry in glossary if entry['slug'] in terms}
     slugs = list(sorted(crossref.keys()))
@@ -22,13 +26,26 @@ def show(glossary, entry):
     '''Print required Markdown.'''
     term = entry['en']['term']
     slug = entry['slug']
-    body = ' '.join([x.strip() for x in entry['en']['def'].split('\n')])
-    ref = makeRef(glossary, entry)
+    body = make_body(entry['en']['def'])
+    ref = make_ref(glossary, entry)
     print('**{term}**<a id="{slug}"></a>'.format(term=term, slug=slug))
     print(f':   {body}{ref}\n')
 
 
-def makeRef(glossary, entry):
+def make_body_replace(match):
+    '''Replace a single Markdown-style interlink in the glossary.'''
+    text = match.group(1)
+    link = match.group(2).replace('_', '\\_')
+    return f'\\gref{{{text}}}{{{link}}}'
+
+
+def make_body(raw):
+    '''Convert glossary YAML body into required Markdown text.'''
+    body = ' '.join([x.strip() for x in raw.split('\n')])
+    return MARKDOWN_REF.sub(make_body_replace, body)
+
+
+def make_ref(glossary, entry):
     '''Build cross-references if any.'''
     if 'ref' not in entry:
         return ''
