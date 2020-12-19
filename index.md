@@ -4937,7 +4937,7 @@ was,42
 that,41
 ```
 
-## Positional and Optional Arguments {#py-rse-py-scripting-positional-optional}
+## Positional and Optional Arguments {#scripting-positional-optional}
 
 We have met two kinds of command-line arguments while writing `countwords.py`.
 \gref{Optional arguments}{optional_argument}\index{option (of shell command)!optional}
@@ -5080,7 +5080,7 @@ it,6821
 he,6142
 ```
 
-## Writing Our Own Modules {#py-rse-py-scripting-modules}
+## Writing Our Own Modules {#scripting-modules}
 
 `countwords.py` and `collate.py` both now contain the function `collection_to_csv`.
 Having the same function in two or more places is a bad idea:
@@ -6856,7 +6856,7 @@ __pycache__
 ```
 
 which tells Git to ignore any `__pycache__` directory created by Python\index{\_\_pycache\_\_ directory!ignoring in Git}
-(Section \@ref(py-rse-py-scripting-modules)).
+(Section \@ref(scripting-modules)).
 
 > **Remember to Ignore**
 >
@@ -9022,7 +9022,7 @@ it is the right thing to do.
 >
 > \gref{Privilege}{privilege} is an unearned advantage given to some people but not all,\index{privilege}
 > while \gref{oppression}{oppression} is systemic inequality that benefits the privileged\index{oppression}
-> and harms those without privilege [@Auro2019].
+> and harms those without privilege [@Auro2018].
 > In Europe, the Americas, Australia, and New Zealand,
 > a straight, white, affluent, physically able male
 > is less likely to be interrupted when speaking,
@@ -9032,9 +9032,9 @@ it is the right thing to do.
 > People who are privileged are often not aware of it,
 > as they've lived in a system that provides unearned advantages their entire lives.
 > In John Scalzi's memorable phrase,
-> they've been playing on [the lowest difficulty setting there is][scalzi-easy-mode]
+> they've been playing on the lowest difficulty setting there is
 > their whole lives,
-> and as a result don't realize how much harder things are for others.
+> and as a result don't realize how much harder things are for others [@Scal2012].
 >
 > The targets of oppression are often called "members of a marginalized group",
 > but targets don't choose to be marginalized:
@@ -9274,7 +9274,7 @@ Every creative work has some sort of license;
 the only question is whether authors and users know what it is and choose to enforce it.
 Choosing a license for a project can be complex,
 not least because the law hasn't kept up with everyday practice.
-@Mori2012 and [this blog post][vanderplas-licensing] are good starting points
+@Mori2012 and @Vand2014 are good starting points
 to understand licensing and intellectual property from a researcher's point of view,
 while @Lind2008 is a deeper dive for those who want details.
 Depending on country, institution, and job role,
@@ -9954,7 +9954,7 @@ is often enough to get them to throttle back.
 Online meetings provide special challenges,\index{meetings!online}
 both in the context of regulating how often individuals speak,
 as well as running meetings in general.
-[This discussion][troy-meetings] of why online meetings are often frustrating and unproductive
+@Troy2018 discusses why online meetings are often frustrating and unproductive and
 points out that in most online meetings,
 the first person to speak during a pause gets the floor.
 As a result,
@@ -14324,7 +14324,7 @@ In Section \@ref(errors-messages) we started to define an error catalog called 
    in other scripts besides `collate.py`.
    To avoid duplication,
    move `ERRORS` to the `utilities` module that was first created in
-   Section \@ref(py-rse-py-scripting-modules).
+   Section \@ref(scripting-modules).
 
 ### Tracebacks {#errors-ex-traceback}
 
@@ -15695,14 +15695,14 @@ and doesn't download them again.
 Once we are happy with our package at TestPyPI,
 we can go through the same process to put it on the main [PyPI][pypi] repository.
 
-> **conda installation packages**
+> **`conda` installation packages**
 >
-> Given the widespread use of [conda][conda] for package management,
-> it can be a good idea to post a conda installation package to
+> Given the widespread use of [`conda`][conda] for package management,
+> it can be a good idea to post a `conda` installation package to
 > [Anaconda Cloud][anaconda-cloud].
-> The conda documentation has [instructions][conda-skeleton-pypi] for quickly building
-> a conda package for a Python module that is already available on PyPI.
-> See Appendix \@ref(anaconda) for more information about conda and Anaconda Cloud.
+> The `conda` documentation has [instructions][conda-skeleton-pypi] for quickly building
+> a `conda` package for a Python module that is already available on PyPI.
+> See Appendix \@ref(anaconda) for more information about `conda` and Anaconda Cloud.
 
 ## Documenting Packages {#packaging-document}
 
@@ -16243,7 +16243,7 @@ def random_quote():
     print(random.choice(quote_list))
 ```
 
-Create a new conda development environment called `pratchett`
+Create a new `conda` development environment called `pratchett`
 and use `pip` to install a new package called `pratchett` into that environment.
 The package should contain `quotes.py`,
 and once the package has been installed the user should be able to run:
@@ -18428,7 +18428,7 @@ $ conda activate pratchett
 
 # Learning Objectives {#objectives}
 
-This appendix lays out the learning objectives for each set of lessons,
+This appendix lists the learning objectives for each chapter,
 and is intended to help instructors who want to use this curriculum.
 
 <!-- Used `bin/list-keypoints-objectives.R` to create this list -->
@@ -18600,7 +18600,7 @@ and is intended to help instructors who want to use this curriculum.
 
 # Key Points {#keypoints}
 
-<!-- Used `bin/list-keypoints-objectives.R` to create this list -->
+This appendix lists the key points for each chapter.
 
 ## Getting Started
 
@@ -18956,11 +18956,11 @@ changes name to `pyzipf/` in Section \@ref(packaging-package).
 `pyzipf/pyzipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
 
 `pyzipf/pyzipf/collate.py`: Introduced in Section \@ref(scripting-collate) and
-updated in Section \@ref(py-rse-py-scripting-modules),
+updated in Section \@ref(scripting-modules),
 throughout Chapter \@ref(errors) and in Section \@ref(packaging-package).
 
 `pyzipf/pyzipf/countwords.py`: Introduced in Section \@ref(scripting-wordcount) and
-updated in Sections \@ref(py-rse-py-scripting-modules) and \@ref(packaging-package).
+updated in Sections \@ref(scripting-modules) and \@ref(packaging-package).
 
 `pyzipf/pyzipf/plotcounts.py`: Introduced in Exercise \@ref(scripting-ex-better-plotting) and
 updated throughout Chapters \@ref(git-cmdline), \@ref(git-advanced) and \@ref(config).
@@ -18972,7 +18972,7 @@ updated in Section \@ref(scripting-docstrings).
 
 `pyzipf/pyzipf/test_zipfs.py`: Introduced and updated throughout Chapter \@ref(testing).
 
-`pyzipf/pyzipf/utilities.py`: Introduced in Section \@ref(py-rse-py-scripting-modules).
+`pyzipf/pyzipf/utilities.py`: Introduced in Section \@ref(scripting-modules).
 
 
 <!--chapter:end:chapters/tree.Rmd-->
@@ -19429,9 +19429,9 @@ but people do if they are to create, debug, and extend them.
 
 Throughout this book we have written code to analyze word counts in classic novels
 using good Python style.
-In this appendix we will discuss the style choices we made,
-present guidelines for good Python programming style,\index{Python!style}
-and introduce some language features that can make programs more flexible and more readable.
+This appendix discusses the style choices we made,
+presents guidelines for good Python programming style,\index{Python!style}
+and introduces some language features that can make programs more flexible and more readable.
 
 ## Python Style {#style-pep8}
 
@@ -19652,7 +19652,7 @@ We put all of the single-use functions in the first half of the file
 in the order in which they are likely to be called,
 and then put all of the multi-use utility functions in the bottom of the file in alphabetical order.
 If any of those utility functions are used by other scripts or programs,
-they should go in a file of their own.
+they should go in a file of their own (Section \@ref(scripting-modules)).
 
 In fact,
 this is a good practice even if those functions are only used by one program,
@@ -20333,7 +20333,7 @@ Look for algorithmic problems first.
     The first pass over any change should therefore look for algorithmic problems.
     Are the calculations right?
     Are any rare cases going to be missed?
-    Are errors being caught and handled (Chapter \@ref(errors-logging))?
+    Are errors being caught and handled (Chapter \@ref(errors))?
     Using a consistent style helps reviewers focus on these issues.
 
 Use a checklist.
@@ -20686,83 +20686,16 @@ the best function names in the world aren't going to answer the questions
 and
 "Why doesn't it do this in a simpler way?"
 
-## Defining Your Audience {#documentation-audience}
-
-It's important to consider who documentation is for.
-There are three kinds of people in any domain:
-\gref{novices}{novice},
-\gref{competent practitioners}{competent_practitioner},
-and \gref{experts}{expert} [@Wils2018].
-A novice doesn't yet have a \gref{mental model}{mental_model} of the domain:
-they don't know what the key terms are,
-how they relate,
-what the causes of their problems are,
-or how to tell whether a solution to their problem is appropriate or not.
-
-Competent practitioners know enough to accomplish routine tasks with routine effort:
-they may need to check [Stack Overflow][stack-overflow] every few minutes,
-but they know what to search for and what "done" looks like.
-
-Finally,
-experts have such a deep and broad understanding of the domain
-that they can solve routine problems at a glance
-and are able to handle the one-in-a-thousand cases
-that would baffle the merely competent.
-
-Each of these three groups needs a different kind of documentation:
-
--   A novice needs a tutorial that introduces her to key ideas one by one
-    and shows how they fit together.
-
--   A competent practitioner needs reference guides, cookbooks, and Q&A sites;
-    these give her solutions close enough to what she needs
-    that she can tweak them the rest of the way.
-
--   Experts need this material as well---nobody's memory is perfect---but
-    they may also paradoxically want tutorials.
-    The difference between them and novices is that experts want tutorials on how things work
-    and why they were designed that way.
-
-The first thing to decide when writing documentation
-is therefore to decide which of these needs we are trying to meet.
-Tutorials like this one should be long-form prose that contain code samples and diagrams.
-They should use \gref{authentic tasks}{authentic_task} to motivate ideas,
-i.e.,
-show people things they actually want to do rather than printing the numbers from 1 to 10,
-and should include regular check-ins
-so that learners and instructors alike can tell if they're making progress.
-
-Tutorials help novices build a mental model,
-but competent practitioners and experts will be frustrated by their slow pace and low information density.
-They will want single-point solutions to specific problems like
-how to find cells in a spreadsheet that contain a certain string
-or how to configure the web server to load an access control module.
-They can make use of an alphabetical list of the functions in a library,
-but are much happier if they can search by keyword to find what they need;
-one of the signs that someone is no longer a novice is that
-they're able to compose useful queries and tell if the results are on the right track or not.
-
-> **False Beginners**
->
-> A \gref{false beginner}{false_beginner} is someone who appears not to know anything,
-> but who has enough prior experience in other domains
-> to be able to piece things together much more quickly than a genuine novice.
-> Someone who is proficient with MATLAB, for example,
-> will speed through a tutorial on Python's numerical libraries
-> much more quickly than someone who has never programmed before.
-> Creating documentation for false beginners is especially challenging;
-> if resources permit,
-> the best option is often a translation guide
-> that shows them how they would do a task with the system they know well
-> and then how to do the equivalent task with the new system.
-
-In an ideal world,
-we would satisfy these needs with a [chorus of explanations][caulfield-chorus],
-some long and detailed,
-others short and to the point.
-In our world, though,
-time and resources are limited,
-so all but the most popular packages must make do with single explanations.
+In this appendix we address some issues that commonly arise
+when people start to think about documenting their software.
+We start with tips for writing good docstrings,
+before considering more detailed documentation
+like tutorials, cookbooks and frequently-asked question
+(\gref{FAQ}{faq}\index{FAQ (Frequency Asked Questions)}\index{Python package!FAQ}) lists.
+Clearly defining your audience can make it easier to determine
+which types of documentation you need to provide,
+and there are a number of things you can do to reduce the
+work involved in providing support for FAQs. 
 
 ## Writing Good Docstrings {#documentation-docstrings}
 
@@ -20806,12 +20739,90 @@ as discussed in Chapter \@ref(testing),
 these should have long names that describe what they're checking
 so that failure reports are easy to scan.
 
+## Defining Your Audience {#documentation-audience}
+
+It's important to consider who documentation is for.
+There are three kinds of people in any domain:
+\gref{novices}{novice},
+\gref{competent practitioners}{competent_practitioner},
+and \gref{experts}{expert} [@Wils2018].
+A novice doesn't yet have a \gref{mental model}{mental_model} of the domain:
+they don't know what the key terms are,
+how they relate,
+what the causes of their problems are,
+or how to tell whether a solution to their problem is appropriate or not.
+
+Competent practitioners know enough to accomplish routine tasks with routine effort:
+they may need to check [Stack Overflow][stack-overflow] every few minutes,
+but they know what to search for and what "done" looks like.
+
+Finally,
+experts have such a deep and broad understanding of the domain
+that they can solve routine problems at a glance
+and are able to handle the one-in-a-thousand cases
+that would baffle the merely competent.
+
+Each of these three groups needs a different kind of documentation:
+
+-   A novice needs a tutorial that introduces her to key ideas one by one
+    and shows how they fit together.
+
+-   A competent practitioner needs reference guides, cookbooks, and Q&A sites;
+    these give her solutions close enough to what she needs
+    that she can tweak them the rest of the way.
+
+-   Experts need this material as well---nobody's memory is perfect---but
+    they may also paradoxically want tutorials.
+    The difference between them and novices is that experts want tutorials on how things work
+    and why they were designed that way.
+
+The first thing to decide when writing documentation
+is therefore to decide which of these needs we are trying to meet.
+Tutorials like this book should be long-form prose that contain code samples and diagrams.
+They should use \gref{authentic tasks}{authentic_task} to motivate ideas,
+i.e.,
+show people things they actually want to do rather than printing the numbers from 1 to 10,
+and should include regular check-ins
+so that learners and instructors alike can tell if they're making progress.
+
+Tutorials help novices build a mental model,
+but competent practitioners and experts will be frustrated by their slow pace and low information density.
+They will want single-point solutions to specific problems like
+how to find cells in a spreadsheet that contain a certain string
+or how to configure the web server to load an access control module.
+They can make use of an alphabetical list of the functions in a library,
+but are much happier if they can search by keyword to find what they need;
+one of the signs that someone is no longer a novice is that
+they're able to compose useful queries and tell if the results are on the right track or not.
+
+> **False Beginners**
+>
+> A \gref{false beginner}{false_beginner} is someone who appears not to know anything,
+> but who has enough prior experience in other domains
+> to be able to piece things together much more quickly than a genuine novice.
+> Someone who is proficient with MATLAB, for example,
+> will speed through a tutorial on Python's numerical libraries
+> much more quickly than someone who has never programmed before.
+> Creating documentation for false beginners is especially challenging;
+> if resources permit,
+> the best option is often a translation guide
+> that shows them how they would do a task with the system they know well
+> and then how to do the equivalent task with the new system.
+
+In an ideal world,
+we would satisfy these needs with a chorus of explanations [@Caul2016],
+some long and detailed,
+others short and to the point.
+In our world, though,
+time and resources are limited,
+so all but the most popular packages must make do with single explanations.
+
 ## Creating a FAQ {#documentation-faq}
 
 As projects grow,
 documentation within functions alone may be insufficient for users to apply code to their own problems.
 One strategy to assist other people with understanding a project is with
-an \gref{FAQ}{faq}:\index{FAQ (Frequency Asked Questions)}\index{Python package!FAQ}
+an \gref{FAQ}{faq}:
 a list of frequently-asked questions and corresponding answers.
 A good FAQ uses the terms and concepts that people bring to the software
 rather than the vocabulary of its authors;
@@ -20870,7 +20881,7 @@ Keep each item short.
     but is often as much as a person searching and reading can handle.
     It also helps writers realize just how much implicit knowledge they are assuming.
 
-Allow for a [chorus of explanations][caulfield-chorus].
+Allow for a chorus of explanations.
 :   As discussed earlier,
     users are all different from one another,
     and are therefore best served by a chorus of explanations.
@@ -20889,6 +20900,14 @@ The acronym stands for "YAML Ain't Markup Language",
 but that's a lie:
 YAML doesn't use `<tags>` like HTML,
 but can still be quite fussy about what is allowed to appear where.
+
+Throughout this book we use YAML to
+configure our plotting script (Chapter \@ref(config)),
+continuous integration with Travis CI (Section \@ref(testing-ci)),
+software environment with `conda` (Section \@ref(provenance-code-environment)),
+and a documentation website with Read the Docs (Section \@ref(packaging-rtd)).
+While you don't need to be an expert in YAML to complete tasks like these,
+this appendix outlines some basics that can help make things easier.
 
 A simple YAML file has one key-value pair on each line
 with a colon separating the key from the value:
@@ -20952,7 +20971,7 @@ bookdown::gitbook:
     toc:
       collapse: section
       before: |
-        <li><strong><a href="./">Merely Useful</a></strong></li>
+        <li><a href="./">Merely Useful</a></li>
     sharing: no
 ```
 
@@ -20969,7 +20988,7 @@ It corresponds to the following Python data structure:
       ],
       'toc': {
         'collapse': 'section',
-        'before': '<li><strong><a href="./">Merely Useful</a></strong></li>\n'
+        'before': '<li><a href="./">Merely Useful</a></li>\n'
       }
       'sharing': False
     }
@@ -20984,7 +21003,7 @@ It corresponds to the following Python data structure:
 
 When people first started using Python for data science,
 installing the relevant libraries could be difficult.\index{package installation}
-The main problem was that the Python package installer ([pip][pip])\index{pip}
+The main problem was that the Python package installer ([`pip`][pip])\index{pip}
 only worked for libraries written in pure Python.
 Many scientific Python libraries have C and/or Fortran dependencies,
 so it was left up to data scientists
@@ -20997,7 +21016,9 @@ These come with the most popular data science libraries and their dependencies p
 and some also come with a package manager to assist
 with installing additional libraries that weren't pre-installed.
 Today the most popular distribution for data science is [Anaconda][anaconda],\index{Anaconda}
-which comes with a package (and environment) manager called [conda][conda].\index{conda}
+which comes with a package (and environment) manager called [`conda`][conda].\index{conda}
+In this appendix we look at some of the most important features of `conda`
+for research software engineers.
 
 ## Package Management With conda {#anaconda-conda-package-management}
 
@@ -21010,7 +21031,7 @@ by identifying and installing compatible versions of software and all required d
 It also handles the process of updating software as more recent versions become available.
 If you don't want to install the entire Anaconda distribution,
 you can install [Miniconda][miniconda]\index{miniconda} instead.
-It essentially comes with conda and nothing else.
+It essentially comes with `conda` and nothing else.
 
 ### Anaconda Cloud {#anaconda-cloud}
 
@@ -21018,32 +21039,32 @@ What happens if we want to install a Python package
 that isn't on the list of the few thousand or so most popular data science packages
 (i.e. the ones that are automatically available via the `conda install` command)?
 The answer is the [Anaconda Cloud][anaconda-cloud] website,
-where the community can post conda installation packages.
+where the community can post `conda` installation packages.
 
 The utility of the Anaconda Cloud for research software engineers
 is best illustrated by an example.
 A few years ago, an atmospheric scientist by the name of Andrew Dawson
-wrote a Python package called [windspharm][windspharm]
+wrote a Python package called [`windspharm`][windspharm]
 for performing computations on global wind fields in spherical geometry.
 While many of Andrew's colleagues routinely process global wind fields,
-atmospheric science is a relatively small field and thus the windspharm package
+atmospheric science is a relatively small field and thus the `windspharm` package
 will never have a big enough user base to make the list of
 popular data science packages supported by Anaconda.
-Andrew has therefore posted a conda installation package to Anaconda Cloud
+Andrew has therefore posted a `conda` installation package to Anaconda Cloud
 (Figure \@ref(fig:anaconda-windspharm-ajdawson))
-so that users can install windspharm using conda:
+so that users can install `windspharm` using `conda`:
 
 ```bash
 $ conda install -c ajdawson windspharm
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/anaconda/cloud-windspharm-ajdawson.png" alt="windspharm conda installation package on Anaconda Cloud." width="100%" />
-<p class="caption">(\#fig:anaconda-windspharm-ajdawson)windspharm conda installation package on Anaconda Cloud.</p>
+<img src="figures/anaconda/cloud-windspharm-ajdawson.png" alt="The windspharm conda installation package on Anaconda Cloud." width="100%" />
+<p class="caption">(\#fig:anaconda-windspharm-ajdawson)The windspharm conda installation package on Anaconda Cloud.</p>
 </div>
 
-The conda documentation has [instructions][conda-skeleton-pypi] for quickly building
-a conda package for a Python module that is already available on [PyPI][pypi]
+The `conda` documentation has [instructions][conda-skeleton-pypi] for quickly building
+a `conda` package for a Python module that is already available on [PyPI][pypi]
 (Section \@ref(packaging-distribute)).
 
 ### conda-forge
@@ -21054,7 +21075,7 @@ To try and address this duplication problem [conda-forge][conda-forge] was launc
 which aims to be a central repository that contains just a single, up-to-date (and working)
 version of each installation package on Anaconda Cloud.
 You can therefore expand the selection of packages available via `conda install`
-beyond the chosen few thousand by adding the conda-forge channel to your conda configuration:
+beyond the chosen few thousand by adding the conda-forge channel to your `conda` configuration:
 
 ```bash
 $ conda config --add channels conda-forge
@@ -21066,7 +21087,7 @@ $ conda config --add channels conda-forge
 </div>
 
 The conda-forge website has [instructions][conda-forge-instructions]
-for adding a conda installation package to the conda-forge repository.
+for adding a `conda` installation package to the conda-forge repository.
 
 ## Environment Management With conda {#anaconda-environments}
 
@@ -21077,13 +21098,13 @@ This is especially true if the projects rely on different versions of the same p
 or if you are developing a new package and need to try new things.
 The way to avoid these issues is to create different
 \gref{virtual environments}{virtual_environment}\index{virtual environment (in Python)} for different projects/tasks.
-The original environment manager for Python development was [virtualenv][virtualenv],
-which has been more recently superseded by [pipenv][pipenv].
-The advantage that conda has over these options is that it is language agnostic
+The original environment manager for Python development was [`virtualenv`][virtualenv],
+which has been more recently superseded by [`pipenv`][pipenv].
+The advantage that `conda` has over these options is that it is language agnostic
 (i.e. you can isolate non-Python packages in your environments too) and
 supports binary packages (i.e. you don't need to compile the source code after installing),
 so it has become the environment manager of choice in data science.
-In this book conda is used to export the details of an environment
+In this book `conda` is used to export the details of an environment
 when documenting the computational methodology for a report (Section \@ref(provenance-code))
 and to test how a new package installs without disturbing anything
 in our main Python installation (Section \@ref(packaging-virtualenv)).
@@ -21255,7 +21276,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 **documentation generator**<a id="documentation_generator"></a>
 :   A software tool that extracts specially-formatted comments or \gref{dostrings}{docstring} from code and generates cross-referenced developer documentation.
 
-**Digital Object Identifier**<a id="doi"></a>
+**Digital Object Identifier (DOI)**<a id="doi"></a>
 :   A unique persistent identifier for a book, paper, report, dataset, software release, or other digital artefact. See also: [ORCID](#orcid)
 
 **down-vote**<a id="down_vote"></a>
@@ -21288,7 +21309,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 **false beginner**<a id="false_beginner"></a>
 :   Someone whose previous knowledge allows them to learn (or re-learn) something more quickly.  False beginners start at the same point as true beginners (i.e., a pre-test will show the same proficiency) but can move much more quickly.
 
-**Frequently Asked Questions**<a id="faq"></a>
+**Frequently Asked Questions (FAQs)**<a id="faq"></a>
 :   A curated list of questions commonly asked about a subject, along with answers.
 
 **feature request**<a id="feature_request"></a>
@@ -21357,7 +21378,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 **GNU Public License**<a id="gpl"></a>
 :   A \gref{license}{license} that allows people to re-use software as long as they distribute the source of their changes.
 
-**graphical user interface**<a id="gui"></a>
+**Graphical User Interface (GUI)**<a id="gui"></a>
 :   A user interface that relies on windows, menus, pointers, and other graphical elements, as opposed to a \gref{command-line interface}{cli} or voice-driven interface.
 
 **hitchhiker**<a id="hitchhiker"></a>
@@ -21402,7 +21423,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 **issue tracking system**<a id="issue_tracking_system"></a>
 :   Similar to a \gref{bug tracking system}{bug\_tracker} in that it tracks \gref{"issues"}{issue} made to a \gref{repository}{repository}, usually in the form of \gref{feature requests}{feature\_request}, \gref{bug reports}{bug\_report}, or some other to-do item.
 
-**JavaScript Object Notation**<a id="json"></a>
+**JSON**<a id="json"></a>
 :   A way to represent data by combining basic values like numbers and character strings in \gref{lists}{list} and \gref{key/value}{dictionary} structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like \gref{XML}{xml}, it is unencumbered by a syntax for comments or ways to define a \gref{schema}{schema}.
 
 **kebab case**<a id="kebab_case"></a>
@@ -21453,7 +21474,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 **Nano (editor)**<a id="nano_editor"></a>
 :   A very simple text editor found on most Unix systems.
 
-**non-governmental organization**<a id="ngo"></a>
+**Non-Governmental Organization (NGO)**<a id="ngo"></a>
 :   An organization that is not affiliated with the government, but does the sorts of public service work that governments often do.
 
 **novice**<a id="novice"></a>
@@ -21763,7 +21784,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A system for managing changes made to software during its development. See also: [Git](#git)
 
 **virtual environment**<a id="virtual_environment"></a>
-:   In \gref{Python}{python}, the `virtualenv` \gref{package}{package} allows you to create virtual, disposable, \gref{Python}{python} software environments containing only the packages and versions of packages you want to use for a particular project or task, and to install new packages into the environment without affecting other virtual environments, or the system-wide default environment.
+:   In \gref{Python}{python}, the `conda` or `virtualenv` \gref{packages}{package} allow you to create virtual, disposable, \gref{Python}{python} software environments containing only the packages and versions of packages you want to use for a particular project or task, and to install new packages into the environment without affecting other virtual environments, or the system-wide default environment.
 
 **virtual machine**<a id="virtual_machine"></a>
 :   A program that pretends to be a computer. This may seem a bit redundant, but VMs are quick to create and start up, and changes made inside the virtual machine are contained within that VM so we can install new \gref{packages}{package} or run a completely different operating system without affecting the underlying computer.
@@ -21801,7 +21822,6 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [carpentries-install-instructions]: https://carpentries.github.io/workshop-template/#setup
-[caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
 [choose-license]: https://choosealicense.com/
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
@@ -21881,7 +21901,6 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
-[scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
 [scipy-optimize]: https://docs.scipy.org/doc/scipy/reference/optimize.html
 [setuptools]: https://setuptools.readthedocs.io/
@@ -21900,13 +21919,11 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
 [travis-ci]: https://travis-ci.org/
-[troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
 [udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
-[vanderplas-licensing]: https://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
