@@ -153,6 +153,9 @@ def get_power_law_params(word_counts):
     return alpha
 ```
 
+Update `plotcounts.py` with the assertion described above.
+You'll see additional examples of assertions throughout this chapter.
+
 ## Unit Testing {#testing-unit}
 
 Catching errors is good, but preventing them is better,
@@ -270,7 +273,8 @@ which structures tests as follows:
 3.  These functions use `assert` to check results.
 
 Following these rules,
-we can create a `test_zipfs.py` script that contains the test we just developed:
+we can create a `test_zipfs.py` script in your `bin` directory
+that contains the test we just developed:
 
 ```python
 from collections import Counter
@@ -306,7 +310,7 @@ $ pytest
 ```
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 1 item
@@ -400,7 +404,7 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+platform darwin -- Python 3.7.6, pytest-6.2.1, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
@@ -532,7 +536,7 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
@@ -610,7 +614,7 @@ writer.close()
 We can confirm this code worked by checking the resulting file:
 
 ```bash
-tail -n 5 random_words.txt
+tail -n 5 test_data/random_words.txt
 ```
 
 ```text
@@ -643,7 +647,7 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 3 items
@@ -694,7 +698,7 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
@@ -727,7 +731,7 @@ $ coverage run -m pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-6.1.1, py-1.9.0,
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
@@ -749,9 +753,9 @@ $ coverage report -m
 ```
 
 ```text
-bin/countwords.py      20      7    65%   25-26, 30-37
-bin/plotcounts.py      58     37    36%   48-55, 75-77, 81-82, 
-                                          86-118, 121-139
+bin/countwords.py      20      7    65%   25-26, 30-38
+bin/plotcounts.py      58     37    36%   48-55, 75-77, 82-83, 
+                                          88-118, 122-140
 bin/test_zipfs.py      31      0   100%
 bin/utilities.py        8      5    38%   18-22
 -------------------------------------------------
@@ -867,43 +871,10 @@ Travis CI creates a fresh environment,
 makes a fresh clone of the repository (Section \@ref(git-advanced-fork)),
 and runs whatever commands the project's managers have set up.
 
-To set up CI for a project, we must:
-
-1.  Create an account on [Travis CI][travis-ci] (if we don't already have one).
-2.  Link our Travis CI account to our GitHub account (if we haven't done so already).
-3.  Tell Travis CI to watch the repository that contains our project.
-
-Creating an account with an online service is probably a familiar process,
-but linking our Travis CI account to our GitHub account may be something new.
-We only have to do this once
-to allow Travis CI to access all our GitHub repositories,
-but we should always be careful when giving sites access to other sites,
-and only trust well-established and widely-used services.
-
-Once we have created an account,
-we can tell Travis CI which repository we want it to watch
-by clicking the "+" next to the "My Repositories" link
-on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
-
-```{r testing-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI.", out.width="50%"}
-knitr::include_graphics("figures/testing/travis-add-repo.png")
-```
-
-To add the GitHub repository we have been using throughout the course,
-find it in the repository list
-and toggle the switch so that it turns green
-(Figure \@ref(fig:testing-list-repos)).
-If the repository doesn't show up,
-re-synchronize the list using the green "Sync account" button on the left sidebar.
-If it still doesn't appear,
-the repository may belong to someone else or be private.
-
-```{r testing-list-repos, echo=FALSE, fig.cap="Find Zipf's Law repository and switch it on.", out.width="50%"}
-knitr::include_graphics("figures/testing/travis-list-repos.png")
-```
-
-The next step is to tell Travis CI what we want it to do
-by creating a file called `.travis.yml`.
+Before setting up our account with Travis CI, however,
+we need to prepare our repository to be recognized by the tool.
+We'll first add a file called `.travis.yml` to our repository,
+which includes instructions for Travis CI.
 (The leading `.` in the name hides the file from casual listings on Mac or Linux,
 but not on Windows.)
 This file must be in the root directory of the repository,
@@ -918,6 +889,9 @@ language: python
 python:
 - "3.6"
 
+install:
+- pip install -r requirements.txt
+
 script:
 - pytest
 ```
@@ -926,79 +900,14 @@ The `language` key tells Travis CI which programming language to use,
 so that it knows which of its standard \gref{virtual machines}{virtual_machine} to use\index{continuous integration!use of virtual machines}
 as a starting point for the project.
 The `python` key specifies the version or versions of Python to use,
-while the `script` key lists the commands to run---in this case, `pytest`.
-We can now go ahead and push the `.travis.yml` file to GitHub.
-
-```bash
-$ git add .travis.yml
-$ git commit -m "Initial commit of travis configuration file"
-```
-```text
-[master 46cd2d8] Initial commit of travis configuration file
- 1 file changed, 7 insertions(+)
- create mode 100644 .travis.yml
-```
-```bash
-$ git push origin master
-```
-```text
-Enumerating objects: 4, done.
-Counting objects: 100% (4/4), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 339 bytes | 67.00 KiB/s, done.
-Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/amira-khan/zipf.git
-   65aee17..46cd2d8  master -> master
-```
-
-When this commit reaches GitHub,
-that site notifies Travis CI that the repository has changed.
-Travis CI then follows the instructions in `.travis.yml`
-and reports whether the build passed (shown in green)
-or produced warnings or errors (shown in red).
-To create this report, Travis CI has:
-
-1.  Created a new Linux virtual machine.
-1.  Installed the desired version of Python.
-1.  Ran the commands below the `script` key.
-1.  Reported the results at `https://travis-ci.com/USER/REPO`,
-    where `USER/REPO`
-    identifies the repository for a given user.
-
-In this case,
-we can see that the build failed (Figure \@ref(fig:testing-build-fail)).
-
-```{r testing-build-fail, echo=FALSE, fig.cap="Travis build overview (build failed)."}
-knitr::include_graphics("figures/testing/travis-build-fail.png")
-```
-
-Scrolling down to read the job log in detail,
-it says that it "could not locate requirements.txt."
-This happens because the Python scripts that are run when `pytest` is executed
+while the `install` key indicates the name of the file (`requirements.txt`)
+listing the libraries that need to be installed.
+The `script` key lists the commands to run---in this case, `pytest`---
+which in turn executes our project scripts.
 (i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `utilities.py`)
-import a number of packages that don't come with the
-[Python Standard Library][python-standard-library].
-To fix this problem,
-we need to do two things.
-The first is to add an `install` key to `.travis.yml`:
-
-```yaml
-language: python
-
-python:
-- "3.6"
-
-install:
-- pip install -r requirements.txt
-
-script:
-- pytest
-```
-
-The second is to create `requirements.txt`,
-which lists the libraries that need to be installed:
+These scripts import a number of packages that don't come with the
+[Python Standard Library][python-standard-library],
+so these are what comprises `requirements.txt`:
 
 ```text
 numpy
@@ -1009,34 +918,64 @@ pytest
 pyyaml
 ```
 
-We commit these changes to GitHub:
+Be sure to save both `requirements.txt` and `.travis.yml`
+to your project's root directory,
+commit to your repository,a
+and push to GitHub,
+or Travis CI will not be able to recognize your project.
 
-```bash
-$ git add .travis.yml requirements.txt
-$ git commit -m "Adding requirements"
-```
-```text
-[master 4917a19] Adding requirements
- 2 files changed, 9 insertions(+)
- create mode 100644 requirements.txt
-```
-```bash
-$ git push origin master
-```
-```text
-Enumerating objects: 6, done.
-Counting objects: 100% (6/6), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (4/4), 445 bytes | 74.00 KiB/s, done.
-Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/amira-khan/zipf.git
-   46cd2d8..4917a19  master -> master
+We're now ready to set up CI for our project.
+The basic steps are as follows:
+
+1.  Create an account on [Travis CI][travis-ci] (if we don't already have one).
+2.  Link our Travis CI account to our GitHub account (if we haven't done so already).
+3.  Tell Travis CI to watch the repository that contains our project.
+
+Creating an account with an online service is probably a familiar process,
+but linking our Travis CI account to our GitHub account may be something new.
+We only have to do this once
+to allow Travis CI to access all our GitHub repositories,
+but we should always be careful when giving sites access to other sites,
+and only trust well-established and widely-used services.
+
+We can tell Travis CI which repository we want it to watch
+by clicking the "+" next to the "My Repositories" link
+on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
+
+```{r testing-add-repo, echo=FALSE, fig.cap="Click to add a new GitHub repository to Travis CI.", out.width="50%"}
+knitr::include_graphics("figures/testing/travis-add-repo.png")
 ```
 
-Travis CI automatically runs again.
-This time our tests pass and the build completes successfully
+To add the GitHub repository we have been using throughout this book,
+find it in the repository list
+(Figure \@ref(fig:testing-list-repos)).
+If the repository doesn't show up,
+re-synchronize the list using the green "Sync account" button on the left sidebar.
+If it still doesn't appear,
+the repository may belong to someone else or be private,
+or your required files may be incorrect.
+Click the "Trigger a build" button to initiate your first test using Travis CI.
+
+```{r testing-list-repos, echo=FALSE, fig.cap="Find Zipf's Law repository and trigger a build.", out.width="50%"}
+knitr::include_graphics("figures/testing/travis-list-repos.png")
+```
+
+Once your repository has been activated,
+Travis CI follows the instructions in `.travis.yml`
+and reports whether the build passed (shown in green)
+or produced warnings or errors (shown in red).
+To create this report, Travis CI has:
+
+1.  Created a new Linux virtual machine.
+2.  Installed the desired version of Python.
+3.  Run the commands below the `script` key.
+4.  Reported the results at `https://travis-ci.com/USER/REPO`,
+    where `USER/REPO`
+    identifies the repository for a given user.
+
+Our tests pass and the build completes successfully.
+We can view additional details about the test by clicking on the
+repository name
 (Figure \@ref(fig:testing-build-pass)).
 
 ```{r testing-build-pass, echo=FALSE, fig.cap="Travis build overview (build succeeded)."}
