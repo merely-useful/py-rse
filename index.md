@@ -2,10 +2,13 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-12-19"
+date: "2020-12-20"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
+citation-package: biblatex
+biblio-style: ieee
+biblatexoptions: [backend=biber, doi=only]
 link-citations: yes
 github-repo: merely-useful/py-rse
 site: bookdown::bookdown_site
