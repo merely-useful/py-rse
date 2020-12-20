@@ -8903,6 +8903,9 @@ defined in the \texttt{plotcounts.py} script:
 
 where the maximum word frequency rank corresponds to \(c\),
 and \(-1 / \alpha\) the exponent in the power law.
+We have followed the \href{https://numpydoc.readthedocs.io/en/latest/}{\texttt{numpydoc}} format for the detailed docstring
+in \texttt{plot\_fit} - see Appendix \ref{documentation} for more information
+about docstring formats.
 
 \hypertarget{git-advanced-zipf-verify}{%
 \section{Verifying Zipf's Law}\label{git-advanced-zipf-verify}}
@@ -24801,14 +24804,39 @@ as we discuss below,
 if we need to describe both,
 we should probably rewrite our function.
 
-An active verb is something like \enquote{extract}, \enquote{normalize}, or \enquote{find}.
+An active verb is something like \enquote{extract}, \enquote{normalize}, or \enquote{plot}.
 For example,
-these are all good one-line docstrings:
+here's a function that calculates someone's age from their birthday,
+which uses a one-line docstring beginning with the active verb \enquote{find}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ re}
+\ImportTok{from}\NormalTok{ datetime }\ImportTok{import}\NormalTok{ date}
+
+
+\KeywordTok{def}\NormalTok{ calculate_age(birthday):}
+    \CommentTok{"""Find current age from birth date."""}
+\NormalTok{    valid_date }\OperatorTok{=} \StringTok{'([0-9]}\SpecialCharTok{\{4\}}\StringTok{)-([0-9]}\SpecialCharTok{\{2\}}\StringTok{)-([0-9]}\SpecialCharTok{\{2\}}\StringTok{)$'}
+    \ControlFlowTok{if} \KeywordTok{not} \BuiltInTok{bool}\NormalTok{(re.search(valid_date, birthday)):}
+\NormalTok{        message }\OperatorTok{=} \StringTok{'Birthday must be in YYYY-MM-DD format'}
+        \ControlFlowTok{raise} \PreprocessorTok{ValueError}\NormalTok{(message)}
+\NormalTok{    today }\OperatorTok{=}\NormalTok{ date.today()}
+\NormalTok{    born }\OperatorTok{=}\NormalTok{ date.fromisoformat(birthday)}
+\NormalTok{    no_bday_this_year_yet }\OperatorTok{=}\NormalTok{ (today.month,}
+\NormalTok{                             today.day) }\OperatorTok{<}\NormalTok{ (born.month,}
+\NormalTok{                                           born.day)}
+\NormalTok{    age }\OperatorTok{=}\NormalTok{ today.year }\OperatorTok{-}\NormalTok{ born.year }\OperatorTok{-}\NormalTok{ no_bday_this_year_yet}
+    \ControlFlowTok{return}\NormalTok{ age}
+\end{Highlighting}
+\end{Shaded}
+
+Other examples of good one-line docstrings include:
 
 \begin{itemize}
 \tightlist
 \item
-  \enquote{Create a list of current ages from a list of birth dates.}
+  \enquote{Create a list of capital cities from a list of countries.}
 \item
   \enquote{Clip signals to lie in {[}0\ldots1{]}.}
 \item
@@ -24840,10 +24868,88 @@ The word \enquote{public} in the first rule is important.
 We don't have to write full documentation for helper functions
 that are only used inside our package and aren't meant to be called by users,
 but these should still have at least a comment explaining their purpose.
-We also don't have to document unit testing functions:
-as discussed in Chapter~\ref{testing},
-these should have long names that describe what they're checking
-so that failure reports are easy to scan.
+
+Here's the previous function with a more complete docstring:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ calculate_age(birthday):}
+    \CommentTok{"""Find current age from birth date.}
+\CommentTok{    }
+\CommentTok{    :param birthday str: birth date}
+\CommentTok{    :returns: age in years}
+\CommentTok{    :rtype: int}
+\CommentTok{    :raises ValueError: if birthday not in YYYY-MM-DD format}
+\CommentTok{    """}
+\end{Highlighting}
+\end{Shaded}
+
+We could format and organise the information in the docstring any way we like,
+but here we've decided to use \gref{reStructuredText}{restructured\_text},
+which is the default plain-text markup format supported by \href{https://www.sphinx-doc.org/en/master/}{Sphinx}
+(Section \ref{packaging-document}).
+The \href{https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html\#info-field-lists}{Sphinx documentation} describes the precise syntax for
+parameters, returns, exceptions and other items that are typically included
+in a docstring.
+
+While the reStructuredText docstring format suggested in the Sphinx documentation
+looks nice once Sphinx parses and converts it to HTML for the web,
+the code itself is somewhat dense and hard to read.
+To address this issue,
+a number of different formats have been proposed.
+Two of the most prominent are \href{https://github.com/google/styleguide/blob/gh-pages/pyguide.md\#38-comments-and-docstrings}{Google style}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ calculate_age(birthday):}
+    \CommentTok{"""Find current age from birth date.}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        birthday (str): birth date.}
+\CommentTok{    }
+\CommentTok{    Returns:}
+\CommentTok{        Age in years.}
+\CommentTok{    }
+\CommentTok{    Raises:}
+\CommentTok{        ValueError: If birthday not in YYYY-MM-DD format.}
+\CommentTok{    """}
+\end{Highlighting}
+\end{Shaded}
+
+and \href{https://numpydoc.readthedocs.io/en/latest/}{\texttt{numpydoc} style}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ calculate_age(birthday):}
+    \CommentTok{"""Find current age from birth date.}
+\CommentTok{    }
+\CommentTok{    Parameters}
+\CommentTok{    ----------}
+\CommentTok{    birthday : string}
+\CommentTok{        birth date}
+
+\CommentTok{    Returns}
+\CommentTok{    -------}
+\CommentTok{    integer}
+\CommentTok{        age in years}
+
+\CommentTok{    Raises}
+\CommentTok{    ------}
+\CommentTok{    ValueError}
+\CommentTok{        if birthday not in YYYY-MM-DD format}
+\CommentTok{    """}
+\end{Highlighting}
+\end{Shaded}
+
+These two formats have become so popular that a Sphinx extension
+called \href{https://sphinxcontrib-napoleon.readthedocs.io/en/latest/}{Napoleon} has been released.
+It parses \texttt{numpydoc} and Google style docstrings and converts them to reStructuredText
+before Sphinx attempts to parse them.
+This happens in an intermediate step while Sphinx is processing the documentation,
+so it doesn't modify any of the docstrings in your actual source code files.
+The choice between the \texttt{numpydoc} and Google styles is largely aesthetic,
+but the two styles should not be mixed.
+Choose one style for your project and be consistent with it.
 
 \hypertarget{documentation-audience}{%
 \section{Defining Your Audience}\label{documentation-audience}}

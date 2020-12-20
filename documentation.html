@@ -733,11 +733,30 @@ or what side effects the function has;
 as we discuss below,
 if we need to describe both,
 we should probably rewrite our function.</p>
-<p>An active verb is something like “extract”, “normalize”, or “find”.
+<p>An active verb is something like “extract”, “normalize”, or “plot”.
 For example,
-these are all good one-line docstrings:</p>
+here’s a function that calculates someone’s age from their birthday,
+which uses a one-line docstring beginning with the active verb “find”:</p>
+<div class="sourceCode" id="cb1036"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1036-1"><a href="documentation.html#cb1036-1"></a><span class="im">import</span> re</span>
+<span id="cb1036-2"><a href="documentation.html#cb1036-2"></a><span class="im">from</span> datetime <span class="im">import</span> date</span>
+<span id="cb1036-3"><a href="documentation.html#cb1036-3"></a></span>
+<span id="cb1036-4"><a href="documentation.html#cb1036-4"></a></span>
+<span id="cb1036-5"><a href="documentation.html#cb1036-5"></a><span class="kw">def</span> calculate_age(birthday):</span>
+<span id="cb1036-6"><a href="documentation.html#cb1036-6"></a>    <span class="co">&quot;&quot;&quot;Find current age from birth date.&quot;&quot;&quot;</span></span>
+<span id="cb1036-7"><a href="documentation.html#cb1036-7"></a>    valid_date <span class="op">=</span> <span class="st">&#39;([0-9]</span><span class="sc">{4}</span><span class="st">)-([0-9]</span><span class="sc">{2}</span><span class="st">)-([0-9]</span><span class="sc">{2}</span><span class="st">)$&#39;</span></span>
+<span id="cb1036-8"><a href="documentation.html#cb1036-8"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">bool</span>(re.search(valid_date, birthday)):</span>
+<span id="cb1036-9"><a href="documentation.html#cb1036-9"></a>        message <span class="op">=</span> <span class="st">&#39;Birthday must be in YYYY-MM-DD format&#39;</span></span>
+<span id="cb1036-10"><a href="documentation.html#cb1036-10"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(message)</span>
+<span id="cb1036-11"><a href="documentation.html#cb1036-11"></a>    today <span class="op">=</span> date.today()</span>
+<span id="cb1036-12"><a href="documentation.html#cb1036-12"></a>    born <span class="op">=</span> date.fromisoformat(birthday)</span>
+<span id="cb1036-13"><a href="documentation.html#cb1036-13"></a>    no_bday_this_year_yet <span class="op">=</span> (today.month,</span>
+<span id="cb1036-14"><a href="documentation.html#cb1036-14"></a>                             today.day) <span class="op">&lt;</span> (born.month,</span>
+<span id="cb1036-15"><a href="documentation.html#cb1036-15"></a>                                           born.day)</span>
+<span id="cb1036-16"><a href="documentation.html#cb1036-16"></a>    age <span class="op">=</span> today.year <span class="op">-</span> born.year <span class="op">-</span> no_bday_this_year_yet</span>
+<span id="cb1036-17"><a href="documentation.html#cb1036-17"></a>    <span class="cf">return</span> age</span></code></pre></div>
+<p>Other examples of good one-line docstrings include:</p>
 <ul>
-<li>“Create a list of current ages from a list of birth dates.”</li>
+<li>“Create a list of capital cities from a list of countries.”</li>
 <li>“Clip signals to lie in [0…1].”</li>
 <li>“Reduce the red component of each pixel.”</li>
 </ul>
@@ -755,11 +774,69 @@ our docstrings should include:</p>
 <p>The word “public” in the first rule is important.
 We don’t have to write full documentation for helper functions
 that are only used inside our package and aren’t meant to be called by users,
-but these should still have at least a comment explaining their purpose.
-We also don’t have to document unit testing functions:
-as discussed in Chapter <a href="testing.html#testing">11</a>,
-these should have long names that describe what they’re checking
-so that failure reports are easy to scan.</p>
+but these should still have at least a comment explaining their purpose.</p>
+<p>Here’s the previous function with a more complete docstring:</p>
+<div class="sourceCode" id="cb1037"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1037-1"><a href="documentation.html#cb1037-1"></a><span class="kw">def</span> calculate_age(birthday):</span>
+<span id="cb1037-2"><a href="documentation.html#cb1037-2"></a>    <span class="co">&quot;&quot;&quot;Find current age from birth date.</span></span>
+<span id="cb1037-3"><a href="documentation.html#cb1037-3"></a><span class="co">    </span></span>
+<span id="cb1037-4"><a href="documentation.html#cb1037-4"></a><span class="co">    :param birthday str: birth date</span></span>
+<span id="cb1037-5"><a href="documentation.html#cb1037-5"></a><span class="co">    :returns: age in years</span></span>
+<span id="cb1037-6"><a href="documentation.html#cb1037-6"></a><span class="co">    :rtype: int</span></span>
+<span id="cb1037-7"><a href="documentation.html#cb1037-7"></a><span class="co">    :raises ValueError: if birthday not in YYYY-MM-DD format</span></span>
+<span id="cb1037-8"><a href="documentation.html#cb1037-8"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>We could format and organise the information in the docstring any way we like,
+but here we’ve decided to use <a href="glossary.html#restructured_text">reStructuredText</a>,
+which is the default plain-text markup format supported by <a href="https://www.sphinx-doc.org/en/master/">Sphinx</a>
+(Section <a href="packaging.html#packaging-document">14.6</a>).
+The <a href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#info-field-lists">Sphinx documentation</a> describes the precise syntax for
+parameters, returns, exceptions and other items that are typically included
+in a docstring.</p>
+<p>While the reStructuredText docstring format suggested in the Sphinx documentation
+looks nice once Sphinx parses and converts it to HTML for the web,
+the code itself is somewhat dense and hard to read.
+To address this issue,
+a number of different formats have been proposed.
+Two of the most prominent are <a href="https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings">Google style</a>:</p>
+<div class="sourceCode" id="cb1038"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1038-1"><a href="documentation.html#cb1038-1"></a><span class="kw">def</span> calculate_age(birthday):</span>
+<span id="cb1038-2"><a href="documentation.html#cb1038-2"></a>    <span class="co">&quot;&quot;&quot;Find current age from birth date.</span></span>
+<span id="cb1038-3"><a href="documentation.html#cb1038-3"></a><span class="co">    </span></span>
+<span id="cb1038-4"><a href="documentation.html#cb1038-4"></a><span class="co">    Args:</span></span>
+<span id="cb1038-5"><a href="documentation.html#cb1038-5"></a><span class="co">        birthday (str): birth date.</span></span>
+<span id="cb1038-6"><a href="documentation.html#cb1038-6"></a><span class="co">    </span></span>
+<span id="cb1038-7"><a href="documentation.html#cb1038-7"></a><span class="co">    Returns:</span></span>
+<span id="cb1038-8"><a href="documentation.html#cb1038-8"></a><span class="co">        Age in years.</span></span>
+<span id="cb1038-9"><a href="documentation.html#cb1038-9"></a><span class="co">    </span></span>
+<span id="cb1038-10"><a href="documentation.html#cb1038-10"></a><span class="co">    Raises:</span></span>
+<span id="cb1038-11"><a href="documentation.html#cb1038-11"></a><span class="co">        ValueError: If birthday not in YYYY-MM-DD format.</span></span>
+<span id="cb1038-12"><a href="documentation.html#cb1038-12"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>and <a href="https://numpydoc.readthedocs.io/en/latest/"><code>numpydoc</code> style</a>:</p>
+<div class="sourceCode" id="cb1039"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1039-1"><a href="documentation.html#cb1039-1"></a><span class="kw">def</span> calculate_age(birthday):</span>
+<span id="cb1039-2"><a href="documentation.html#cb1039-2"></a>    <span class="co">&quot;&quot;&quot;Find current age from birth date.</span></span>
+<span id="cb1039-3"><a href="documentation.html#cb1039-3"></a><span class="co">    </span></span>
+<span id="cb1039-4"><a href="documentation.html#cb1039-4"></a><span class="co">    Parameters</span></span>
+<span id="cb1039-5"><a href="documentation.html#cb1039-5"></a><span class="co">    ----------</span></span>
+<span id="cb1039-6"><a href="documentation.html#cb1039-6"></a><span class="co">    birthday : string</span></span>
+<span id="cb1039-7"><a href="documentation.html#cb1039-7"></a><span class="co">        birth date</span></span>
+<span id="cb1039-8"><a href="documentation.html#cb1039-8"></a></span>
+<span id="cb1039-9"><a href="documentation.html#cb1039-9"></a><span class="co">    Returns</span></span>
+<span id="cb1039-10"><a href="documentation.html#cb1039-10"></a><span class="co">    -------</span></span>
+<span id="cb1039-11"><a href="documentation.html#cb1039-11"></a><span class="co">    integer</span></span>
+<span id="cb1039-12"><a href="documentation.html#cb1039-12"></a><span class="co">        age in years</span></span>
+<span id="cb1039-13"><a href="documentation.html#cb1039-13"></a></span>
+<span id="cb1039-14"><a href="documentation.html#cb1039-14"></a><span class="co">    Raises</span></span>
+<span id="cb1039-15"><a href="documentation.html#cb1039-15"></a><span class="co">    ------</span></span>
+<span id="cb1039-16"><a href="documentation.html#cb1039-16"></a><span class="co">    ValueError</span></span>
+<span id="cb1039-17"><a href="documentation.html#cb1039-17"></a><span class="co">        if birthday not in YYYY-MM-DD format</span></span>
+<span id="cb1039-18"><a href="documentation.html#cb1039-18"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>These two formats have become so popular that a Sphinx extension
+called <a href="https://sphinxcontrib-napoleon.readthedocs.io/en/latest/">Napoleon</a> has been released.
+It parses <code>numpydoc</code> and Google style docstrings and converts them to reStructuredText
+before Sphinx attempts to parse them.
+This happens in an intermediate step while Sphinx is processing the documentation,
+so it doesn’t modify any of the docstrings in your actual source code files.
+The choice between the <code>numpydoc</code> and Google styles is largely aesthetic,
+but the two styles should not be mixed.
+Choose one style for your project and be consistent with it.</p>
 </div>
 <div id="documentation-audience" class="section level2">
 <h2><span class="header-section-number">G.2</span> Defining Your Audience</h2>

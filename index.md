@@ -7444,6 +7444,9 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
 
 where the maximum word frequency rank corresponds to \(c\),
 and \(-1 / \alpha\) the exponent in the power law.
+We have followed the [`numpydoc`][numpydoc] format for the detailed docstring
+in `plot_fit` - see Appendix \@ref(documentation) for more information
+about docstring formats.
 
 ## Verifying Zipf's Law {#git-advanced-zipf-verify}
 
@@ -20713,11 +20716,34 @@ as we discuss below,
 if we need to describe both,
 we should probably rewrite our function.
 
-An active verb is something like "extract", "normalize", or "find".
+An active verb is something like "extract", "normalize", or "plot".
 For example,
-these are all good one-line docstrings:
+here's a function that calculates someone's age from their birthday,
+which uses a one-line docstring beginning with the active verb "find": 
 
--   "Create a list of current ages from a list of birth dates."
+```python
+import re
+from datetime import date
+
+
+def calculate_age(birthday):
+    """Find current age from birth date."""
+    valid_date = '([0-9]{4})-([0-9]{2})-([0-9]{2})$'
+    if not bool(re.search(valid_date, birthday)):
+        message = 'Birthday must be in YYYY-MM-DD format'
+        raise ValueError(message)
+    today = date.today()
+    born = date.fromisoformat(birthday)
+    no_bday_this_year_yet = (today.month,
+                             today.day) < (born.month,
+                                           born.day)
+    age = today.year - born.year - no_bday_this_year_yet
+    return age
+```
+
+Other examples of good one-line docstrings include:
+
+-   "Create a list of capital cities from a list of countries."
 -   "Clip signals to lie in [0...1]."
 -   "Reduce the red component of each pixel."
 
@@ -20737,10 +20763,82 @@ The word "public" in the first rule is important.
 We don't have to write full documentation for helper functions
 that are only used inside our package and aren't meant to be called by users,
 but these should still have at least a comment explaining their purpose.
-We also don't have to document unit testing functions:
-as discussed in Chapter \@ref(testing),
-these should have long names that describe what they're checking
-so that failure reports are easy to scan.
+
+Here's the previous function with a more complete docstring:
+
+```python
+def calculate_age(birthday):
+    """Find current age from birth date.
+    
+    :param birthday str: birth date
+    :returns: age in years
+    :rtype: int
+    :raises ValueError: if birthday not in YYYY-MM-DD format
+    """
+```
+
+We could format and organise the information in the docstring any way we like,
+but here we've decided to use \gref{reStructuredText}{restructured_text},
+which is the default plain-text markup format supported by [Sphinx][sphinx]
+(Section \@ref(packaging-document)).
+The [Sphinx documentation][sphinx-docstring-docs] describes the precise syntax for
+parameters, returns, exceptions and other items that are typically included
+in a docstring.
+
+While the reStructuredText docstring format suggested in the Sphinx documentation
+looks nice once Sphinx parses and converts it to HTML for the web,
+the code itself is somewhat dense and hard to read.
+To address this issue,
+a number of different formats have been proposed.
+Two of the most prominent are [Google style][google-style]:
+
+```python
+def calculate_age(birthday):
+    """Find current age from birth date.
+    
+    Args:
+        birthday (str): birth date.
+    
+    Returns:
+        Age in years.
+    
+    Raises:
+        ValueError: If birthday not in YYYY-MM-DD format.
+    """
+``` 
+
+and [`numpydoc` style][numpydoc]:
+
+```python
+def calculate_age(birthday):
+    """Find current age from birth date.
+    
+    Parameters
+    ----------
+    birthday : string
+        birth date
+
+    Returns
+    -------
+    integer
+        age in years
+
+    Raises
+    ------
+    ValueError
+        if birthday not in YYYY-MM-DD format
+    """
+```
+
+These two formats have become so popular that a Sphinx extension
+called [Napoleon][napoleon] has been released.
+It parses `numpydoc` and Google style docstrings and converts them to reStructuredText
+before Sphinx attempts to parse them.
+This happens in an intermediate step while Sphinx is processing the documentation,
+so it doesn’t modify any of the docstrings in your actual source code files.
+The choice between the `numpydoc` and Google styles is largely aesthetic,
+but the two styles should not be mixed.
+Choose one style for your project and be consistent with it.
 
 ## Defining Your Audience {#documentation-audience}
 
@@ -21864,6 +21962,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [gnu-man-coreutils]: https://www.gnu.org/software/coreutils/manual/coreutils.html
 [gnu-man]: https://www.gnu.org/manual/manual.html
 [go-fair]: https://www.go-fair.org/fair-principles/
+[google-style]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
 [heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
@@ -21881,6 +21980,8 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [meili-review-article]: https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[napoleon]: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/
+[numpydoc]: https://numpydoc.readthedocs.io/en/latest/
 [orcid-registration]: https://orcid.org/register
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
@@ -21911,6 +22012,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [sphinx]: https://www.sphinx-doc.org/en/master/
+[sphinx-docstring-docs]: https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#info-field-lists
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-git]: http://swcarpentry.github.io/git-novice/
