@@ -9,7 +9,7 @@ CHAPTERS=index.Rmd $(wildcard chapters/*.Rmd)
 OBJECTIVES_KEYPOINTS=$(wildcard objectives/*.md) $(wildcard keypoints/*.md)
 
 GLOSSARY=glossary/glossary.md
-GLOSARIO=${HOME}/glosario
+GLOSARIO=${HOME}/proj/glosario
 
 COMMON_FILES=\
   krantz.cls \
@@ -98,7 +98,7 @@ fixme :
 
 ## gloss : rebuild the Markdown glossary file.
 # Target cannot be called 'glossary' because there is a directory with that name.
-gloss :
+gloss : bin/glossary-merge.py bin/glossarize.py glossary/glossary.yml
 	echo '# Glossary {#glossary}' > ${GLOSSARY}
 	echo '' >> ${GLOSSARY}
 	bin/glossary-merge.py ${GLOSARIO}/glossary.yml glossary/glossary.yml \

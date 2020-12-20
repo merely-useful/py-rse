@@ -13,7 +13,6 @@
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [carpentries-install-instructions]: https://carpentries.github.io/workshop-template/#setup
-[caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
 [choose-license]: https://choosealicense.com/
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
@@ -94,7 +93,6 @@
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
-[scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
 [scipy-optimize]: https://docs.scipy.org/doc/scipy/reference/optimize.html
 [setuptools]: https://setuptools.readthedocs.io/
@@ -113,13 +111,11 @@
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
 [travis-ci]: https://travis-ci.com/
-[troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
 [udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
-[vanderplas-licensing]: https://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/
