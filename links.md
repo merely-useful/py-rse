@@ -52,6 +52,7 @@
 [gnu-man-coreutils]: https://www.gnu.org/software/coreutils/manual/coreutils.html
 [gnu-man]: https://www.gnu.org/manual/manual.html
 [go-fair]: https://www.go-fair.org/fair-principles/
+[google-style]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
 [heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
@@ -69,6 +70,8 @@
 [meili-review-article]: https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[napoleon]: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/
+[numpydoc]: https://numpydoc.readthedocs.io/en/latest/
 [orcid-registration]: https://orcid.org/register
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
@@ -99,6 +102,7 @@
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [sphinx]: https://www.sphinx-doc.org/en/master/
+[sphinx-docstring-docs]: https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#info-field-lists
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-git]: http://swcarpentry.github.io/git-novice/

@@ -94,19 +94,68 @@ def calculate_age(birthday):
     """
 ```
 
-We could format and organise the information in the docstring in any way we like,
+We could format and organise the information in the docstring any way we like,
 but here we've decided to use \gref{reStructuredText}{restructured_text},
 which is the default plain-text markup format supported by [Sphinx][sphinx]
-(Section \@ref(packaging-document)) and is also the docstring format
-recommended by [PEP 287][pep287]. 
+(Section \@ref(packaging-document)).
+The [Sphinx documentation][sphinx-docstring-docs] describes the precise syntax for
+parameters, returns, exceptions and other items that are typically included
+in a docstring.
 
-https://www.python.org/dev/peps/pep-0287/.
-The Sphinx website has a detailed guide 
-https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#info-field-lists
+While the reStructuredText docstring format suggested in the Sphinx documentation
+looks nice once Sphinx parses and converts it to HTML for the web,
+the code itself is somewhat dense and hard to read.
+To address this issue,
+a number of different formats have been proposed.
+Two of the most prominent are [Google style][google-style]:
 
- 
+```python
+def calculate_age(birthday):
+    """Find current age from birth date.
+    
+    Args:
+        birthday (str): birth date.
+    
+    Returns:
+        Age in years.
+    
+    Raises:
+        ValueError: If birthday not in YYYY-MM-DD format.
+    """
+``` 
 
+and [`numpydoc` style][numpydoc]:
 
+```python
+def calculate_age(birthday):
+    """Find current age from birth date.
+    
+    Parameters
+    ----------
+    birthday : string
+        birth date
+
+    Returns
+    -------
+    integer
+        age in years
+
+    Raises
+    ------
+    ValueError
+        if birthday not in YYYY-MM-DD format
+    """
+```
+
+These two formats have become so popular that a Sphinx extension
+called [Napoleon][napoleon] has been released.
+It parses `numpydoc` and Google style docstrings and converts them to reStructuredText
+before Sphinx attempts to parse them.
+This happens in an intermediate step while Sphinx is processing the documentation,
+so it doesn’t modify any of the docstrings in your actual source code files.
+The choice between the `numpydoc` and Google styles is largely aesthetic,
+but the two styles should not be mixed.
+Choose one style for your project and be consistent with it.
 
 ## Defining Your Audience {#documentation-audience}
 
