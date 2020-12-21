@@ -13,7 +13,6 @@
 [captain-awkward]: https://captainawkward.com/
 [carpentries]: https://carpentries.org/
 [carpentries-install-instructions]: https://carpentries.github.io/workshop-template/#setup
-[caulfield-chorus]: https://hapgood.us/2016/05/13/choral-explanations/
 [charles-rules]: https://geekfeminism.wikia.com/wiki/Charles%27_Rules_of_Argument
 [choose-license]: https://choosealicense.com/
 [code-smells-and-feels]: https://github.com/jennybc/code-smells-and-feels
@@ -53,6 +52,7 @@
 [gnu-man-coreutils]: https://www.gnu.org/software/coreutils/manual/coreutils.html
 [gnu-man]: https://www.gnu.org/manual/manual.html
 [go-fair]: https://www.go-fair.org/fair-principles/
+[google-style]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
 [heaps-law]: https://en.wikipedia.org/wiki/Heaps%27_law
 [hippocratic-license]: https://firstdonoharm.dev/
 [ini-format]: https://en.wikipedia.org/wiki/INI_file
@@ -70,6 +70,8 @@
 [meili-review-article]: https://lawdigitalcommons.bc.edu/cgi/viewcontent.cgi?article=3318&context=bclr
 [miniconda]: https://docs.conda.io/en/latest/miniconda.html
 [model-coc]: https://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy
+[napoleon]: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/
+[numpydoc]: https://numpydoc.readthedocs.io/en/latest/
 [orcid-registration]: https://orcid.org/register
 [orwells-rules]: https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules
 [osf]: https://osf.io/
@@ -88,12 +90,12 @@
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [python-graph-gallery-styles]: https://python-graph-gallery.com/199-matplotlib-style-sheets/
+[python-import]: https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 [python-standard-library]: https://docs.python.org/3/library/
 [python-traceback]: https://docs.python.org/3/library/traceback.html
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
-[scalzi-easy-mode]: https://whatever.scalzi.com/2012/05/15/straight-white-male-the-lowest-difficulty-setting-there-is/
 [scientific-data]: https://www.nature.com/sdata/
 [scipy-optimize]: https://docs.scipy.org/doc/scipy/reference/optimize.html
 [setuptools]: https://setuptools.readthedocs.io/
@@ -101,6 +103,7 @@
 [snakemake]: https://snakemake.readthedocs.io/
 [so-bash]: https://stackoverflow.com/questions/tagged/bash
 [sphinx]: https://www.sphinx-doc.org/en/master/
+[sphinx-docstring-docs]: https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#info-field-lists
 [stack-overflow-good-question]: https://stackoverflow.com/help/how-to-ask
 [stack-overflow]: https://stackoverflow.com/
 [swc-git]: http://swcarpentry.github.io/git-novice/
@@ -111,14 +114,12 @@
 [theoj-checklist]: https://joss.readthedocs.io/en/latest/review_checklist.html
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
-[travis-ci]: https://travis-ci.org/
-[troy-meetings]: https://chelseatroy.com/2018/03/29/why-do-remote-meetings-suck-so-much/
+[travis-ci]: https://travis-ci.com/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
 [udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
 [ukho-accessibility]: https://ukhomeoffice.github.io/accessibility-posters/posters/accessibility-posters.pdf
 [uwm-git-lesson]: https://uw-madison-datascience.github.io/git-novice-custom/
-[vanderplas-licensing]: https://www.astrobetter.com/blog/2014/03/10/the-whys-and-hows-of-licensing-scientific-code/
 [virtualenv]: https://virtualenv.pypa.io/
 [wayback-machine]: https://web.archive.org/
 [windspharm]: https://ajdawson.github.io/windspharm/latest/

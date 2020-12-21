@@ -35,7 +35,7 @@ def show(glossary, entry):
 def make_body_replace(match):
     '''Replace a single Markdown-style interlink in the glossary.'''
     text = match.group(1)
-    link = match.group(2).replace('_', '\\_')
+    link = match.group(2)
     return f'\\gref{{{text}}}{{{link}}}'
 
 

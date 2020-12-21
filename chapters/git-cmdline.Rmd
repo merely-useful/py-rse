@@ -81,6 +81,7 @@ import pandas as pd
 
 
 def main(args):
+    """Run the command line program."""
     df = pd.read_csv(args.infile, header=None,
                      names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False,
@@ -89,7 +90,8 @@ def main(args):
     ax = df.plot.scatter(x='word_frequency',
                          y='inverse_rank',
                          figsize=[12, 6],
-                         grid=True)
+                         grid=True,
+                         xlim=args.xlim)
     ax.figure.savefig(args.outfile)
 
 
@@ -240,8 +242,8 @@ On branch master
 No commits yet
 
 Untracked files:
-  (use "git add <file>..." to include in what will
-  be committed)
+  (use "git add <file>..." to include in what will be
+  committed)
 
         bin/
         data/
@@ -294,25 +296,24 @@ No commits yet
 
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
-
-        new file:   bin/book_summary.sh
-        new file:   bin/collate.py
-        new file:   bin/countwords.py
-        new file:   bin/plotcounts.py
-        new file:   bin/script_template.py
-        new file:   bin/utilities.py
-        new file:   data/README.md
-        new file:   data/dracula.txt
-        new file:   data/frankenstein.txt
-        new file:   data/jane_eyre.txt
-        new file:   data/moby_dick.txt
-        new file:   data/sense_and_sensibility.txt
-        new file:   data/sherlock_holmes.txt
-        new file:   data/time_machine.txt
-        new file:   results/dracula.csv
-        new file:   results/jane_eyre.csv
-        new file:   results/moby_dick.csv
-        new file:   results/jane_eyre.png
+	  new file:   bin/book_summary.sh
+	  new file:   bin/collate.py
+	  new file:   bin/countwords.py
+	  new file:   bin/plotcounts.py
+	  new file:   bin/script_template.py
+	  new file:   bin/utilities.py
+	  new file:   data/README.md
+	  new file:   data/dracula.txt
+	  new file:   data/frankenstein.txt
+	  new file:   data/jane_eyre.txt
+	  new file:   data/moby_dick.txt
+	  new file:   data/sense_and_sensibility.txt
+	  new file:   data/sherlock_holmes.txt
+	  new file:   data/time_machine.txt
+	  new file:   results/dracula.csv
+	  new file:   results/jane_eyre.csv
+	  new file:   results/jane_eyre.png
+	  new file:   results/moby_dick.csv
 ```
 
 Adding all of our existing files this way is easy,
@@ -350,12 +351,12 @@ $ git commit -m "Add scripts, novels, word counts, and plots"
 ```
 
 ```text
-[master (root-commit) 31a216a] Add scripts, novels, word
+[master (root-commit) 173222b] Add scripts, novels, word 
     counts, and plots
- 17 files changed, 240337 insertions(+)
+ 18 files changed, 145296 insertions(+)
  create mode 100644 bin/book_summary.sh
  create mode 100644 bin/collate.py
- create mode 100755 bin/countwords.py
+ create mode 100644 bin/countwords.py
  create mode 100644 bin/plotcounts.py
  create mode 100644 bin/script_template.py
  create mode 100644 bin/utilities.py
@@ -378,7 +379,7 @@ and stores a copy permanently inside the repository's `.git` directory.
 This permanent copy is called a \gref{commit}{commit} or a \gref{revision}{revision}.\index{commit!set of files}
 Git gives is a unique identifier,
 and the first line of output from `git commit` displays
-its \gref{short identifier}{short_identifier_git} `31a216a`,\index{Git!short identifier}\index{short identifier (in Git)}
+its \gref{short identifier}{short_identifier_git} `2dc78f0`,\index{Git!short identifier}\index{short identifier (in Git)}
 which is the first few characters of that unique label.
 
 We use the `-m` option (short for **m**essage)
@@ -485,10 +486,9 @@ $ git status
 ```text
 On branch master
 Untracked files:
-  (use "git add <file>..." to include in what will
-  be committed)
-
-        results/dracula.png
+  (use "git add <file>..." to include in what will be
+  committed)
+    results/dracula.png
 
 nothing added to commit but untracked files
 present (use "git add" to track)
@@ -503,7 +503,7 @@ $ git commit -m "Add plot of word counts for 'Dracula'"
 ```
 
 ```text
-[master 65b7e61] Add plot of word counts for 'Dracula'
+[master 851d590] Add plot of word counts for 'Dracula'
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 results/dracula.png
 ```
@@ -516,15 +516,15 @@ $ git log
 ```
 
 ```text
-commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa (HEAD -> master)
+commit 851d590a214c7859eafa0998c6c951f8e0eb359b (HEAD -> master)
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 10:46:19 2020 -0800
+Date:   Sat Dec 19 09:32:41 2020 -0800
 
     Add plot of word counts for 'Dracula'
 
-commit 31a216a6119de9a8d2233e5e275af9a2967415af
+commit 173222bf90216b408c8997f4e143572b99637750
 Author: Amira Khan <amira@zipf.org>
-Date:   Wed Feb 19 15:39:04 2020 -0800
+Date:   Sat Dec 19 09:30:23 2020 -0800
 
     Add scripts, novels, word counts, and plots
 ```
@@ -537,7 +537,7 @@ the commit's author,
 when it was created,
 and the commit message that we wrote.
 
-> **Scrolling through logs**
+> **Scrolling Through Logs**
 >
 > Our log this time isn't very long, 
 > so you were likely able to see it printed to your screen without needing to scroll.
@@ -579,7 +579,7 @@ to put `'rank'` on the y-axis and add `loglog=True`:
                          xlim=args.xlim)
 ```
 
-When we run `git status` now,
+When we check our status again,
 it prints:
 
 ```bash
@@ -589,10 +589,11 @@ $ git status
 ```text
 On branch master
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-        modified:   bin/plotcounts.py
+  (use "git add <file>..." to update what will be 
+  committed)
+  (use "git restore <file>..." to discard changes in
+  working directory)
+	  modified:   bin/plotcounts.py
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -605,7 +606,7 @@ a file Git already knows about has been modified.
 > After executing Git commands,
 > you may see output that differs slightly from what is shown here.
 > For example, 
-> you may see a suggestion for `git checkout` 
+> you may see a suggestion for `git checkout`\index{Git commands!checkout}
 > in place of `git restore` after executing the code above,
 > which means you're running an different version of Git.
 > As with most tasks in coding,
@@ -632,13 +633,10 @@ $ git diff
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index 13e7f38..a6005cd 100644
+index f274473..c4c5b5a 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
+@@ -13,7 +13,7 @@ def main(args):
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
@@ -647,7 +645,6 @@ index 13e7f38..a6005cd 100644
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
 The output is cryptic,
@@ -659,7 +656,7 @@ If we break it down into pieces:
 1.  The first line tells us that Git is producing output
     in the format of the Unix `diff` command.
 2.  The second line tells exactly which versions of the file Git is comparing:
-    `13e7f38` and `a6005cd` are the short identifiers for those versions.
+    `f274473` and `c4c5b5a` are the short identifiers for those versions.
 3.  The third and fourth lines once again show the name of the file being changed;
     the name appears twice in case we are renaming a file as well as modifying it.
 4.  The remaining lines show us the changes and the lines on which they occur.
@@ -683,9 +680,13 @@ $ git commit -m "Plot frequency against rank on log-log axes"
 ```text
 On branch master
 Changes not staged for commit:
-        modified:   bin/plotcounts.py
+  (use "git add <file>..." to update what will be 
+  committed)
+  (use "git restore <file>..." to discard changes in 
+  working directory)
+	  modified:   bin/plotcounts.py
 
-no changes added to commit
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 Whoops:
@@ -700,9 +701,8 @@ $ git status
 ```text
 On branch master
 Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-        modified:   bin/plotcounts.py
+  (use "git restore --staged <file>..." to unstage)
+	  modified:   bin/plotcounts.py
 ```
 
 ```bash
@@ -710,8 +710,8 @@ $ git commit -m "Plot frequency against rank on log-log axes"
 ```
 
 ```text
-[master b5176bf] Plot frequency against rank on log-log axes
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[master 582f7f6] Plot frequency against rank on log-log axes
+1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
 > **The Staging Area**
@@ -768,10 +768,9 @@ On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be
   committed)
-  (use "git checkout -- <file>..." to discard changes in
+  (use "git restore <file>..." to discard changes in
   working directory)
-
-        modified:   results/dracula.png
+	  modified:   results/dracula.png
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -782,8 +781,8 @@ It therefore simply tells us that the new file is different from the old one:
 
 ```diff
 diff --git a/results/dracula.png b/results/dracula.png
-index d8162ac..e9fe7f8 100644
-Binary files a/results/dracula.png and
+index c1f62fd..57a7b70 100644
+Binary files a/results/dracula.png and 
 b/results/dracula.png differ
 ```
 
@@ -804,7 +803,7 @@ $ git commit -a -m "Update dracula plot"
 ```
 
 ```text
-[master d77bc5c] Update dracula plot
+[master ee8684c] Update dracula plot
  1 file changed, 0 insertions(+), 0 deletions(-)
  rewrite results/dracula.png (99%)
 ```
@@ -836,10 +835,17 @@ to one stored on a hosting service such as [GitHub][github].
 > which we'll refer to as a remote or GitHub repository.
 
 The first steps are to create an account on GitHub,
-and then to create a new repository to synchronize with.
+and then select the option there to create a new remote repository
+to synchronize with our local repository.
+Select the option on GitHub to create a new repository,
+then add the requested information for your Zipf's Law project.
 The remote repository doesn't have to have the same name as the local one,
 but we will probably get confused if they are different,
 so the repository we create on GitHub will also be called `zipf`.
+The other default options are likely appropriate for your remote repository.
+Because we are synchronizing with an existing repository,
+do not add a README, `.gitignore`, or license;
+we'll discuss these additions in other chapters.
 
 Next,
 we need to connect our desktop repository with the one on GitHub.
@@ -911,16 +917,15 @@ once we do that,
 Git prints a few lines of administrative information:
 
 ```text
-Enumerating objects: 33, done.
-Counting objects: 100% (33/33), done.
+Enumerating objects: 35, done.
+Counting objects: 100% (35/35), done.
 Delta compression using up to 4 threads
-Compressing objects: 100% (33/33), done.
-Writing objects: 100% (33/33), 2.12 MiB | 799.00 KiB/s, done.
-Total 33 (delta 5), reused 0 (delta 0)
-remote: Resolving deltas: 100% (5/5), done.
+Compressing objects: 100% (35/35), done.
+Writing objects: 100% (35/35), 2.17 MiB | 602.00 KiB/s, done.
+Total 35 (delta 7), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (7/7), done.
 To https://github.com/amira-khan/zipf.git
  * [new branch]      master -> master
-Branch 'master' set up to track remote branch 'master' from 'origin'.
 ```
 
 If we view our GitHub repository in the browser,
@@ -962,6 +967,13 @@ The Git commands we've covered in this section (`git pull`, `git push`)
 are the main tasks associated with incorporating remote repositories into your workflow 
 (Figure \@ref(fig:git-cmdline-remote)b).
 
+> **Amira's Repository**
+>
+> Amira's repository referenced in this section
+> does exist in on GitHub at [amira-khan/zipf][amira-repo];
+> you may find it a useful reference point 
+> when proceeding through the rest of the book.
+
 ## Exploring History {#git-cmdline-history}
 
 Git lets us look at previous versions of files
@@ -979,35 +991,34 @@ if we run `git log`\index{Git commands!log} right now,
 it shows us something like this:
 
 ```text
-commit d77bc5cc204f3140d95f942d0515b143927c6f51
-  (HEAD -> master, origin/master)
+commit ee8684ca123e1e829fc995d672e3d7e4b00f2610 (HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:44:54 2020 -0800
+Date:   Sat Dec 19 09:52:04 2020 -0800
 
     Update dracula plot
 
-commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
+commit 582f7f6f536d520b1328c04c9d41e24b54170656
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:18:33 2020 -0800
+Date:   Sat Dec 19 09:37:25 2020 -0800
 
     Plot frequency against rank on log-log axes
 
-commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa
+commit 851d590a214c7859eafa0998c6c951f8e0eb359b
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 10:46:19 2020 -0800
+Date:   Sat Dec 19 09:32:41 2020 -0800
 
     Add plot of word counts for 'Dracula'
 
-commit 31a216a6119de9a8d2233e5e275af9a2967415af
+commit 173222bf90216b408c8997f4e143572b99637750
 Author: Amira Khan <amira@zipf.org>
-Date:   Wed Feb 19 15:39:04 2020 -0800
+Date:   Sat Dec 19 09:30:23 2020 -0800
 
     Add scripts, novels, word counts, and plots
 ```
 
 The commit in which we changed `plotcounts.py`
-has the absolute identifier `b5176bfd2ce9650ad5e79e117cd68a666c9cdabc`,
-but we can use `b5176bf` to reference it in almost all situations.
+has the absolute identifier `582f7f6f536d520b1328c04c9d41e24b54170656`,
+but we can use `582f7f6` to reference it in almost all situations.
 
 While `git log` includes the commit message,
 it doesn't tell us exactly what changes were made in each commit.
@@ -1023,17 +1034,17 @@ The first part of the output is shown below;
 we have truncated the rest,
 since it is very long:
 
-```text
-commit d77bc5cc204f3140d95f942d0515b143927c6f51
+```diff
+commit ee8684ca123e1e829fc995d672e3d7e4b00f2610
   (HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:44:54 2020 -0800
+Date:   Sat Dec 19 09:52:04 2020 -0800
 
     Update dracula plot
 
 diff --git a/results/dracula.png b/results/dracula.png
-index 8e3ff84..af8e892 100644
-Binary files a/results/dracula.png and
+index c1f62fd..57a7b70 100644
+Binary files a/results/dracula.png and 
 b/results/dracula.png differ
 ...
 ```
@@ -1055,12 +1066,10 @@ the difference between the file as it is now and the most recent version:
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index a6005cd..d085f22 100644
+index c4c5b5a..c511da1 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -7,7 +7,6 @@ def main(args):
-     """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None,
+@@ -11,7 +11,6 @@ def main(args):
                       names=('word', 'word_frequency'))
      df['rank'] = df['word_frequency'].rank(ascending=False,
                                             method='max')
@@ -1068,45 +1077,35 @@ index a6005cd..d085f22 100644
      ax = df.plot.scatter(x='word_frequency',
                           y='rank', loglog=True,
                           figsize=[12, 6],
-                          grid=True,
-                          xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
-`git diff b5176bf`,
+`git diff 582f7f6`,
 on the other hand,
 shows the difference between the current state
 and the commit referenced by the short identifier:
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index a6005cd..04e824d 100644
+index c4c5b5a..c511da1 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -7,8 +7,7 @@ def main(args):
-     """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None,
+@@ -11,7 +11,6 @@ def main(args):
                       names=('word', 'word_frequency'))
      df['rank'] = df['word_frequency'].rank(ascending=False,
                                             method='max')
 -    df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
--                         y='inverse_rank',
-+                         y='rank', loglog=True,
+                          y='rank', loglog=True,
                           figsize=[12, 6],
-                          grid=True,
-                          xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
-
 diff --git a/results/dracula.png b/results/dracula.png
-index d8162ac..e9fe7f8 100644
-Binary files a/results/dracula.png and
+index c1f62fd..57a7b70 100644
+Binary files a/results/dracula.png and 
 b/results/dracula.png differ
 ```
 
-Note that you may need to use something other than `b5176bf`,
-since Git may have assigned your commit a different unique identifier.
-Note also that we have *not* committed this change:
+Note that you will need to reference your `git log` to replace `582f7f6` in the code above,
+since Git assigned your commit a different unique identifier.
+Note also that we have *not* committed the last change to `plotcounts.py`;
 we will look at ways of undoing it in the next section.
 
 The "relative" version of history relies on a special identifier called `HEAD`,\index{Git!HEAD}\index{HEAD (in Git)}
@@ -1126,22 +1125,18 @@ $ git diff HEAD~1..HEAD~2
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index a6005cd..13e7f38 100644
+index c4c5b5a..f274473 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
+@@ -13,7 +13,7 @@ def main(args):
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
--                         y='inverse_rank',
-+                         y='rank', loglog=True,
+-                         y='rank', loglog=True,
++                         y='inverse_rank',
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
 If we want to see the changes made in a particular commit,
@@ -1153,20 +1148,17 @@ $ git show HEAD~1 bin/plotcounts.py
 ```
 
 ```diff
-commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
+commit 582f7f6f536d520b1328c04c9d41e24b54170656
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:18:33 2020 -0800
+Date:   Sat Dec 19 09:37:25 2020 -0800
 
     Plot frequency against rank on log-log axes
 
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index 13e7f38..a6005cd 100644
+index f274473..c4c5b5a 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
+@@ -13,7 +13,7 @@ def main(args):
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
@@ -1175,7 +1167,6 @@ index 13e7f38..a6005cd 100644
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
 If we wanted to view the contents of a file
@@ -1194,7 +1185,8 @@ This allows us to look through the file using a paging program.
 We can see what we changed,
 but how can we restore it?\index{Git!restore old versions}
 Suppose we change our mind about the last update to `bin/plotcounts.py`
-before we add it or commit it.
+(removing `df['inverse_rank'] = 1 / df['rank']`)
+before we add or commit it.
 `git status` tells us that the file has been changed,
 but those changes haven't been \gref{staged}{git_stage}:\index{Git!staging area}
 
@@ -1204,15 +1196,12 @@ $ git status
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be
+  (use "git add <file>..." to update what will be 
   committed)
-  (use "git checkout -- <file>..." to discard changes
-  in working directory)
-
-        modified:   bin/plotcounts.py
+  (use "git restore <file>..." to discard changes in 
+  working directory)
+	modified:   bin/plotcounts.py
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -1228,8 +1217,6 @@ $ git status
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
 nothing to commit, working tree clean
 ```
 
@@ -1243,15 +1230,15 @@ we used it to recover the version of the file in the most recent commit.
 > If you're running a different version of Git,
 > you may see a suggestion for `git checkout` instead of `git restore`.
 > As of Git version 2.29,
-> `git restore` is still an experimental command.
-> `git checkout` is a generally used to switch among versions of working files.
+> `git restore` is still an experimental command,
+> and operates as a specialized form of `git chekcout`.
 > `git checkout HEAD bin/plotcounts.py` is equivalent to the last command run.\index{Git commands!checkout}
 
 We can confirm the file has been restored
 by printing the relevant lines of the file:
 
 ```bash
-$ head -n 12 bin/plotcounts.py | tail -4
+$ head -n 19 bin/plotcounts.py | tail -n 8
 ```
 
 ```text
@@ -1270,7 +1257,11 @@ we'll need to use `git checkout` to revert to earlier versions of files.\index{G
 We can use a specific commit identifier rather than `HEAD` to go back as far as we want:
 
 ```bash
-$ git checkout 65b7e61 bin/countwords.py
+$ git checkout 851d590 bin/plotcounts.py
+```
+
+```text
+Updated 1 path from c8d6a33
 ```
 
 Doing this does not change the history:
@@ -1284,35 +1275,51 @@ $ git status
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
 Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-        modified:   bin/plotcounts.py
+  (use "git restore --staged <file>..." to unstage)
+	  modified:   bin/plotcounts.py
 ```
 
-Notice that the changes have already been added to the staging area for new commits.
+```bash
+$ head -n 19 bin/plotcounts.py | tail -n 8
+```
+
+```text
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
+    df['inverse_rank'] = 1 / df['rank']
+    ax = df.plot.scatter(x='word_frequency',
+                         y='inverse_rank',
+                         figsize=[12, 6],
+                         grid=True,
+                         xlim=args.xlim)
+```
+
 If we change our mind again,
-we can return the file to the state of the most recent commit using `git reset`:\index{Git commands!reset}
+we can use the suggestion in the output to restore the earlier version.
+Because checking out the changes added them to the staging area,
+we need to first remove them from the staging area:
 
 ```bash
-$ git reset HEAD bin/countwords.py
+$ git restore --staged bin/plotcounts.py
+```
+
+However,
+the changes have been unstaged but still exist in the file.
+We can return the file to the state of the most recent commit:
+
+```bash
+$ git restore bin/plotcounts.py
 $ git status
 ```
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-        modified:   bin/plotcounts.py
+nothing to commit, working tree clean
 ```
 
 ```bash
-$ head -n 12 bin/plotcounts.py | tail -4
+$ head -n 19 bin/plotcounts.py | tail -n 8
 ```
 
 ```text
@@ -1326,6 +1333,7 @@ $ head -n 12 bin/plotcounts.py | tail -4
                          xlim=args.xlim)
 ```
 
+We have restored the most recent commit.
 Since we didn't commit the change
 that removed the line that calculates the inverse rank,
 that work is now lost:
@@ -1358,7 +1366,7 @@ __pycache__
 ```
 
 which tells Git to ignore any `__pycache__` directory created by Python\index{\_\_pycache\_\_ directory!ignoring in Git}
-(Section \@ref(py-rse-py-scripting-modules)).
+(Section \@ref(scripting-modules)).
 
 > **Remember to Ignore**
 >
@@ -1397,12 +1405,13 @@ required for tracking files stored there?
 
 ### Removing before saving {#git-cmdline-ex-unsave}
 
-The output of `git status` tells us that
-we can take files out of the list of things to be saved
+If you're working on an older version of Git,
+you may see an output from `git status` suggesting
+you can take files out of the staging area
 using `git rm --cached`.
 Try this out:
 
-1.  Create a new file in the repository called `example.txt`.
+1.  Create a new file in an initialized Git repository called `example.txt`.
 2.  Use `git add example.txt` to add this file.
 3.  Use `git status` to check that Git has noticed it.
 4.  Use `git rm --cached example.txt` to remove it from the list of things to be saved.
@@ -1412,36 +1421,45 @@ What (if anything) has happened to the file?
 
 ### Viewing changes {#git-cmdline-ex-word-diff}
 
-Make a few changes to a file in your Git repository,
+Make a few changes to a file in a Git repository,
 then view those differences using both `git diff`
 and `git diff --word-diff`.
 Which output do you find easiest to understand?
+
+Note: If you performed this exercise in your Zipf's Law project,
+we recommend discarding (not committing)
+your changes made to a file.
 
 ### Committing changes {#git-cmdline-ex-commit}
 
 Which command(s) below would save changes to `myfile.txt` to a local Git repository?
 
-1. ```bash
-   $ git commit -m "Add recent changes"
+```bash
+# Option 1
+$ git commit -m "Add recent changes"
+```
+
+```bash
+# Option 2
+$ git init myfile.txt
+$ git commit -m "Add recent changes"
+```
+
+```bash
+# Option 3
+$ git add myfile.txt
+$ git commit -m "Add recent changes"
    ```
 
-2. ```bash
-   $ git init myfile.txt
-   $ git commit -m "Add recent changes"
-   ```
-
-3. ```bash
-   $ git add myfile.txt
-   $ git commit -m "Add recent changes"
-   ```
-
-4. ```bash
-   $ git commit -m myfile.txt "Add recent changes"
-   ```
+```bash
+# Option 4
+$ git commit -m myfile.txt "Add recent changes"
+```
 
 ### Write your biography {#git-cmdline-ex-bio}
 
 1.  Create a new Git repository on your computer called `bio`.
+Make sure the directory containing this repository is outside your `zipf` project directory! 
 2.  Write a three-line biography for yourself in a file called `me.txt` and commit your changes.
 3.  Modify one line and add a fourth line.
 4.  Display the differences between the file's original state and its updated state.
@@ -1450,7 +1468,9 @@ Which command(s) below would save changes to `myfile.txt` to a local Git reposit
 
 The staging area can hold changes from any number of files
 that you want to commit as a single snapshot.
-From your new `bio` directory:
+
+From your new `bio` directory,
+following after the previous exercise (in which you have uncommitted changes to `me.txt`):
 
 1.  Create another new file `employment.txt`
     and add the details of your most recent job.
@@ -1468,6 +1488,32 @@ From your new `bio` directory:
 4.  Go to the repo you just created on GitHub and check the timestamps of the files.
 
 How does GitHub record times, and why?
+
+### Workflow and history {#git-cmdline-ex-history}
+
+Assume you made the following changes in your `bio` repository.
+What is the output of the last command in the sequence below?
+
+```bash
+$ echo "Sharing information about myself." > motivation.txt
+$ git add motivation.txt
+$ echo "Documenting major milestones." > motivation.txt
+$ git commit -m "Motivate project"
+$ git restore motivation.txt
+$ cat motivation.txt
+```
+
+1. `Sharing information about myself.`
+
+2. `Documenting major milestones.`
+
+3. 
+```text
+Sharing information about myself.
+Documenting major milestones.
+```
+
+4. An error message because we have changed `motivation.txt` without committing first.
 
 ### Ignoring nested files {#git-cmdline-ex-ignore-nested}
 
@@ -1495,7 +1541,7 @@ Explain in one or two sentences how `git push` is different from `git commit`.
 
 ### License and README files {#git-cmdline-ex-boilerplate}
 
-When we initialized our GitHub repo,
+When we initialized our remote `zipf` GitHub repo,
 we didn't add a `README.md` or license file.
 If we had,
 what would have happened when we tried to link our local and remote repositories?
@@ -1515,49 +1561,14 @@ to recover the last committed version of her script?
 2.  `$ git checkout HEAD data_cruncher.sh`
 3.  `$ git checkout HEAD~1 data_cruncher.sh`
 4.  `$ git checkout <unique ID of last commit> data_cruncher.sh`
-5.  Both 2 and 4
-
-### Workflow and history {#git-cmdline-ex-history}
-
-What is the output of the last command in the sequence below?
-
-```bash
-$ cd zipf
-$ echo "Zipf's Law describes the relationship between the
-  frequency and rarity of words." > motivation.txt
-$ git add motivation.txt
-$ echo "Zipf's Law suggests the frequency of any word is
-  inversely proportional to its rank." > motivation.txt
-$ git commit -m "Motivate project"
-$ git restore motivation.txt
-$ cat motivation.txt
-```
-
-1.
-```
-    Zipf's Law describes the relationship between the
-    frequency and rarity of words.
-```
-
-2.
-```
-    Zipf's Law suggests the frequency of any word is
-    inversely proportional to its rank.
-```
-
-3.
-```
-   Zipf's Law describes the relationship between the
-   frequency and rarity of words.
-   Zipf's Law suggests the frequency of any word is
-   inversely proportional to its rank.
-```
-
-4. An error message because we have changed `motivation.txt` without committing first.
+5.  `$ git restore data_cruncher.sh`
+6.  `$ git restore HEAD`
 
 ### Understanding `git diff` {#git-cmdline-ex-diff}
 
-1.  What will the command `git diff HEAD~2 bin/plotcounts.py` do if we run it?
+Using your `zipf` project directory:
+
+1.  What would the command `git diff HEAD~9 bin/plotcounts.py` do if we run it?
 2.  What does it actually do?
 3.  What does `git diff HEAD bin/plotcounts.py` do?
 
@@ -1565,7 +1576,8 @@ $ cat motivation.txt
 
 `git checkout` can be used to restore a previous commit when unstaged changes have been made,
 but will it also work for changes that have been staged but not committed?
-To find out:
+To find out,
+use your `zipf` project directory to:
 
 1.  Change `bin/plotcounts.py`.
 2.  Use `git add` on those changes to `bin/plotcounts.py`.
@@ -1574,6 +1586,14 @@ To find out:
 Does it work?
 
 ### Figuring out who did what {#git-cmdline-ex-blame}
+
+We never committed the last edit that removes the calculation of inverse rank.
+Remove this line from `plotcounts.py`,
+then commit the change:
+
+```python
+df['inverse_rank'] = 1 / df['rank']
+```
 
 Run the command `git blame bin/plotcounts.py`.
 What does each line of the output show?

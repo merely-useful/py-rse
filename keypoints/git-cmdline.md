@@ -12,5 +12,5 @@
 -   `git remote` manages bookmarks pointing at remote repositories.
 -   `git push` copies changes from a local repository to a remote repository.
 -   `git pull` copies changes from a remote repository to a local repository.
--   `git checkout` recovers old versions of files.
+-   `git restore` and `git checkout` recover old versions of files.
 -   The `.gitignore` file tells Git what files to ignore.

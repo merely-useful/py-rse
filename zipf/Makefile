@@ -27,7 +27,8 @@ results/collated.csv : $(RESULTS) $(COLLATE)
 
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-	@bash $(SUMMARY) $<
+	@bash $(SUMMARY) $< Title
+	@bash $(SUMMARY) $< Author
 	python $(COUNT) $< > $@
 
 ## results : regenerate result for all books.

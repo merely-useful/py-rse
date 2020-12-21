@@ -95,9 +95,9 @@ i.e. `print_name`.
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```
@@ -205,6 +205,7 @@ If we run `script_template.py` at the command line
 the output shows us that `argparse` has successfully handled the arguments:
 
 ```bash
+$ cd ~/zipf
 $ python script_template.py in.csv out.png
 ```
 
@@ -337,9 +338,9 @@ Python provides this for us.)
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```
@@ -380,7 +381,7 @@ We start by moving the template into the directory
 where we store our runnable programs (Section \@ref(getting-started-organize)):
 
 ```bash
-$ mv script_template.py ~/zipf/bin
+$ mv script_template.py bin
 ```
 
 Next,
@@ -435,6 +436,7 @@ orders its contents from most to least frequent,
 and then writes it to \gref{standard output}{stdout} as CSV:
 
 ```python
+import sys
 import csv
 
 
@@ -530,7 +532,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=str,
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -591,7 +594,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'),
                         nargs='?', default='-',
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -633,7 +637,7 @@ was,42
 that,41
 ```
 
-## Positional and Optional Arguments {#py-rse-py-scripting-positional-optional}
+## Positional and Optional Arguments {#scripting-positional-optional}
 
 We have met two kinds of command-line arguments while writing `countwords.py`.
 \gref{Optional arguments}{optional_argument}\index{option (of shell command)!optional}
@@ -643,7 +647,8 @@ which means that all three of the following definitions are valid:
 ```python
 parser.add_argument('-n', type=int, help='Limit output')
 parser.add_argument('--num', type=int, help='Limit output')
-parser.add_argument('-n', '--num', type=int, help='Limit output')
+parser.add_argument('-n', '--num',
+                    type=int, help='Limit output')
 ```
 
 The convention is for `-` to precede
@@ -725,8 +730,8 @@ def update_counts(reader, word_counts):
 def main(args):
     """Run the command line program."""
     word_counts = Counter()
-    for file_name in args.infiles:
-        with open(file_name, 'r') as reader:
+    for fname in args.infiles:
+        with open(fname, 'r') as reader:
             update_counts(reader, word_counts)
     collection_to_csv(word_counts, num=args.num)
 
@@ -735,7 +740,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*',
                         help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -776,7 +782,7 @@ it,6821
 he,6142
 ```
 
-## Writing Our Own Modules {#py-rse-py-scripting-modules}
+## Writing Our Own Modules {#scripting-modules}
 
 `countwords.py` and `collate.py` both now contain the function `collection_to_csv`.
 Having the same function in two or more places is a bad idea:
@@ -859,7 +865,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'),
                         nargs='?', default='-',
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -889,8 +896,8 @@ def update_counts(reader, word_counts):
 def main(args):
     """Run the command line program."""
     word_counts = Counter()
-    for fn in args.infiles:
-        with open(fn, 'r') as reader:
+    for fname in args.infiles:
+        with open(fname, 'r') as reader:
             update_counts(reader, word_counts)
     util.collection_to_csv(word_counts, num=args.num)
 
@@ -899,7 +906,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*',
                         help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -1021,9 +1029,9 @@ matching a pattern, much like the `ls` shell command.
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```
@@ -1096,9 +1104,9 @@ Hint: String objects have a `count` method, e.g:
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```

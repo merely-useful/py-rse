@@ -17,8 +17,8 @@ def test_alpha():
       f the word count, and
       c is a constant of proportionality.
 
-    To generate test word counts for an expected alpha value
-      of 1.0, a maximum word frequency of 600 is used
+    To generate test word counts for an expected alpha value of
+      1.0, a maximum word frequency of 600 is used
       (i.e. c = 600 and r ranges from 1 to 600)
     """
     max_freq = 600
