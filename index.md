@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-12-20"
+date: "2020-12-21"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -452,6 +452,8 @@ as part of their workshop website template at:
 <https://carpentries.github.io/workshop-template/#setup>
 
 We can follow those instructions to install the Bash shell, Git, a text editor and Anaconda.
+We recommend Anaconda as the method for installing Python,
+as it includes Conda as well as many of the packages we'll use in this book.
 
 You can check if Make is already on your computer by typing `make -v` into the Bash shell.
 If it is not, you can install it as follows:
@@ -461,12 +463,26 @@ If it is not, you can install it as follows:
 - *Windows*: Follow the [installation instructions][ubc-mds-make-windows] maintained by the
   Master of Data Science program at the University of British Columbia.
 
-> **conda in the shell on Windows**
+> **conda in the Shell on Windows**
 >
 > If you are using Windows and the `conda` command isn't available at the Bash shell,
 > you'll need to open the Anaconda Prompt program (via the Windows start menu)
 > and run the command `conda init bash` (this only needs to be done once).
 > After that, your shell will be configured to use conda going forward.
+
+> **Software Versions**
+> 
+> Throughout the book,
+> we'll be showing you examples of the output you can expect to see.
+> This output is derived from running a Mac with:
+> Git version 2.29.2, Python version 3.7.6,
+> GNU bash version 3.2.57(1)-release (x86_64-apple-darwin19),
+> GNU Make 3.81, and conda 4.9.2.
+> In some cases,
+> what you see printed to the screen may differ slightly 
+> based on software version.
+> We'll help you understand how to interpret the output
+> so you can keep working and troubleshoot regardless of software version.
 
 ## Summary {#getting-started-summary}
 
@@ -698,9 +714,9 @@ $ ls
 ```
 
 ```text
-Applications   Downloads     Music        opt
-Desktop        Library       Pictures     todo.txt
-Documents      Movies        Public       zipf
+Applications   Downloads     Music        todo.txt
+Desktop        Library       Pictures     zipf
+Documents      Movies        Public       
 ```
 
 Again,
@@ -722,9 +738,9 @@ $ ls -F
 ```
 
 ```text
-Applications/   Downloads/     Music/        opt/
-Desktop/        Library/       Pictures/     todo.txt
-Documents/      Movies/        Public/       zipf/
+Applications/   Downloads/     Music/        todo.txt
+Desktop/        Library/       Pictures/     zipf/
+Documents/      Movies/        Public/       
 ```
 
 Here,
@@ -806,9 +822,9 @@ $ ls -F
 ```
 
 ```text
-Applications/   Downloads/     Music/        opt/
-Desktop/        Library/       Pictures/     todo.txt
-Documents/      Movies/        Public/       zipf/
+Applications/   Downloads/     Music/        todo.txt
+Desktop/        Library/       Pictures/     zipf/
+Documents/      Movies/        Public/       
 ```
 
 If we want to see what's in the `zipf` directory
@@ -944,10 +960,10 @@ $ ls -F -a
 ```
 
 ```text
-./              Documents/     Music/        todo.txt
-../             Downloads/     Pictures/     zipf/
+./              Documents/     Music/        zipf/
+../             Downloads/     Pictures/     
 Applications/   Library/       Public/ 
-Desktop/        Movies/        opt/
+Desktop/        Movies/        todo.txt
 ```
 
 The output also shows another special directory called `.` (a single period),\index{path!.}\index{. (current working directory)}
@@ -1031,9 +1047,9 @@ $ ls ~
 ```
 
 ```text
-Applications   Downloads     Music        opt
-Desktop        Library       Pictures     todo.txt
-Documents      Movies        Public       zipf
+Applications   Downloads     Music        todo.txt
+Desktop        Library       Pictures     zipf
+Documents      Movies        Public       
 ```
 
 (`ls` doesn't show any trailing slashes here because we haven't used `-F`.)
@@ -3892,7 +3908,7 @@ HOSTNAME=TURING
 HOSTTYPE=i686
 NUMBER_OF_PROCESSORS=4
 OS=Windows_NT
-PATH=/Users/amira/opt/anaconda3/bin:/usr/bin:
+PATH=/Users/amira/anaconda3/bin:/usr/bin:
   /bin:/usr/sbin:/sbin:/usr/local/bin
 PWD=/Users/amira
 UID=1000
@@ -3939,7 +3955,7 @@ To show how this works,
 here are the components of `PATH` listed one per line:
 
 ```bash
-/Users/amira/opt/anaconda3/bin
+/Users/amira/anaconda3/bin
 /usr/bin
 /bin
 /usr/sbin
@@ -4402,9 +4418,9 @@ i.e. `print_name`.
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```
@@ -4512,6 +4528,7 @@ If we run `script_template.py` at the command line
 the output shows us that `argparse` has successfully handled the arguments:
 
 ```bash
+$ cd ~/zipf
 $ python script_template.py in.csv out.png
 ```
 
@@ -4644,9 +4661,9 @@ Python provides this for us.)
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```
@@ -4687,7 +4704,7 @@ We start by moving the template into the directory
 where we store our runnable programs (Section \@ref(getting-started-organize)):
 
 ```bash
-$ mv script_template.py ~/zipf/bin
+$ mv script_template.py bin
 ```
 
 Next,
@@ -4742,6 +4759,7 @@ orders its contents from most to least frequent,
 and then writes it to \gref{standard output}{stdout} as CSV:
 
 ```python
+import sys
 import csv
 
 
@@ -4837,7 +4855,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=str,
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -4898,7 +4917,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'),
                         nargs='?', default='-',
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -4950,7 +4970,8 @@ which means that all three of the following definitions are valid:
 ```python
 parser.add_argument('-n', type=int, help='Limit output')
 parser.add_argument('--num', type=int, help='Limit output')
-parser.add_argument('-n', '--num', type=int, help='Limit output')
+parser.add_argument('-n', '--num',
+                    type=int, help='Limit output')
 ```
 
 The convention is for `-` to precede
@@ -5032,8 +5053,8 @@ def update_counts(reader, word_counts):
 def main(args):
     """Run the command line program."""
     word_counts = Counter()
-    for file_name in args.infiles:
-        with open(file_name, 'r') as reader:
+    for fname in args.infiles:
+        with open(fname, 'r') as reader:
             update_counts(reader, word_counts)
     collection_to_csv(word_counts, num=args.num)
 
@@ -5042,7 +5063,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*',
                         help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -5166,7 +5188,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'),
                         nargs='?', default='-',
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -5196,8 +5219,8 @@ def update_counts(reader, word_counts):
 def main(args):
     """Run the command line program."""
     word_counts = Counter()
-    for fn in args.infiles:
-        with open(fn, 'r') as reader:
+    for fname in args.infiles:
+        with open(fname, 'r') as reader:
             update_counts(reader, word_counts)
     util.collection_to_csv(word_counts, num=args.num)
 
@@ -5206,7 +5229,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*',
                         help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -5329,9 +5353,9 @@ matching a pattern, much like the `ls` shell command.
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```
@@ -5404,9 +5428,9 @@ Hint: String objects have a `count` method, e.g:
 $ python
 ```
 ```text
-Python 3.8.1 | packaged by conda-forge |
-(default, Jan 29 2020, 14:55:04)
-[GCC 7.3.0] on linux
+Python 3.7.6 (default, Jan  8 2020, 13:42:34) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: 
+Anaconda, Inc. on darwin
 Type "help", "copyright", "credits" or "license"
 for more information.
 ```
@@ -5580,6 +5604,7 @@ import pandas as pd
 
 
 def main(args):
+    """Run the command line program."""
     df = pd.read_csv(args.infile, header=None,
                      names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False,
@@ -5588,7 +5613,8 @@ def main(args):
     ax = df.plot.scatter(x='word_frequency',
                          y='inverse_rank',
                          figsize=[12, 6],
-                         grid=True)
+                         grid=True,
+                         xlim=args.xlim)
     ax.figure.savefig(args.outfile)
 
 
@@ -5739,8 +5765,8 @@ On branch master
 No commits yet
 
 Untracked files:
-  (use "git add <file>..." to include in what will
-  be committed)
+  (use "git add <file>..." to include in what will be
+  committed)
 
         bin/
         data/
@@ -5793,25 +5819,24 @@ No commits yet
 
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
-
-        new file:   bin/book_summary.sh
-        new file:   bin/collate.py
-        new file:   bin/countwords.py
-        new file:   bin/plotcounts.py
-        new file:   bin/script_template.py
-        new file:   bin/utilities.py
-        new file:   data/README.md
-        new file:   data/dracula.txt
-        new file:   data/frankenstein.txt
-        new file:   data/jane_eyre.txt
-        new file:   data/moby_dick.txt
-        new file:   data/sense_and_sensibility.txt
-        new file:   data/sherlock_holmes.txt
-        new file:   data/time_machine.txt
-        new file:   results/dracula.csv
-        new file:   results/jane_eyre.csv
-        new file:   results/moby_dick.csv
-        new file:   results/jane_eyre.png
+	  new file:   bin/book_summary.sh
+	  new file:   bin/collate.py
+	  new file:   bin/countwords.py
+	  new file:   bin/plotcounts.py
+	  new file:   bin/script_template.py
+	  new file:   bin/utilities.py
+	  new file:   data/README.md
+	  new file:   data/dracula.txt
+	  new file:   data/frankenstein.txt
+	  new file:   data/jane_eyre.txt
+	  new file:   data/moby_dick.txt
+	  new file:   data/sense_and_sensibility.txt
+	  new file:   data/sherlock_holmes.txt
+	  new file:   data/time_machine.txt
+	  new file:   results/dracula.csv
+	  new file:   results/jane_eyre.csv
+	  new file:   results/jane_eyre.png
+	  new file:   results/moby_dick.csv
 ```
 
 Adding all of our existing files this way is easy,
@@ -5849,12 +5874,12 @@ $ git commit -m "Add scripts, novels, word counts, and plots"
 ```
 
 ```text
-[master (root-commit) 31a216a] Add scripts, novels, word
+[master (root-commit) 173222b] Add scripts, novels, word 
     counts, and plots
- 17 files changed, 240337 insertions(+)
+ 18 files changed, 145296 insertions(+)
  create mode 100644 bin/book_summary.sh
  create mode 100644 bin/collate.py
- create mode 100755 bin/countwords.py
+ create mode 100644 bin/countwords.py
  create mode 100644 bin/plotcounts.py
  create mode 100644 bin/script_template.py
  create mode 100644 bin/utilities.py
@@ -5877,7 +5902,7 @@ and stores a copy permanently inside the repository's `.git` directory.
 This permanent copy is called a \gref{commit}{commit} or a \gref{revision}{revision}.\index{commit!set of files}
 Git gives is a unique identifier,
 and the first line of output from `git commit` displays
-its \gref{short identifier}{short_identifier_git} `31a216a`,\index{Git!short identifier}\index{short identifier (in Git)}
+its \gref{short identifier}{short_identifier_git} `2dc78f0`,\index{Git!short identifier}\index{short identifier (in Git)}
 which is the first few characters of that unique label.
 
 We use the `-m` option (short for **m**essage)
@@ -5984,10 +6009,9 @@ $ git status
 ```text
 On branch master
 Untracked files:
-  (use "git add <file>..." to include in what will
-  be committed)
-
-        results/dracula.png
+  (use "git add <file>..." to include in what will be
+  committed)
+    results/dracula.png
 
 nothing added to commit but untracked files
 present (use "git add" to track)
@@ -6002,7 +6026,7 @@ $ git commit -m "Add plot of word counts for 'Dracula'"
 ```
 
 ```text
-[master 65b7e61] Add plot of word counts for 'Dracula'
+[master 851d590] Add plot of word counts for 'Dracula'
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 results/dracula.png
 ```
@@ -6015,15 +6039,15 @@ $ git log
 ```
 
 ```text
-commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa (HEAD -> master)
+commit 851d590a214c7859eafa0998c6c951f8e0eb359b (HEAD -> master)
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 10:46:19 2020 -0800
+Date:   Sat Dec 19 09:32:41 2020 -0800
 
     Add plot of word counts for 'Dracula'
 
-commit 31a216a6119de9a8d2233e5e275af9a2967415af
+commit 173222bf90216b408c8997f4e143572b99637750
 Author: Amira Khan <amira@zipf.org>
-Date:   Wed Feb 19 15:39:04 2020 -0800
+Date:   Sat Dec 19 09:30:23 2020 -0800
 
     Add scripts, novels, word counts, and plots
 ```
@@ -6036,7 +6060,7 @@ the commit's author,
 when it was created,
 and the commit message that we wrote.
 
-> **Scrolling through logs**
+> **Scrolling Through Logs**
 >
 > Our log this time isn't very long, 
 > so you were likely able to see it printed to your screen without needing to scroll.
@@ -6079,7 +6103,7 @@ to put `'rank'` on the y-axis and add `loglog=True`:
                          xlim=args.xlim)
 ```
 
-When we run `git status` now,
+When we check our status again,
 it prints:
 
 ```bash
@@ -6089,10 +6113,11 @@ $ git status
 ```text
 On branch master
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-        modified:   bin/plotcounts.py
+  (use "git add <file>..." to update what will be 
+  committed)
+  (use "git restore <file>..." to discard changes in
+  working directory)
+	  modified:   bin/plotcounts.py
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -6105,7 +6130,7 @@ a file Git already knows about has been modified.
 > After executing Git commands,
 > you may see output that differs slightly from what is shown here.
 > For example, 
-> you may see a suggestion for `git checkout` 
+> you may see a suggestion for `git checkout`\index{Git commands!checkout}
 > in place of `git restore` after executing the code above,
 > which means you're running an different version of Git.
 > As with most tasks in coding,
@@ -6132,13 +6157,10 @@ $ git diff
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index 13e7f38..a6005cd 100644
+index f274473..c4c5b5a 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
+@@ -13,7 +13,7 @@ def main(args):
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
@@ -6147,7 +6169,6 @@ index 13e7f38..a6005cd 100644
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
 The output is cryptic,
@@ -6159,7 +6180,7 @@ If we break it down into pieces:
 1.  The first line tells us that Git is producing output
     in the format of the Unix `diff` command.
 2.  The second line tells exactly which versions of the file Git is comparing:
-    `13e7f38` and `a6005cd` are the short identifiers for those versions.
+    `f274473` and `c4c5b5a` are the short identifiers for those versions.
 3.  The third and fourth lines once again show the name of the file being changed;
     the name appears twice in case we are renaming a file as well as modifying it.
 4.  The remaining lines show us the changes and the lines on which they occur.
@@ -6183,9 +6204,13 @@ $ git commit -m "Plot frequency against rank on log-log axes"
 ```text
 On branch master
 Changes not staged for commit:
-        modified:   bin/plotcounts.py
+  (use "git add <file>..." to update what will be 
+  committed)
+  (use "git restore <file>..." to discard changes in 
+  working directory)
+	  modified:   bin/plotcounts.py
 
-no changes added to commit
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 Whoops:
@@ -6200,9 +6225,8 @@ $ git status
 ```text
 On branch master
 Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-        modified:   bin/plotcounts.py
+  (use "git restore --staged <file>..." to unstage)
+	  modified:   bin/plotcounts.py
 ```
 
 ```bash
@@ -6210,8 +6234,8 @@ $ git commit -m "Plot frequency against rank on log-log axes"
 ```
 
 ```text
-[master b5176bf] Plot frequency against rank on log-log axes
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[master 582f7f6] Plot frequency against rank on log-log axes
+1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
 > **The Staging Area**
@@ -6266,10 +6290,9 @@ On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be
   committed)
-  (use "git checkout -- <file>..." to discard changes in
+  (use "git restore <file>..." to discard changes in
   working directory)
-
-        modified:   results/dracula.png
+	  modified:   results/dracula.png
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -6280,8 +6303,8 @@ It therefore simply tells us that the new file is different from the old one:
 
 ```diff
 diff --git a/results/dracula.png b/results/dracula.png
-index d8162ac..e9fe7f8 100644
-Binary files a/results/dracula.png and
+index c1f62fd..57a7b70 100644
+Binary files a/results/dracula.png and 
 b/results/dracula.png differ
 ```
 
@@ -6302,7 +6325,7 @@ $ git commit -a -m "Update dracula plot"
 ```
 
 ```text
-[master d77bc5c] Update dracula plot
+[master ee8684c] Update dracula plot
  1 file changed, 0 insertions(+), 0 deletions(-)
  rewrite results/dracula.png (99%)
 ```
@@ -6335,10 +6358,17 @@ to one stored on a hosting service such as [GitHub][github].
 > which we'll refer to as a remote or GitHub repository.
 
 The first steps are to create an account on GitHub,
-and then to create a new repository to synchronize with.
+and then select the option there to create a new remote repository
+to synchronize with our local repository.
+Select the option on GitHub to create a new repository,
+then add the requested information for your Zipf's Law project.
 The remote repository doesn't have to have the same name as the local one,
 but we will probably get confused if they are different,
 so the repository we create on GitHub will also be called `zipf`.
+The other default options are likely appropriate for your remote repository.
+Because we are synchronizing with an existing repository,
+do not add a README, `.gitignore`, or license;
+we'll discuss these additions in other chapters.
 
 Next,
 we need to connect our desktop repository with the one on GitHub.
@@ -6411,16 +6441,15 @@ once we do that,
 Git prints a few lines of administrative information:
 
 ```text
-Enumerating objects: 33, done.
-Counting objects: 100% (33/33), done.
+Enumerating objects: 35, done.
+Counting objects: 100% (35/35), done.
 Delta compression using up to 4 threads
-Compressing objects: 100% (33/33), done.
-Writing objects: 100% (33/33), 2.12 MiB | 799.00 KiB/s, done.
-Total 33 (delta 5), reused 0 (delta 0)
-remote: Resolving deltas: 100% (5/5), done.
+Compressing objects: 100% (35/35), done.
+Writing objects: 100% (35/35), 2.17 MiB | 602.00 KiB/s, done.
+Total 35 (delta 7), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (7/7), done.
 To https://github.com/amira-khan/zipf.git
  * [new branch]      master -> master
-Branch 'master' set up to track remote branch 'master' from 'origin'.
 ```
 
 If we view our GitHub repository in the browser,
@@ -6463,6 +6492,13 @@ The Git commands we've covered in this section (`git pull`, `git push`)
 are the main tasks associated with incorporating remote repositories into your workflow 
 (Figure \@ref(fig:git-cmdline-remote)b).
 
+> **Amira's Repository**
+>
+> Amira's repository referenced in this section
+> does exist in on GitHub at [amira-khan/zipf][amira-repo];
+> you may find it a useful reference point 
+> when proceeding through the rest of the book.
+
 ## Exploring History {#git-cmdline-history}
 
 Git lets us look at previous versions of files
@@ -6480,35 +6516,34 @@ if we run `git log`\index{Git commands!log} right now,
 it shows us something like this:
 
 ```text
-commit d77bc5cc204f3140d95f942d0515b143927c6f51
-  (HEAD -> master, origin/master)
+commit ee8684ca123e1e829fc995d672e3d7e4b00f2610 (HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:44:54 2020 -0800
+Date:   Sat Dec 19 09:52:04 2020 -0800
 
     Update dracula plot
 
-commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
+commit 582f7f6f536d520b1328c04c9d41e24b54170656
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:18:33 2020 -0800
+Date:   Sat Dec 19 09:37:25 2020 -0800
 
     Plot frequency against rank on log-log axes
 
-commit 65b7e6129f978f6b99bae6b16c5704a9ce079afa
+commit 851d590a214c7859eafa0998c6c951f8e0eb359b
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 10:46:19 2020 -0800
+Date:   Sat Dec 19 09:32:41 2020 -0800
 
     Add plot of word counts for 'Dracula'
 
-commit 31a216a6119de9a8d2233e5e275af9a2967415af
+commit 173222bf90216b408c8997f4e143572b99637750
 Author: Amira Khan <amira@zipf.org>
-Date:   Wed Feb 19 15:39:04 2020 -0800
+Date:   Sat Dec 19 09:30:23 2020 -0800
 
     Add scripts, novels, word counts, and plots
 ```
 
 The commit in which we changed `plotcounts.py`
-has the absolute identifier `b5176bfd2ce9650ad5e79e117cd68a666c9cdabc`,
-but we can use `b5176bf` to reference it in almost all situations.
+has the absolute identifier `582f7f6f536d520b1328c04c9d41e24b54170656`,
+but we can use `582f7f6` to reference it in almost all situations.
 
 While `git log` includes the commit message,
 it doesn't tell us exactly what changes were made in each commit.
@@ -6524,17 +6559,17 @@ The first part of the output is shown below;
 we have truncated the rest,
 since it is very long:
 
-```text
-commit d77bc5cc204f3140d95f942d0515b143927c6f51
+```diff
+commit ee8684ca123e1e829fc995d672e3d7e4b00f2610
   (HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:44:54 2020 -0800
+Date:   Sat Dec 19 09:52:04 2020 -0800
 
     Update dracula plot
 
 diff --git a/results/dracula.png b/results/dracula.png
-index 8e3ff84..af8e892 100644
-Binary files a/results/dracula.png and
+index c1f62fd..57a7b70 100644
+Binary files a/results/dracula.png and 
 b/results/dracula.png differ
 ...
 ```
@@ -6556,12 +6591,10 @@ the difference between the file as it is now and the most recent version:
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index a6005cd..d085f22 100644
+index c4c5b5a..c511da1 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -7,7 +7,6 @@ def main(args):
-     """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None,
+@@ -11,7 +11,6 @@ def main(args):
                       names=('word', 'word_frequency'))
      df['rank'] = df['word_frequency'].rank(ascending=False,
                                             method='max')
@@ -6569,45 +6602,35 @@ index a6005cd..d085f22 100644
      ax = df.plot.scatter(x='word_frequency',
                           y='rank', loglog=True,
                           figsize=[12, 6],
-                          grid=True,
-                          xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
-`git diff b5176bf`,
+`git diff 582f7f6`,
 on the other hand,
 shows the difference between the current state
 and the commit referenced by the short identifier:
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index a6005cd..04e824d 100644
+index c4c5b5a..c511da1 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -7,8 +7,7 @@ def main(args):
-     """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None,
+@@ -11,7 +11,6 @@ def main(args):
                       names=('word', 'word_frequency'))
      df['rank'] = df['word_frequency'].rank(ascending=False,
                                             method='max')
 -    df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
--                         y='inverse_rank',
-+                         y='rank', loglog=True,
+                          y='rank', loglog=True,
                           figsize=[12, 6],
-                          grid=True,
-                          xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
-
 diff --git a/results/dracula.png b/results/dracula.png
-index d8162ac..e9fe7f8 100644
-Binary files a/results/dracula.png and
+index c1f62fd..57a7b70 100644
+Binary files a/results/dracula.png and 
 b/results/dracula.png differ
 ```
 
-Note that you may need to use something other than `b5176bf`,
-since Git may have assigned your commit a different unique identifier.
-Note also that we have *not* committed this change:
+Note that you will need to reference your `git log` to replace `582f7f6` in the code above,
+since Git assigned your commit a different unique identifier.
+Note also that we have *not* committed the last change to `plotcounts.py`;
 we will look at ways of undoing it in the next section.
 
 The "relative" version of history relies on a special identifier called `HEAD`,\index{Git!HEAD}\index{HEAD (in Git)}
@@ -6627,22 +6650,18 @@ $ git diff HEAD~1..HEAD~2
 
 ```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index a6005cd..13e7f38 100644
+index c4c5b5a..f274473 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
+@@ -13,7 +13,7 @@ def main(args):
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
--                         y='inverse_rank',
-+                         y='rank', loglog=True,
+-                         y='rank', loglog=True,
++                         y='inverse_rank',
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
 If we want to see the changes made in a particular commit,
@@ -6654,20 +6673,17 @@ $ git show HEAD~1 bin/plotcounts.py
 ```
 
 ```diff
-commit b5176bfd2ce9650ad5e79e117cd68a666c9cdabc
+commit 582f7f6f536d520b1328c04c9d41e24b54170656
 Author: Amira Khan <amira@zipf.org>
-Date:   Thu Feb 20 11:18:33 2020 -0800
+Date:   Sat Dec 19 09:37:25 2020 -0800
 
     Plot frequency against rank on log-log axes
 
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index 13e7f38..a6005cd 100644
+index f274473..c4c5b5a 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -8,7 +8,7 @@ def main(args):
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
+@@ -13,7 +13,7 @@ def main(args):
                                             method='max')
      df['inverse_rank'] = 1 / df['rank']
      ax = df.plot.scatter(x='word_frequency',
@@ -6676,7 +6692,6 @@ index 13e7f38..a6005cd 100644
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
-     ax.figure.savefig(args.outfile)
 ```
 
 If we wanted to view the contents of a file
@@ -6695,7 +6710,8 @@ This allows us to look through the file using a paging program.
 We can see what we changed,
 but how can we restore it?\index{Git!restore old versions}
 Suppose we change our mind about the last update to `bin/plotcounts.py`
-before we add it or commit it.
+(removing `df['inverse_rank'] = 1 / df['rank']`)
+before we add or commit it.
 `git status` tells us that the file has been changed,
 but those changes haven't been \gref{staged}{git_stage}:\index{Git!staging area}
 
@@ -6705,15 +6721,12 @@ $ git status
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
 Changes not staged for commit:
-  (use "git add <file>..." to update what will be
+  (use "git add <file>..." to update what will be 
   committed)
-  (use "git checkout -- <file>..." to discard changes
-  in working directory)
-
-        modified:   bin/plotcounts.py
+  (use "git restore <file>..." to discard changes in 
+  working directory)
+	modified:   bin/plotcounts.py
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -6729,8 +6742,6 @@ $ git status
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
 nothing to commit, working tree clean
 ```
 
@@ -6744,15 +6755,15 @@ we used it to recover the version of the file in the most recent commit.
 > If you're running a different version of Git,
 > you may see a suggestion for `git checkout` instead of `git restore`.
 > As of Git version 2.29,
-> `git restore` is still an experimental command.
-> `git checkout` is a generally used to switch among versions of working files.
+> `git restore` is still an experimental command,
+> and operates as a specialized form of `git chekcout`.
 > `git checkout HEAD bin/plotcounts.py` is equivalent to the last command run.\index{Git commands!checkout}
 
 We can confirm the file has been restored
 by printing the relevant lines of the file:
 
 ```bash
-$ head -n 12 bin/plotcounts.py | tail -4
+$ head -n 19 bin/plotcounts.py | tail -n 8
 ```
 
 ```text
@@ -6771,7 +6782,11 @@ we'll need to use `git checkout` to revert to earlier versions of files.\index{G
 We can use a specific commit identifier rather than `HEAD` to go back as far as we want:
 
 ```bash
-$ git checkout 65b7e61 bin/countwords.py
+$ git checkout 851d590 bin/plotcounts.py
+```
+
+```text
+Updated 1 path from c8d6a33
 ```
 
 Doing this does not change the history:
@@ -6785,35 +6800,51 @@ $ git status
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
 Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-        modified:   bin/plotcounts.py
+  (use "git restore --staged <file>..." to unstage)
+	  modified:   bin/plotcounts.py
 ```
 
-Notice that the changes have already been added to the staging area for new commits.
+```bash
+$ head -n 19 bin/plotcounts.py | tail -n 8
+```
+
+```text
+    df['rank'] = df['word_frequency'].rank(ascending=False,
+                                           method='max')
+    df['inverse_rank'] = 1 / df['rank']
+    ax = df.plot.scatter(x='word_frequency',
+                         y='inverse_rank',
+                         figsize=[12, 6],
+                         grid=True,
+                         xlim=args.xlim)
+```
+
 If we change our mind again,
-we can return the file to the state of the most recent commit using `git reset`:\index{Git commands!reset}
+we can use the suggestion in the output to restore the earlier version.
+Because checking out the changes added them to the staging area,
+we need to first remove them from the staging area:
 
 ```bash
-$ git reset HEAD bin/countwords.py
+$ git restore --staged bin/plotcounts.py
+```
+
+However,
+the changes have been unstaged but still exist in the file.
+We can return the file to the state of the most recent commit:
+
+```bash
+$ git restore bin/plotcounts.py
 $ git status
 ```
 
 ```text
 On branch master
-Your branch is up to date with 'origin/master'.
-
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-        modified:   bin/plotcounts.py
+nothing to commit, working tree clean
 ```
 
 ```bash
-$ head -n 12 bin/plotcounts.py | tail -4
+$ head -n 19 bin/plotcounts.py | tail -n 8
 ```
 
 ```text
@@ -6827,6 +6858,7 @@ $ head -n 12 bin/plotcounts.py | tail -4
                          xlim=args.xlim)
 ```
 
+We have restored the most recent commit.
 Since we didn't commit the change
 that removed the line that calculates the inverse rank,
 that work is now lost:
@@ -6898,12 +6930,13 @@ required for tracking files stored there?
 
 ### Removing before saving {#git-cmdline-ex-unsave}
 
-The output of `git status` tells us that
-we can take files out of the list of things to be saved
+If you're working on an older version of Git,
+you may see an output from `git status` suggesting
+you can take files out of the staging area
 using `git rm --cached`.
 Try this out:
 
-1.  Create a new file in the repository called `example.txt`.
+1.  Create a new file in an initialized Git repository called `example.txt`.
 2.  Use `git add example.txt` to add this file.
 3.  Use `git status` to check that Git has noticed it.
 4.  Use `git rm --cached example.txt` to remove it from the list of things to be saved.
@@ -6913,36 +6946,45 @@ What (if anything) has happened to the file?
 
 ### Viewing changes {#git-cmdline-ex-word-diff}
 
-Make a few changes to a file in your Git repository,
+Make a few changes to a file in a Git repository,
 then view those differences using both `git diff`
 and `git diff --word-diff`.
 Which output do you find easiest to understand?
+
+Note: If you performed this exercise in your Zipf's Law project,
+we recommend discarding (not committing)
+your changes made to a file.
 
 ### Committing changes {#git-cmdline-ex-commit}
 
 Which command(s) below would save changes to `myfile.txt` to a local Git repository?
 
-1. ```bash
-   $ git commit -m "Add recent changes"
+```bash
+# Option 1
+$ git commit -m "Add recent changes"
+```
+
+```bash
+# Option 2
+$ git init myfile.txt
+$ git commit -m "Add recent changes"
+```
+
+```bash
+# Option 3
+$ git add myfile.txt
+$ git commit -m "Add recent changes"
    ```
 
-2. ```bash
-   $ git init myfile.txt
-   $ git commit -m "Add recent changes"
-   ```
-
-3. ```bash
-   $ git add myfile.txt
-   $ git commit -m "Add recent changes"
-   ```
-
-4. ```bash
-   $ git commit -m myfile.txt "Add recent changes"
-   ```
+```bash
+# Option 4
+$ git commit -m myfile.txt "Add recent changes"
+```
 
 ### Write your biography {#git-cmdline-ex-bio}
 
 1.  Create a new Git repository on your computer called `bio`.
+Make sure the directory containing this repository is outside your `zipf` project directory! 
 2.  Write a three-line biography for yourself in a file called `me.txt` and commit your changes.
 3.  Modify one line and add a fourth line.
 4.  Display the differences between the file's original state and its updated state.
@@ -6951,7 +6993,9 @@ Which command(s) below would save changes to `myfile.txt` to a local Git reposit
 
 The staging area can hold changes from any number of files
 that you want to commit as a single snapshot.
-From your new `bio` directory:
+
+From your new `bio` directory,
+following after the previous exercise (in which you have uncommitted changes to `me.txt`):
 
 1.  Create another new file `employment.txt`
     and add the details of your most recent job.
@@ -6969,6 +7013,32 @@ From your new `bio` directory:
 4.  Go to the repo you just created on GitHub and check the timestamps of the files.
 
 How does GitHub record times, and why?
+
+### Workflow and history {#git-cmdline-ex-history}
+
+Assume you made the following changes in your `bio` repository.
+What is the output of the last command in the sequence below?
+
+```bash
+$ echo "Sharing information about myself." > motivation.txt
+$ git add motivation.txt
+$ echo "Documenting major milestones." > motivation.txt
+$ git commit -m "Motivate project"
+$ git restore motivation.txt
+$ cat motivation.txt
+```
+
+1. `Sharing information about myself.`
+
+2. `Documenting major milestones.`
+
+3. 
+```text
+Sharing information about myself.
+Documenting major milestones.
+```
+
+4. An error message because we have changed `motivation.txt` without committing first.
 
 ### Ignoring nested files {#git-cmdline-ex-ignore-nested}
 
@@ -6996,7 +7066,7 @@ Explain in one or two sentences how `git push` is different from `git commit`.
 
 ### License and README files {#git-cmdline-ex-boilerplate}
 
-When we initialized our GitHub repo,
+When we initialized our remote `zipf` GitHub repo,
 we didn't add a `README.md` or license file.
 If we had,
 what would have happened when we tried to link our local and remote repositories?
@@ -7016,49 +7086,14 @@ to recover the last committed version of her script?
 2.  `$ git checkout HEAD data_cruncher.sh`
 3.  `$ git checkout HEAD~1 data_cruncher.sh`
 4.  `$ git checkout <unique ID of last commit> data_cruncher.sh`
-5.  Both 2 and 4
-
-### Workflow and history {#git-cmdline-ex-history}
-
-What is the output of the last command in the sequence below?
-
-```bash
-$ cd zipf
-$ echo "Zipf's Law describes the relationship between the
-  frequency and rarity of words." > motivation.txt
-$ git add motivation.txt
-$ echo "Zipf's Law suggests the frequency of any word is
-  inversely proportional to its rank." > motivation.txt
-$ git commit -m "Motivate project"
-$ git restore motivation.txt
-$ cat motivation.txt
-```
-
-1.
-```
-    Zipf's Law describes the relationship between the
-    frequency and rarity of words.
-```
-
-2.
-```
-    Zipf's Law suggests the frequency of any word is
-    inversely proportional to its rank.
-```
-
-3.
-```
-   Zipf's Law describes the relationship between the
-   frequency and rarity of words.
-   Zipf's Law suggests the frequency of any word is
-   inversely proportional to its rank.
-```
-
-4. An error message because we have changed `motivation.txt` without committing first.
+5.  `$ git restore data_cruncher.sh`
+6.  `$ git restore HEAD`
 
 ### Understanding `git diff` {#git-cmdline-ex-diff}
 
-1.  What will the command `git diff HEAD~2 bin/plotcounts.py` do if we run it?
+Using your `zipf` project directory:
+
+1.  What would the command `git diff HEAD~9 bin/plotcounts.py` do if we run it?
 2.  What does it actually do?
 3.  What does `git diff HEAD bin/plotcounts.py` do?
 
@@ -7066,7 +7101,8 @@ $ cat motivation.txt
 
 `git checkout` can be used to restore a previous commit when unstaged changes have been made,
 but will it also work for changes that have been staged but not committed?
-To find out:
+To find out,
+use your `zipf` project directory to:
 
 1.  Change `bin/plotcounts.py`.
 2.  Use `git add` on those changes to `bin/plotcounts.py`.
@@ -7075,6 +7111,14 @@ To find out:
 Does it work?
 
 ### Figuring out who did what {#git-cmdline-ex-blame}
+
+We never committed the last edit that removes the calculation of inverse rank.
+Remove this line from `plotcounts.py`,
+then commit the change:
+
+```python
+df['inverse_rank'] = 1 / df['rank']
+```
 
 Run the command `git blame bin/plotcounts.py`.
 What does each line of the output show?
@@ -7096,7 +7140,7 @@ What does each line of the output show?
 -   `git remote` manages bookmarks pointing at remote repositories.
 -   `git push` copies changes from a local repository to a remote repository.
 -   `git pull` copies changes from a remote repository to a local repository.
--   `git checkout` recovers old versions of files.
+-   `git restore` and `git checkout` recover old versions of files.
 -   The `.gitignore` file tells Git what files to ignore.
 
 <!--chapter:end:chapters/git-cmdline.Rmd-->
@@ -7125,8 +7169,8 @@ zipf/
 ├── .gitignore
 ├── bin
 │   ├── book_summary.sh
-│   ├── countwords.py
 │   ├── collate.py
+│   ├── countwords.py
 │   ├── plotcounts.py
 │   ├── script_template.py
 │   └── utilities.py
@@ -7178,7 +7222,7 @@ i.e.,
 that all changes we make will take place in this branch by default.
 (The active branch is like the \gref{current working directory}{current_working_directory} in the shell.)
 
-> **Default branches**
+> **Default Branches**
 > 
 > In mid-2020,
 > GitHub changed the name of the default branch
@@ -7287,7 +7331,7 @@ nothing to commit, working directory clean
 ```
 
 To switch to our new branch we can use the `checkout` command\index{Git commands!checkout}
-that we first saw in Section \@ref(git-cmdline-restore):
+that we first saw in Chapter \@ref(git-cmdline):
 
 ```bash
 $ git checkout fit
@@ -7299,10 +7343,10 @@ $ git branch
 * fit
 ```
 
-`git checkout` doesn't just check out a file from a specific commit:
-it can also check out the whole repository,
-i.e.,
-switch it from one saved state to another.
+In this case,
+we're using `git checkout` to check out a whole repository,
+i.e., switch it from one saved state to another.
+
 We should choose the name to signal the purpose of the branch,
 just as we choose the names of files and variables to indicate what they are for.
 We haven't made any changes since switching to the `fit` branch,
@@ -7481,18 +7525,6 @@ def get_power_law_params(word_counts):
     return alpha
 
 
-def set_plot_params(param_file):
-    """Set the matplotlib rc parameters."""
-    if param_file:
-        with open(param_file, 'r') as reader:
-            param_dict = yaml.load(reader,
-                                   Loader=yaml.BaseLoader)
-    else:
-        param_dict = {}
-    for param, value in param_dict.items():
-        mpl.rcParams[param] = value
-
-
 def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
     """
     Plot the power law curve that was fitted to the data.
@@ -7591,8 +7623,9 @@ $ git commit -m "Added fit to word count data"
 ```
 
 ```text
-[fit 3ff8195] Added fit to word count data
- 2 files changed, 62 insertions(+), 1 deletion(-)
+[fit 38c209b] Added fit to word count data
+ 2 files changed, 57 insertions(+)
+ rewrite results/dracula.png (99%)
 ```
 
 If we look at the last couple of commits using `git log`,
@@ -7603,8 +7636,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-3ff8195 Added fit to word count data
-ffb5cee adding ignore file
+38c209b (HEAD -> fit) Added fit to word count data
+ddb00fb (origin/master, master) removing inverse rank calculation
 ```
 
 (We use `--oneline` and `-n 2` to shorten the log display.)
@@ -7616,8 +7649,8 @@ $ git branch
 ```
 
 ```text
-* master
   fit
+* master
 ```
 
 and look at the log,
@@ -7628,8 +7661,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-ffb5cee adding ignore file
-d77bc5c Update dracula plot
+ddb00fb (HEAD -> master, origin/master) removing inverse rank calculation
+7de9877 ignoring __pycache__
 ```
 
 We have not lost our work:
@@ -7642,8 +7675,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-3ff8195 Added fit to word count data
-d77bc5c Update dracula plot
+38c209b (HEAD -> fit) Added fit to word count data
+ddb00fb (origin/master, master) removing inverse rank calculation
 ```
 
 We can also look inside `plotcounts.py` and see our changes.
@@ -7684,7 +7717,7 @@ $ git commit -m "Adding Moreno-Sanchez et al (2016) reference"
 ```
 
 ```text
-[fit db1d03f] Adding Moreno-Sanchez et al (2016) reference
+[fit 1577404] Adding Moreno-Sanchez et al (2016) reference
  1 file changed, 14 insertions(+), 1 deletion(-)
 ```
 
@@ -7697,14 +7730,15 @@ used to view differences between two revisions:
 $ git diff master..fit
 ```
 
-```text
+```diff
 diff --git a/bin/plotcounts.py b/bin/plotcounts.py
-index 4501eaf..d57fd63 100644
+index c511da1..6905b6e 100644
 --- a/bin/plotcounts.py
 +++ b/bin/plotcounts.py
-@@ -1,15 +1,89 @@
- """Plot word counts."""
+@@ -2,7 +2,62 @@
+ 
  import argparse
+ 
 +import numpy as np
  import pandas as pd
 +from scipy.optimize import minimize_scalar
@@ -7741,18 +7775,6 @@ index 4501eaf..d57fd63 100644
 +    return alpha
 +
 +
-+def set_plot_params(param_file):
-+    """Set the matplotlib rc parameters."""
-+    if param_file:
-+        with open(param_file, 'r') as reader:
-+            param_dict = yaml.load(reader,
-+                                   Loader=yaml.BaseLoader)
-+    else:
-+        param_dict = {}
-+    for param, value in param_dict.items():
-+        mpl.rcParams[param] = value
-+
-+
 +def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
 +    """
 +    Plot the power law curve that was fitted to the data.
@@ -7773,16 +7795,10 @@ index 4501eaf..d57fd63 100644
 +    xvals = np.arange(curve_xmin, curve_xmax)
 +    yvals = max_rank * (xvals**(-1 / alpha))
 +    ax.loglog(xvals, yvals, color='grey')
-
-
+ 
+ 
  def main(args):
-+    """Run the command line program."""
-     df = pd.read_csv(args.infile, header=None,
-                      names=('word', 'word_frequency'))
-     df['rank'] = df['word_frequency'].rank(ascending=False,
-                                            method='max')
-     ax = df.plot.scatter(x='word_frequency',
-                          y='rank', loglog=True,
+@@ -16,6 +71,21 @@ def main(args):
                           figsize=[12, 6],
                           grid=True,
                           xlim=args.xlim)
@@ -7802,10 +7818,10 @@ index 4501eaf..d57fd63 100644
 +
 +    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
      ax.figure.savefig(args.outfile)
-
-
+ 
+ 
 diff --git a/results/dracula.png b/results/dracula.png
-index d34c46d..1c42702 100644
+index 57a7b70..5f10271 100644
 Binary files a/results/dracula.png and b/results/dracula.png differ
 ```
 
@@ -7853,12 +7869,12 @@ $ git merge fit
 ```
 
 ```text
-Updating d77bc5c..db1d03f
+Updating ddb00fb..1577404
 Fast-forward
- bin/plotcounts.py   |  76 ++++++++++++++++++++++++++++++++++++++
-                           ++++++++++++++++++++++-
- results/dracula.png | Bin 22351 -> 31378 bytes
- 2 files changed, 75 insertions(+), 1 deletion(-)
+ bin/plotcounts.py   |  70 ++++++++++++++++++++++++++++++++++++++
+                           +++++++++++++++++++++++++++++++
+ results/dracula.png | Bin 23291 -> 38757 bytes
+ 2 files changed, 70 insertions(+)
 ```
 
 Merging doesn't change the source branch `fit`,
@@ -7870,13 +7886,13 @@ $ git log --oneline -n 4
 ```
 
 ```text
-db1d03f (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
-3ff8195 Added fit to word count data
-ffb5cee adding ignore file
-d77bc5c Update dracula plot
+1577404 (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
+38c209b Added fit to word count data
+ddb00fb (origin/master) removing inverse rank calculation
+7de9877 ignoring __pycache__
 ```
 
-Note that Git automatically creates a new commit (in this case, `db1d03f`)
+Note that Git automatically creates a new commit (in this case, `1577404`)
 to represent the merge.
 If we now run `git diff master..fit`,
 Git doesn't print anything
@@ -7891,7 +7907,7 @@ $ git branch -d fit
 ```
 
 ```text
-Deleted branch fit (was db1d03f).
+Deleted branch fit (was 1577404).
 ```
 
 > **Not Just the Command Line**
@@ -7914,11 +7930,11 @@ but if we are going to use branches,
 we must learn how to merge conflicts.
 
 To start,
-let's add a `README.md` file to the `master` branch
-containing just the project's title:
+use `nano` to add the project's title to
+a new file called `README.md` in the `master` branch,
+which we can the view:
 
 ```bash
-$ nano README.md
 $ cat README.md
 ```
 
@@ -7932,7 +7948,7 @@ $ git commit -m "Initial commit of README file"
 ```
 
 ```text
-[master b07c14a] Initial commit of README file
+[master 232b564] Initial commit of README file
  1 file changed, 1 insertion(+)
  create mode 100644 README.md
 ```
@@ -7975,7 +7991,7 @@ $ git commit -m "Added repository overview"
 ```
 
 ```text
-[docs a41a6ea] Added repository overview
+[docs a0b88e5] Added repository overview
  1 file changed, 3 insertions(+)
 ```
 
@@ -8015,7 +8031,7 @@ $ git commit -m "Added contributor list"
 ```
 
 ```text
-[master a102c83] Added contributor list
+[master 45a576b] Added contributor list
  1 file changed, 4 insertions(+)
 ```
 
@@ -8029,12 +8045,12 @@ $ git diff docs..master
 
 ```diff
 diff --git a/README.md b/README.md
-index fd3de28..cf317ea 100644
+index f40e895..71f67db 100644
 --- a/README.md
 +++ b/README.md
 @@ -1,4 +1,5 @@
  # Zipf's Law
-
+ 
 -These Zipf's Law scripts tally the occurrences of words in text files
 -and plot each word's rank versus its frequency.
 +## Contributors
@@ -8088,12 +8104,8 @@ edit this part of the file to combine them,
 or write something new.
 Whatever we do,
 we must remove the `>>>`, `===`, and `<<<` markers.
-Let's combine the two sets of changes:
-
-```bash
-$ nano README.md
-$ cat README.md
-```
+Let's combine the two sets of changes
+so the resulting file reads:
 
 ```text
 # Zipf's Law
@@ -8115,7 +8127,7 @@ $ git commit -m "Merging README additions"
 ```
 
 ```text
-[master 4ffeaa4] Merging README additions
+[master 55c63d0] Merging README additions
 ```
 
 Our branch's history now shows a single sequence of commits,
@@ -8126,10 +8138,10 @@ $ git log --oneline -n 4
 ```
 
 ```text
-4ffeaa4 (HEAD -> master) Merging README additions
-a102c83 Added contributors list
-a41a6ea (docs) Added repository overview
-b07c14a Initial commit of README file
+55c63d0 (HEAD -> master) Merging README additions
+45a576b Added contributor list
+a0b88e5 (docs) Added repository overview
+232b564 Initial commit of README file
 ```
 
 If we want to see what really happened,
@@ -8140,12 +8152,12 @@ $ git log --oneline --graph -n 4
 ```
 
 ```text
-*   4ffeaa4 (HEAD -> master) Merging README additions
-|\
-| * a41a6ea (docs) Added repository overview
-* | a102c83 Added contributors list
-|/
-* b07c14a Initial commit of README file
+*   55c63d0 (HEAD -> master) Merging README additions
+|\  
+| * a0b88e5 (docs) Added repository overview
+* | 45a576b Added contributor list
+|/  
+* 232b564 Initial commit of README file
 ```
 
 At this point we can delete the `docs` branch:
@@ -8155,7 +8167,7 @@ $ git branch -d docs
 ```
 
 ```text
-Deleted branch docs (was 4ffeaa4).
+Deleted branch docs (was a0b88e5).
 ```
 
 Alternatively,
@@ -8167,6 +8179,13 @@ do our editing
 to work on the code),
 and then merge *from* `docs` *to* `master`
 once the documentation is updated.
+
+> **Remember to Push**
+>
+> If you are using a remote repository,
+> don't forget to use `git push`
+> to keep your version on GitHub up to date
+> with your local version.
 
 ## A Branch-Based Workflow {#git-advanced-workflow}
 
@@ -8302,11 +8321,12 @@ sami:~ $ git clone https://github.com/sami-virtanen/zipf.git
 
 ```text
 Cloning into 'zipf'...
-remote: Enumerating objects: 60, done.
-remote: Counting objects: 100% (60/60), done.
-remote: Compressing objects: 100% (42/42), done.
-remote: Total 60 (delta 17), reused 59 (delta 16), pack-reused 0
-Unpacking objects: 100% (60/60), done.
+remote: Enumerating objects: 64, done.
+remote: Counting objects: 100% (64/64), done.
+remote: Compressing objects: 100% (43/43), done.
+remote: Total 64 (delta 20), reused 63 (delta 19), pack-reused 0
+Receiving objects: 100% (64/64), 2.20 MiB | 2.66 MiB/s, done.
+Resolving deltas: 100% (20/20), done.
 ```
 
 This command creates a new directory with the same name as the project,
@@ -8328,10 +8348,11 @@ sami:~/zipf $ git log --oneline -n 4
 ```
 
 ```text
-4ffeaa4 (HEAD -> master) Merging README additions
-a102c83 Added contributors list
-a41a6ea Added repository overview
-b07c14a Initial commit of README file
+55c63d0 (HEAD -> master, origin/master, origin/HEAD) 
+        Merging README additions
+45a576b Added contributor list
+a0b88e5 Added repository overview
+232b564 Initial commit of README file
 ```
 
 Sami also sees that Git has automatically created a \gref{remote}{git_remote} for their repository\index{Git!remote}\index{remote (in Git)}
@@ -8371,20 +8392,7 @@ Sami is finally set up.
 Suppose,
 for example,
 that Amira has modified the project's `README.md` file to add Sami as a contributor.
-(Again, we show Amira's user ID and working directory in her prompt to make it clear who's doing what).
-
-```bash
-amira:~/zipf $ pwd
-```
-
-```text
-/Users/amira/zipf
-```
-
-```bash
-amira:~/zipf $ nano README.md
-amira:~/zipf $ cat README.md
-```
+(Again, we show Amira's user ID and working directory in her prompt to make it clear who's doing what):
 
 ```text
 # Zipf's Law
@@ -8405,7 +8413,7 @@ amira:~/zipf $ git commit -a -m "Adding Sami as a contributor"
 ```
 
 ```text
-[master 766c2cd] Adding Sami as a contributor
+[master 35fca86] Adding Sami as a contributor
  1 file changed, 1 insertion(+)
 ```
 
@@ -8419,10 +8427,10 @@ Counting objects: 100% (5/5), done.
 Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
-Total 3 (delta 2), reused 0 (delta 0)
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 To https://github.com/amira-khan/zipf.git
-   b0c3fc6..766c2cd  master -> master
+   55c63d0..35fca86  master -> master
 ```
 
 Amira's changes are now on her desktop and in her GitHub repository
@@ -8436,15 +8444,10 @@ sami:~/zipf $ git pull upstream master
 ```
 
 ```text
-remote: Enumerating objects: 5, done.
-remote: Counting objects: 100% (5/5), done.
-remote: Compressing objects: 100% (1/1), done.
-remote: Total 3 (delta 2), reused 3 (delta 2), pack-reused 0
-Unpacking objects: 100% (3/3), done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
  * [new branch]      master     -> upstream/master
-Updating 1c63b8b..893fc9f
+Updating 55c63d0..35fca86
 Fast-forward
  README.md | 1 +
  1 file changed, 1 insertion(+)
@@ -8506,27 +8509,26 @@ Switched to a new branch 'adding-email'
 then make a change and commit it:
 
 ```bash
-sami:~/zipf $ nano README.md
 sami:~/zipf $ git commit -a -m "Adding my email address"
 ```
 
 ```text
-[master b8938eb] Adding my email address
+[adding-email 3e73dc0] Adding my email address
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
 ```bash
-sami:~/zipf $ git diff -r HEAD~1
+sami:~/zipf $ git diff HEAD~1
 ```
 
 ```diff
 diff --git a/README.md b/README.md
-index a55a9bb..eb24a3f 100644
+index e8281ee..e1bf630 100644
 --- a/README.md
 +++ b/README.md
 @@ -6,4 +6,4 @@ and plot each word's rank versus its frequency.
  ## Contributors
-
+ 
  - Amira Khan <amira@zipf.org>
 -- Sami Virtanen
 +- Sami Virtanen <sami@zipf.org>
@@ -8546,12 +8548,12 @@ Counting objects: 100% (5/5), done.
 Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
-Total 3 (delta 2), reused 0 (delta 0)
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-remote:
+remote: 
 remote: Create a pull request for 'adding-email' on GitHub by visiting:
 remote:      https://github.com/sami-virtanen/zipf/pull/new/adding-email
-remote:
+remote: 
 To https://github.com/sami-virtanen/zipf.git
  * [new branch]      adding-email -> adding-email
 ```
@@ -8606,15 +8608,14 @@ since it is Amira's repository that will be affected if the pull request is merg
 <p class="caption">(\#fig:git-advanced-pull-request-new)Creating a new pull request.</p>
 </div>
 
-Some time later,
-Amira checks her repository and sees that there is a pull request
+Amira's repository now shows a new pull request
 (Figure \@ref(fig:git-advanced-pull-request-viewing)).
 Clicking on the "Pull requests" tab brings up a list of PRs
 (Figure \@ref(fig:git-advanced-pull-request-list))
 and clicking on the pull request link itself displays its details
-(Figure \@ref(fig:git-advanced-pull-request-details)),
-Which appears identical to the details seen by .
-
+(Figure \@ref(fig:git-advanced-pull-request-details)).
+Sami and Amira can both see and interact with these pages,
+though only Amira has permission to merge.
 
 <div class="figure" style="text-align: center">
 <img src="figures/git-advanced/viewing-new-pull-request.png" alt="Viewing a pull request." width="100%" />
@@ -8643,7 +8644,7 @@ she clicks on the "Files changed" tab to see what Sami has changed
 <p class="caption">(\#fig:git-advanced-pull-request-changes)Viewing changes to files.</p>
 </div>
 
-If she moves her mouse over particular lines,\index{Git!pull request!reviewing}\index{reviewing (Git pull request})\index{code review!pull request}
+If she moves her mouse over particular lines,\index{Git!pull request!reviewing}\index{reviewing (Git pull request)}\index{code review!pull request}
 a white-on-blue cross appears near the numbers to indicate that she can add comments
 (Figure \@ref(fig:git-advanced-pull-request-comment-marker)).
 She clicks on the marker beside her own name and writes a comment:
@@ -8707,14 +8708,9 @@ amira:~/zipf $ git pull origin master
 ```
 
 ```text
-remote: Enumerating objects: 9, done.
-remote: Counting objects: 100% (9/9), done.
-remote: Compressing objects: 100% (5/5), done.
-remote: Total 7 (delta 4), reused 4 (delta 2), pack-reused 0
-Unpacking objects: 100% (7/7), done.
 From https://github.com/amira-khan/zipf
-   893fc9f..4bf4b68  master     -> origin/master
-Updating 893fc9f..4bf4b68
+ * branch            master     -> FETCH_HEAD
+Updating 35fca86..a04e3b9
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
@@ -8733,8 +8729,7 @@ sami:~/zipf $ git checkout master
 
 ```text
 Switched to branch 'master'
-Your branch is ahead of 'origin/master' by 1 commit.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 ```
 
 ```bash
@@ -8742,18 +8737,26 @@ sami:~/zipf $ git pull upstream master
 ```
 
 ```text
-remote: Enumerating objects: 8, done.
-remote: Counting objects: 100% (8/8), done.
-remote: Compressing objects: 100% (2/2), done.
-remote: Total 4 (delta 2), reused 3 (delta 2), pack-reused 0
-Unpacking objects: 100% (4/4), done.
 From https://github.com/amira-khan/zipf
  * branch            master     -> FETCH_HEAD
-   893fc9f..4bf4b68  master     -> upstream/master
-Updating 893fc9f..4bf4b68
+Updating 35fca86..a04e3b9
 Fast-forward
  README.md | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
+```
+
+Finally,
+Sami can push their changes back to the `master` branch
+in their own remote repository:
+
+```bash
+sami:~/zipf $ git push origin master
+```
+
+```text
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/sami-virtanen/zipf.git
+   35fca86..a04e3b9  master -> master
 ```
 
 All four repositories are now synchronized.
@@ -9090,10 +9093,6 @@ We therefore recommend using one that other groups have drafted, refined, and te
 The [Contributor Covenant][covenant] is relevant for projects being developed online,
 such as those based on GitHub:
 
-```bash
-$ cat CONDUCT.md
-```
-
 ```text
 # Contributor Covenant Code of Conduct
 
@@ -9365,11 +9364,7 @@ many projects have survived and thrived without this safeguard.
 We therefore recommend that projects choose the MIT license,
 as it places the fewest restrictions on future action.
 
-```bash
-$ cat LICENSE.md
-```
-
-```
+```text
 MIT License
 
 Copyright (c) 2020 Amira Khan
@@ -9576,28 +9571,13 @@ To write a good bug report:
     This parallels the rule about creating a branch in version control for each bug fix or feature
     discussed in Section \@ref(git-advanced).
 
-Here is an example of a well-written bug report with all of the components mentioned above:
+An example of a well-written bug report with all of the components mentioned above
+is shown in Figure \@ref(fig:bug-report).
 
-```text
-ID: #25
-Creator: @sami
-Owner: @amira
-Title: countwords.py does not handle em-dashes correctly
-Description:
-
-1.  Create a text file called 'emdash.txt' containing the single
-    line "first---second".
-
-2.  Run 'python bin/countwords.py emdash.txt'
-
-The program should find the words 'first' and 'second', but
-instead it finds the single "word" 'first---second'.
-
-Versions:
--   Tested in `809b6768`.
--   Using on Windows 10.
--   Python 3.6.7 installed from anaconda
-```
+<div class="figure" style="text-align: center">
+<img src="figures/teams/bug-report.png" alt="Example of a bug report." width="100%" />
+<p class="caption">(\#fig:teams-bug-report)Example of a bug report.</p>
+</div>
 
 It takes time and energy to write a good error report.
 If the report is being filed by a member of the development team,
@@ -9682,6 +9662,15 @@ A separate set of labels can be used to indicate the state of an issue:
 -   *Duplicate*: this issue is a duplicate of one that's already in the system.
     Issues marked this way are usually also then closed;
     this is another opportunity to encourage people to stay involved.
+
+Some of the labels that GitHub creates for repositories by default
+are shown in Figure \@ref(fig:teams-labels).
+These labels can be modified or otherwise customized for each repository.
+
+<div class="figure" style="text-align: center">
+<img src="figures/teams/issue-labels.png" alt="Labels for GitHub issues." width="100%" />
+<p class="caption">(\#fig:teams-labels)Labels for GitHub issues.</p>
+</div>
 
 Some projects use labels corresponding to upcoming software releases, journal issues, or conferences
 instead of *Current*, *Next*, and *Eventually*.
@@ -10308,7 +10297,7 @@ to ask that unit tests be written for `countwords.py`
 1.  Create the labels *current* and *discussion*
     to help organize and prioritize your issues.
 2.  Delete at least one of the labels that GitHub automatically created for you.
-3.  Apply each label to at least one of the issues in your repository.
+3.  Apply at least one label to each issue in your repository.
 
 ### Balancing individual and team needs {#teams-ex-balancing}
 
@@ -10512,7 +10501,7 @@ and add the following:
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
-	  data/moby_dick.txt > results/moby_dick.csv
+		data/moby_dick.txt > results/moby_dick.csv
 ```
 
 As in the shell and many other programming languages,
@@ -10552,6 +10541,15 @@ python bin/countwords.py \
   data/moby_dick.txt > results/moby_dick.csv
 ```
 
+> **Indentation Errors**
+>
+> If a `Makefile` indents a rule with spaces rather than tabs,
+> Make produces an error message like this:
+>
+> ```text
+> Makefile:3: *** missing separator.  Stop.
+> ```
+
 When Make follows the rules in our Makefile,
 one of three things will happen:
 
@@ -10568,15 +10566,6 @@ along with anything those command prints to the screen
 via \gref{standard output}{stdout} or \gref{standard error}{stderr}.
 There is no screen output in this case,
 so we only see the command.
-
-> **Indentation Errors**
->
-> If a `Makefile` indents a rule with spaces rather than tabs,
-> Make produces an error message like this:
->
-> ```text
-> Makefile:3: *** missing separator.  Stop.
-> ```
 
 No matter what happened the first time we ran `make`,
 if we run it again right away it does nothing
@@ -10595,8 +10584,8 @@ $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 ```
 
 ```text
--rw-r--r-- 1 amira staff  219107 31 Dec 08:58 results/moby_dick.csv
--rw-r--r-- 1 amira staff 1276201 31 Dec 08:58 data/moby_dick.txt
+-rw-r--r-- 1 amira staff  274967 Nov 29 12:58 results/moby_dick.csv
+-rw-r--r-- 1 amira staff 1253891 Nov 27 20:56 data/moby_dick.txt
 ```
 
 As a further test:
@@ -10625,12 +10614,12 @@ Let's add another rule to reproduce another result:
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
-	  data/moby_dick.txt > results/moby_dick.csv
+		data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt
 	python bin/countwords.py \
-	  data/jane_eyre.txt > results/jane_eyre.csv
+		data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 When we run `make` it tells us:
@@ -10665,6 +10654,7 @@ that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
 ```makefile
+# Regenerate all results.
 all : results/moby_dick.csv results/jane_eyre.csv
 ```
 
@@ -10689,12 +10679,12 @@ For example,
 let's add another target to our Makefile to delete all of the result files we have generated
 so that we can start afresh.
 By convention this target is called `clean`,\index{build target!clean}
-and ours looks like this:
+and we'll place it below the two existing targets:
 
 ```makefile
 # Remove all generated files.
 clean :
-	rm -f results/*
+	rm -f results/*.csv
 ```
 
 The `-f` flag to `rm` means "force removal":
@@ -10707,9 +10697,9 @@ $ make clean
 ```
 
 Make will delete any results files we have.
-This is a lot safer than typing `rm -f results/*` at the command-line each time,
+This is a lot safer than typing `rm -f results/*.csv` at the command-line each time,
 because if we mistakenly put a space before the `*`
-we would delete all of the files in the project's root directory.
+we would delete all of the CSV files in the project's root directory.
 
 Phony targets are very useful,
 but there is a catch.
@@ -10745,20 +10735,18 @@ each result also depends on the program used to generate it.
 If we change our program,
 we should regenerate our results.
 To get Make to do that,
-we can add the program to the prerequisites for each result:
+we can change our prerequisites to include the program:
 
 ```makefile
-# ...phony targets...
-
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
 	python bin/countwords.py \
-      data/moby_dick.txt > results/moby_dick.csv
+    	data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
 	python bin/countwords.py \
-	  data/jane_eyre.txt > results/jane_eyre.csv
+		data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 To run both of these rules,
@@ -10800,13 +10788,18 @@ makes them harder to understand.
 
 The solution is the same one we use in programs:
 define and use variables.
-Let's create names for the word-counting script and the command used to run it:
+Let's modify the results regeneration code by 
+creating targets for the word-counting script and the command used to run it.
+The entire file should now read:
 
 ```makefile
-# ...phony targets...
+.PHONY : all clean
 
 COUNT=bin/countwords.py
 RUN_COUNT=python $(COUNT)
+
+# Regenerate all results.
+all : results/moby_dick.csv results/jane_eyre.csv
 
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
@@ -10815,6 +10808,10 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt $(COUNT)
 	$(RUN_COUNT) data/jane_eyre.txt > results/jane_eyre.csv
+
+# Remove all generated files.
+clean :
+	rm -f results/*.csv
 ```
 
 Each definition takes the form `NAME=value`.
@@ -10879,7 +10876,7 @@ with the automatic variable `$^`,
 which means "all the prerequisites in the rule":
 
 ```makefile
-# Regenerate results for "Jane Eyre"
+# Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $^ > $@
 ```
@@ -10901,10 +10898,16 @@ which means "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
 ```makefile
-# Regenerate results for "Jane Eyre"
+# Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
 ```
+
+If you use this approach,
+the rule for *Jane Eyre* should be updated as well.
+The next section,
+however,
+includes instructions for generalizing rules.
 
 ## Generic Rules {#automate-pattern}
 
@@ -10943,9 +10946,11 @@ results/%.csv : data/%.txt $(COUNT)
 
 # Remove all generated files.
 clean :
-	rm -f results/*
+	rm -f results/*.csv
 ```
 
+We now have fewer lines of text,
+but we've also included a third book.
 To test our shortened Makefile,
 let's delete all of the results files:
 
@@ -10954,7 +10959,7 @@ $ make clean
 ```
 
 ```text
-rm -f results/*
+rm -f results/*.csv
 ```
 
 and then recreate them:
@@ -11138,6 +11143,18 @@ RESULTS: results/dracula.csv results/frankenstein.csv
 Excellent:
 `DATA` has the names of the files we want to process
 and `RESULTS` automatically has the names of the corresponding result files.
+
+Why haven't we included `RUN_COUNT` when assessing our variables' values?
+This is another place we can streamline our script,
+by removing `RUN_COUNT` from the list of variables 
+and changing our regeneration rule:
+
+```makefile
+# Regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+```
+
 Since the phony target `all` depends on `$(RESULTS)`
 (i.e., all the files whose names appear in the variable `RESULTS`)
 we can regenerate all the results in one step:
@@ -11270,8 +11287,10 @@ all : results/collated.csv
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
-	mkdir -p results  # Create dir if it doesn't exist
+	mkdir -p results
 	python $(COLLATE) $(RESULTS) > $@
+
+# ...other rules...
 
 ## settings : show variables' values.
 settings :
@@ -11279,7 +11298,8 @@ settings :
 	@echo DATA: $(DATA)
 	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
-	...
+
+# ...help rule...
 ```
 
 The first two lines tell Make about the collation program,
@@ -11315,6 +11335,8 @@ all : results/collated.png
 results/collated.png : results/collated.csv
 	python $(PLOT) $< --outfile $@
 
+# ...other rules...
+
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
@@ -11322,7 +11344,8 @@ settings :
 	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
 	@echo PLOT: $(PLOT)
-	...
+
+# ...help...
 ```
 
 Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
@@ -11504,17 +11527,29 @@ help :
 Using `man` and online search,
 explain what every part of this recipe does.
 
-## Configuration {#automate-ex-configuration}
+### Configuration {#automate-ex-configuration}
 
-Let's say that in future we intend to write a number of different Makefiles
-that all use the `countwords.py`, `collate.py` and `plotcounts.py` scripts.
+A next step in automating this analysis might include 
+moving the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
+into a separate file called `config.mk`:
 
-To avoid duplication,
-cut and paste the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
-into a separate file called `config.mk`.
-Use the `include` command to access those definitions in the existing `Makefile`.
+```makefile
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PLOT=bin/plotcounts.py
+```
 
-(In Chapter \@ref(config) we discuss configuration strategies in more detail.)
+and using the `include` command to access those definitions in the existing `Makefile`:
+
+```makefile
+.PHONY: results all clean help settings
+
+include config.mk
+
+# ... the rest of the Makefile ...
+```
+
+Under what circumstances would this strategy be useful?
 
 ## Key Points {#automate-keypoints}
 
@@ -11583,6 +11618,8 @@ zipf/
 │   ├── dracula.txt
 │   └── ...
 └── results
+    ├── collate.csv
+    ├── collate.png
     ├── dracula.csv
     ├── dracula.png
     └── ...
@@ -11680,7 +11717,7 @@ mpl.matplotlib_fname()
 ```
 
 ```text
-/Users/amira/opt/anaconda3/lib/python3.7/site-packages/matplotlib/
+/Users/amira/anaconda3/lib/python3.7/site-packages/matplotlib/
 mpl-data/matplotlibrc
 ```
 
@@ -11857,9 +11894,11 @@ to pass a YAML file full of Matplotlib parameters to `plotcounts.py`.\index{conf
 First,
 we save the parameters we want to change in a file inside our project directory.
 We can call it anything,
-but `plotparams.yml` seems like it will be easy to remember:
+but `plotparams.yml` seems like it will be easy to remember,
+and we'll store it in `bin` with the scripts that will use it:
 
 ```yaml
+# Plot characteristics
 axes.labelsize   : x-large  ## fontsize of the x any y labels
 xtick.labelsize  : large    ## fontsize of the tick labels
 ytick.labelsize  : large    ## fontsize of the tick labels
@@ -11947,7 +11986,7 @@ def main(args):
                          xlim=args.xlim)
 
     word_counts = df['word_frequency'].to_numpy()
-    alpha, beta = get_power_law_params(word_counts)
+    alpha = get_power_law_params(word_counts)
     print('alpha:', alpha)
 
     # Since the ranks are already sorted, we can take the last
@@ -11959,7 +11998,6 @@ def main(args):
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
-    # Plot the result
     plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
     ax.figure.savefig(args.outfile)
 
@@ -12084,6 +12122,8 @@ handle a configuration file in INI rather than YAML format.
 1.  Which file format do you find easier to work with?
 2.  What other factors should influence your choice of a configuration file syntax?
 
+Note: we will be referencing the code in YAML format in the rest of this book.
+
 ### Configuration consistency {#config-ex-consistency}
 
 In order for a data processing pipeline to work correctly,
@@ -12157,6 +12197,8 @@ zipf/
 │   ├── dracula.txt
 │   └── ...
 └── results
+    ├── collated.csv
+    ├── collated.png
     ├── dracula.csv
     ├── dracula.png
     └── ...
@@ -12261,6 +12303,9 @@ def get_power_law_params(word_counts):
     return alpha
 ```
 
+Update `plotcounts.py` with the assertion described above.
+You'll see additional examples of assertions throughout this chapter.
+
 ## Unit Testing {#testing-unit}
 
 Catching errors is good, but preventing them is better,
@@ -12271,7 +12316,7 @@ checks the correctness of a single unit of software.
 Exactly what constitutes a "unit" is subjective,
 but it typically means the behavior of a single function in one situation.
 In our Zipf's Law software,
-the `count_words` function in `wordcounts.py` is
+the `count_words` function in `countwords.py` is
 a good candidate for unit testing:
 
 ```python
@@ -12332,10 +12377,12 @@ risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1,
 expected_result = Counter(risk_poem_counts)
 ```
 
-We then generate the actual result by calling `word_counts`,
+We then generate the actual result by calling `count_words`,
 and use an assertion to check if it is what we expected:
 
 ```python
+import sys
+sys.path.append('/Users/amira/zipf/bin')
 import countwords
 
 
@@ -12347,6 +12394,19 @@ assert actual_result == expected_result
 There's no output,
 which means the assertion (and test) passed.
 (Remember, assertions only do something if the condition is false.)
+
+> **Appending the Import Path**
+>
+> The last code chunk included `sys.path.append`,
+> which allowed us to import scripts from elsewhere than 
+> our current working directory.
+> This isn't a perfect solution,
+> but works well enough for quick tests while developing code,
+> especially since the tool we'll use for the 
+> rest of the chapter handles this issue for us.
+> [Import statements][python-import] are notoriously tricky,
+> but we'll learn better methods for organizing our code for 
+> function imports in Chapter \@ref(packaging).
 
 ## Testing Frameworks {#testing-framework}
 
@@ -12363,7 +12423,8 @@ which structures tests as follows:
 3.  These functions use `assert` to check results.
 
 Following these rules,
-we can create a `test_zipfs.py` script that contains the test we just developed:
+we can create a `test_zipfs.py` script in your `bin` directory
+that contains the test we just developed:
 
 ```python
 from collections import Counter
@@ -12399,8 +12460,8 @@ $ pytest
 ```
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 1 item
 
@@ -12493,8 +12554,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.2.1, py-1.10.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
 
@@ -12505,13 +12566,13 @@ __________________________ test_alpha __________________________
 
     def test_alpha():
         """Test the calculation of the alpha parameter.
-
+    
         The test word counts satisfy the relationship,
           r = cf**(-1/alpha), where
           r is the rank,
           f the word count, and
           c is a constant of proportionality.
-
+    
         To generate test word counts for an expected alpha value of
           1.0, a maximum word frequency of 600 is used
           (i.e. c = 600 and r ranges from 1 to 600)
@@ -12523,10 +12584,11 @@ __________________________ test_alpha __________________________
 >       assert actual_alpha == expected_alpha
 E       assert 0.9951524579316625 == 1.0
 
-bin/test_zipfs.py:24: AssertionError
+bin/test_zipfs.py:26: AssertionError
 ==================== short test summary info =====================
 FAILED bin/test_zipfs.py::test_alpha - assert 0.99515245793 == 1.0
-================== 1 failed, 1 passed in 0.85s ===================
+================== 1 failed, 1 passed in 3.98s ===================
+
 ```
 
 The output tells us that one test failed but the other test passed.
@@ -12624,8 +12686,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
 
@@ -12669,33 +12731,48 @@ might be a text file with a word frequency distribution that has a known \(\alph
 In order to create this text fixture,
 we need a way to generate random words.
 
-Fortunately, a Python library called `randomwordgenerator` exists to do just that.
-We can install it and the `pypandoc` library it depends on
-using [`pip`][pip], the Python Package Installer:
+Fortunately, a Python library called 
+[`RandomWordGenerator`](https://github.com/AbhishekSalian/Random-Word-Generator) 
+exists to do just that.
+We can install it using [`pip`][pip], the Python Package Installer:
 
 ```bash
-$ pip install pypandoc
-$ pip install randomwordgenerator
+$ pip install Random-Word-Generator
 ```
 
 Borrowing from the word count distribution we created for `test_alpha`,
-we can then create a text file full of random words
+we can use the following code to create a text file full of random words
 with a frequency distribution that corresponds to an \(\alpha\) of approximately 1.0:
 
 ```python
 import numpy as np
-from randomwordgenerator import randomwordgenerator as rwg
+from RandomWordGenerator import RandomWord
 
 
 max_freq = 600
 word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
-random_words = rwg.generate_random_words(n=max_freq)
+rw = RandomWord()
+random_words = rw.getList(num_of_words=max_freq)
 writer = open('test_data/random_words.txt', 'w')
 for index in range(max_freq):
     count = int(word_counts[index])
-    word_sequence = f"{random_words[index]} " * count
+    word_sequence = f'{random_words[index]} ' * count
     writer.write(word_sequence + '\n')
 writer.close()
+```
+
+We can confirm this code worked by checking the resulting file:
+
+```bash
+tail -n 5 test_data/random_words.txt
+```
+
+```text
+lZnkzoBHRb 
+djiroplqrJ 
+HmAUGOncHg 
+DGLpfTIitu 
+KALSfPkrga
 ```
 
 We can then add this integration test to `test_zipfs.py`:
@@ -12703,7 +12780,6 @@ We can then add this integration test to `test_zipfs.py`:
 ```python
 def test_integration():
     """Test the full word count to alpha parameter workflow."""
-
     with open('test_data/random_words.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     counts_array = np.array(list(word_counts_dict.values()))
@@ -12721,8 +12797,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 3 items
 
@@ -12758,7 +12834,6 @@ Let's use that value to add a regression test to `test_zipfs.py`:
 ```python
 def test_regression():
     """Regression test for Dracula."""
-
     with open('data/dracula.txt', 'r') as reader:
         word_counts_dict = countwords.count_words(reader)
     counts_array = np.array(list(word_counts_dict.values()))
@@ -12773,8 +12848,8 @@ $ pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
 
@@ -12806,8 +12881,8 @@ $ coverage run -m pytest
 
 ```text
 ===================== test session starts ======================
-platform darwin -- Python 3.7.6, pytest-5.4.1, py-1.8.1,
-pluggy-0.12.0
+platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
+pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
 
@@ -12828,21 +12903,20 @@ $ coverage report -m
 ```
 
 ```text
-Name            Stmts   Miss  Cover   Missing
----------------------------------------------
-countwords.py      20      8    60%   19-21, 25-31
-plotcounts.py      46     27    41%   41-47, 67-69, 74-90, 94-104
-test_zipfs.py      32      0   100%
-utilities.py        7      4    43%   24-27
----------------------------------------------
-TOTAL             105     39    63%
+bin/countwords.py      20      7    65%   25-26, 30-38
+bin/plotcounts.py      58     37    36%   48-55, 75-77, 82-83, 
+                                          88-118, 122-140
+bin/test_zipfs.py      31      0   100%
+bin/utilities.py        8      5    38%   18-22
+-------------------------------------------------
+TOTAL                 117     49    58%
 ```
 
 This summary shows us that
 some lines of `countwords.py` or `plotcounts.py`
 were not executed when we ran the tests:
 in fact,
-only 60% and 41% of the lines were run respectively.
+only 65% and 36% of the lines were run respectively.
 This makes sense,
 since much of the code in those scripts
 is devoted to handling command line arguments or file I/O
@@ -12862,6 +12936,21 @@ produces the colorized line-by-line display shown in Figure \@ref(fig:python-co
 
 This output confirms that all lines relating to word counting were tested,
 but not any of the lines related to argument handling or I/O.
+
+> **Commit our Coverage?**
+>
+> At this point,
+> you're probably wondering if you should use version control
+> to track the files reporting your code's coverage.
+> While it won't necessarily harm your code,
+> the reports will become inaccurate
+> unless you continue updating your coverage reports
+> as your code changes.
+> Therefore, we recommend adding `.coverage` and `htmlcov/` 
+> to your [`.gitignore` file][github-gitignore].
+> In the next section,
+> we'll explore an approach that can help you automate tasks 
+> like assessing coverage.
 
 Is this good enough?
 The answer depends on what the software is being used for and by whom.
@@ -12892,7 +12981,7 @@ Luckily,
 we can usually put test cases into groups.
 For example,
 when testing a function that summarizes a table full of data,
-it's probably enough to check that it handles table with:
+it's probably enough to check that it handles tables with:
 
 -   no rows
 -   only one row
@@ -12933,45 +13022,10 @@ Travis CI creates a fresh environment,
 makes a fresh clone of the repository (Section \@ref(git-advanced-fork)),
 and runs whatever commands the project's managers have set up.
 
-To set up CI for a project, we must:
-
-1.  Create an account on [Travis CI][travis-ci] (if we don't already have one).
-2.  Link our Travis CI account to our GitHub account (if we haven't done so already).
-3.  Tell Travis CI to watch the repository that contains our project.
-
-Creating an account with an online service is probably a familiar process,
-but linking our Travis CI account to our GitHub account may be something new.
-We only have to do this once
-to allow Travis CI to access all our GitHub repositories,
-but we should always be careful when giving sites access to other sites,
-and only trust well-established and widely-used services.
-
-Once we have created an account,
-we can tell Travis CI which repository we want it to watch
-by clicking the "+" next to the "My Repositories" link
-on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
-
-<div class="figure" style="text-align: center">
-<img src="figures/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI." width="50%" />
-<p class="caption">(\#fig:testing-add-repo)Click to add a new GitHub repository to Travis CI.</p>
-</div>
-
-To add the GitHub repository we have been using throughout the course,
-find it in the repository list
-and toggle the switch so that it turns green
-(Figure \@ref(fig:testing-list-repos)).
-If the repository doesn't show up,
-re-synchronize the list using the green "Sync account" button on the left sidebar.
-If it still doesn't appear,
-the repository may belong to someone else or be private.
-
-<div class="figure" style="text-align: center">
-<img src="figures/testing/travis-list-repos.png" alt="Find Zipf's Law repository and switch it on." width="50%" />
-<p class="caption">(\#fig:testing-list-repos)Find Zipf's Law repository and switch it on.</p>
-</div>
-
-The next step is to tell Travis CI what we want it to do
-by creating a file called `.travis.yml`.
+Before setting up our account with Travis CI, however,
+we need to prepare our repository to be recognized by the tool.
+We'll first add a file called `.travis.yml` to our repository,
+which includes instructions for Travis CI.
 (The leading `.` in the name hides the file from casual listings on Mac or Linux,
 but not on Windows.)
 This file must be in the root directory of the repository,
@@ -12986,6 +13040,9 @@ language: python
 python:
 - "3.6"
 
+install:
+- pip install -r requirements.txt
+
 script:
 - pytest
 ```
@@ -12994,79 +13051,14 @@ The `language` key tells Travis CI which programming language to use,
 so that it knows which of its standard \gref{virtual machines}{virtual_machine} to use\index{continuous integration!use of virtual machines}
 as a starting point for the project.
 The `python` key specifies the version or versions of Python to use,
-while the `script` key lists the commands to run---in this case, `pytest`.
-We can now go ahead and push the `.travis.yml` file to GitHub.
-
-```bash
-$ git add .travis.yml
-$ git commit -m "Initial commit of travis configuration file"
-```
-```text
-[master 71084f7] Initial commit of travis file
- 1 file changed, 4 insertions(+)
- create mode 100644 .travis.yml
-```
-```bash
-$ git push origin master
-```
-```text
-Enumerating objects: 4, done.
-Counting objects: 100% (4/4), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
-To https://github.com/amira-khan/zipf.git
-   1f0590b..71084f7  master -> master
-```
-
-When this commit reaches GitHub,
-that site notifies Travis CI that the repository has changed.
-Travis CI then follows the instructions in `.travis.yml`
-and reports whether the build passed (shown in green)
-or produced warnings or errors (shown in red).
-To create this report, Travis CI has:
-
-1.  Created a new Linux virtual machine.
-1.  Installed the desired version of Python.
-1.  Ran the commands below the `script` key.
-1.  Reported the results at `https://travis-ci.org/USER/REPO`,
-    where `USER/REPO`
-    identifies the repository for a given user.
-
-In this case,
-we can see that the build failed (Figure \@ref(fig:testing-build-fail)).
-
-<div class="figure" style="text-align: center">
-<img src="figures/testing/travis-build-fail.png" alt="Travis build overview (build failed)." width="100%" />
-<p class="caption">(\#fig:testing-build-fail)Travis build overview (build failed).</p>
-</div>
-
-Scrolling down to read the job log in detail,
-it says that it "could not locate requirements.txt."
-This happens because the Python scripts that are run when `pytest` is executed
-(i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `utilities.py`)
-import a number of packages that don't come with the
-[Python Standard Library][python-standard-library].
-To fix this problem,
-we need to do two things.
-The first is to add an `install` key to `.travis.yml`:
-
-```yaml
-language: python
-
-python:
-- "3.6"
-
-install:
-- pip install -r requirements.txt
-
-script:
-- pytest
-```
-
-The second is to create `requirements.txt`,
-which lists the libraries that need to be installed:
+while the `install` key indicates the name of the file (`requirements.txt`)
+listing the libraries that need to be installed.
+The `script` key lists the commands to run---in this case, `pytest`---
+which in turn executes our project scripts
+(i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `utilities.py`).
+These scripts import a number of packages that don't come with the
+[Python Standard Library][python-standard-library],
+so these are what comprises `requirements.txt`:
 
 ```text
 numpy
@@ -13077,33 +13069,66 @@ pytest
 pyyaml
 ```
 
-We commit these changes to GitHub:
+Be sure to save both `requirements.txt` and `.travis.yml`
+to your project's root directory,
+commit to your repository,
+and push to GitHub,
+or Travis CI will not be able to recognize your project.
 
-```bash
-$ git add .travis.yml requirements.txt
-$ git commit -m "Adding requirements"
-```
-```text
-[master d96593f] Adding requirements
- 2 files changed, 16 insertions(+), 1 deletion(-)
- create mode 100644 requirements.txt
-```
-```bash
-$ git push origin master
-```
-```text
-Enumerating objects: 4, done.
-Counting objects: 100% (4/4), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 344 bytes | 344.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
-To https://github.com/amira-khan/zipf.git
-   1f0590b..71084f7  master -> master
-```
+We're now ready to set up CI for our project.
+The basic steps are as follows:
 
-Travis CI automatically runs again.
-This time our tests pass and the build completes successfully
+1.  Create an account on [Travis CI][travis-ci] (if we don't already have one).
+2.  Link our Travis CI account to our GitHub account (if we haven't done so already).
+3.  Tell Travis CI to watch the repository that contains our project.
+
+Creating an account with an online service is probably a familiar process,
+but linking our Travis CI account to our GitHub account may be something new.
+We only have to do this once
+to allow Travis CI to access all our GitHub repositories,
+but we should always be careful when giving sites access to other sites,
+and only trust well-established and widely-used services.
+
+We can tell Travis CI which repository we want it to watch
+by clicking the "+" next to the "My Repositories" link
+on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
+
+<div class="figure" style="text-align: center">
+<img src="figures/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI." width="50%" />
+<p class="caption">(\#fig:testing-add-repo)Click to add a new GitHub repository to Travis CI.</p>
+</div>
+
+To add the GitHub repository we have been using throughout this book,
+find it in the repository list
+(Figure \@ref(fig:testing-list-repos)).
+If the repository doesn't show up,
+re-synchronize the list using the green "Sync account" button on the left sidebar.
+If it still doesn't appear,
+the repository may belong to someone else or be private,
+or your required files may be incorrect.
+Click the "Trigger a build" button to initiate your first test using Travis CI.
+
+<div class="figure" style="text-align: center">
+<img src="figures/testing/travis-list-repos.png" alt="Find Zipf's Law repository and trigger a build." width="50%" />
+<p class="caption">(\#fig:testing-list-repos)Find Zipf's Law repository and trigger a build.</p>
+</div>
+
+Once your repository has been activated,
+Travis CI follows the instructions in `.travis.yml`
+and reports whether the build passed (shown in green)
+or produced warnings or errors (shown in red).
+To create this report, Travis CI has:
+
+1.  Created a new Linux virtual machine.
+2.  Installed the desired version of Python.
+3.  Run the commands below the `script` key.
+4.  Reported the results at `https://travis-ci.com/USER/REPO`,
+    where `USER/REPO`
+    identifies the repository for a given user.
+
+Our tests pass and the build completes successfully.
+We can view additional details about the test by clicking on the
+repository name
 (Figure \@ref(fig:testing-build-pass)).
 
 <div class="figure" style="text-align: center">
@@ -13268,7 +13293,8 @@ def normalize_rectangle(rect):
 ```
 
 In order to answer the following questions,
-cut and paste the `normalize_rectangle` function into a new file called `geometry.py` and
+cut and paste the `normalize_rectangle` function into a new file called `geometry.py` 
+(outside of your `zipf` project) and
 save that file in a new directory called `exercises`.
 
 1. To ensure that the inputs to `normalize_rectangle` are valid,
@@ -13416,11 +13442,13 @@ The Zipf's Law project should now include:
 ```text
 zipf/
 ├── .gitignore
+├── .travis.yml
 ├── CONDUCT.md
 ├── CONTRIBUTING.md
 ├── LICENSE.md
 ├── Makefile
 ├── README.md
+├── requirements.txt
 ├── bin
 │   ├── book_summary.sh
 │   ├── collate.py
@@ -13428,15 +13456,19 @@ zipf/
 │   ├── plotcounts.py
 │   ├── plotparams.yml
 │   ├── script_template.py
+│   ├── test_zipfs.py
 │   └── utilities.py
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
 │   └── ...
-└── results
-    ├── dracula.csv
-    ├── dracula.png
-    └── ...
+├── results
+│   ├── dracula.csv
+│   ├── dracula.png
+│   └── ...
+└── test_data
+    ├── random_words.txt
+    └── risk.txt
 ```
 
 ## Exceptions {#errors-exceptions}
@@ -13618,9 +13650,9 @@ $ python bin/collate.py results/none.csv results/dracula.csv
 
 ```text
 Traceback (most recent call last):
-  File "bin/collate.py", line 27, in <module>
+  File "bin/collate.py", line 35, in <module>
     main(args)
-  File "bin/collate.py", line 17, in main
+  File "bin/collate.py", line 23, in main
     with open(fname, 'r') as reader:
 FileNotFoundError: [Errno 2] No such file or directory:
 'results/none.csv'
@@ -13636,11 +13668,11 @@ $ python bin/collate.py Makefile
 
 ```text
 Traceback (most recent call last):
-  File "bin/collate.py", line 27, in <module>
+  File "bin/collate.py", line 35, in <module>
     main(args)
-  File "bin/collate.py", line 18, in main
+  File "bin/collate.py", line 24, in main
     update_counts(reader, word_counts)
-  File "bin/collate.py", line 10, in update_counts
+  File "bin/collate.py", line 15, in update_counts
     for word, count in csv.reader(reader):
 ValueError: not enough values to unpack (expected 2, got 1)
 ```
@@ -13693,9 +13725,9 @@ $ python bin/collate.py Makefile
 
 ```text
 Traceback (most recent call last):
-  File "bin/collate.py", line 29, in <module>
+  File "bin/collate.py", line 37, in <module>
     main(args)
-  File "bin/collate.py", line 18, in main
+  File "bin/collate.py", line 24, in main
     raise OSError(f'{fname} is not a CSV file.')
 OSError: Makefile is not a CSV file.
 ```
@@ -14121,8 +14153,8 @@ can save us and our users a lot of needless work.
 
 ## Exercises {#errors-exercises}
 
-This chapter suggested several edits to `collate.py`,
-such that the script now reads:
+This chapter suggested several edits to `collate.py`.
+We'll proceed with the following basic framework for the script:
 
 ```python
 """
@@ -14168,7 +14200,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*',
                         help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -14251,7 +14284,7 @@ the default name of `collate.log`.
 
 In our suggested solution to the previous exercise we modified `collate.py` to handle
 different types of errors associated with reading input files.
-The `main` function in `collate.py` now reads:
+Consider if the `main` function in `collate.py` now reads:
 
 ```python
 def main(args):
@@ -14264,8 +14297,8 @@ def main(args):
         try:
             logging.debug(f'Reading in {fname}...')
             if fname[-4:] != '.csv':
-                msg = util.ERRORS['not_csv_suffix'].format(
-                      fname=fname)
+                msg = ERRORS['not_csv_suffix'].format(
+                    fname=fname)
                 raise OSError(msg)
             with open(fname, 'r') as reader:
                 logging.debug('Computing word counts...')
@@ -14280,7 +14313,6 @@ def main(args):
             msg = f'{fname} not processed: {error}'
             logging.warning(msg)
     util.collection_to_csv(word_counts, num=args.num)
-
 ```
 
 1.  It is difficult to write a simple unit test for the lines of code dedicated
@@ -14295,7 +14327,8 @@ def process_file(fname, word_counts):
     """Read file and update word counts"""
     logging.debug(f'Reading in {fname}...')
     if fname[-4:] != '.csv':
-        msg = util.ERRORS['not_csv_suffix'].format(fname=fname)
+        msg = ERRORS['not_csv_suffix'].format(
+            fname=fname)
         raise OSError(msg)
     with open(fname, 'r') as reader:
         logging.debug('Computing word counts...')
@@ -14400,6 +14433,7 @@ Our Zipf's Law project files are structured as they were at the end of the previ
 ```text
 zipf/
 ├── .gitignore
+├── .travis.yml
 ├── CONDUCT.md
 ├── CONTRIBUTING.md
 ├── LICENSE.md
@@ -14413,6 +14447,7 @@ zipf/
 │   ├── plotcounts.py
 │   ├── plotparams.yml
 │   ├── script_template.py
+│   ├── test_zipfs.py
 │   └── utilities.py
 ├── data
 │   ├── README.md
@@ -14621,7 +14656,7 @@ but in more complex cases we probably want to make life easier for the reader
 (and for our future selves looking to re-run the analysis).
 One way to make things easier is to export a description of
 a complete conda environment (Section \@ref(packaging-virtualenv);
-Appendix \@ref(anaconda-environments)),
+Appendix \@ref(anaconda-environments)){virtual_environment}\index,
 which can be saved as YAML using:
 
 ```bash
@@ -14652,13 +14687,8 @@ That software environment can be recreated on another computer with one line of 
 $ conda env create -f environment.yml
 ```
 
-We can go ahead and add the `environment.yml` file to our GitHub repository:
-
-```bash
-$ git add environment.yml
-$ git commit -m "Adding the conda environment file"
-$ git push origin master
-```
+Since this `environment.yml` file is an important part of reproducing the analysis,
+remember to add it to your GitHub repository.
 
 > **Container Images**
 >
@@ -14898,6 +14928,7 @@ which should include the following files:
 ```text
 zipf/
 ├── .gitignore
+├── .travis.yml
 ├── CONDUCT.md
 ├── CONTRIBUTING.md
 ├── KhanVirtanen2020.md
@@ -14988,7 +15019,7 @@ $ cd ~/pyzipf
 $ mv bin pyzipf
 ```
 
-> **Updating GitHub**
+> **Updating GitHub's Repository Name**
 >
 > We won't do it in this case
 > (because it would break links/references from earlier in the book),
@@ -15059,6 +15090,10 @@ though,
 we should create a \gref{virtual environment}{virtual_environment}\index{virtual environment (in Python)}\index{Python!virtual environment}
 to test how our package installs
 without breaking anything in our main Python installation.
+We exported details of our environment in Chapter \@ref(provenance)
+as a way to document the software we're using;
+in this section,
+we'll use environments to make the software we're creating more robust.
 
 A virtual environment is a layer on top of an existing Python installation.
 Whenever Python needs to find a package,
@@ -15078,10 +15113,10 @@ Virtual environments also help with package development:
 We can manage virtual environments using [`conda`][conda] (Appendix \@ref(anaconda)).
 To create a new virtual environment called `pyzipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
-and listing `python` as the base to build on:
+and including `pip` and our current version of python in the new environment:
 
 ```bash
-$ conda create -n pyzipf python
+$ conda create -n pyzipf pip python=3.7.6
 ```
 
 ```text
@@ -15090,9 +15125,18 @@ Solving environment: done
 
 ## Package Plan ##
 
-  environment location: /Users/amira/opt/anaconda3/envs/pyzipf
+  environment location: /Users/amira/anaconda3/envs/pyzipf
 
-...
+  added / updated specs:
+    - pip
+    - python=3.7.6
+
+
+The following packages will be downloaded:
+...list of packages...
+
+The following NEW packages will be INSTALLED:
+...list of packages...
 
 Proceed ([y]/n)? y
 
@@ -15111,19 +15155,25 @@ Executing transaction: done
 #     $ conda deactivate
 ```
 
-`conda` creates the directory `~/opt/anaconda3/envs/pyzipf`,
+`conda` creates the directory `/Users/amira/anaconda3/envs/pyzipf`,
 which contains the subdirectories needed for a minimal Python installation,
 such as `bin` and `lib`.
-It also creates `~/opt/anaconda3/envs/pyzipf/bin/python`,
+It also creates `/Users/amira/anaconda3/envs/pyzipf/bin/python`,
 which checks for packages in these directories before checking the main installation.
 
->**Anaconda location variations**
+> **`conda` Variations**
 >
-> The default location for Anaconda differs between operating systems.
-> Our examples show the default location on MacOS (`/Users/amira/opt/anaconda3`),
-> but on Linux it is typically `/home/amira/anaconda3` and
-> on Windows it might be `C:\Documents and Settings\amira\anaconda3`
-> or `C:\Users\amira\anaconda3` (depending on the version of Windows).
+> As with many of the other tools we've explored in this book,
+> the behavior of some `conda` commands differ depending on operating system.
+> There are multiple ways to accomplish some of the tasks we present in this chapter.
+> The options we present here represent the approaches most likely to work across multiple platforms.
+> 
+> Additionally, the path for Anaconda differs among operating systems.
+> Our examples show the default path for Anaconda installed via the Unix shell 
+> on MacOS (`/Users/amira/anaconda3`),
+> but for the MacOS graphical installer it is `/Users/amira/opt/anaconda3`,
+> for Linux it is `/home/amira/anaconda3` and
+> on Windows it is `C:\Users\amira\Anaconda3`.
 > During the installation process users can also choose a custom location
 > if they like (Section \@ref(getting-started-install-software)).
 
@@ -15141,7 +15191,7 @@ the `python` command runs the interpreter in `pyzipf/bin`:
 ```
 
 ```text
-/Users/amira/opt/anaconda3/envs/pyzipf/bin/python
+/Users/amira/anaconda3/envs/pyzipf/bin/python
 ```
 
 Notice that every shell command displays `(pyzipf)` when that virtual environment is active.
@@ -15189,15 +15239,10 @@ and install our package:
 ```
 
 ```text
-Processing /Users/amira/pyzipf
-Building wheels for collected packages: pyzipf
-  Building wheel for pyzipf (setup.py) ... done
-  Created wheel for pyzipf: filename=pyzipf-0.1.0-py3-none-any.whl
-    size=4574 sha256=b7d645f1d07775
-  Stored in directory: /tmp/pip-ephem-wheel/wheels/a8/a6/0e/8b2a5cb
-Successfully built pyzipf
+Obtaining file:///Users/amira/pyzipf
 Installing collected packages: pyzipf
-Successfully installed pyzipf-0.1.0
+  Running setup.py develop for pyzipf
+Successfully installed pyzipf
 ```
 
 The `-e` option indicates that we want to install the package in "editable" mode,
@@ -15205,7 +15250,8 @@ which means that any changes we make in the package code are directly available 
 without having to reinstall the package;
 the `.` means "install from the current directory".
 
-If we look in `~/opt/anaconda3/envs/pyzipf/lib/python3.8/site-packages/`,
+If we look in the location containing package installations 
+(e.g., `/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages/`),
 we can see the `pyzipf` package beside all the other locally-installed packages.
 If we try to use the package at this stage,
 though,
@@ -15245,50 +15291,78 @@ because it will be installed as a dependency for `pandas` and `scipy`.\index{dep
 > we could put `pandas==1.1.2` or `pandas>=1.1.2` instead of just `pandas`
 > in the list argument passed to the `install_requires` parameter.
 
-We can now install our package and all its dependencies in a single command:
+Next,
+we can install our package using the modified `setup.py` file:
 
 ```bash
+(pyzipf)$ cd ~/pyzipf
 (pyzipf)$ pip install -e .
 ```
 
 ```text
 Obtaining file:///Users/amira/pyzipf
 Collecting matplotlib
-  Downloading matplotlib-3.2.1-cp37-cp37m-manylinux1_x86_64.whl (12.4 MB)
-     |████████████████████████████████| 12.4 MB 1.9 MB/s
-Collecting pandas
-  Downloading pandas-1.0.3-cp37-cp37m-manylinux1_x86_64.whl (10.0 MB)
-     |████████████████████████████████| 10.0 MB 16.1 MB/s
-Collecting scipy
-  Downloading scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
-     |████████████████████████████████| 26.1 MB 11.4 MB/s
-Requirement already satisfied: pyyaml in
-/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages
-(from pyzipf==0.1) (5.3.1)
-Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
-  Using cached pyparsing-2.4.6-py2.py3-none-any.whl (67 kB)
-Collecting python-dateutil>=2.1
-  Using cached python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
-Collecting kiwisolver>=1.0.1
-  Downloading kiwisolver-1.2.0-cp37-cp37m-manylinux1_x86_64.whl (88 kB)
-     |████████████████████████████████| 88 kB 8.6 MB/s
+  Downloading matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl (8.5 MB)
+     |████████████████████████████████| 8.5 MB 3.1 MB/s 
 Collecting cycler>=0.10
   Using cached cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
-Collecting numpy>=1.11
-  Downloading numpy-1.18.2-cp37-cp37m-manylinux1_x86_64.whl (20.2 MB)
-     |████████████████████████████████| 20.2 MB 16.3 MB/s
-Requirement already satisfied: pytz>=2017.2 in
-  /Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages
-  (from pandas->pyzipf==0.1) (2019.3)
-Requirement already satisfied: six>=1.5 in
-  /Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages
-  (from python-dateutil>=2.1->matplotlib->pyzipf==0.1) (1.14.0)
-Installing collected packages: pyparsing, python-dateutil,
-  kiwisolver, cycler, numpy, matplotlib, pandas, scipy, pyzipf
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.3.1-cp37-cp37m-macosx_10_9_x86_64.whl (61 kB)
+     |████████████████████████████████| 61 kB 2.0 MB/s 
+Collecting numpy>=1.15
+  Downloading numpy-1.19.4-cp37-cp37m-macosx_10_9_x86_64.whl (15.3 MB)
+     |████████████████████████████████| 15.3 MB 8.9 MB/s 
+Collecting pillow>=6.2.0
+  Downloading Pillow-8.0.1-cp37-cp37m-macosx_10_10_x86_64.whl (2.2 MB)
+     |████████████████████████████████| 2.2 MB 6.3 MB/s 
+Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.3
+  Using cached pyparsing-2.4.7-py2.py3-none-any.whl (67 kB)
+Collecting python-dateutil>=2.1
+  Using cached python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+Collecting six
+  Using cached six-1.15.0-py2.py3-none-any.whl (10 kB)
+Collecting pandas
+  Downloading pandas-1.1.5-cp37-cp37m-macosx_10_9_x86_64.whl (10.0 MB)
+     |████████████████████████████████| 10.0 MB 1.4 MB/s 
+Collecting pytz>=2017.2
+  Using cached pytz-2020.4-py2.py3-none-any.whl (509 kB)
+Collecting pytest
+  Using cached pytest-6.2.1-py3-none-any.whl (279 kB)
+Collecting attrs>=19.2.0
+  Using cached attrs-20.3.0-py2.py3-none-any.whl (49 kB)
+Collecting importlib-metadata>=0.12
+  Downloading importlib_metadata-3.3.0-py3-none-any.whl (10 kB)
+Collecting pluggy<1.0.0a1,>=0.12
+  Using cached pluggy-0.13.1-py2.py3-none-any.whl (18 kB)
+Collecting py>=1.8.2
+  Using cached py-1.10.0-py2.py3-none-any.whl (97 kB)
+Collecting typing-extensions>=3.6.4
+  Downloading typing_extensions-3.7.4.3-py3-none-any.whl (22 kB)
+Collecting zipp>=0.5
+  Downloading zipp-3.4.0-py3-none-any.whl (5.2 kB)
+Collecting iniconfig
+  Using cached iniconfig-1.1.1-py2.py3-none-any.whl (5.0 kB)
+Collecting packaging
+  Using cached packaging-20.8-py2.py3-none-any.whl (39 kB)
+Collecting pyyaml
+  Using cached PyYAML-5.3.1.tar.gz (269 kB)
+Collecting scipy
+  Downloading scipy-1.5.4-cp37-cp37m-macosx_10_9_x86_64.whl (28.7 MB)
+     |████████████████████████████████| 28.7 MB 10.7 MB/s 
+Collecting toml
+  Using cached toml-0.10.2-py2.py3-none-any.whl (16 kB)
+Building wheels for collected packages: pyyaml
+  Building wheel for pyyaml (setup.py) ... done
+  Created wheel for pyyaml: filename=PyYAML-5.3.1-cp37-cp37m-macosx_10_9_x86_64.whl size=44626 sha256=5a59ccf08237931e7946ec6b526922e4f0c8ee903d43671f50289431d8ee689d
+  Stored in directory: /Users/amira/Library/Caches/pip/wheels/5e/03/1e/e1e954795d6f35dfc7b637fe2277bff021303bd9570ecea653
+Successfully built pyyaml
+Installing collected packages: zipp, typing-extensions, six, pyparsing, importlib-metadata, toml, pytz, python-dateutil, py, pluggy, pillow, packaging, numpy, kiwisolver, iniconfig, cycler, attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
+  Attempting uninstall: pyzipf
+    Found existing installation: pyzipf 0.1.0
+    Uninstalling pyzipf-0.1.0:
+      Successfully uninstalled pyzipf-0.1.0
   Running setup.py develop for pyzipf
-Successfully installed cycler-0.10.0 kiwisolver-1.2.0
-  matplotlib-3.2.1 numpy-1.18.2 pandas-1.0.3 pyparsing-2.4.6
-  python-dateutil-2.8.1 scipy-1.4.1 pyzipf
+Successfully installed attrs-20.3.0 cycler-0.10.0 importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1 matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5 pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1 python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf scipy-1.5.4 six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3 zipp-3.4.0
 ```
 
 (The precise output of this command will change
@@ -15301,20 +15375,24 @@ to use the function in `utilities`,
 we would write:
 
 ```python
-from pyzipf import utilities
+from pyzipf import utilities as util
 
 
-utilities.collection_to_csv(...)
+util.collection_to_csv(...)
 ```
+
+To allow our functions to continue accessing `utilities.py`,
+we need to change that line in both `countwords.py` and `collate.py`.
 
 However,
 the useful command-line scripts that we used to count and plot word counts
 are no longer accessible directly from the Unix shell.
-Fortunately,
-the `setuptools` package allows us to install programs along with the package.\index{Python package!installing programs}
+Fortunately there is an alternative to changing the function import
+as described above.
+The `setuptools` package allows us to install programs along with the package.\index{Python package!installing programs}
 These programs are placed beside those of other packages.
 We tell `setuptools` to do this by defining
-\gref{entry points}{entry_point}:\index{entry point (in Python package)}\index{Python package!entry point}
+\gref{entry points}{entry_point} in `setup.py`:\index{entry point (in Python package)}\index{Python package!entry point}
 
 ```python
 from setuptools import setup
@@ -15350,8 +15428,7 @@ the relevant section of our `countwords.py` program is:
 ```python
 def main(args):
     """Run the command line program."""
-    with args.infile as reader:
-        word_counts = count_words(reader)
+    word_counts = count_words(args.infile)
     util.collection_to_csv(word_counts, num=args.num)
 
 
@@ -15360,7 +15437,8 @@ if __name__ == '__main__':
     parser.add_argument('infile', type=argparse.FileType('r'),
                         nargs='?', default='-',
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -15376,7 +15454,8 @@ def parse_command_line():
     parser.add_argument('infile', type=argparse.FileType('r'),
                         nargs='?', default='-',
                         help='Input file name')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     return args
@@ -15385,8 +15464,7 @@ def parse_command_line():
 def main():
     """Run the command line program."""
     args = parse_command_line()
-    with args.infile as reader:
-        word_counts = count_words(reader)
+    word_counts = count_words(args.infile)
     util.collection_to_csv(word_counts, num=args.num)
 
 
@@ -15409,38 +15487,38 @@ Defaulting to user installation because normal site-packages is
   not writeable
 Obtaining file:///Users/amira/pyzipf
 Requirement already satisfied: matplotlib in
-  /usr/lib/python3.8/site-packages (from pyzipf==0.1) (3.2.1)
+  /usr/lib/python3.7/site-packages (from pyzipf==0.1) (3.2.1)
 Requirement already satisfied: pandas in
-  /Users/amira/.local/lib/python3.8/site-packages
+  /Users/amira/.local/lib/python3.7/site-packages
   (from pyzipf==0.1) (1.0.3)
 Requirement already satisfied: scipy in
-  /usr/lib/python3.8/site-packages (from pyzipf==0.1) (1.4.1)
+  /usr/lib/python3.7/site-packages (from pyzipf==0.1) (1.4.1)
 Requirement already satisfied: pyyaml in
-  /usr/lib/python3.8/site-packages (from pyzipf==0.1) (5.3.1)
+  /usr/lib/python3.7/site-packages (from pyzipf==0.1) (5.3.1)
 Requirement already satisfied: cycler>=0.10 in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from matplotlib->pyzipf==0.1) (0.10.0)
 Requirement already satisfied: kiwisolver>=1.0.1 in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from matplotlib->pyzipf==0.1) (1.1.0)
 Requirement already satisfied: numpy>=1.11 in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from matplotlib->pyzipf==0.1) (1.18.2)
 Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,
 !=2.1.6,>=2.0.1 in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from matplotlib->pyzipf==0.1) (2.4.6)
 Requirement already satisfied: python-dateutil>=2.1 in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from matplotlib->pyzipf==0.1) (2.8.1)
 Requirement already satisfied: pytz>=2017.2 in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from pandas->pyzipf==0.1) (2019.3)
 Requirement already satisfied: six in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from cycler>=0.10->matplotlib->pyzipf==0.1) (1.14.0)
 Requirement already satisfied: setuptools in
-  /usr/lib/python3.8/site-packages
+  /usr/lib/python3.7/site-packages
   (from kiwisolver>=1.0.1->matplotlib->pyzipf==0.1) (46.1.3)
 Installing collected packages: pyzipf
   Running setup.py develop for pyzipf
@@ -15469,6 +15547,14 @@ to,4540
 of,3738
 ```
 
+> **Tracking `pyzipf.egg-info`?**
+> 
+> Using `setuptools` automatically creates a new folder
+> in your project directory named `pyzipf.egg-info`.
+> This folder is [another example][github-gitignore] of information generated by a script
+> that is also included in the repository,
+> so it should be included in the `.gitignore` file to avoid tracking with Git.
+
 ## What Installation Does {#packaging-installation}
 
 Now that we have created and installed a Python package,
@@ -15495,11 +15581,11 @@ sys.path
 
 ```text
 ['',
-'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python37.zip',
-'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7',
-'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/lib-dynload',
+'/Users/amira/anaconda3/envs/pyzipf/lib/python37.zip',
+'/Users/amira/anaconda3/envs/pyzipf/lib/python3.7',
+'/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/lib-dynload',
 '/Users/amira/.local/lib/python3.7/site-packages',
-'/Users/amira/opt/anaconda3/envs/pyzipf/lib/python3.7/site-packages',
+'/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages',
 '/Users/amira/pyzipf']
 ```
 
@@ -15519,7 +15605,7 @@ and will vary from computer to computer.
 > <https://pypi.org/project/pyzipf/>
 >
 > You won't be able to execute the `twine upload`
-> commands exactly as shown
+> commands below exactly as shown
 > (because Amira has already uploaded the `pyzipf` package),
 > but the general sequence of commands in this section
 > is an excellent resource to refer back to when you are
@@ -15544,42 +15630,48 @@ a \gref{source distribution}{source_distribution}\index{source distribution (of 
 ```text
 running sdist
 running egg_info
+creating pyzipf.egg-info
 writing pyzipf.egg-info/PKG-INFO
 writing dependency_links to pyzipf.egg-info/dependency_links.txt
 writing entry points to pyzipf.egg-info/entry_points.txt
 writing requirements to pyzipf.egg-info/requires.txt
 writing top-level names to pyzipf.egg-info/top_level.txt
+writing manifest file 'pyzipf.egg-info/SOURCES.txt'
 package init file 'pyzipf/__init__.py' not found (or not a regular file)
 reading manifest file 'pyzipf.egg-info/SOURCES.txt'
 writing manifest file 'pyzipf.egg-info/SOURCES.txt'
 running check
 warning: check: missing required meta-data: url
 
-warning: check: missing meta-data: if 'author' supplied,
-  'author_email' must be supplied too
+warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
 
-creating pyzipf-0.1.0
-creating pyzipf-0.1.0/pyzipf
-creating pyzipf-0.1.0/pyzipf.egg-info
-copying files to pyzipf-0.1.0...
-copying README.md -> pyzipf-0.1.0
-copying setup.py -> pyzipf-0.1.0
-copying pyzipf/collate.py -> pyzipf-0.1.0/pyzipf
-copying pyzipf/countwords.py -> pyzipf-0.1.0/pyzipf
-copying pyzipf/plotcounts.py -> pyzipf-0.1.0/pyzipf
-copying pyzipf/utilities.py -> pyzipf-0.1.0/pyzipf
-copying pyzipf.egg-info/PKG-INFO -> pyzipf-0.1.0/pyzipf.egg-info
-copying pyzipf.egg-info/SOURCES.txt -> pyzipf-0.1.0/pyzipf.egg-info
-copying pyzipf.egg-info/dependency_links.txt -> pyzipf-0.1.0/pyzipf.egg-info
-copying pyzipf.egg-info/entry_points.txt -> pyzipf-0.1.0/pyzipf.egg-info
-copying pyzipf.egg-info/requires.txt -> pyzipf-0.1.0/pyzipf.egg-info
-copying pyzipf.egg-info/top_level.txt -> pyzipf-0.1.0/pyzipf.egg-info
-Writing pyzipf-0.1.0/setup.cfg
+creating pyzipf-0.1
+creating pyzipf-0.1/pyzipf
+creating pyzipf-0.1/pyzipf.egg-info
+copying files to pyzipf-0.1...
+copying README.md -> pyzipf-0.1
+copying setup.py -> pyzipf-0.1
+copying pyzipf/collate.py -> pyzipf-0.1/pyzipf
+copying pyzipf/countwords.py -> pyzipf-0.1/pyzipf
+copying pyzipf/plotcounts.py -> pyzipf-0.1/pyzipf
+copying pyzipf/script_template.py -> pyzipf-0.1/pyzipf
+copying pyzipf/test_zipfs.py -> pyzipf-0.1/pyzipf
+copying pyzipf/utilities.py -> pyzipf-0.1/pyzipf
+copying pyzipf.egg-info/PKG-INFO -> pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/SOURCES.txt -> pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/dependency_links.txt -> pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/entry_points.txt -> pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/requires.txt -> pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/top_level.txt -> pyzipf-0.1/pyzipf.egg-info
+Writing pyzipf-0.1/setup.cfg
 creating dist
 Creating tar archive
-removing 'pyzipf-0.1.0' (and everything under it)
+removing 'pyzipf-0.1' (and everything under it)
 ```
 
+This creates a file named `pyzipf-0.1.tar.gz`,
+located in a new directory in our project, `dist/`
+(another directory to add to [`.gitignore`][github-gitignore]).
 These distribution files can now be distributed via [PyPI][pypi],
 the standard repository for Python packages.
 Before doing that,
@@ -15598,7 +15690,6 @@ which we can install with:
 ```
 
 Following the [Python Packaging User Guide][pypi-user-guide],
-we can now register for an account at the [TestPyPI website][testpypi]
 and then upload our distributions from the `dist/` folder
 using the `--repository` option to specify the TestPyPI repository:
 
@@ -15611,7 +15702,7 @@ Uploading distributions to https://test.pypi.org/legacy/
 ```
 
 ```bash
-Enter your username: amirakhan
+Enter your username: amira-khan
 Enter your password: *********
 ```
 
@@ -15638,70 +15729,41 @@ allowing people to use the wheel distribution if their system supports it
 or the source distribution if it does not.
 We can test that this has worked
 by creating a virtual environment
-and installing our package from TestPyPI:
+and installing our package from TestPyPI and PyPI
+(since not all of our dependencies are available on TestPyPI):
 
 ```bash
-(pyzipf)$ conda create -n pyzipf-test
-$ conda activate pyzipf-test
+(pyzipf)$ conda create -n pyzipf-test pip python=3.7.6
+(pyzipf)$ conda activate pyzipf-test 
 (pyzipf-test)$ pip install --index-url
-  https://test.pypi.org/simple pyzipf
+  https://test.pypi.org/simple 
+  --extra-index-url https://pypi.org/simple pyzipf
 ```
 
 ```text
-Looking in indexes: https://test.pypi.org/simple
+Looking in indexes: https://test.pypi.org/simple, https://pypi.org/simple
 Collecting pyzipf
-  Downloading https://test-files.pythonhosted.org/packages/
-              aa/fb/352af20b6f/pyzipf-0.1.0.tar.gz (3.1 kB)
-Requirement already satisfied:
-matplotlib in /usr/lib/python3.8/site-packages
-(from pyzipf) (3.2.1)
-Requirement already satisfied:
-pandas in ./.local/lib/python3.8/site-packages
-(from pyzipf) (1.0.3)
-Requirement already satisfied:
-scipy in /usr/lib/python3.8/site-packages
-(from pyzipf) (1.4.1)
-Requirement already satisfied:
-pyyaml in /usr/lib/python3.8/site-packages
-(from pyzipf) (5.3.1)
-Requirement already satisfied:
-cycler>=0.10 in /usr/lib/python3.8/site-packages
-(from matplotlib->pyzipf) (0.10.0)
-Requirement already satisfied:
-kiwisolver>=1.0.1 in /usr/lib/python3.8/site-packages
-(from matplotlib->pyzipf) (1.1.0)
-Requirement already satisfied:
-numpy>=1.11 in /usr/lib/python3.8/site-packages
-(from matplotlib->pyzipf) (1.18.2)
-Requirement already satisfied:
-pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
-in /usr/lib/python3.8/site-packages
-(from matplotlib->pyzipf) (2.4.7)
-Requirement already satisfied:
-python-dateutil>=2.1 in /usr/lib/python3.8/site-packages
-(from matplotlib->pyzipf) (2.8.1)
-Requirement already satisfied:
-pytz>=2017.2 in /usr/lib/python3.8/site-packages
-(from pandas->pyzipf) (2019.3)
-Requirement already satisfied:
-six in /usr/lib/python3.8/site-packages
-(from cycler>=0.10->matplotlib->pyzipf) (1.14.0)
-Requirement already satisfied:
-setuptools in /usr/lib/python3.8/site-packages
-(from kiwisolver>=1.0.1->matplotlib->pyzipf)
-(46.1.3)
-Installing collected packages: pyzipf
-    Running setup.py install for pyzipf ... done
-Successfully installed pyzipf-0.1.0
+  Downloading pyzipf-0.1.tar.gz (5.5 kB)
+Collecting matplotlib
+  Using cached matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl (8.5 MB)
+...collecting other packages...
+Building wheels for collected packages: pyzipf
+  Building wheel for pyzipf (setup.py) ... done
+  Created wheel for pyzipf: filename=pyzipf-0.1-py3-none-any.whl size=6836 sha256=62a23715379b71ad5a6b124444fab194596d094c7df293c4019d33bdd648aff1
+  Stored in directory: /Users/amira/Library/Caches/pip/wheels/c6/d6/08/f16cf80ec82a9c70ab8a5d9c8acc7ab35c9a01009539aeb2be
+Successfully built pyzipf
+Installing collected packages: zipp, typing-extensions, six, pyparsing, importlib-metadata, toml, pytz, python-dateutil, py, pluggy, pillow, packaging, numpy, kiwisolver, iniconfig, cycler, attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
+Successfully installed attrs-20.3.0 cycler-0.10.0 importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1 matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5 pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1 python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf-0.1 scipy-1.5.4 six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3 zipp-3.4.0
 ```
 
 Once again,
 `pip` takes advantage of the fact that some packages already existing on our system
+(e.g., they are cached from our previous installs)
 and doesn't download them again.
 Once we are happy with our package at TestPyPI,
 we can go through the same process to put it on the main [PyPI][pypi] repository.
 
-> **`conda` installation packages**
+> **`conda` Installation Packages**
 >
 > Given the widespread use of [`conda`][conda] for package management,
 > it can be a good idea to post a `conda` installation package to
@@ -15750,10 +15812,7 @@ $ cat README.md
 These Zipf's Law scripts tally the occurrences of words in text
 files and plot each word's rank versus its frequency.
 
-## Contributors
-
-- Amira Khan <amira@zipf.org>
-- Sami Virtanen <sami@zipf.org>
+...
 ```
 
 This file is currently written in [Markdown][markdown]\index{Markdown},
@@ -15770,10 +15829,12 @@ so our first task is to rename our existing file:
 $ git mv README.md README.rst
 ```
 
-We then make a few edits to the file:
+We then make a few edits to the file formatting:
 titles are underlined and overlined,
 section headings are underlined,
-and code blocks are set off with two colons (`::`) and indented:
+and code blocks are set off with two colons (`::`) and indented.
+We can also add some context about why to use the package,
+as well as updated information about package installation:
 
 ```markdown
 The ``pyzipf`` package tallies the occurrences of words in text
@@ -15826,11 +15887,18 @@ Additional information on each function
 can be found in their docstrings and appending the ``-h`` flag,
 e.g. ``countwords -h``.
 
-Contributors
+Contributing
 ------------
 
-- Amira Khan <amira@zipf.org>
-- Sami Virtanen <sami@zipf.org>
+Interested in contributing?
+Check out the CONTRIBUTING.md
+file for guidelines on how to contribute.
+Please note that this project is released with a
+Contributor Code of Conduct (CONDUCT.md).
+By contributing to this project,
+you agree to abide by its terms.
+Both of these files can be found in our
+`GitHub repository. <https://github.com/amira-khan/zipf>`_
 ```
 
 ### Creating a web page for documentation {#packaging-sphinx}
@@ -15948,7 +16016,6 @@ to tell Sphinx where those modules are:
 ```python
 import os
 import sys
-
 sys.path.insert(0, os.path.abspath('../pyzipf'))
 ```
 
@@ -16043,7 +16110,7 @@ Sphinx>=1.7.4
 ```
 
 Anyone wanting to build the documentation (including us, on another computer)
-now only needs run `pip install -r requirement_docs.txt`
+now only needs run `pip install -r requirements_docs.txt`
 
 ### Hosting documentation online {#packaging-rtd}
 
@@ -16076,14 +16143,7 @@ We also need to create and save a
 in the root directory of our `pyzipf` package:
 
 ```bash
-$ pwd
-```
-
-```text
-/Users/amira/pyzipf
-```
-
-```bash
+$ cd ~/pyzipf
 $ cat .readthedocs.yml
 ```
 
@@ -17059,14 +17119,15 @@ def main(args):
     ax = df.plot.scatter(x='word_frequency',
                          y='inverse_rank',
                          figsize=[12, 6],
-                         grid=True)
+                         grid=True,
+                         xlim=args.xlim)
     ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=argparse.FileType('r'),
-                        nargs='?',ndefault='-',
+                        nargs='?', default='-',
                         help='Word count csv file name')
     parser.add_argument('--outfile', type=str,
                         default='plotcounts.png',
@@ -17095,39 +17156,83 @@ or both.
 
 `git status` now shows:
 
-```bash
-On branch book
+```text
+On branch master
 Untracked files:
-(use "git add <file>..." to include in what will be committed)
-
-    example.txt
+  (use "git add <file>..." to include in what will be committed)
+	example.txt
 
 nothing added to commit but untracked files present
 (use "git add" to track)
 ```
 
-Nothing has happened to the file, it still exists but Git no longer has it in
-the staging area.
+Nothing has happened to the file;
+it still exists but Git no longer has it in the staging area.
+`git rm --cached` is equivalent to `git restore --staged`.
+With newer versions of Git,
+older commands will still work,
+and you may encounter references to them when reading help documentation.
+If you created this file in your `zipf` project,
+we recommend removing it before proceeding.
 
 ### Exercise \@ref(git-cmdline-ex-word-diff) {-}
 
-Using `git diff --word-diff` might be easier since it shows exactly what has been
+If we make a few changes to `.gitignore` such that it now reads:
+
+```text
+__pycache__ this is a change
+
+this is another change
+```
+
+Then `git diff` would show:
+
+```diff
+diff --git a/.gitignore b/.gitignore
+index bee8a64..5c83419 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,3 @@
+-__pycache__
++__pycache__ this is a change
++
++this is another change
+```
+
+Whereas `git diff --word-diff` shows:
+
+```diff
+diff --git a/.gitignore b/.gitignore
+index bee8a64..5c83419 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,3 @@
+__pycache__ {+this is a change+}
+
+{+this is another change+}
+```
+
+Depending on the nature of the changes you are viewing,
+the latter may be easier to interpret 
+since it shows exactly what has been
 changed.
 
 ### Exercise \@ref(git-cmdline-ex-commit) {-}
 
-1.  No: This would only create a commit if files have already been staged.
-2.  No: This would try to create a new repository.
-3.  Yes: First add the file to the staging area, then commit.
-4.  No: This would try to commit a file "my recent changes" with the message myfile.txt.
+1.  Maybe: would only create a commit if the file has already been staged.
+2.  No: would try to create a new repository,
+which results in an error if a repository already exists.
+3.  Yes: first adds the file to the staging area, then commits.
+4.  No: would result in an error,
+as it would try to commit a file "my recent changes" with the message "myfile.txt".
 
 ### Exercise \@ref(git-cmdline-ex-bio) {-}
 
 1.  Go into your home directory with `cd ~`.
 2.  Create a new folder called `bio` with `mkdir bio`.
-3.  Go into it with `cd bio`.
+3.  Make the repository your working directory with `cd bio`.
 4.  Turn it into a repository with `git init`.
-5.  Create your biography using Nano or another text editor.
+5.  Create your biography using `nano` or another text editor.
 6.  Add it and commit it in a single step with `git commit -a -m "Some message"`.
 7.  Modify the file.
 8.  Use `git diff` to see the differences.
@@ -17139,10 +17244,43 @@ changed.
 3.  Check that both files are there with `git status`.
 4.  Commit both files at once with `git commit`.
 
+### Exercise \@ref(git-cmdline-ex-timestamp) {-}
+
+GitHub displays timestamps in a human-readable relative format
+(i.e. "22 hours ago" or "three weeks ago"),
+since this makes it easy for anyone in any time zone
+to know what changes have been made recently.
+However, if we hover over the timestamp
+we can see the exact time at which the last change to the file occurred.
+
+### Exercise \@ref(git-cmdline-ex-history) {-}
+
+The answer is 1.
+
+The command `git add motivation.txt` adds the current version of `motivation.txt` to the staging area.
+The changes to the file from the second `echo` command are only applied to the working copy,
+not the version in the staging area.
+
+As a result,
+when `git commit -m "Motivate project"` is executed,
+the version of `motivation.txt` committed to the repository is the content from the first `echo`.
+
+However,
+the working copy still has the output from the second `echo`;
+`git status` would show that the file is modified.
+`git restore HEAD motivation.txt` therefore replaces the working copy with
+the most recently committed version of `motivation.txt`
+(the content of the first `echo`),
+so `cat motivation.txt` prints:
+
+```text
+Zipf's Law describes the relationship between the frequency and
+rarity of words.
+```
+
 ### Exercise \@ref(git-cmdline-ex-ignore-nested) {-}
 
-To ignore only the contents of `results/plots`,
-add this line to `.gitignore`:
+Add this line to `.gitignore`:
 
 ```text
 results/plots/
@@ -17170,7 +17308,8 @@ copies the full identifier of the commit to the clipboard.
 In the shell,
 `git log` shows the full commit identifier for each commit.
 
-The middle button shows all of the changes that were made in that particular commit;
+The middle button (with seven letters and numbers)
+shows all of the changes that were made in that particular commit;
 green shaded lines indicate additions and red lines indicate removals.
 We can show the same thing in the shell using `git diff`
 or `git diff FROM..TO`
@@ -17182,13 +17321,6 @@ we would need to check out the repository as it was at that commit
 using `git checkout ID`, where `ID` is the tag, branch name, or commit identifier.
 If we do this,
 we need to remember to put the repository back to the right state afterward.
-
-### Exercise \@ref(git-cmdline-ex-timestamp) {-}
-
-GitHub displays timestamps in a human-readable relative format
-(i.e. "22 hours ago" or "three weeks ago").
-However, if we hover over the timestamp
-we can see the exact time at which the last change to the file occurred.
 
 ### Exercise \@ref(git-cmdline-ex-push-commit) {-}
 
@@ -17225,71 +17357,52 @@ Please check the contents of the local and remote repositories carefully before 
 
 ### Exercise \@ref(git-cmdline-ex-recover) {-}
 
-The answer is (5)-Both 2 and 4.
-
 The `checkout` command restores files from the repository,
 overwriting the files in our working directory.
-Answers 2 and 4 both restore the latest version in the repository of the file `data_cruncher.sh`.
-Answer 2 uses `HEAD` to indicate the latest,
-while answer 4 uses the unique ID of the last commit,
-which is what `HEAD` means.
+`HEAD` indicates the latest version.
 
-Answer 3 gets the version of `data_cruncher.sh` from the commit before `HEAD`,
-which is not what we want.
-
-Answer 1 can be dangerous:
+1. No: this can be dangerous;
 without a filename,
 `git checkout` will restore all files in the current directory (and all directories below it)
 to their state at the commit specified.
 This command will restore `data_cruncher.sh` to the latest commit version,
 but will also reset any other files we have changed to that version,
 which will erase any unsaved changes you may have made to those files.
-
-### Exercise \@ref(git-cmdline-ex-history) {-}
-
-The answer is 1.
-
-The command `git add motivation.txt` adds the current version of `motivation.txt` to the staging area.
-The changes to the file from the second `echo` command are only applied to the working copy,
-not the version in the staging area.
-
-As a result,
-when `git commit -m "Motivate project"` is executed,
-the version of `motivation.txt` committed to the repository is the one from the staging area
-with only one line.
-
-However,
-the working copy still has the second line.
-(`git status` will show that the file is modified.)
-`git restore motivation.txt` therefore replaces the working copy with
-the most recently committed version of `motivation.txt`,
-so `cat motivation.txt` prints:
-
-```text
-Zipf's Law describes the relationship between the frequency and
-rarity of words.
-```
+2. Yes: this restores the latest version of only the desired file.
+3. No: this gets the version of `data_cruncher.sh` from the commit before `HEAD`,
+which is not what we want.
+4. Yes: the unique ID (identifier) of the last commit is what `HEAD` means.
+5. Yes: this is equivalent to the answer to 2.
+6. No: `git restore` assumes `HEAD`,
+so Git will assume you're trying to restore a file called `HEAD`,
+resulting in an error.
 
 ### Exercise \@ref(git-cmdline-ex-diff) {-}
 
-1. `git diff HEAD~2 bin/plotcounts.py` compares what has changed between the
-current `bin/plotcounts.py` and the same file 2 commits ago.
-2.  The previous Git command takes the state of the file at each point and then
-compares them.
-3.  `git diff HEAD bin/plotcounts.py` compares what has been changed in
-`bin/plotcounts.py` with the previous commit.
+1. Compares what has changed between the
+current `bin/plotcounts.py` and the same file nine commits ago.
+2.  It returns an error: 
+`fatal: ambiguous argument 'HEAD~9': unknown revision or path not in the working tree.`
+We don't have enough commits in history for the command to properly execute.
+3.  It compares changes (either staged or unstaged)
+to the most recent commit.
 
 ### Exercise \@ref(git-cmdline-ex-unstage) {-}
 
-Using `git checkout` on a staged file does not unstage it. That's
-because the changes are in the staging area and checkout would affect
+No, using `git checkout` on a staged file does not unstage it.
+The changes are in the staging area and checkout would affect
 the working directory.
 
 ### Exercise \@ref(git-cmdline-ex-blame) {-}
 
-Each line of output corresponds to a line in the file, who was last
-to modify the line, when that change was made, and what the file name was
-or is called.
+Each line of output corresponds to a line in the file, 
+and includes the commit identifier,
+who last modified the line,
+when that change was made,
+and what is included on that line.
+Note that the edit you just committed is not present here;
+`git blame` only shows the current lines in the file,
+and doesn't report on lines that have been removed.
 
 ## Chapter \@ref(git-advanced) {.unnumbered .unlisted}
 
@@ -17426,7 +17539,7 @@ Interested in contributing?
 Check out the [CONTRIBUTING.md](CONTRIBUTING.md)
 file for guidelines on how to contribute.
 Please note that this project is released with a
-[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+[Contributor Code of Conduct](CONDUCT.md).
 By contributing to this project,
 you agree to abide by its terms.
 ```
@@ -17551,8 +17664,9 @@ The build rule for generated the result for any book should now be:
 ```makefile
 ## results/%.csv : regenerate result for any book.
 results/%.csv : data/%.txt $(COUNT)
-	@bash $(SUMMARY) $<
-	python $(COUNT) $< > $@
+	@bash $(SUMMARY) $< Title
+	@bash $(SUMMARY) $< Author
+    python $(COUNT) $< > $@
 ```
 
 where `SUMMARY` is defined earlier in the `Makefile` as
@@ -17614,24 +17728,11 @@ help :
 
 ### Exercise \@ref(automate-ex-configuration) {-}
 
-The new `config.mk` file reads as follows:
+This strategy would be advantageous if 
+in future we intended to write a number of different Makefiles
+that all use the `countwords.py`, `collate.py` and `plotcounts.py` scripts.
 
-```makefile
-COUNT=bin/countwords.py
-COLLATE=bin/collate.py
-PLOT=bin/plotcounts.py
-```
-
-The contents of that file can then be included in the `Makefile`:
-
-```makefile
-.PHONY: results all clean help settings
-
-include config.mk
-
-# ... the rest of the Makefile
-
-```
+We discuss configuration strategies in more detail in Chapter \@ref(config).
 
 ## Chapter \@ref(config) {.unnumbered .unlisted}
 
@@ -17719,24 +17820,23 @@ For now we use `return` to exit from `main` as soon as the parameters have been 
 this lets us test our change without overwriting any of our actual plots.
 
 ```python
+def save_configuration(fname, params):
+    """Save configuration to a file."""
+    with open(fname, 'w') as reader:
+        yaml.dump(params, reader)
+
+
 def main(args):
     """Run the command line program."""
     if args.style:
         plt.style.use(args.style)
     set_plot_params(args.plotparams)
-    # Save plotting configuration.
     if args.saveconfig:
         save_configuration(args.saveconfig, mpl.rcParams)
         return
     df = pd.read_csv(args.infile, header=None,
                      names=('word', 'word_frequency'))
     # ...carry on producing plot...
-
-
-def save_configuration(filename, params):
-    """Save configuration to a file."""
-    with open(filename, 'w') as reader:
-        yaml.dump(params, reader)
 ```
 
 Finally, we add a target to `Makefile` to try out our change.
@@ -17978,8 +18078,8 @@ def main(args):
     logging.info('Processing files...')
     for fname in args.infiles:
         logging.debug(f'Reading in {fname}...')
-        msg = ERRORS['not_csv_suffix'].format(fname=fname)
         if fname[-4:] != '.csv':
+            msg = ERRORS['not_csv_suffix'].format(fname=fname)
             raise OSError(msg)
         with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
@@ -18015,7 +18115,7 @@ and pass the name of the log file to `logging.basicConfig`
 using the `filename` argument:
 
 ```python
-logging.basicConfig(level=log_level, filename=args.logfile)
+logging.basicConfig(level=log_lev, filename=args.logfile)
 ```
 
 such that the `collate.py` script now reads as follows:
@@ -18106,7 +18206,8 @@ for fname in args.infiles:
     try:
         logging.debug(f'Reading in {fname}...')
         if fname[-4:] != '.csv':
-            msg = ERRORS['not_csv_suffix'].format(fname=fname)
+            msg = ERRORS['not_csv_suffix'].format(
+                fname=fname)
             raise OSError(msg)
         with open(fname, 'r') as reader:
             logging.debug('Computing word counts...')
@@ -18181,8 +18282,8 @@ for fname in args.infiles:
    `str.format` can be given any number of named keyword arguments (Appendix \@ref(style)),
    so we can look up a string and then interpolate whatever values we want.
 
-3. Once `ERROR_MESSAGES` has been moved to the `utilities` module
-   all references to it in `collate.py` must be updated to `utilities.ERROR_MESSAGES`.
+3. Once `ERRORS` has been moved to the `utilities` module
+   all references to it in `collate.py` must be updated to `util.ERRORS`.
 
 ### Exercise \@ref(errors-ex-traceback) {-}
 
@@ -18707,7 +18808,7 @@ This appendix lists the key points for each chapter.
 -   `git remote` manages bookmarks pointing at remote repositories.
 -   `git push` copies changes from a local repository to a remote repository.
 -   `git pull` copies changes from a remote repository to a local repository.
--   `git checkout` recovers old versions of files.
+-   `git restore` and `git checkout` recover old versions of files.
 -   The `.gitignore` file tells Git what files to ignore.
 
 ## Going Further with Git
@@ -18898,7 +18999,9 @@ in the following chapters, sections and exercises:
 `pyzipf/`: Introduced as `zipf/` in Section \@ref(getting-started-download-data) and
 changes name to `pyzipf/` in Section \@ref(packaging-package).
 
-`pyzipf/.gitignore`: Introduced in Section \@ref(git-cmdline-ignore).
+`pyzipf/.gitignore`: Introduced in Section \@ref(git-cmdline-ignore),
+and updated in various other chapters following
+[GitHub's `.gitignore` templates][github-gitignore].
 
 `pyzipf/CITATION.md`: Introduced in Section \@ref(packaging-software-journals).
 
@@ -19999,7 +20102,7 @@ def rescale_by_average(values, factors, weights):
 ```
 
 
-> **Return consistently**
+> **Return Consistently**
 >
 > PEP-8 says, "Be consistent in `return` statements,"
 > and goes on to say that either all `return` statements in a function should return a value,
@@ -22000,6 +22103,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [python-102]: https://python-102.readthedocs.io/
 [python-exceptions]: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 [python-graph-gallery-styles]: https://python-graph-gallery.com/199-matplotlib-style-sheets/
+[python-import]: https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 [python-standard-library]: https://docs.python.org/3/library/
 [python-traceback]: https://docs.python.org/3/library/traceback.html
 [readthedocs]: https://docs.readthedocs.io/en/latest/
@@ -22023,7 +22127,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [theoj-checklist]: https://joss.readthedocs.io/en/latest/review_checklist.html
 [tldr-gpl]: https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 [tldr]: https://tldr.sh/
-[travis-ci]: https://travis-ci.org/
+[travis-ci]: https://travis-ci.com/
 [twine]: https://twine.readthedocs.io/en/latest/
 [ubc-mds-make-windows]: https://ubc-mds.github.io/resources_pages/install_ds_stack_windows/#make
 [udhr]: https://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights

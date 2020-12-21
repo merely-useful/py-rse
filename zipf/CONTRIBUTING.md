@@ -9,5 +9,5 @@ As the project grows,
 we intend to develop more detailed guidelines for submitting
 bug reports and feature requests.
 
-We also have a code of conduct (see `CONDUCT.md`).
+We also have a code of conduct (see [`CONDUCT.md`](CONDUCT.md)).
 Please follow it in all your interactions with the project.
