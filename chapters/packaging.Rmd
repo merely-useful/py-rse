@@ -206,21 +206,26 @@ Virtual environments also help with package development:
 We can manage virtual environments using [`conda`][conda] (Appendix \@ref(anaconda)).
 To create a new virtual environment called `pyzipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
-and starting from your default environment with `--clone root`:
+and listing `python` as the base to build on:
 
 ```bash
-$ conda create -n pyzipf --clone root
+$ conda create -n pyzipf python
 ```
 
 ```text
-Source:      /Users/amira/anaconda3
-Destination: /Users/amira/anaconda3/envs/pyzipf
-The following packages cannot be cloned out of the root environment:
- - defaults/osx-64::conda-env-2.6.0-1
- - defaults/osx-64::conda-4.9.2-py37hecd8cb5_0
- - defaults/osx-64::conda-build-3.18.11-py37_0
-Packages: 327
-Files: 135
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /Users/amira/anaconda3/envs/pyzipf
+
+...
+
+Proceed ([y]/n)? y
+
+...
+
 Preparing transaction: done
 Verifying transaction: done
 Executing transaction: done
@@ -240,14 +245,9 @@ such as `bin` and `lib`.
 It also creates `/Users/amira/anaconda3/envs/pyzipf/bin/python`,
 which checks for packages in these directories before checking the main installation.
 
-> **`conda` Variations**
+> **Anaconda Path Variations**
 >
-> As with many of the other tools we've explored in this book,
-> the behavior of some `conda` commands differ depending on operating system.
-> There are multiple ways to accomplish some of the tasks we present in this chapter.
-> The options we present here represent the approaches most likely to work across multiple platforms.
-> 
-> Additionally, the path for Anaconda differs among operating systems.
+> The path for Anaconda differs among operating systems.
 > Our examples show the default path for Anaconda installed via the Unix shell 
 > on MacOS (`/Users/amira/anaconda3`),
 > but for the MacOS graphical installer it is `/Users/amira/opt/anaconda3`,
@@ -296,7 +296,7 @@ $ which python
 ```
 
 ```text
-/Users/amira/anaconda3/bin/python
+/usr/bin/python
 ```
 
 ## Installing a Development Package {#packaging-installing}
@@ -308,8 +308,43 @@ First we re-activate it:
 $ conda activate pyzipf
 ```
 
-Let's make some additions that will reliably automate
-the process of installing all dependencies for our package
+Next,
+we go into the upper `pyzipf` directory that contains our `setup.py` file
+and install our package:
+
+```bash
+(pyzipf)$ cd ~/pyzipf
+(pyzipf)$ pip install -e .
+```
+
+```text
+Processing /Users/amira/pyzipf
+Building wheels for collected packages: pyzipf
+  Building wheel for pyzipf (setup.py) ... done
+  Created wheel for pyzipf: filename=pyzipf-0.1.0-py3-none-any.whl
+    size=4574 sha256=b7d645f1d07775
+  Stored in directory: /tmp/pip-ephem-wheel/wheels/a8/a6/0e/8b2a5cb
+Successfully built pyzipf
+Installing collected packages: pyzipf
+Successfully installed pyzipf-0.1.0
+```
+
+The `-e` option indicates that we want to install the package in "editable" mode,
+which means that any changes we make in the package code are directly available to use
+without having to reinstall the package;
+the `.` means "install from the current directory".
+
+If we look in the location containing package installations 
+(e.g., `/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages/`),
+we can see the `pyzipf` package beside all the other locally-installed packages.
+If we try to use the package at this stage,
+though,
+Python will complain that some of the packages it depends on,
+such as `pandas`,
+are not installed.
+We could install these manually,
+but it is more reliable to automate this process
+by listing everything that our package depends on
 using the `install_requires` parameter in `setup.py`:
 
 ```python
@@ -350,24 +385,46 @@ we can install our package using the `setup.py` file:
 
 ```text
 Obtaining file:///Users/amira/pyzipf
-Requirement already satisfied: matplotlib in /Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages (from pyzipf==0.1) (3.3.2)
-...other requirements...
-Installing collected packages: pyzipf
+Collecting matplotlib
+  Downloading matplotlib-3.2.1-cp37-cp37m-manylinux1_x86_64.whl (12.4 MB)
+     |████████████████████████████████| 12.4 MB 1.9 MB/s
+Collecting pandas
+  Downloading pandas-1.0.3-cp37-cp37m-manylinux1_x86_64.whl (10.0 MB)
+     |████████████████████████████████| 10.0 MB 16.1 MB/s
+Collecting scipy
+  Downloading scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
+     |████████████████████████████████| 26.1 MB 11.4 MB/s
+Requirement already satisfied: pyyaml in
+/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages
+(from pyzipf==0.1) (5.3.1)
+Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
+  Using cached pyparsing-2.4.6-py2.py3-none-any.whl (67 kB)
+Collecting python-dateutil>=2.1
+  Using cached python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.2.0-cp37-cp37m-manylinux1_x86_64.whl (88 kB)
+     |████████████████████████████████| 88 kB 8.6 MB/s
+Collecting cycler>=0.10
+  Using cached cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
+Collecting numpy>=1.11
+  Downloading numpy-1.18.2-cp37-cp37m-manylinux1_x86_64.whl (20.2 MB)
+     |████████████████████████████████| 20.2 MB 16.3 MB/s
+Requirement already satisfied: pytz>=2017.2 in
+  /Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages
+  (from pandas->pyzipf==0.1) (2019.3)
+Requirement already satisfied: six>=1.5 in
+  /Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages
+  (from python-dateutil>=2.1->matplotlib->pyzipf==0.1) (1.14.0)
+Installing collected packages: pyparsing, python-dateutil,
+  kiwisolver, cycler, numpy, matplotlib, pandas, scipy, pyzipf
   Running setup.py develop for pyzipf
-Successfully installed pyzipf
+Successfully installed cycler-0.10.0 kiwisolver-1.2.0
+  matplotlib-3.2.1 numpy-1.18.2 pandas-1.0.3 pyparsing-2.4.6
+  python-dateutil-2.8.1 scipy-1.4.1 pyzipf
 ```
 
 (The precise output of this command will change
 depending on which versions of our dependencies get installed.)
-
-The `-e` option indicates that we want to install the package in "editable" mode,
-which means that any changes we make in the package code are directly available to use
-without having to reinstall the package;
-the `.` means "install from the current directory".
-
-If we look in the location containing package installations 
-(e.g., `/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages/`),
-we can see the `pyzipf` package beside all the other locally-installed packages.
 
 We can now import our package in a script or a [Jupyter notebook][jupyter]
 just as we would any other package.
@@ -484,24 +541,53 @@ we can re-install our package:
 ```
 
 ```text
+Defaulting to user installation because normal site-packages is
+  not writeable
 Obtaining file:///Users/amira/pyzipf
 Requirement already satisfied: matplotlib in
   /usr/lib/python3.7/site-packages (from pyzipf==0.1) (3.2.1)
-...other requirements...
+Requirement already satisfied: pandas in
+  /Users/amira/.local/lib/python3.7/site-packages
+  (from pyzipf==0.1) (1.0.3)
+Requirement already satisfied: scipy in
+  /usr/lib/python3.7/site-packages (from pyzipf==0.1) (1.4.1)
+Requirement already satisfied: pyyaml in
+  /usr/lib/python3.7/site-packages (from pyzipf==0.1) (5.3.1)
+Requirement already satisfied: cycler>=0.10 in
+  /usr/lib/python3.7/site-packages
+  (from matplotlib->pyzipf==0.1) (0.10.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in
+  /usr/lib/python3.7/site-packages
+  (from matplotlib->pyzipf==0.1) (1.1.0)
+Requirement already satisfied: numpy>=1.11 in
+  /usr/lib/python3.7/site-packages
+  (from matplotlib->pyzipf==0.1) (1.18.2)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,
+!=2.1.6,>=2.0.1 in
+  /usr/lib/python3.7/site-packages
+  (from matplotlib->pyzipf==0.1) (2.4.6)
+Requirement already satisfied: python-dateutil>=2.1 in
+  /usr/lib/python3.7/site-packages
+  (from matplotlib->pyzipf==0.1) (2.8.1)
+Requirement already satisfied: pytz>=2017.2 in
+  /usr/lib/python3.7/site-packages
+  (from pandas->pyzipf==0.1) (2019.3)
+Requirement already satisfied: six in
+  /usr/lib/python3.7/site-packages
+  (from cycler>=0.10->matplotlib->pyzipf==0.1) (1.14.0)
+Requirement already satisfied: setuptools in
+  /usr/lib/python3.7/site-packages
+  (from kiwisolver>=1.0.1->matplotlib->pyzipf==0.1) (46.1.3)
 Installing collected packages: pyzipf
-  Attempting uninstall: pyzipf
-    Found existing installation: pyzipf 0.1
-    Uninstalling pyzipf-0.1:
-      Successfully uninstalled pyzipf-0.1
   Running setup.py develop for pyzipf
 Successfully installed pyzipf
 ```
 
-The output looks generally the same as the first install
-because `pip` could again re-use packages saved locally
+The output looks slightly different than the first run
+because `pip` could re-use some packages saved locally by the previous install
 rather than re-fetching them from online repositories.
 (If we hadn't used the `-e` option to make the package immediately editable,
-we would have to manually uninstall it before reinstalling it during development.)
+we would have to uninstall it before reinstalling it during development.)
 
 We can now use our commands directly from the Unix shell
 without writing the full path to the file
@@ -613,7 +699,7 @@ writing manifest file 'pyzipf.egg-info/SOURCES.txt'
 running check
 warning: check: missing required meta-data: url
 
-warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
+warning: check: missing meta-data: if 'author' supplied, 'author_email' should be supplied too
 
 creating pyzipf-0.1
 creating pyzipf-0.1/pyzipf
@@ -677,7 +763,7 @@ Enter your password: *********
 ```
 
 ```text
-Uploading pyzipf-0.1.tar.gz
+Uploading pyzipf-0.1.0.tar.gz
 100%|█████████████████| 5.59k/5.59k [00:01<00:00, 3.27kB/s]
 
 View at:
@@ -701,7 +787,7 @@ by creating a virtual environment
 and installing our package from TestPyPI:
 
 ```bash
-(pyzipf)$ conda create -n pyzipf-test --clone pyzipf
+(pyzipf)$ conda create -n pyzipf-test
 $ conda activate pyzipf-test
 (pyzipf-test)$ pip install --index-url
   https://test.pypi.org/simple pyzipf
@@ -709,10 +795,47 @@ $ conda activate pyzipf-test
 
 ```text
 Looking in indexes: https://test.pypi.org/simple
+Collecting pyzipf
+  Downloading https://test-files.pythonhosted.org/packages/
+              aa/fb/352af20b6f/pyzipf-0.1.0.tar.gz (3.1 kB)
 Requirement already satisfied:
 matplotlib in /usr/lib/python3.7/site-packages
 (from pyzipf) (3.2.1)
-...other requirements...
+Requirement already satisfied:
+pandas in ./.local/lib/python3.7/site-packages
+(from pyzipf) (1.0.3)
+Requirement already satisfied:
+scipy in /usr/lib/python3.7/site-packages
+(from pyzipf) (1.4.1)
+Requirement already satisfied:
+pyyaml in /usr/lib/python3.7/site-packages
+(from pyzipf) (5.3.1)
+Requirement already satisfied:
+cycler>=0.10 in /usr/lib/python3.7/site-packages
+(from matplotlib->pyzipf) (0.10.0)
+Requirement already satisfied:
+kiwisolver>=1.0.1 in /usr/lib/python3.7/site-packages
+(from matplotlib->pyzipf) (1.1.0)
+Requirement already satisfied:
+numpy>=1.11 in /usr/lib/python3.7/site-packages
+(from matplotlib->pyzipf) (1.18.2)
+Requirement already satisfied:
+pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
+in /usr/lib/python3.7/site-packages
+(from matplotlib->pyzipf) (2.4.7)
+Requirement already satisfied:
+python-dateutil>=2.1 in /usr/lib/python3.7/site-packages
+(from matplotlib->pyzipf) (2.8.1)
+Requirement already satisfied:
+pytz>=2017.2 in /usr/lib/python3.7/site-packages
+(from pandas->pyzipf) (2019.3)
+Requirement already satisfied:
+six in /usr/lib/python3.7/site-packages
+(from cycler>=0.10->matplotlib->pyzipf) (1.14.0)
+Requirement already satisfied:
+setuptools in /usr/lib/python3.7/site-packages
+(from kiwisolver>=1.0.1->matplotlib->pyzipf)
+(46.1.3)
 Installing collected packages: pyzipf
     Running setup.py install for pyzipf ... done
 Successfully installed pyzipf-0.1.0
