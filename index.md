@@ -13047,6 +13047,21 @@ script:
 - pytest
 ```
 
+> **Python 3.6?**
+> 
+> An early draft of the book used Python 3.6, 
+> and we later updated to 3.7.
+> Over the life of a real project,
+> software versions change,
+> and it's not always feasible or possible to re-do all parts of the project.
+> In this case,
+> our first build in Travis CI used Python 3.6,
+> so that's what we've shown here,
+> and later checked that updating to 3.7 didn't break anything.
+> We can't expect our software will be perfect the first time around,
+> but we can do our best to document what's changed and confirm
+> our results are still accurate.
+
 The `language` key tells Travis CI which programming language to use,
 so that it knows which of its standard \gref{virtual machines}{virtual_machine} to use\index{continuous integration!use of virtual machines}
 as a starting point for the project.
@@ -16267,8 +16282,7 @@ As well as `requirements_docs.txt`,
 developers often create a `requirements_dev.txt` file
 to list packages that are not needed by the package's users,
 but are required for its development and testing.
-Pull `pytest` out of `requirements.txt` and put it in a new `requirements_dev.txt` file,
-using `pip freeze` to find the minimum required version.
+Pull `pytest` out of `requirements.txt` and put it in a new `requirements_dev.txt` file.
 
 ### Software review {#packaging-ex-software-review}
 
