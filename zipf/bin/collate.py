@@ -21,7 +21,8 @@ def process_file(fname, word_counts):
     """Read file and update word counts"""
     logging.debug(f'Reading in {fname}...')
     if fname[-4:] != '.csv':
-        msg = util.ERRORS['not_csv_suffix'].format(fname=fname)
+        msg = util.ERRORS['not_csv_suffix'].format(
+              fname=fname)
         raise OSError(msg)
     with open(fname, 'r') as reader:
         logging.debug('Computing word counts...')

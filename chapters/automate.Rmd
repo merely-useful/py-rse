@@ -103,7 +103,7 @@ and add the following:
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
-	  data/moby_dick.txt > results/moby_dick.csv
+		data/moby_dick.txt > results/moby_dick.csv
 ```
 
 As in the shell and many other programming languages,
@@ -143,6 +143,15 @@ python bin/countwords.py \
   data/moby_dick.txt > results/moby_dick.csv
 ```
 
+> **Indentation Errors**
+>
+> If a `Makefile` indents a rule with spaces rather than tabs,
+> Make produces an error message like this:
+>
+> ```text
+> Makefile:3: *** missing separator.  Stop.
+> ```
+
 When Make follows the rules in our Makefile,
 one of three things will happen:
 
@@ -159,15 +168,6 @@ along with anything those command prints to the screen
 via \gref{standard output}{stdout} or \gref{standard error}{stderr}.
 There is no screen output in this case,
 so we only see the command.
-
-> **Indentation Errors**
->
-> If a `Makefile` indents a rule with spaces rather than tabs,
-> Make produces an error message like this:
->
-> ```text
-> Makefile:3: *** missing separator.  Stop.
-> ```
 
 No matter what happened the first time we ran `make`,
 if we run it again right away it does nothing
@@ -186,8 +186,8 @@ $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 ```
 
 ```text
--rw-r--r-- 1 amira staff  219107 31 Dec 08:58 results/moby_dick.csv
--rw-r--r-- 1 amira staff 1276201 31 Dec 08:58 data/moby_dick.txt
+-rw-r--r-- 1 amira staff  274967 Nov 29 12:58 results/moby_dick.csv
+-rw-r--r-- 1 amira staff 1253891 Nov 27 20:56 data/moby_dick.txt
 ```
 
 As a further test:
@@ -216,12 +216,12 @@ Let's add another rule to reproduce another result:
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt
 	python bin/countwords.py \
-	  data/moby_dick.txt > results/moby_dick.csv
+		data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt
 	python bin/countwords.py \
-	  data/jane_eyre.txt > results/jane_eyre.csv
+		data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 When we run `make` it tells us:
@@ -256,6 +256,7 @@ that doesn't correspond to an actual file.
 Let's add this line to the top of our Makefile:
 
 ```makefile
+# Regenerate all results.
 all : results/moby_dick.csv results/jane_eyre.csv
 ```
 
@@ -279,12 +280,12 @@ For example,
 let's add another target to our Makefile to delete all of the result files we have generated
 so that we can start afresh.
 By convention this target is called `clean`,\index{build target!clean}
-and ours looks like this:
+and we'll place it below the two existing targets:
 
 ```makefile
 # Remove all generated files.
 clean :
-	rm -f results/*
+	rm -f results/*.csv
 ```
 
 The `-f` flag to `rm` means "force removal":
@@ -297,9 +298,9 @@ $ make clean
 ```
 
 Make will delete any results files we have.
-This is a lot safer than typing `rm -f results/*` at the command-line each time,
+This is a lot safer than typing `rm -f results/*.csv` at the command-line each time,
 because if we mistakenly put a space before the `*`
-we would delete all of the files in the project's root directory.
+we would delete all of the CSV files in the project's root directory.
 
 Phony targets are very useful,
 but there is a catch.
@@ -335,20 +336,18 @@ each result also depends on the program used to generate it.
 If we change our program,
 we should regenerate our results.
 To get Make to do that,
-we can add the program to the prerequisites for each result:
+we can change our prerequisites to include the program:
 
 ```makefile
-# ...phony targets...
-
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt bin/countwords.py
 	python bin/countwords.py \
-      data/moby_dick.txt > results/moby_dick.csv
+    	data/moby_dick.txt > results/moby_dick.csv
 
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt bin/countwords.py
 	python bin/countwords.py \
-	  data/jane_eyre.txt > results/jane_eyre.csv
+		data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
 To run both of these rules,
@@ -390,13 +389,18 @@ makes them harder to understand.
 
 The solution is the same one we use in programs:
 define and use variables.
-Let's create names for the word-counting script and the command used to run it:
+Let's modify the results regeneration code by 
+creating targets for the word-counting script and the command used to run it.
+The entire file should now read:
 
 ```makefile
-# ...phony targets...
+.PHONY : all clean
 
 COUNT=bin/countwords.py
 RUN_COUNT=python $(COUNT)
+
+# Regenerate all results.
+all : results/moby_dick.csv results/jane_eyre.csv
 
 # Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
@@ -405,6 +409,10 @@ results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 # Regenerate results for "Jane Eyre"
 results/jane_eyre.csv : data/jane_eyre.txt $(COUNT)
 	$(RUN_COUNT) data/jane_eyre.txt > results/jane_eyre.csv
+
+# Remove all generated files.
+clean :
+	rm -f results/*.csv
 ```
 
 Each definition takes the form `NAME=value`.
@@ -469,7 +477,7 @@ with the automatic variable `$^`,
 which means "all the prerequisites in the rule":
 
 ```makefile
-# Regenerate results for "Jane Eyre"
+# Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $^ > $@
 ```
@@ -491,10 +499,16 @@ which means "only the first prerequisite".
 Using it lets us rewrite our rule as:
 
 ```makefile
-# Regenerate results for "Jane Eyre"
+# Regenerate results for "Moby Dick"
 results/moby_dick.csv : data/moby_dick.txt $(COUNT)
 	$(RUN_COUNT) $< > $@
 ```
+
+If you use this approach,
+the rule for *Jane Eyre* should be updated as well.
+The next section,
+however,
+includes instructions for generalizing rules.
 
 ## Generic Rules {#automate-pattern}
 
@@ -533,9 +547,11 @@ results/%.csv : data/%.txt $(COUNT)
 
 # Remove all generated files.
 clean :
-	rm -f results/*
+	rm -f results/*.csv
 ```
 
+We now have fewer lines of text,
+but we've also included a third book.
 To test our shortened Makefile,
 let's delete all of the results files:
 
@@ -544,7 +560,7 @@ $ make clean
 ```
 
 ```text
-rm -f results/*
+rm -f results/*.csv
 ```
 
 and then recreate them:
@@ -728,6 +744,18 @@ RESULTS: results/dracula.csv results/frankenstein.csv
 Excellent:
 `DATA` has the names of the files we want to process
 and `RESULTS` automatically has the names of the corresponding result files.
+
+Why haven't we included `RUN_COUNT` when assessing our variables' values?
+This is another place we can streamline our script,
+by removing `RUN_COUNT` from the list of variables 
+and changing our regeneration rule:
+
+```makefile
+# Regenerate result for any book.
+results/%.csv : data/%.txt $(COUNT)
+	python $(COUNT) $< > $@
+```
+
 Since the phony target `all` depends on `$(RESULTS)`
 (i.e., all the files whose names appear in the variable `RESULTS`)
 we can regenerate all the results in one step:
@@ -860,8 +888,10 @@ all : results/collated.csv
 
 ## results/collated.csv : collate all results.
 results/collated.csv : $(RESULTS) $(COLLATE)
-	mkdir -p results  # Create dir if it doesn't exist
+	mkdir -p results
 	python $(COLLATE) $(RESULTS) > $@
+
+# ...other rules...
 
 ## settings : show variables' values.
 settings :
@@ -869,7 +899,8 @@ settings :
 	@echo DATA: $(DATA)
 	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
-	...
+
+# ...help rule...
 ```
 
 The first two lines tell Make about the collation program,
@@ -905,6 +936,8 @@ all : results/collated.png
 results/collated.png : results/collated.csv
 	python $(PLOT) $< --outfile $@
 
+# ...other rules...
+
 ## settings : show variables' values.
 settings :
 	@echo COUNT: $(COUNT)
@@ -912,7 +945,8 @@ settings :
 	@echo RESULTS: $(RESULTS)
 	@echo COLLATE: $(COLLATE)
 	@echo PLOT: $(PLOT)
-	...
+
+# ...help...
 ```
 
 Running `make all` should now generate the new `collated.png` plot (Figure \@ref(fig:automate-collated)):
@@ -1093,17 +1127,29 @@ help :
 Using `man` and online search,
 explain what every part of this recipe does.
 
-## Configuration {#automate-ex-configuration}
+### Configuration {#automate-ex-configuration}
 
-Let's say that in future we intend to write a number of different Makefiles
-that all use the `countwords.py`, `collate.py` and `plotcounts.py` scripts.
+A next step in automating this analysis might include 
+moving the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
+into a separate file called `config.mk`:
 
-To avoid duplication,
-cut and paste the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
-into a separate file called `config.mk`.
-Use the `include` command to access those definitions in the existing `Makefile`.
+```makefile
+COUNT=bin/countwords.py
+COLLATE=bin/collate.py
+PLOT=bin/plotcounts.py
+```
 
-(In Chapter \@ref(config) we discuss configuration strategies in more detail.)
+and using the `include` command to access those definitions in the existing `Makefile`:
+
+```makefile
+.PHONY: results all clean help settings
+
+include config.mk
+
+# ... the rest of the Makefile ...
+```
+
+Under what circumstances would this strategy be useful?
 
 ## Key Points {#automate-keypoints}
 

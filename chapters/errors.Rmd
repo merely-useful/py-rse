@@ -48,11 +48,13 @@ The Zipf's Law project should now include:
 ```text
 zipf/
 ├── .gitignore
+├── .travis.yml
 ├── CONDUCT.md
 ├── CONTRIBUTING.md
 ├── LICENSE.md
 ├── Makefile
 ├── README.md
+├── requirements.txt
 ├── bin
 │   ├── book_summary.sh
 │   ├── collate.py
@@ -60,15 +62,19 @@ zipf/
 │   ├── plotcounts.py
 │   ├── plotparams.yml
 │   ├── script_template.py
+│   ├── test_zipfs.py
 │   └── utilities.py
 ├── data
 │   ├── README.md
 │   ├── dracula.txt
 │   └── ...
-└── results
-    ├── dracula.csv
-    ├── dracula.png
-    └── ...
+├── results
+│   ├── dracula.csv
+│   ├── dracula.png
+│   └── ...
+└── test_data
+    ├── random_words.txt
+    └── risk.txt
 ```
 
 ## Exceptions {#errors-exceptions}
@@ -249,9 +255,9 @@ $ python bin/collate.py results/none.csv results/dracula.csv
 
 ```text
 Traceback (most recent call last):
-  File "bin/collate.py", line 27, in <module>
+  File "bin/collate.py", line 35, in <module>
     main(args)
-  File "bin/collate.py", line 17, in main
+  File "bin/collate.py", line 23, in main
     with open(fname, 'r') as reader:
 FileNotFoundError: [Errno 2] No such file or directory:
 'results/none.csv'
@@ -267,11 +273,11 @@ $ python bin/collate.py Makefile
 
 ```text
 Traceback (most recent call last):
-  File "bin/collate.py", line 27, in <module>
+  File "bin/collate.py", line 35, in <module>
     main(args)
-  File "bin/collate.py", line 18, in main
+  File "bin/collate.py", line 24, in main
     update_counts(reader, word_counts)
-  File "bin/collate.py", line 10, in update_counts
+  File "bin/collate.py", line 15, in update_counts
     for word, count in csv.reader(reader):
 ValueError: not enough values to unpack (expected 2, got 1)
 ```
@@ -324,9 +330,9 @@ $ python bin/collate.py Makefile
 
 ```text
 Traceback (most recent call last):
-  File "bin/collate.py", line 29, in <module>
+  File "bin/collate.py", line 37, in <module>
     main(args)
-  File "bin/collate.py", line 18, in main
+  File "bin/collate.py", line 24, in main
     raise OSError(f'{fname} is not a CSV file.')
 OSError: Makefile is not a CSV file.
 ```
@@ -751,8 +757,8 @@ can save us and our users a lot of needless work.
 
 ## Exercises {#errors-exercises}
 
-This chapter suggested several edits to `collate.py`,
-such that the script now reads:
+This chapter suggested several edits to `collate.py`.
+We'll proceed with the following basic framework for the script:
 
 ```python
 """
@@ -798,7 +804,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infiles', type=str, nargs='*',
                         help='Input file names')
-    parser.add_argument('-n', '--num', type=int, default=None,
+    parser.add_argument('-n', '--num',
+                        type=int, default=None,
                         help='Output only n most frequent words')
     args = parser.parse_args()
     main(args)
@@ -881,7 +888,7 @@ the default name of `collate.log`.
 
 In our suggested solution to the previous exercise we modified `collate.py` to handle
 different types of errors associated with reading input files.
-The `main` function in `collate.py` now reads:
+Consider if the `main` function in `collate.py` now reads:
 
 ```python
 def main(args):
@@ -894,8 +901,8 @@ def main(args):
         try:
             logging.debug(f'Reading in {fname}...')
             if fname[-4:] != '.csv':
-                msg = util.ERRORS['not_csv_suffix'].format(
-                      fname=fname)
+                msg = ERRORS['not_csv_suffix'].format(
+                    fname=fname)
                 raise OSError(msg)
             with open(fname, 'r') as reader:
                 logging.debug('Computing word counts...')
@@ -910,7 +917,6 @@ def main(args):
             msg = f'{fname} not processed: {error}'
             logging.warning(msg)
     util.collection_to_csv(word_counts, num=args.num)
-
 ```
 
 1.  It is difficult to write a simple unit test for the lines of code dedicated
@@ -925,7 +931,8 @@ def process_file(fname, word_counts):
     """Read file and update word counts"""
     logging.debug(f'Reading in {fname}...')
     if fname[-4:] != '.csv':
-        msg = util.ERRORS['not_csv_suffix'].format(fname=fname)
+        msg = ERRORS['not_csv_suffix'].format(
+            fname=fname)
         raise OSError(msg)
     with open(fname, 'r') as reader:
         logging.debug('Computing word counts...')

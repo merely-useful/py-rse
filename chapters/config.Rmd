@@ -47,6 +47,8 @@ zipf/
 │   ├── dracula.txt
 │   └── ...
 └── results
+    ├── collate.csv
+    ├── collate.png
     ├── dracula.csv
     ├── dracula.png
     └── ...
@@ -143,7 +145,7 @@ mpl.matplotlib_fname()
 ```
 
 ```text
-/Users/amira/opt/anaconda3/lib/python3.7/site-packages/matplotlib/
+/Users/amira/anaconda3/lib/python3.7/site-packages/matplotlib/
 mpl-data/matplotlibrc
 ```
 
@@ -319,9 +321,11 @@ to pass a YAML file full of Matplotlib parameters to `plotcounts.py`.\index{conf
 First,
 we save the parameters we want to change in a file inside our project directory.
 We can call it anything,
-but `plotparams.yml` seems like it will be easy to remember:
+but `plotparams.yml` seems like it will be easy to remember,
+and we'll store it in `bin` with the scripts that will use it:
 
 ```yaml
+# Plot characteristics
 axes.labelsize   : x-large  ## fontsize of the x any y labels
 xtick.labelsize  : large    ## fontsize of the tick labels
 ytick.labelsize  : large    ## fontsize of the tick labels
@@ -409,7 +413,7 @@ def main(args):
                          xlim=args.xlim)
 
     word_counts = df['word_frequency'].to_numpy()
-    alpha, beta = get_power_law_params(word_counts)
+    alpha = get_power_law_params(word_counts)
     print('alpha:', alpha)
 
     # Since the ranks are already sorted, we can take the last
@@ -421,7 +425,6 @@ def main(args):
     curve_xmin = df['word_frequency'].min()
     curve_xmax = df['word_frequency'].max()
 
-    # Plot the result
     plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)
     ax.figure.savefig(args.outfile)
 
@@ -545,6 +548,8 @@ handle a configuration file in INI rather than YAML format.
 
 1.  Which file format do you find easier to work with?
 2.  What other factors should influence your choice of a configuration file syntax?
+
+Note: we will be referencing the code in YAML format in the rest of this book.
 
 ### Configuration consistency {#config-ex-consistency}
 
