@@ -9572,7 +9572,7 @@ To write a good bug report:
     discussed in Section \@ref(git-advanced).
 
 An example of a well-written bug report with all of the components mentioned above
-is shown in Figure \@ref(fig:bug-report).
+is shown in Figure \@ref(fig:teams-bug-report).
 
 <div class="figure" style="text-align: center">
 <img src="figures/teams/bug-report.png" alt="Example of a bug report." width="100%" />
@@ -11530,7 +11530,7 @@ explain what every part of this recipe does.
 ### Configuration {#automate-ex-configuration}
 
 A next step in automating this analysis might include 
-moving the definitions of the `COUNT`, `COLLATE` and `PLOT` variables
+moving the definitions of the `COUNT`, `COLLATE`, and `PLOT` variables
 into a separate file called `config.mk`:
 
 ```makefile
@@ -11894,8 +11894,8 @@ to pass a YAML file full of Matplotlib parameters to `plotcounts.py`.\index{conf
 First,
 we save the parameters we want to change in a file inside our project directory.
 We can call it anything,
-but `plotparams.yml` seems like it will be easy to remember,
-and we'll store it in `bin` with the scripts that will use it:
+but `plotparams.yml` seems like it will be easy to remember.
+We'll store it in `bin` with the scripts that will use it:
 
 ```yaml
 # Plot characteristics
@@ -12122,7 +12122,7 @@ handle a configuration file in INI rather than YAML format.
 1.  Which file format do you find easier to work with?
 2.  What other factors should influence your choice of a configuration file syntax?
 
-Note: we will be referencing the code in YAML format in the rest of this book.
+Note: the code modified in this exercise is not required for the rest of the book.
 
 ### Configuration consistency {#config-ex-consistency}
 
@@ -14154,7 +14154,7 @@ can save us and our users a lot of needless work.
 ## Exercises {#errors-exercises}
 
 This chapter suggested several edits to `collate.py`.
-We'll proceed with the following basic framework for the script:
+If our script now reads as follows:
 
 ```python
 """
@@ -14207,7 +14207,7 @@ if __name__ == '__main__':
     main(args)
 ```
 
-Some of the following exercises will ask you to make further edits to `collate.py`.
+The following exercises will ask you to make further edits to `collate.py`.
 
 ### Set the logging level {#errors-ex-set-level}
 
@@ -14284,7 +14284,7 @@ the default name of `collate.log`.
 
 In our suggested solution to the previous exercise we modified `collate.py` to handle
 different types of errors associated with reading input files.
-Consider if the `main` function in `collate.py` now reads:
+If the `main` function in `collate.py` now reads:
 
 ```python
 def main(args):
