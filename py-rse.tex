@@ -94,23 +94,50 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
-\usepackage{booktabs}
-\usepackage{longtable}
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
 \usepackage[bf,singlelinecheck=off]{caption}
+\usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{csquotes}
 
-\usepackage{framed,color}
-\definecolor{shadecolor}{RGB}{248,248,248}
+
+\usepackage[framemethod=default]{mdframed} % Required for creating the definition box
+
+% temp box
+\newmdenv[skipabove=7pt,
+skipbelow=7pt,
+rightline=false,
+leftline=false,
+topline=false,
+bottomline=false,
+innerleftmargin=5pt,
+innerrightmargin=5pt,
+innertopmargin=0pt,
+leftmargin=0cm,
+rightmargin=0cm,
+linewidth=4pt,
+innerbottommargin=0pt]{tBox}
+
+%\usepackage[bottom]{footmisc}
+%\usepackage{etoolbox}
+\newtoggle{inshade}
+\togglefalse{inshade}
+
+\pretocmd{\footnote}{\iftoggle{inshade}{\stepcounter{footnote}}{\relax}}{}{}
+
+
+\renewenvironment{quote}{\savenotes\begin{tBox}\begin{shaded*}\toggletrue{inshade}\renewcommand{\thempfootnote}{\arabic{footnote}}}{\end{shaded*}\end{tBox}\togglefalse{inshade}
+  \spewnotes}
+\let\oldhref\href
+\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
 
 \renewcommand{\textfraction}{0.05}
 \renewcommand{\topfraction}{0.8}
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\floatpagefraction}{0.75}
 
-\renewenvironment{quote}{\begin{shaded*}}{\end{shaded*}}
-\let\oldhref\href
-\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+\makeatletter
 
 \makeatletter
 \newenvironment{kframe}{%
