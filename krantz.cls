@@ -714,7 +714,7 @@
                    \@topnewpage[\@makeschapterhead{#1}]%
                  \else
                    \@makeschapterhead{#1}%
-                   \addcontentsline{toc}{fm}{#1}
+                   \addcontentsline{toc}{chapter}{#1}
                    \markboth{#1}{#1}
                    \@afterheading
                  \fi}
@@ -1111,31 +1111,46 @@
     \par
     \penalty\@highpenalty\endgroup}
 
+\newcommand*\l@chapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 1.0em \@plus\p@
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
+\newcommand*\l@section{\@dottedtocline{1}{1.5em}{2.8em}}
 
-
-  \def\l@chapter#1#2{%
-  \toc@draw
-  \gdef\toc@draw{\draw@chapter{#1}{#2}}}
-\def\@pnumwidth{1.8em}
-\def\draw@chapter#1#2{%
-  \addpenalty{-\@highpenalty}%
-  \vskip1em plus\p@
-  \@tempdima1.5em
-  \begingroup
-    \parindent\z@\rightskip\@pnumwidth
-    \parfillskip-\rightskip
-    \bfseries
-    \leavevmode
-    \advance\leftskip\@tempdima
-    \hskip-\leftskip
-    {#1\hfil}\nobreak
-      \if@pdf
-      \else
-        \hfil\nobreak\hb@xt@\@pnumwidth{\hss #2}%
-\fi
-    \par
-    {\it\draw@authors}%
-    \penalty\@highpenalty\endgroup}
+%%  \def\l@chapter#1#2{%
+%%  \toc@draw
+%%  \gdef\toc@draw{\draw@chapter{#1}{#2}}}
+%%\def\@pnumwidth{1.8em}
+%%\def\draw@chapter#1#2{%
+%%  \addpenalty{-\@highpenalty}%
+%%  \vskip1em plus\p@
+%%  \@tempdima1.5em
+%%  \begingroup
+%%    \parindent\z@\rightskip\@pnumwidth
+%%    \parfillskip-\rightskip
+%%    \bfseries
+%%    \leavevmode
+%%    \advance\leftskip\@tempdima
+%%    \hskip-\leftskip
+%%    {#1\hfil}\nobreak
+%%      \if@pdf
+%%      \else
+%%        \hfil\nobreak\hb@xt@\@pnumwidth{\hss #2}%
+%%\fi
+%%    \par
+%%    {\it\draw@authors}%
+%%    \penalty\@highpenalty\endgroup}
 \def\toc@author#1#2{%
   \if@firstauthor
     \@firstauthorfalse
@@ -1172,12 +1187,12 @@
 \section@toc@skip1.5em
 \newlength\SectionTOCWidth
 \SectionTOCWidth2.8em
-\def\l@section#1#2{%
-  \toc@draw
-  \gdef\toc@draw{\draw@section{#1}{#2}}}
-\def\draw@section#1#2{%
-  \@dottedtocline{1}{\section@toc@skip}{\SectionTOCWidth}{#1 }{{
-\tocfont #2}}}
+%%\def\l@section#1#2{%
+%%  \toc@draw
+%%  \gdef\toc@draw{\draw@section{#1}{#2}}}
+%%\def\draw@section#1#2{%
+%%  \@dottedtocline{1}{\section@toc@skip}{\SectionTOCWidth}{#1 }{{
+%%\tocfont #2}}}
 \newlength\subsection@toc@skip
 \subsection@toc@skip\section@toc@skip
 \advance\subsection@toc@skip\SectionTOCWidth
@@ -1501,7 +1516,7 @@
                         \addcontentsline{toc}{chapter}{\indexname}
 % there seems to be a weird bug in krantz.cls that prevents the very _last_ item
 % of \addcontentsline from being added to TOC, so I have to add an empty entry
-\addcontentsline{toc}{section}{}
+%\addcontentsline{toc}{section}{}
                 \thispagestyle{folio}\parindent\z@\markboth{\indexname}{\indexname}
                 \parskip\z@ \@plus .3\p@\relax\raggedright
                 \columnseprule \z@
