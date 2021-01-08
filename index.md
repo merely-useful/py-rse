@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2020-12-22"
+date: "2021-01-08"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -1194,8 +1194,8 @@ we can use <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit the editor and return to the she
 > it displays some help in the bottom two lines of the screen
 > using the last of these notations:
 > for example,
-> `^G Get Help` means "use <kbd>Control</kbd>+<kbd>G</kbd> to get help"
-> and `^O WriteOut` means "use <kbd>Control</kbd>+<kbd>O</kbd> to write out the current file".
+> `^G Get Help` means "use <kbd>Ctrl</kbd>+<kbd>G</kbd> to get help"
+> and `^O WriteOut` means "use <kbd>Ctrl</kbd>+<kbd>O</kbd> to write out the current file".
 
 Nano doesn't leave any output on the screen after it exits,
 but `ls` will show that we have indeed created a new file `draft.txt`:
@@ -19435,7 +19435,7 @@ The example of copying our public key to a remote machine, so that it
 can then be used when we next SSH into that remote machine, assumed
 that we already had a directory `~/.ssh/`.
 
-Whilst a remote server may support the use of SSH to login, your home
+While a remote server may support the use of SSH to login, your home
 directory there may not contain a `.ssh` directory by default.
 
 We have already seen that we can use SSH to run commands on remote
@@ -19526,7 +19526,7 @@ $ ssh amira@comet "ls -l ~/.ssh"
 -rw-r--r-- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/authorized_keys
 ```
 
-Whilst the authorized keys file is not considered to be highly sensitive,
+While the authorized keys file is not considered to be highly sensitive,
 (after all, it contains public keys), we alter the permissions to match
 the man page's recommendations
 
@@ -20529,7 +20529,7 @@ in order to show what standards everyone else is expected to meet.
 \gref{Working memory}{working_memory} can only hold a few items at once:
 initial estimates in the 1950s put the number at 7±2 [@Mill1956],
 and more recent estimates put it as low as 4 or 5.
-High-level languages from FORTRAN to Python
+High-level languages from Fortran to Python
 are essentially a way to reduce the number of things programmers have to think about at once
 so that they can fit what the computer is doing into this limited space.
 The sections below describe some of these features;
@@ -20788,7 +20788,7 @@ Marlyn Wescoff <mwescoff@eniac.org>
 George Orwell laid out [six rules for good writing][orwells-rules],
 the last and most important of which is,
 "Break any of these rules sooner than say anything outright barbarous."
-PEP8 conveys [the same message][pep-8-hobgoblin]:
+PEP-8 conveys [the same message][pep-8-hobgoblin]:
 there will always be cases where your code will be easier to understand
 if you *don't* do the things described in this lesson,
 but there are probably fewer of them than you think.
