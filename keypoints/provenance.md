@@ -1,5 +1,5 @@
 -   Publish data and code as well as papers.
--   Use \gref{DOIs}{doi} to identify reports, datasets, or software release.
+-   Use \gref{DOIs}{doi} to identify reports, datasets, and software releases.
 -   Use an \gref{ORCID}{orcid} to identify yourself as an author of a report, dataset, or software release.
 -   Data should be [FAIR][go-fair]: findable, accessible, interoperable, and reusable.
 -   Put small datasets in version control repositories; store large ones on data sharing sites.
