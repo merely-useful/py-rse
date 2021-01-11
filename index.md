@@ -2701,8 +2701,8 @@ $ for filename in s*.txt
 with this:
 
 ```bash
-$ for filename in s*.txt; do echo $filename; head -n 17 $filename |
-  tail -n 8; done
+$ for filename in s*.txt; do echo $filename; head -n 17 $filename
+  | tail -n 8; done
 ```
 
 Even experienced users have a tendency to (incorrectly) 
@@ -6516,7 +6516,8 @@ if we run `git log`\index{Git commands!log} right now,
 it shows us something like this:
 
 ```text
-commit ee8684ca123e1e829fc995d672e3d7e4b00f2610 (HEAD -> master, origin/master)
+commit ee8684ca123e1e829fc995d672e3d7e4b00f2610
+(HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
 Date:   Sat Dec 19 09:52:04 2020 -0800
 
@@ -7661,7 +7662,8 @@ $ git log --oneline -n 2
 ```
 
 ```text
-ddb00fb (HEAD -> master, origin/master) removing inverse rank calculation
+ddb00fb (HEAD -> master, origin/master) removing inverse rank
+        calculation
 7de9877 ignoring __pycache__
 ```
 
@@ -7886,7 +7888,8 @@ $ git log --oneline -n 4
 ```
 
 ```text
-1577404 (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016) reference
+1577404 (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016)
+        reference
 38c209b Added fit to word count data
 ddb00fb (origin/master) removing inverse rank calculation
 7de9877 ignoring __pycache__
@@ -7981,8 +7984,8 @@ let's add some information to the README file:
 ```text
 # Zipf's Law
 
-These Zipf's Law scripts tally the occurrences of words in text files
-and plot each word's rank versus its frequency.
+These Zipf's Law scripts tally the occurrences of words in text
+files and plot each word's rank versus its frequency.
 ```
 
 ```bash
@@ -8051,8 +8054,8 @@ index f40e895..71f67db 100644
 @@ -1,4 +1,5 @@
  # Zipf's Law
  
--These Zipf's Law scripts tally the occurrences of words in text files
--and plot each word's rank versus its frequency.
+-These Zipf's Law scripts tally the occurrences of words in text
+-files and plot each word's rank versus its frequency.
 +## Contributors
 +
 +- Amira Khan <amira@zipf.org>
@@ -8087,8 +8090,8 @@ $ cat README.md
 
 - Amira Khan <amira@zipf.org>
 =======
-These Zipf's Law scripts tally the occurrences of words in text files
-and plot each word's rank versus its frequency.
+These Zipf's Law scripts tally the occurrences of words in text
+files and plot each word's rank versus its frequency.
 >>>>>>> docs
 ```
 
@@ -8110,8 +8113,8 @@ so the resulting file reads:
 ```text
 # Zipf's Law
 
-These Zipf's Law scripts tally the occurrences of words in text files
-and plot each word's rank versus its frequency.
+These Zipf's Law scripts tally the occurrences of words in text
+files and plot each word's rank versus its frequency.
 
 ## Contributors
 
@@ -8371,7 +8374,8 @@ Sami can pull changes from their fork and push work back there,
 but needs to do one more thing before getting the changes from Amira's repository:
 
 ```bash
-sami:~/zipf $ git remote add upstream https://github.com/amira-khan/zipf.git
+sami:~/zipf $ git remote add upstream
+              https://github.com/amira-khan/zipf.git
 sami:~/zipf $ git remote -v
 ```
 
@@ -8397,8 +8401,8 @@ that Amira has modified the project's `README.md` file to add Sami as a contribu
 ```text
 # Zipf's Law
 
-These Zipf's Law scripts tally the occurrences of words in text files
-and plot each word's rank versus its frequency.
+These Zipf's Law scripts tally the occurrences of words in text
+files and plot each word's rank versus its frequency.
 
 ## Contributors
 
@@ -8552,7 +8556,7 @@ Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 remote: 
 remote: Create a pull request for 'adding-email' on GitHub by visiting:
-remote:      https://github.com/sami-virtanen/zipf/pull/new/adding-email
+remote:   https://github.com/sami-virtanen/zipf/pull/new/adding-email
 remote: 
 To https://github.com/sami-virtanen/zipf.git
  * [new branch]      adding-email -> adding-email
@@ -9886,7 +9890,7 @@ As soon as the meeting is over,
 circulate the minutes by emailing them to everyone\index{project!meeting minutes}\index{meetings!minutes}
 or adding a text file to the project's repository:
 
-People who weren't at the meeting can keep track of what's going on.
+People who weren't at the meeting can follow what's going on.
 :   We all have to juggle tasks from several projects or courses,
     which means that sometimes we can't make it to meetings.
     Checking a written record
@@ -12234,7 +12238,8 @@ AssertionError                  Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
       2 total = 0.0
       3 for freq in frequencies[:5]:
-----> 4     assert freq >= 0.0, 'Word frequencies must be non-negative'
+----> 4     assert freq >= 0.0, 'Word frequencies must be
+            non-negative'
       5     total += freq
       6 print('total frequency of first 5 words:', total)
 
@@ -14670,8 +14675,8 @@ This might be fine for a small number of packages with very few dependencies,
 but in more complex cases we probably want to make life easier for the reader
 (and for our future selves looking to re-run the analysis).
 One way to make things easier is to export a description of
-a complete conda environment (Section \@ref(packaging-virtualenv);
-Appendix \@ref(anaconda-environments)){virtual_environment}\index,
+a complete conda environment
+(Section \@ref(packaging-virtualenv); Appendix \@ref(anaconda-environments))\index{virtual environment},
 which can be saved as YAML using:
 
 ```bash
@@ -15317,67 +15322,80 @@ we can install our package using the modified `setup.py` file:
 ```text
 Obtaining file:///Users/amira/pyzipf
 Collecting matplotlib
-  Downloading matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl (8.5 MB)
+  Downloading matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl
      |████████████████████████████████| 8.5 MB 3.1 MB/s 
 Collecting cycler>=0.10
-  Using cached cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
+  Using cached cycler-0.10.0-py2.py3-none-any.whl
 Collecting kiwisolver>=1.0.1
-  Downloading kiwisolver-1.3.1-cp37-cp37m-macosx_10_9_x86_64.whl (61 kB)
+  Downloading kiwisolver-1.3.1-cp37-cp37m-macosx_10_9_x86_64.whl 
      |████████████████████████████████| 61 kB 2.0 MB/s 
 Collecting numpy>=1.15
-  Downloading numpy-1.19.4-cp37-cp37m-macosx_10_9_x86_64.whl (15.3 MB)
+  Downloading numpy-1.19.4-cp37-cp37m-macosx_10_9_x86_64.whl
      |████████████████████████████████| 15.3 MB 8.9 MB/s 
 Collecting pillow>=6.2.0
-  Downloading Pillow-8.0.1-cp37-cp37m-macosx_10_10_x86_64.whl (2.2 MB)
+  Downloading Pillow-8.0.1-cp37-cp37m-macosx_10_10_x86_64.whl
      |████████████████████████████████| 2.2 MB 6.3 MB/s 
 Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.3
-  Using cached pyparsing-2.4.7-py2.py3-none-any.whl (67 kB)
+  Using cached pyparsing-2.4.7-py2.py3-none-any.whl
 Collecting python-dateutil>=2.1
-  Using cached python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+  Using cached python_dateutil-2.8.1-py2.py3-none-any.whl
 Collecting six
-  Using cached six-1.15.0-py2.py3-none-any.whl (10 kB)
+  Using cached six-1.15.0-py2.py3-none-any.whl
 Collecting pandas
-  Downloading pandas-1.1.5-cp37-cp37m-macosx_10_9_x86_64.whl (10.0 MB)
+  Downloading pandas-1.1.5-cp37-cp37m-macosx_10_9_x86_64.whl
      |████████████████████████████████| 10.0 MB 1.4 MB/s 
 Collecting pytz>=2017.2
-  Using cached pytz-2020.4-py2.py3-none-any.whl (509 kB)
+  Using cached pytz-2020.4-py2.py3-none-any.whl
 Collecting pytest
-  Using cached pytest-6.2.1-py3-none-any.whl (279 kB)
+  Using cached pytest-6.2.1-py3-none-any.whl
 Collecting attrs>=19.2.0
-  Using cached attrs-20.3.0-py2.py3-none-any.whl (49 kB)
+  Using cached attrs-20.3.0-py2.py3-none-any.whl
 Collecting importlib-metadata>=0.12
-  Downloading importlib_metadata-3.3.0-py3-none-any.whl (10 kB)
+  Downloading importlib_metadata-3.3.0-py3-none-any.whl
 Collecting pluggy<1.0.0a1,>=0.12
-  Using cached pluggy-0.13.1-py2.py3-none-any.whl (18 kB)
+  Using cached pluggy-0.13.1-py2.py3-none-any.whl
 Collecting py>=1.8.2
-  Using cached py-1.10.0-py2.py3-none-any.whl (97 kB)
+  Using cached py-1.10.0-py2.py3-none-any.whl
 Collecting typing-extensions>=3.6.4
-  Downloading typing_extensions-3.7.4.3-py3-none-any.whl (22 kB)
+  Downloading typing_extensions-3.7.4.3-py3-none-any.whl
 Collecting zipp>=0.5
-  Downloading zipp-3.4.0-py3-none-any.whl (5.2 kB)
+  Downloading zipp-3.4.0-py3-none-any.whl
 Collecting iniconfig
-  Using cached iniconfig-1.1.1-py2.py3-none-any.whl (5.0 kB)
+  Using cached iniconfig-1.1.1-py2.py3-none-any.whl
 Collecting packaging
-  Using cached packaging-20.8-py2.py3-none-any.whl (39 kB)
+  Using cached packaging-20.8-py2.py3-none-any.whl
 Collecting pyyaml
-  Using cached PyYAML-5.3.1.tar.gz (269 kB)
+  Using cached PyYAML-5.3.1.tar.gz
 Collecting scipy
-  Downloading scipy-1.5.4-cp37-cp37m-macosx_10_9_x86_64.whl (28.7 MB)
+  Downloading scipy-1.5.4-cp37-cp37m-macosx_10_9_x86_64.whl
      |████████████████████████████████| 28.7 MB 10.7 MB/s 
 Collecting toml
-  Using cached toml-0.10.2-py2.py3-none-any.whl (16 kB)
+  Using cached toml-0.10.2-py2.py3-none-any.whl
 Building wheels for collected packages: pyyaml
   Building wheel for pyyaml (setup.py) ... done
-  Created wheel for pyyaml: filename=PyYAML-5.3.1-cp37-cp37m-macosx_10_9_x86_64.whl size=44626 sha256=5a59ccf08237931e7946ec6b526922e4f0c8ee903d43671f50289431d8ee689d
-  Stored in directory: /Users/amira/Library/Caches/pip/wheels/5e/03/1e/e1e954795d6f35dfc7b637fe2277bff021303bd9570ecea653
+  Created wheel for pyyaml:
+    filename=PyYAML-5.3.1-cp37-cp37m-macosx_10_9_x86_64.whl
+    size=44626
+    sha256=5a59ccf08237931e7946ec6b526922e4
+           f0c8ee903d43671f50289431d8ee689d
+  Stored in directory: /Users/amira/Library/Caches/pip/wheels/5e/
+    03/1e/e1e954795d6f35dfc7b637fe2277bff021303bd9570ecea653
 Successfully built pyyaml
-Installing collected packages: zipp, typing-extensions, six, pyparsing, importlib-metadata, toml, pytz, python-dateutil, py, pluggy, pillow, packaging, numpy, kiwisolver, iniconfig, cycler, attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
+Installing collected packages: zipp, typing-extensions, six,
+pyparsing, importlib-metadata, toml, pytz, python-dateutil, py,
+pluggy, pillow, packaging, numpy, kiwisolver, iniconfig, cycler,
+attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
   Attempting uninstall: pyzipf
     Found existing installation: pyzipf 0.1.0
     Uninstalling pyzipf-0.1.0:
       Successfully uninstalled pyzipf-0.1.0
   Running setup.py develop for pyzipf
-Successfully installed attrs-20.3.0 cycler-0.10.0 importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1 matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5 pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1 python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf scipy-1.5.4 six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3 zipp-3.4.0
+Successfully installed attrs-20.3.0 cycler-0.10.0
+importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1
+matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5
+pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1
+python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf scipy-1.5.4
+six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3 zipp-3.4.0
 ```
 
 (The precise output of this command will change
@@ -15652,13 +15670,15 @@ writing entry points to pyzipf.egg-info/entry_points.txt
 writing requirements to pyzipf.egg-info/requires.txt
 writing top-level names to pyzipf.egg-info/top_level.txt
 writing manifest file 'pyzipf.egg-info/SOURCES.txt'
-package init file 'pyzipf/__init__.py' not found (or not a regular file)
+package init file 'pyzipf/__init__.py' not found
+(or not a regular file)
 reading manifest file 'pyzipf.egg-info/SOURCES.txt'
 writing manifest file 'pyzipf.egg-info/SOURCES.txt'
 running check
 warning: check: missing required meta-data: url
 
-warning: check: missing meta-data: if 'author' supplied, 'author_email' must be supplied too
+warning: check: missing meta-data: if 'author' supplied, 
+                'author_email' must be supplied too
 
 creating pyzipf-0.1
 creating pyzipf-0.1/pyzipf
@@ -15666,18 +15686,30 @@ creating pyzipf-0.1/pyzipf.egg-info
 copying files to pyzipf-0.1...
 copying README.md -> pyzipf-0.1
 copying setup.py -> pyzipf-0.1
-copying pyzipf/collate.py -> pyzipf-0.1/pyzipf
-copying pyzipf/countwords.py -> pyzipf-0.1/pyzipf
-copying pyzipf/plotcounts.py -> pyzipf-0.1/pyzipf
-copying pyzipf/script_template.py -> pyzipf-0.1/pyzipf
-copying pyzipf/test_zipfs.py -> pyzipf-0.1/pyzipf
-copying pyzipf/utilities.py -> pyzipf-0.1/pyzipf
-copying pyzipf.egg-info/PKG-INFO -> pyzipf-0.1/pyzipf.egg-info
-copying pyzipf.egg-info/SOURCES.txt -> pyzipf-0.1/pyzipf.egg-info
-copying pyzipf.egg-info/dependency_links.txt -> pyzipf-0.1/pyzipf.egg-info
-copying pyzipf.egg-info/entry_points.txt -> pyzipf-0.1/pyzipf.egg-info
-copying pyzipf.egg-info/requires.txt -> pyzipf-0.1/pyzipf.egg-info
-copying pyzipf.egg-info/top_level.txt -> pyzipf-0.1/pyzipf.egg-info
+copying pyzipf/collate.py ->
+  pyzipf-0.1/pyzipf
+copying pyzipf/countwords.py ->
+  pyzipf-0.1/pyzipf
+copying pyzipf/plotcounts.py ->
+  pyzipf-0.1/pyzipf
+copying pyzipf/script_template.py ->
+  pyzipf-0.1/pyzipf
+copying pyzipf/test_zipfs.py ->
+  pyzipf-0.1/pyzipf
+copying pyzipf/utilities.py ->
+  pyzipf-0.1/pyzipf
+copying pyzipf.egg-info/PKG-INFO ->
+  pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/SOURCES.txt ->
+  pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/dependency_links.txt ->
+  pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/entry_points.txt ->
+  pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/requires.txt ->
+  pyzipf-0.1/pyzipf.egg-info
+copying pyzipf.egg-info/top_level.txt ->
+  pyzipf-0.1/pyzipf.egg-info
 Writing pyzipf-0.1/setup.cfg
 creating dist
 Creating tar archive
@@ -15756,19 +15788,34 @@ and installing our package from TestPyPI and PyPI
 ```
 
 ```text
-Looking in indexes: https://test.pypi.org/simple, https://pypi.org/simple
+Looking in indexes: https://test.pypi.org/simple,
+                    https://pypi.org/simple
 Collecting pyzipf
   Downloading pyzipf-0.1.tar.gz (5.5 kB)
 Collecting matplotlib
-  Using cached matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl (8.5 MB)
+  Using cached matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl
 ...collecting other packages...
 Building wheels for collected packages: pyzipf
   Building wheel for pyzipf (setup.py) ... done
-  Created wheel for pyzipf: filename=pyzipf-0.1-py3-none-any.whl size=6836 sha256=62a23715379b71ad5a6b124444fab194596d094c7df293c4019d33bdd648aff1
-  Stored in directory: /Users/amira/Library/Caches/pip/wheels/c6/d6/08/f16cf80ec82a9c70ab8a5d9c8acc7ab35c9a01009539aeb2be
+  Created wheel for pyzipf:
+    filename=pyzipf-0.1-py3-none-any.whl
+    size=6836
+    sha256=62a23715379b71ad5a6b124444fab194
+           596d094c7df293c4019d33bdd648aff1
+  Stored in directory: /Users/amira/Library/Caches/pip/wheels/c6/
+    d6/08/f16cf80ec82a9c70ab8a5d9c8acc7ab35c9a01009539aeb2be
 Successfully built pyzipf
-Installing collected packages: zipp, typing-extensions, six, pyparsing, importlib-metadata, toml, pytz, python-dateutil, py, pluggy, pillow, packaging, numpy, kiwisolver, iniconfig, cycler, attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
-Successfully installed attrs-20.3.0 cycler-0.10.0 importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1 matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5 pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1 python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf-0.1 scipy-1.5.4 six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3 zipp-3.4.0
+Installing collected packages: zipp, typing-extensions, six,
+pyparsing, importlib-metadata, toml, pytz, python-dateutil, py,
+pluggy, pillow, packaging, numpy, kiwisolver, iniconfig, cycler,
+attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
+Successfully installed attrs-20.3.0 cycler-0.10.0
+importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1
+matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5
+pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1
+python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf-0.1
+scipy-1.5.4 six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3
+zipp-3.4.0
 ```
 
 Once again,
@@ -19396,11 +19443,12 @@ $ cat ~/.ssh/id_rsa.pub
 ```
 
 ```text
-ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA879BJGYlPTLIuc9/R5MYiN4yc/YiCLcdBpSdzgK9Dt0B
-kfe3rSz5cPm4wmehdE7GkVFXrBJ2YHqPLuM1yx1AUxIebpwlIl9f/aUHOts9eVnVh4NztPy0iSU/Sv0b
-2ODQQvcy2vYcujlorscl8JjAgfWsO3W4iGEe6QwBpVomcME8IU35v5VbylM9ORQa6wvZMVrPECBvwItT
-Y8cPWH3MGZiK/74eHbSLKA4PY3gM4GHI450Nie16yggEg2aTQfWA1rry9JYWEoHS9pJ1dnLqZU3k/8OW
-gqJrilwSoC5rGjgp93iu0H8T6+mEHGRQe84Nk1y5lESSWIbn6P636Bl3uQ== your@email.com
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA879BJGYlPTLIuc9/R5MYiN4yc/YiCL
+cdBpSdzgK9Dt0Bkfe3rSz5cPm4wmehdE7GkVFXrBJ2YHqPLuM1yx1AUxIebpwlIl9f
+/aUHOts9eVnVh4NztPy0iSU/Sv0b2ODQQvcy2vYcujlorscl8JjAgfWsO3W4iGEe6Q
+wBpVomcME8IU35v5VbylM9ORQa6wvZMVrPECBvwItTY8cPWH3MGZiK/74eHbSLKA4P
+Y3gM4GHI450Nie16yggEg2aTQfWA1rry9JYWEoHS9pJ1dnLqZU3k/8OWgqJrilwSoC
+5rGjgp93iu0H8T6+mEHGRQe84Nk1y5lESSWIbn6P636Bl3uQ== your@email.com
 ```
 
 Copy the contents of the output,
@@ -19523,7 +19571,8 @@ $ ssh amira@comet "ls -l ~/.ssh"
 ```
 
 ```text
--rw-r--r-- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/authorized_keys
+-rw-r--r-- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/
+authorized_keys
 ```
 
 While the authorized keys file is not considered to be highly sensitive,
@@ -19535,7 +19584,8 @@ $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
 ```
 
 ```text
--rw------- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/authorized_keys
+-rw------- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/
+authorized_keys
 ```
 
 <!--chapter:end:chapters/ssh.Rmd-->
@@ -19839,7 +19889,8 @@ E101 indentation contains mixed spaces and tabs
 src/style/count_stops_before.py:12:13:
 W191 indentation contains tabs
 src/style/count_stops_before.py:15:1:
-E305 expected 2 blank lines after class or function definition, found 1
+E305 expected 2 blank lines after class or function definition,
+  found 1
 src/style/count_stops_before.py:15:1:
 E402 module level import not at top of file
 ```
