@@ -40,6 +40,27 @@ will know how to redirect output,
 combine commands using the pipe, and 
 repeat commands using a for loop.
 
+## 4. Going Further with the Unix Shell
+
+The previous chapters explained how to use the command line
+as an alternative to doing things in a graphical user interface,
+and how to combine commands in new ways using pipes and redirection.
+This chapter extends those ideas to show
+how to create new tools by saving commands in files
+and how to use a more powerful version of wildcards
+to extract data from files.
+For reuse, shell commands can be saved in files known as shell scripts.
+Shell scripts can be run from the command line like any other program.
+By the end of the chapter a learner will be able to
+create shell scripts, 
+run shell scripts,
+write shell scripts that take command line arguments,
+and add comments to shell scripts.
+The example scripts in this chapter also introduce 
+two shell commands for filtering: 
+`grep` to find lines inside files, and
+`find` to find files themselves.
+
 ## 6. Using Git at the Command Line
 
 A version control system tracks changes to files
