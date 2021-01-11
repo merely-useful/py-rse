@@ -35,7 +35,7 @@ An alternative way to combine programs is the pipe,
 a way to link the output of one command to the input of
 another without intermediate files.
 A loop is a way to repeat a set of commands for each item in a list.
-By the end of the chapter a learner,
+By the end of the chapter a learner
 will know how to redirect output,
 combine commands using the pipe, and 
 repeat commands using a for loop.
@@ -77,7 +77,7 @@ A remote repository is hosted on another computer or server, like GitHub.
 By referring to specific Git commits, 
 previous versions of files can be viewed,
 or restored.
-Not every file’s history, needs to be tracked,
+Not every file’s history needs to be tracked,
 so some files should be ignored. 
 By the end of the chapter a learner will be able to
 initialize a local Git repository,
@@ -97,8 +97,8 @@ Used together,
 they allow a write-review-revise cycle
 familiar to anyone who has ever written a journal paper
 in hours rather than weeks.
-This chapter, presents a branch-per-feature workflow to develop new features while leaving the master branch in working order.
-By the end of the chapter a learner will be able to use the workflow in individual projects by,
+This chapter presents a branch-per-feature workflow to develop new features while leaving the master branch in working order.
+By the end of the chapter a learner will be able to use the workflow in individual projects by
 creating new branches, 
 switching between branches,
 merging from another branch into the current branch,
@@ -113,10 +113,10 @@ Projects can run for years with poorly-written code,
 but none will survive for long if people are confused,
 pulling in different directions,
 or hostile to each other.
-This chapter therefore looks at how to create a culture of collaboration
+This chapter looks at how to create a culture of collaboration
 that will help people who want to contribute to a project,
 and introduce a few ways to manage projects and teams as they develop.
-In particular the chapter suggests ways to
+In particular, the chapter suggests ways to
 welcome and nurture community members proactively,
 including by creating an explicit Code of Conduct, 
 and including a license in your project so that it's clear who can do what with the material.
