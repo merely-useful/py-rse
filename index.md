@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-01-09"
+date: "2021-01-11"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -2087,7 +2087,7 @@ $ cat lengths.txt
 We can now use `sort` to sort the lines in this file:
 
 ```bash
-$ sort lengths.txt
+$ sort lengths.txt -n
 ```
 
 ```text
@@ -2103,7 +2103,7 @@ $ sort lengths.txt
 ```
 
 Just to be safe,
-we should use `sort`'s `-n` option to specify that we want to sort numerically.
+we use `sort`'s `-n` option to specify that we want to sort numerically.
 Without it,
 `sort` would order things alphabetically
 so that `10` would come before `2`.
@@ -6756,7 +6756,7 @@ we used it to recover the version of the file in the most recent commit.
 > you may see a suggestion for `git checkout` instead of `git restore`.
 > As of Git version 2.29,
 > `git restore` is still an experimental command,
-> and operates as a specialized form of `git chekcout`.
+> and operates as a specialized form of `git checkout`.
 > `git checkout HEAD bin/plotcounts.py` is equivalent to the last command run.\index{Git commands!checkout}
 
 We can confirm the file has been restored
@@ -6922,7 +6922,7 @@ Amira creates a `heaps-law` project inside her `zipf` project as follows:
 $ cd ~/zipf         # go into zipf directory, which is a Git repo
 $ mkdir heaps-law   # make a subdirectory zipf/heaps-law
 $ cd heaps-law      # go into heaps-law subdirectory
-$ git heaps-law     # make heaps-law a Git repository
+$ git init heaps-law     # make heaps-law a Git repository
 ```
 
 Is the `git init` command that she runs inside the `heaps-law` subdirectory
@@ -9786,7 +9786,7 @@ In a large project,
 a \gref{product manager}{product_manager} decides how important items are,\index{product manager}\index{project!product manager}
 while a \gref{project manager}{project_manager} is responsible for estimating effort\index{project manager}\index{project!project manager}
 and tracking progress.
-In a typical research software projects,
+In a typical research software project,
 the principal investigator either makes the decision
 or delegates that responsibility (and authority) to the lead developer.
 
@@ -10098,12 +10098,12 @@ Broadly speaking, there are four ways we can deal with them:
 2.  Do extra work to make up for others' shortcomings.
     This saves us the mental anguish of confronting others in the short run,
     but the time for that "extra" has to come from somewhere.
-    Sooner or alter,
+    Sooner or later,
     our personal lives or other parts of the project will suffer.
 
 3.  Lose our temper.
     People often wind up displacing anger into other parts of their life:
-    they may yell at someone for taking an extra thirty seconds to make change
+    they may yell at someone for taking an extra thirty seconds to make a change
     when what they really need to do is tell their boss
     that they won't work through another holiday weekend
     to make up for management's decision to short-staff the project.
@@ -11731,7 +11731,7 @@ The default size of the X and Y axis labels is "medium",
 as is the size of the tick labels:
 
 ```yaml
-#axes.labelsize    : medium  ## fontsize of the x any y labels
+#axes.labelsize    : medium  ## fontsize of the x and y labels
 #xtick.labelsize   : medium  ## fontsize of the tick labels
 #ytick.labelsize   : medium  ## fontsize of the tick labels
 ```
@@ -11739,7 +11739,7 @@ as is the size of the tick labels:
 We can uncomment those lines and change the sizes to "large" and "extra large":
 
 ```yaml
-axes.labelsize     : x-large  ## fontsize of the x any y labels
+axes.labelsize     : x-large  ## fontsize of the x and y labels
 xtick.labelsize    : large    ## fontsize of the tick labels
 ytick.labelsize    : large    ## fontsize of the tick labels
 ```
@@ -11818,7 +11818,7 @@ we can add a new file called `big-labels.mplstyle`
 that has the same YAML format as the `matplotlibrc` file:
 
 ```python
-axes.labelsize   : x-large  ## fontsize of the x any y labels
+axes.labelsize   : x-large  ## fontsize of the x and y labels
 xtick.labelsize  : large    ## fontsize of the tick labels
 ytick.labelsize  : large    ## fontsize of the tick labels
 ```
@@ -11848,7 +11848,7 @@ mpl_sizes = ['xx-small', 'x-small', 'small', 'medium',
              'large', 'x-large', 'xx-large']
 parser.add_argument('--labelsize', type=str, default='x-large',
                     choices=mpl_sizes,
-                    help='fontsize of the x any y labels')
+                    help='fontsize of the x and y labels')
 parser.add_argument('--xticksize', type=str, default='large',
                     choices=mpl_sizes,
                     help='fontsize of the x tick labels')
@@ -11899,7 +11899,7 @@ We'll store it in `bin` with the scripts that will use it:
 
 ```yaml
 # Plot characteristics
-axes.labelsize   : x-large  ## fontsize of the x any y labels
+axes.labelsize   : x-large  ## fontsize of the x and y labels
 xtick.labelsize  : large    ## fontsize of the tick labels
 ytick.labelsize  : large    ## fontsize of the tick labels
 ```
