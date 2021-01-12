@@ -6,7 +6,7 @@ The `argparse` Python module can be used to parse user input,
 and provides other expected command line functionality
 such as positional and optional arguments, and help messages.
 Python scripts can take input from files or directly from standard input
-and write to fies or the standard output.
+and write to files or standard output.
 When we write Python scripts we put the put `import` statements first,
 and use a special variable called `__name__`
 to check whether the script is run as the main program
