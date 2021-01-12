@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-01-11"
+date: "2021-01-12"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -2898,18 +2898,18 @@ you combine with it in a pipe to remove all duplicated lines?
 
 ### Pipe reading comprehension {#bash-tools-ex-reading-pipes}
 
-A file called `titles.txt` contains the following data:
+A file called `titles.txt` contains a list of book titles and publication years:
 
 ```text
-Sense and Sensibility,1811
+Dracula,1897
 Frankenstein,1818
 Jane Eyre,1847
-Wuthering Heights,1847
 Moby Dick,1851
+Sense and Sensibility,1811
 The Adventures of Sherlock Holmes,1892
-The Time Machine,1895
-Dracula,1897
 The Invisible Man,1897
+The Time Machine,1895
+Wuthering Heights,1847
 ```
 
 What text passes through each of the pipes and the final redirect in the pipeline below?
@@ -16781,7 +16781,7 @@ These results are written to the file `final.txt`,
 the contents of which are:
 
 ```text
-Wuthering Heights,1847
+Sense and Sensibility,1811
 Moby Dick,1851
 Jane Eyre,1847
 ```
@@ -16803,15 +16803,15 @@ $ cut -d , -f 2 titles.txt
 ```
 
 ```text
-1811
+1897
 1818
 1847
-1847
 1851
+1811
 1892
+1897
 1895
-1897
-1897
+1847
 ```
 
 ### Exercise \@ref(bash-tools-ex-which-pipe) {-}
