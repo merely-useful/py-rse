@@ -21,7 +21,7 @@ in their respective docstring.
 
 Keeping track of programs that process multiple data files
 is an error prone process that we should automate to minimize mistakes.
-Build-managers such as `make`
+Build-managers such as Make
 can keep track of file dependencies in the analysis pipelines
 and run our programs automatically to update files that are out of date.
 A build rule has targets, prerequisites, and a recipe.
