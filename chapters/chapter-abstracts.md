@@ -22,7 +22,7 @@ in their respective docstring.
 Keeping track of programs that process multiple data files
 is an error prone process that we should automate to minimize mistakes.
 Build-managers such as Make
-can keep track of file dependencies in the analysis pipelines
+can keep track of file dependencies in analysis pipelines
 and run our programs automatically to update files that are out of date.
 A build rule has targets, prerequisites, and a recipe.
 A target can be a file or a phony target that triggers an action.
@@ -34,7 +34,7 @@ such as `$@` (target),
 and `$<` (first prerequisite).
 Makefiles can also use wildcard matching of file names
 and functions such as `$(patsubst ...)` for increased flexibility.
-As always it is important to document our code
+As always, it is important to document our code
 and in Make we use specially-formatted comments to create self-documenting Makefiles.
 
 ## 10. Configuring Programs
@@ -52,10 +52,10 @@ This is sometimes called overlay configuration
 because each level overrides the ones above it.
 Often,
 a pre-existing standard such as the YAML or INI syntax
-is used to write these configuration files.
+is used to write configuration files.
 Saving and sharing these configuration files
-makes it easy for researchers programs with the same settings,
-which reduces the risk for errors and increases reproducibility.
+makes it easy for researchers to run programs with the same settings,
+which reduces the risk of errors and increases reproducibility.
 
 ## 11. Testing Software
 
@@ -66,7 +66,7 @@ There are several layers to testing software:
 adding assertions to code so that it checks itself as it runs;
 writing unit tests to check individual pieces of code;
 writing integration tests to check that those pieces work together correctly;
-writing regression tests to check if things that used to work no longer do.
+and writing regression tests to check if things that used to work no longer do.
 Fortunately,
 there are many excellent test frameworks to aid us with these tasks.
 A test framework finds and runs tests written in a prescribed fashion
@@ -75,7 +75,7 @@ In addition to test failures,
 these reports often include the tests' coverage,
 which is the fraction of lines of code that are checked.
 To automate the execution of our tests
-we can use Continuous Integration
+we can use a continuous integration tool like Travis CI,
 which runs tests every time we make changes to the code,
 so that we can immediately spot when something breaks.
 
@@ -104,17 +104,17 @@ and the code used to do the analysis.
 While some reports, datasets, software packages, and analysis scripts
 can't be published without violating personal or commercial confidentiality,
 every researcher's default should be to make all these as widely available as possible.
-Publishing it under an open license is the first step.
+Publishing under an open license is the first step.
 Using DOIs facilitates identification of reports, datasets, and software releases.
 Similarly,
-using an ORCID ensures that your research profile it correctly linked with your work
+using an ORCID ensures that your research profile is correctly linked with your work
 and not mixed up with others of the same name.
 Any published data should be FAIR:
 findable, accessible, interoperable, and reusable.
-While small datasets can be put under standard version control;
-large ones should be stored on data sharing sites,
-sometimes there are specific ones for you field or the technology used for data collection.
-To facilitate for others to use your software, it is important that you
+While small datasets can be put under standard version control,
+medium-sized ones should be stored on data sharing sites like Figshare or Dryad.
+Big datasets may not be ours in the first place, and probably need the attention of a professional archivist.
+In terms of providing the code associated with a report, it is important that you
 describe your software environment, analysis scripts, and data processing steps
 in reproducible and easily inspectable ways.
 
@@ -123,7 +123,7 @@ in reproducible and easily inspectable ways.
 While the core of programming languages are useful on their own,
 much of a language's value is added by community-contributed packages
 with domain-specific functionality.
-The most popular way to build packages in Python,
+The most popular way to build packages in Python
 is by using `setuptools`.
 This involves creating a directory named `mypackage`
 containing a `setup.py` script
@@ -137,7 +137,7 @@ we want to ensure that they install in a fresh environment;
 for this we can use virtual Python environments
 instead having to worry about messing up our main Python installation.
 To ensure that others can use our package as we intend,
-it is instrumental that we write documentation in the package's README file
+it is customary to write documentation in the package's README file
 and host it in the source code repository,
 or use documentation frameworks such as Sphinx and Read The Docs.
 When we're ready to distribute our package to others,
