@@ -14174,7 +14174,7 @@ can save us and our users a lot of needless work.
 ## Exercises {#errors-exercises}
 
 This chapter suggested several edits to `collate.py`.
-If our script now reads as follows:
+Suppose our script now reads as follows:
 
 ```python
 """
@@ -14582,7 +14582,7 @@ We can tell we've done this if:
 This is the ultimate purpose of the FAIR Principles and much other work.
 We can tell we've done this if:
 
-1.  Meta(data) is described with accurate and relevant attributes.
+1.  (Meta)data is described with accurate and relevant attributes.
 2.  (Meta)data is released with a clear and accessible data usage license.
 3.  (Meta)data has detailed \gref{provenance}{provenance}.
 4.  (Meta)data meets domain-relevant community standards.
@@ -15307,7 +15307,7 @@ because it will be installed as a dependency for `pandas` and `scipy`.\index{dep
 >
 > It is good practice to specify the versions of our dependencies
 > and even better to specify version ranges.
-> For example, if we have only tested our package on pandas version 1.0.1,
+> For example, if we have only tested our package on pandas version 1.1.2,
 > we could put `pandas==1.1.2` or `pandas>=1.1.2` instead of just `pandas`
 > in the list argument passed to the `install_requires` parameter.
 
@@ -15737,7 +15737,7 @@ which we can install with:
 ```
 
 Following the [Python Packaging User Guide][pypi-user-guide],
-and then upload our distributions from the `dist/` folder
+we upload our distributions from the `dist/` folder
 using the `--repository` option to specify the TestPyPI repository:
 
 ```bash
@@ -16443,7 +16443,7 @@ by suggesting ways they can make their research more accessible, inspectable and
 Jun is now working on his first Python package.
 He's added better error handling so he and his
 users get better information when something goes wrong,
-he's implemented some testing strategies to give him and his users confidence his code works, and
+he's implemented some testing strategies to give him and his users confidence that his code works, and
 he's improved his documentation.
 Jun has also added a license, a Code of Conduct and contributing guidelines to his project repo,
 and has already had a contribution that fixes some typos in the documentation.
