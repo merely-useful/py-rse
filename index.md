@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-01-12"
+date: "2021-01-13"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -2250,7 +2250,7 @@ and temporarily reconnects the keyboard and stream
 to that process's standard input and output (Figure \@ref(fig:bash-tools-stdio)b).
 
 <div class="figure" style="text-align: center">
-<img src="figures/bash-tools/standard-io.png" alt="Standard I/O." width="100%" />
+<img src="figures/bash-tools/standard-io.png" alt="Standard I/O." width="80%" />
 <p class="caption">(\#fig:bash-tools-stdio)Standard I/O.</p>
 </div>
 
@@ -6255,7 +6255,7 @@ $ git commit -m "Plot frequency against rank on log-log axes"
 > (Figure \@ref(fig:git-cmdline-staging-area)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/staging-area.svg" alt="The staging area in Git." width="100%" />
+<img src="figures/git-cmdline/staging-area.png" alt="The staging area in Git." width="100%" />
 <p class="caption">(\#fig:git-cmdline-staging-area)The staging area in Git.</p>
 </div>
 
@@ -13114,7 +13114,7 @@ by clicking the "+" next to the "My Repositories" link
 on the left-hand side of the Travis CI homepage (Figure \@ref(fig:testing-add-repo)).
 
 <div class="figure" style="text-align: center">
-<img src="figures/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI." width="50%" />
+<img src="figures/testing/travis-add-repo.png" alt="Click to add a new GitHub repository to Travis CI." width="70%" />
 <p class="caption">(\#fig:testing-add-repo)Click to add a new GitHub repository to Travis CI.</p>
 </div>
 
@@ -13129,7 +13129,7 @@ or your required files may be incorrect.
 Click the "Trigger a build" button to initiate your first test using Travis CI.
 
 <div class="figure" style="text-align: center">
-<img src="figures/testing/travis-list-repos.png" alt="Find Zipf's Law repository and trigger a build." width="50%" />
+<img src="figures/testing/travis-list-repos.png" alt="Find Zipf's Law repository and trigger a build." width="100%" />
 <p class="caption">(\#fig:testing-list-repos)Find Zipf's Law repository and trigger a build.</p>
 </div>
 
