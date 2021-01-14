@@ -3,7 +3,7 @@
     as well as a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
 -   Use a \gref{virtual environment}{virtual_environment} to test how your package installs
-    without disrupting your main Python installation.  
+    without disrupting your main Python installation.
 -   Use [`pip`][pip] to install Python packages.
 -   The default respository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
