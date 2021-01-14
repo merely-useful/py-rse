@@ -675,6 +675,9 @@
 **virtual machine**<a id="virtual_machine"></a>
 :   A program that pretends to be a computer. This may seem a bit redundant, but VMs are quick to create and start up, and changes made inside the virtual machine are contained within that VM so we can install new \gref{packages}{package} or run a completely different operating system without affecting the underlying computer.
 
+**wheel**<a id="wheel"></a>
+:   A pre-built binary Python installation format that is smaller and faster to install than the \gref{source distribution}{source_distribution} but not as versatile.
+
 **whitespace**<a id="whitespace"></a>
 :   The space, newline, carriage return, and horizontal and vertical tab characters that take up space but do not create a visible mark. The name comes from their appearance on a printed page in the era of typewriters.
 
