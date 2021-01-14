@@ -15827,7 +15827,7 @@ we can go through the same process to put it on the main [PyPI][pypi] repository
 >
 > When we installed our package from TestPyPI,
 > the output said that it collected our source distribution 
-> and then used it to "build a wheel" for `pyzipf`.
+> and then used it to build a \gref{wheel}{wheel} for `pyzipf`.
 > This build takes time (especially for large, complex packages),
 > so it can be a good idea for package authors to create and upload wheel files (`.whl`)
 > to PyPI along with the source distribution.
@@ -22068,6 +22068,9 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 
 **virtual machine**<a id="virtual_machine"></a>
 :   A program that pretends to be a computer. This may seem a bit redundant, but VMs are quick to create and start up, and changes made inside the virtual machine are contained within that VM so we can install new \gref{packages}{package} or run a completely different operating system without affecting the underlying computer.
+
+**wheel**<a id="wheel"></a>
+:   A pre-built binary Python installation format that is smaller and faster to install than the \gref{source distribution}{source_distribution} but not as versatile.
 
 **whitespace**<a id="whitespace"></a>
 :   The space, newline, carriage return, and horizontal and vertical tab characters that take up space but do not create a visible mark. The name comes from their appearance on a printed page in the era of typewriters.
