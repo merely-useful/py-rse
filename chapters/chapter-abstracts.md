@@ -1,13 +1,13 @@
 ## 5. Building Command-Line Tools with Python
 
-Writing command-line Python scripts allows us to run our programs from the Unix shell,
+Writing command-line Python scripts makes it possible to run programs from the Unix shell,
 which facilitates both scalability and interoperability with data analysis pipelines.
 The `argparse` Python module can be used to parse user input,
 and provides other expected command line functionality
 such as positional and optional arguments, and help messages.
 Python scripts can take input from files or directly from standard input
-and write to files or standard output.
-When we write Python scripts we put the `import` statements first,
+and write to fies or the standard output.
+When writing Python scripts `import` statements are put first first,
 and use a special variable called `__name__`
 to check whether the script is run as the main program
 or called from another program.
@@ -20,9 +20,9 @@ in their respective docstring.
 ## 9. Automating Analyses with Make
 
 Keeping track of programs that process multiple data files
-is an error prone process that we should automate to minimize mistakes.
+is an error prone process that should be automated to minimize mistakes.
 Build-managers such as Make
-can keep track of file dependencies in analysis pipelines
+can keep track of file dependencies in the analysis pipelines
 and run our programs automatically to update files that are out of date.
 A build rule has targets, prerequisites, and a recipe.
 A target can be a file or a phony target that triggers an action.
@@ -34,8 +34,9 @@ such as `$@` (target),
 and `$<` (first prerequisite).
 Makefiles can also use wildcard matching of file names
 and functions such as `$(patsubst ...)` for increased flexibility.
-As always, it is important to document our code
-and in Make we use specially-formatted comments to create self-documenting Makefiles.
+As always it is important to document the code
+and Make uses specially-formatted comments
+to create self-documenting Makefiles.
 
 ## 10. Configuring Programs
 
@@ -43,7 +44,7 @@ For complex programs,
 usability and reproducibility can be improved
 by reading configuration options from files
 in addition to using command-line options.
-We may want to use up to four layers of configuration:
+Up to four layers of configuration may be used:
 a system-wide configuration file for general settings;
 a user-specific configuration file for personal preferences;
 a job-specific file with settings for a particular run;
@@ -59,7 +60,7 @@ which reduces the risk of errors and increases reproducibility.
 
 ## 11. Testing Software
 
-It is critical to test software to reassure people (including yourself)
+It is critical to test software to reassure people
 that the software is correct enough
 and to make tolerances on "enough" explicit.
 There are several layers to testing software:
@@ -68,16 +69,15 @@ writing unit tests to check individual pieces of code;
 writing integration tests to check that those pieces work together correctly;
 and writing regression tests to check if things that used to work no longer do.
 Fortunately,
-there are many excellent test frameworks to aid us with these tasks.
+there are many excellent test frameworks to aid with these tasks.
 A test framework finds and runs tests written in a prescribed fashion
 and reports their results.
 In addition to test failures,
 these reports often include the tests' coverage,
 which is the fraction of lines of code that are checked.
-To automate the execution of our tests
-we can use a continuous integration tool like Travis CI,
-which runs tests every time we make changes to the code,
-so that we can immediately spot when something breaks.
+Continuous Integration can be used to automate test execution
+as it runs tests every time a change is made to the code,
+so that breaking changes are noticed immediately.
 
 ## 12. Handling errors
 
@@ -107,15 +107,17 @@ every researcher's default should be to make all these as widely available as po
 Publishing under an open license is the first step.
 Using DOIs facilitates identification of reports, datasets, and software releases.
 Similarly,
-using an ORCID ensures that your research profile is correctly linked with your work
+using an ORCID ensures that researchers are correctly linked with their work
 and not mixed up with others of the same name.
 Any published data should be FAIR:
 findable, accessible, interoperable, and reusable.
 While small datasets can be put under standard version control,
-medium-sized ones should be stored on data sharing sites like Figshare or Dryad.
-Big datasets may not be ours in the first place, and probably need the attention of a professional archivist.
-In terms of providing the code associated with a report, it is important that you
-describe your software environment, analysis scripts, and data processing steps
+medium-sized ones should be stored on data sharing sites like Figshare or Dryad,
+Big datasets probably need the attention of a professional archivist.
+or the technology used for data collection.
+In terms of providing the code associated with a report
+it is important to describe the required software environment,
+analysis scripts, and data processing steps
 in reproducible and easily inspectable ways.
 
 ## 14. Creating Packages with Python
@@ -131,18 +133,18 @@ containing a `setup.py` script
 and a subdirectory also called `mypackage`
 containing the package's source files.
 To track and communicate new functionality
-that we add to the package
+that is added to the package
 it is recommended to use semantic versioning.
-Before distributing our packages
-we want to ensure that they install in a fresh environment;
-for this we can use virtual Python environments
-instead having to worry about messing up our main Python installation.
-To ensure that others can use our package as we intend,
+Before distributing packages
+a test install should be performed in a fresh environment;
+virtual Python environments can be used for this purpose
+to avoid messing up the main Python installation.
+To ensure that packages can be used as intended,
 it is customary to write documentation in the package's README file
 and host it in the source code repository,
 or use documentation frameworks such as Sphinx and Read The Docs.
-When we're ready to distribute our package to others,
-we can upload it to the PyPI repository,
+When the package is ready for distribution,
+it can be uploaded to the PyPI repository,
 which makes it easy to install with `pip`.
-It is important that we create a DOI for our package
+It is important to create a DOI for each package
 and potentially also publish it in a citable software journal.
