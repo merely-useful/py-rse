@@ -1377,7 +1377,7 @@ but they are free to create.</p>
 which we can install with:</p>
 <div class="sourceCode" id="cb811"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb811-1"><a href="packaging.html#cb811-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install twine</span></code></pre></div>
 <p>Following the <a href="https://packaging.python.org/guides/using-testpypi/">Python Packaging User Guide</a>,
-we upload our distributions from the <code>dist/</code> folder
+we upload our distribution from the <code>dist/</code> folder
 using the <code>--repository</code> option to specify the TestPyPI repository:</p>
 <div class="sourceCode" id="cb812"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb812-1"><a href="packaging.html#cb812-1"></a>$ <span class="ex">twine</span> upload --repository testpypi dist/*</span></code></pre></div>
 <pre class="text"><code>Uploading distributions to https://test.pypi.org/legacy/</code></pre>
@@ -1399,13 +1399,11 @@ Figure 14.1: Our new project on TestPyPI.
 In the exercises,
 we will explore additional metadata that can be added to <code>setup.py</code>
 so that it appears on the project webpage.</p>
-<p>We have now uploaded both types of distribution,
-allowing people to use the wheel distribution if their system supports it
-or the source distribution if it does not.
-We can test that this has worked
+<p>We can test that everything works as expected
 by creating a virtual environment
-and installing our package from TestPyPI and PyPI
-(since not all of our dependencies are available on TestPyPI):</p>
+and installing our package from TestPyPI
+(the <code>--extra-index-url</code> reference to PyPI below accounts for the fact that
+not all of our package dependencies are available on TestPyPI):</p>
 <div class="sourceCode" id="cb816"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb816-1"><a href="packaging.html#cb816-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> create -n pyzipf-test pip python=3.7.6</span>
 <span id="cb816-2"><a href="packaging.html#cb816-2"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> activate pyzipf-test </span>
 <span id="cb816-3"><a href="packaging.html#cb816-3"></a><span class="kw">(</span><span class="ex">pyzipf-test</span><span class="kw">)</span>$ <span class="ex">pip</span> install --index-url</span>
@@ -1445,6 +1443,19 @@ zipp-3.4.0</code></pre>
 and doesn’t download them again.
 Once we are happy with our package at TestPyPI,
 we can go through the same process to put it on the main <a href="https://pypi.org/">PyPI</a> repository.</p>
+<blockquote>
+<p><strong>Python Wheels</strong></p>
+<p>When we installed our package from TestPyPI,
+the output said that it collected our source distribution
+and then used it to “build a wheel” for <code>pyzipf</code>.
+This build takes time (especially for large, complex packages),
+so it can be a good idea for package authors to create and upload wheel files (<code>.whl</code>)
+to PyPI along with the source distribution.
+<code>pip</code> will use the appropriate wheel file if it’s available at PyPI
+instead of building it from the source distribution,
+which makes the installation process faster and more efficient.
+Check out the <a href="https://realpython.com/python-wheels/">Real Python guide to wheels</a> for details.</p>
+</blockquote>
 <blockquote>
 <p><strong><code>conda</code> Installation Packages</strong></p>
 <p>Given the widespread use of <a href="https://conda.io/"><code>conda</code></a> for package management,

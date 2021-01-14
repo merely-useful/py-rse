@@ -15737,7 +15737,7 @@ which we can install with:
 ```
 
 Following the [Python Packaging User Guide][pypi-user-guide],
-we upload our distributions from the `dist/` folder
+we upload our distribution from the `dist/` folder
 using the `--repository` option to specify the TestPyPI repository:
 
 ```bash
@@ -15771,13 +15771,11 @@ In the exercises,
 we will explore additional metadata that can be added to `setup.py`
 so that it appears on the project webpage.
 
-We have now uploaded both types of distribution,
-allowing people to use the wheel distribution if their system supports it
-or the source distribution if it does not.
-We can test that this has worked
+We can test that everything works as expected
 by creating a virtual environment
-and installing our package from TestPyPI and PyPI
-(since not all of our dependencies are available on TestPyPI):
+and installing our package from TestPyPI 
+(the `--extra-index-url` reference to PyPI below accounts for the fact that
+not all of our package dependencies are available on TestPyPI):
 
 ```bash
 (pyzipf)$ conda create -n pyzipf-test pip python=3.7.6
@@ -15824,6 +15822,19 @@ Once again,
 and doesn't download them again.
 Once we are happy with our package at TestPyPI,
 we can go through the same process to put it on the main [PyPI][pypi] repository.
+
+> **Python Wheels**
+>
+> When we installed our package from TestPyPI,
+> the output said that it collected our source distribution 
+> and then used it to "build a wheel" for `pyzipf`.
+> This build takes time (especially for large, complex packages),
+> so it can be a good idea for package authors to create and upload wheel files (`.whl`)
+> to PyPI along with the source distribution.
+> `pip` will use the appropriate wheel file if it's available at PyPI
+> instead of building it from the source distribution,
+> which makes the installation process faster and more efficient.
+> Check out the [Real Python guide to wheels][python-wheels] for details.     
 
 > **`conda` Installation Packages**
 >
@@ -22171,6 +22182,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [python-import]: https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 [python-standard-library]: https://docs.python.org/3/library/
 [python-traceback]: https://docs.python.org/3/library/traceback.html
+[python-wheels]: https://realpython.com/python-wheels/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
