@@ -81,19 +81,30 @@ so that breaking changes are noticed immediately.
 
 ## 12. Handling errors
 
-People will misunderstand how to use our programs,
-and we should therefore plan from the start to detect and handle errors.
+People will misunderstand how to use programs,
+so software authors should plan from the start to detect and handle errors.
 Something that goes wrong while a program is running
-is sometimes referred to as an exception from normal behavior.
+is referred to as an exception from normal behavior.
+When an exception is raised it can be caught and handled 
+via `try`/`except` blocks.
+Python organizes its standard exceptions in a hierarchy
+so that programs can catch and handle them selectively.
 Generally speaking,
-we distinguish between two types of errors/exceptions.
+there is distinction between two types of errors/exceptions.
 Internal errors are mistakes in the program itself,
-such as calling a function with None instead of a list.
+such as calling a function with `None` instead of a list.
 External errors are usually caused by interactions
 between the program and the outside world:
 a user may mis-type a filename,
 the network might be down,
 and so on.
+Error messages should be written
+so that they are informative to users of the program,
+and point to what can be done to fix the issue at hands.
+To report on program activity such as errors
+a proper logging framework should be used rather than `print` statements.
+This facilitates separating logging messages into various levels
+according to their severity.
 
 ## 13. Tracking Provenance
 
