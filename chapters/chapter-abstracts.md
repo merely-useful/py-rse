@@ -39,9 +39,9 @@ and in Make we use specially-formatted comments to create self-documenting Makef
 
 ## 10. Configuring Programs
 
-For complex programs
-it can improve usability and increase reproducibility
-to be able to read configuration options from files
+For complex programs,
+usability and reproducibility can be improved
+by reading configuration options from files
 in addition to using command-line options.
 We may want to use up to four layers of configuration:
 a system-wide configuration file for general settings;
@@ -120,7 +120,8 @@ in reproducible and easily inspectable ways.
 
 ## 14. Creating Packages with Python
 
-While the core of programming languages are useful on their own,
+While the libraries that come with a programming language
+are useful on their own,
 much of a language's value is added by community-contributed packages
 with domain-specific functionality.
 The most popular way to build packages in Python
