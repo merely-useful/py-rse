@@ -93,6 +93,7 @@
 [python-import]: https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 [python-standard-library]: https://docs.python.org/3/library/
 [python-traceback]: https://docs.python.org/3/library/traceback.html
+[python-wheels]: https://realpython.com/python-wheels/
 [readthedocs]: https://docs.readthedocs.io/en/latest/
 [readthedocs-config]: https://docs.readthedocs.io/en/stable/config-file/v2.html
 [rstudio-ide]: https://www.rstudio.com/products/rstudio/
