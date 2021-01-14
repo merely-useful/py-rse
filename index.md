@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-01-13"
+date: "2021-01-14"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -13402,7 +13402,7 @@ and what might be a better way to measure error in this case?
 -   Test software to convince people (including yourself) that software is correct enough
     and to make tolerances on "enough" explicit.
 -   Add \gref{assertions}{assertion} to code so that it checks itself as it runs.
--   Write \gref{unit tests}{unit_test} to check indivdiual pieces of code.
+-   Write \gref{unit tests}{unit_test} to check individual pieces of code.
 -   Write \gref{integration tests}{integration_test} to check that those pieces work together correctly.
 -   Write \gref{regression tests}{regression_testing} to check if things that used to work no longer do.
 -   A \gref{test framework}{test_framework} finds and runs tests written in a prescribed fashion and reports their results.
@@ -14915,7 +14915,7 @@ How would you go about publishing the code associated with that project
 
 
 -   Publish data and code as well as papers.
--   Use \gref{DOIs}{doi} to identify reports, datasets, or software release.
+-   Use \gref{DOIs}{doi} to identify reports, datasets, and software releases.
 -   Use an \gref{ORCID}{orcid} to identify yourself as an author of a report, dataset, or software release.
 -   Data should be [FAIR][go-fair]: findable, accessible, interoperable, and reusable.
 -   Put small datasets in version control repositories; store large ones on data sharing sites.
@@ -16390,7 +16390,7 @@ quotes.random_quote()
     as well as a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
 -   Use a \gref{virtual environment}{virtual_environment} to test how your package installs
-    without disrupting your main Python installation.  
+    without disrupting your main Python installation.
 -   Use [`pip`][pip] to install Python packages.
 -   The default respository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
@@ -18934,7 +18934,7 @@ This appendix lists the key points for each chapter.
 -   Test software to convince people (including yourself) that software is correct enough
     and to make tolerances on "enough" explicit.
 -   Add \gref{assertions}{assertion} to code so that it checks itself as it runs.
--   Write \gref{unit tests}{unit_test} to check indivdiual pieces of code.
+-   Write \gref{unit tests}{unit_test} to check individual pieces of code.
 -   Write \gref{integration tests}{integration_test} to check that those pieces work together correctly.
 -   Write \gref{regression tests}{regression_testing} to check if things that used to work no longer do.
 -   A \gref{test framework}{test_framework} finds and runs tests written in a prescribed fashion and reports their results.
@@ -18958,7 +18958,7 @@ This appendix lists the key points for each chapter.
 
 
 -   Publish data and code as well as papers.
--   Use \gref{DOIs}{doi} to identify reports, datasets, or software release.
+-   Use \gref{DOIs}{doi} to identify reports, datasets, and software releases.
 -   Use an \gref{ORCID}{orcid} to identify yourself as an author of a report, dataset, or software release.
 -   Data should be [FAIR][go-fair]: findable, accessible, interoperable, and reusable.
 -   Put small datasets in version control repositories; store large ones on data sharing sites.
@@ -18973,7 +18973,7 @@ This appendix lists the key points for each chapter.
     as well as a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
 -   Use a \gref{virtual environment}{virtual_environment} to test how your package installs
-    without disrupting your main Python installation.  
+    without disrupting your main Python installation.
 -   Use [`pip`][pip] to install Python packages.
 -   The default respository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
