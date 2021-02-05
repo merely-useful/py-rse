@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-01-29"
+date: "2021-02-05"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -9435,7 +9435,7 @@ we want people to share them widely
 but also want to get credit for our work.
 
 Other Creative Commons licenses incorporate various restrictions,
-and are usually referred two using the two-letter abbreviations listed below:
+and are usually referred to using the two-letter abbreviations listed below:
 
 -   ND (no derivative works) prevents people from creating modified versions of our work.
     Unfortunately, this also inhibits translation and reformatting.
