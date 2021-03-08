@@ -4,4 +4,4 @@
 -   Use `grep` to select lines from text files that match simple patterns.
 -   Use `find` to find files whose names match simple patterns.
 -   Edit the `.bashrc` file to change default shell variables.
--   Create aliases for commonly-used commands.
+-   Create aliases for commonly used commands.

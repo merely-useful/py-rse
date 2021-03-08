@@ -1,6 +1,6 @@
 -   Explain how to use exceptions to signal and handle errors in programs.
 -   Write `try`/`except` blocks to \gref{raise}{raise_exception} and \gref{catch}{catch_exception} exceptions.
--   Explain what is meant by "throw low, catch high".
+-   Explain what is meant by "throw low, catch high."
 -   Describe the most common built-in exception types in Python and how they relate to each other.
 -   Explain what makes a useful error message.
 -   Create and use a lookup table for common error messages.

@@ -1,7 +1,7 @@
 -   Signal errors by \gref{raising exceptions}{raise_exception}.
 -   Use `try`/`except` blocks to \gref{catch}{catch_exception} and handle exceptions.
 -   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
--   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
+-   "Throw low, catch high," i.e., raise exceptions immediately but handle them at a higher level.
 -   Write error messages that help users figure out what to do to fix the problem.
 -   Store error messages in a lookup table to ensure consistency.
 -   Use a \gref{logging framework}{logging_framework} instead of `print` statements to report program activity.

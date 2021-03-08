@@ -31,11 +31,11 @@ We call this a \gref{remote login}{remote_login}.
 
 ## Logging In {#ssh-login}
 
-In order for us to be able to login,
+In order for us to be able to log in,
 the remote computer must run a \gref{remote login server}{remote_login_server}
 and we must run a program that can talk to that server.
 The client program passes our login credentials to the remote login server;
-if we are allowed to login,
+if we are allowed to log in,
 that server then runs a shell for us on the remote computer (Figure \@ref(fig:ssh-ssh)).
 
 ```{r ssh-ssh, echo=FALSE, fig.cap="The local client connects to the remote login server, which starts a remote shell (solid lines). Commands from the local client are passed to the remote shell and output is passed back (dashed lines)."}
@@ -51,14 +51,13 @@ then sends back output, via the server, to our client, for our computer to displ
 
 The remote login server which accepts connections from client programs
 is known as the \gref{SSH daemon}{ssh_daemon}, or `sshd`.
-The client program we use to login remotely is the \gref{secure shell}{ssh_glossary},
+The client program we use to log in remotely is the \gref{secure shell}{ssh_glossary},
 or `ssh`.
 It has a companion program called `scp`
 that allows us to copy files to or from a remote computer using the same kind of encrypted connection.
 
-To make a remote login, we issue the command `ssh username@computer`
-which tries to make a connection to the SSH daemon running on the remote computer we have specified.
-
+We issue the command `ssh username@computer` to log in remotely.
+This command tries to make a connection to the SSH daemon running on the remote computer we have specified.
 After we log in,
 we can use the remote shell to use the remote computer's files and directories.
 Typing `exit` or Control-D
@@ -167,7 +166,7 @@ $ cp results.dat amira@backupserver
 ```
 
 Copying a whole directory between remote machines uses the same syntax as the `cp` command:
-we just use the `-r` option to signal that we want copying to be recursively.
+we just use the `-r` option to signal that we want copying to be recursive.
 For example,
 this command copies all of our results from the backup server to our laptop:
 
@@ -202,8 +201,8 @@ results-2019-10-04.dat  results-2019-11-11.dat
 ```
 
 Here, `ssh` takes the argument after our remote username
-and passes them to the shell on the remote computer.
-(We have to put quotes around it to make it look like a single argument.)
+and passes it to the shell on the remote computer.
+(`ls results` has multiple words, so we have to put quotes around it to make it look like one value.)
 Since those arguments are a legal command,
 the remote shell runs `ls results` for us
 and sends the output back to our local shell for display.
@@ -220,11 +219,11 @@ that it should always trust us.
 SSH keys come in pairs, a public key that gets shared with services like GitHub,
 and a private key that is stored only on our computer. If the keys match,
 we are granted access.
-The cryptography behind SSH keys ensures that no one can reverse engineer our
+The cryptography behind SSH keys ensures that no one can reverse-engineer our
 private key from the public one.
 
-We might already have an SSH key pair on your machine.
-We can check by moving to your `.ssh` directory and listing the contents.
+We might already have an SSH key pair on our machine.
+We can check by moving to our `.ssh` directory and listing the contents.
 
 ```bash
 $ cd ~/.ssh
@@ -252,7 +251,7 @@ Enter file in which to save the key (/Users/username/.ssh/id_rsa):
 
 We will then be asked to provide an optional passphrase.
 This can be used to make your key even more secure,
-but if we want to avoid typing our password every time
+but if we want to avoid typing our password every time,
 we can skip it by pressing enter twice:
 
 ```text
@@ -284,7 +283,7 @@ The key's randomart image is:
 
 (The random art image is an alternate way to match keys.)
 We now need to place a copy of our public key on
-any servers we would like to to connect to.
+any servers we would like to connect to.
 Display the contents of our public key file with `cat`:
 
 ```bash
@@ -316,7 +315,7 @@ moon> nano ~/.ssh/authorized_keys
 
 After appending the content,
 log out of the remote machine and try to log in again.
-If we set up the SSH key correctly we won't need to type our password:
+If we set up the SSH key correctly, we won't need to type our password:
 
 ```bash
 moon> exit
@@ -332,7 +331,7 @@ The example of copying our public key to a remote machine, so that it
 can then be used when we next SSH into that remote machine, assumed
 that we already had a directory `~/.ssh/`.
 
-While a remote server may support the use of SSH to login, your home
+While a remote server may support the use of SSH to log in, your home
 directory there may not contain a `.ssh` directory by default.
 
 We have already seen that we can use SSH to run commands on remote
@@ -340,7 +339,7 @@ machines, so we can ensure that everything is set up as required before
 we place the copy of our public key on a remote machine.
 
 Walking through this process allows us to highlight some of the typical
-requirements of the SSH protocol itself, as documented in the man-page
+requirements of the SSH protocol itself, as documented in the man page
 for the `ssh` command.
 
 Firstly, we check that we have a `.ssh/` directory on another remote
@@ -375,9 +374,8 @@ drwxr-xr-x 2 amira amira 512 Jan 01 09:09 /Users/amira/.ssh
 Now we have a `.ssh` directory, into which to place SSH-related
 files, but we can see that the default permissions allow anyone to
 inspect the files within that directory.
-
-For a protocol that is supposed to be secure, this is not considered
-a good thing and so the recommended permissions are read/write/execute
+This is not considered a good thing for a protocol that is supposed to be secure,
+so the recommended permissions are read/write/execute
 for the user, and not accessible by others.
 
 Let's alter the permissions on the directory:
@@ -424,9 +422,9 @@ $ ssh amira@comet "ls -l ~/.ssh"
 authorized_keys
 ```
 
-While the authorized keys file is not considered to be highly sensitive,
+While the authorized keys file is not considered to be highly sensitive
 (after all, it contains public keys), we alter the permissions to match
-the man page's recommendations
+the man page's recommendations.
 
 ```bash
 $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"

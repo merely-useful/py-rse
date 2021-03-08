@@ -5,5 +5,5 @@
 -   Write a loop that applies one or more commands separately to each file in a set of files.
 -   Trace the values taken on by a loop variable during execution of the loop.
 -   Explain the difference between a variable's name and its value.
--   Demonstrate how to see recently-executed commands.
+-   Demonstrate how to see recently executed commands.
 -   Re-run recently executed commands without retyping them.

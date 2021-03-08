@@ -1,5 +1,5 @@
 -   Welcome and nurture community members proactively.
--   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
+-   Create an explicit Code of Conduct for your project modeled on the [Contributor Covenant][covenant].
 -   Include a license in your project so that it's clear who can do what with the material.
 -   Create \gref{issues}{issue} for bugs, enhancement requests, and discussions.
 -   \gref{Label issues}{issue_label} to identify their purpose.
