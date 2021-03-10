@@ -11,7 +11,7 @@ ERRORS = {
 
 def collection_to_csv(collection, num=None):
     """
-    Write out collection of items and counts in csv format.
+    Write collection of items and counts in csv format.
 
     Parameters
     ----------

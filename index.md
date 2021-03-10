@@ -2440,11 +2440,11 @@ $ head -n 17 s*.txt
 
 ```text
 ==> sense_and_sensibility.txt <==
-The Project Gutenberg EBook of Sense and Sensibility, by Jane Austen
+The Project Gutenberg EBook of Sense and Sensibility, by ...
 
 This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
+almost no restrictions whatsoever.  You may copy it, give it ...
+re-use it under the terms of the Project Gutenberg License ...
 with this eBook or online at www.gutenberg.net
 
 
@@ -2462,9 +2462,9 @@ Language: English
 Project Gutenberg's The Adventures of Sherlock Holmes, by Arthur
 Conan Doyle
 
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
+This eBook is for the use of anyone anywhere at no cost and ...
+almost no restrictions whatsoever.  You may copy it, give ...
+re-use it under the terms of the Project Gutenberg License ...
 with this eBook or online at www.gutenberg.net
 
 
@@ -2677,7 +2677,7 @@ Instead,
 their parts can be separated with semi-colons:
 
 ```bash
-$ for filename in s*.txt ; do head -n 17 $filename | tail -n 8;
+$ for filename in s*.txt; do head -n 17 $filename | tail -n 8;
 done
 ```
 
@@ -3552,9 +3552,9 @@ $ grep -n "on the" data/sherlock_holmes.txt | head -n 5
 ```text
 105:One night--it was on the twentieth of March, 1888--I was
 118:drug-created dreams and was hot upon the scent of some new
-155:"It is simplicity itself," said he; "my eyes tell me that on the
-165:on the right side of his top-hat to show where he has secreted
-198:pink-tinted note-paper which had been lying open upon the table.
+155:"It is simplicity itself," said he; "my eyes tell me ...
+165:on the right side of his top-hat to show where he has ...
+198:pink-tinted note-paper which had been lying open upon ...
 ```
 
 `grep` has many options---so many,
@@ -3593,7 +3593,7 @@ $ grep -i -n -v the data/sherlock_holmes.txt | head -n 5
 
 ```text
 2:
-4:almost no restrictions whatsoever. You may copy it, give it away or
+4:almost no restrictions whatsoever. You may copy it, give ...
 6:with this eBook or online at www.gutenberg.net
 7:
 8:
@@ -3846,7 +3846,8 @@ $ grep "Author:" $(find . -name "*.txt")
 
 ```text
 ./results/authors.txt:Author: Bram Stoker
-./results/authors.txt:Author: Mary Wollstonecraft (Godwin) Shelley
+./results/authors.txt:Author: Mary Wollstonecraft (Godwin)
+Shelley
 ./results/authors.txt:Author: Charlotte Bronte
 ./results/authors.txt:Author: Herman Melville
 ./results/authors.txt:Author: Jane Austen
@@ -3856,7 +3857,8 @@ $ grep "Author:" $(find . -name "*.txt")
 ./data/sense_and_sensibility.txt:Author: Jane Austen
 ./data/sherlock_holmes.txt:Author: Arthur Conan Doyle
 ./data/time_machine.txt:Author: H. G. Wells
-./data/frankenstein.txt:Author: Mary Wollstonecraft (Godwin) Shelley
+./data/frankenstein.txt:Author: Mary Wollstonecraft (Godwin)
+Shelley
 ./data/dracula.txt:Author: Bram Stoker
 ./data/jane_eyre.txt:Author: Charlotte Bronte
 ```
@@ -4731,8 +4733,8 @@ def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
-    stripped = [word.strip(string.punctuation) for word in chunks]
-    word_list = [word.lower() for word in stripped if word]
+    npunc = [word.strip(string.punctuation) for word in chunks] 
+    word_list = [word.lower() for word in npunc if word]
     word_counts = Counter(word_list)
     return word_counts
 ```
@@ -4763,7 +4765,7 @@ import csv
 
 
 def collection_to_csv(collection):
-    """Write out collection of items and counts in csv format."""
+    """Write collection of items and counts in csv format."""
     collection = collection.most_common()
     writer = csv.writer(sys.stdout)
     writer.writerows(collection)
@@ -4780,7 +4782,7 @@ in which case we display the whole collection:
 
 ```python
 def collection_to_csv(collection, num=None):
-    """Write out collection of items and counts in csv format."""
+    """Write collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -4825,7 +4827,7 @@ from collections import Counter
 
 
 def collection_to_csv(collection, num=None):
-    """Write out collection of items and counts in csv format."""
+    """Write collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -4837,8 +4839,8 @@ def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
-    stripped = [word.strip(string.punctuation) for word in chunks]
-    word_list = [word.lower() for word in stripped if word]
+    npunc = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in npunc if word]
     word_counts = Counter(word_list)
     return word_counts
 
@@ -4856,7 +4858,7 @@ if __name__ == '__main__':
                         help='Input file name')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -4918,7 +4920,7 @@ if __name__ == '__main__':
                         help='Input file name')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -5035,7 +5037,7 @@ from collections import Counter
 
 
 def collection_to_csv(collection, num=None):
-    """Write out collection of items and counts in csv format."""
+    """Write collection of items and counts in csv format."""
     collection = collection.most_common()
     if num is None:
         num = len(collection)
@@ -5064,7 +5066,7 @@ if __name__ == '__main__':
                         help='Input file names')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -5170,8 +5172,8 @@ def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
-    stripped = [word.strip(string.punctuation) for word in chunks]
-    word_list = [word.lower() for word in stripped if word]
+    npunc = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in npunc if word]
     word_counts = Counter(word_list)
     return word_counts
 
@@ -5189,7 +5191,7 @@ if __name__ == '__main__':
                         help='Input file name')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -5230,7 +5232,7 @@ if __name__ == '__main__':
                         help='Input file names')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -6118,7 +6120,7 @@ Changes not staged for commit:
   working directory)
 	  modified:   bin/plotcounts.py
 
-no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" or "git commit -a")
 ```
 
 The last line tells us that
@@ -6209,7 +6211,7 @@ Changes not staged for commit:
   working directory)
 	  modified:   bin/plotcounts.py
 
-no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" or "git commit -a")
 ```
 
 Whoops:
@@ -6293,7 +6295,7 @@ Changes not staged for commit:
   working directory)
 	  modified:   results/dracula.png
 
-no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" or "git commit -a")
 ```
 
 Since `results/dracula.png` is a binary file rather than text,
@@ -6561,7 +6563,7 @@ since it is very long:
 
 ```diff
 commit ee8684ca123e1e829fc995d672e3d7e4b00f2610
-  (HEAD -> master, origin/master)
+(HEAD -> master, origin/master)
 Author: Amira Khan <amira@zipf.org>
 Date:   Sat Dec 19 09:52:04 2020 -0800
 
@@ -6728,7 +6730,7 @@ Changes not staged for commit:
   working directory)
 	modified:   bin/plotcounts.py
 
-no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" or "git commit -a")
 ```
 
 We can put things back the way they were in the last saved revision 
@@ -6919,7 +6921,7 @@ Despite her colleagues' concerns,
 Amira creates a `heaps-law` project inside her `zipf` project as follows:
 
 ```bash
-$ cd ~/zipf         # go into zipf directory, which is a Git repo
+$ cd ~/zipf         # go into zipf directory (it's a Git repo)
 $ mkdir heaps-law   # make a subdirectory zipf/heaps-law
 $ cd heaps-law      # go into heaps-law subdirectory
 $ git init heaps-law     # make heaps-law a Git repository
@@ -7637,7 +7639,8 @@ $ git log --oneline -n 2
 
 ```text
 38c209b (HEAD -> fit) Added fit to word count data
-ddb00fb (origin/master, master) removing inverse rank calculation
+ddb00fb (origin/master, master) removing inverse rank
+        calculation
 ```
 
 (We use `--oneline` and `-n 2` to shorten the log display.)
@@ -7677,7 +7680,8 @@ $ git log --oneline -n 2
 
 ```text
 38c209b (HEAD -> fit) Added fit to word count data
-ddb00fb (origin/master, master) removing inverse rank calculation
+ddb00fb (origin/master, master) removing inverse rank
+        calculation
 ```
 
 We can also look inside `plotcounts.py` and see our changes.
@@ -7823,7 +7827,8 @@ index c511da1..6905b6e 100644
  
 diff --git a/results/dracula.png b/results/dracula.png
 index 57a7b70..5f10271 100644
-Binary files a/results/dracula.png and b/results/dracula.png differ
+Binary files a/results/dracula.png and b/results/dracula.png
+differ
 ```
 
 > **Why Branch?**
@@ -7887,8 +7892,8 @@ $ git log --oneline -n 4
 ```
 
 ```text
-1577404 (HEAD -> master, fit) Adding Moreno-Sanchez et al (2016)
-        reference
+1577404 (HEAD -> master, fit) Adding Moreno-Sanchez et al
+        (2016) reference
 38c209b Added fit to word count data
 ddb00fb (origin/master) removing inverse rank calculation
 7de9877 ignoring __pycache__
@@ -8053,7 +8058,7 @@ index f40e895..71f67db 100644
 @@ -1,4 +1,5 @@
  # Zipf's Law
  
--These Zipf's Law scripts tally the occurrences of words in text
+-These Zipf's Law scripts tally occurrences of words in text
 -files and plot each word's rank versus its frequency.
 +## Contributors
 +
@@ -8431,7 +8436,8 @@ Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
 Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote: Resolving deltas: 100% (2/2), completed with 2 local
+        objects.
 To https://github.com/amira-khan/zipf.git
    55c63d0..35fca86  master -> master
 ```
@@ -9109,8 +9115,8 @@ expression, level of experience, education, socio-economic
 status, nationality, personal appearance, race, religion, or
 sexual identity and orientation.
 
-We pledge to act and interact in ways that contribute to an open,
-welcoming, diverse, inclusive, and healthy community.
+We pledge to act and interact in ways that contribute to an
+open, welcoming, diverse, inclusive, and healthy community.
 
 ## Our Standards
 
@@ -9128,8 +9134,8 @@ for our community include:
 
 Examples of unacceptable behavior include:
 
-* The use of sexualized language or imagery, and sexual attention
-  or advances of any kind
+* The use of sexualized language or imagery, and sexual
+  attention or advances of any kind
 * Trolling, insulting or derogatory comments, and personal or
   political attacks
 * Public or private harassment
@@ -9142,14 +9148,14 @@ Examples of unacceptable behavior include:
 
 Community leaders are responsible for clarifying and enforcing
 our standards of acceptable behavior and will take appropriate
-and fair corrective action in response to any behavior that they
-deem inappropriate, threatening, offensive, or harmful.
+and fair corrective action in response to any behavior that
+they deem inappropriate, threatening, offensive, or harmful.
 
 Community leaders have the right and responsibility to remove,
-edit, or reject comments, commits, code, wiki edits, issues, and
-other contributions that are not aligned to this Code of Conduct,
-and will communicate reasons for moderation decisions when
-appropriate.
+edit, or reject comments, commits, code, wiki edits, issues,
+and other contributions that are not aligned to this
+Code of Conduct, and will communicate reasons for moderation
+decisions when appropriate.
 
 ## Scope
 
@@ -9163,9 +9169,9 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable
-behavior may be reported to the community leaders responsible for
-enforcement at [INSERT CONTACT METHOD]. All complaints will be
-reviewed and investigated promptly and fairly.
+behavior may be reported to the community leaders responsible
+for enforcement at [INSERT CONTACT METHOD]. All complaints will
+be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and
 security of the reporter of any incident.
@@ -9182,9 +9188,9 @@ violation of this Code of Conduct:
 behavior deemed unprofessional or unwelcome in the community.
 
 **Consequence**: A private, written warning from community
-leaders, providing clarity around the nature of the violation and
-an explanation of why the behavior was inappropriate. A public
-apology may be requested.
+leaders, providing clarity around the nature of the violation
+and an explanation of why the behavior was inappropriate.
+A public apology may be requested.
 
 ### 2. Warning
 
@@ -9193,29 +9199,29 @@ series of actions.
 
 **Consequence**: A warning with consequences for continued
 behavior. No interaction with the people involved, including
-unsolicited interaction with those enforcing the Code of Conduct,
-for a specified period of time. This includes avoiding
+unsolicited interaction with those enforcing the Code of
+Conduct, for a specified period of time. This includes avoiding
 interactions in community spaces as well as external channels
-like social media. Violating these terms may lead to a temporary
-or permanent ban.
+like social media. Violating these terms may lead to a
+temporary or permanent ban.
 
 ### 3. Temporary Ban
 
-**Community Impact**: A serious violation of community standards,
-including sustained inappropriate behavior.
+**Community Impact**: A serious violation of community
+standards, including sustained inappropriate behavior.
 
-**Consequence**: A temporary ban from any sort of interaction or
-public communication with the community for a specified period of
-time. No public or private interaction with the people involved,
-including unsolicited interaction with those enforcing the Code
-of Conduct, is allowed during this period. Violating these terms
-may lead to a permanent ban.
+**Consequence**: A temporary ban from any sort of interaction
+or public communication with the community for a specified
+period of time. No public or private interaction with the
+people involved, including unsolicited interaction with those
+enforcing the Code of Conduct, is allowed during this period.
+Violating these terms may lead to a permanent ban.
 
 ### 4. Permanent Ban
 
 **Community Impact**: Demonstrating a pattern of violation of
-community standards, including sustained inappropriate behavior,
-harassment of an individual, or aggression toward or
+community standards, including sustained inappropriate
+behavior, harassment of an individual, or aggression toward or
 disparagement of classes of individuals.
 
 **Consequence**: A permanent ban from any sort of public
@@ -9226,7 +9232,7 @@ interaction within the community.
 This Code of Conduct is adapted from the
 [Contributor Covenant][covenant],
 version 2.0, available at
-https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
+www.contributor-covenant.org/version/2/0/code_of_conduct.html
 
 Community Impact Guidelines were inspired by
 [Mozilla's code of conduct enforcement
@@ -9234,9 +9240,9 @@ ladder](https://github.com/mozilla/diversity).
 
 [homepage]: https://www.contributor-covenant.org
 
-For answers to common questions about this code of conduct, see
-the FAQ at https://www.contributor-covenant.org/faq. Translations
-are available at
+For answers to common questions about this code of conduct,
+see the FAQ at https://www.contributor-covenant.org/faq.
+Translations are available at
 https://www.contributor-covenant.org/translations.
 ```
 
@@ -9376,8 +9382,8 @@ Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without
 restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
+copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the
 Software is furnished to do so, subject to the following
 conditions:
 
@@ -10587,8 +10593,10 @@ $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 ```
 
 ```text
--rw-r--r-- 1 amira staff  274967 Nov 29 12:58 results/moby_dick.csv
--rw-r--r-- 1 amira staff 1253891 Nov 27 20:56 data/moby_dick.txt
+-rw-r--r-- 1 amira staff  274967 Nov 29 12:58
+  results/moby_dick.csv
+-rw-r--r-- 1 amira staff 1253891 Nov 27 20:56
+  data/moby_dick.txt
 ```
 
 As a further test:
@@ -10972,12 +10980,12 @@ $ make  # Same as `make all` as "all" is the first target
 ```
 
 ```text
-python bin/countwords.py \
-  data/moby_dick.txt > results/moby_dick.csv
-python bin/countwords.py \
-  data/jane_eyre.txt > results/jane_eyre.csv
-python bin/countwords.py \
-  data/time_machine.txt > results/time_machine.csv
+python bin/countwords.py data/moby_dick.txt >
+  results/moby_dick.csv
+python bin/countwords.py data/jane_eyre.txt >
+  results/jane_eyre.csv
+python bin/countwords.py data/time_machine.txt >
+  results/time_machine.csv
 ```
 
 We can still rebuild individual files if we want,
@@ -10990,8 +10998,8 @@ $ make results/jane_eyre.csv
 ```
 
 ```text
-python bin/countwords.py \
-  data/jane_eyre.txt > results/jane_eyre.csv
+python bin/countwords.py data/jane_eyre.txt >
+  results/jane_eyre.csv
 ```
 
 ## Defining Sets of Files {#automate-functions}
@@ -11175,20 +11183,19 @@ $ make  # Same as `make all` since "all" is the first target
 ```
 
 ```text
-python bin/countwords.py \
-  data/dracula.txt > results/dracula.csv
-python bin/countwords.py \
-  data/frankenstein.txt > results/frankenstein.csv
-python bin/countwords.py \
-  data/jane_eyre.txt > results/jane_eyre.csv
-python bin/countwords.py \
-  data/moby_dick.txt > results/moby_dick.csv
-python bin/countwords.py \
-  data/sense_and_sensibility.txt > results/sense_and_sensibility.csv
-python bin/countwords.py \
-  data/sherlock_holmes.txt > results/sherlock_holmes.csv
-python bin/countwords.py \
-  data/time_machine.txt > results/time_machine.csv
+python bin/countwords.py data/dracula.txt > results/dracula.csv
+python bin/countwords.py data/frankenstein.txt >
+  results/frankenstein.csv
+python bin/countwords.py data/jane_eyre.txt >
+  results/jane_eyre.csv
+python bin/countwords.py data/moby_dick.txt >
+  results/moby_dick.csv
+python bin/countwords.py data/sense_and_sensibility.txt >
+  results/sense_and_sensibility.csv
+python bin/countwords.py data/sherlock_holmes.txt >
+  results/sherlock_holmes.csv
+python bin/countwords.py data/time_machine.txt >
+  results/time_machine.csv
 ```
 
 Our workflow is now just two steps:
@@ -11211,10 +11218,10 @@ We could create another phony target called `help` that prints a list of availab
 
 # Show help.
 help :
-	@echo "all : regenerate all out-of-date results files."
-	@echo "results/*.csv : regenerate a particular results file."
+	@echo "all : regenerate all results."
+	@echo "results/*.csv : regenerate result for any book."
 	@echo "clean : remove all generated files."
-	@echo "settings : show the values of all variables."
+	@echo "settings : show variables' values."
 	@echo "help : show this message."
 ```
 
@@ -11358,12 +11365,13 @@ $ make all
 ```
 
 ```text
-python bin/collate.py results/time_machine.csv \
-  results/moby_dick.csv results/jane_eyre.csv results/dracula.csv \
-  results/sense_and_sensibility.csv results/sherlock_holmes.csv \
-  results/frankenstein.csv > results/collated.csv
-python bin/plotcounts.py results/collated.csv \
-  --outfile results/collated.png
+python bin/collate.py results/time_machine.csv
+  results/moby_dick.csv results/jane_eyre.csv
+  results/dracula.csv results/sense_and_sensibility.csv
+  results/sherlock_holmes.csv results/frankenstein.csv >
+  results/collated.csv
+python bin/plotcounts.py results/collated.csv --outfile
+  results/collated.png
 alpha: 1.1712445413685917
 ```
 
@@ -12232,8 +12240,8 @@ print('total frequency of first 5 words:', total)
 ```
 
 ```text
------------------------------------------------------------------
-AssertionError                  Traceback (most recent call last)
+---------------------------------------------------------------
+AssertionError                Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
       2 total = 0.0
       3 for freq in frequencies[:5]:
@@ -12328,8 +12336,8 @@ def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
-    stripped = [word.strip(string.punctuation) for word in chunks]
-    word_list = [word.lower() for word in stripped if word]
+    npunc = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in npunc if word]
     word_counts = Counter(word_list)
     return word_counts
 ```
@@ -12376,8 +12384,9 @@ from collections import Counter
 
 risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1,
   'then': 1, 'day': 1, 'came': 1, 'when': 1, 'remain': 1,
-  'tight': 1, 'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
-  'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
+  'tight': 1, 'in': 1, 'a': 1, 'bud': 1, 'was': 1,
+  'more': 1, 'painful': 1, 'than': 1, 'it': 1, 'took': 1,
+  'blossom': 1}
 expected_result = Counter(risk_poem_counts)
 ```
 
@@ -12443,8 +12452,9 @@ def test_word_count():
     """
     risk_poem_counts = {'the': 3, 'risk': 2, 'to': 2, 'and': 1,
       'then': 1, 'day': 1, 'came': 1, 'when': 1, 'remain': 1,
-      'tight': 1, 'in': 1, 'a': 1, 'bud': 1, 'was': 1, 'more': 1,
-      'painful': 1, 'than': 1, 'it': 1, 'took': 1, 'blossom': 1}
+      'tight': 1, 'in': 1, 'a': 1, 'bud': 1, 'was': 1,
+      'more': 1, 'painful': 1, 'than': 1, 'it': 1, 'took': 1,
+      'blossom': 1}
     expected_result = Counter(risk_poem_counts)
     with open('test_data/risk.txt', 'r') as reader:
         actual_result = countwords.count_words(reader)
@@ -12463,15 +12473,15 @@ we can use the command `pytest path/to/test_file.py`.)
 $ pytest
 ```
 ```text
-===================== test session starts ======================
+==================== test session starts ======================
 platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 1 item
 
-bin/test_zipfs.py .                                      [100%]
+bin/test_zipfs.py .                                     [100%]
 
-====================== 1 passed in 0.02s =======================
+===================== 1 passed in 0.02s =======================
 ```
 
 To add more tests,
@@ -12500,8 +12510,8 @@ import numpy as np
 
 
 max_freq = 600
-word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
-print(word_counts)
+counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+print(counts)
 ```
 
 ```text
@@ -12535,13 +12545,13 @@ def test_alpha():
       f the word count, and
       c is a constant of proportionality.
 
-    To generate test word counts for an expected alpha value of
+    To generate test word counts for an expected alpha of
       1.0, a maximum word frequency of 600 is used
       (i.e. c = 600 and r ranges from 1 to 600)
     """
     max_freq = 600
-    word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
-    actual_alpha = plotcounts.get_power_law_params(word_counts)
+    counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+    actual_alpha = plotcounts.get_power_law_params(counts)
     expected_alpha = 1.0
     assert actual_alpha == expected_alpha
 
@@ -12557,41 +12567,41 @@ $ pytest
 ```
 
 ```text
-===================== test session starts ======================
+==================== test session starts ======================
 platform darwin -- Python 3.7.6, pytest-6.2.1, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
 
-bin/test_zipfs.py F.                                     [100%]
+bin/test_zipfs.py F.                                    [100%]
 
-=========================== FAILURES ===========================
-__________________________ test_alpha __________________________
+========================== FAILURES ===========================
+_________________________ test_alpha __________________________
 
-    def test_alpha():
-        """Test the calculation of the alpha parameter.
+  def test_alpha():
+      """Test the calculation of the alpha parameter.
     
-        The test word counts satisfy the relationship,
-          r = cf**(-1/alpha), where
-          r is the rank,
-          f the word count, and
-          c is a constant of proportionality.
+      The test word counts satisfy the relationship,
+        r = cf**(-1/alpha), where
+        r is the rank,
+        f the word count, and
+        c is a constant of proportionality.
     
-        To generate test word counts for an expected alpha value of
-          1.0, a maximum word frequency of 600 is used
-          (i.e. c = 600 and r ranges from 1 to 600)
-        """
-        max_freq = 600
-        word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
-        actual_alpha = plotcounts.get_power_law_params(word_counts)
-        expected_alpha = 1.0
->       assert actual_alpha == expected_alpha
-E       assert 0.9951524579316625 == 1.0
+      To generate test word counts for an expected alpha of
+        1.0, a maximum word frequency of 600 is used
+        (i.e. c = 600 and r ranges from 1 to 600)
+      """
+      max_freq = 600
+      counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+      actual_alpha = plotcounts.get_power_law_params(counts)
+      expected_alpha = 1.0
+>     assert actual_alpha == expected_alpha
+E     assert 0.9951524579316625 == 1.0
 
 bin/test_zipfs.py:26: AssertionError
-==================== short test summary info =====================
-FAILED bin/test_zipfs.py::test_alpha - assert 0.99515245793 == 1.0
-================== 1 failed, 1 passed in 3.98s ===================
+=================== short test summary info ===================
+FAILED bin/test_zipfs.py::test_alpha - assert 0.99515246 == 1.0
+================= 1 failed, 1 passed in 3.98s =================
 
 ```
 
@@ -12666,13 +12676,13 @@ def test_alpha():
       f the word count, and
       c is a constant of proportionality.
 
-    To generate test word counts for an expected alpha value of
+    To generate test word counts for an expected alpha of
       1.0, a maximum word frequency of 600 is used
       (i.e. c = 600 and r ranges from 1 to 600)
     """
     max_freq = 600
-    word_counts = np.floor(max_freq / np.arange(1, max_freq + 1))
-    actual_alpha = plotcounts.get_power_law_params(word_counts)
+    counts = np.floor(max_freq / np.arange(1, max_freq + 1))
+    actual_alpha = plotcounts.get_power_law_params(counts)
     expected_alpha = pytest.approx(1.0, abs=0.01)
     assert actual_alpha == expected_alpha
 
@@ -12689,15 +12699,15 @@ $ pytest
 ```
 
 ```text
-===================== test session starts ======================
+==================== test session starts ======================
 platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 2 items
 
-bin/test_zipfs.py ..                                     [100%]
+bin/test_zipfs.py ..                                    [100%]
 
-====================== 2 passed in 0.69s =======================
+===================== 2 passed in 0.69s =======================
 ```
 
 > **Testing Visualizations**
@@ -12800,15 +12810,15 @@ $ pytest
 ```
 
 ```text
-===================== test session starts ======================
+===================== test session starts =====================
 platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 3 items
 
-bin/test_zipfs.py ...                                    [100%]
+bin/test_zipfs.py ...                                   [100%]
 
-======================= 3 passed in 0.48s ======================
+======================= 3 passed in 0.48s =====================
 ```
 
 ## Regression Testing {#testing-regression}
@@ -12851,15 +12861,15 @@ $ pytest
 ```
 
 ```text
-===================== test session starts ======================
+===================== test session starts =====================
 platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
 
-bin/test_zipfs.py ....                                   [100%]
+bin/test_zipfs.py ....                                  [100%]
 
-====================== 4 passed in 0.56s =======================
+====================== 4 passed in 0.56s ======================
 ```
 
 ## Test Coverage {#testing-coverage}
@@ -12884,15 +12894,15 @@ $ coverage run -m pytest
 ```
 
 ```text
-===================== test session starts ======================
+===================== test session starts =====================
 platform darwin -- Python 3.7.6, pytest-6.2.0, py-1.10.0,
 pluggy-0.13.1
 rootdir: /Users/amira
 collected 4 items
 
-bin/test_zipfs.py ....                                   [100%]
+bin/test_zipfs.py ....                                  [100%]
 
-====================== 4 passed in 0.72s =======================
+====================== 4 passed in 0.72s ======================
 ```
 
 The `coverage` command doesn't display any information of its own,
@@ -14221,7 +14231,7 @@ if __name__ == '__main__':
                         help='Input file names')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -14244,8 +14254,8 @@ Once finished,
 running `collate.py` with and without the `-v` flag should produce the following output:
 
 ```bash
-$ python bin/collate.py results/dracula.csv results/moby_dick.csv
-  -n 5
+$ python bin/collate.py results/dracula.csv
+  results/moby_dick.csv -n 5
 ```
 ```text
 the,22559
@@ -14256,8 +14266,8 @@ a,7629
 ```
 
 ```bash
-$ python bin/collate.py results/dracula.csv results/moby_dick.csv
-  -n 5 -v
+$ python bin/collate.py results/dracula.csv
+  results/moby_dick.csv -n 5 -v
 ```
 ```text
 INFO:root:Processing files...
@@ -14326,7 +14336,7 @@ def main(args):
             msg = f'{fname} not processed: File does not exist'
             logging.warning(msg)
         except PermissionError:
-            msg = f'{fname} not processed: No permission to read'
+            msg = f'{fname} not processed: No read permission'
             logging.warning(msg)
         except Exception as error:
             msg = f'{fname} not processed: {error}'
@@ -14732,7 +14742,7 @@ to describe the steps:
 The code in this repository was used in generating the results
 for the following paper:
 
-Khan A and Virtanen S (2020). Zipf's Law in classic english texts.
+Khan A & Virtanen S, 2020. Zipf's Law in classic english texts.
 *Journal of Important Research*, 27, 134-139.
 
 The code was executed in the software environment described by
@@ -14740,8 +14750,8 @@ The code was executed in the software environment described by
 [conda](https://docs.conda.io/en/latest/):
 $ conda env create -f environment.yml
 
-Figure 1 in the paper was created by running the following at the
-command line:
+Figure 1 in the paper was created by running the following at
+the command line:
 $ make all
 ```
 
@@ -15377,8 +15387,8 @@ Building wheels for collected packages: pyyaml
     size=44626
     sha256=5a59ccf08237931e7946ec6b526922e4
            f0c8ee903d43671f50289431d8ee689d
-  Stored in directory: /Users/amira/Library/Caches/pip/wheels/5e/
-    03/1e/e1e954795d6f35dfc7b637fe2277bff021303bd9570ecea653
+  Stored in directory: /Users/amira/Library/Caches/pip/wheels/
+    5e/03/1e/e1e954795d6f35dfc7b637fe2277bff021303bd9570ecea653
 Successfully built pyyaml
 Installing collected packages: zipp, typing-extensions, six,
 pyparsing, importlib-metadata, toml, pytz, python-dateutil, py,
@@ -15392,9 +15402,10 @@ attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
 Successfully installed attrs-20.3.0 cycler-0.10.0
 importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1
 matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5
-pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1
-python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf scipy-1.5.4
-six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3 zipp-3.4.0
+pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7
+pytest-6.2.1 python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1
+pyzipf scipy-1.5.4 six-1.15.0 toml-0.10.2
+typing-extensions-3.7.4.3 zipp-3.4.0
 ```
 
 (The precise output of this command will change
@@ -15471,7 +15482,7 @@ if __name__ == '__main__':
                         help='Input file name')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
 ```
@@ -15488,7 +15499,7 @@ def parse_command_line():
                         help='Input file name')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     return args
 
@@ -15617,7 +15628,8 @@ sys.path
 '/Users/amira/anaconda3/envs/pyzipf/lib/python3.7',
 '/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/lib-dynload',
 '/Users/amira/.local/lib/python3.7/site-packages',
-'/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages',
+'/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/
+site-packages',
 '/Users/amira/pyzipf']
 ```
 
@@ -15790,7 +15802,7 @@ Looking in indexes: https://test.pypi.org/simple,
 Collecting pyzipf
   Downloading pyzipf-0.1.tar.gz (5.5 kB)
 Collecting matplotlib
-  Using cached matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl
+ Using cached matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl
 ...collecting other packages...
 Building wheels for collected packages: pyzipf
   Building wheel for pyzipf (setup.py) ... done
@@ -15799,8 +15811,8 @@ Building wheels for collected packages: pyzipf
     size=6836
     sha256=62a23715379b71ad5a6b124444fab194
            596d094c7df293c4019d33bdd648aff1
-  Stored in directory: /Users/amira/Library/Caches/pip/wheels/c6/
-    d6/08/f16cf80ec82a9c70ab8a5d9c8acc7ab35c9a01009539aeb2be
+  Stored in directory: /Users/amira/Library/Caches/pip/wheels/
+   c6/d6/08/f16cf80ec82a9c70ab8a5d9c8acc7ab35c9a01009539aeb2be
 Successfully built pyzipf
 Installing collected packages: zipp, typing-extensions, six,
 pyparsing, importlib-metadata, toml, pytz, python-dateutil, py,
@@ -15809,10 +15821,10 @@ attrs, scipy, pyyaml, pytest, pandas, matplotlib, pyzipf
 Successfully installed attrs-20.3.0 cycler-0.10.0
 importlib-metadata-3.3.0 iniconfig-1.1.1 kiwisolver-1.3.1
 matplotlib-3.3.3 numpy-1.19.4 packaging-20.8 pandas-1.1.5
-pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7 pytest-6.2.1
-python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1 pyzipf-0.1
-scipy-1.5.4 six-1.15.0 toml-0.10.2 typing-extensions-3.7.4.3
-zipp-3.4.0
+pillow-8.0.1 pluggy-0.13.1 py-1.10.0 pyparsing-2.4.7
+pytest-6.2.1 python-dateutil-2.8.1 pytz-2020.4 pyyaml-5.3.1
+pyzipf-0.1 scipy-1.5.4 six-1.15.0 toml-0.10.2
+typing-extensions-3.7.4.3 zipp-3.4.0
 ```
 
 Once again,
@@ -15916,11 +15928,11 @@ with a line for the theoretical distribution for Zipf's Law.
 Motivation
 ----------
 
-Zipf's Law is often stated as an observational pattern seen in the
+Zipf's Law is often stated as an observational pattern in the
 relationship between the frequency and rank of words in a text:
 
-`"…the most frequent word will occur approximately twice as often
-as the second most frequent word,
+`"…the most frequent word will occur approximately twice as
+often as the second most frequent word,
 three times as often as the third most
 frequent word, etc."`
 — `wikipedia <https://en.wikipedia.org/wiki/Zipf%27s_law>`_
@@ -15943,12 +15955,12 @@ Usage
 After installing this package, the following three commands will
 be available from the command line
 
-- ``countwords`` for counting the occurrences of words in a text.
-- ``collate`` for collating multiple word count files together.
-- ``plotcounts`` for visualizing the word counts.
+- ``countwords`` for counting the occurrences of words in a text
+- ``collate`` for collating multiple word count files together
+- ``plotcounts`` for visualizing the word counts
 
-A typical usage scenario would include running the following from
-your terminal::
+A typical usage scenario would include running the following
+from your terminal::
 
     countwords dracula.txt > dracula.csv
     countwords moby_dick.txt > moby_dick.csv
@@ -16017,8 +16029,8 @@ Selected root path: .
 
 You have two options for placing the build directory for Sphinx
 output. Either, you use a directory "_build" within the root
-path, or you separate "source" and "build" directories within the
-root path.
+path, or you separate "source" and "build" directories within
+the root path.
 ```
 
 ```bash
@@ -16072,11 +16084,11 @@ so that another tool called `autodoc` can find our modules (and their docstrings
 The first change relates to the "path setup" section near the head of the file:
 
 ```text
-# -- Path setup -------------------------------------------------
+# -- Path setup -----------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in
-# another directory, add these directories to sys.path here. If the
-# directory is relative to the documentation root, use
+# another directory, add these directories to sys.path here. If
+# the directory is relative to the documentation root, use
 # os.path.abspath to make it absolute, like shown here.
 ```
 
@@ -16292,23 +16304,23 @@ $ cat CITATION.md
 If you use the pyzipf package for work/research presented in a
 publication, we ask that you please cite:
 
-Khan, A., and Virtanen, S., 2020. pyzipf: A Python package for word
+Khan A and Virtanen S, 2020. pyzipf: A Python package for word
 count analysis. *Journal of Important Software*, 5(51), 2317,
 https://doi.org/10.21105/jois.02317
 
 ### BibTeX entry
 
-    @article{Khan2020,
-        title={pyzipf: A Python package for word count analysis.},
-        author={Khan, Amira and Virtanen, Sami},
-        journal={Journal of Important Software},
-        volume={5},
-        number={51},
-        eid={2317},
-        year={2020},
-        doi={10.21105/jois.02317},
-       url={https://doi.org/10.21105/jois.02317},
-    }
+@article{Khan2020,
+    title={pyzipf: A Python package for word count analysis.},
+    author={Khan, Amira and Virtanen, Sami},
+    journal={Journal of Important Software},
+    volume={5},
+    number={51},
+    eid={2317},
+    year={2020},
+    doi={10.21105/jois.02317},
+    url={https://doi.org/10.21105/jois.02317},
+}
 ```
 
 ## Summary {#packaging-summary}
@@ -17494,7 +17506,8 @@ An online search for "show Git branch in Bash prompt" turns up several approache
 one of the simplest of which is to add this line to our `~/.bashrc` file:
 
 ```text
-export PS1="\\w + \$(git branch 2>/dev/null | grep '^*' | colrm 1 2) \$ "
+export PS1="\\w + \$(git branch 2>/dev/null | grep '^*' |
+colrm 1 2) \$ "
 ```
 
 Breaking it down:
@@ -18056,7 +18069,7 @@ def test_short_wide():
 
 
 def test_negative_coordinates():
-    """Test rectangle normalization with negative coordinates."""
+    """Test rectangle normalization with negative coords."""
     rect = [-2, 5, -1, 10]
     expected_result = (0, 0, 0.2, 1.0)
     actual_result = geometry.normalize_rectangle(rect)
@@ -18163,7 +18176,7 @@ if __name__ == '__main__':
                         help='Input file names')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     parser.add_argument('-v', '--verbose',
                         action="store_true", default=False,
                         help="Set logging level to DEBUG")
@@ -18238,7 +18251,7 @@ if __name__ == '__main__':
                         help='Input file names')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     parser.add_argument('-v', '--verbose',
                         action="store_true", default=False,
                         help="Set logging level to DEBUG")
@@ -18286,7 +18299,7 @@ for fname in args.infiles:
         msg = f'{fname} not processed: File does not exist'
         logging.warning(msg)
     except PermissionError:
-        msg = f'{fname} not processed: No permission to read'
+        msg = f'{fname} not processed: No read permission'
         logging.warning(msg)
     except Exception as error:
         msg = f'{fname} not processed: {error}'
@@ -18472,7 +18485,11 @@ For the GitHub repo [`blab/h3n2-reassortment`][blab-h3n2-reassortment]:
 
 You'll know you've completed this exercise when you have a URL
 that points to zip archive for a specific release of your repository on GitHub,
-e.g., `https://github.com/amira-khan/zipf/archive/KhanVirtanen2020.zip`
+e.g:  
+
+```text
+https://github.com/amira-khan/zipf/archive/KhanVirtanen2020.zip
+```
 
 ### Exercise \@ref(provenance-ex-publish-code) {-}
 
@@ -19285,7 +19302,7 @@ this command copies our latest results to the backup server in the basement,
 printing out its progress as it does so:
 
 ```bash
-$ scp results.dat amira@backupserver:backups/results-2019-11-11.dat
+$ scp results.dat amira@backup:backups/results-2019-11-11.dat
 Password: ********
 ```
 
@@ -19305,21 +19322,21 @@ target, for a remote copy, is also the  home directory.
 This means that:
 
 ```bash
-$ scp results.dat amira@backupserver:
+$ scp results.dat amira@backup:
 ```
 
-would copy `results.dat` into our home directory on `backupserver`, however, if we did not
+would copy `results.dat` into our home directory on `backup`, however, if we did not
 have the colon to inform `scp` of the remote machine, we would still have a valid command:
 
 ```bash
-$ scp results.dat amira@backupserver
+$ scp results.dat amira@backup
 ```
 
-but now we have merely created a file called `amira@backupserver` on our local machine,
+but now we have merely created a file called `amira@backup` on our local machine,
 as we would have done with `cp`.
 
 ```bash
-$ cp results.dat amira@backupserver
+$ cp results.dat amira@backup
 ```
 
 Copying a whole directory between remote machines uses the same syntax as the `cp` command:
@@ -19328,7 +19345,7 @@ For example,
 this command copies all of our results from the backup server to our laptop:
 
 ```bash
-$ scp -r amira@backupserver:backups ./backups
+$ scp -r amira@backup:backups ./backups
 Password: ********
 ```
 
@@ -19348,7 +19365,7 @@ Instead of logging in and then typing `ls`,
 we could do this:
 
 ```bash
-$ ssh amira@backupserver "ls results*"
+$ ssh amira@backup "ls results*"
 Password: ********
 ```
 
@@ -19403,7 +19420,8 @@ press enter to accept the default location.
 
 ```text
 Generating public/private rsa key pair.
-Enter file in which to save the key (/Users/username/.ssh/id_rsa):
+Enter file in which to save the key
+(/Users/username/.ssh/id_rsa):
 ```
 
 We will then be asked to provide an optional passphrase.
@@ -19420,8 +19438,10 @@ When key generation is complete,
 we should see the following confirmation:
 
 ```text
-Your identification has been saved in /Users/username/.ssh/id_rsa.
-Your public key has been saved in /Users/username/.ssh/id_rsa.pub.
+Your identification has been saved in
+/Users/username/.ssh/id_rsa.
+Your public key has been saved in 
+/Users/username/.ssh/id_rsa.pub.
 The key fingerprint is:
 01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db your@email.com
 The key's randomart image is:
@@ -19448,12 +19468,13 @@ $ cat ~/.ssh/id_rsa.pub
 ```
 
 ```text
-ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA879BJGYlPTLIuc9/R5MYiN4yc/YiCL
-cdBpSdzgK9Dt0Bkfe3rSz5cPm4wmehdE7GkVFXrBJ2YHqPLuM1yx1AUxIebpwlIl9f
-/aUHOts9eVnVh4NztPy0iSU/Sv0b2ODQQvcy2vYcujlorscl8JjAgfWsO3W4iGEe6Q
-wBpVomcME8IU35v5VbylM9ORQa6wvZMVrPECBvwItTY8cPWH3MGZiK/74eHbSLKA4P
-Y3gM4GHI450Nie16yggEg2aTQfWA1rry9JYWEoHS9pJ1dnLqZU3k/8OWgqJrilwSoC
-5rGjgp93iu0H8T6+mEHGRQe84Nk1y5lESSWIbn6P636Bl3uQ== your@email.com
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA879BJGYlPTLIuc9/R5MYiN4yc/
+YiCLcdBpSdzgK9Dt0Bkfe3rSz5cPm4wmehdE7GkVFXrBJ2YHqPLuM1yx1AUxIe
+bpwlIl9f/aUHOts9eVnVh4NztPy0iSU/Sv0b2ODQQvcy2vYcujlorscl8JjAgf
+WsO3W4iGEe6QwBpVomcME8IU35v5VbylM9ORQa6wvZMVrPECBvwItTY8cPWH3M
+GZiK/74eHbSLKA4PY3gM4GHI450Nie16yggEg2aTQfWA1rry9JYWEoHS9pJ1dn
+LqZU3k/8OWgqJrilwSoC5rGjgp93iu0H8T6+mEHGRQe84Nk1y5lESSWIbn6P63
+6Bl3uQ== your@email.com
 ```
 
 Copy the contents of the output,
@@ -19575,8 +19596,8 @@ $ ssh amira@comet "ls -l ~/.ssh"
 ```
 
 ```text
--rw-r--r-- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/
-authorized_keys
+-rw-r--r-- 2 amira amira 512 Jan 01 09:11
+/Users/amira/.ssh/authorized_keys
 ```
 
 While the authorized keys file is not considered to be highly sensitive
@@ -19584,12 +19605,13 @@ While the authorized keys file is not considered to be highly sensitive
 the man page's recommendations.
 
 ```bash
-$ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
+$ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l
+~/.ssh"
 ```
 
 ```text
--rw------- 2 amira amira 512 Jan 01 09:11 /Users/amira/.ssh/
-authorized_keys
+-rw------- 2 amira amira 512 Jan 01 09:11
+/Users/amira/.ssh/authorized_keys
 ```
 
 <!--chapter:end:chapters/ssh.Rmd-->
@@ -19887,7 +19909,8 @@ it prints:
 src/style/count_stops_before.py:3:1:
 E302 expected 2 blank lines, found 1
 src/style/count_stops_before.py:11:24:
-E712 comparison to True should be 'if cond is True:' or 'if cond:'
+E712 comparison to True should be
+'if cond is True:' or 'if cond:'
 src/style/count_stops_before.py:12:13:
 E101 indentation contains mixed spaces and tabs
 src/style/count_stops_before.py:12:13:
@@ -20101,16 +20124,17 @@ they make it harder to get complex assignments wrong.
 For example:
 
 ```python
-samples[least_factor_index,
+samples[least_factor,
         max(current_offset, offset_limit)] *= scaling_factor
 ```
 
 is less difficult to read than the equivalent expression:
 
 ```python
-samples[least_factor_index, max(current_offset, offset_limit)] = \
-    scaling_factor * samples[least_factor_index,
-                             max(current_limit, offset_limit)]
+samples[least_factor, max(current_offset, offset_limit)] = \
+    scaling_factor * samples[least_factor,
+                             max(current_limit,
+                                 offset_limit)]
 ```
 
 (The proof of this claim is that you probably didn't notice

@@ -850,8 +850,10 @@ It tells us this by displaying the message:</p>
 <p>We can check that it is telling the truth by listing the files with their timestamps,
 ordered by how recently they have been updated:</p>
 <div class="sourceCode" id="cb589"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb589-1"><a href="automate.html#cb589-1"></a>$ <span class="fu">ls</span> -l -t data/moby_dick.txt results/moby_dick.csv</span></code></pre></div>
-<pre class="text"><code>-rw-r--r-- 1 amira staff  274967 Nov 29 12:58 results/moby_dick.csv
--rw-r--r-- 1 amira staff 1253891 Nov 27 20:56 data/moby_dick.txt</code></pre>
+<pre class="text"><code>-rw-r--r-- 1 amira staff  274967 Nov 29 12:58
+  results/moby_dick.csv
+-rw-r--r-- 1 amira staff 1253891 Nov 27 20:56
+  data/moby_dick.txt</code></pre>
 <p>As a further test:</p>
 <ol style="list-style-type: decimal">
 <li>Delete <code>results/moby_dick.csv</code> and run <code>make</code> again.
@@ -1134,19 +1136,19 @@ let’s delete all of the results files:</p>
 <pre class="text"><code>rm -f results/*.csv</code></pre>
 <p>and then re-create them:</p>
 <div class="sourceCode" id="cb614"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb614-1"><a href="automate.html#cb614-1"></a>$ <span class="fu">make</span>  <span class="co"># Same as `make all` as &quot;all&quot; is the first target</span></span></code></pre></div>
-<pre class="text"><code>python bin/countwords.py \
-  data/moby_dick.txt &gt; results/moby_dick.csv
-python bin/countwords.py \
-  data/jane_eyre.txt &gt; results/jane_eyre.csv
-python bin/countwords.py \
-  data/time_machine.txt &gt; results/time_machine.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py data/moby_dick.txt &gt;
+  results/moby_dick.csv
+python bin/countwords.py data/jane_eyre.txt &gt;
+  results/jane_eyre.csv
+python bin/countwords.py data/time_machine.txt &gt;
+  results/time_machine.csv</code></pre>
 <p>We can still rebuild individual files if we want,
 since Make will take the target filename we give on the command line
 and see if a pattern rule matches it:</p>
 <div class="sourceCode" id="cb616"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb616-1"><a href="automate.html#cb616-1"></a>$ <span class="fu">touch</span> data/jane_eyre.txt</span>
 <span id="cb616-2"><a href="automate.html#cb616-2"></a>$ <span class="fu">make</span> results/jane_eyre.csv</span></code></pre></div>
-<pre class="text"><code>python bin/countwords.py \
-  data/jane_eyre.txt &gt; results/jane_eyre.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py data/jane_eyre.txt &gt;
+  results/jane_eyre.csv</code></pre>
 </div>
 <div id="automate-functions" class="section level2">
 <h2><span class="header-section-number">9.7</span> Defining Sets of Files</h2>
@@ -1261,20 +1263,19 @@ we can regenerate all the results in one step:</p>
 <div class="sourceCode" id="cb632"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb632-1"><a href="automate.html#cb632-1"></a>$ <span class="fu">make</span> clean</span></code></pre></div>
 <pre class="text"><code>rm -f results/*.csv</code></pre>
 <div class="sourceCode" id="cb634"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb634-1"><a href="automate.html#cb634-1"></a>$ <span class="fu">make</span>  <span class="co"># Same as `make all` since &quot;all&quot; is the first target</span></span></code></pre></div>
-<pre class="text"><code>python bin/countwords.py \
-  data/dracula.txt &gt; results/dracula.csv
-python bin/countwords.py \
-  data/frankenstein.txt &gt; results/frankenstein.csv
-python bin/countwords.py \
-  data/jane_eyre.txt &gt; results/jane_eyre.csv
-python bin/countwords.py \
-  data/moby_dick.txt &gt; results/moby_dick.csv
-python bin/countwords.py \
-  data/sense_and_sensibility.txt &gt; results/sense_and_sensibility.csv
-python bin/countwords.py \
-  data/sherlock_holmes.txt &gt; results/sherlock_holmes.csv
-python bin/countwords.py \
-  data/time_machine.txt &gt; results/time_machine.csv</code></pre>
+<pre class="text"><code>python bin/countwords.py data/dracula.txt &gt; results/dracula.csv
+python bin/countwords.py data/frankenstein.txt &gt;
+  results/frankenstein.csv
+python bin/countwords.py data/jane_eyre.txt &gt;
+  results/jane_eyre.csv
+python bin/countwords.py data/moby_dick.txt &gt;
+  results/moby_dick.csv
+python bin/countwords.py data/sense_and_sensibility.txt &gt;
+  results/sense_and_sensibility.csv
+python bin/countwords.py data/sherlock_holmes.txt &gt;
+  results/sherlock_holmes.csv
+python bin/countwords.py data/time_machine.txt &gt;
+  results/time_machine.csv</code></pre>
 <p>Our workflow is now just two steps:
 add a data file and run Make.
 This is a big improvement over running things manually,
@@ -1293,10 +1294,10 @@ We could create another phony target called <code>help</code> that prints a list
 <span id="cb636-4"><a href="automate.html#cb636-4"></a></span>
 <span id="cb636-5"><a href="automate.html#cb636-5"></a><span class="co"># Show help.</span></span>
 <span id="cb636-6"><a href="automate.html#cb636-6"></a><span class="dv">help :</span></span>
-<span id="cb636-7"><a href="automate.html#cb636-7"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;all : regenerate all out-of-date results files.&quot;</span></span>
-<span id="cb636-8"><a href="automate.html#cb636-8"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;results/*.csv : regenerate a particular results file.&quot;</span></span>
+<span id="cb636-7"><a href="automate.html#cb636-7"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;all : regenerate all results.&quot;</span></span>
+<span id="cb636-8"><a href="automate.html#cb636-8"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;results/*.csv : regenerate result for any book.&quot;</span></span>
 <span id="cb636-9"><a href="automate.html#cb636-9"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;clean : remove all generated files.&quot;</span></span>
-<span id="cb636-10"><a href="automate.html#cb636-10"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;settings : show the values of all variables.&quot;</span></span>
+<span id="cb636-10"><a href="automate.html#cb636-10"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;settings : show variables&#39; values.&quot;</span></span>
 <span id="cb636-11"><a href="automate.html#cb636-11"></a>    <span class="ch">@</span><span class="fu">echo </span><span class="st">&quot;help : show this message.&quot;</span></span></code></pre></div>
 <p>but sooner or later
 we will add a target or rule and forget to update this list.</p>
@@ -1411,12 +1412,13 @@ rather than to standard output.</p>
 <span id="cb641-22"><a href="automate.html#cb641-22"></a><span class="co"># ...help...</span></span></code></pre></div>
 <p>Running <code>make all</code> should now generate the new <code>collated.png</code> plot (Figure <a href="automate.html#fig:automate-collated">9.2</a>):</p>
 <div class="sourceCode" id="cb642"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb642-1"><a href="automate.html#cb642-1"></a>$ <span class="fu">make</span> all</span></code></pre></div>
-<pre class="text"><code>python bin/collate.py results/time_machine.csv \
-  results/moby_dick.csv results/jane_eyre.csv results/dracula.csv \
-  results/sense_and_sensibility.csv results/sherlock_holmes.csv \
-  results/frankenstein.csv &gt; results/collated.csv
-python bin/plotcounts.py results/collated.csv \
-  --outfile results/collated.png
+<pre class="text"><code>python bin/collate.py results/time_machine.csv
+  results/moby_dick.csv results/jane_eyre.csv
+  results/dracula.csv results/sense_and_sensibility.csv
+  results/sherlock_holmes.csv results/frankenstein.csv &gt;
+  results/collated.csv
+python bin/plotcounts.py results/collated.csv --outfile
+  results/collated.png
 alpha: 1.1712445413685917</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:automate-collated"></span>
 <img src="figures/automate/collated.png" alt="Word count distribution for all books combined." width="100%" />

@@ -14,8 +14,8 @@ def count_words(reader):
     """Count the occurrence of each word in a string."""
     text = reader.read()
     chunks = text.split()
-    stripped = [word.strip(string.punctuation) for word in chunks]
-    word_list = [word.lower() for word in stripped if word]
+    npunc = [word.strip(string.punctuation) for word in chunks]
+    word_list = [word.lower() for word in npunc if word]
     word_counts = Counter(word_list)
     return word_counts
 
@@ -33,6 +33,6 @@ if __name__ == '__main__':
                         help='Input file name')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     args = parser.parse_args()
     main(args)
