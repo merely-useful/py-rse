@@ -1,4 +1,4 @@
--   Use `git config` with the `--global` option to configure your user name,
+-   Use `git config` with the `--global` option to configure your username,
     email address, and other preferences once per machine.
 -   `git init` initializes a \gref{repository}{repository}.
 -   Git stores all repository management data in the `.git` subdirectory of the repository's root directory.

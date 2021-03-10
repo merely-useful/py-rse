@@ -25,13 +25,13 @@
 :   To add data to the end of an existing file instead of overwriting the previous contents of that file. Overwriting is the default, so most programming languages require programs to be explicit about wanting to append instead.
 
 **assertion**<a id="assertion"></a>
-:   A \gref{Boolean}{boolean} expression that must be \gref{true}{true} at a certain point in a program. Assertions may be built into the language (e.g., \gref{Python}{python}'s `assert` statement) or provided as functions (e.g., \gref{R}{r_language}'s `stopifnot`). They are often used in testing, but are also put in \gref{production code}{production_code} to check that it is behaving correctly. In many languages, assertions should not be used to perform data-validation as they may be silently dropped by compilers and interpreters under optimization conditions. Using assertions for data validation can therefore introduce security risks. Unlike many languages, R does not have an `assert` statement which can be disabled, and so use of \gref{package}{package} such as `assertr` for data validation does not create security holes.
+:   A \gref{Boolean}{boolean} expression that must be \gref{true}{true} at a certain point in a program. Assertions may be built into the language (e.g., \gref{Python}{python}'s `assert` statement) or provided as functions (e.g., \gref{R}{r_language}'s `stopifnot`). They are often used in testing, but are also put in \gref{production code}{production_code} to check that it is behaving correctly. In many languages, assertions should not be used to perform data validation as they may be silently dropped by compilers and interpreters under optimization conditions. Using assertions for data validation can therefore introduce security risks. Unlike many languages, R does not have an `assert` statement which can be disabled, and so use of a \gref{package}{package} such as `assertr` for data validation does not create security holes.
 
 **authentic task**<a id="authentic_task"></a>
-:   A task which contains important elements of things that learners would do in real (non-classroom situations).
+:   A task which contains important elements of things that learners would do in real life (non-classroom situations).
 
 **auto-completion**<a id="auto_completion"></a>
-:   A feature that allows the user to finish a word or code quickly through the use of pressing the TAB key to list possible words or code from which the user can select.
+:   A feature that allows the user to finish a word or code quickly by pressing the TAB key to list possible words or code from which the user can select.
 
 **automatic variable**<a id="automatic_variable"></a>
 :   A variable that is automatically given a value in a \gref{build rule}{build_rule}. For example, Make automatically assigns the name of a rule's \gref{target}{build_target} to the automatic variable `$@`. Automatic variables are frequently used when writing \gref{pattern rules}{pattern_rule}. See also: [Makefile](#makefile)
@@ -70,10 +70,10 @@
 :   A style of writing code that involves naming variables and objects with no space, underscore (`_`), dot (`.`), or dash (`-`) characters, with each word being capitalized. Examples include `CalculateSum` and `findPattern`. See also: [kebab case](#kebab_case), [pothole case](#pothole_case)
 
 **catch (an exception)**<a id="catch_exception"></a>
-:   To accept responsibility for handling an error or other unexpected event. \gref{R}{r_language} prefers "handling a condition" to "catching an exception". \gref{Python}{python}, on the other hand, encourages raising and catching exceptions, and in some situations, requires it.
+:   To accept responsibility for handling an error or other unexpected event. \gref{R}{r_language} prefers "handling a condition" to "catching an exception." \gref{Python}{python}, on the other hand, encourages raising and catching exceptions, and in some situations, requires it.
 
 **Creative Commons license**<a id="cc_license"></a>
-:   A set of \gref{licenses}{license} that can be applied to published work. Each license is formed by concatenating one or more of `-BY` (Attribution): users must cite the original source; `-SA` (ShareAlike): users must share their own work under a similar license; `-NC` (NonCommercial): work may not be used for commercial purposes without the creator's permission; `-ND` (NoDerivatives): no derivative works (e.g., translations) can be created without the creator's permission. Thus, `CC-BY-NC` means "users must give attribution and cannot use commercially without permission". The term `CC-0` (zero, not letter 'O') is sometimes used to mean "no restrictions", i.e., the work is in the public domain.
+:   A set of \gref{licenses}{license} that can be applied to published work. Each license is formed by concatenating one or more of `-BY` (Attribution): users must cite the original source; `-SA` (ShareAlike): users must share their own work under a similar license; `-NC` (NonCommercial): work may not be used for commercial purposes without the creator's permission; `-ND` (NoDerivatives): no derivative works (e.g., translations) can be created without the creator's permission. Thus, `CC-BY-NC` means "users must give attribution and cannot use commercially without permission." The term `CC-0` (zero, not letter 'O') is sometimes used to mean "no restrictions," i.e., the work is in the public domain.
 
 **checklist**<a id="checklist"></a>
 :   A list of things to be checked or completed when doing a task.
@@ -91,18 +91,18 @@
 :   The amount of working memory needed to accomplish a set of simultaneous tasks.
 
 **command history**<a id="command_history"></a>
-:   An automatically-created list of previously-executed commands. Most read-eval-print loops (\gref{REPLs}{repl}), including the \gref{Unix shell}{shell}, record history and allow users to play back recent commands.
+:   An automatically created list of previously executed commands. Most read-eval-print loops (\gref{REPLs}{repl}), including the \gref{Unix shell}{shell}, record history and allow users to play back recent commands.
 
 **command-line argument**<a id="command_line_argument"></a>
 :   A filename or control flag given to a command-line program when it is run.
 
-**command line flag**<a id="command_line_flag"></a>
+**command-line flag**<a id="command_line_flag"></a>
 :   See \gref{command-line argument}{command_line_argument}
 
-**command line option**<a id="command_line_option"></a>
+**command-line option**<a id="command_line_option"></a>
 :   See \gref{command-line argument}{command_line_argument}
 
-**command line switch**<a id="command_line_switch"></a>
+**command-line switch**<a id="command_line_switch"></a>
 :   See \gref{command-line argument}{command_line_argument}
 
 **comment**<a id="comment"></a>
@@ -124,7 +124,7 @@
 :   A combination of a document format that allows users to mix prose and code in a single file, and an application that executes that code interactively and in place. The \gref{Jupyter Notebook}{jupyter_notebook} and \gref{R Markdown}{r_markdown} files are both examples of computational notebooks.
 
 **conditional expression**<a id="conditional_expression"></a>
-:   A \gref{ternary expression}{ternary_expression} that serves the role of an if/else statement. For example, C and similar languages use the syntax `test : ifTrue ? ifFalse` to mean "choose the value `ifTrue` if `test` is true, or the value `ifFalse` if it is not".
+:   A \gref{ternary expression}{ternary_expression} that serves the role of an if/else statement. For example, C and similar languages use the syntax `test : ifTrue ? ifFalse` to mean "choose the value `ifTrue` if `test` is true, or the value `ifFalse` if it is not."
 
 **confirmation bias**<a id="confirmation_bias"></a>
 :   The tendency to analyze information or make decisions in ways that reinforce existing beliefs.
@@ -157,13 +157,13 @@
 :   A data structure that allows items to be looked up by value, sometimes called an \gref{associative array}{associative_array}. Dictionaries are often implemented using \gref{hash tables}{hash_table}.
 
 **docstring**<a id="docstring"></a>
-:   Short for "documentation string", a string appearing at the start of a module, class, or function in \gref{Python}{python} that automatically becomes that object's documentation.
+:   Short for "documentation string," a string appearing at the start of a module, class, or function in \gref{Python}{python} that automatically becomes that object's documentation.
 
 **documentation generator**<a id="documentation_generator"></a>
-:   A software tool that extracts specially-formatted comments or \gref{dostrings}{docstring} from code and generates cross-referenced developer documentation.
+:   A software tool that extracts specially formatted comments or \gref{dostrings}{docstring} from code and generates cross-referenced developer documentation.
 
 **Digital Object Identifier**<a id="doi"></a>
-:   A unique persistent identifier for a book, paper, report, dataset, software release, or other digital artefact. See also: [ORCID](#orcid)
+:   A unique persistent identifier for a book, paper, report, dataset, software release, or other digital artifact. See also: [ORCID](#orcid)
 
 **down-vote**<a id="down_vote"></a>
 :   A vote against something. See also: [up-vote](#up_vote)
@@ -244,7 +244,7 @@
 :   To make a new copy of a \gref{Git}{git} \gref{repository}{repository} on a \gref{server}{server}, or the copy that is made. See also: [Git clone](#git_clone)
 
 **Git merge**<a id="git_merge"></a>
-:   Merging branches in \gref{Git}{git} incorporates development histories of two \gref{branches}{branch} in one. If changes are made to similar parts of the branches on both branches a \gref{conflict}{git_conflict} will occur and this must be resolved before the merge will be completed.
+:   Merging branches in \gref{Git}{git} incorporates development histories of two \gref{branches}{branch} in one. If changes are made to similar parts of the branches on both branches, a \gref{conflict}{git_conflict} will occur and this must be resolved before the merge will be completed.
 
 **Git pull**<a id="git_pull"></a>
 :   Downloads and synchronizes changes between a \gref{remote repository}{remote_repository} and a local \gref{repository}{repository}.
@@ -298,16 +298,16 @@
 :   A technique for managing interruptions in meetings. Everyone's name is placed on each row and each column of a grid; each time person A interrupts person B, a mark is added to the appropriate grid cell.
 
 **invariant**<a id="invariant"></a>
-:   Something that is must be \gref{true}{true} at all times inside of a program or during the \gref{lifecycle}{lifecycle} of an \gref{object}{object}. Invariants are often expressed using \gref{assertions}{assertion}. If an invariant expression is not true, this is indicative of a problem, and may result in failure or early temrination of the program.
+:   Something that must be \gref{true}{true} at all times inside of a program or during the \gref{lifecycle}{lifecycle} of an \gref{object}{object}. Invariants are often expressed using \gref{assertions}{assertion}. If an invariant expression is not true, this is indicative of a problem, and may result in failure or early termination of the program.
 
 **issue**<a id="issue"></a>
 :   A \gref{bug report}{bug_report}, feature request, or other to-do item associated with a project. Also called a \gref{ticket}{ticket}.
 
 **label (an issue)**<a id="issue_label"></a>
-:   A short textual tag associated with an \gref{issue}{issue} to categorize it. Common labels include \gref{`bug`}{bug} and `feature request`.
+:   A short textual tag associated with an \gref{issue}{issue} to categorize it. Common labels include `bug` and `feature request`.
 
 **issue tracking system**<a id="issue_tracking_system"></a>
-:   Similar to a \gref{bug tracking system}{bug_tracker} in that it tracks \gref{"issues"}{issue} made to a \gref{repository}{repository}, usually in the form of \gref{feature requests}{feature_request}, \gref{bug reports}{bug_report}, or some other to-do item.
+:   Similar to a \gref{bug tracking system}{bug_tracker} in that it tracks \gref{issues}{issue} made to a \gref{repository}{repository}, usually in the form of \gref{feature requests}{feature_request}, \gref{bug reports}{bug_report}, or some other to-do item.
 
 **JavaScript Object Notation**<a id="json"></a>
 :   A way to represent data by combining basic values like numbers and character strings in \gref{lists}{list} and \gref{key/value}{dictionary} structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like \gref{XML}{xml}, it is unencumbered by a syntax for comments or ways to define a \gref{schema}{schema}.
@@ -316,7 +316,7 @@
 :   A naming convention in which the parts of a name are separated with dashes, as in `first-second-third`. See also: [camel case](#camel_case), [pothole case](#pothole_case)
 
 **LaTeX**<a id="latex"></a>
-:   A typesetting system for document preparation that uses a specialized \gref{markup language}{markup_language} to define a document structure (e.g. headings), stylise text, insert mathematical equations, and manage citations and cross-references. LaTeX is widely used in academia, in particular for scientific papers and theses in mathematics, physics, engineering, and computer science.
+:   A typesetting system for document preparation that uses a specialized \gref{markup language}{markup_language} to define a document structure (e.g., headings), stylize text, insert mathematical equations, and manage citations and cross-references. LaTeX is widely used in academia, in particular for scientific papers and theses in mathematics, physics, engineering, and computer science.
 
 **linter**<a id="linter"></a>
 :   A program that checks for common problems in software, such as violations of indentation rules or variable naming conventions. The name comes from the first tool of its kind, called `lint`.
@@ -331,7 +331,7 @@
 :   A setting that controls how much information is generated by a \gref{logging framework}{logging_framework}. Typical logging levels include `DEBUG`, `WARNING`, and `ERROR`.
 
 **long option**<a id="long_option"></a>
-:   A full-word identifier for a \gref{command line argument}{command_line_argument}. While most common flags are a single letter preceded by a dash, such as `-v`, long options typically use two dashes and a readable name, such as `--verbose`. See also: [short option](#short_option)
+:   A full-word identifier for a \gref{command-line argument}{command_line_argument}. While most common flags are a single letter preceded by a dash, such as `-v`, long options typically use two dashes and a readable name, such as `--verbose`. See also: [short option](#short_option)
 
 **loop body**<a id="loop_body"></a>
 :   The statement or statements executed by a loop.
@@ -412,7 +412,7 @@
 :   A generic \gref{build rule}{build_rule} that describes how to update any file whose name matches a pattern. Pattern rules often use \gref{automatic variables}{automatic_variable} to represent the actual filenames.
 
 **phony target**<a id="phony_target"></a>
-:   A \gref{build target}{build_target} that does not correspond to an actual file. Phony targets are often used to store commonly-used commands in a \gref{Makefile}{makefile}.
+:   A \gref{build target}{build_target} that does not correspond to an actual file. Phony targets are often used to store commonly used commands in a \gref{Makefile}{makefile}.
 
 **pipe (in the Unix shell)**<a id="pipe_shell"></a>
 :   The `|` used to make the output of one command the input of the next.
@@ -460,7 +460,7 @@
 :   A record of where data originally came from and what was done to process it.
 
 **pull request**<a id="pull_request"></a>
-:   The request to merge a new feature or correction created on a user's \gref{fork}{fork} of a \gref{Git}{git} \gref{repository}{repository}repository into the \gref{upstream repository}{upstream_repository}. The developer will be notified of the change, review it, make or suggest changes, and potentially \gref{merge}{git_merge} it.
+:   The request to merge a new feature or correction created on a user's \gref{fork}{fork} of a \gref{Git}{git} \gref{repository}{repository} into the \gref{upstream repository}{upstream_repository}. The developer will be notified of the change, review it, make or suggest changes, and potentially \gref{merge}{git_merge} it.
 
 **raise (an exception)**<a id="raise_exception"></a>
 :   To signal that something unexpected or unusual has happened in a program by creating an \gref{exception}{exception} and handing it to the \gref{error-handling}{error_handling} system, which then tries to find a point in the program that will \gref{catch}{catch_exception} it.
@@ -550,7 +550,7 @@
 :   A set of commands for the \gref{shell}{shell} stored in a file so that they can be re-executed. A shell script is effectively a program.
 
 **shell variable**<a id="shell_variable"></a>
-:   A variable set and used in the \gref{Unix shell}{shell}. Commonly-used shell variables include `HOME` (the user's home directory) and `PATH` (their \gref{search path}{search_path}).
+:   A variable set and used in the \gref{Unix shell}{shell}. Commonly used shell variables include `HOME` (the user's home directory) and `PATH` (their \gref{search path}{search_path}).
 
 **short circuit test**<a id="short_circuit_test"></a>
 :   A logical test that only evaluates as many arguments as it needs to. For example, if `A` is \gref{false}{false}, then most languages never evaluate `B` in the expression `A and B`.
@@ -559,7 +559,7 @@
 :   The first few characters of a \gref{full identifier}{full_identifier_git}. Short identifiers are easy for people to type and say aloud, and are usually unique within a \gref{repository's}{repository} recent history.
 
 **short option**<a id="short_option"></a>
-:   A single-letter identifier for a \gref{command line argument}{command_line_argument}. Most common flags are a single letter preceded by a dash, such as `-v`. See also: [long option](#long_option)
+:   A single-letter identifier for a \gref{command-line argument}{command_line_argument}. Most common flags are a single letter preceded by a dash, such as `-v`. See also: [long option](#long_option)
 
 **snake case**<a id="snake_case"></a>
 :   See \gref{pothole case}{pothole_case}. See also: [camel case](#camel_case), [kebab case](#kebab_case)
@@ -607,7 +607,7 @@
 :   Software that its users can afford to keep up to date. Sustainability depends on the quality of the software, the skills of the potential maintainers, and how much the community is willing to invest.
 
 **tag (in version control)**<a id="tag"></a>
-:   A readable label attached to a specific \gref{commit}{commit} so that it can easily be referenced to later.
+:   A readable label attached to a specific \gref{commit}{commit} so that it can easily be referred to later.
 
 **test-driven development**<a id="tdd"></a>
 :   A programming practice in which tests are written before a new feature is added or a \gref{bug}{bug} is fixed in order to clarify the goal.
@@ -646,7 +646,7 @@
 :   To go through the \gref{issues}{issue} associated with a project and decide which are currently priorities. Triage is one of the key responsibilities of a \gref{project manager}{project_manager}.
 
 **tuple**<a id="tuple"></a>
-:   A data type that has a fixed number of parts, such as the three color components of a red-green-blue color specification. Tuples are immutable (their values can not be reset.)
+:   A data type that has a fixed number of parts, such as the three color components of a red-green-blue color specification. Tuples are immutable (their values cannot be reset.)
 
 **unit test**<a id="unit_test"></a>
 :   A test that exercises one function or feature of a piece of software and produces \gref{pass}{pass_test}, \gref{fail}{fail_test}, or \gref{error}{error_test}. See also: [integration test](#integration_test)
@@ -674,9 +674,6 @@
 
 **virtual machine**<a id="virtual_machine"></a>
 :   A program that pretends to be a computer. This may seem a bit redundant, but VMs are quick to create and start up, and changes made inside the virtual machine are contained within that VM so we can install new \gref{packages}{package} or run a completely different operating system without affecting the underlying computer.
-
-**wheel**<a id="wheel"></a>
-:   A pre-built binary Python installation format that is smaller and faster to install than the \gref{source distribution}{source_distribution} but not as versatile.
 
 **whitespace**<a id="whitespace"></a>
 :   The space, newline, carriage return, and horizontal and vertical tab characters that take up space but do not create a visible mark. The name comes from their appearance on a printed page in the era of typewriters.

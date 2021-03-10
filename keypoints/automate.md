@@ -1,4 +1,4 @@
--   [Make][gnu-make] is a widely-used build manager.
+-   [Make][gnu-make] is a widely used build manager.
 -   A \gref{build manager}{build_manager} re-runs commands to update files that are out of date.
 -   A \gref{build rule}{build_rule} has \gref{targets}{build_target}, \gref{prerequisites}{prerequisite}, and a \gref{recipe}{build_recipe}.
 -   A target can be a file or a \gref{phony target}{phony_target} that simply triggers an action.
@@ -8,4 +8,4 @@
 -   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
 -   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
--   Use specially-formatted comments to create self-documenting Makefiles.
+-   Use specially formatted comments to create self-documenting Makefiles.

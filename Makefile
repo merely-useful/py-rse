@@ -73,7 +73,7 @@ _book/py-rse.pdf : ${SOURCE} $(wildcard includes/*.tex)
 ## clean : clean up generated files.
 clean :
 	@rm -rf _book _bookdown_files py-rse.Rmd
-	@rm -f *.aux *.lof *.log *.lot *.out *.toc
+	@rm -f *.aux *.idx *.lof *.log *.lot *.out *.toc
 	@find . -name '*~' -exec rm {} \;
 
 ## captions : check that image captions are OK.
