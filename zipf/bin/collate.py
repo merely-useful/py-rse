@@ -42,7 +42,7 @@ def main(args):
             msg = f'{fname} not processed: File does not exist'
             logging.warning(msg)
         except PermissionError:
-            msg = f'{fname} not processed: No permission to read'
+            msg = f'{fname} not processed: No read permission'
             logging.warning(msg)
         except Exception as error:
             msg = f'{fname} not processed: {error}'
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                         help='Input file names')
     parser.add_argument('-n', '--num',
                         type=int, default=None,
-                        help='Output only n most frequent words')
+                        help='Output n most frequent words')
     parser.add_argument('-v', '--verbose',
                         action="store_true", default=False,
                         help="Set logging level to DEBUG")
