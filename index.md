@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-02-05"
+date: "2021-03-10"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -12,7 +12,6 @@ biblatexoptions: [backend=biber, doi=only]
 link-citations: yes
 github-repo: merely-useful/py-rse
 site: bookdown::bookdown_site
-lof: yes
 ---
 
 
@@ -112,12 +111,12 @@ Amira Khan
     She did some statistics during her degree,
     and has learned some R and Python by doing data science courses online,
     but has no formal training in programming.
-    Amira would like to tidy up the scripts, data sets, and reports she has created
+    Amira would like to tidy up the scripts, datasets, and reports she has created
     in order to share them with her colleagues.
     These lessons will show her how to do this.
 
 Jun Hsu
-:   completed an [Insight Data Science][insight] fellowship last year after doing a PhD in Geology
+:   completed an [Insight Data Science][insight] fellowship last year after doing a PhD in geology
     and now works for a company that does forensic audits.
     He uses a variety of machine learning and visualization packages,
     and would now like to turn some of his own work into an open source project.
@@ -148,7 +147,7 @@ we write a software package that counts and analyzes the word frequency distribu
 in any arbitrary body of text.
 
 In the process of writing and publishing a Python package to verify Zipf's Law,
-we will show you how to:
+we will show you how to do the following:
 
 -   Organize small and medium-sized data science projects.
 -   Use the Unix shell to efficiently manage your data and code.
@@ -164,8 +163,8 @@ we will show you how to:
 
 ## Using this Book  {#intro-using}
 
-This book was written to be used as the material for a (potentially) semester
-long course at the university level,
+This book was written to be used as the material for a (potentially) semester-long
+course at the university level,
 although it can also be used for independent self-study.
 Participatory live-coding is the anticipated style for teaching the material,
 rather than lectures simply talking about the code presented [@Brow2018; @Wils2018].
@@ -190,7 +189,7 @@ and key points (Appendix \@ref(keypoints)) for each chapter.
 
 The source for the book can be found at the [`py-rse` GitHub repository](https://github.com/merely-useful/py-rse) and
 any corrections, additions, or contributions are very welcome.
-Everyone whose work is included will be credited in the acknowledgements.
+Everyone whose work is included will be credited in the acknowledgments.
 Check out our
 [contributing guidelines](https://github.com/merely-useful/py-rse/blob/book/CONTRIBUTING.md)
 as well as our
@@ -224,10 +223,10 @@ and Elizabeth Wickes.
     have been adapted from Software Carpentry's lesson
     [*The Unix Shell*][swc-shell-novice].
 
--   Many of explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
+-   Many of the explanations and exercises in Chapters \@ref(git-cmdline) and \@ref(git-advanced)
     have been adapted from Software Carpentry's lesson
     [*Version Control with Git*][swc-git] and an
-    [adaptation/extension of that lesson][uwm-git-lesson] maintained by
+    [adaptation/extension of that lesson][uwm-git-lesson] that is maintained by
     the University of Wisconsin-Madison Data Science Hub.
 
 -   Chapter \@ref(automate) is based on Software Carpentry's lesson
@@ -305,13 +304,13 @@ than large chunks that vary from project to project and have names like "stuff".
 We can be messy while we are working and then tidy up later,
 but experience teaches that we will be more productive if we make tidiness a habit.
 
-In building the Zipf's Law project we'll follow
-a widely-used template
+In building the Zipf's Law project,
+we'll follow a widely used template
 for organizing small and medium-sized data analysis projects [@Nobl2009].
 The project will live in a directory called `zipf`,
 which will also be a Git repository stored on GitHub (Chapter \@ref(git-cmdline)).
 The following is an abbreviated version of the project directory tree
-as it appears towards the end of the book:
+as it appears toward the end of the book:
 
 ```text
 zipf/
@@ -377,13 +376,13 @@ the directories in the repository's root are organized according to purpose:
 -   Runnable programs go in `bin/`
     (an old Unix abbreviation for "binary", meaning "not text").
     This will include both shell scripts,
-    e.g. `book_summary.sh` developed in Chapter \@ref(bash-advanced),
+    e.g., `book_summary.sh` developed in Chapter \@ref(bash-advanced),
     and Python programs,
-    e.g. `countwords.py`, developed in Chapter \@ref(scripting).
+    e.g., `countwords.py`, developed in Chapter \@ref(scripting).
 
 -   Raw data goes in `data/`
     and is never modified after being stored.
-    You'll set up this directory,
+    You'll set up this directory
     and its contents in Section \@ref(getting-started-download-data).
 
 -   Results are put in `results/`.
@@ -396,7 +395,8 @@ the directories in the repository's root are organized according to purpose:
 
 -   Finally,
     documentation and manuscripts go in `docs/`.
-    In this project `docs` will contain automatically generated
+    In this project,
+    `docs` will contain automatically generated
     documentation for the Python package, created in
     Section \@ref(packaging-sphinx).
 
@@ -437,7 +437,7 @@ zipf/
 
 ## Installing the Software {#getting-started-install-software}
 
-In order to conduct our analysis we need to install the following software:
+In order to conduct our analysis, we need to install the following software:
 
 1. A \gref{Bash shell}{shell}
 2. \gref{Git}{git} version control
@@ -507,7 +507,7 @@ before progressing to the next chapter.
 - Include a few standard files in all your projects, such as README, LICENSE, CONTRIBUTING, CONDUCT and CITATION.
 - Put runnable code in a `bin/` directory.
 - Put raw/original data in a `data/` directory and never modify it.
-- Put results in a `results/` directory. This includes cleaned-up data and figures (i.e. everything created using what's in `bin` and `data`).
+- Put results in a `results/` directory. This includes cleaned-up data and figures (i.e., everything created using what's in `bin` and `data`).
 - Put documentation and manuscripts in a `docs/` directory.
 - Refer to The Carpentries [software installation guide][carpentries-install-instructions] if you're having trouble. 
 
@@ -526,7 +526,7 @@ run programs,
 talk with each other,
 and interact with people.
 They do the interacting in many different ways,
-of which \gref{graphical user interfaces}{gui} (GUI) are the most widely used.
+of which \gref{graphical user interfaces}{gui} (GUIs) are the most widely used.
 The computer displays icons to show our files and programs,
 and we tell it to copy or run those by clicking with a mouse.
 GUIs are easy to learn but hard to automate,
@@ -599,7 +599,7 @@ $
 However,
 different shells may use a different symbol:
 in particular,
-the `zsh` shell that is the default on newer version of MacOS uses `%`.
+the `zsh` shell, which is the default on newer versions of MacOS, uses `%`.
 As we'll see in Section \@ref(bash-advanced-vars),
 we can customize the prompt to give us more information.
 
@@ -632,7 +632,7 @@ Now that we know who we are,
 we can explore where we are and what we have.
 The part of the operating system that manages files and directories (also called \gref{folders}{folder})
 is called the \gref{filesystem}{filesystem}.\index{filesystem}
-Some of the most commonly-used commands in the shell create, inspect, rename, and delete files and directories.
+Some of the most commonly used commands in the shell create, inspect, rename, and delete files and directories.
 Let's start exploring them by running the command `pwd`,\index{Unix commands!pwd}
 which stands for **p**rint **w**orking **d**irectory.
 The "print" part of its name is straightforward;
@@ -889,7 +889,7 @@ data/
 > **Missing Directories and Unknown Options**
 >
 > If we give a command an option that it doesn't understand,
-> it will usually print an error message and (if we're lucky)
+> it will usually print an error message, and (if we're lucky)
 > tersely remind us of what we should have done:
 >
 > ```bash
@@ -926,7 +926,7 @@ cd: amira: No such file or directory
 ```
 
 because `amira` on its own is a relative path meaning
-"a file or directory called `amira` *below our current working directory*".
+"a file or directory called `amira` *below our current working directory.*"
 To get back home,
 we can either use an absolute path:
 
@@ -935,7 +935,7 @@ $ cd /Users/amira
 ```
 
 or a special relative path called `..` (two periods in a row with no spaces),\index{.. (parent directory)}\index{path!..}
-which always means "the directory that contains the current one".
+which always means "the directory that contains the current one."
 The directory that contains the one we are in is called the \gref{parent directory}{parent_directory},\index{parent directory}
 and sure enough,
 `..` gets us there:
@@ -974,7 +974,7 @@ but we'll see some uses for it soon.
 > **Combining Options**
 >
 > You'll occasionally need to use multiple options in the same command.
-> In most command line tools,
+> In most command-line tools,
 > multiple options can be combined with a single `-`
 > and no spaces between the options:
 >
@@ -1003,7 +1003,7 @@ because there are fewer special cases to remember.
 > **Other Hidden Files**
 >
 > In addition to the hidden directories `..` and `.`,
-> we may also comes across files with names like `.jupyter` or `.Rhistory`.
+> we may also come across files with names like `.jupyter` or `.Rhistory`.
 > These usually contain settings or other data for particular programs;
 > the prefix `.` is used to prevent `ls` from cluttering up the output
 > when we run `ls`.
@@ -1115,15 +1115,15 @@ the files and directories themselves are the same.
 >    but since they are used to separate arguments on the command line,
 >    most shell commands interpret a name like `My Thesis` as two names `My` and `Thesis`.
 >    Use `-` or `_` instead,
->    e.g, `My-Thesis` or `My_Thesis`.
+>    e.g., `My-Thesis` or `My_Thesis`.
 >
 > 2. **Don't begin the name with `-` (dash)**
 >    to avoid confusion with command options like `-F`.
 >
 > 3. **Stick with letters, digits, `.` (period or 'full stop'), `-` (dash) and `_` (underscore).**
 >    Many other characters mean special things in the shell.
->    We will learn about some of these during this lesson,
->    but these are always safe.
+>    We will learn about some of those special characters during this lesson,
+>    but the characters cited here are always safe.
 >
 > If we need to refer to files or directories that have spaces or other special characters in their names,
 > we can surround the name in quotes (`""`).
@@ -1190,12 +1190,12 @@ we can use <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit the editor and return to the she
 > -   `C-x`
 > -   `^X`
 >
-> When Nano runs
+> When Nano runs,
 > it displays some help in the bottom two lines of the screen
 > using the last of these notations:
 > for example,
 > `^G Get Help` means "use <kbd>Ctrl</kbd>+<kbd>G</kbd> to get help"
-> and `^O WriteOut` means "use <kbd>Ctrl</kbd>+<kbd>O</kbd> to write out the current file".
+> and `^O WriteOut` means "use <kbd>Ctrl</kbd>+<kbd>O</kbd> to write out the current file."
 
 Nano doesn't leave any output on the screen after it exits,
 but `ls` will show that we have indeed created a new file `draft.txt`:
@@ -1210,7 +1210,7 @@ draft.txt
 
 > **Dot Something**
 >
-> All of Amira's files are named "something dot something".
+> All of Amira's files are named "something dot something."
 > This is just a convention:
 > we can call a file `mythesis` or almost anything else.
 > However,
@@ -1377,7 +1377,7 @@ section-1.txt
 > For many researchers,
 > a motivation for learning how to use the shell
 > is that it's often the only way to connect to a remote computer
-> (e.g. located at a supercomputing facility or in a university department).
+> (e.g., located at a supercomputing facility or in a university department).
 >
 > Similar to the `cp` command,
 > there exists a **s**ecure **c**o**p**y (`scp`) command for
@@ -1488,7 +1488,7 @@ wc: data: read: Is a directory
 
 Instead,
 we can use \gref{wildcards}{wildcard} to specify a set of files at once.\index{wildcard!in Unix shell}
-The most commonly-used wildcard is `*` (a single asterisk).
+The most commonly used wildcard is `*` (a single asterisk).
 It matches zero or more characters,
 so `data/*.txt` matches all of the text files in the `data` directory:
 
@@ -1516,7 +1516,7 @@ data/sense_and_sensibility.txt  data/sherlock_holmes.txt
 Wildcards are expanded to match filenames *before* commands are run,
 so they work exactly the same way for every command.
 This means that we can use them with `wc` to (for example)
-count the number of words in the books with names that contains an underscore:
+count the number of words in the books with names that contain an underscore:
 
 ```bash
 $ wc data/*_*.txt
@@ -1579,7 +1579,7 @@ to find out what they are:
 $ man wc
 ```
 
-> **Paging Through the Manual**
+> **Paging through the Manual**
 >
 > If our screen is too small to display an entire manual page at once,
 > the shell will use a \gref{paging program}{pager} called `less` to show it
@@ -1607,7 +1607,7 @@ and highlights a few of features useful for beginners.
 
 Some commands have a `--help` option that provides a succinct summary of possibilities,
 but the best place to go for help these days is probably the [TLDR][tldr] website.
-The acronym stands for "too long, didn't read",
+The acronym stands for "too long, didn't read,"
 and its help for `wc` displays this:
 
 ```
@@ -1830,7 +1830,7 @@ $ mkdir backup
 $ cp dracula.txt frankenstein.txt backup/
 ```
 
-What does `cp` do when given three or more file names?
+What does `cp` do when given three or more filenames?
 
 ```bash
 $ cp dracula.txt frankenstein.txt jane_eyre.txt
@@ -1897,8 +1897,7 @@ so that your final directory structure looks like this:
 	    ├── processed
 	    └── raw
 
-Which of the following set of commands would achieve this objective?
-
+Which of the following commands would achieve this objective?
 What would the other commands do?
 
 ```bash
@@ -1964,7 +1963,7 @@ and *only* the processed data files?
 
 ### Other wildcards {#bash-basics-ex-other-wildcards}
 
-The shell provides several wildcards beyond the widely-used `*`.
+The shell provides several wildcards beyond the widely used `*`.
 To explore them,
 explain in plain language what (hypothetical) files the expression `novel-????-[ab]*.{txt,pdf}` matches and why.
 
@@ -2008,7 +2007,7 @@ This lesson shows how to do that,
 and how to repeat commands to process as many files as we want automatically.
 
 We'll be continuing to work in the `zipf` project,
-which after the previous chapter should contain the following files:
+which should contain the following files after the previous chapter:
 
 ```text
 zipf/
@@ -2130,7 +2129,7 @@ $ sort lengths.txt > sorted-lengths.txt
 > The reason is that when the shell sees the redirection,
 > it opens the file on the right of the `>` for writing,
 > which erases anything that file contained.
-> It then runs `sort`, which finds itself reading from a newly-empty file.
+> It then runs `sort`, which finds itself reading from a newly empty file.
 
 Creating intermediate files with names like `lengths.txt` and `sorted-lengths.txt` works,
 but keeping track of those files and cleaning them up when they're no longer needed is a burden.
@@ -2244,7 +2243,7 @@ Under normal circumstances its standard input is connected to our keyboard
 and its standard output to our screen,
 so it reads what we type
 and displays its output for us to see (Figure \@ref(fig:bash-tools-stdio)a).
-When we tell the shell to run a program
+When we tell the shell to run a program,
 it creates a new process
 and temporarily reconnects the keyboard and stream
 to that process's standard input and output (Figure \@ref(fig:bash-tools-stdio)b).
@@ -2310,7 +2309,7 @@ it just knows that it has to read, sort, and print.
 > Since `wc` doesn't have any filenames,
 > it assumes it is supposed to read from the keyboard,
 > so it waits for us to type in some data.
-> It doesn't tell us this:
+> It doesn't tell us this;
 > it just sits and waits.
 >
 > This mistake can be hard to spot,
@@ -2523,7 +2522,7 @@ so we will break it down into pieces:
 3.  The loop runs once for each item in the list.
     Each time it runs,
     it assigns the next item to the variable.
-    In this case `filename` will be `sense_and_sensibility.txt`
+    In this case, `filename` will be `sense_and_sensibility.txt`
     the first time around the loop
     and `sherlock_holmes.txt` the second time.
 
@@ -2819,7 +2818,7 @@ by following the instructions in Section \@ref(getting-started-download-data).
 
 We have seen the use of `>`, but there is a similar operator `>>` which works slightly differently.
 We'll learn about the differences between these two operators by printing some strings.
-We can use the `echo` command to print strings e.g.
+We can use the `echo` command to print strings as shown below:
 
 ```bash
 $ echo The echo command prints text
@@ -2966,7 +2965,7 @@ $ for file in *.txt
 What is the difference between the two loops below,
 and which one would we want to run?
 (Note: The lines starting with `#` are not code,
-and are included for labelling purposes only;
+and are included for labeling purposes only;
 we'll discuss this more in the next chapter)
 
 ```bash
@@ -3134,7 +3133,7 @@ zipf/
 Loops let us run the same commands many times,
 but we can go further and save commands in files
 so that we can repeat complex operations with a few keystrokes.
-For historical reasons
+For historical reasons,
 a file full of shell commands is usually called a \gref{shell script}{shell_script},\index{shell script}
 but it is really just another kind of program.
 
@@ -3277,7 +3276,7 @@ head -n 17 $1 | tail -n 8 | grep Author
 ```
 
 Inside a shell script,
-`$1` means "the first argument on the command line".
+`$1` means "the first argument on the command line."
 If we now run our script like this:
 
 ```bash
@@ -3407,7 +3406,7 @@ but we also often want to select lines that contain certain values.
 This is called \gref{filtering}{filter},\index{filter (in Unix shell)}
 and we usually do it in the shell with the command `grep`\index{grep}\index{Unix commands!grep}
 that we briefly met in Section \@ref(bash-advanced-script).
-Its name is an acronym of "global regular expression print",
+Its name is an acronym of "global regular expression print,"
 which was a common sequence of operations in early Unix text editors.
 
 To show how `grep` works,
@@ -3436,8 +3435,8 @@ as I had pictured it from Sherlock Holmes' succinct description,
 "Good-night, Mister Sherlock Holmes."
 ```
 
-If we run `grep sherlock` instead we get no output,
-since `grep` patterns are case-sensitive.
+If we run `grep sherlock` instead, we get no output
+because `grep` patterns are case-sensitive.
 If we wanted to make the search case-insensitive,
 we can add the option `-i`:
 
@@ -3888,7 +3887,7 @@ $ find . -name "*.bak"
 
 As Section \@ref(bash-tools-loops) explained,
 the shell is a program,
-and like any other program it has variables.
+and it has variables like any other program.
 Some of those variables control the shell's operations;
 by changing their values
 we can change how the shell and other programs behave.
@@ -3967,7 +3966,7 @@ Suppose that our computer has three programs called `analyze`:
 `/bin/analyze`,
 `/usr/local/bin/analyze`,
 and `/Users/amira/analyze`.
-Since the shell searches the directories in the order they're listed in `PATH`,
+Since the shell searches the directories in the order in which they're listed in `PATH`,
 it finds `/bin/analyze` first and runs that.
 Since `/Users/amira` is not in our path,
 Bash will *never* find the program `/Users/amira/analyze`
@@ -4312,7 +4311,7 @@ Explain why the value for `-mtime` needs to be negative.
 -   `$@` refers to all of a shell script's command-line arguments.
 -   `$1`, `$2`, etc., refer to the first command-line argument, the second command-line argument, etc.
 -   Place variables in quotes if the values might have spaces or other special characters in them.
--   `find` lists files with specific properties or whose names match patterns.
+-   `find` prints a list of files with specific properties or whose names match patterns.
 -   `$(command)` inserts a command's output in place.
 -   `grep` selects lines in files that match patterns.
 -   Use the `.bashrc` file in your home directory to set shell variables each time the shell runs.
@@ -4412,7 +4411,7 @@ __main__
 But if we import `print_name.py` from another file
 or from the Python interpreter,
 it will print the name of the file,
-i.e. `print_name`.
+i.e., `print_name`.
 
 ```bash
 $ python
@@ -4502,11 +4501,11 @@ if __name__ == '__main__':
 > remember to end your Python scripts in a newline character
 > (which we view as an empty line).\index{whitespace}
 
-If `script_template.py` is run as a standalone program at the command line
+If `script_template.py` is run as a standalone program at the command line,
 then `__name__ == '__main__'` is true,
 so the program uses `argparse` to create an argument parser.
 It then specifies that it expects two command-line arguments:
-an input filename (`infile`) and output filename (`outfile`).
+an input filename (`infile`) and an output filename (`outfile`).
 The program uses `parser.parse_args()` to parse the actual command-line arguments given by the user
 and stores the result in a variable called `args`,
 which it passes to `main`.
@@ -4524,7 +4523,7 @@ in the `parser.add_argument` calls.
 > we can pass in other functions like `int`
 > if we want arguments converted to numbers.
 
-If we run `script_template.py` at the command line
+If we run `script_template.py` at the command line,
 the output shows us that `argparse` has successfully handled the arguments:
 
 ```bash
@@ -4714,8 +4713,8 @@ Our function splits the text on \gref{whitespace}{whitespace} characters
 then strips leading and trailing punctuation.
 This isn't completely correct---if two words are joined by a long dash
 like "correct" and "if" in this sentence, for example,
-they will be treated as one word---but given that long dashes are used relatively
-infrequently it's close enough to correct for our purposes.
+they will be treated as one word---but given that long dashes are used relatively infrequently,
+it's close enough to correct for our purposes.
 (We will submit a bug report about the long dash issue in Section \@ref(teams-bugs)).
 We also use the `Counter` class from the `collections` library
 to count how many times each word occurs.
@@ -5013,13 +5012,13 @@ $ python bin/countwords.py data/jane_eyre.txt >
 ```
 
 As in the previous chapter,
-we've split long lines of to code onto separate lines for formatting purposes;
+we've split long lines of code onto separate lines for formatting purposes;
 each of the three code chunks above should be run as a single line of code.
 
 Now that we can get word counts for individual books
 we can collate the counts for several books.
 This can be done using a loop that adds up the counts of a word
-from the each of the CSV files created by `countwords.py`.
+from each of the CSV files created by `countwords.py`.
 Using the same template as before,
 we can write a program called `collate.py`:
 
@@ -5074,7 +5073,7 @@ The loop in the `main` function iterates over each filename in `infiles`,
 opens the CSV file,
 and calls `update_counts` with the input stream as one parameter
 and the counter as the other.
-`update_counts` then iterates through all the words the CSV-files
+`update_counts` then iterates through all the words in the CSV files
 and increments the counts using the `+=` operator.
 
 Note that we have not used `type=argparse.FileType('r')` here.
@@ -5238,9 +5237,9 @@ if __name__ == '__main__':
 
 Any Python source file can be imported by any other.
 This is why Python files should be named using \gref{snake case}{snake_case}\index{snake case}\index{naming conventions!snake case}
-(e.g. `some_thing`)
+(e.g., `some_thing`)
 instead of \gref{kebab case}{kebab_case}\index{kebab case}\index{naming conventions!kebab case}
-(e.g. `some-thing`):
+(e.g., `some-thing`):
 an expression like `import some-thing` isn't allowed
 because `some-thing` isn't a legal variable name.
 When a file is imported,
@@ -5372,7 +5371,7 @@ for more information.
 
 Using `script_template.py` as a guide,
 write a new script called `my_ls.py`
-that takes as input a directory and suffix (e.g. py, txt, md, sh)
+that takes as input a directory and a suffix (e.g., py, txt, md, sh)
 and outputs a list of the files (sorted alphabetically)
 in that directory ending in that suffix.
 
@@ -5422,7 +5421,7 @@ write a new script called `sentence_endings.py` that counts
 the occurrence of full stops, question marks and exclamation points
 and prints that information to the screen.
 
-Hint: String objects have a `count` method, e.g:
+Hint: String objects have a `count` method:
 
 ```bash
 $ python
@@ -5473,11 +5472,11 @@ Note: we will not be including this script in subsequent chapters.
 Using `script_template.py` as a guide,
 take the plotting code from Section \@ref(scripting-plotting)
 and write a new Python program called `plotcounts.py`.
-The script should:
+The script should do the following:
 
 1. Use the `type=argparse.FileType('r')`, `nargs='?'` and `default='-'` options
-   for the input file argument (i.e. similar to the `countwords.py` script)
-   so that `plotcounts.py` uses standard input if no csv file is given.
+   for the input file argument (i.e., similar to the `countwords.py` script)
+   so that `plotcounts.py` uses standard input if no CSV file is given.
 
 2. Include an optional `--outfile` argument for the name of the output image file.
    The default value should be `plotcounts.png`.
@@ -5539,7 +5538,7 @@ Version control works by storing a master copy of your code in a repository,
 which you can't edit directly.
 Instead, you check out a working copy of the code,
 edit that code, then commit changes back to the repository.
-In this way, version control records a complete revision history (i.e. of every commit),
+In this way, version control records a complete revision history (i.e., of every commit),
 so that you can retrieve and compare previous versions at any time.
 This is useful from an individual viewpoint,
 because you don't need to store multiple (but slightly different) copies of the same script
@@ -5682,7 +5681,7 @@ core.ignorecase=true
 Depending on your operating system and version of Git, 
 your configuration list may look a bit different.
 Most of these differences shouldn't matter right now,
-as long as your user name and email are accurate.
+as long as your username and email are accurate.
 
 > **Git Help and Manual**
 >
@@ -6060,7 +6059,7 @@ the commit's author,
 when it was created,
 and the commit message that we wrote.
 
-> **Scrolling Through Logs**
+> **Scrolling through Logs**
 >
 > Our log this time isn't very long, 
 > so you were likely able to see it printed to your screen without needing to scroll.
@@ -6077,8 +6076,8 @@ most of the visual space is devoted to a few very common words,
 which makes it hard to see what is happening with the other ten thousand or so words.
 
 <div class="figure" style="text-align: center">
-<img src="figures/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for Dracula." width="100%" />
-<p class="caption">(\#fig:git-cmdline-initial-plot)Inverse rank versus word frequency for Dracula.</p>
+<img src="figures/git-cmdline/plot-initial.png" alt="Inverse rank versus word frequency for *Dracula*." width="100%" />
+<p class="caption">(\#fig:git-cmdline-initial-plot)Inverse rank versus word frequency for *Dracula*.</p>
 </div>
 
 An alternative way to visually evaluate Zipf's Law is
@@ -6495,7 +6494,7 @@ are the main tasks associated with incorporating remote repositories into your w
 > **Amira's Repository**
 >
 > Amira's repository referenced in this section
-> does exist in on GitHub at [amira-khan/zipf][amira-repo];
+> exists on GitHub at [amira-khan/zipf][amira-repo];
 > you may find it a useful reference point 
 > when proceeding through the rest of the book.
 
@@ -6639,7 +6638,7 @@ which always refers to the most recent version in the repository.
 `git diff HEAD` therefore shows the same thing as `git diff`,
 but instead of typing in a version identifier to back up one commit,
 we can use `HEAD~1` (where `~` is the tilde symbol).\index{Git!relative revision}
-This shorthand is read "HEAD minus one",
+This shorthand is read "HEAD minus one,"
 and gives us the difference to the previous saved version.
 `git diff HEAD~2` goes back two revisions and so on.
 We can also look at the differences between two saved versions
@@ -6667,7 +6666,7 @@ index c4c5b5a..f274473 100644
 
 If we want to see the changes made in a particular commit,
 we can use `git show`\index{Git commands!show}
-with an identifier and a file name:
+with an identifier and a filename:
 
 ```bash
 $ git show HEAD~1 bin/plotcounts.py
@@ -6996,7 +6995,7 @@ The staging area can hold changes from any number of files
 that you want to commit as a single snapshot.
 
 From your new `bio` directory,
-following after the previous exercise (in which you have uncommitted changes to `me.txt`):
+following after the previous exercise (wich leaves you with uncommitted changes to `me.txt`):
 
 1.  Create another new file `employment.txt`
     and add the details of your most recent job.
@@ -7009,7 +7008,7 @@ following after the previous exercise (in which you have uncommitted changes to 
 1.  Create a remote repository on GitHub for your new `bio` repository.
 2.  Push the contents of your local repository to the remote.
 3.  Make another change to your local repository
-    (e.g. by editing `me.txt` or `employment.txt`)
+    (e.g., by editing `me.txt` or `employment.txt`)
     and push these changes as well.
 4.  Go to the repo you just created on GitHub and check the timestamps of the files.
 
@@ -7127,7 +7126,7 @@ What does each line of the output show?
 ## Key Points {#git-cmdline-keypoints}
 
 
--   Use `git config` with the `--global` option to configure your user name,
+-   Use `git config` with the `--global` option to configure your username,
     email address, and other preferences once per machine.
 -   `git init` initializes a \gref{repository}{repository}.
 -   Git stores all repository management data in the `.git` subdirectory of the repository's root directory.
@@ -7368,7 +7367,7 @@ Commands like `ls` and `git log` therefore show that the files and history haven
 
 Before we make any changes to our new branch,
 we need to figure out how to fit a line to the word count data.
-Zipf's Law says that:
+Zipf's Law says:
 
 > The second most common word in a body of text
 > appears half as often as the most common,
@@ -7412,7 +7411,7 @@ and intercept \(\log(c)\).
 To fit a line to our word count data we therefore need to estimate the value of \(\alpha\);
 we'll see later that \(c\) is completely defined.
 
-In order to determine the best method for estimating \(\alpha\) we turn to @More2016,
+In order to determine the best method for estimating \(\alpha\), we turn to @More2016,
 which suggests using a method called \gref{maximum likelihood estimation}{maximum_likelihood_estimation}.\index{maximum likelihood estimation}
 The likelihood function is the probability of our observed data
 as a function of the parameters in the statistical model that we assume generated it.
@@ -7490,7 +7489,7 @@ def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):
 where the maximum word frequency rank corresponds to \(c\),
 and \(-1 / \alpha\) the exponent in the power law.
 We have followed the [`numpydoc`][numpydoc] format for the detailed docstring
-in `plot_fit` - see Appendix \@ref(documentation) for more information
+in `plot_fit`---see Appendix \@ref(documentation) for more information
 about docstring formats.
 
 ## Verifying Zipf's Law {#git-advanced-zipf-verify}
@@ -7935,7 +7934,7 @@ we must learn how to merge conflicts.
 To start,
 use `nano` to add the project's title to
 a new file called `README.md` in the `master` branch,
-which we can the view:
+which we can then view:
 
 ```bash
 $ cat README.md
@@ -8387,7 +8386,7 @@ upstream    https://github.com/amira-khan/zipf.git (push)
 ```
 
 Sami has called their new remote `upstream` because it points at the repository
-theirs is derived from.\index{Git!upstream repository}\index{upstream repository (in Git)}
+from which theirs is derived.\index{Git!upstream repository}\index{upstream repository (in Git)}
 They could use any name,
 but `upstream` is a nearly universal convention.
 
@@ -8481,7 +8480,7 @@ They aren't part of Git itself,
 but are supported by all major online \gref{forges}{forge}.
 
 A pull request is essentially a note saying,
-"Someone would like to merge branch A of repository B into branch X of repository Y".
+"Someone would like to merge branch A of repository B into branch X of repository Y."
 The pull request does not contain the changes,
 but instead points at two particular branches.
 That way,
@@ -8599,7 +8598,7 @@ When they do,
 GitHub displays a page showing the new pull request,
 which has a unique serial number
 (Figure \@ref(fig:git-advanced-pull-request-new)).
-Note that this pull request is displayed in Amira's repository rather than Sami's
+Note that this pull request is displayed in Amira's repository rather than Sami's,
 since it is Amira's repository that will be affected if the pull request is merged.
 
 <div class="figure" style="text-align: center">
@@ -8788,7 +8787,7 @@ Amira can solve this problem with the tools she already has.
 If she has made her changes in a branch called `editing-readme`,
 the steps are:
 
-1.  Pull Sami's on the `master` branch of the GitHub repository
+1.  Pull Sami's changes from the `master` branch of the GitHub repository
     into the `master` branch of her desktop repository.
 
 2.  Merge *from* the `master` branch of her desktop repository
@@ -8926,7 +8925,7 @@ Describe what is in each of the four repositories involved after each of the ste
 >
 > --- Terry Pratchett\index{Pratchett, Terry}
 
-Projects can run for years with poorly-written code,
+Projects can run for years with poorly written code,
 but none will survive for long if people are confused,
 pulling in different directions,
 or hostile to each other.
@@ -8963,7 +8962,7 @@ zipf/
     └── ...
 ```
 
-## What is a Project? {#teams-scope}
+## What Is a Project? {#teams-scope}
 
 The first decision we have to make is what exactly constitutes a "project" [@Wils2017].
 Some examples are:
@@ -9049,7 +9048,7 @@ it is the right thing to do.
 > their whole lives,
 > and as a result don't realize how much harder things are for others [@Scal2012].
 >
-> The targets of oppression are often called "members of a marginalized group",
+> The targets of oppression are often called "members of a marginalized group,"
 > but targets don't choose to be marginalized:
 > people with privilege marginalize them.
 > Finally,
@@ -9307,7 +9306,7 @@ Similarly,
 changing a license does not change it retroactively,
 so different users may wind up operating under different licensing structures.
 
-> **Leave It To The Professionals**
+> **Leave It to the Professionals**
 >
 > Don't write your own license.
 > Legalese is a highly technical language,
@@ -9330,7 +9329,7 @@ Some of the things we need to think about are:
 Unfortunately,
 GitHub's list does not include common licenses for data or written works like papers and reports.
 Those can be added in manually,
-but it's often hard to understand the interactions between multiple licenses
+but it's often hard to understand the interactions among multiple licenses
 on different kinds of material [@Alme2017].
 
 Just as the project's Code of Conduct is usually placed in a root-level file called `CONDUCT.md`,
@@ -9417,10 +9416,10 @@ by [Creative Commons][creative-commons].\index{Creative Commons}
 These have been written and checked by lawyers and are well understood by the community.
 
 The most liberal option is referred to as \gref{CC-0}{cc_license},\index{Creative Commons!CC-0 license}\index{public domain}
-where the "0" stands for "zero restrictions".
+where the "0" stands for "zero restrictions."
 This puts work in the public domain,
 i.e.,
-allows anyone who wants to use it to do so however they want with no restrictions.
+allows anyone who wants to use it to do so, however they want, with no restrictions.
 CC-0 is usually the best choice for data,
 since it simplifies aggregate analysis involving datasets from different sources.
 It does not negate the scholarly tradition and requirement of citing sources;
@@ -9435,7 +9434,7 @@ we want people to share them widely
 but also want to get credit for our work.
 
 Other Creative Commons licenses incorporate various restrictions,
-and are usually referred to using the two-letter abbreviations listed below:
+and are usually referred to using two-letter abbreviations:
 
 -   ND (no derivative works) prevents people from creating modified versions of our work.
     Unfortunately, this also inhibits translation and reformatting.
@@ -9443,7 +9442,7 @@ and are usually referred to using the two-letter abbreviations listed below:
 -   SA (share-alike) requires people to share work that incorporates ours
     on the same terms that we used.
     Again,
-    it is fine in principle but in practice makes aggregation and recombination difficult.
+    it is fine in principle, but in practice it makes aggregation and recombination difficult.
 
 -   NC (no commercial use) does *not* mean that people cannot charge money for something that includes our work,
     though some publishers still try to imply that in order to scare people away from open licensing.
@@ -9515,7 +9514,7 @@ people create three kinds of issues:
 
 2.  \gref{Feature requests}{feature_request}\index{feature request}
     describing what could be done next,
-    such as "add this function to this package" or "add a menu to the website".
+    such as "add this function to this package" or "add a menu to the website."
 
 3.  Questions about how to use the software,
     how parts of the project work,
@@ -9555,7 +9554,7 @@ To write a good bug report:
     that includes only the steps needed to make the problem happen,
     and that (if possible) uses simplified data rather than a complete dataset.
     Again,
-    we can often we solve the problem ourselves as we trim down the steps to create one.
+    we can often solve the problem ourselves as we trim down the steps to create one.
 
 3.  Write a one-line title for the issue
     and a longer (but still brief) description that includes relevant details.
@@ -9678,7 +9677,7 @@ These labels can be modified or otherwise customized for each repository.
 
 Some projects use labels corresponding to upcoming software releases, journal issues, or conferences
 instead of *Current*, *Next*, and *Eventually*.
-This approach works well in the short-term,
+This approach works well in the short term,
 but becomes unwieldy as labels with names like `sprint-2020-08-01` and `spring-2020-08-16` pile up.
 
 Instead,
@@ -9705,7 +9704,7 @@ let us define a workflow like the one shown in Figure \@ref(fig:teams-lifecycle
 
 -   An *Open* issue becomes *Assigned* when someone is made responsible for it.
 
--   They can then move the issue to *Cancelled* if they think it was filed mistakenly
+-   They can then move the issue to *Canceled* if they think it was filed mistakenly
     or doesn't need to be fixed.
     (This is different from closing the issue after working on it.)
 
@@ -9721,7 +9720,7 @@ let us define a workflow like the one shown in Figure \@ref(fig:teams-lifecycle
     the issue's state is changed to reflect that.
 
 Small projects do not need this much formality,
-but when the team is distributed
+but when the team is distributed,
 contributors need to be able to find out what's going on
 without having to wait for someone to respond to email
 (or wondering who they *should* have emailed).
@@ -9765,7 +9764,7 @@ and is typically measured on a low--medium--high scale.
 but this just leads to arguing over whether something is a 4 or a 5.)
 Effort measures how much work the issue requires.
 Since this can't always be estimated accurately,
-it's common to classify things as "an hour", "a day", or "multiple days".
+it's common to classify things as "an hour," "a day," or "multiple days."
 Again,
 anything that's likely to take longer than multiple days should be broken down
 so that planning and progress tracking can be more accurate.
@@ -9780,7 +9779,7 @@ anything that is of high importance and requires little effort should be include
 while things of low importance that require a lot of effort should not.
 The team must still make hard decisions, though:
 
--   Should a a single large high-priority item be done,
+-   Should a single large high-priority item be done,
     or should several smaller low-priority items be tackled instead?
 -   What should be done about medium-priority items that keep being put off?
 
@@ -9790,7 +9789,7 @@ In a large project,
 a \gref{product manager}{product_manager} decides how important items are,\index{product manager}\index{project!product manager}
 while a \gref{project manager}{project_manager} is responsible for estimating effort\index{project manager}\index{project!project manager}
 and tracking progress.
-In a typical research software project,
+In a typical research software project
 the principal investigator either makes the decision
 or delegates that responsibility (and authority) to the lead developer.
 
@@ -9802,7 +9801,7 @@ to indicate their opinions on importance,
 or as complex as asking them to propose
 a multi-sprint breakdown of a particularly complex feature.
 Doing this shows people that their contributions are valued,
-which in turn increase their commitment to doing the work.
+which in turn increases their commitment to doing the work.
 It also produces better plans,
 since everyone knows something that someone else doesn't.
 
@@ -9918,7 +9917,7 @@ People can be held accountable at subsequent meetings.
 
 ### Air time {#teams-fair}
 
-One of the problem in a synchronous meeting
+One of the problems in a synchronous meeting
 is the tendency of some people to speak far more than others.
 Other meeting members may be so accustomed to this
 that they don't speak up even when they have valuable points to make.\index{meetings!how to run}
@@ -9935,7 +9934,7 @@ the quietest person in the meeting,
 and completely changes group dynamics.
 People who have given up trying to be heard
 suddenly have space to contribute,
-and the overly-frequent speakers realize how unfair they have been.
+and the overly frequent speakers realize how unfair they have been.
 
 Another useful technique is called \gref{interruption bingo}{interruption_bingo}.
 Draw a grid and label the rows and columns with the participants' names.
@@ -10045,7 +10044,7 @@ Who gets to vote?
     but as it attracts more volunteer contributors,
     a more explicit rule is needed.
     One common method is for existing members to nominate new ones,
-    who are then voted on using the process described above.
+    who are then voted in (or not) using the process described above.
 
 ## Make All This Obvious to Newcomers {#teams-documentation}
 
@@ -10161,7 +10160,7 @@ Talk with the offender.
     put it on the agenda for a team meeting,
     present the complaint,
     and make sure that the offender understands it.
-    This is often enough:
+    Doing this once is often enough:
     if someone realizes that they're going to be called on their hitchhiking or bad manners,
     they will usually change their ways.
 
@@ -10175,7 +10174,7 @@ Escalate as soon as there's a second offense.
     we are being foolish if we give them a chance to do it again and again.
 
 In academic research projects,
-"escalation" means "taking the issue to the project's principal investigator".
+"escalation" means "taking the issue to the project's principal investigator."
 Of course,
 the PI has probably had dozens of students complain to her over the years
 about teammates not doing their share,
@@ -10268,7 +10267,7 @@ Where is the information for licensing and contributing?
 
 Add a `CONDUCT.md` file to your Zipf's Law project repository.
 Use the [Contributor Covenant][covenant] Code of Conduct template and modify the
-places that need updating (e.g. who to contact).
+places that need updating (e.g., who to contact).
 Be sure to edit the contact information in both before committing the files.
 
 ### Add a license to your project {#teams-ex-boilerplate-license}
@@ -10325,7 +10324,7 @@ How would you address this issue?
 
 ### Who are you? {#teams-ex-members}
 
-1.  Which (if any) of the profiles below best describes you?
+1.  Which (if any) of the followig profiles describes you best?
 2.  How would you handle each of these people if they were on your team?
 
 -   *Anna* thinks she knows more about every subject
@@ -10371,9 +10370,9 @@ How would you address this issue?
     She means well---she really does feel bad about letting people down---but
     somehow her tasks are never finished until the last possible moment.
     Of course, that means that everyone who is depending on her can't do their work until
-    *after* the last possible moment...
+    *after* the last possible moment.
 
--   *Petra*'s favorite phrase is "why don't we".
+-   *Petra*'s favorite phrase is "why don't we."
     Why don't we write a GUI to help people edit the program's configuration files?
     Hey, why don't we invent our own little language for designing GUIs?
 
@@ -10387,7 +10386,7 @@ How would you address this issue?
 
 
 -   Welcome and nurture community members proactively.
--   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
+-   Create an explicit Code of Conduct for your project modeled on the [Contributor Covenant][covenant].
 -   Include a license in your project so that it's clear who can do what with the material.
 -   Create \gref{issues}{issue} for bugs, enhancement requests, and discussions.
 -   \gref{Label issues}{issue_label} to identify their purpose.
@@ -10415,7 +10414,7 @@ or when we need to re-do the analysis every time new data arrives?
 What should we do if the analysis has several steps
 that we have to do in a particular order?
 
-If we try to keep track of this ourselves
+If we try to keep track of this ourselves,
 we will inevitably forget some crucial steps
 and it will be hard for other people to pick up our work.
 Instead,
@@ -10487,11 +10486,11 @@ This chapter uses a version of Make called [GNU Make][gnu-make].
 It comes with MacOS and Linux;
 please see Section \@ref(getting-started-install-software) for Windows installation instructions.
 
-> **Keep Tracking With Version Control**
+> **Keep Tracking with Version Control**
 >
 > We learned about tracking our project's version history using Git
 > in Chapters \@ref(git-cmdline) and \@ref(git-advanced).
-> We encourage you to continue apply the Git workflow
+> We encourage you to continue applying the Git workflow
 > throughout the rest of our code development,
 > though we won't continue to remind you.
 
@@ -10527,7 +10526,7 @@ Spaces cannot be used instead of tabs here,
 which can be confusing as they are interchangeable in most other programming languages.
 In the rule above,
 the recipe is "run `bin/countwords.py` on the raw data file
-and put the output in a CSV file in the `results` directory".
+and put the output in a CSV file in the `results` directory."
 
 To test our rule, run this command in the shell:
 
@@ -10565,8 +10564,8 @@ one of three things will happen:
     Make does nothing.
 
 In the first two cases,
-Make prints the commands it runs
-along with anything those command prints to the screen
+Make prints the commands it runs,
+along with anything those commands print to the screen
 via \gref{standard output}{stdout} or \gref{standard error}{stderr}.
 There is no screen output in this case,
 so we only see the command.
@@ -10632,7 +10631,7 @@ When we run `make` it tells us:
 make: `results/moby_dick.csv' is up to date.
 ```
 
-By default Make only attempts to update the first target it finds in the Makefile,
+By default, Make only attempts to update the first target it finds in the Makefile,
 which is called the \gref{default target}{default_target}.\index{build target!default}
 In this case,
 the first target is `results/moby_dick.csv`,
@@ -10649,7 +10648,7 @@ python bin/countwords.py \
   data/jane_eyre.txt > results/jane_eyre.csv
 ```
 
-If we have to run `make` once for each result
+If we have to run `make` once for each result,
 we're right back where we started.
 However,
 we can add a rule to our Makefile to update all of our results at once.
@@ -10701,7 +10700,7 @@ $ make clean
 ```
 
 Make will delete any results files we have.
-This is a lot safer than typing `rm -f results/*.csv` at the command-line each time,
+This is a lot safer than typing `rm -f results/*.csv` at the command line each time,
 because if we mistakenly put a space before the `*`
 we would delete all of the CSV files in the project's root directory.
 
@@ -10830,7 +10829,7 @@ to use `$(NAME)` and not `$NAME`.
 > **Why the Parentheses?**
 >
 > For historical reasons,
-> Make interprets `$NAME` to be a "variable called `N` followed by the three characters 'AME'",
+> Make interprets `$NAME` to be a variable called `N` followed by the three characters "AME".
 > If no variable called `N` exists,
 > `$NAME` becomes `AME`,
 > which is almost certainly not what we want.
@@ -10851,7 +10850,7 @@ To do this,
 we need to understand Make's
 \gref{automatic variables}{automatic_variable}.\index{automatic variables (in Make)}\index{Make!automatic variables}
 The first step is to use the very cryptic expression `$@` in the rule's recipe
-to mean "the target of the rule".
+to mean "the target of the rule."
 It lets us turn this:
 
 ```makefile
@@ -10929,7 +10928,7 @@ results/%.csv : data/%.txt $(COUNT)
 ```
 
 will handle *Jane Eyre*, *Moby Dick*, *The Time Machine*, and every other novel in the `data/` directory.
-`%` cannot be used in rules' recipes,
+`%` cannot be used in recipes,
 which is why `$<` and `$@` are needed.
 
 With this rule in place, our entire Makefile is reduced to:
@@ -10966,7 +10965,7 @@ $ make clean
 rm -f results/*.csv
 ```
 
-and then recreate them:
+and then re-create them:
 
 ```bash
 $ make  # Same as `make all` as "all" is the first target
@@ -11317,15 +11316,15 @@ and that the final result should be regenerated if the program used to create it
 One difference between the recipe in this rule and the recipes we've seen before
 is that this recipe uses `$(RESULTS)` directly instead of an automatic variable.
 We have written the rule this way because
-there isn't an automatic variable that means "all but the last prerequisite",
+there isn't an automatic variable that means "all but the last prerequisite,"
 so there's no way to use automatic variables that wouldn't result in us trying to process our program.
 
 Likewise,
 we can also add the `plotcounts.py` script to this workflow
 and update the `all` and `settings` rules accordingly.
 Note that there is no `>` needed before the `$@`
-because `plotcounts.py` default is to write to a file
-rather than to [standard output][stdout].
+because the default action of `plotcounts.py` is to write to a file
+rather than to standard output.
 
 ```makefile
 # ...phony targets and previous variable definitions...
@@ -11558,7 +11557,7 @@ Under what circumstances would this strategy be useful?
 ## Key Points {#automate-keypoints}
 
 
--   [Make][gnu-make] is a widely-used build manager.
+-   [Make][gnu-make] is a widely used build manager.
 -   A \gref{build manager}{build_manager} re-runs commands to update files that are out of date.
 -   A \gref{build rule}{build_rule} has \gref{targets}{build_target}, \gref{prerequisites}{prerequisite}, and a \gref{recipe}{build_recipe}.
 -   A target can be a file or a \gref{phony target}{phony_target} that simply triggers an action.
@@ -11568,7 +11567,7 @@ Under what circumstances would this strategy be useful?
 -   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
 -   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
--   Use specially-formatted comments to create self-documenting Makefiles.
+-   Use specially formatted comments to create self-documenting Makefiles.
 
 <!--chapter:end:chapters/automate.Rmd-->
 
@@ -11629,7 +11628,7 @@ zipf/
     └── ...
 ```
 
-> **Be Careful When Applying Settings Outside Your Project**
+> **Be Careful When Applying Settings outside Your Project**
 >
 > This chapter's examples modify files outside of the Zipf's Law project
 > in order to illustrate some concepts.
@@ -11640,7 +11639,7 @@ zipf/
 
 Programmers have invented far too many formats for configuration files;
 rather than creating one of your own,
-you should adopt some widely-used approach.
+you should adopt some widely used approach.
 One is to write the configuration as a Python module
 and load it as if it was a library.
 This is clever,
@@ -11763,7 +11762,7 @@ $ python bin/plotcounts.py results/jane_eyre.csv --outfile
 This does what we want,
 but is usually the wrong approach.
 Since the `matplotlibrc` file sets system-wide defaults,
-we will now have big labels by default for all plotting we do in future,
+we will now have big labels by default for all plotting we do in the future,
 which we may not want.
 Secondly,
 we want to package our Zipf's Law code and make it available to other people (Chapter \@ref(packaging)).
@@ -11780,7 +11779,7 @@ a one-line change in `matplotlibrc` can prevent a lot of failed jobs.
 
 If we don't want to change the configuration for everyone,
 we can change it for just ourself.
-Matplotlib defines several carefully-designed styles for plots:\index{configuration!user}
+Matplotlib defines several carefully designed styles for plots:\index{configuration!user}
 
 ```python
 import matplotlib.pyplot as plt
@@ -11881,7 +11880,7 @@ mpl.rcParams['xtick.labelsize'] = args.xticksize
 mpl.rcParams['ytick.labelsize'] = args.yticksize
 ```
 
-Adding extra command line arguments is a good solution
+Adding extra command-line arguments is a good solution
 if we only want to change a small number of plot characteristics.
 It also makes our work more reproducible:
 if we use a Makefile to regenerate our plots (Chapter \@ref(automate)),
@@ -11893,7 +11892,7 @@ if we want to tweak other aspects of the plot.
 
 ## A Job Control File {#config-job-file}
 
-The final option for configuring our plots---the one we will actually adopt in this case--- is
+The final option for configuring our plots---the one we will actually adopt in this case---is
 to pass a YAML file full of Matplotlib parameters to `plotcounts.py`.\index{configuration!file}
 First,
 we save the parameters we want to change in a file inside our project directory.
@@ -12040,7 +12039,7 @@ from people who just want to get their science done.
 More generally,
 the problem of configuring a program illustrates the difference
 between "works for me on my machine"
-and "works for everyone, everywhere".
+and "works for everyone, everywhere."
 From reproducible workflows (Chapter \@ref(automate)) to logging (Section \@ref(errors-logging)),
 this difference influences every aspect of a research software engineer's work.
 We don't always have to design for large-scale re-use,
@@ -12071,7 +12070,7 @@ to understand what that command is doing.
 
 ### Using different plot styles {#config-ex-style}
 
-There are a wide variety of pre-defined matplotlib styles (Section \@ref(config-user)),
+There are many pre-defined matplotlib styles (Section \@ref(config-user)),
 as illustrated at the [Python Graph Gallery][python-graph-gallery-styles].
 
 1. Add a new option `--style` to `plotcounts.py` that allows the user
@@ -12105,7 +12104,7 @@ is working.
 
 If we used [Windows INI format][ini-format] instead of YAML
 for our plot parameters configuration file
-(i.e. `plotparams.ini` instead of `plotparams.yml`)
+(i.e., `plotparams.ini` instead of `plotparams.yml`)
 that file would read as follows:
 
 ```ini
@@ -12247,7 +12246,7 @@ AssertionError: Word frequencies must be non-negative
 ```
 
 Programs intended for widespread use are full of assertions:
-10-20% of the code they contain are there to check that the other 80-90% are working correctly.
+10%--20% of the code they contain are there to check that the other 80%--90% are working correctly.
 Broadly speaking, assertions fall into three categories:
 
 -   A \gref{precondition}{precondition}\index{precondition (in program)}\index{assertion!precondition}
@@ -12269,7 +12268,7 @@ Broadly speaking, assertions fall into three categories:
     is something that is true for every iteration in a loop.
     The invariant might be a property of the data (as in the example above),
     or it might be something like,
-    "the value of `highest` is less than or equal to the current loop index".
+    "the value of `highest` is less than or equal to the current loop index."
 
 The function `get_power_law_params` in our `plotcounts.py` script
 is a good example of the need for a precondition.
@@ -12420,7 +12419,7 @@ but we should check other cases as well.
 To manage them,
 we can use a \gref{test framework}{test_framework}\index{test framework}\index{testing!framework}
 (also called a \gref{test runner}{test_runner}).
-The most widely-used test framework for Python is called [`pytest`][pytest],
+The most widely used test framework for Python is called [`pytest`][pytest],
 which structures tests as follows:
 
 1.  Tests are put in files whose names begin with `test_`.
@@ -12491,8 +12490,8 @@ Setting \(\alpha\) to one and re-arranging the power law gives us:\[
 c = f/r
 \]
 
-We can use this formula to generate synthetic word counts data
-(i.e. our test fixture)
+We can use this formula to generate synthetic word count data
+(i.e., our test fixture)
 with a constant of proportionality set to a hypothetical maximum word frequency of 600
 (and thus \(r\) ranges from 1 to 600):
 
@@ -12603,7 +12602,7 @@ rather than stopping at the first assertion failure as a regular Python script w
 
 ## Testing Floating-Point Values {#testing-numeric}
 
-The output above shows that that while `test_alpha` failed,
+The output above shows that while `test_alpha` failed,
 the `actual_alpha` value of 0.9951524579316625 was very close to the expected value of 1.0.
 After a bit of thought,
 we decide that this isn't actually a failure:
@@ -12636,9 +12635,9 @@ or the \gref{relative error}{relative_error},\index{relative error}\index{error!
 which the ratio of the absolute error to the value we're approximating [@Gold1991].
 For example,
 if we add 9+1 and get 11,
-the absolute error is 1 (i.e., 11-10),
+the absolute error is 1 (i.e., \(11-10\)),
 and the relative error is 10%.
-If we add 99+1 and get 101,
+If we add \(99+1\) and get 101,
 on the other hand,
 the absolute error is still 1,
 but the relative error is only 1%.
@@ -12731,7 +12730,7 @@ However,
 creating the fixture and running the code
 can be considerably more complicated.
 For example,
-in the case of our Zipf's Law software an appropriate integration test fixture
+in the case of our Zipf's Law software, an appropriate integration test fixture
 might be a text file with a word frequency distribution that has a known \(\alpha\) value.
 In order to create this text fixture,
 we need a way to generate random words.
@@ -12826,8 +12825,8 @@ the odds are good that we'd make a mistake.
 
 For this kind of situation we can use
 \gref{regression testing}{regression_testing}.\index{testing!regression test}\index{regression test}
-Rather than assuming that the test author knows what the expected result should be,
-regression tests compares today's answer with a previous one.
+Rather than assuming that the test's author knows what the expected result should be,
+regression tests compare today's answer with a previous one.
 This doesn't guarantee that the answer is right---if the original answer is wrong,
 we could carry that mistake forward indefinitely---but
 it does draw attention to any changes (or "regressions").
@@ -12924,9 +12923,9 @@ in fact,
 only 65% and 36% of the lines were run respectively.
 This makes sense,
 since much of the code in those scripts
-is devoted to handling command line arguments or file I/O
+is devoted to handling command-line arguments or file I/O
 rather than the word counting and parameter estimation functionality
-that our unit, integration and regression tests focus on.
+that our unit, integration, and regression tests focus on.
 
 To make sure that's the case,
 we can get a more complete report by running `coverage html` at the command line
@@ -13073,12 +13072,12 @@ as a starting point for the project.
 The `python` key specifies the version or versions of Python to use,
 while the `install` key indicates the name of the file (`requirements.txt`)
 listing the libraries that need to be installed.
-The `script` key lists the commands to run---in this case, `pytest`---
-which in turn executes our project scripts
-(i.e. `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `utilities.py`).
+The `script` key lists the commands to run---in this case, `pytest`---which
+in turn executes our project scripts
+(i.e., `test_zipfs.py`, `plotcounts.py`, `countwords.py` and `utilities.py`).
 These scripts import a number of packages that don't come with the
 [Python Standard Library][python-standard-library],
-so these are what comprises `requirements.txt`:
+so these are what comprise `requirements.txt`:
 
 ```text
 numpy
@@ -13107,7 +13106,7 @@ but linking our Travis CI account to our GitHub account may be something new.
 We only have to do this once
 to allow Travis CI to access all our GitHub repositories,
 but we should always be careful when giving sites access to other sites,
-and only trust well-established and widely-used services.
+and only trust well-established and widely used services.
 
 We can tell Travis CI which repository we want it to watch
 by clicking the "+" next to the "My Repositories" link
@@ -13137,7 +13136,7 @@ Once your repository has been activated,
 Travis CI follows the instructions in `.travis.yml`
 and reports whether the build passed (shown in green)
 or produced warnings or errors (shown in red).
-To create this report, Travis CI has:
+To create this report, Travis CI has done the following:
 
 1.  Created a new Linux virtual machine.
 2.  Installed the desired version of Python.
@@ -13162,7 +13161,7 @@ just as writing a Makefile forces us to be explicit about exactly how we produce
 
 ## When to Write Tests {#testing-tdd}
 
-We have now met the three major types of test: unit, integration and regression.
+We have now met the three major types of test: unit, integration, and regression.
 At what point in the code development process should we write these?
 The answer depends on who you ask.
 
@@ -13201,12 +13200,12 @@ each time they produce an intermediate or final result,
 they scan a table, create a chart, or inspect some summary statistics
 to see if everything looks OK.
 Their heuristics are usually easy to state,
-like "there shouldn't be NAs at this point" or "the age range should be reasonable",
+like "there shouldn't be NAs at this point" or "the age range should be reasonable,"
 but applying those heuristics to a particular analysis always depends on
 their evolving insight into the data in question.
 
 By analogy with test-driven development,
-we could call this process "checking-driven development".
+we could call this process "checking-driven development."
 Each time we add a step to our pipeline and look at its output,
 we can also add a check of some kind to the pipeline to ensure that
 what we are checking for remains true as the pipeline evolves or is run on other data.
@@ -13241,7 +13240,7 @@ the practices introduced in this chapter will help with both.
 
 ### Explaining assertions {#testing-ex-explain-assertions}
 
-Given a list of a numbers,
+Given a list of numbers,
 the function `total` returns the total:
 
 ```python
@@ -13252,7 +13251,7 @@ total([1, 2, 3, 4])
 10
 ```
 
-`total` only works on numbers:
+The function only works on numbers:
 
 ```python
 total(['a', 'b', 'c'])
@@ -13283,7 +13282,7 @@ A rectangle can be described using a tuple of four cartesian coordinates `(x0, y
 where `(x0, y0)` represents the lower left corner and `(x1, y1)` the upper right.
 In order to do some calculations,
 suppose we need to be able to normalize rectangles so that the lower left corner
-is at the origin (i.e. `(x0, y0) = (0, 0)`) and the longest side is 1.0 units long.
+is at the origin (i.e., `(x0, y0) = (0, 0)`) and the longest side is 1.0 units long.
 This function does that:
 
 ```python
@@ -13320,11 +13319,11 @@ save that file in a new directory called `exercises`.
 1. To ensure that the inputs to `normalize_rectangle` are valid,
 add \gref{preconditions}{precondition} to check that:
 (a) `rect` contains 4 coordinates,
-(b) the width of the rectangle is a positive, non-zero value (i.e. `x0 < x1`), and
-(c) the height of the rectangle is a positive, non-zero value (i.e. `y0 < y1`).
+(b) the width of the rectangle is a positive, non-zero value (i.e., `x0 < x1`), and
+(c) the height of the rectangle is a positive, non-zero value (i.e., `y0 < y1`).
 
 2. If the normalization calculation has worked correctly,
-the new `x1` coordinate will lie between 0 and 1 (i.e. `0 < upper_x <= 1.0`).
+the new `x1` coordinate will lie between 0 and 1 (i.e., `0 < upper_x <= 1.0`).
 Add a \gref{postcondition}{postcondition} to check that this is true.
 Do the same for the new `y1` coordinate, `upper_y`.
 
@@ -13701,7 +13700,7 @@ This error is hard to understand,
 even if we are familiar with the code's internals.
 Our program should therefore check that the input files are CSV files,
 and if not,
-raise an error with a useful explanation to what went wrong.
+raise an error with a useful explanation of what went wrong.
 We could achieve this by wrapping the call to `open` in a `try/except` clause:
 
 ```python
@@ -13762,9 +13761,9 @@ and that the second is numerical.
 
 > **Kinds of Errors**
 >
-> The "`if` then `raise`" approach is sometimes referred to as "look before you leap",
+> The "`if` then `raise`" approach is sometimes referred to as "look before you leap,"
 > while the `try/except` approach obeys the old adage that
-> "it's easier to ask for forgiveness than permission".
+> "it's easier to ask for forgiveness than permission."
 > The first approach is more precise,
 > but has the shortcoming that programmers can't anticipate everything that can go wrong when running a program,
 > so there should always be an `except` somewhere
@@ -13837,7 +13836,7 @@ What research there is gives us the following rules [@Beck2016]:
 3.  Be as specific as possible without being or seeming wrong
     from a user's point of view.
     For example,
-    "file not found" is very different from "don't have permissions to open file" or "file is empty".
+    "file not found" is very different from "don't have permissions to open file" or "file is empty."
 
 4.  Write for your audience's level of understanding.
     For example,
@@ -13918,7 +13917,7 @@ Equally,
 if a function doesn't raise an exception when it should
 then errors can easily slip past us.
 If we want to check that a function called `func`
-raises an `ExpectedError` exception\index{testing!error handling}\index{exception!testing}
+raises an `ExpectedError` exception\index{testing!error handling}\index{exception!testing},
 we can use the following template for a unit test:
 
 ```python
@@ -13938,7 +13937,7 @@ This template has three cases:
     then something has gone wrong,
     so we `assert False` (which always fails).
 
-2.  If `func` raises the error it's supposed to
+2.  If `func` raises the error it's supposed to,
     then we go into the first `except` branch
     *without* triggering the `assert` immediately below the function call.
     The code in this `except` branch could check that
@@ -14102,12 +14101,12 @@ but we should think twice before doing it in production,
 since the information we throw away often turns out to be
 exactly what we need to find a bug.
 
-Many programs allow users to specify logging levels and log file names as command-line parameters.
+Many programs allow users to specify logging levels and log filenames as command-line parameters.
 At its simplest,
 this is a single flag `-v` or `--verbose` that changes the logging level from `WARNING` (the default)
 to `DEBUG` (the noisiest level).
 There may also be a corresponding flag `-q` or `--quiet` that changes the level to `ERROR`,
-and a flag `-l` or `--logfile` that specifies a log file name.
+and a flag `-l` or `--logfile` that specifies the name of a log file.
 To log messages to a file while also printing them,
 we can tell `logging` to use two handlers simultaneously:
 
@@ -14231,7 +14230,7 @@ The following exercises will ask you to make further edits to `collate.py`.
 
 ### Set the logging level {#errors-ex-set-level}
 
-Define a new command line flag for `collate.py` called `--verbose` (or `-v`)
+Define a new command-line flag for `collate.py` called `--verbose` (or `-v`)
 that changes the logging level from `WARNING` (the default)
 to `DEBUG` (the noisiest level).
 
@@ -14285,7 +14284,7 @@ as well as the words and their counts.
 called `collate.log` instead.
 (HINT: `logging.basicConfig` has an argument called `filename`.)
 
-2. Create a new command line option `-l` or `--logfile` so that the user
+2. Create a new command-line option `-l` or `--logfile` so that the user
 can specify a different name for the log file if they don't like
 the default name of `collate.log`.
 
@@ -14295,14 +14294,14 @@ the default name of `collate.log`.
     that are raised when it tries to open files
     and records them in the log file.
     When you are finished,
-    the program should collate all the files it can
+    the program should collate all the files it can,
     rather than halting as soon as it encounters a problem.
 2.  Modify your first solution to handle nonexistent files
     and permission problems separately.
 
 ### Testing error handling {#errors-ex-error-handling}
 
-In our suggested solution to the previous exercise we modified `collate.py` to handle
+In our suggested solution to the previous exercise, we modified `collate.py` to handle
 different types of errors associated with reading input files.
 If the `main` function in `collate.py` now reads:
 
@@ -14337,9 +14336,9 @@ def main(args):
 
 1.  It is difficult to write a simple unit test for the lines of code dedicated
     to reading input files, because `main` is a long function that requires
-    command line arguments as input.  Edit `collate.py` so that the six lines of
+    command-line arguments as input.  Edit `collate.py` so that the six lines of
     code responsible for processing an input file appear in their own function
-    that reads as follows (i.e. once you are done, `main` should call
+    that reads as follows (i.e., once you are done, `main` should call
     `process_file` in place of the existing code):
 
 ```python
@@ -14405,7 +14404,7 @@ except Exception as e:
 -   Signal errors by \gref{raising exceptions}{raise_exception}.
 -   Use `try`/`except` blocks to \gref{catch}{catch_exception} and handle exceptions.
 -   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
--   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
+-   "Throw low, catch high," i.e., raise exceptions immediately but handle them at a higher level.
 -   Write error messages that help users figure out what to do to fix the problem.
 -   Store error messages in a lookup table to ensure consistency.
 -   Use a \gref{logging framework}{logging_framework} instead of `print` statements to report program activity.
@@ -14543,19 +14542,19 @@ They are still aspirational for most researchers,
 but tell us what to aim for [@Good2014; @Mich2015; @Hart2016; @Broc2019; @Tier2020].
 The most immediately important elements of the FAIR Principles are outlined below.
 
-#### Data should be *findable*.
+#### Data should be *findable*
 
 The first step in using or re-using data is to find it.
 We can tell we've done this if:
 
 1.  (Meta)data is assigned a globally unique and persistent identifier
-    (i.e. a \gref{DOI}{doi}).
-2.  Data is described with rich metadata
+    (i.e., a \gref{DOI}{doi}).
+2.  Data is described with rich metadata.
 3.  Metadata clearly and explicitly includes the identifier of the data it describes.
 4.  (Meta)data is registered or indexed in a searchable resource,
     such as the data sharing platforms described in Section \@ref(provenance-data-where).
 
-#### Data should be *accessible*.
+#### Data should be *accessible*
 
 People can't use data if they don't have access to it.
 In practice,
@@ -14567,7 +14566,7 @@ We can tell we've done this if:
     using a standard communications protocol like HTTP.
 2.  Metadata is accessible even when the data is no longer available.
 
-#### Data should be *interoperable*.
+#### Data should be *interoperable*
 
 Data usually needs to be integrated with other data,
 which means that tools need to be able to process it.
@@ -14577,7 +14576,7 @@ We can tell we've done this if:
 2.  (Meta)data uses vocabularies that follow FAIR principles.
 3.  (Meta)data includes qualified references to other (meta)data.
 
-#### Data should be *reusable*.
+#### Data should be *reusable*
 
 This is the ultimate purpose of the FAIR Principles and much other work.
 We can tell we've done this if:
@@ -14620,7 +14619,7 @@ Our Zipf's Law analysis represents a typical data science project
 in that we've written some code
 that leverages other pre-existing software packages
 in order to produce the key results of a report.\index{publishing!software}
-To make a computational workflow like this open, transparent and reproducible
+To make a computational workflow like this open, transparent, and reproducible
 we must archive three key items:
 
 1.  A copy of any **analysis scripts or notebooks** used to produce the key results
@@ -14635,7 +14634,7 @@ Unfortunately,
 librarians, publishers, and regulatory bodies are still trying to determine
 the best way to document and archive material like this,
 so a widely accepted set of FAIR Principles for research software
-are still under development [@Lamp2020].
+is still under development [@Lamp2020].
 In the meantime, the best advice we can give is presented below.
 It involves adding information about the software environment
 and data processing steps to a GitHub repository that contains
@@ -14664,7 +14663,7 @@ asn1crypto==1.0.1
 ...
 ```
 
-Other command line tools will often have an option like `--version` or `--status`
+Other command-line tools will often have an option like `--version` or `--status`
 to access the version information.
 
 Archiving a list of package names and version numbers would mean that our
@@ -14701,7 +14700,7 @@ dependencies:
 ...
 ```
 
-That software environment can be recreated on another computer with one line of code:
+That software environment can be re-created on another computer with one line of code:
 
 ```
 $ conda env create -f environment.yml
@@ -14790,7 +14789,7 @@ Over time some of these dependencies will inevitably be updated or no longer sup
 meaning our workflow will be documented but not reproducible.
 
 Fortunately,
-most readers are not looking to exactly re-run a decade old analysis:
+most readers are not looking to exactly re-run a decade-old analysis:
 they just want to be able to figure out what was run
 and what the important decisions were,
 which is sometimes referred to as \gref{inspectability}{inspectability}\index{inspectability}
@@ -14857,7 +14856,7 @@ Review the dataset's main page to get a sense of the study,
 then review the spreadsheet file and the coded response file.
 
 1.  Who are the participants of this study?
-2.  What types of data was collected and used for analysis?
+2.  What types of data were collected and used for analysis?
 3.  Can you find information on the demographics of the interviewees?
 4.  This dataset is clearly in support of an article.
     What information can you find about it, and can you find a link to it?
@@ -14867,10 +14866,10 @@ then review the spreadsheet file and the coded response file.
 The GitHub repository [`borstlab/reversephi_paper`][borstlab-reversephi] provides the code and data for the paper @Leon2017.
 Browse the repository and answer the following questions:
 
-1.  Where is the software environment described? What files would you need to recreate the software environment?
+1.  Where is the software environment described? What files would you need to re-create the software environment?
 2.  Where are the data processing steps described? How could you re-create the results included in the manuscript?
 3.  How are the scripts and data archived?
-    i.e. Where can you download the version of the code and data as it was when the manuscript was published?
+    That is, where can you download the version of the code and data as it was when the manuscript was published?
 
 To get a feel for the different approaches to code provenance, repeat steps 1-3 with the following:
 
@@ -14938,7 +14937,7 @@ How would you go about publishing the code associated with that project
 
 The more software we write,
 the more we come to think of programming languages as a way to build and combine libraries.
-Every widely-used language now has an online repository
+Every widely used language now has an online repository
 from which people can download and install those libraries.
 This lesson shows you how to use Python's tools to create and share libraries of your own.
 
@@ -15043,7 +15042,7 @@ $ mv bin pyzipf
 >
 > We won't do it in this case
 > (because it would break links/references from earlier in the book),
-> but now that we've decided to name our package is `pyzipf`,
+> but now that we've decided to name our package `pyzipf`,
 > we would normally update the name of our GitHub repository to match.
 > After changing the name at the GitHub website,
 > we would need to update our `git remote` so that our 
@@ -15088,10 +15087,10 @@ Major version zero (0.Y.Z) is for initial development, so we have started with 0
 The first stable public release would be version 1.0.0,
 and in general, the version number is incremented as follows:
 
--   Increment `major` every time there's an incompatible externally-visible change
+-   Increment `major` every time there's an incompatible externally visible change.
 -   Increment `minor` when adding new functionality in a backwards-compatible manner
-    (i.e. without breaking any existing code)
--   Increment `patch` for backwards-compatible bug fixes that don't add any new features
+    (i.e., without breaking any existing code).
+-   Increment `patch` for backwards-compatible bug fixes that don't add any new features.
 
 Finally,
 we specify the name of the directory
@@ -15126,14 +15125,14 @@ Virtual environments also help with package development:
 -   We want to be able to easily test install and uninstall our package,
     without affecting the entire Python environment.
 -   We want to answer problems people have with our package with something more helpful than
-    "I don't know, it works for me".
+    "I don't know, it works for me."
     By installing and running our package in a completely empty environment,
     we can ensure that we're not accidentally relying on other packages being installed.
 
 We can manage virtual environments using [`conda`][conda] (Appendix \@ref(anaconda)).
 To create a new virtual environment called `pyzipf` we run `conda create`,\index{virtual environment (in Python)!creating}
 specifying the environment's name with the `-n` or `--name` flag
-and including `pip` and our current version of python in the new environment:
+and including `pip` and our current version of Python in the new environment:
 
 ```bash
 $ conda create -n pyzipf pip python=3.7.6
@@ -15184,7 +15183,7 @@ which checks for packages in these directories before checking the main installa
 > **`conda` Variations**
 >
 > As with many of the other tools we've explored in this book,
-> the behavior of some `conda` commands differ depending on operating system.
+> the behavior of some `conda` commands differ depending on the operating system.
 > There are multiple ways to accomplish some of the tasks we present in this chapter.
 > The options we present here represent the approaches most likely to work across multiple platforms.
 > 
@@ -15192,9 +15191,9 @@ which checks for packages in these directories before checking the main installa
 > Our examples show the default path for Anaconda installed via the Unix shell 
 > on MacOS (`/Users/amira/anaconda3`),
 > but for the MacOS graphical installer it is `/Users/amira/opt/anaconda3`,
-> for Linux it is `/home/amira/anaconda3` and
-> on Windows it is `C:\Users\amira\Anaconda3`.
-> During the installation process users can also choose a custom location
+> for Linux it is `/home/amira/anaconda3`,
+> and on Windows it is `C:\Users\amira\Anaconda3`.
+> During the installation process, users can also choose a custom location
 > if they like (Section \@ref(getting-started-install-software)).
 
 We can switch to the `pyzipf` environment by running:\index{virtual environment (in Python)!switching}
@@ -15268,11 +15267,11 @@ Successfully installed pyzipf
 The `-e` option indicates that we want to install the package in "editable" mode,
 which means that any changes we make in the package code are directly available to use
 without having to reinstall the package;
-the `.` means "install from the current directory".
+the `.` means "install from the current directory."
 
 If we look in the location containing package installations 
 (e.g., `/Users/amira/anaconda3/envs/pyzipf/lib/python3.7/site-packages/`),
-we can see the `pyzipf` package beside all the other locally-installed packages.
+we can see the `pyzipf` package beside all the other locally installed packages.
 If we try to use the package at this stage,
 though,
 Python will complain that some of the packages it depends on,
@@ -15452,8 +15451,8 @@ setup(
 The right side of the `=` operator is the location of a function,
 written as `package.module:function`;
 the left side is the name we want to use to call this function from the command line.
-In this case, we want to call each module's `main` function,
-which as it stands requires an input argument `args`
+In this case we want to call each module's `main` function;
+right now, it requires an input argument `args`
 containing the command-line arguments given by the user (Section \@ref(scripting-options)).
 For example,
 the relevant section of our `countwords.py` program is:
@@ -15505,7 +15504,7 @@ if __name__ == '__main__':
     main()
 ```
 
-The new `parse_command_line` function handles the command line arguments,
+The new `parse_command_line` function handles the command-line arguments,
 so that `main()` no longer requires any input arguments.
 
 Once we have made the corresponding change in `collate.py` and `plotcounts.py`,
@@ -15622,13 +15621,13 @@ sys.path
 '/Users/amira/pyzipf']
 ```
 
-The empty string at the start of the list means "the current directory".
+The empty string at the start of the list means "the current directory."
 The rest are system paths for our Python installation,
 and will vary from computer to computer.
 
 ## Distributing Packages {#packaging-distribute}
 
-> **Look But Don't Execute**
+> **Look but Don't Execute**
 >
 > In this section we upload the `pyzipf` package
 > to TestPyPI and PyPI:
@@ -15641,10 +15640,10 @@ and will vary from computer to computer.
 > commands below exactly as shown
 > (because Amira has already uploaded the `pyzipf` package),
 > but the general sequence of commands in this section
-> is an excellent resource to refer back to when you are
+> is an excellent resource to refer to when you are
 > uploading your own packages.
 > If you want to try uploading your own `pyzipf` package via `twine`,
-> you could edit the project name to include your name (e.g. `pyzipf-yourname`)
+> you could edit the project name to include your name (e.g., `pyzipf-yourname`)
 > and use the TestPyPI repository for the upload.
 
 An installable package is most useful
@@ -15851,7 +15850,7 @@ Now that our package has been distributed,
 we need to think about whether we have provided sufficient documentation.
 Docstrings (Section \@ref(scripting-docstrings)) and READMEs
 are sufficient to describe most simple packages,
-but as our code base grows larger
+but as our code base grows larger,
 we will want to complement these manually written sections with automatically generated content,
 references between functions,
 and search functionality.
@@ -15859,9 +15858,9 @@ For most large Python packages,
 such documentation is generated using a \gref{documentation generator}{documentation_generator}
 called [Sphinx][sphinx],\index{Python package!documentation!Sphinx}
 which is often used in combination with a free online hosting service called
-[Read The Docs][readthedocs]\index{Read The Docs (for Python documentation)}.
+[Read the Docs][readthedocs]\index{Read the Docs (for Python documentation)}.
 In this section we will update our README file with some basic package-level documentation,
-before using Sphinx and Read The Docs to host that information online
+before using Sphinx and Read the Docs to host that information online
 along with more detailed function-level documentation.
 For further advice on writing documentation for larger and more complex packages,
 see Appendix \@ref(documentation).
@@ -15958,7 +15957,7 @@ your terminal::
 
 Additional information on each function
 can be found in their docstrings and appending the ``-h`` flag,
-e.g. ``countwords -h``.
+e.g., ``countwords -h``.
 
 Contributing
 ------------
@@ -15981,8 +15980,8 @@ we need to think about function-level documentation.
 We want to provide users with a list of all the functions available in our package
 along with a short description of what they do and how to use them.
 We could achieve this by manually cutting and pasting function names and docstrings
-from our Python modules (i.e. `countwords.py`, `plotcounts.py`, etc),
-but that would be a time consuming process prone to errors as more functions are added over time.
+from our Python modules (i.e., `countwords.py`, `plotcounts.py`, etc.),
+but that would be a time-consuming process prone to errors as more functions are added over time.
 Instead, we can use a \gref{documentation generator}{documentation_generator}
 called [Sphinx][sphinx]\index{Python package!documentation!Sphinx}
 that is capable of scanning Python code for function names and docstrings
@@ -16082,7 +16081,7 @@ The first change relates to the "path setup" section near the head of the file:
 ```
 
 Relative to the `docs/` directory,
-our modules (i.e. `countwords.py`, `utilities.py`, etc) are located in the `../pyzipf` directory.
+our modules (i.e., `countwords.py`, `utilities.py`, etc.) are located in the `../pyzipf` directory.
 We therefore need to uncomment the relevant lines of the path setup section in `conf.py`
 to tell Sphinx where those modules are:
 
@@ -16119,8 +16118,8 @@ Creating file source/modules.rst.
 
 At this point, we are ready to generate our webpage.
 The `docs` sub-directory contains a Makefile that was generated by `sphinx-quickstart`.
-If we run `make html` and open `docs/_build/index.html` in a web browser
-we'll have a website landing page with minimal documentation (Figure \@ref(fig:packaging-sphinx-landing-page-original)).
+If we run `make html` and open `docs/_build/index.html` in a web browser,
+we'll have a landing page with minimal documentation (Figure \@ref(fig:packaging-sphinx-landing-page-original)).
 If we click on the `Module Index` link we can access the documentation for the individual modules
 (Figures \@ref(fig:packaging-sphinx-module-list) and \@ref(fig:packaging-sphinx-module-countwords)).
 
@@ -16189,18 +16188,18 @@ now only needs run `pip install -r requirements_docs.txt`
 
 Now that we have generated our package documentation,
 we need to host it online.
-A common option for Python projects is [Read The Docs][readthedocs],\index{Read The Docs (for Python documentation)}
+A common option for Python projects is [Read the Docs][readthedocs],\index{Read the Docs (for Python documentation)}
 which is a community-supported site that hosts software documentation free of charge.
 
 Just as continuous integration systems automatically re-test things (Section \@ref(testing-ci)),
-Read The Docs integrates with GitHub
+Read the Docs integrates with GitHub
 so that documentation is automatically re-built
 every time updates are pushed to the project's GitHub repository.\index{continuous integration!for documentation}
-If we register for Read The Docs with our GitHub account,
-we can login at the Read The Docs website and
+If we register for Read the Docs with our GitHub account,
+we can log in at the Read the Docs website and
 import a project from our GitHub repository.
-Read The Docs will then build the documentation
-(using `make html` just as we did earlier)
+Read the Docs will then build the documentation
+(using `make html` as we did earlier)
 and host the resulting files.
 
 For this to work,
@@ -16265,10 +16264,10 @@ there is the option of publishing
 a journal paper to describe the software in detail.
 Some research disciplines have journals devoted
 to describing particular types of software
-(e.g., [Geoscientific Model Development][geoscientific-model-development]),
+(e.g., [*Geoscientific Model Development*][geoscientific-model-development]),
 and there are also a number of generic software journals such as the
-[Journal of Open Research Software][jors] and
-the [Journal of Open Source Software][theoj].
+[*Journal of Open Research Software*][jors] and
+the [*Journal of Open Source Software*][theoj].
 Packages submitted to these journals are typically assessed against a range of criteria
 relating to how easy the software is to install
 and how well it is documented,
@@ -16344,7 +16343,7 @@ Pull `pytest` out of `requirements.txt` and put it in a new `requirements_dev.tx
 
 ### Software review {#packaging-ex-software-review}
 
-The [Journal of Open Source Software][theoj] has a [checklist][theoj-checklist]
+The [*Journal of Open Source Software*][theoj] has a [checklist][theoj-checklist]
 that reviewers must follow when assessing a submitted software paper.
 Run through the checklist (skipping the criteria related to the software paper)
 and see how the Zipf's Law package would rate on each criteria.
@@ -16397,17 +16396,15 @@ quotes.random_quote()
 
 
 -   Use [`setuptools`][setuptools] to build and distribute Python packages.
--   Create a directory named `mypackage` containing a `setup.py` script
-    as well as a subdirectory also called `mypackage` containing the package's source files.
+-   Create a directory named `mypackage` containing a `setup.py` script as well as a subdirectory, also called `mypackage`, containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
--   Use a \gref{virtual environment}{virtual_environment} to test how your package installs
-    without disrupting your main Python installation.
+-   Use a \gref{virtual environment}{virtual_environment} to test how your package installs without disrupting your main Python installation.
 -   Use [`pip`][pip] to install Python packages.
--   The default respository for Python packages is [PyPI][pypi].
+-   The default repository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
 -   Use a README file for package-level documentation.
 -   Use [Sphinx][sphinx] to generate documentation for a package.
--   Use [Read The Docs][readthedocs] to host package documentation online.
+-   Use [Read the Docs][readthedocs] to host package documentation online.
 -   Create a \gref{DOI}{doi} for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
 -   Publish the details of your package in a software journal so that others can cite it.
 
@@ -16417,7 +16414,7 @@ quotes.random_quote()
 # Finale {#finale}
 
 We have come a long way since we first met Amira, Jun, and Sami in Section \@ref(intro-personas).
-Amira now has her scripts, data sets and reports organized,
+Amira now has her scripts, datasets and reports organized,
 in version control,
 and on GitHub.
 Her work has already paid off:
@@ -16434,7 +16431,7 @@ and has added implementing it to her to-do list.
 She used to be intimidated by the Unix shell,
 but now Amira finds it an essential part of her everyday work:
 she uses shell scripts to automate data processing tasks,
-she runs her own command line tools she wrote in Python,
+she runs her own command-line tools she wrote in Python,
 and issues countless commands to Git.
 Her comfort with the shell is also helping
 as she learns how to run her analyses on a remote computing cluster
@@ -16524,7 +16521,7 @@ which allow you to see the specific lines of a file modified to arrive at the an
 The `-l` option makes `ls` use a **l**ong listing format, showing not only
 the file/directory names but also additional information such as the file size
 and the time of its last modification. If you use both the `-h` option and the `-l` option,
-this makes the file size "**h**uman readable", i.e. displaying something like `5.3K`
+this makes the file size "**h**uman readable", i.e., displaying something like `5.3K`
 instead of `5369`.
 
 ### Exercise \@ref(bash-basics-ex-ls-rt) {-}
@@ -16537,13 +16534,13 @@ each directory sorted by time of last change.
 1. No: `.` stands for the current directory.
 2. No: `/` stands for the root directory.
 3. No: Amira's home directory is `/Users/Amira`.
-4. No: This goes up two levels, i.e. ends in `/Users`.
+4. No: This goes up two levels, i.e., ends in `/Users`.
 5. Yes: `~` stands for the user's home directory, in this case `/Users/amira`.
 6. No: This would navigate into a directory `home` in the current directory if it exists.
 7. Yes: Starting from the home directory `~`, this command goes into `data` then back (using `..`) to the home directory.
 8. Yes: Shortcut to go back to the user's home directory.
 9. Yes: Goes up one level.
-10. Yes: Same as the previous answer, but with an unnecessary `.` (indicating current directory)
+10. Yes: Same as the previous answer, but with an unnecessary `.` (indicating the current directory).
 
 ### Exercise \@ref(bash-basics-ex-resolve-rel-path) {-}
 
@@ -16569,7 +16566,7 @@ Assuming you don't already have `my_file.txt` in your working directory,
 `touch my_file.txt` will create the file.
 When you inspect the file with `ls -l`, note that the size of
 `my_file.txt` is 0 bytes.  In other words, it contains no data.
-If you open `my_file.txt` using your text editor it is blank.
+If you open `my_file.txt` using your text editor, it is blank.
 
 Some programs do not generate output files themselves, but
 instead require that empty files have already been generated.
@@ -16596,7 +16593,7 @@ only the files that we want to remove.
 $ mv ../data/chapter1.txt ../data/chapter2.txt .
 ```
 
-Recall that `..` refers to the parent directory (i.e. one above the current directory)
+Recall that `..` refers to the parent directory (i.e., one above the current directory)
 and that `.` refers to the current directory.
 
 ### Exercise \@ref(bash-basics-ex-renaming-files) {-}
@@ -16604,20 +16601,21 @@ and that `.` refers to the current directory.
 1. No: While this would create a file with the correct name,
 the incorrectly named file still exists in the directory and would need to be deleted.
 2. Yes: This would work to rename the file.
-3. No: The period (`.`) indicates where to move the file, but does not provide a new file name;
-identical file names cannot be created.
-4. No: The period (`.`) indicates where to copy the file, but does not provide a new file name;
-identical file names cannot be created.
+3. No: The period (`.`) indicates where to move the file, but does not provide a new filename;
+identical filenames cannot be created.
+4. No: The period (`.`) indicates where to copy the file, but does not provide a new filename;
+identical filenames cannot be created.
 
 ### Exercise \@ref(bash-basics-ex-last-ls) {-}
 
 We start in the `/Users/amira/data` directory, 
 containing a single file, `books.dat`.
-We create a new folder called `doc`,
-move (`mv`) the file `books.dat` to the new folder (`doc`).
+We create a new folder called `doc`
+and move (`mv`) the file `books.dat` to that new folder.
 Then we make a copy (`cp`) of the file we just moved named `books-saved.dat`.  
+
 The tricky part here is the location of the copied file.
-Recall that `..` means "go up a level", so the copied file is now in `/Users/amira`.
+Recall that `..` means "go up a level," so the copied file is now in `/Users/amira`.
 Notice that `..` is interpreted with respect to the current working
 directory, **not** with respect to the location of the file being copied.
 So, the only thing that will show using ls (in `/Users/amira/data`) is the `doc` folder.
@@ -16629,10 +16627,10 @@ So, the only thing that will show using ls (in `/Users/amira/data`) is the `doc`
 
 ### Exercise \@ref(bash-basics-ex-copy-multi) {-}
 
-If given more than one file name followed by a directory name (i.e. the destination directory must
+If given more than one filename followed by a directory name (i.e., the destination directory must
 be the last argument), `cp` copies the files to the named directory.
 
-If given three file names, 
+If given three filenames, 
 `cp` throws an error because it is expecting a directory name as the last argument.
 
 ### Exercise \@ref(bash-basics-ex-ls-match) {-}
@@ -16674,9 +16672,9 @@ The `mv` command then moves the list of `.txt` files to the `data` directory.
 
 ### Exercise \@ref(bash-basics-ex-reproduce-structure) {-}
 
-1. Yes: This accurately recreates the directory structure.
+1. Yes: This accurately re-creates the directory structure.
 
-2. Yes: This accurately recreates the directory structure.
+2. Yes: This accurately re-creates the directory structure.
 
 3. No: The first line of this code set gives an error:
 
@@ -16738,7 +16736,7 @@ so this command would delete all files in the current directory.
 but the file gets overwritten each time we run the command.
 
 `echo hello >> testfile02.txt` writes "hello" to `testfile02.txt`,
-but appends the string to the file if it already exists (i.e. when we run it for the second time).
+but appends the string to the file if it already exists (i.e., when we run it for the second time).
 
 ### Exercise \@ref(bash-tools-ex-append-data) {-}
 
@@ -16772,7 +16770,7 @@ $ sort genres.txt | uniq
 It makes sense that `uniq` is almost always run after using `sort`,
 because that allows a computer to compare only adjacent lines.
 If `uniq` did not compare only adjacent lines,
-it would require comparing each line to all other lines,
+it would require comparing each line to all other lines.
 For a small set of comparisons,
 this doesn't matter much,
 but this isn't always possible for large files.
@@ -16785,7 +16783,7 @@ In this case,
 the contents of `titles.txt` are sent as input to `head -n 5`,
 so the first five lines of `titles.txt` is output.
 These five lines are used as the input for `tail -n 3`,
-which results in lines 3-5 as output.
+which results in lines 3--5 as output.
 This is used as input to the final command,
 which sorts them in reverse order.
 These results are written to the file `final.txt`,
@@ -16861,7 +16859,7 @@ expanding the loop variable name (prefixed with `$`).
 The first version redirects the output from `echo analyze $file` 
 to a file (`analyzed-$file`). 
 This doesn't allow us to preview the commands,
-but instead creates files (`analyzed-$file`),
+but instead creates files (`analyzed-$file`)
 containing the text `analyze $file`.
 
 Try both versions for yourself to see the output. Be sure to open the
@@ -16997,16 +16995,16 @@ wc -l $1/*.$2 | sort -n | tail -n 2 | head -n 1
 ### Exercise \@ref(bash-advanced-ex-reading-scripts) {-}
 
 1. `script1.sh` will print the names of all files in the directory on a single line,
-e.g. `README.md dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt script1.sh sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt`.
+e.g., `README.md dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt script1.sh sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt`.
 Although `*.txt` is included when running the script,
 the commands run by the script do not reference `$1`.
 2. `script2.sh` will print the contents of the first three files ending in `.txt`;
 the three variables (`$1`, `$2`, `$3`) refer to the first, second, and third argument
 entered after the script, respectively.
 3. `script3.sh` will print the name of each file ending in `.txt`,
-since `$@` refers to *all* the arguments (e.g. filenames) given to a shell script.
+since `$@` refers to *all* the arguments (e.g., filenames) given to a shell script.
 The list of files would be followed by `.txt`:
-`dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt.txt`
+`dracula.txt frankenstein.txt jane_eyre.txt moby_dick.txt sense_and_sensibility.txt sherlock_holmes.txt time_machine.txt.txt`.
 
 ### Exercise \@ref(bash-advanced-ex-using-grep) {-}
 
@@ -17072,7 +17070,7 @@ because expansion of the wildcard (`*e.txt`) may prevent piping from working cor
 We recommend enclosing `*e.txt` in quotation marks,
 as in answer 1.
 3. No: This searches the contents of files for lines matching "machine",
-rather than the file names.
+rather than the filenames.
 4. See above.
 
 ### Exercise \@ref(bash-advanced-ex-reading-find) {-}
@@ -17257,7 +17255,7 @@ __pycache__ this is a change
 this is another change
 ```
 
-Then `git diff` would show:
+then `git diff` would show:
 
 ```diff
 diff --git a/.gitignore b/.gitignore
@@ -17296,7 +17294,7 @@ changed.
 which results in an error if a repository already exists.
 3.  Yes: first adds the file to the staging area, then commits.
 4.  No: would result in an error,
-as it would try to commit a file "my recent changes" with the message "myfile.txt".
+as it would try to commit a file "my recent changes" with the message "myfile.txt."
 
 ### Exercise \@ref(git-cmdline-ex-bio) {-}
 
@@ -17319,7 +17317,7 @@ as it would try to commit a file "my recent changes" with the message "myfile.tx
 ### Exercise \@ref(git-cmdline-ex-timestamp) {-}
 
 GitHub displays timestamps in a human-readable relative format
-(i.e. "22 hours ago" or "three weeks ago"),
+(i.e., "22 hours ago" or "three weeks ago"),
 since this makes it easy for anyone in any time zone
 to know what changes have been made recently.
 However, if we hover over the timestamp
@@ -17367,9 +17365,9 @@ Add the following two lines to `.gitignore`:
 !final.dat      # except final.data
 ```
 
-The exclamation point `!` includes a previously-excluded entry.
+The exclamation point `!` includes a previously excluded entry.
 
-Note also that if we have previously committed `.dat` files in this repository
+Note also that if we have previously committed `.dat` files in this repository,
 they will not be ignored once these rules are added to `.gitignore`.
 Only future `.dat` files will be ignored.
 
@@ -17503,7 +17501,7 @@ Breaking it down:
 
 1.  Setting the `PS1` variable defines the primary shell \gref{prompt}{prompt}.
 
-1.  `\\w` in a shell prompt string means "the current directory".
+1.  `\\w` in a shell prompt string means "the current directory."
 
 1.  The `+` is a literal `+` sign between the current directory and the Git branch name.
 
@@ -17653,7 +17651,7 @@ in which case it's just as sensible to label the issue `wontfix`.
 Some solutions could be:
 
 - Give the team member their own office space so they don't distract others.
-- Buy noise cancelling headphones for the employees that find it distracting.
+- Buy noise-cancelling headphones for the employees that find it distracting.
 - Re-arrange the work spaces so that there is a "quiet office" and a regular
 office space and have the team member with the attention disorder work
 in the regular office.
@@ -17683,7 +17681,7 @@ We obviously can't say which description fits you best, but:
     and reminding her of them frequently is a start,
     but the real fix is to create and maintain a supportive environment.
 
--   Unmasking *Kenny*'s hitchhiking wll feel like nit-picking,
+-   Unmasking *Kenny*'s hitchhiking will feel like nit-picking,
     but so does the accounting required to pin down other forms of fraud.
     The most important thing is to have the discussion in the open
     so that everyone realizes he's taking credit for everyone else's work
@@ -17712,7 +17710,7 @@ We obviously can't say which description fits you best, but:
 
 ### Exercise \@ref(automate-ex-useful-options) {-}
 
-1.  The `-B` option makes everything, even files that aren't out of date.
+1.  The `-B` option rebuilds everything, even files that aren't out of date.
 
 2.  The `-C` option tells Make to change directories before executing,
     so that `make -C ~/myproject` runs Make in `~/myproject`
@@ -17788,9 +17786,9 @@ help :
 ```
 
 -   The `-h` option to `grep` tells it *not* to print filenames,
-    while the `-E` option tells it to interprets `^##` as a pattern.
+    while the `-E` option tells it to interpret `^##` as a pattern.
 
--   `MAKEFILE_LIST` is an automatically-defined variable
+-   `MAKEFILE_LIST` is an automatically defined variable
     with the names of all the Makefiles in play.
     (There might be more than one because Makefiles can include other Makefiles.)
 
@@ -17800,8 +17798,8 @@ help :
 
 ### Exercise \@ref(automate-ex-configuration) {-}
 
-This strategy would be advantageous if 
-in future we intended to write a number of different Makefiles
+This strategy would be advantageous
+if in the future we intended to write a number of different Makefiles
 that all use the `countwords.py`, `collate.py` and `plotcounts.py` scripts.
 
 We discuss configuration strategies in more detail in Chapter \@ref(config).
@@ -17927,7 +17925,7 @@ test-saveconfig :
 ```
 
 The output is over 400 lines long,
-and includes settings for everything from the animation bit rate and the size of y-axis ticks:
+and includes settings for everything from the animation bit rate to the size of y-axis ticks:
 
 ```yaml
 !!python/object/new:matplotlib.RcParams
@@ -17950,7 +17948,7 @@ This helps reproducibility because any one of these settings might change
 in a new release of `matplotlib`,
 and any of those changes might affect our plots.
 Saving the settings allows us to compare what we had when we did our work
-to what we have when we're trying to recreate it,
+to what we have when we're trying to re-create it,
 which in turn gives us a starting point for debugging if we need to.
 
 ### Exercise \@ref(config-ex-ini) {-}
@@ -18100,7 +18098,7 @@ divided by the standard deviation of the data.
 
 ### Exercise \@ref(errors-ex-set-level) {-}
 
-Add a new command line argument to `collate.py`:
+Add a new command-line argument to `collate.py`:
 
 ```python
 parser.add_argument('-v', '--verbose',
@@ -18175,7 +18173,7 @@ if __name__ == '__main__':
 
 ### Exercise \@ref(errors-ex-logging-output) {-}
 
-Add a new command line argument to `collate.py`:
+Add a new command-line argument to `collate.py`:
 
 ```python
 parser.add_argument('-l', '--logfile',
@@ -18297,7 +18295,7 @@ for fname in args.infiles:
 
 ### Exercise \@ref(errors-ex-error-handling) {-}
 
-1. The `try/except` block in `collate.py` should read begin as follows:
+1. The `try/except` block in `collate.py` should begin as follows:
 
    ```python
    try:
@@ -18342,7 +18340,7 @@ for fname in args.infiles:
    Open `htmlcov/index.html` and click on `bin/collate.py` to view a coverage summary.
    The lines of `process_files` that include the `raise OSError` and
    `open(fname, 'r')` commands should appear in green after clicking the green "run" box
-   in the top left hand corner of the page.
+   in the top left-hand corner of the page.
 
 ### Exercise \@ref(errors-ex-catalog) {-}
 
@@ -18354,7 +18352,7 @@ for fname in args.infiles:
    `str.format` can be given any number of named keyword arguments (Appendix \@ref(style)),
    so we can look up a string and then interpolate whatever values we want.
 
-3. Once `ERRORS` has been moved to the `utilities` module
+3. Once `ERRORS` has been moved to the `utilities` module,
    all references to it in `collate.py` must be updated to `util.ERRORS`.
 
 ### Exercise \@ref(errors-ex-traceback) {-}
@@ -18383,22 +18381,21 @@ Where did you agree and disagree, and why?
 
 1.  51 solicitors were interviewed as the participants.
 
-2.  Interview data and a data from a database on court decisions.
+2.  Interview data, and data from a database on court decisions.
 
 3.  This information is not available within the documentation.
     Information on their jobs and opinions are there,
     but the participant demographics are only described within the associated article.
     The difficulty is that the article is not linked within the documentation or the metadata.
 
-4.  We can search the dataset name and authorname trying to find this.
-    A search for "National Science Foundation (1228602)",
-    which is the grant information,
+4.  We can search the dataset name and author name trying to find this.
+    A search for the grant information with "National Science Foundation (1228602)"
     finds the [grant page][meili-grant].
     Two articles are linked there,
     but both the DOI links are broken.
     We can search with the citation for each paper to find them.
     The [Forced Migration article][meili-migration-article]
-    uses a different subset of interviews and does not mention demographics
+    uses a different subset of interviews and does not mention demographics,
     nor links to the deposited dataset.
     The [Boston College Law Review article][meili-review-article]
     has the same two problems of different data and no dataset citation.
@@ -18406,8 +18403,8 @@ Where did you agree and disagree, and why?
     Searching more broadly through Meili's work, we can find @Meil2015.
     This lists the dataset as a footnote and reports the 51 interviews
     with demographic data on reported gender of the interviewees.
-    This paper lists data collection as 2010-2014,
-    while the other two say 2010-2013.
+    This paper lists data collection as 2010--2014,
+    while the other two say 2010--2013.
     We might come to a conclusion that this extra year
     is where the extra 9 interviews come in,
     but that difference is not explained anywhere.
@@ -18421,20 +18418,20 @@ For [`borstlab/reversephi_paper`][borstlab-reversephi]:
     the project also requires ImageMagick.
     No information on installing ImageMagick or a required version of ImageMagick is provided.
 
-    To re-create the `conda` environment you would need the file `my_environment.yml`.
+    To re-create the `conda` environment, you would need the file `my_environment.yml`.
     Instructions for creating and using the environment are provided in `README.md`.
 
 2.  Like `zipf` the data processing and analysis steps are documented in a `Makefile`.
     The `README` includes instructions for re-creating the results using `make all`.
 
 3.  There doesn't seem to be a DOI for the archived code and data,
-    but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)".
+    but the GitHub repo does have a release `v1.0` with the description "Published manuscript (1.0)" beside it.
     A zip file of this release could be downloaded from GitHub.
 
 For [the figshare page][irving-figshare] that accompanies the paper @Irvi2019:
 
 1. The figshare page includes a "Software environment" section.
-   To re-create the `conda` environment you would need the file `environment.yml`.
+   To re-create the `conda` environment, you would need the file `environment.yml`.
 
 2. `figure*_log.txt` are log files for each figure in the paper.
    These files show the computational steps performed in generating the figure,
@@ -18442,7 +18439,7 @@ For [the figshare page][irving-figshare] that accompanies the paper @Irvi2019:
 
    `code.zip` is a version controlled (using git) file directory
    containing the code written to perform the analysis
-   (i.e. it contains the scripts referred to in the log files).
+   (i.e., it contains the scripts referred to in the log files).
    This code can also be found on GitHub.
 
 3. The figshare page itself is the archive, and includes a version history for the contents.
@@ -18475,7 +18472,7 @@ For the GitHub repo [`blab/h3n2-reassortment`][blab-h3n2-reassortment]:
 
 You'll know you've completed this exercise when you have a URL
 that points to zip archive for a specific release of your repository on GitHub,
-e.g. `https://github.com/amira-khan/zipf/archive/KhanVirtanen2020.zip`
+e.g., `https://github.com/amira-khan/zipf/archive/KhanVirtanen2020.zip`
 
 ### Exercise \@ref(provenance-ex-publish-code) {-}
 
@@ -18496,10 +18493,10 @@ A `description` and `long_description` argument need to be provided
 when the `setup` function is called in `setup.py`.
 On the TestPyPI webpage,
 the user interface displays description in the grey banner
-and long_description in the section named "Project Description".
+and long_description in the section named "Project Description."
 
 Other metadata that might be added includes the author email address,
-software license details and a link to the documentation at Read The Docs.
+software license details and a link to the documentation at Read the Docs.
 
 ### Exercise \@ref(packaging-ex-separating-requirements) {-}
 
@@ -18528,7 +18525,7 @@ Installation: Does installation proceed as outlined in the documentation?
    
 Functionality: Have the functional claims of the software been confirmed?
 
-  - Yes. The command line programs `countwords`, `collate`, and `plotcounts`
+  - Yes. The command-line programs `countwords`, `collate`, and `plotcounts`
     perform as described in the README. 
 
 A statement of need: Do the authors clearly state what problems the software
@@ -18536,7 +18533,7 @@ is designed to solve and who the target audience is?
 
   - Yes. The "Motivation" section of the README explains this.
 
-Installation instructions: Is there a clearly-stated list of dependencies?
+Installation instructions: Is there a clearly stated list of dependencies?
 Ideally these should be handled with an automated package management solution.
 
   - Yes. In our `setup.py` file the `install_requires` argument lists dependencies.
@@ -18549,12 +18546,12 @@ Example usage: Do the authors include examples of how to use the software
 Functionality documentation: Is the core functionality of the software documented
 to a satisfactory level (e.g., API method documentation)?
 
-  - Yes. This information is available on Read The Docs.
+  - Yes. This information is available on Read the Docs.
 
 Automated tests: Are there automated tests or manual steps described
 so that the functionality of the software can be verified?
 
-  - We have units tests written and available (`test_zipfs.py`),
+  - We have unit tests written and available (`test_zipfs.py`),
     but our documentation needs to be updated to tell people
     to run `pytest` in order to manually run those tests.
 
@@ -18642,7 +18639,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Write a loop that applies one or more commands separately to each file in a set of files.
 -   Trace the values taken on by a loop variable during execution of the loop.
 -   Explain the difference between a variable's name and its value.
--   Demonstrate how to see recently-executed commands.
+-   Demonstrate how to see recently executed commands.
 -   Re-run recently executed commands without retyping them.
 
 ## Going Further with the Unix Shell
@@ -18654,7 +18651,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Use `grep` to select lines from text files that match simple patterns.
 -   Use `find` to find files whose names match simple patterns.
 -   Edit the `.bashrc` file to change default shell variables.
--   Create aliases for commonly-used commands.
+-   Create aliases for commonly used commands.
 
 ## Building Command-Line Tools with Python
 
@@ -18715,7 +18712,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Write a Makefile that re-runs a multi-stage data analysis.
 -   Explain and trace how Make chooses an order in which to execute rules.
 -   Explain what \gref{phony targets}{phony_target} are and define a phony target.
--   Explain what \gref{automatic variables}{automatic_variable} are and identify three commonly-used automatic variables.
+-   Explain what \gref{automatic variables}{automatic_variable} are and identify three commonly used automatic variables.
 -   Write Make rules that use automatic variables.
 -   Explain why and how to write \gref{pattern rules}{pattern_rule} in a Makefile.
 -   Write Make rules that use patterns.
@@ -18744,7 +18741,7 @@ and is intended to help instructors who want to use this curriculum.
 
 -   Explain how to use exceptions to signal and handle errors in programs.
 -   Write `try`/`except` blocks to \gref{raise}{raise_exception} and \gref{catch}{catch_exception} exceptions.
--   Explain what is meant by "throw low, catch high".
+-   Explain what is meant by "throw low, catch high."
 -   Describe the most common built-in exception types in Python and how they relate to each other.
 -   Explain what makes a useful error message.
 -   Create and use a lookup table for common error messages.
@@ -18788,7 +18785,7 @@ This appendix lists the key points for each chapter.
 - Include a few standard files in all your projects, such as README, LICENSE, CONTRIBUTING, CONDUCT and CITATION.
 - Put runnable code in a `bin/` directory.
 - Put raw/original data in a `data/` directory and never modify it.
-- Put results in a `results/` directory. This includes cleaned-up data and figures (i.e. everything created using what's in `bin` and `data`).
+- Put results in a `results/` directory. This includes cleaned-up data and figures (i.e., everything created using what's in `bin` and `data`).
 - Put documentation and manuscripts in a `docs/` directory.
 - Refer to The Carpentries [software installation guide][carpentries-install-instructions] if you're having trouble. 
 
@@ -18844,7 +18841,7 @@ This appendix lists the key points for each chapter.
 -   `$@` refers to all of a shell script's command-line arguments.
 -   `$1`, `$2`, etc., refer to the first command-line argument, the second command-line argument, etc.
 -   Place variables in quotes if the values might have spaces or other special characters in them.
--   `find` lists files with specific properties or whose names match patterns.
+-   `find` prints a list of files with specific properties or whose names match patterns.
 -   `$(command)` inserts a command's output in place.
 -   `grep` selects lines in files that match patterns.
 -   Use the `.bashrc` file in your home directory to set shell variables each time the shell runs.
@@ -18866,7 +18863,7 @@ This appendix lists the key points for each chapter.
 ## Using Git at the Command Line
 
 
--   Use `git config` with the `--global` option to configure your user name,
+-   Use `git config` with the `--global` option to configure your username,
     email address, and other preferences once per machine.
 -   `git init` initializes a \gref{repository}{repository}.
 -   Git stores all repository management data in the `.git` subdirectory of the repository's root directory.
@@ -18902,7 +18899,7 @@ This appendix lists the key points for each chapter.
 
 
 -   Welcome and nurture community members proactively.
--   Create an explicit Code of Conduct for your project modelled on the [Contributor Covenant][covenant].
+-   Create an explicit Code of Conduct for your project modeled on the [Contributor Covenant][covenant].
 -   Include a license in your project so that it's clear who can do what with the material.
 -   Create \gref{issues}{issue} for bugs, enhancement requests, and discussions.
 -   \gref{Label issues}{issue_label} to identify their purpose.
@@ -18915,7 +18912,7 @@ This appendix lists the key points for each chapter.
 ## Automating Analyses with Make
 
 
--   [Make][gnu-make] is a widely-used build manager.
+-   [Make][gnu-make] is a widely used build manager.
 -   A \gref{build manager}{build_manager} re-runs commands to update files that are out of date.
 -   A \gref{build rule}{build_rule} has \gref{targets}{build_target}, \gref{prerequisites}{prerequisite}, and a \gref{recipe}{build_recipe}.
 -   A target can be a file or a \gref{phony target}{phony_target} that simply triggers an action.
@@ -18925,7 +18922,7 @@ This appendix lists the key points for each chapter.
 -   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
 -   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
--   Use specially-formatted comments to create self-documenting Makefiles.
+-   Use specially formatted comments to create self-documenting Makefiles.
 
 ## Configuring Programs
 
@@ -18958,7 +18955,7 @@ This appendix lists the key points for each chapter.
 -   Signal errors by \gref{raising exceptions}{raise_exception}.
 -   Use `try`/`except` blocks to \gref{catch}{catch_exception} and handle exceptions.
 -   Python organizes its standard exceptions in a hierarchy so that programs can catch and handle them selectively.
--   "Throw low, catch high", i.e., raise exceptions immediately but handle them at a higher level.
+-   "Throw low, catch high," i.e., raise exceptions immediately but handle them at a higher level.
 -   Write error messages that help users figure out what to do to fix the problem.
 -   Store error messages in a lookup table to ensure consistency.
 -   Use a \gref{logging framework}{logging_framework} instead of `print` statements to report program activity.
@@ -18980,17 +18977,15 @@ This appendix lists the key points for each chapter.
 
 
 -   Use [`setuptools`][setuptools] to build and distribute Python packages.
--   Create a directory named `mypackage` containing a `setup.py` script
-    as well as a subdirectory also called `mypackage` containing the package's source files.
+-   Create a directory named `mypackage` containing a `setup.py` script as well as a subdirectory, also called `mypackage`, containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
--   Use a \gref{virtual environment}{virtual_environment} to test how your package installs
-    without disrupting your main Python installation.
+-   Use a \gref{virtual environment}{virtual_environment} to test how your package installs without disrupting your main Python installation.
 -   Use [`pip`][pip] to install Python packages.
--   The default respository for Python packages is [PyPI][pypi].
+-   The default repository for Python packages is [PyPI][pypi].
 -   Use [TestPyPI][testpypi] to test the distribution of your package.
 -   Use a README file for package-level documentation.
 -   Use [Sphinx][sphinx] to generate documentation for a package.
--   Use [Read The Docs][readthedocs] to host package documentation online.
+-   Use [Read the Docs][readthedocs] to host package documentation online.
 -   Create a \gref{DOI}{doi} for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
 -   Publish the details of your package in a software journal so that others can cite it.
 
@@ -18999,7 +18994,7 @@ This appendix lists the key points for each chapter.
 
 # Project Tree {#tree}
 
-The final directory tree for the Zipf's Law project looks as follows:
+The final directory tree for the Zipf's Law project looks like the following:
 
 ```
 pyzipf/
@@ -19068,8 +19063,8 @@ in [Amira's `zipf` repository on GitHub][amira-repo].
 Each file was introduced and subsequently modified
 in the following chapters, sections and exercises:
 
-`pyzipf/`: Introduced as `zipf/` in Section \@ref(getting-started-download-data) and
-changes name to `pyzipf/` in Section \@ref(packaging-package).
+`pyzipf/`: Introduced as `zipf/` in Section \@ref(getting-started-download-data)
+and changed name to `pyzipf/` in Section \@ref(packaging-package).
 
 `pyzipf/.gitignore`: Introduced in Section \@ref(git-cmdline-ignore),
 and updated in various other chapters following
@@ -19132,7 +19127,7 @@ with further updates in Section \@ref(packaging-readme).
 `pyzipf/test_data/risk.txt`: Introduced in Section \@ref(testing-unit).
 
 `pyzipf/pyzipf/`: Introduced as `bin/` in Section \@ref(getting-started-organize) and
-changes name to `pyzipf/` in Section \@ref(packaging-package).
+changed name to `pyzipf/` in Section \@ref(packaging-package).
 
 `pyzipf/pyzipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
 
@@ -19192,11 +19187,11 @@ We call this a \gref{remote login}{remote_login}.
 
 ## Logging In {#ssh-login}
 
-In order for us to be able to login,
+In order for us to be able to log in,
 the remote computer must run a \gref{remote login server}{remote_login_server}
 and we must run a program that can talk to that server.
 The client program passes our login credentials to the remote login server;
-if we are allowed to login,
+if we are allowed to log in,
 that server then runs a shell for us on the remote computer (Figure \@ref(fig:ssh-ssh)).
 
 <div class="figure" style="text-align: center">
@@ -19213,14 +19208,13 @@ then sends back output, via the server, to our client, for our computer to displ
 
 The remote login server which accepts connections from client programs
 is known as the \gref{SSH daemon}{ssh_daemon}, or `sshd`.
-The client program we use to login remotely is the \gref{secure shell}{ssh_glossary},
+The client program we use to log in remotely is the \gref{secure shell}{ssh_glossary},
 or `ssh`.
 It has a companion program called `scp`
 that allows us to copy files to or from a remote computer using the same kind of encrypted connection.
 
-To make a remote login, we issue the command `ssh username@computer`
-which tries to make a connection to the SSH daemon running on the remote computer we have specified.
-
+We issue the command `ssh username@computer` to log in remotely.
+This command tries to make a connection to the SSH daemon running on the remote computer we have specified.
 After we log in,
 we can use the remote shell to use the remote computer's files and directories.
 Typing `exit` or Control-D
@@ -19329,7 +19323,7 @@ $ cp results.dat amira@backupserver
 ```
 
 Copying a whole directory between remote machines uses the same syntax as the `cp` command:
-we just use the `-r` option to signal that we want copying to be recursively.
+we just use the `-r` option to signal that we want copying to be recursive.
 For example,
 this command copies all of our results from the backup server to our laptop:
 
@@ -19364,8 +19358,8 @@ results-2019-10-04.dat  results-2019-11-11.dat
 ```
 
 Here, `ssh` takes the argument after our remote username
-and passes them to the shell on the remote computer.
-(We have to put quotes around it to make it look like a single argument.)
+and passes it to the shell on the remote computer.
+(`ls results` has multiple words, so we have to put quotes around it to make it look like one value.)
 Since those arguments are a legal command,
 the remote shell runs `ls results` for us
 and sends the output back to our local shell for display.
@@ -19382,11 +19376,11 @@ that it should always trust us.
 SSH keys come in pairs, a public key that gets shared with services like GitHub,
 and a private key that is stored only on our computer. If the keys match,
 we are granted access.
-The cryptography behind SSH keys ensures that no one can reverse engineer our
+The cryptography behind SSH keys ensures that no one can reverse-engineer our
 private key from the public one.
 
-We might already have an SSH key pair on your machine.
-We can check by moving to your `.ssh` directory and listing the contents.
+We might already have an SSH key pair on our machine.
+We can check by moving to our `.ssh` directory and listing the contents.
 
 ```bash
 $ cd ~/.ssh
@@ -19414,7 +19408,7 @@ Enter file in which to save the key (/Users/username/.ssh/id_rsa):
 
 We will then be asked to provide an optional passphrase.
 This can be used to make your key even more secure,
-but if we want to avoid typing our password every time
+but if we want to avoid typing our password every time,
 we can skip it by pressing enter twice:
 
 ```text
@@ -19446,7 +19440,7 @@ The key's randomart image is:
 
 (The random art image is an alternate way to match keys.)
 We now need to place a copy of our public key on
-any servers we would like to to connect to.
+any servers we would like to connect to.
 Display the contents of our public key file with `cat`:
 
 ```bash
@@ -19478,7 +19472,7 @@ moon> nano ~/.ssh/authorized_keys
 
 After appending the content,
 log out of the remote machine and try to log in again.
-If we set up the SSH key correctly we won't need to type our password:
+If we set up the SSH key correctly, we won't need to type our password:
 
 ```bash
 moon> exit
@@ -19494,7 +19488,7 @@ The example of copying our public key to a remote machine, so that it
 can then be used when we next SSH into that remote machine, assumed
 that we already had a directory `~/.ssh/`.
 
-While a remote server may support the use of SSH to login, your home
+While a remote server may support the use of SSH to log in, your home
 directory there may not contain a `.ssh` directory by default.
 
 We have already seen that we can use SSH to run commands on remote
@@ -19502,7 +19496,7 @@ machines, so we can ensure that everything is set up as required before
 we place the copy of our public key on a remote machine.
 
 Walking through this process allows us to highlight some of the typical
-requirements of the SSH protocol itself, as documented in the man-page
+requirements of the SSH protocol itself, as documented in the man page
 for the `ssh` command.
 
 Firstly, we check that we have a `.ssh/` directory on another remote
@@ -19537,9 +19531,8 @@ drwxr-xr-x 2 amira amira 512 Jan 01 09:09 /Users/amira/.ssh
 Now we have a `.ssh` directory, into which to place SSH-related
 files, but we can see that the default permissions allow anyone to
 inspect the files within that directory.
-
-For a protocol that is supposed to be secure, this is not considered
-a good thing and so the recommended permissions are read/write/execute
+This is not considered a good thing for a protocol that is supposed to be secure,
+so the recommended permissions are read/write/execute
 for the user, and not accessible by others.
 
 Let's alter the permissions on the directory:
@@ -19586,9 +19579,9 @@ $ ssh amira@comet "ls -l ~/.ssh"
 authorized_keys
 ```
 
-While the authorized keys file is not considered to be highly sensitive,
+While the authorized keys file is not considered to be highly sensitive
 (after all, it contains public keys), we alter the permissions to match
-the man page's recommendations
+the man page's recommendations.
 
 ```bash
 $ ssh amira@comet "chmod go-r ~/.ssh/authorized_keys; ls -l ~/.ssh"
@@ -19622,10 +19615,10 @@ and introduces some language features that can make programs more flexible and m
 The single most important rule of style is to be consistent,
 both internally and with other programs [@Kern1999].
 Python's standard style is called [PEP-8][pep-8];\index{Python!PEP-8}\index{PEP-8 (Python style)}
-the acronym "PEP" is short for "Python Enhancement Proposal",
+the acronym "PEP" is short for "Python Enhancement Proposal,"
 and PEP-8 lays out the rules that Python's own libraries use.
 Some of its rules are listed below,
-along with others borrowed from "[Code Smells and Feels][code-smells-and-feels]":
+along with others borrowed from "[Code Smells and Feels][code-smells-and-feels]."
 
 ### Spacing
 
@@ -19673,7 +19666,7 @@ but the legacy of those ancient times lives on.
 Write `(1+2)` instead of `( 1+2 )`.
 This applies to function calls as well:
 write `max(a, b)` rather than `max( a, b )`.
-(We will see a related rule when we discussed default parameter values
+(We will see a related rule when we discuss default parameter values
 in Section \@ref(style-features).)
 
 **Always use spaces around comparisons like `>` and `<=`.**
@@ -19756,7 +19749,7 @@ which are outside the scope of this lesson.
 
 Abbreviations and acronyms can be ambiguous
 (does `xcl` mean "Excel", "exclude", or "excellent"?),
-and can be be hard for non-native speakers to understand.
+and can be hard for non-native speakers to understand.
 Following this rule doesn't necessarily require more typing:
 a good programming editor will \gref{auto-complete}{auto_completion} names for us.
 
@@ -19962,7 +19955,7 @@ and makes it easier to communicate with our peers.
 
 ### Do not repeat values
 
-The first and simplest refactoring is "replace value with name".
+The first and simplest refactoring is "replace value with name."
 It tells us to replace magic numbers with names,
 i.e., to define constants.
 This can seem ridiculous in simple cases
@@ -20004,7 +19997,7 @@ if a calculation is inside a loop or a function,
 readers will assume that it might change each time the code is executed.
 
 Our second refactoring,
-"hoist repeated calculation out of loop",
+"hoist repeated calculation out of loop,"
 tells us to move the repeated calculation out of the loop or function.
 Doing this signals that its value is always the same.
 And naming that common value helps readers understand what its purpose is.
@@ -20044,7 +20037,7 @@ if was_greater:
     # ...do something...
 ```
 
-This refactoring is "replace repeated test with flag".
+This refactoring is "replace repeated test with flag."
 Again,
 there is no need to write `if was_greater == True`:
 that always produces the same result as `if was_greater`.
@@ -20186,7 +20179,7 @@ def rescale_by_average(values, factors, weights):
 > If a function contains any explicit `return` statements at all,
 > it should end with one as well.
 
-A related refactoring pattern is "default and override".
+A related refactoring pattern is "default and override."
 To use it,
 assign a default or most common value to a variable unconditionally,
 and then override it in a special case.
@@ -20235,7 +20228,7 @@ which is less clear.
 > `X if test else Y` is called a \gref{ternary expression}{ternary_expression}.
 > Just as a binary expression like `A + B` has two parts,
 > a ternary expression has three.
-> Conditional expressions are the only ternary expression in most programming languages.
+> Conditional expressions are the only ternary expressions in most programming languages.
 
 ### Use functions to make code more comprehensible
 
@@ -20247,7 +20240,7 @@ A common rule of thumb is that
 no function should be longer than a printed page (about 80 lines)
 or have more than four levels of indentation because of nested loops and conditionals.
 Anything longer or more deeply nested is hard for readers to understand,
-so we should moves pieces of long functions into small ones.
+so we should move pieces of long functions into small ones.
 
 ```python
 # ...before...
@@ -20283,7 +20276,7 @@ to reduce typing.
 
 ### Combine operations in functions
 
-"Combine functions" is the opposite of "extract function".
+"Combine functions" is the opposite of "extract function."
 If operations are always done together,
 it can sometimes be be more efficient to do them together,
 and might be easier to understand.
@@ -20447,7 +20440,7 @@ these things should be changed:
 -   Rather than reading the input into a list of lines and then looping over that,
     we can give `count` a stream and have it process the lines one by one.
 
--   Since we might want to use `count` in other programs some day,
+-   Since we might want to use `count` in other programs someday,
     we should put the two lines at the bottom that handle input into a conditional
     so that they aren't executed when this script is imported.
 
@@ -20545,13 +20538,13 @@ Don't be sarcastic or disparaging.
     is a Code of Conduct violation in any well-run project.
 
 Don't present opinions as facts.
-:   "Nobody uses X any more" might be true.
+:   "Nobody uses X anymore" might be true.
     If it is,
     the person making the claim ought to be able to point at download statistics
     or a Google Trends search;
     if they can't,
     they should say,
-    "I don't think we use X any more" and explain why they think that.
+    "I don't think we use X anymore" and explain why they think that.
 
 Don't feign surprise or pass judgment.
 :   "Gosh, didn't you know [some obscure fact]?" isn't helpful;
@@ -20582,7 +20575,8 @@ Thank our reviewers.
 And finally:
 
 **Don't let anyone break these rules just because they're frequent contributors or in positions of power.**
-The culture of any organization is shaped by the worst behavior it is willing to tolerate @Grue2015.
+As @Grue2015 says,
+the culture of any organization is shaped by the worst behavior it is willing to tolerate.
 The main figures in a project should be *more* respectful than everyone else
 in order to show what standards everyone else is expected to meet.
 
@@ -20669,7 +20663,7 @@ it can also be called like this:
     allows pixels to differ slightly without those differences being significant.
 -   `image_diff(old, new, fraction=0.05)` allows more pixels to differ.
 -   `image_diff(old, new, per_pixel=1, fraction=0.005)`
-    raises the per-pixel threshold but decrease number of allowed differences.
+    raises the per-pixel threshold but decreases number of allowed differences.
 
 Note that we do not put spaces around the `=` when defining a default parameter value.
 This is consistent with PEP-8's rules about spacing in function definitions and calls
@@ -20715,7 +20709,7 @@ def collect(new_value, accumulator=None):
 We can often make programs simpler by writing functions that take
 \gref{a variable number of arguments}{variable_arguments},\index{Python!variable arguments}
 just like `print` and `max`.
-One way to to require user to stuff those arguments into a list,
+One way is to require users to stuff those arguments into a list,
 e.g.,
 to write `find_limits([a, b, c, d])`.
 However,
@@ -20875,7 +20869,7 @@ In this appendix we address some issues that commonly arise
 when people start to think about documenting their software.
 We start with tips for writing good docstrings,
 before considering more detailed documentation
-like tutorials, cookbooks and frequently-asked question
+like tutorials, cookbooks and frequently asked question
 (\gref{FAQ}{faq}\index{FAQ (Frequency Asked Questions)}\index{Python package!FAQ}) lists.
 Clearly defining your audience can make it easier to determine
 which types of documentation you need to provide,
@@ -20956,7 +20950,7 @@ def calculate_age(birthday):
     """
 ```
 
-We could format and organise the information in the docstring any way we like,
+We could format and organize the information in the docstring any way we like,
 but here we've decided to use \gref{reStructuredText}{restructured_text},
 which is the default plain-text markup format supported by [Sphinx][sphinx]
 (Section \@ref(packaging-document)).
@@ -21067,8 +21061,8 @@ so that learners and instructors alike can tell if they're making progress.
 
 Tutorials help novices build a mental model,
 but competent practitioners and experts will be frustrated by their slow pace and low information density.
-They will want single-point solutions to specific problems like
-how to find cells in a spreadsheet that contain a certain string
+They will want single-point solutions to specific problems,
+like how to find cells in a spreadsheet that contain a certain string
 or how to configure the web server to load an access control module.
 They can make use of an alphabetical list of the functions in a library,
 but are much happier if they can search by keyword to find what they need;
@@ -21097,20 +21091,20 @@ In our world, though,
 time and resources are limited,
 so all but the most popular packages must make do with single explanations.
 
-## Creating a FAQ {#documentation-faq}
+## Creating an FAQ {#documentation-faq}
 
 As projects grow,
 documentation within functions alone may be insufficient for users to apply code to their own problems.
 One strategy to assist other people with understanding a project is with
 an \gref{FAQ}{faq}:
-a list of frequently-asked questions and corresponding answers.
+a list of frequently asked questions and corresponding answers.
 A good FAQ uses the terms and concepts that people bring to the software
 rather than the vocabulary of its authors;
 putting it another way,
 the questions should be things that people might search for online,
 and the answers should give them enough information to solve their problem.
 
-Creating and maintaining a FAQ is a lot of work,
+Creating and maintaining an FAQ is a lot of work,
 and unless the community is large and active,
 a lot of that effort may turn out to be wasted,
 because it's hard for the authors or maintainers of a piece of software
@@ -21127,7 +21121,7 @@ which is where most programmers are going to look for answers anyway:
     making sure to mention which version of the software we're talking about
     (so that people can easily spot and discard stale answers in the future).
 
-[Stack Overflow][stack-overflow]'s guide to [asking a good question][stack-overflow-good-question]
+The [Stack Overflow][stack-overflow] guide to [asking a good question][stack-overflow-good-question]
 has been refined over many years,
 and is a good guide for any project:
 
@@ -21136,8 +21130,8 @@ Write the most specific title we can.
     is much better than, "Help! Math in Python!!"
 
 Give context before giving sample code.
-:   A few sentences to explain what are are trying to do and why
-    will help people determine if their question is a close match to ours or not.
+:   A few sentences to explain what we are trying to do
+    and why it will help people determine if their question is a close match to ours or not.
 
 Provide a minimal reprex.
 :   Section \@ref(teams-bugs) explains the value of a \gref{reproducible example}{reprex},
@@ -21176,9 +21170,9 @@ Allow for a chorus of explanations.
 
 \gref{YAML}{yaml_glossary}\index{YAML} is a way to write nested data structures in plain text
 that is often used to specify configuration options for software.
-The acronym stands for "YAML Ain't Markup Language",
-but that's a lie:
-YAML doesn't use `<tags>` like HTML,
+The acronym stands for "YAML Ain't Markup Language,"
+but that's misleading:
+YAML doesn't use tags like HTML,
 but can still be quite fussy about what is allowed to appear where.
 
 Throughout this book we use YAML to
@@ -21300,7 +21294,7 @@ which comes with a package (and environment) manager called [`conda`][conda].\in
 In this appendix we look at some of the most important features of `conda`
 for research software engineers.
 
-## Package Management With conda {#anaconda-conda-package-management}
+## Package Management with conda {#anaconda-conda-package-management}
 
 According to the [latest documentation][anaconda-docs],
 Anaconda comes with over 250 of the most widely used data science libraries (and their dependencies) pre-installed.
@@ -21317,7 +21311,7 @@ It essentially comes with `conda` and nothing else.
 
 What happens if we want to install a Python package
 that isn't on the list of the few thousand or so most popular data science packages
-(i.e. the ones that are automatically available via the `conda install` command)?
+(i.e., the ones that are automatically available via the `conda install` command)?
 The answer is the [Anaconda Cloud][anaconda-cloud] website,
 where the community can post `conda` installation packages.
 
@@ -21350,9 +21344,9 @@ a `conda` package for a Python module that is already available on [PyPI][pypi]
 ### conda-forge
 
 It turns out there are often multiple installation packages for the same library
-up on Anaconda Cloud (e.g. Figure \@ref(fig:anaconda-windspharm-search)).
-To try and address this duplication problem [conda-forge][conda-forge] was launched,
-which aims to be a central repository that contains just a single, up-to-date (and working)
+up on Anaconda Cloud (e.g., Figure \@ref(fig:anaconda-windspharm-search)).
+To try and address this duplication problem, [conda-forge][conda-forge] was launched.
+It aims to be a central repository that contains just a single, up-to-date (and working)
 version of each installation package on Anaconda Cloud.
 You can therefore expand the selection of packages available via `conda install`
 beyond the chosen few thousand by adding the conda-forge channel to your `conda` configuration:
@@ -21369,11 +21363,11 @@ $ conda config --add channels conda-forge
 The conda-forge website has [instructions][conda-forge-instructions]
 for adding a `conda` installation package to the conda-forge repository.
 
-## Environment Management With conda {#anaconda-environments}
+## Environment Management with conda {#anaconda-environments}
 
 If you are working on several data science projects at once,
 installing all the libraries you need in the same place
-(i.e. the system default location) can become problematic.
+(i.e., the system default location) can become problematic.
 This is especially true if the projects rely on different versions of the same package,
 or if you are developing a new package and need to try new things.
 The way to avoid these issues is to create different
@@ -21381,8 +21375,8 @@ The way to avoid these issues is to create different
 The original environment manager for Python development was [`virtualenv`][virtualenv],
 which has been more recently superseded by [`pipenv`][pipenv].
 The advantage that `conda` has over these options is that it is language agnostic
-(i.e. you can isolate non-Python packages in your environments too) and
-supports binary packages (i.e. you don't need to compile the source code after installing),
+(i.e., you can isolate non-Python packages in your environments too) and
+supports binary packages (i.e., you don't need to compile the source code after installing),
 so it has become the environment manager of choice in data science.
 In this book `conda` is used to export the details of an environment
 when documenting the computational methodology for a report (Section \@ref(provenance-code))
@@ -21419,13 +21413,13 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   To add data to the end of an existing file instead of overwriting the previous contents of that file. Overwriting is the default, so most programming languages require programs to be explicit about wanting to append instead.
 
 **assertion**<a id="assertion"></a>
-:   A \gref{Boolean}{boolean} expression that must be \gref{true}{true} at a certain point in a program. Assertions may be built into the language (e.g., \gref{Python}{python}'s `assert` statement) or provided as functions (e.g., \gref{R}{r_language}'s `stopifnot`). They are often used in testing, but are also put in \gref{production code}{production_code} to check that it is behaving correctly. In many languages, assertions should not be used to perform data-validation as they may be silently dropped by compilers and interpreters under optimization conditions. Using assertions for data validation can therefore introduce security risks. Unlike many languages, R does not have an `assert` statement which can be disabled, and so use of \gref{package}{package} such as `assertr` for data validation does not create security holes.
+:   A \gref{Boolean}{boolean} expression that must be \gref{true}{true} at a certain point in a program. Assertions may be built into the language (e.g., \gref{Python}{python}'s `assert` statement) or provided as functions (e.g., \gref{R}{r_language}'s `stopifnot`). They are often used in testing, but are also put in \gref{production code}{production_code} to check that it is behaving correctly. In many languages, assertions should not be used to perform data validation as they may be silently dropped by compilers and interpreters under optimization conditions. Using assertions for data validation can therefore introduce security risks. Unlike many languages, R does not have an `assert` statement which can be disabled, and so use of a \gref{package}{package} such as `assertr` for data validation does not create security holes.
 
 **authentic task**<a id="authentic_task"></a>
-:   A task which contains important elements of things that learners would do in real (non-classroom situations).
+:   A task which contains important elements of things that learners would do in real life (non-classroom situations).
 
 **auto-completion**<a id="auto_completion"></a>
-:   A feature that allows the user to finish a word or code quickly through the use of pressing the TAB key to list possible words or code from which the user can select.
+:   A feature that allows the user to finish a word or code quickly by pressing the TAB key to list possible words or code from which the user can select.
 
 **automatic variable**<a id="automatic_variable"></a>
 :   A variable that is automatically given a value in a \gref{build rule}{build_rule}. For example, Make automatically assigns the name of a rule's \gref{target}{build_target} to the automatic variable `$@`. Automatic variables are frequently used when writing \gref{pattern rules}{pattern_rule}. See also: [Makefile](#makefile)
@@ -21464,10 +21458,10 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A style of writing code that involves naming variables and objects with no space, underscore (`_`), dot (`.`), or dash (`-`) characters, with each word being capitalized. Examples include `CalculateSum` and `findPattern`. See also: [kebab case](#kebab_case), [pothole case](#pothole_case)
 
 **catch (an exception)**<a id="catch_exception"></a>
-:   To accept responsibility for handling an error or other unexpected event. \gref{R}{r_language} prefers "handling a condition" to "catching an exception". \gref{Python}{python}, on the other hand, encourages raising and catching exceptions, and in some situations, requires it.
+:   To accept responsibility for handling an error or other unexpected event. \gref{R}{r_language} prefers "handling a condition" to "catching an exception." \gref{Python}{python}, on the other hand, encourages raising and catching exceptions, and in some situations, requires it.
 
 **Creative Commons license**<a id="cc_license"></a>
-:   A set of \gref{licenses}{license} that can be applied to published work. Each license is formed by concatenating one or more of `-BY` (Attribution): users must cite the original source; `-SA` (ShareAlike): users must share their own work under a similar license; `-NC` (NonCommercial): work may not be used for commercial purposes without the creator's permission; `-ND` (NoDerivatives): no derivative works (e.g., translations) can be created without the creator's permission. Thus, `CC-BY-NC` means "users must give attribution and cannot use commercially without permission". The term `CC-0` (zero, not letter 'O') is sometimes used to mean "no restrictions", i.e., the work is in the public domain.
+:   A set of \gref{licenses}{license} that can be applied to published work. Each license is formed by concatenating one or more of `-BY` (Attribution): users must cite the original source; `-SA` (ShareAlike): users must share their own work under a similar license; `-NC` (NonCommercial): work may not be used for commercial purposes without the creator's permission; `-ND` (NoDerivatives): no derivative works (e.g., translations) can be created without the creator's permission. Thus, `CC-BY-NC` means "users must give attribution and cannot use commercially without permission." The term `CC-0` (zero, not letter 'O') is sometimes used to mean "no restrictions," i.e., the work is in the public domain.
 
 **checklist**<a id="checklist"></a>
 :   A list of things to be checked or completed when doing a task.
@@ -21485,18 +21479,18 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   The amount of working memory needed to accomplish a set of simultaneous tasks.
 
 **command history**<a id="command_history"></a>
-:   An automatically-created list of previously-executed commands. Most read-eval-print loops (\gref{REPLs}{repl}), including the \gref{Unix shell}{shell}, record history and allow users to play back recent commands.
+:   An automatically created list of previously executed commands. Most read-eval-print loops (\gref{REPLs}{repl}), including the \gref{Unix shell}{shell}, record history and allow users to play back recent commands.
 
 **command-line argument**<a id="command_line_argument"></a>
 :   A filename or control flag given to a command-line program when it is run.
 
-**command line flag**<a id="command_line_flag"></a>
+**command-line flag**<a id="command_line_flag"></a>
 :   See \gref{command-line argument}{command_line_argument}
 
-**command line option**<a id="command_line_option"></a>
+**command-line option**<a id="command_line_option"></a>
 :   See \gref{command-line argument}{command_line_argument}
 
-**command line switch**<a id="command_line_switch"></a>
+**command-line switch**<a id="command_line_switch"></a>
 :   See \gref{command-line argument}{command_line_argument}
 
 **comment**<a id="comment"></a>
@@ -21518,7 +21512,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A combination of a document format that allows users to mix prose and code in a single file, and an application that executes that code interactively and in place. The \gref{Jupyter Notebook}{jupyter_notebook} and \gref{R Markdown}{r_markdown} files are both examples of computational notebooks.
 
 **conditional expression**<a id="conditional_expression"></a>
-:   A \gref{ternary expression}{ternary_expression} that serves the role of an if/else statement. For example, C and similar languages use the syntax `test : ifTrue ? ifFalse` to mean "choose the value `ifTrue` if `test` is true, or the value `ifFalse` if it is not".
+:   A \gref{ternary expression}{ternary_expression} that serves the role of an if/else statement. For example, C and similar languages use the syntax `test : ifTrue ? ifFalse` to mean "choose the value `ifTrue` if `test` is true, or the value `ifFalse` if it is not."
 
 **confirmation bias**<a id="confirmation_bias"></a>
 :   The tendency to analyze information or make decisions in ways that reinforce existing beliefs.
@@ -21551,13 +21545,13 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A data structure that allows items to be looked up by value, sometimes called an \gref{associative array}{associative_array}. Dictionaries are often implemented using \gref{hash tables}{hash_table}.
 
 **docstring**<a id="docstring"></a>
-:   Short for "documentation string", a string appearing at the start of a module, class, or function in \gref{Python}{python} that automatically becomes that object's documentation.
+:   Short for "documentation string," a string appearing at the start of a module, class, or function in \gref{Python}{python} that automatically becomes that object's documentation.
 
 **documentation generator**<a id="documentation_generator"></a>
-:   A software tool that extracts specially-formatted comments or \gref{dostrings}{docstring} from code and generates cross-referenced developer documentation.
+:   A software tool that extracts specially formatted comments or \gref{dostrings}{docstring} from code and generates cross-referenced developer documentation.
 
 **Digital Object Identifier**<a id="doi"></a>
-:   A unique persistent identifier for a book, paper, report, dataset, software release, or other digital artefact. See also: [ORCID](#orcid)
+:   A unique persistent identifier for a book, paper, report, dataset, software release, or other digital artifact. See also: [ORCID](#orcid)
 
 **down-vote**<a id="down_vote"></a>
 :   A vote against something. See also: [up-vote](#up_vote)
@@ -21638,7 +21632,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   To make a new copy of a \gref{Git}{git} \gref{repository}{repository} on a \gref{server}{server}, or the copy that is made. See also: [Git clone](#git_clone)
 
 **Git merge**<a id="git_merge"></a>
-:   Merging branches in \gref{Git}{git} incorporates development histories of two \gref{branches}{branch} in one. If changes are made to similar parts of the branches on both branches a \gref{conflict}{git_conflict} will occur and this must be resolved before the merge will be completed.
+:   Merging branches in \gref{Git}{git} incorporates development histories of two \gref{branches}{branch} in one. If changes are made to similar parts of the branches on both branches, a \gref{conflict}{git_conflict} will occur and this must be resolved before the merge will be completed.
 
 **Git pull**<a id="git_pull"></a>
 :   Downloads and synchronizes changes between a \gref{remote repository}{remote_repository} and a local \gref{repository}{repository}.
@@ -21692,16 +21686,16 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A technique for managing interruptions in meetings. Everyone's name is placed on each row and each column of a grid; each time person A interrupts person B, a mark is added to the appropriate grid cell.
 
 **invariant**<a id="invariant"></a>
-:   Something that is must be \gref{true}{true} at all times inside of a program or during the \gref{lifecycle}{lifecycle} of an \gref{object}{object}. Invariants are often expressed using \gref{assertions}{assertion}. If an invariant expression is not true, this is indicative of a problem, and may result in failure or early temrination of the program.
+:   Something that must be \gref{true}{true} at all times inside of a program or during the \gref{lifecycle}{lifecycle} of an \gref{object}{object}. Invariants are often expressed using \gref{assertions}{assertion}. If an invariant expression is not true, this is indicative of a problem, and may result in failure or early termination of the program.
 
 **issue**<a id="issue"></a>
 :   A \gref{bug report}{bug_report}, feature request, or other to-do item associated with a project. Also called a \gref{ticket}{ticket}.
 
 **label (an issue)**<a id="issue_label"></a>
-:   A short textual tag associated with an \gref{issue}{issue} to categorize it. Common labels include \gref{`bug`}{bug} and `feature request`.
+:   A short textual tag associated with an \gref{issue}{issue} to categorize it. Common labels include `bug` and `feature request`.
 
 **issue tracking system**<a id="issue_tracking_system"></a>
-:   Similar to a \gref{bug tracking system}{bug_tracker} in that it tracks \gref{"issues"}{issue} made to a \gref{repository}{repository}, usually in the form of \gref{feature requests}{feature_request}, \gref{bug reports}{bug_report}, or some other to-do item.
+:   Similar to a \gref{bug tracking system}{bug_tracker} in that it tracks \gref{issues}{issue} made to a \gref{repository}{repository}, usually in the form of \gref{feature requests}{feature_request}, \gref{bug reports}{bug_report}, or some other to-do item.
 
 **JavaScript Object Notation**<a id="json"></a>
 :   A way to represent data by combining basic values like numbers and character strings in \gref{lists}{list} and \gref{key/value}{dictionary} structures. The acronym stands for "JavaScript Object Notation"; unlike better-defined standards like \gref{XML}{xml}, it is unencumbered by a syntax for comments or ways to define a \gref{schema}{schema}.
@@ -21710,7 +21704,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A naming convention in which the parts of a name are separated with dashes, as in `first-second-third`. See also: [camel case](#camel_case), [pothole case](#pothole_case)
 
 **LaTeX**<a id="latex"></a>
-:   A typesetting system for document preparation that uses a specialized \gref{markup language}{markup_language} to define a document structure (e.g. headings), stylise text, insert mathematical equations, and manage citations and cross-references. LaTeX is widely used in academia, in particular for scientific papers and theses in mathematics, physics, engineering, and computer science.
+:   A typesetting system for document preparation that uses a specialized \gref{markup language}{markup_language} to define a document structure (e.g., headings), stylize text, insert mathematical equations, and manage citations and cross-references. LaTeX is widely used in academia, in particular for scientific papers and theses in mathematics, physics, engineering, and computer science.
 
 **linter**<a id="linter"></a>
 :   A program that checks for common problems in software, such as violations of indentation rules or variable naming conventions. The name comes from the first tool of its kind, called `lint`.
@@ -21725,7 +21719,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A setting that controls how much information is generated by a \gref{logging framework}{logging_framework}. Typical logging levels include `DEBUG`, `WARNING`, and `ERROR`.
 
 **long option**<a id="long_option"></a>
-:   A full-word identifier for a \gref{command line argument}{command_line_argument}. While most common flags are a single letter preceded by a dash, such as `-v`, long options typically use two dashes and a readable name, such as `--verbose`. See also: [short option](#short_option)
+:   A full-word identifier for a \gref{command-line argument}{command_line_argument}. While most common flags are a single letter preceded by a dash, such as `-v`, long options typically use two dashes and a readable name, such as `--verbose`. See also: [short option](#short_option)
 
 **loop body**<a id="loop_body"></a>
 :   The statement or statements executed by a loop.
@@ -21806,7 +21800,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A generic \gref{build rule}{build_rule} that describes how to update any file whose name matches a pattern. Pattern rules often use \gref{automatic variables}{automatic_variable} to represent the actual filenames.
 
 **phony target**<a id="phony_target"></a>
-:   A \gref{build target}{build_target} that does not correspond to an actual file. Phony targets are often used to store commonly-used commands in a \gref{Makefile}{makefile}.
+:   A \gref{build target}{build_target} that does not correspond to an actual file. Phony targets are often used to store commonly used commands in a \gref{Makefile}{makefile}.
 
 **pipe (in the Unix shell)**<a id="pipe_shell"></a>
 :   The `|` used to make the output of one command the input of the next.
@@ -21854,7 +21848,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A record of where data originally came from and what was done to process it.
 
 **pull request**<a id="pull_request"></a>
-:   The request to merge a new feature or correction created on a user's \gref{fork}{fork} of a \gref{Git}{git} \gref{repository}{repository}repository into the \gref{upstream repository}{upstream_repository}. The developer will be notified of the change, review it, make or suggest changes, and potentially \gref{merge}{git_merge} it.
+:   The request to merge a new feature or correction created on a user's \gref{fork}{fork} of a \gref{Git}{git} \gref{repository}{repository} into the \gref{upstream repository}{upstream_repository}. The developer will be notified of the change, review it, make or suggest changes, and potentially \gref{merge}{git_merge} it.
 
 **raise (an exception)**<a id="raise_exception"></a>
 :   To signal that something unexpected or unusual has happened in a program by creating an \gref{exception}{exception} and handing it to the \gref{error-handling}{error_handling} system, which then tries to find a point in the program that will \gref{catch}{catch_exception} it.
@@ -21944,7 +21938,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   A set of commands for the \gref{shell}{shell} stored in a file so that they can be re-executed. A shell script is effectively a program.
 
 **shell variable**<a id="shell_variable"></a>
-:   A variable set and used in the \gref{Unix shell}{shell}. Commonly-used shell variables include `HOME` (the user's home directory) and `PATH` (their \gref{search path}{search_path}).
+:   A variable set and used in the \gref{Unix shell}{shell}. Commonly used shell variables include `HOME` (the user's home directory) and `PATH` (their \gref{search path}{search_path}).
 
 **short circuit test**<a id="short_circuit_test"></a>
 :   A logical test that only evaluates as many arguments as it needs to. For example, if `A` is \gref{false}{false}, then most languages never evaluate `B` in the expression `A and B`.
@@ -21953,7 +21947,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   The first few characters of a \gref{full identifier}{full_identifier_git}. Short identifiers are easy for people to type and say aloud, and are usually unique within a \gref{repository's}{repository} recent history.
 
 **short option**<a id="short_option"></a>
-:   A single-letter identifier for a \gref{command line argument}{command_line_argument}. Most common flags are a single letter preceded by a dash, such as `-v`. See also: [long option](#long_option)
+:   A single-letter identifier for a \gref{command-line argument}{command_line_argument}. Most common flags are a single letter preceded by a dash, such as `-v`. See also: [long option](#long_option)
 
 **snake case**<a id="snake_case"></a>
 :   See \gref{pothole case}{pothole_case}. See also: [camel case](#camel_case), [kebab case](#kebab_case)
@@ -22001,7 +21995,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   Software that its users can afford to keep up to date. Sustainability depends on the quality of the software, the skills of the potential maintainers, and how much the community is willing to invest.
 
 **tag (in version control)**<a id="tag"></a>
-:   A readable label attached to a specific \gref{commit}{commit} so that it can easily be referenced to later.
+:   A readable label attached to a specific \gref{commit}{commit} so that it can easily be referred to later.
 
 **test-driven development**<a id="tdd"></a>
 :   A programming practice in which tests are written before a new feature is added or a \gref{bug}{bug} is fixed in order to clarify the goal.
@@ -22040,7 +22034,7 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 :   To go through the \gref{issues}{issue} associated with a project and decide which are currently priorities. Triage is one of the key responsibilities of a \gref{project manager}{project_manager}.
 
 **tuple**<a id="tuple"></a>
-:   A data type that has a fixed number of parts, such as the three color components of a red-green-blue color specification. Tuples are immutable (their values can not be reset.)
+:   A data type that has a fixed number of parts, such as the three color components of a red-green-blue color specification. Tuples are immutable (their values cannot be reset.)
 
 **unit test**<a id="unit_test"></a>
 :   A test that exercises one function or feature of a piece of software and produces \gref{pass}{pass_test}, \gref{fail}{fail_test}, or \gref{error}{error_test}. See also: [integration test](#integration_test)
@@ -22068,9 +22062,6 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 
 **virtual machine**<a id="virtual_machine"></a>
 :   A program that pretends to be a computer. This may seem a bit redundant, but VMs are quick to create and start up, and changes made inside the virtual machine are contained within that VM so we can install new \gref{packages}{package} or run a completely different operating system without affecting the underlying computer.
-
-**wheel**<a id="wheel"></a>
-:   A pre-built binary Python installation format that is smaller and faster to install than the \gref{source distribution}{source_distribution} but not as versatile.
 
 **whitespace**<a id="whitespace"></a>
 :   The space, newline, carriage return, and horizontal and vertical tab characters that take up space but do not create a visible mark. The name comes from their appearance on a printed page in the era of typewriters.
