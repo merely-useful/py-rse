@@ -4,5 +4,5 @@
 -   Identify the command, options, and filenames in a command-line call.
 -   Explain the similarities and differences between files and directories.
 -   Translate an \gref{absolute path}{absolute_path} into a \gref{relative path}{relative_path} and vice versa.
--   Construct absolute and relative paths that identify specific files and directories.
+-   Construct absolute and relative paths that identify files and directories.
 -   Delete, copy, and move files and directories.
