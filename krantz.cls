@@ -374,8 +374,18 @@
   \else
 \let\@oddfoot\@empty
 \let\@evenfoot\@empty
-    \let\@evenhead\even@head
-    \let\@oddhead\odd@head
+    \def\@evenhead{\top@cornermarks
+  {\thepage\RunningHeadFont
+    \hfill
+\if@mainmatter\thechapter\enspace\fi\leftmark}
+}%\even@head
+    \def\@oddhead{\top@cornermarks
+  \hfil{\RunningHeadFont
+\rightmark
+    }
+\hfill
+    \thepage
+}%\odd@head
   \fi
   }
 \else
@@ -448,7 +458,7 @@
     \markboth{%
       ##1}{}}%
   \def\sectionmark##1{%
-    \markright{%
+    \markright{\if@mainmatter\thesection\enspace\else\fi%
       ##1}}}
 \def\pdfon{\@pdftrue}
 \def\pdfoff{\@pdffalse}
