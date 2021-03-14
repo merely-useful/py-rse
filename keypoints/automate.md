@@ -7,5 +7,5 @@
 -   Make defines \gref{automatic variables}{automatic_variable} such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
 -   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
--   Makefiles also has functions such as `$(wildcard...)` and `$(patsubst...)`.
+-   Make also has functions such as `$(wildcard...)` and `$(patsubst...)`.
 -   Use specially formatted comments to create self-documenting Makefiles.
