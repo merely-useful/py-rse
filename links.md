@@ -25,7 +25,6 @@
 [creative-commons]: https://creativecommons.org/
 [desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
-[drake]: https://ropenscilabs.github.io/drake-manual/
 [dryad]: https://datadryad.org/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [explainshell]: http://explainshell.com
