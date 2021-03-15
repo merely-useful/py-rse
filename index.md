@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-03-12"
+date: "2021-03-15"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -491,6 +491,8 @@ our data is downloaded,
 and our software is installed,
 we are ready to start our analysis.
 
+\newpage
+
 ## Exercises {#getting-started-exercises}
 
 ### Getting ready {#getting-started-install}
@@ -547,7 +549,7 @@ the CLI **r**eads the command,
 **e**valuates it (i.e., executes it),
 **p**rints the command's output,
 and **l**oops around to wait for another command.
-If you have used an interactive console for R or Python,
+If you have used an interactive console for Python,
 you have already used a simple CLI.
 
 This lesson introduces another CLI that lets us interact with our computer's operating system.
@@ -725,7 +727,7 @@ and what files or directories we have.
 
 We can make the output of `ls` more informative using the `-F` \gref{option}{command_line_option}\index{option (of shell command)}\index{command-line option}
 (also sometimes called a \gref{switch}{command_line_switch} or a \gref{flag}{command_line_flag}).
-Options are exactly like arguments to a function in R or Python;
+Options are exactly like arguments to a function in Python;
 in this case,
 `-F` tells `ls` to decorate its output to show what things are.
 A trailing `/` indicates a directory,
@@ -1003,7 +1005,7 @@ because there are fewer special cases to remember.
 > **Other Hidden Files**
 >
 > In addition to the hidden directories `..` and `.`,
-> we may also come across files with names like `.jupyter` or `.Rhistory`.
+> we may also come across files with names like `.jupyter`.
 > These usually contain settings or other data for particular programs;
 > the prefix `.` is used to prevent `ls` from cluttering up the output
 > when we run `ls`.
@@ -1273,6 +1275,8 @@ the directory we want is the special name `.` that we mentioned earlier:
 ```bash
 $ mv docs/prior-work.txt .
 ```
+
+\newpage
 
 `ls` now shows us that `docs` is empty:
 
@@ -2085,6 +2089,8 @@ $ cat lengths.txt
 
 We can now use `sort` to sort the lines in this file:
 
+\newpage
+
 ```bash
 $ sort lengths.txt -n
 ```
@@ -2328,6 +2334,8 @@ it just knows that it has to read, sort, and print.
 > We can also use this to interrupt programs that are taking a long time to run
 > or are trying to connect to a website that isn't responding.
 
+\newpage
+
 Just as we can redirect standard output with `>`,
 we can connect standard input to a file using `<`.\index{redirection (in Unix shell)}
 In the case of a single file,
@@ -2479,6 +2487,8 @@ Latest Update:
 Language: English
 ```
 
+\newpage
+
 Let's try this instead:
 
 ```bash
@@ -2515,7 +2525,7 @@ so we will break it down into pieces:
 1.  The keywords `for`, `in`, `do`, and `done` create the loop,
     and must always appear in that order.
 
-2.  `filename` is a variable just like a variable in R or Python.\index{variable (in Unix shell)}\index{shell variable}
+2.  `filename` is a variable just like a variable in Python.\index{variable (in Unix shell)}\index{shell variable}
     At any moment it contains a value,
     but that value can change over time.
 
@@ -2820,6 +2830,8 @@ We have seen the use of `>`, but there is a similar operator `>>` which works sl
 We'll learn about the differences between these two operators by printing some strings.
 We can use the `echo` command to print strings as shown below:
 
+\newpage
+
 ```bash
 $ echo The echo command prints text
 ```
@@ -2964,20 +2976,17 @@ $ for file in *.txt
 
 What is the difference between the two loops below,
 and which one would we want to run?
-(Note: The lines starting with `#` are not code,
-and are included for labeling purposes only;
-we'll discuss this more in the next chapter)
 
 ```bash
-# Version 1
 $ for file in *.txt
 > do
 >   echo analyze $file > analyzed-$file
 > done
 ```
 
+or:
+
 ```bash
-# Version 2
 $ for file in *.txt
 > do
 >   echo "analyze $file > analyzed-$file"
@@ -2990,7 +2999,6 @@ Given the files in `data/`,
 what is the output of the following code?
 
 ```bash
-# Version 1
 $ for datafile in *.txt
 > do
 >    ls *.txt
@@ -3000,7 +3008,6 @@ $ for datafile in *.txt
 Now, what is the output of the following code?
 
 ```bash
-# Version 2
 $ for datafile in *.txt
 > do
 >	ls $datafile
@@ -3014,7 +3021,6 @@ Why do these two loops give different outputs?
 What would be the output of running the following loop in your `data/` directory?
 
 ```bash
-# Version 1
 $ for filename in d*
 > do
 >    ls $filename
@@ -3024,7 +3030,6 @@ $ for filename in d*
 How would the output differ from using this command instead?
 
 ```bash
-# Version 2
 $ for filename in *d*
 > do
 >    ls $filename
@@ -3036,7 +3041,6 @@ $ for filename in *d*
 Consider running the following loop in the  `data/` directory:
 
 ```bash
-# Version 1
 for book in *.txt
 > do
 >     echo $book
@@ -3047,12 +3051,13 @@ for book in *.txt
 Why would the following loop be preferable?
 
 ```bash
-# Version 2
 for book in *.txt
 > do
 >     head -n 16 $book >> headers.txt
 > done
 ```
+
+\newpage
 
 ### Why does `history` record commands before running them? {#bash-tools-ex-history-order}
 
@@ -3307,7 +3312,7 @@ We can improve our script by adding \gref{comments}{comment} at the top:\index{c
 head -n 17 $1 | tail -n 8 | grep Author
 ```
 
-As in R and Python,
+As in Python,
 a comment starts with a `#` character and runs to the end of the line.
 The computer ignores comments,
 but they help people (including our future self) understand and use what we've created.
@@ -3488,6 +3493,8 @@ that I had a country walk on Thursday and came home in a dreadful
 "It is simplicity itself," said he; "my eyes tell me that on the
 on the right side of his top-hat to show where he has secreted
 ```
+
+\newpage
 
 What if we want to search for a phrase rather than a single word?
 
@@ -4002,6 +4009,8 @@ $ echo $HOME
 /Users/amira
 ```
 
+\newpage
+
 As with loop variables (Section \@ref(bash-tools-loops)),
 the dollar sign before the variable names tells the shell
 that we want the variable's value.
@@ -4487,7 +4496,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    USAGE = 'One-line description of what the script does.'
+    USAGE = 'Brief description of what the script does.'
     parser = argparse.ArgumentParser(description=USAGE)
     parser.add_argument('infile', type=str,
                         help='Input file name')
@@ -4561,7 +4570,7 @@ $ python script_template.py -h
 ```text
 usage: script_template.py [-h] infile outfile
 
-One-line description of what the script does.
+Brief description of what the script does.
 
 positional arguments:
   infile      Input file name
@@ -4625,7 +4634,7 @@ If we add documentation to our template,
 it becomes:
 
 ```python
-"""One-line description of what the script does."""
+"""Brief description of what the script does."""
 
 import argparse
 
@@ -4673,7 +4682,7 @@ for more information.
 >>> script_template.__doc__
 ```
 ```text
-'One-line description of what the script does.'
+'Brief description of what the script does.'
 ```
 ```python
 >>> help(script_template)
@@ -4682,7 +4691,7 @@ for more information.
 Help on module script_template:
 
 NAME
-    script_template - One-line description of what the script does.
+    script_template - Brief description of what the script does.
 
 FUNCTIONS
     main(args)
@@ -4806,6 +4815,8 @@ he,2543
 that,2455
 it,2141
 ```
+
+\newpage
 
 To make our `count_words` and `collection_to_csv` functions available at the command line,
 we need to insert them into our script template
@@ -5092,6 +5103,8 @@ Let's give `collate.py` a try
 $ python bin/collate.py results/dracula.csv
   results/moby_dick.csv results/jane_eyre.csv -n 10
 ```
+
+\newpage
 
 ```text
 the,30505
@@ -5395,6 +5408,8 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
 ```
+
+\newpage
 
 and an example of the output would be:
 
@@ -6371,6 +6386,8 @@ Because we are synchronizing with an existing repository,
 do not add a README, `.gitignore`, or license;
 we'll discuss these additions in other chapters.
 
+\newpage
+
 Next,
 we need to connect our desktop repository with the one on GitHub.
 We do this by making the GitHub repository a \gref{remote}{remote_repository}\index{Git!remote}\index{remote (in Git)}
@@ -6402,6 +6419,8 @@ let's go into the local `zipf` repository and run this command:
 $ cd ~/zipf
 $ git remote add origin https://github.com/amira-khan/zipf.git
 ```
+
+\newpage
 
 Make sure to use the URL for your repository instead of the one shown:
 the only difference should be that it includes your username instead of `amira-khan`.
@@ -6461,6 +6480,8 @@ along with all of the commits we have made so far (Figure \@ref(fig:git-cmdline
 <img src="figures/git-cmdline/repo-history.png" alt="Viewing the repository's history on GitHub." width="100%" />
 <p class="caption">(\#fig:git-cmdline-history)Viewing the repository's history on GitHub.</p>
 </div>
+
+\newpage
 
 We can also \gref{pull}{git_pull} changes\index{Git commands!pull}\index{pull (in Git)}
 from the remote repository to the local one:
@@ -6921,10 +6942,10 @@ Despite her colleagues' concerns,
 Amira creates a `heaps-law` project inside her `zipf` project as follows:
 
 ```bash
-$ cd ~/zipf         # go into zipf directory (it's a Git repo)
-$ mkdir heaps-law   # make a subdirectory zipf/heaps-law
-$ cd heaps-law      # go into heaps-law subdirectory
-$ git init heaps-law     # make heaps-law a Git repository
+$ cd ~/zipf
+$ mkdir heaps-law
+$ cd heaps-law
+$ git init heaps-law
 ```
 
 Is the `git init` command that she runs inside the `heaps-law` subdirectory
@@ -6995,7 +7016,6 @@ Make sure the directory containing this repository is outside your `zipf` projec
 
 The staging area can hold changes from any number of files
 that you want to commit as a single snapshot.
-
 From your new `bio` directory,
 following after the previous exercise (wich leaves you with uncommitted changes to `me.txt`):
 
@@ -7009,8 +7029,8 @@ following after the previous exercise (wich leaves you with uncommitted changes 
 
 1.  Create a remote repository on GitHub for your new `bio` repository.
 2.  Push the contents of your local repository to the remote.
-3.  Make another change to your local repository
-    (e.g., by editing `me.txt` or `employment.txt`)
+3.  Make a change to your local repository
+    (e.g., edit `me.txt` or `employment.txt`)
     and push these changes as well.
 4.  Go to the repo you just created on GitHub and check the timestamps of the files.
 
@@ -7034,8 +7054,7 @@ $ cat motivation.txt
 
 2. `Documenting major milestones.`
 
-3. 
-```text
+3. ```text
 Sharing information about myself.
 Documenting major milestones.
 ```
@@ -7188,6 +7207,8 @@ zipf/
     ├── jane_eyre.png
     └── moby_dick.csv
 ```
+
+\newpage
 
 All of these files should also be tracked in your version history.
 We'll use them and some additional analyses to explore Zipf's Law
@@ -7375,10 +7396,13 @@ Zipf's Law says:
 > appears half as often as the most common,
 > the third most common appears a third as often, and so on.
 
-In other words,
-the frequency of a word (\(f\)) is proportional to its inverse rank (\(r\)), \[
+In other words
+the frequency of a word \(f\) is proportional to its inverse rank \(r\):
+
+\[
 f \propto \frac{1}{r^\alpha}
 \]
+
 with a value of \(\alpha\) close to one.
 The reason \(\alpha\) must be close to one for Zipf's Law to hold
 becomes clear if we include it in a modified version of the earlier definition:
@@ -7392,21 +7416,29 @@ In general, when two variables \(x\) and \(y\)
 are related through a power law, so that \[
 y = ax^b
 \]
-taking logarithms of both sides yields a linear relationship: \[
+taking logarithms of both sides yields a linear relationship:
+
+\[
 \log(y) = \log(a) + b\log(x)
 \]
 
 Hence,
 plotting the variables on a log-log scale reveals this linear relationship.
 If Zipf's Law holds,
-we should have \[
+we should have
+
+\[
 r = cf^{\frac{-1}{\alpha}}
 \]
+
 where \(c\) is a constant of proportionality.
 The linear relationship between the log word frequency and
-log rank is then \[
+log rank is then
+
+\[
 \log(r) = \log(c) - \frac{1}{\alpha}\log(f)
 \]
+
 This suggests that the points on our log-log plot should fall on a straight line
 with a slope of \(- \tfrac{1}{\alpha}\)
 and intercept \(\log(c)\).
@@ -7426,6 +7458,8 @@ through \(\alpha = \tfrac{1}{\beta-1}\).
 Under their model,
 the value of $c$ is the total number of unique words,
 or equivalently the largest value of the rank.
+
+\newpage
 
 Expressed as a Python function,
 the negative log likelihood function is:
@@ -8200,6 +8234,8 @@ What is the best way to incorporate branching into our regular coding practice?
 If we are working on our own computer,
 this workflow will help us keep track of what we are doing:
 
+\newpage
+
 1.  `git checkout master` to make sure we are in the `master` branch.
 
 2.  `git checkout -b name-of-feature` to create a new branch.
@@ -8322,6 +8358,8 @@ We will modify Sami's prompt to include their desktop user ID (`sami`)
 and working directory (initially `~`)
 to make it easier to follow what's happening:\index{Git commands!clone}
 
+\newpage
+
 ```bash
 sami:~ $ git clone https://github.com/sami-virtanen/zipf.git
 ```
@@ -8442,6 +8480,8 @@ To https://github.com/amira-khan/zipf.git
    55c63d0..35fca86  master -> master
 ```
 
+\newpage
+
 Amira's changes are now on her desktop and in her GitHub repository
 but not in either of Sami's repositories (local or remote).
 Since Sami has created a remote that points at Amira's GitHub repository,
@@ -8558,10 +8598,12 @@ Delta compression using up to 4 threads
 Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 315 bytes | 315.00 KiB/s, done.
 Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote: Resolving deltas: 100% (2/2), completed with 2 local
+  objects.
 remote: 
-remote: Create a pull request for 'adding-email' on GitHub by visiting:
-remote:   https://github.com/sami-virtanen/zipf/pull/new/adding-email
+remote: Create a pull request for 'adding-email' on GitHub by
+  visiting:
+  https://github.com/sami-virtanen/zipf/pull/new/adding-email
 remote: 
 To https://github.com/sami-virtanen/zipf.git
  * [new branch]      adding-email -> adding-email
@@ -8595,6 +8637,8 @@ Sami can see a summary of the changes that will be in the pull request
 <img src="figures/git-advanced/open-pull-request-detail.png" alt="Summary of a pull request." width="100%" />
 <p class="caption">(\#fig:git-advanced-pull-request-summary)Summary of a pull request.</p>
 </div>
+
+\newpage
 
 The top (title) box is autofilled with the previous commit message,
 so Sami adds an extended explanation to provide additional context
@@ -8711,6 +8755,8 @@ The icon at the top of the PR's page changes text and color to show that the mer
 
 To get those changes from GitHub to her desktop repository,
 Amira uses `git pull`:
+
+\newpage
 
 ```bash
 amira:~/zipf $ git pull origin master
@@ -9479,6 +9525,8 @@ They are also often called \gref{bug trackers}{bug_tracker},
 but they can be used to manage any kind of work,
 and are often a convenient way to manage discussions as well.
 
+\newpage
+
 Like other \gref{forges}{forge},
 GitHub allows participants to create issues for a project,
 comment on existing issues,
@@ -9999,6 +10047,7 @@ in groups of up to a few dozen members [@Mina1986]:
 1.  Before each meeting, anyone who wishes may sponsor a proposal.
     Proposals must be filed at least 24 hours before a meeting
     in order to be considered at that meeting, and must include:
+    \newpage
     -   a one-line summary
     -   the full text of the proposal
     -   any required background information
@@ -10262,6 +10311,8 @@ Collaboration and management become easier with practice,
 and everything you learn from taking part in research software projects
 will help other things you do as well.
 
+\newpage
+
 ## Exercises {#teams-exercises}
 
 ### Finding information {#teams-ex-scavenger-hunt}
@@ -10330,8 +10381,8 @@ How would you address this issue?
 
 ### Who are you? {#teams-ex-members}
 
-1.  Which (if any) of the followig profiles describes you best?
-2.  How would you handle each of these people if they were on your team?
+Which (if any) of the following profiles describes you best?
+How would you help each of these people if they were on your team?
 
 -   *Anna* thinks she knows more about every subject
     than everyone else on the team put together.
@@ -10494,10 +10545,9 @@ please see Section \@ref(getting-started-install-software) for Windows installa
 
 > **Keep Tracking with Version Control**
 >
-> We learned about tracking our project's version history using Git
-> in Chapters \@ref(git-cmdline) and \@ref(git-advanced).
-> We encourage you to continue applying the Git workflow
-> throughout the rest of our code development,
+> We encourage you to use the Git workflow
+> from Chapters \@ref(git-cmdline) and \@ref(git-advanced)
+> throughout the rest of this book,
 > though we won't continue to remind you.
 
 ## Updating a Single File {#automate-single-file}
@@ -10598,6 +10648,8 @@ $ ls -l -t data/moby_dick.txt results/moby_dick.csv
 -rw-r--r-- 1 amira staff 1253891 Nov 27 20:56
   data/moby_dick.txt
 ```
+
+\newpage
 
 As a further test:
 
@@ -10797,6 +10849,8 @@ this redundancy makes our Makefile harder to understand,
 just as scattering \gref{magic numbers}{magic_number} through programs
 makes them harder to understand.
 
+\newpage
+
 The solution is the same one we use in programs:
 define and use variables.
 Let's modify the results regeneration code by 
@@ -10900,8 +10954,8 @@ the resulting command tries to process the program `bin/countwords.py`
 as if it was a data file:
 
 ```bash
-python bin/countwords.py \
-  data/moby_dick.txt bin/countwords.py > results/moby_dick.csv
+python bin/countwords.py data/moby_dick.txt bin/countwords.py >
+  results/moby_dick.csv
 ```
 
 Make solves this problem with another automatic variable `$<`,
@@ -11110,7 +11164,7 @@ To create a list of corresponding output files,
 we use Make's `patsubst` function
 (short for **pat**tern **subst**itution):
 
-```
+```makefile
 RESULTS=$(patsubst data/%.txt,results/%.csv,$(DATA))
 ```
 
@@ -11380,6 +11434,8 @@ alpha: 1.1712445413685917
 <p class="caption">(\#fig:automate-collated)Word count distribution for all books combined.</p>
 </div>
 
+\newpage
+
 Finally,
 we can update the `clean` target
 to only remove files created by the Makefile.
@@ -11397,8 +11453,7 @@ clean :
 
 ## Summary {#automate-summary}
 
-Make's reliance on shell commands instead of direct calls to functions in Python or R
-sometimes makes it clumsy to use.
+Make's reliance on shell commands instead of direct calls to functions in Python sometimes makes it clumsy to use.
 However,
 that also makes it very flexible:
 a single Makefile can run shell commands and programs written in a variety of languages,
@@ -11408,8 +11463,7 @@ Programmers have created many replacements for Make in the 45 years since it was
 in fact,
 that none have attracted enough users to displace it.
 If you would like to explore them,
-check out [Snakemake][snakemake] (for Python)
-and [drake][drake] (for R).
+check out [Snakemake][snakemake] (for Python).
 If you want to go deeper,
 @Smit2011 describes the design and implementation of several build managers.
 
@@ -11574,7 +11628,7 @@ Under what circumstances would this strategy be useful?
 -   Make defines \gref{automatic variables}{automatic_variable} such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
 -   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
--   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
+-   Make also has functions such as `$(wildcard...)` and `$(patsubst...)`.
 -   Use specially formatted comments to create self-documenting Makefiles.
 
 <!--chapter:end:chapters/automate.Rmd-->
@@ -12342,6 +12396,8 @@ def count_words(reader):
     return word_counts
 ```
 
+\newpage
+
 A single unit test will typically have:
 
 -   a \gref{fixture}{fixture},\index{testing!fixture}\index{fixture (of test)}
@@ -12492,11 +12548,16 @@ the other critical part of our code is the calculation of the \(\alpha\) paramet
 Earlier we defined a power law relating \(\alpha\)
 to the word frequency \(f\),
 the word rank \(r\),
-and a constant of proportionality \(c\) (Section \@ref(git-advanced-theory)):\[
+and a constant of proportionality \(c\) (Section \@ref(git-advanced-theory)):
+
+\[
 r = cf^{\frac{-1}{\alpha}}
 \]
+
 We also noted that Zipf's Law holds exactly when \(\alpha\) is equal to one.
-Setting \(\alpha\) to one and re-arranging the power law gives us:\[
+Setting \(\alpha\) to one and re-arranging the power law gives us:
+
+\[
 c = f/r
 \]
 
@@ -12991,6 +13052,8 @@ A function with only two numeric arguments has 2^128^ possible inputs.
 Even if we could write the tests,
 how could we be sure we were checking the result of each one correctly?
 
+\newpage
+
 Luckily,
 we can usually put test cases into groups.
 For example,
@@ -13298,10 +13361,9 @@ This function does that:
 ```python
 def normalize_rectangle(rect):
     """Normalizes a rectangle so that it is at the origin
-    and 1.0 units long on its longest axis.
-    Input should be of the format (x0, y0, x1, y1).
-    (x0, y0) and (x1, y1) define the lower left and
-    upper right corners of the rectangle, respectively."""
+    and 1.0 units long on its longest axis.  Input should be
+    (x0, y0, x1, y1), where (x0, y0) and (x1, y1) define the
+    lower left and upper right corners of the rectangle."""
 
     # insert preconditions
     x0, y0, x1, y1 = rect
@@ -13596,6 +13658,8 @@ but an `except` that catches an `OverflowError`
 The Python documentation describes all of [the built-in exception types][python-exceptions];
 in practice,
 the ones that people handle most often are:
+
+\newpage
 
 -   `ArithmeticError`:
     something has gone wrong in a calculation.
@@ -13940,6 +14004,8 @@ except ExpectedError as error:
 except Exception as error:
     assert False, 'Function raised the wrong exception'
 ```
+
+\newpage
 
 This template has three cases:
 
@@ -14601,12 +14667,13 @@ We can tell we've done this if:
 Small datasets (i.e., anything under 500 MB) can be stored in version control.\index{publishing!data!archiving}
 If the data is being used in several projects,
 it may make sense to create one repository to hold only the data;
-the R community refers to these as \gref{data packages}{data_package},\index{data package (in R)}\index{publishing!data!package}
+these are sometimes referred to as \gref{data packages}{data_package},\index{data package}\index{publishing!data!package}
 and they are often accompanied by small scripts to clean up and query the data.
 
 For medium-sized datasets (between 500 MB and 5 GB),
 it's better to put the data on platforms
-like the [Open Science Framework][osf], [Dryad][dryad], and [Figshare][figshare],
+like the [Open Science Framework][osf], [Dryad][dryad], 
+[Zenodo][zenodo], and [Figshare][figshare],
 which will give the dataset a DOI.
 Big datasets (i.e., anything more than 5 GB)
 may not be ours in the first place,
@@ -14639,6 +14706,8 @@ we must archive three key items:
 3.  A description of the **data processing steps** taken in producing each key result,
     i.e., a step-by-step account of which scripts were executed in what order
     for each key result.
+
+\newpage
 
 Unfortunately,
 librarians, publishers, and regulatory bodies are still trying to determine
@@ -15016,6 +15085,8 @@ pkg_name
 └── setup.py
 ```
 
+\newpage
+
 The top-level directory is named after the package.
 It contains a directory that is also named after the package,
 and that contains the package's source files.
@@ -15062,6 +15133,8 @@ $ mv bin pyzipf
 > $ git remote set-url origin 
 >   https://github.com/amira-khan/pyzipf.git  
 > ```
+
+\newpage
 
 Python has several ways to build an installable package.\index{Python package!building}
 We will show how to use [`setuptools`][setuptools],\index{setuptools (in Python)}\index{Python!setuptools}
@@ -15796,6 +15869,8 @@ not all of our package dependencies are available on TestPyPI):
   --extra-index-url https://pypi.org/simple pyzipf
 ```
 
+\newpage
+
 ```text
 Looking in indexes: https://test.pypi.org/simple,
                     https://pypi.org/simple
@@ -16110,6 +16185,8 @@ to add `autodoc` to the list of Sphinx extensions we want:
 extensions = ['sphinx.ext.autodoc']
 ```
 
+\newpage
+
 With those edits complete,
 we can now generate a Sphinx `autodoc` script
 that generates information about each of our modules
@@ -16408,7 +16485,7 @@ quotes.random_quote()
 
 
 -   Use [`setuptools`][setuptools] to build and distribute Python packages.
--   Create a directory named `mypackage` containing a `setup.py` script as well as a subdirectory, also called `mypackage`, containing the package's source files.
+-   Create a directory named `mypackage` containing a `setup.py` script with a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
 -   Use a \gref{virtual environment}{virtual_environment} to test how your package installs without disrupting your main Python installation.
 -   Use [`pip`][pip] to install Python packages.
@@ -16418,7 +16495,7 @@ quotes.random_quote()
 -   Use [Sphinx][sphinx] to generate documentation for a package.
 -   Use [Read the Docs][readthedocs] to host package documentation online.
 -   Create a \gref{DOI}{doi} for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
--   Publish the details of your package in a software journal so that others can cite it.
+-   Publish details of your package in a software journal so others can cite it.
 
 <!--chapter:end:chapters/packaging.Rmd-->
 
@@ -16580,6 +16657,8 @@ When you inspect the file with `ls -l`, note that the size of
 `my_file.txt` is 0 bytes.  In other words, it contains no data.
 If you open `my_file.txt` using your text editor, it is blank.
 
+\newpage
+
 Some programs do not generate output files themselves, but
 instead require that empty files have already been generated.
 When the program is run, it searches for an existing file to
@@ -16715,7 +16794,7 @@ The `mv` command then moves the list of `.txt` files to the `data` directory.
     ```
 
 2. When there are no files beginning with `s` and ending in `.txt`, 
-or when there are no files beginning with `t` and ending in `.txt`, 
+or when there are no files beginning with `t` and ending in `.txt`. 
 
 
 ### Exercise \@ref(bash-basics-ex-remove-unneeded) {-}
@@ -16864,22 +16943,22 @@ try running the commands or sub-sections of the pipelines
 The difference between the versions is whether the code after `echo`
 is inside quotation marks.
 
-Version 2 will allow us to preview the commands.
-This prints to screen everything enclosed in the quotation marks,
-expanding the loop variable name (prefixed with `$`).
-
 The first version redirects the output from `echo analyze $file` 
 to a file (`analyzed-$file`). 
 This doesn't allow us to preview the commands,
 but instead creates files (`analyzed-$file`)
 containing the text `analyze $file`.
 
+The second version will allow us to preview the commands.
+This prints to screen everything enclosed in the quotation marks,
+expanding the loop variable name (prefixed with `$`).
+
 Try both versions for yourself to see the output. Be sure to open the
 `analyzed-*` files to view their contents.
 
 ### Exercise \@ref(bash-tools-ex-loop-variables) {-}
 
-Version 1 gives the same output on each iteration through
+The first version gives the same output on each iteration through
 the loop.
 Bash expands the wildcard `*.txt` to match all files ending in `.txt`
 and then lists them using `ls`.
@@ -16898,7 +16977,7 @@ dracula.txt  frankenstein.txt ...
 ...
 ```
 
-Version 2 lists a different file on each loop iteration.
+The second version lists a different file on each loop iteration.
 The value of the `datafile` variable is evaluated using `$datafile`,
 and then listed using `ls`.
 
@@ -16914,10 +16993,10 @@ time_machine.txt
 
 ### Exercise \@ref(bash-tools-ex-limiting-file-sets) {-}
 
-Version 1 results in only `dracula.txt` output, 
+The first version results in only `dracula.txt` output, 
 because it is the only file beginning in "d".
 
-Version 2 results in the following,
+The second version results in the following,
 because these files all contain a "d" with zero or more characters before and after:
 
 ```text
@@ -16932,10 +17011,10 @@ sense_and_sensibility.txt
 Both versions write the first 16 lines (`head -n 16`) 
 of each book to a file (`headers.txt`).
 
-Version 1 results in the text from each file being overwritten in each iteration
+The first version results in the text from each file being overwritten in each iteration
 because of use of `>` as a redirect.
 
-Version 2 uses `>>`,
+The second version uses `>>`,
 which appends the lines to the existing file.
 This is preferable because the final `headers.txt` 
 includes the first 16 lines from all files.
@@ -17964,6 +18043,8 @@ Saving the settings allows us to compare what we had when we did our work
 to what we have when we're trying to re-create it,
 which in turn gives us a starting point for debugging if we need to.
 
+\newpage
+
 ### Exercise \@ref(config-ex-ini) {-}
 
 ```python
@@ -18527,55 +18608,45 @@ pytest
 
 The answers to the relevant questions from the checklist are shown below.
 
-Repository: Is the source code for this software available at the repository url?
-
+- *Repository*: Is the source code for this software available at the repository url?
   - Yes. The source code is available at PyPI.
 
-License: Does the repository contain a plain-text LICENSE file
+- *License*: Does the repository contain a plain-text LICENSE file
 with the contents of an OSI approved software license?
-
   - Yes. Our GitHub repository contains LICENSE.md (Section \@ref(teams-license-software)).
 
-Installation: Does installation proceed as outlined in the documentation?
-
+- *Installation*: Does installation proceed as outlined in the documentation?
   - Yes. Our README says the package can be installed via pip.
    
-Functionality: Have the functional claims of the software been confirmed?
-
+- *Functionality*: Have the functional claims of the software been confirmed?
   - Yes. The command-line programs `countwords`, `collate`, and `plotcounts`
     perform as described in the README. 
 
-A statement of need: Do the authors clearly state what problems the software
+- *A statement of need*: Do the authors clearly state what problems the software
 is designed to solve and who the target audience is?
-
   - Yes. The "Motivation" section of the README explains this.
 
-Installation instructions: Is there a clearly stated list of dependencies?
+- *Installation instructions*: Is there a clearly stated list of dependencies?
 Ideally these should be handled with an automated package management solution.
-
   - Yes. In our `setup.py` file the `install_requires` argument lists dependencies.
 
-Example usage: Do the authors include examples of how to use the software
+- *Example usage*: Do the authors include examples of how to use the software
 (ideally to solve real-world analysis problems).
-
   - Yes. There are examples in the README.
 
-Functionality documentation: Is the core functionality of the software documented
+- *Functionality documentation*: Is the core functionality of the software documented
 to a satisfactory level (e.g., API method documentation)?
-
   - Yes. This information is available on Read the Docs.
-
-Automated tests: Are there automated tests or manual steps described
+  
+- *Automated tests*: Are there automated tests or manual steps described
 so that the functionality of the software can be verified?
-
   - We have unit tests written and available (`test_zipfs.py`),
     but our documentation needs to be updated to tell people
     to run `pytest` in order to manually run those tests.
 
-Community guidelines: Are there clear guidelines for third parties wishing
+- *Community guidelines*: Are there clear guidelines for third parties wishing
 to 1) Contribute to the software 2) Report issues or problems
 with the software 3) Seek support?
-
   - Yes. Our CONTRIBUTING file explains this (Section \@ref(teams-documentation)).
 
 ### Exercise \@ref(packaging-ex-pratchett) {-}
@@ -18643,7 +18714,7 @@ and is intended to help instructors who want to use this curriculum.
 -   Identify the command, options, and filenames in a command-line call.
 -   Explain the similarities and differences between files and directories.
 -   Translate an \gref{absolute path}{absolute_path} into a \gref{relative path}{relative_path} and vice versa.
--   Construct absolute and relative paths that identify specific files and directories.
+-   Construct absolute and relative paths that identify files and directories.
 -   Delete, copy, and move files and directories.
 
 ## Building Tools with the Unix Shell
@@ -18938,7 +19009,7 @@ This appendix lists the key points for each chapter.
 -   Make defines \gref{automatic variables}{automatic_variable} such as `$@` (target), `$^` (all prerequisites), and `$<` (first prerequisite).
 -   \gref{Pattern rules}{pattern_rule} can use `%` as a placeholder for parts of filenames.
 -   Makefiles can define variables using `NAME=value`.
--   Makefiles can also use functions such as `$(wildcard ...)` and `$(patsubst ...)`.
+-   Make also has functions such as `$(wildcard...)` and `$(patsubst...)`.
 -   Use specially formatted comments to create self-documenting Makefiles.
 
 ## Configuring Programs
@@ -18994,7 +19065,7 @@ This appendix lists the key points for each chapter.
 
 
 -   Use [`setuptools`][setuptools] to build and distribute Python packages.
--   Create a directory named `mypackage` containing a `setup.py` script as well as a subdirectory, also called `mypackage`, containing the package's source files.
+-   Create a directory named `mypackage` containing a `setup.py` script with a subdirectory also called `mypackage` containing the package's source files.
 -   Use \gref{semantic versioning}{semantic_versioning} for software releases.
 -   Use a \gref{virtual environment}{virtual_environment} to test how your package installs without disrupting your main Python installation.
 -   Use [`pip`][pip] to install Python packages.
@@ -19004,7 +19075,7 @@ This appendix lists the key points for each chapter.
 -   Use [Sphinx][sphinx] to generate documentation for a package.
 -   Use [Read the Docs][readthedocs] to host package documentation online.
 -   Create a \gref{DOI}{doi} for your package using [GitHub's Zenodo integration][github-zenodo-tutorial].
--   Publish the details of your package in a software journal so that others can cite it.
+-   Publish details of your package in a software journal so others can cite it.
 
 <!--chapter:end:chapters/keypoints.Rmd-->
 
@@ -19080,92 +19151,92 @@ in [Amira's `zipf` repository on GitHub][amira-repo].
 Each file was introduced and subsequently modified
 in the following chapters, sections and exercises:
 
-`pyzipf/`: Introduced as `zipf/` in Section \@ref(getting-started-download-data)
+- `pyzipf/`: Introduced as `zipf/` in Section \@ref(getting-started-download-data)
 and changed name to `pyzipf/` in Section \@ref(packaging-package).
 
-`pyzipf/.gitignore`: Introduced in Section \@ref(git-cmdline-ignore),
+- `pyzipf/.gitignore`: Introduced in Section \@ref(git-cmdline-ignore),
 and updated in various other chapters following
 [GitHub's `.gitignore` templates][github-gitignore].
 
-`pyzipf/CITATION.md`: Introduced in Section \@ref(packaging-software-journals).
+- `pyzipf/CITATION.md`: Introduced in Section \@ref(packaging-software-journals).
 
-`pyzipf/CONDUCT.md`: Introduced in Section \@ref(teams-coc) and
+- `pyzipf/CONDUCT.md`: Introduced in Section \@ref(teams-coc) and
 committed to the repository in Exercise \@ref(teams-ex-boilerplate-coc).
 
-`pyzipf/CONTRIBUTING.md`: Introduced in Section \@ref(teams-documentation) and
+- `pyzipf/CONTRIBUTING.md`: Introduced in Section \@ref(teams-documentation) and
 committed to the repository in Exercise \@ref(teams-ex-contributing).
 
-`pyzipf/KhanVirtanen2020.md`: Introduced in Section \@ref(provenance-code-steps).
+- `pyzipf/KhanVirtanen2020.md`: Introduced in Section \@ref(provenance-code-steps).
 
-`pyzipf/LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
+- `pyzipf/LICENSE.md`: Introduced in Section \@ref(teams-license-software) and
 committed to the repository in Exercise \@ref(teams-ex-boilerplate-license).
 
-`pyzipf/Makefile`: Introduced and updated throughout Chapter \@ref(automate).
+- `pyzipf/Makefile`: Introduced and updated throughout Chapter \@ref(automate).
 Updated again in Exercise \@ref(config-ex-build-plotparams).
 
-`pyzipf/README.rst`: Introduced as a `.md` file in Section \@ref(git-advanced-conflict),
+- `pyzipf/README.rst`: Introduced as a `.md` file in Section \@ref(git-advanced-conflict),
 updated in Section \@ref(git-advanced-fork) and then converted to a `.rst` file
 with further updates in Section \@ref(packaging-readme).
 
-`pyzipf/environment.yml`: Introduced in Section \@ref(provenance-code-environment).
+- `pyzipf/environment.yml`: Introduced in Section \@ref(provenance-code-environment).
 
-`pyzipf/requirements.txt`: Introduced in Section \@ref(testing-ci).
+- `pyzipf/requirements.txt`: Introduced in Section \@ref(testing-ci).
 
-`pyzipf/requirements_docs.txt`: Introduced in Section \@ref(packaging-sphinx).
+- `pyzipf/requirements_docs.txt`: Introduced in Section \@ref(packaging-sphinx).
 
-`pyzipf/setup.py`: Introduced and updated throughout Chapter \@ref(packaging).
+- `pyzipf/setup.py`: Introduced and updated throughout Chapter \@ref(packaging).
 
-`pyzipf/data/*` : Downloaded as part of the setup instructions (Section \@ref(getting-started-download-data)).
+- `pyzipf/data/*` : Downloaded as part of the setup instructions (Section \@ref(getting-started-download-data)).
 
-`pyzipf/docs/*`: Introduced in Section \@ref(packaging-sphinx).
+- `pyzipf/docs/*`: Introduced in Section \@ref(packaging-sphinx).
 
-`pyzipf/results/collated.*`: Generated in Section \@ref(automate-pipeline).
+- `pyzipf/results/collated.*`: Generated in Section \@ref(automate-pipeline).
 
-`pyzipf/results/dracula.csv`: Generated in Section \@ref(scripting-collate).
+- `pyzipf/results/dracula.csv`: Generated in Section \@ref(scripting-collate).
 
-`pyzipf/results/dracula.png`: Generated in Section \@ref(git-cmdline-changes) and updated in Section \@ref(git-advanced-zipf-verify).
+- `pyzipf/results/dracula.png`: Generated in Section \@ref(git-cmdline-changes) and updated in Section \@ref(git-advanced-zipf-verify).
 
-`pyzipf/results/jane_eyre.csv`: Generated in Section \@ref(scripting-collate).
+- `pyzipf/results/jane_eyre.csv`: Generated in Section \@ref(scripting-collate).
 
-`pyzipf/results/jane_eyre.png`: Generated in Section \@ref(scripting-plotting).
+- `pyzipf/results/jane_eyre.png`: Generated in Section \@ref(scripting-plotting).
 
-`pyzipf/results/moby_dick.csv`: Generated in Section \@ref(scripting-collate).
+- `pyzipf/results/moby_dick.csv`: Generated in Section \@ref(scripting-collate).
 
-`pyzipf/results/frankenstein.csv`: Generated in Section \@ref(automate-functions).
+- `pyzipf/results/frankenstein.csv`: Generated in Section \@ref(automate-functions).
 
-`pyzipf/results/sense_and_sensibility.csv`: Generated in Section \@ref(automate-functions).
+- `pyzipf/results/sense_and_sensibility.csv`: Generated in Section \@ref(automate-functions).
 
-`pyzipf/results/sherlock_holmes.csv`: Generated in Section \@ref(automate-functions).
+- `pyzipf/results/sherlock_holmes.csv`: Generated in Section \@ref(automate-functions).
 
-`pyzipf/results/time_machine.csv`: Generated in Section \@ref(automate-functions).
+- `pyzipf/results/time_machine.csv`: Generated in Section \@ref(automate-functions).
 
-`pyzipf/test_data/random_words.txt`: Generated in Section \@ref(testing-integration).
+- `pyzipf/test_data/random_words.txt`: Generated in Section \@ref(testing-integration).
 
-`pyzipf/test_data/risk.txt`: Introduced in Section \@ref(testing-unit).
+- `pyzipf/test_data/risk.txt`: Introduced in Section \@ref(testing-unit).
 
-`pyzipf/pyzipf/`: Introduced as `bin/` in Section \@ref(getting-started-organize) and
+- `pyzipf/pyzipf/`: Introduced as `bin/` in Section \@ref(getting-started-organize) and
 changed name to `pyzipf/` in Section \@ref(packaging-package).
 
-`pyzipf/pyzipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
+- `pyzipf/pyzipf/book_summary.sh`: Introduced and updated throughout Chapter \@ref(bash-advanced).
 
-`pyzipf/pyzipf/collate.py`: Introduced in Section \@ref(scripting-collate) and
+- `pyzipf/pyzipf/collate.py`: Introduced in Section \@ref(scripting-collate) and
 updated in Section \@ref(scripting-modules),
 throughout Chapter \@ref(errors) and in Section \@ref(packaging-package).
 
-`pyzipf/pyzipf/countwords.py`: Introduced in Section \@ref(scripting-wordcount) and
+- `pyzipf/pyzipf/countwords.py`: Introduced in Section \@ref(scripting-wordcount) and
 updated in Sections \@ref(scripting-modules) and \@ref(packaging-package).
 
-`pyzipf/pyzipf/plotcounts.py`: Introduced in Exercise \@ref(scripting-ex-better-plotting) and
+- `pyzipf/pyzipf/plotcounts.py`: Introduced in Exercise \@ref(scripting-ex-better-plotting) and
 updated throughout Chapters \@ref(git-cmdline), \@ref(git-advanced) and \@ref(config).
 
-`pyzipf/pyzipf/plotparams.yml`: Introduced in Section \@ref(config-job-file).
+- `pyzipf/pyzipf/plotparams.yml`: Introduced in Section \@ref(config-job-file).
 
-`pyzipf/pyzipf/script_template.py`: Introduced in Section \@ref(scripting-options) and
+- `pyzipf/pyzipf/script_template.py`: Introduced in Section \@ref(scripting-options) and
 updated in Section \@ref(scripting-docstrings).
 
-`pyzipf/pyzipf/test_zipfs.py`: Introduced and updated throughout Chapter \@ref(testing).
+- `pyzipf/pyzipf/test_zipfs.py`: Introduced and updated throughout Chapter \@ref(testing).
 
-`pyzipf/pyzipf/utilities.py`: Introduced in Section \@ref(scripting-modules).
+- `pyzipf/pyzipf/utilities.py`: Introduced in Section \@ref(scripting-modules).
 
 
 <!--chapter:end:chapters/tree.Rmd-->
@@ -19300,6 +19371,8 @@ If we leave out a computer name,
 For example,
 this command copies our latest results to the backup server in the basement,
 printing out its progress as it does so:
+
+\newpage
 
 ```bash
 $ scp results.dat amira@backup:backups/results-2019-11-11.dat
@@ -19992,6 +20065,8 @@ if we write numbers without explanation in our code for simple cases,
 we are more likely to do so in complex cases,
 and more likely to regret it afterward.
 
+\newpage
+
 Using names instead of raw values also makes it easier to understand code when we read it aloud,
 which is always a good test of its style.
 Finally,
@@ -20235,6 +20310,8 @@ people will sometimes put the test and assignment on a single line:
 scale = 1.0
 if configuration['threshold'] > UPPER_BOUND: scale = 0.8
 ```
+
+\newpage
 
 Some programmers take this even further
 and use a \gref{conditional expression}{conditional_expression}:
@@ -22132,7 +22209,6 @@ in our main Python installation (Section \@ref(packaging-virtualenv)).
 [creative-commons]: https://creativecommons.org/
 [desc-cmt-msgs]: https://chris.beams.io/posts/git-commit/
 [docker]: https://en.wikipedia.org/wiki/Docker_(software)
-[drake]: https://ropenscilabs.github.io/drake-manual/
 [dryad]: https://datadryad.org/
 [dursi-pattern-rules]: https://github.com/ljdursi/make_pattern_rules
 [explainshell]: http://explainshell.com
