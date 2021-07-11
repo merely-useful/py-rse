@@ -46,7 +46,7 @@ A corresponding book for R users is also currently under development
 Much of the content in the early chapters of the book borrows from existing Software Carpentry lessons (e.g. unix shell, version control),
 but the later chapters cover a number of topics that either aren't included in the current offerings of Carpentries lessons at all
 or that are currently only at the Incubator stage of development
-(e.g. elements of the program configuration, error handing, provenance tracking and python packaging chapters).
+(e.g. elements of the program configuration, error handling, provenance tracking and python packaging chapters).
 The book might therefore be a useful reference for people developing new lessons. 
 
 Comments and suggestions are more than welcome at the book’s [GitHub repository](https://github.com/merely-useful/py-rse) –
