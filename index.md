@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-07-20"
+date: "2021-07-29"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -6148,7 +6148,7 @@ a file Git already knows about has been modified.
 > For example, 
 > you may see a suggestion for `git checkout`\index{Git commands!checkout}
 > in place of `git restore` after executing the code above,
-> which means you're running an different version of Git.
+> which means you're running a different version of Git.
 > As with most tasks in coding,
 > there are often multiple commands to accomplish the same action with Git.
 > This chapter will show output from Git version 2.29.
