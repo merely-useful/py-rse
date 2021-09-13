@@ -1352,7 +1352,7 @@ $ cp docs backup
 ```
 
 ```text
-cp: analysis is a directory (not copied).
+cp: docs is a directory (not copied).
 ```
 
 If we really want to copy everything,
@@ -2092,7 +2092,7 @@ We can now use `sort` to sort the lines in this file:
 \newpage
 
 ```bash
-$ sort lengths.txt -n
+$ sort -n lengths.txt
 ```
 
 ```text
@@ -2120,7 +2120,7 @@ We can therefore put the sorted list of lines in another temporary file called `
 using `>` once again:
 
 ```bash
-$ sort lengths.txt > sorted-lengths.txt
+$ sort -n lengths.txt > sorted-lengths.txt
 ```
 
 > **Redirecting to the Same File**
@@ -17821,7 +17821,7 @@ It is useful for creating the output directories for build rules.
 
 ### Exercise \@ref(automate-ex-print) {-}
 
-The build rule for generated the result for any book should now be:
+The build rule for generating the result for any book should now be:
 
 ```makefile
 ## results/%.csv : regenerate result for any book.
