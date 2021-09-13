@@ -272,6 +272,15 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="6.11.6" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-multiple"><i class="fa fa-check"></i><b>6.11.6</b> Committing multiple files</a></li>
 <li class="chapter" data-level="6.11.7" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-timestamp"><i class="fa fa-check"></i><b>6.11.7</b> GitHub timestamps</a></li>
 <li class="chapter" data-level="6.11.8" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-history"><i class="fa fa-check"></i><b>6.11.8</b> Workflow and history</a></li>
+<li class="chapter" data-level="6.11.9" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-ignore-nested"><i class="fa fa-check"></i><b>6.11.9</b> Ignoring nested files</a></li>
+<li class="chapter" data-level="6.11.10" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-include"><i class="fa fa-check"></i><b>6.11.10</b> Including specific files</a></li>
+<li class="chapter" data-level="6.11.11" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-github-interface"><i class="fa fa-check"></i><b>6.11.11</b> Exploring the GitHub interface</a></li>
+<li class="chapter" data-level="6.11.12" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-push-commit"><i class="fa fa-check"></i><b>6.11.12</b> Push versus commit</a></li>
+<li class="chapter" data-level="6.11.13" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-boilerplate"><i class="fa fa-check"></i><b>6.11.13</b> License and README files</a></li>
+<li class="chapter" data-level="6.11.14" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-recover"><i class="fa fa-check"></i><b>6.11.14</b> Recovering older versions of a file</a></li>
+<li class="chapter" data-level="6.11.15" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-diff"><i class="fa fa-check"></i><b>6.11.15</b> Understanding <code>git diff</code></a></li>
+<li class="chapter" data-level="6.11.16" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-unstage"><i class="fa fa-check"></i><b>6.11.16</b> Getting rid of staged changes</a></li>
+<li class="chapter" data-level="6.11.17" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-blame"><i class="fa fa-check"></i><b>6.11.17</b> Figuring out who did what</a></li>
 </ul></li>
 <li class="chapter" data-level="6.12" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-keypoints"><i class="fa fa-check"></i><b>6.12</b> Key Points</a></li>
 </ul></li>
@@ -790,9 +799,9 @@ A quick search of the <a href="https://pypi.org/">Python Package Index (PyPI)</a
 reveals that the package name <code>zipf</code> is already taken,
 so we will need to use something different.
 Let’s use <code>pyzipf</code> and update our directory names accordingly:</p>
-<div class="sourceCode" id="cb781"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb781-1"><a href="packaging.html#cb781-1"></a>$ <span class="fu">mv</span> ~/zipf ~/pyzipf</span>
-<span id="cb781-2"><a href="packaging.html#cb781-2"></a>$ <span class="bu">cd</span> ~/pyzipf</span>
-<span id="cb781-3"><a href="packaging.html#cb781-3"></a>$ <span class="fu">mv</span> bin pyzipf</span></code></pre></div>
+<div class="sourceCode" id="cb782"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb782-1"><a href="packaging.html#cb782-1"></a>$ <span class="fu">mv</span> ~/zipf ~/pyzipf</span>
+<span id="cb782-2"><a href="packaging.html#cb782-2"></a>$ <span class="bu">cd</span> ~/pyzipf</span>
+<span id="cb782-3"><a href="packaging.html#cb782-3"></a>$ <span class="fu">mv</span> bin pyzipf</span></code></pre></div>
 <blockquote>
 <p><strong>Updating GitHub’s Repository Name</strong></p>
 <p>We won’t do it in this case
@@ -802,8 +811,8 @@ we would normally update the name of our GitHub repository to match.
 After changing the name at the GitHub website,
 we would need to update our <code>git remote</code> so that our
 local repository could still be synchronized with GitHub:</p>
-<div class="sourceCode" id="cb782"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb782-1"><a href="packaging.html#cb782-1"></a>$ <span class="fu">git</span> remote set-url origin </span>
-<span id="cb782-2"><a href="packaging.html#cb782-2"></a>  <span class="ex">https</span>://github.com/amira-khan/pyzipf.git  </span></code></pre></div>
+<div class="sourceCode" id="cb783"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb783-1"><a href="packaging.html#cb783-1"></a>$ <span class="fu">git</span> remote set-url origin </span>
+<span id="cb783-2"><a href="packaging.html#cb783-2"></a>  <span class="ex">https</span>://github.com/amira-khan/pyzipf.git  </span></code></pre></div>
 </blockquote>
 <div style="page-break-after: always;"></div>
 <p>Python has several ways to build an installable package.
@@ -817,14 +826,14 @@ we must create a file called <code>setup.py</code> in the directory <em>above</e
 (This is why we require the two-level directory structure described earlier.)
 <code>setup.py</code> must have exactly that name,
 and must contain lines like these:</p>
-<div class="sourceCode" id="cb783"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb783-1"><a href="packaging.html#cb783-1"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
-<span id="cb783-2"><a href="packaging.html#cb783-2"></a></span>
-<span id="cb783-3"><a href="packaging.html#cb783-3"></a></span>
-<span id="cb783-4"><a href="packaging.html#cb783-4"></a>setup(</span>
-<span id="cb783-5"><a href="packaging.html#cb783-5"></a>    name<span class="op">=</span><span class="st">&#39;pyzipf&#39;</span>,</span>
-<span id="cb783-6"><a href="packaging.html#cb783-6"></a>    version<span class="op">=</span><span class="st">&#39;0.1.0&#39;</span>,</span>
-<span id="cb783-7"><a href="packaging.html#cb783-7"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
-<span id="cb783-8"><a href="packaging.html#cb783-8"></a>    packages<span class="op">=</span>[<span class="st">&#39;pyzipf&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb784"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb784-1"><a href="packaging.html#cb784-1"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
+<span id="cb784-2"><a href="packaging.html#cb784-2"></a></span>
+<span id="cb784-3"><a href="packaging.html#cb784-3"></a></span>
+<span id="cb784-4"><a href="packaging.html#cb784-4"></a>setup(</span>
+<span id="cb784-5"><a href="packaging.html#cb784-5"></a>    name<span class="op">=</span><span class="st">&#39;pyzipf&#39;</span>,</span>
+<span id="cb784-6"><a href="packaging.html#cb784-6"></a>    version<span class="op">=</span><span class="st">&#39;0.1.0&#39;</span>,</span>
+<span id="cb784-7"><a href="packaging.html#cb784-7"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
+<span id="cb784-8"><a href="packaging.html#cb784-8"></a>    packages<span class="op">=</span>[<span class="st">&#39;pyzipf&#39;</span>])</span></code></pre></div>
 <p>The <code>name</code> and <code>author</code> parameters are self-explanatory.
 Most software projects use <a href="glossary.html#semantic_versioning">semantic versioning</a>
 for software releases.
@@ -880,7 +889,7 @@ we can ensure that we’re not accidentally relying on other packages being inst
 To create a new virtual environment called <code>pyzipf</code> we run <code>conda create</code>,
 specifying the environment’s name with the <code>-n</code> or <code>--name</code> flag
 and including <code>pip</code> and our current version of Python in the new environment:</p>
-<div class="sourceCode" id="cb784"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb784-1"><a href="packaging.html#cb784-1"></a>$ <span class="ex">conda</span> create -n pyzipf pip python=3.7.6</span></code></pre></div>
+<div class="sourceCode" id="cb785"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb785-1"><a href="packaging.html#cb785-1"></a>$ <span class="ex">conda</span> create -n pyzipf pip python=3.7.6</span></code></pre></div>
 <pre class="text"><code>Collecting package metadata (current_repodata.json): done
 Solving environment: done
 
@@ -935,10 +944,10 @@ During the installation process, users can also choose a custom location
 if they like (Section <a href="getting-started.html#getting-started-install-software">1.3</a>).</p>
 </blockquote>
 <p>We can switch to the <code>pyzipf</code> environment by running:</p>
-<div class="sourceCode" id="cb786"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb786-1"><a href="packaging.html#cb786-1"></a>$ <span class="ex">conda</span> activate pyzipf</span></code></pre></div>
+<div class="sourceCode" id="cb787"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb787-1"><a href="packaging.html#cb787-1"></a>$ <span class="ex">conda</span> activate pyzipf</span></code></pre></div>
 <p>Once we have done this,
 the <code>python</code> command runs the interpreter in <code>pyzipf/bin</code>:</p>
-<div class="sourceCode" id="cb787"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb787-1"><a href="packaging.html#cb787-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="fu">which</span> python</span></code></pre></div>
+<div class="sourceCode" id="cb788"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb788-1"><a href="packaging.html#cb788-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="fu">which</span> python</span></code></pre></div>
 <pre class="text"><code>/Users/amira/anaconda3/envs/pyzipf/bin/python</code></pre>
 <p>Notice that every shell command displays <code>(pyzipf)</code> when that virtual environment is active.
 Between Git branches and virtual environments,
@@ -952,20 +961,20 @@ Everything we install will go into the <code>pyzipf</code> virtual environment
 without affecting the underlying Python installation.
 When we are done,
 we can switch back to the default environment using <code>conda deactivate</code>:</p>
-<div class="sourceCode" id="cb789"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb789-1"><a href="packaging.html#cb789-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> deactivate</span></code></pre></div>
-<div class="sourceCode" id="cb790"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb790-1"><a href="packaging.html#cb790-1"></a>$ <span class="fu">which</span> python</span></code></pre></div>
+<div class="sourceCode" id="cb790"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb790-1"><a href="packaging.html#cb790-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> deactivate</span></code></pre></div>
+<div class="sourceCode" id="cb791"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb791-1"><a href="packaging.html#cb791-1"></a>$ <span class="fu">which</span> python</span></code></pre></div>
 <pre class="text"><code>/usr/bin/python</code></pre>
 </div>
 <div id="packaging-installing" class="section level2">
 <h2><span class="header-section-number">14.3</span> Installing a Development Package</h2>
 <p>Let’s install our package in this virtual environment.
 First we re-activate it:</p>
-<div class="sourceCode" id="cb792"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb792-1"><a href="packaging.html#cb792-1"></a>$ <span class="ex">conda</span> activate pyzipf</span></code></pre></div>
+<div class="sourceCode" id="cb793"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb793-1"><a href="packaging.html#cb793-1"></a>$ <span class="ex">conda</span> activate pyzipf</span></code></pre></div>
 <p>Next,
 we go into the upper <code>pyzipf</code> directory that contains our <code>setup.py</code> file
 and install our package:</p>
-<div class="sourceCode" id="cb793"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb793-1"><a href="packaging.html#cb793-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="bu">cd</span> ~/pyzipf</span>
-<span id="cb793-2"><a href="packaging.html#cb793-2"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install -e .</span></code></pre></div>
+<div class="sourceCode" id="cb794"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb794-1"><a href="packaging.html#cb794-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="bu">cd</span> ~/pyzipf</span>
+<span id="cb794-2"><a href="packaging.html#cb794-2"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install -e .</span></code></pre></div>
 <pre class="text"><code>Obtaining file:///Users/amira/pyzipf
 Installing collected packages: pyzipf
   Running setup.py develop for pyzipf
@@ -986,20 +995,20 @@ We could install these manually,
 but it is more reliable to automate this process
 by listing everything that our package depends on
 using the <code>install_requires</code> parameter in <code>setup.py</code>:</p>
-<div class="sourceCode" id="cb795"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb795-1"><a href="packaging.html#cb795-1"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
-<span id="cb795-2"><a href="packaging.html#cb795-2"></a></span>
-<span id="cb795-3"><a href="packaging.html#cb795-3"></a></span>
-<span id="cb795-4"><a href="packaging.html#cb795-4"></a>setup(</span>
-<span id="cb795-5"><a href="packaging.html#cb795-5"></a>    name<span class="op">=</span><span class="st">&#39;pyzipf&#39;</span>,</span>
-<span id="cb795-6"><a href="packaging.html#cb795-6"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
-<span id="cb795-7"><a href="packaging.html#cb795-7"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
-<span id="cb795-8"><a href="packaging.html#cb795-8"></a>    packages<span class="op">=</span>[<span class="st">&#39;pyzipf&#39;</span>],</span>
-<span id="cb795-9"><a href="packaging.html#cb795-9"></a>    install_requires<span class="op">=</span>[</span>
-<span id="cb795-10"><a href="packaging.html#cb795-10"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
-<span id="cb795-11"><a href="packaging.html#cb795-11"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
-<span id="cb795-12"><a href="packaging.html#cb795-12"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
-<span id="cb795-13"><a href="packaging.html#cb795-13"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
-<span id="cb795-14"><a href="packaging.html#cb795-14"></a>        <span class="st">&#39;pytest&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb796"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb796-1"><a href="packaging.html#cb796-1"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
+<span id="cb796-2"><a href="packaging.html#cb796-2"></a></span>
+<span id="cb796-3"><a href="packaging.html#cb796-3"></a></span>
+<span id="cb796-4"><a href="packaging.html#cb796-4"></a>setup(</span>
+<span id="cb796-5"><a href="packaging.html#cb796-5"></a>    name<span class="op">=</span><span class="st">&#39;pyzipf&#39;</span>,</span>
+<span id="cb796-6"><a href="packaging.html#cb796-6"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
+<span id="cb796-7"><a href="packaging.html#cb796-7"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
+<span id="cb796-8"><a href="packaging.html#cb796-8"></a>    packages<span class="op">=</span>[<span class="st">&#39;pyzipf&#39;</span>],</span>
+<span id="cb796-9"><a href="packaging.html#cb796-9"></a>    install_requires<span class="op">=</span>[</span>
+<span id="cb796-10"><a href="packaging.html#cb796-10"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
+<span id="cb796-11"><a href="packaging.html#cb796-11"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
+<span id="cb796-12"><a href="packaging.html#cb796-12"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
+<span id="cb796-13"><a href="packaging.html#cb796-13"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
+<span id="cb796-14"><a href="packaging.html#cb796-14"></a>        <span class="st">&#39;pytest&#39;</span>])</span></code></pre></div>
 <p>We don’t have to list <code>numpy</code> explicitly
 because it will be installed as a dependency for <code>pandas</code> and <code>scipy</code>.</p>
 <blockquote>
@@ -1012,8 +1021,8 @@ in the list argument passed to the <code>install_requires</code> parameter.</p>
 </blockquote>
 <p>Next,
 we can install our package using the modified <code>setup.py</code> file:</p>
-<div class="sourceCode" id="cb796"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb796-1"><a href="packaging.html#cb796-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="bu">cd</span> ~/pyzipf</span>
-<span id="cb796-2"><a href="packaging.html#cb796-2"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install -e .</span></code></pre></div>
+<div class="sourceCode" id="cb797"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb797-1"><a href="packaging.html#cb797-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="bu">cd</span> ~/pyzipf</span>
+<span id="cb797-2"><a href="packaging.html#cb797-2"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install -e .</span></code></pre></div>
 <pre class="text"><code>Obtaining file:///Users/amira/pyzipf
 Collecting matplotlib
   Downloading matplotlib-3.3.3-cp37-cp37m-macosx_10_9_x86_64.whl
@@ -1098,10 +1107,10 @@ just as we would any other package.
 For example,
 to use the function in <code>utilities</code>,
 we would write:</p>
-<div class="sourceCode" id="cb798"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb798-1"><a href="packaging.html#cb798-1"></a><span class="im">from</span> pyzipf <span class="im">import</span> utilities <span class="im">as</span> util</span>
-<span id="cb798-2"><a href="packaging.html#cb798-2"></a></span>
-<span id="cb798-3"><a href="packaging.html#cb798-3"></a></span>
-<span id="cb798-4"><a href="packaging.html#cb798-4"></a>util.collection_to_csv(...)</span></code></pre></div>
+<div class="sourceCode" id="cb799"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb799-1"><a href="packaging.html#cb799-1"></a><span class="im">from</span> pyzipf <span class="im">import</span> utilities <span class="im">as</span> util</span>
+<span id="cb799-2"><a href="packaging.html#cb799-2"></a></span>
+<span id="cb799-3"><a href="packaging.html#cb799-3"></a></span>
+<span id="cb799-4"><a href="packaging.html#cb799-4"></a>util.collection_to_csv(...)</span></code></pre></div>
 <p>To allow our functions to continue accessing <code>utilities.py</code>,
 we need to change that line in both <code>countwords.py</code> and <code>collate.py</code>.</p>
 <p>However,
@@ -1113,25 +1122,25 @@ The <code>setuptools</code> package allows us to install programs along with the
 These programs are placed beside those of other packages.
 We tell <code>setuptools</code> to do this by defining
 <a href="glossary.html#entry_point">entry points</a> in <code>setup.py</code>:</p>
-<div class="sourceCode" id="cb799"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb799-1"><a href="packaging.html#cb799-1"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
-<span id="cb799-2"><a href="packaging.html#cb799-2"></a></span>
-<span id="cb799-3"><a href="packaging.html#cb799-3"></a></span>
-<span id="cb799-4"><a href="packaging.html#cb799-4"></a>setup(</span>
-<span id="cb799-5"><a href="packaging.html#cb799-5"></a>    name<span class="op">=</span><span class="st">&#39;pyzipf&#39;</span>,</span>
-<span id="cb799-6"><a href="packaging.html#cb799-6"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
-<span id="cb799-7"><a href="packaging.html#cb799-7"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
-<span id="cb799-8"><a href="packaging.html#cb799-8"></a>    packages<span class="op">=</span>[<span class="st">&#39;pyzipf&#39;</span>],</span>
-<span id="cb799-9"><a href="packaging.html#cb799-9"></a>    install_requires<span class="op">=</span>[</span>
-<span id="cb799-10"><a href="packaging.html#cb799-10"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
-<span id="cb799-11"><a href="packaging.html#cb799-11"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
-<span id="cb799-12"><a href="packaging.html#cb799-12"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
-<span id="cb799-13"><a href="packaging.html#cb799-13"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
-<span id="cb799-14"><a href="packaging.html#cb799-14"></a>        <span class="st">&#39;pytest&#39;</span>],</span>
-<span id="cb799-15"><a href="packaging.html#cb799-15"></a>    entry_points<span class="op">=</span>{</span>
-<span id="cb799-16"><a href="packaging.html#cb799-16"></a>        <span class="st">&#39;console_scripts&#39;</span>: [</span>
-<span id="cb799-17"><a href="packaging.html#cb799-17"></a>            <span class="st">&#39;countwords = pyzipf.countwords:main&#39;</span>,</span>
-<span id="cb799-18"><a href="packaging.html#cb799-18"></a>            <span class="st">&#39;collate = pyzipf.collate:main&#39;</span>,</span>
-<span id="cb799-19"><a href="packaging.html#cb799-19"></a>            <span class="st">&#39;plotcounts = pyzipf.plotcounts:main&#39;</span>]})</span></code></pre></div>
+<div class="sourceCode" id="cb800"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb800-1"><a href="packaging.html#cb800-1"></a><span class="im">from</span> setuptools <span class="im">import</span> setup</span>
+<span id="cb800-2"><a href="packaging.html#cb800-2"></a></span>
+<span id="cb800-3"><a href="packaging.html#cb800-3"></a></span>
+<span id="cb800-4"><a href="packaging.html#cb800-4"></a>setup(</span>
+<span id="cb800-5"><a href="packaging.html#cb800-5"></a>    name<span class="op">=</span><span class="st">&#39;pyzipf&#39;</span>,</span>
+<span id="cb800-6"><a href="packaging.html#cb800-6"></a>    version<span class="op">=</span><span class="st">&#39;0.1&#39;</span>,</span>
+<span id="cb800-7"><a href="packaging.html#cb800-7"></a>    author<span class="op">=</span><span class="st">&#39;Amira Khan&#39;</span>,</span>
+<span id="cb800-8"><a href="packaging.html#cb800-8"></a>    packages<span class="op">=</span>[<span class="st">&#39;pyzipf&#39;</span>],</span>
+<span id="cb800-9"><a href="packaging.html#cb800-9"></a>    install_requires<span class="op">=</span>[</span>
+<span id="cb800-10"><a href="packaging.html#cb800-10"></a>        <span class="st">&#39;matplotlib&#39;</span>,</span>
+<span id="cb800-11"><a href="packaging.html#cb800-11"></a>        <span class="st">&#39;pandas&#39;</span>,</span>
+<span id="cb800-12"><a href="packaging.html#cb800-12"></a>        <span class="st">&#39;scipy&#39;</span>,</span>
+<span id="cb800-13"><a href="packaging.html#cb800-13"></a>        <span class="st">&#39;pyyaml&#39;</span>,</span>
+<span id="cb800-14"><a href="packaging.html#cb800-14"></a>        <span class="st">&#39;pytest&#39;</span>],</span>
+<span id="cb800-15"><a href="packaging.html#cb800-15"></a>    entry_points<span class="op">=</span>{</span>
+<span id="cb800-16"><a href="packaging.html#cb800-16"></a>        <span class="st">&#39;console_scripts&#39;</span>: [</span>
+<span id="cb800-17"><a href="packaging.html#cb800-17"></a>            <span class="st">&#39;countwords = pyzipf.countwords:main&#39;</span>,</span>
+<span id="cb800-18"><a href="packaging.html#cb800-18"></a>            <span class="st">&#39;collate = pyzipf.collate:main&#39;</span>,</span>
+<span id="cb800-19"><a href="packaging.html#cb800-19"></a>            <span class="st">&#39;plotcounts = pyzipf.plotcounts:main&#39;</span>]})</span></code></pre></div>
 <p>The right side of the <code>=</code> operator is the location of a function,
 written as <code>package.module:function</code>;
 the left side is the name we want to use to call this function from the command line.
@@ -1140,51 +1149,51 @@ right now, it requires an input argument <code>args</code>
 containing the command-line arguments given by the user (Section <a href="scripting.html#scripting-options">5.2</a>).
 For example,
 the relevant section of our <code>countwords.py</code> program is:</p>
-<div class="sourceCode" id="cb800"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb800-1"><a href="packaging.html#cb800-1"></a><span class="kw">def</span> main(args):</span>
-<span id="cb800-2"><a href="packaging.html#cb800-2"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb800-3"><a href="packaging.html#cb800-3"></a>    word_counts <span class="op">=</span> count_words(args.infile)</span>
-<span id="cb800-4"><a href="packaging.html#cb800-4"></a>    util.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
-<span id="cb800-5"><a href="packaging.html#cb800-5"></a></span>
-<span id="cb800-6"><a href="packaging.html#cb800-6"></a></span>
-<span id="cb800-7"><a href="packaging.html#cb800-7"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb800-8"><a href="packaging.html#cb800-8"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb800-9"><a href="packaging.html#cb800-9"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
-<span id="cb800-10"><a href="packaging.html#cb800-10"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
-<span id="cb800-11"><a href="packaging.html#cb800-11"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
-<span id="cb800-12"><a href="packaging.html#cb800-12"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>,</span>
-<span id="cb800-13"><a href="packaging.html#cb800-13"></a>                        <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb800-14"><a href="packaging.html#cb800-14"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output n most frequent words&#39;</span>)</span>
-<span id="cb800-15"><a href="packaging.html#cb800-15"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb800-16"><a href="packaging.html#cb800-16"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb801"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb801-1"><a href="packaging.html#cb801-1"></a><span class="kw">def</span> main(args):</span>
+<span id="cb801-2"><a href="packaging.html#cb801-2"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb801-3"><a href="packaging.html#cb801-3"></a>    word_counts <span class="op">=</span> count_words(args.infile)</span>
+<span id="cb801-4"><a href="packaging.html#cb801-4"></a>    util.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
+<span id="cb801-5"><a href="packaging.html#cb801-5"></a></span>
+<span id="cb801-6"><a href="packaging.html#cb801-6"></a></span>
+<span id="cb801-7"><a href="packaging.html#cb801-7"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb801-8"><a href="packaging.html#cb801-8"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb801-9"><a href="packaging.html#cb801-9"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
+<span id="cb801-10"><a href="packaging.html#cb801-10"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
+<span id="cb801-11"><a href="packaging.html#cb801-11"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
+<span id="cb801-12"><a href="packaging.html#cb801-12"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>,</span>
+<span id="cb801-13"><a href="packaging.html#cb801-13"></a>                        <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb801-14"><a href="packaging.html#cb801-14"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output n most frequent words&#39;</span>)</span>
+<span id="cb801-15"><a href="packaging.html#cb801-15"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb801-16"><a href="packaging.html#cb801-16"></a>    main(args)</span></code></pre></div>
 <p>We can’t pass any arguments to <code>main</code> when we define entry points in our <code>setup.py</code> file,
 so we need to change our script slightly:</p>
-<div class="sourceCode" id="cb801"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb801-1"><a href="packaging.html#cb801-1"></a><span class="kw">def</span> parse_command_line():</span>
-<span id="cb801-2"><a href="packaging.html#cb801-2"></a>    <span class="co">&quot;&quot;&quot;Parse the command line for input arguments.&quot;&quot;&quot;</span></span>
-<span id="cb801-3"><a href="packaging.html#cb801-3"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb801-4"><a href="packaging.html#cb801-4"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
-<span id="cb801-5"><a href="packaging.html#cb801-5"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
-<span id="cb801-6"><a href="packaging.html#cb801-6"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
-<span id="cb801-7"><a href="packaging.html#cb801-7"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>,</span>
-<span id="cb801-8"><a href="packaging.html#cb801-8"></a>                        <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb801-9"><a href="packaging.html#cb801-9"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output n most frequent words&#39;</span>)</span>
-<span id="cb801-10"><a href="packaging.html#cb801-10"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb801-11"><a href="packaging.html#cb801-11"></a>    <span class="cf">return</span> args</span>
-<span id="cb801-12"><a href="packaging.html#cb801-12"></a></span>
-<span id="cb801-13"><a href="packaging.html#cb801-13"></a></span>
-<span id="cb801-14"><a href="packaging.html#cb801-14"></a><span class="kw">def</span> main():</span>
-<span id="cb801-15"><a href="packaging.html#cb801-15"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb801-16"><a href="packaging.html#cb801-16"></a>    args <span class="op">=</span> parse_command_line()</span>
-<span id="cb801-17"><a href="packaging.html#cb801-17"></a>    word_counts <span class="op">=</span> count_words(args.infile)</span>
-<span id="cb801-18"><a href="packaging.html#cb801-18"></a>    util.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
-<span id="cb801-19"><a href="packaging.html#cb801-19"></a></span>
-<span id="cb801-20"><a href="packaging.html#cb801-20"></a></span>
-<span id="cb801-21"><a href="packaging.html#cb801-21"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb801-22"><a href="packaging.html#cb801-22"></a>    main()</span></code></pre></div>
+<div class="sourceCode" id="cb802"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb802-1"><a href="packaging.html#cb802-1"></a><span class="kw">def</span> parse_command_line():</span>
+<span id="cb802-2"><a href="packaging.html#cb802-2"></a>    <span class="co">&quot;&quot;&quot;Parse the command line for input arguments.&quot;&quot;&quot;</span></span>
+<span id="cb802-3"><a href="packaging.html#cb802-3"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb802-4"><a href="packaging.html#cb802-4"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
+<span id="cb802-5"><a href="packaging.html#cb802-5"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
+<span id="cb802-6"><a href="packaging.html#cb802-6"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Input file name&#39;</span>)</span>
+<span id="cb802-7"><a href="packaging.html#cb802-7"></a>    parser.add_argument(<span class="st">&#39;-n&#39;</span>, <span class="st">&#39;--num&#39;</span>,</span>
+<span id="cb802-8"><a href="packaging.html#cb802-8"></a>                        <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb802-9"><a href="packaging.html#cb802-9"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output n most frequent words&#39;</span>)</span>
+<span id="cb802-10"><a href="packaging.html#cb802-10"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb802-11"><a href="packaging.html#cb802-11"></a>    <span class="cf">return</span> args</span>
+<span id="cb802-12"><a href="packaging.html#cb802-12"></a></span>
+<span id="cb802-13"><a href="packaging.html#cb802-13"></a></span>
+<span id="cb802-14"><a href="packaging.html#cb802-14"></a><span class="kw">def</span> main():</span>
+<span id="cb802-15"><a href="packaging.html#cb802-15"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb802-16"><a href="packaging.html#cb802-16"></a>    args <span class="op">=</span> parse_command_line()</span>
+<span id="cb802-17"><a href="packaging.html#cb802-17"></a>    word_counts <span class="op">=</span> count_words(args.infile)</span>
+<span id="cb802-18"><a href="packaging.html#cb802-18"></a>    util.collection_to_csv(word_counts, num<span class="op">=</span>args.num)</span>
+<span id="cb802-19"><a href="packaging.html#cb802-19"></a></span>
+<span id="cb802-20"><a href="packaging.html#cb802-20"></a></span>
+<span id="cb802-21"><a href="packaging.html#cb802-21"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb802-22"><a href="packaging.html#cb802-22"></a>    main()</span></code></pre></div>
 <p>The new <code>parse_command_line</code> function handles the command-line arguments,
 so that <code>main()</code> no longer requires any input arguments.</p>
 <p>Once we have made the corresponding change in <code>collate.py</code> and <code>plotcounts.py</code>,
 we can re-install our package:</p>
-<div class="sourceCode" id="cb802"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb802-1"><a href="packaging.html#cb802-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install -e .</span></code></pre></div>
+<div class="sourceCode" id="cb803"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb803-1"><a href="packaging.html#cb803-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install -e .</span></code></pre></div>
 <pre class="text"><code>Defaulting to user installation because normal site-packages is
   not writeable
 Obtaining file:///Users/amira/pyzipf
@@ -1233,7 +1242,7 @@ we would have to uninstall it before reinstalling it during development.)</p>
 <p>We can now use our commands directly from the Unix shell
 without writing the full path to the file
 and without prefixing it with <code>python</code>.</p>
-<div class="sourceCode" id="cb804"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb804-1"><a href="packaging.html#cb804-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">countwords</span> data/dracula.txt -n 5</span></code></pre></div>
+<div class="sourceCode" id="cb805"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb805-1"><a href="packaging.html#cb805-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">countwords</span> data/dracula.txt -n 5</span></code></pre></div>
 <pre class="text"><code>the,8036
 and,5896
 i,4712
@@ -1265,8 +1274,8 @@ Just as the <code>PATH</code> environment in the shell contains a list of direct
 that the shell searches for programs it can execute (Section <a href="bash-advanced.html#bash-advanced-vars">4.6</a>),
 the Python variable <code>sys.path</code> contains a list of the directories it searches (Section <a href="testing.html#testing-unit">11.2</a>).
 We can look at this list inside the interpreter:</p>
-<div class="sourceCode" id="cb806"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb806-1"><a href="packaging.html#cb806-1"></a><span class="im">import</span> sys</span>
-<span id="cb806-2"><a href="packaging.html#cb806-2"></a>sys.path</span></code></pre></div>
+<div class="sourceCode" id="cb807"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb807-1"><a href="packaging.html#cb807-1"></a><span class="im">import</span> sys</span>
+<span id="cb807-2"><a href="packaging.html#cb807-2"></a>sys.path</span></code></pre></div>
 <pre class="text"><code>[&#39;&#39;,
 &#39;/Users/amira/anaconda3/envs/pyzipf/lib/python37.zip&#39;,
 &#39;/Users/amira/anaconda3/envs/pyzipf/lib/python3.7&#39;,
@@ -1305,7 +1314,7 @@ To make this possible,
 we need to use <code>setuptools</code> to create
 a <a href="glossary.html#source_distribution">source distribution</a>
 (known as an <code>sdist</code> in Python packaging jargon):</p>
-<div class="sourceCode" id="cb808"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb808-1"><a href="packaging.html#cb808-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">python</span> setup.py sdist</span></code></pre></div>
+<div class="sourceCode" id="cb809"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb809-1"><a href="packaging.html#cb809-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">python</span> setup.py sdist</span></code></pre></div>
 <pre class="text"><code>running sdist
 running egg_info
 creating pyzipf.egg-info
@@ -1373,14 +1382,14 @@ We must have an account,
 but they are free to create.</p>
 <p>The preferred tool for uploading packages to PyPI is called <a href="https://twine.readthedocs.io/en/latest/">twine</a>,
 which we can install with:</p>
-<div class="sourceCode" id="cb810"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb810-1"><a href="packaging.html#cb810-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install twine</span></code></pre></div>
+<div class="sourceCode" id="cb811"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb811-1"><a href="packaging.html#cb811-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">pip</span> install twine</span></code></pre></div>
 <p>Following the <a href="https://packaging.python.org/guides/using-testpypi/">Python Packaging User Guide</a>,
 we upload our distribution from the <code>dist/</code> folder
 using the <code>--repository</code> option to specify the TestPyPI repository:</p>
-<div class="sourceCode" id="cb811"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb811-1"><a href="packaging.html#cb811-1"></a>$ <span class="ex">twine</span> upload --repository testpypi dist/*</span></code></pre></div>
+<div class="sourceCode" id="cb812"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb812-1"><a href="packaging.html#cb812-1"></a>$ <span class="ex">twine</span> upload --repository testpypi dist/*</span></code></pre></div>
 <pre class="text"><code>Uploading distributions to https://test.pypi.org/legacy/</code></pre>
-<div class="sourceCode" id="cb813"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb813-1"><a href="packaging.html#cb813-1"></a><span class="ex">Enter</span> your username: amira-khan</span>
-<span id="cb813-2"><a href="packaging.html#cb813-2"></a><span class="ex">Enter</span> your password: *********</span></code></pre></div>
+<div class="sourceCode" id="cb814"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb814-1"><a href="packaging.html#cb814-1"></a><span class="ex">Enter</span> your username: amira-khan</span>
+<span id="cb814-2"><a href="packaging.html#cb814-2"></a><span class="ex">Enter</span> your password: *********</span></code></pre></div>
 <pre class="text"><code>Uploading pyzipf-0.1.0.tar.gz
 100%|█████████████████| 5.59k/5.59k [00:01&lt;00:00, 3.27kB/s]
 
@@ -1402,11 +1411,11 @@ by creating a virtual environment
 and installing our package from TestPyPI
 (the <code>--extra-index-url</code> reference to PyPI below accounts for the fact that
 not all of our package dependencies are available on TestPyPI):</p>
-<div class="sourceCode" id="cb815"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb815-1"><a href="packaging.html#cb815-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> create -n pyzipf-test pip python=3.7.6</span>
-<span id="cb815-2"><a href="packaging.html#cb815-2"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> activate pyzipf-test </span>
-<span id="cb815-3"><a href="packaging.html#cb815-3"></a><span class="kw">(</span><span class="ex">pyzipf-test</span><span class="kw">)</span>$ <span class="ex">pip</span> install --index-url</span>
-<span id="cb815-4"><a href="packaging.html#cb815-4"></a>  <span class="ex">https</span>://test.pypi.org/simple </span>
-<span id="cb815-5"><a href="packaging.html#cb815-5"></a>  <span class="ex">--extra-index-url</span> https://pypi.org/simple pyzipf</span></code></pre></div>
+<div class="sourceCode" id="cb816"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb816-1"><a href="packaging.html#cb816-1"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> create -n pyzipf-test pip python=3.7.6</span>
+<span id="cb816-2"><a href="packaging.html#cb816-2"></a><span class="kw">(</span><span class="ex">pyzipf</span><span class="kw">)</span>$ <span class="ex">conda</span> activate pyzipf-test </span>
+<span id="cb816-3"><a href="packaging.html#cb816-3"></a><span class="kw">(</span><span class="ex">pyzipf-test</span><span class="kw">)</span>$ <span class="ex">pip</span> install --index-url</span>
+<span id="cb816-4"><a href="packaging.html#cb816-4"></a>  <span class="ex">https</span>://test.pypi.org/simple </span>
+<span id="cb816-5"><a href="packaging.html#cb816-5"></a>  <span class="ex">--extra-index-url</span> https://pypi.org/simple pyzipf</span></code></pre></div>
 <div style="page-break-after: always;"></div>
 <pre class="text"><code>Looking in indexes: https://test.pypi.org/simple,
                     https://pypi.org/simple
@@ -1493,7 +1502,7 @@ instructions on how to install it,
 and examples of how to use it.
 We can include these elements in the <code>README.md</code> file we started in Chapter <a href="git-advanced.html#git-advanced">7</a>.
 At the moment it reads as follows:</p>
-<div class="sourceCode" id="cb817"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb817-1"><a href="packaging.html#cb817-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
+<div class="sourceCode" id="cb818"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb818-1"><a href="packaging.html#cb818-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
 <pre class="text"><code># Zipf&#39;s Law
 
 These Zipf&#39;s Law scripts tally the occurrences of words in text
@@ -1509,75 +1518,75 @@ that can be rendered into HTML or PDF documents
 with complex indices and cross-links.
 GitHub recognizes files ending in <code>.rst</code> as reST files and displays them nicely,
 so our first task is to rename our existing file:</p>
-<div class="sourceCode" id="cb819"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb819-1"><a href="packaging.html#cb819-1"></a>$ <span class="fu">git</span> mv README.md README.rst</span></code></pre></div>
+<div class="sourceCode" id="cb820"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb820-1"><a href="packaging.html#cb820-1"></a>$ <span class="fu">git</span> mv README.md README.rst</span></code></pre></div>
 <p>We then make a few edits to the file formatting:
 titles are underlined and overlined,
 section headings are underlined,
 and code blocks are set off with two colons (<code>::</code>) and indented.
 We can also add some context about why to use the package,
 as well as updated information about package installation:</p>
-<div class="sourceCode" id="cb820"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb820-1"><a href="packaging.html#cb820-1"></a>The `<span class="bn">`pyzipf`</span>` package tallies the occurrences of words in text</span>
-<span id="cb820-2"><a href="packaging.html#cb820-2"></a>files and plots each word&#39;s rank versus its frequency together </span>
-<span id="cb820-3"><a href="packaging.html#cb820-3"></a>with a line for the theoretical distribution for Zipf&#39;s Law.</span>
-<span id="cb820-4"><a href="packaging.html#cb820-4"></a></span>
-<span id="cb820-5"><a href="packaging.html#cb820-5"></a>Motivation</span>
-<span id="cb820-6"><a href="packaging.html#cb820-6"></a>----------</span>
-<span id="cb820-7"><a href="packaging.html#cb820-7"></a></span>
-<span id="cb820-8"><a href="packaging.html#cb820-8"></a>Zipf&#39;s Law is often stated as an observational pattern in the</span>
-<span id="cb820-9"><a href="packaging.html#cb820-9"></a>relationship between the frequency and rank of words in a text:</span>
-<span id="cb820-10"><a href="packaging.html#cb820-10"></a></span>
-<span id="cb820-11"><a href="packaging.html#cb820-11"></a>`&quot;…the most frequent word will occur approximately twice as</span>
-<span id="cb820-12"><a href="packaging.html#cb820-12"></a>often as the second most frequent word,</span>
-<span id="cb820-13"><a href="packaging.html#cb820-13"></a>three times as often as the third most</span>
-<span id="cb820-14"><a href="packaging.html#cb820-14"></a>frequent word, etc.&quot;`</span>
-<span id="cb820-15"><a href="packaging.html#cb820-15"></a>— <span class="bn">`wikipedia &lt;https://en.wikipedia.org/wiki/Zipf%27s_law&gt;`</span>_</span>
-<span id="cb820-16"><a href="packaging.html#cb820-16"></a></span>
-<span id="cb820-17"><a href="packaging.html#cb820-17"></a>Many books are available to download in plain text format</span>
-<span id="cb820-18"><a href="packaging.html#cb820-18"></a>from sites such as</span>
-<span id="cb820-19"><a href="packaging.html#cb820-19"></a><span class="bn">`Project Gutenberg &lt;https://www.gutenberg.org/&gt;`</span>_,</span>
-<span id="cb820-20"><a href="packaging.html#cb820-20"></a>so we created this package to qualitatively explore how well</span>
-<span id="cb820-21"><a href="packaging.html#cb820-21"></a>different books align with the word frequencies predicted by</span>
-<span id="cb820-22"><a href="packaging.html#cb820-22"></a>Zipf&#39;s Law.</span>
-<span id="cb820-23"><a href="packaging.html#cb820-23"></a></span>
-<span id="cb820-24"><a href="packaging.html#cb820-24"></a>Installation</span>
-<span id="cb820-25"><a href="packaging.html#cb820-25"></a>------------</span>
-<span id="cb820-26"><a href="packaging.html#cb820-26"></a></span>
-<span id="cb820-27"><a href="packaging.html#cb820-27"></a>`<span class="bn">`pip install pyzipf`</span>`</span>
-<span id="cb820-28"><a href="packaging.html#cb820-28"></a></span>
-<span id="cb820-29"><a href="packaging.html#cb820-29"></a>Usage</span>
-<span id="cb820-30"><a href="packaging.html#cb820-30"></a>-----</span>
-<span id="cb820-31"><a href="packaging.html#cb820-31"></a></span>
-<span id="cb820-32"><a href="packaging.html#cb820-32"></a>After installing this package, the following three commands will</span>
-<span id="cb820-33"><a href="packaging.html#cb820-33"></a>be available from the command line</span>
-<span id="cb820-34"><a href="packaging.html#cb820-34"></a></span>
-<span id="cb820-35"><a href="packaging.html#cb820-35"></a>- <span class="st">`</span><span class="bn">`countwords`</span><span class="st">` for counting the occurrences of words in a text</span></span>
-<span id="cb820-36"><a href="packaging.html#cb820-36"></a><span class="st">- `</span><span class="bn">`collate`</span><span class="st">` for collating multiple word count files together</span></span>
-<span id="cb820-37"><a href="packaging.html#cb820-37"></a><span class="st">- `</span><span class="bn">`plotcounts`</span><span class="st">` for visualizing the word counts</span></span>
-<span id="cb820-38"><a href="packaging.html#cb820-38"></a></span>
-<span id="cb820-39"><a href="packaging.html#cb820-39"></a>A typical usage scenario would include running the following</span>
-<span id="cb820-40"><a href="packaging.html#cb820-40"></a>from your terminal::</span>
-<span id="cb820-41"><a href="packaging.html#cb820-41"></a></span>
-<span id="cb820-42"><a href="packaging.html#cb820-42"></a><span class="bn">    countwords dracula.txt &gt; dracula.csv</span></span>
-<span id="cb820-43"><a href="packaging.html#cb820-43"></a><span class="bn">    countwords moby_dick.txt &gt; moby_dick.csv</span></span>
-<span id="cb820-44"><a href="packaging.html#cb820-44"></a><span class="bn">    collate dracula.csv moby_dick.csv &gt; collated.csv</span></span>
-<span id="cb820-45"><a href="packaging.html#cb820-45"></a><span class="bn">    plotcounts collated.csv --outfile zipf-drac-moby.jpg</span></span>
-<span id="cb820-46"><a href="packaging.html#cb820-46"></a></span>
-<span id="cb820-47"><a href="packaging.html#cb820-47"></a>Additional information on each function</span>
-<span id="cb820-48"><a href="packaging.html#cb820-48"></a>can be found in their docstrings and appending the `<span class="bn">`-h`</span>` flag,</span>
-<span id="cb820-49"><a href="packaging.html#cb820-49"></a>e.g., `<span class="bn">`countwords -h`</span>`.</span>
-<span id="cb820-50"><a href="packaging.html#cb820-50"></a></span>
-<span id="cb820-51"><a href="packaging.html#cb820-51"></a>Contributing</span>
-<span id="cb820-52"><a href="packaging.html#cb820-52"></a>------------</span>
-<span id="cb820-53"><a href="packaging.html#cb820-53"></a></span>
-<span id="cb820-54"><a href="packaging.html#cb820-54"></a>Interested in contributing?</span>
-<span id="cb820-55"><a href="packaging.html#cb820-55"></a>Check out the CONTRIBUTING.md</span>
-<span id="cb820-56"><a href="packaging.html#cb820-56"></a>file for guidelines on how to contribute.</span>
-<span id="cb820-57"><a href="packaging.html#cb820-57"></a>Please note that this project is released with a</span>
-<span id="cb820-58"><a href="packaging.html#cb820-58"></a>Contributor Code of Conduct (CONDUCT.md).</span>
-<span id="cb820-59"><a href="packaging.html#cb820-59"></a>By contributing to this project,</span>
-<span id="cb820-60"><a href="packaging.html#cb820-60"></a>you agree to abide by its terms.</span>
-<span id="cb820-61"><a href="packaging.html#cb820-61"></a>Both of these files can be found in our</span>
-<span id="cb820-62"><a href="packaging.html#cb820-62"></a><span class="bn">`GitHub repository. &lt;https://github.com/amira-khan/zipf&gt;`</span>_</span></code></pre></div>
+<div class="sourceCode" id="cb821"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb821-1"><a href="packaging.html#cb821-1"></a>The `<span class="bn">`pyzipf`</span>` package tallies the occurrences of words in text</span>
+<span id="cb821-2"><a href="packaging.html#cb821-2"></a>files and plots each word&#39;s rank versus its frequency together </span>
+<span id="cb821-3"><a href="packaging.html#cb821-3"></a>with a line for the theoretical distribution for Zipf&#39;s Law.</span>
+<span id="cb821-4"><a href="packaging.html#cb821-4"></a></span>
+<span id="cb821-5"><a href="packaging.html#cb821-5"></a>Motivation</span>
+<span id="cb821-6"><a href="packaging.html#cb821-6"></a>----------</span>
+<span id="cb821-7"><a href="packaging.html#cb821-7"></a></span>
+<span id="cb821-8"><a href="packaging.html#cb821-8"></a>Zipf&#39;s Law is often stated as an observational pattern in the</span>
+<span id="cb821-9"><a href="packaging.html#cb821-9"></a>relationship between the frequency and rank of words in a text:</span>
+<span id="cb821-10"><a href="packaging.html#cb821-10"></a></span>
+<span id="cb821-11"><a href="packaging.html#cb821-11"></a>`&quot;…the most frequent word will occur approximately twice as</span>
+<span id="cb821-12"><a href="packaging.html#cb821-12"></a>often as the second most frequent word,</span>
+<span id="cb821-13"><a href="packaging.html#cb821-13"></a>three times as often as the third most</span>
+<span id="cb821-14"><a href="packaging.html#cb821-14"></a>frequent word, etc.&quot;`</span>
+<span id="cb821-15"><a href="packaging.html#cb821-15"></a>— <span class="bn">`wikipedia &lt;https://en.wikipedia.org/wiki/Zipf%27s_law&gt;`</span>_</span>
+<span id="cb821-16"><a href="packaging.html#cb821-16"></a></span>
+<span id="cb821-17"><a href="packaging.html#cb821-17"></a>Many books are available to download in plain text format</span>
+<span id="cb821-18"><a href="packaging.html#cb821-18"></a>from sites such as</span>
+<span id="cb821-19"><a href="packaging.html#cb821-19"></a><span class="bn">`Project Gutenberg &lt;https://www.gutenberg.org/&gt;`</span>_,</span>
+<span id="cb821-20"><a href="packaging.html#cb821-20"></a>so we created this package to qualitatively explore how well</span>
+<span id="cb821-21"><a href="packaging.html#cb821-21"></a>different books align with the word frequencies predicted by</span>
+<span id="cb821-22"><a href="packaging.html#cb821-22"></a>Zipf&#39;s Law.</span>
+<span id="cb821-23"><a href="packaging.html#cb821-23"></a></span>
+<span id="cb821-24"><a href="packaging.html#cb821-24"></a>Installation</span>
+<span id="cb821-25"><a href="packaging.html#cb821-25"></a>------------</span>
+<span id="cb821-26"><a href="packaging.html#cb821-26"></a></span>
+<span id="cb821-27"><a href="packaging.html#cb821-27"></a>`<span class="bn">`pip install pyzipf`</span>`</span>
+<span id="cb821-28"><a href="packaging.html#cb821-28"></a></span>
+<span id="cb821-29"><a href="packaging.html#cb821-29"></a>Usage</span>
+<span id="cb821-30"><a href="packaging.html#cb821-30"></a>-----</span>
+<span id="cb821-31"><a href="packaging.html#cb821-31"></a></span>
+<span id="cb821-32"><a href="packaging.html#cb821-32"></a>After installing this package, the following three commands will</span>
+<span id="cb821-33"><a href="packaging.html#cb821-33"></a>be available from the command line</span>
+<span id="cb821-34"><a href="packaging.html#cb821-34"></a></span>
+<span id="cb821-35"><a href="packaging.html#cb821-35"></a>- <span class="st">`</span><span class="bn">`countwords`</span><span class="st">` for counting the occurrences of words in a text</span></span>
+<span id="cb821-36"><a href="packaging.html#cb821-36"></a><span class="st">- `</span><span class="bn">`collate`</span><span class="st">` for collating multiple word count files together</span></span>
+<span id="cb821-37"><a href="packaging.html#cb821-37"></a><span class="st">- `</span><span class="bn">`plotcounts`</span><span class="st">` for visualizing the word counts</span></span>
+<span id="cb821-38"><a href="packaging.html#cb821-38"></a></span>
+<span id="cb821-39"><a href="packaging.html#cb821-39"></a>A typical usage scenario would include running the following</span>
+<span id="cb821-40"><a href="packaging.html#cb821-40"></a>from your terminal::</span>
+<span id="cb821-41"><a href="packaging.html#cb821-41"></a></span>
+<span id="cb821-42"><a href="packaging.html#cb821-42"></a><span class="bn">    countwords dracula.txt &gt; dracula.csv</span></span>
+<span id="cb821-43"><a href="packaging.html#cb821-43"></a><span class="bn">    countwords moby_dick.txt &gt; moby_dick.csv</span></span>
+<span id="cb821-44"><a href="packaging.html#cb821-44"></a><span class="bn">    collate dracula.csv moby_dick.csv &gt; collated.csv</span></span>
+<span id="cb821-45"><a href="packaging.html#cb821-45"></a><span class="bn">    plotcounts collated.csv --outfile zipf-drac-moby.jpg</span></span>
+<span id="cb821-46"><a href="packaging.html#cb821-46"></a></span>
+<span id="cb821-47"><a href="packaging.html#cb821-47"></a>Additional information on each function</span>
+<span id="cb821-48"><a href="packaging.html#cb821-48"></a>can be found in their docstrings and appending the `<span class="bn">`-h`</span>` flag,</span>
+<span id="cb821-49"><a href="packaging.html#cb821-49"></a>e.g., `<span class="bn">`countwords -h`</span>`.</span>
+<span id="cb821-50"><a href="packaging.html#cb821-50"></a></span>
+<span id="cb821-51"><a href="packaging.html#cb821-51"></a>Contributing</span>
+<span id="cb821-52"><a href="packaging.html#cb821-52"></a>------------</span>
+<span id="cb821-53"><a href="packaging.html#cb821-53"></a></span>
+<span id="cb821-54"><a href="packaging.html#cb821-54"></a>Interested in contributing?</span>
+<span id="cb821-55"><a href="packaging.html#cb821-55"></a>Check out the CONTRIBUTING.md</span>
+<span id="cb821-56"><a href="packaging.html#cb821-56"></a>file for guidelines on how to contribute.</span>
+<span id="cb821-57"><a href="packaging.html#cb821-57"></a>Please note that this project is released with a</span>
+<span id="cb821-58"><a href="packaging.html#cb821-58"></a>Contributor Code of Conduct (CONDUCT.md).</span>
+<span id="cb821-59"><a href="packaging.html#cb821-59"></a>By contributing to this project,</span>
+<span id="cb821-60"><a href="packaging.html#cb821-60"></a>you agree to abide by its terms.</span>
+<span id="cb821-61"><a href="packaging.html#cb821-61"></a>Both of these files can be found in our</span>
+<span id="cb821-62"><a href="packaging.html#cb821-62"></a><span class="bn">`GitHub repository. &lt;https://github.com/amira-khan/zipf&gt;`</span>_</span></code></pre></div>
 </div>
 <div id="packaging-sphinx" class="section level3">
 <h3><span class="header-section-number">14.6.2</span> Creating a web page for documentation</h3>
@@ -1593,9 +1602,9 @@ called <a href="https://www.sphinx-doc.org/en/master/">Sphinx</a>
 that is capable of scanning Python code for function names and docstrings
 and can export that information to HTML format for hosting on the web.</p>
 <p>To start, let’s install Sphinx and create a <code>docs/</code> directory at the top of our repository:</p>
-<div class="sourceCode" id="cb821"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb821-1"><a href="packaging.html#cb821-1"></a>$ <span class="ex">pip</span> install sphinx</span>
-<span id="cb821-2"><a href="packaging.html#cb821-2"></a>$ <span class="fu">mkdir</span> docs</span>
-<span id="cb821-3"><a href="packaging.html#cb821-3"></a>$ <span class="bu">cd</span> docs</span></code></pre></div>
+<div class="sourceCode" id="cb822"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb822-1"><a href="packaging.html#cb822-1"></a>$ <span class="ex">pip</span> install sphinx</span>
+<span id="cb822-2"><a href="packaging.html#cb822-2"></a>$ <span class="fu">mkdir</span> docs</span>
+<span id="cb822-3"><a href="packaging.html#cb822-3"></a>$ <span class="bu">cd</span> docs</span></code></pre></div>
 <p>We can then run Sphinx’s <code>quickstart</code> tool to create a minimal set of documentation
 that includes the package-level information in the <code>README.rst</code> file we just created
 and the function-level information in the docstrings we’ve written along the way.
@@ -1603,7 +1612,7 @@ It asks us to specify the project’s name,
 the name of the project’s author,
 and a release;
 we can use the default settings for everything else.</p>
-<div class="sourceCode" id="cb822"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb822-1"><a href="packaging.html#cb822-1"></a>$ <span class="ex">sphinx-quickstart</span></span></code></pre></div>
+<div class="sourceCode" id="cb823"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb823-1"><a href="packaging.html#cb823-1"></a>$ <span class="ex">sphinx-quickstart</span></span></code></pre></div>
 <pre class="text"><code>Welcome to the Sphinx 3.1.1 quickstart utility.
 
 Please enter values for the following settings (just press Enter
@@ -1615,12 +1624,12 @@ You have two options for placing the build directory for Sphinx
 output. Either, you use a directory &quot;_build&quot; within the root
 path, or you separate &quot;source&quot; and &quot;build&quot; directories within
 the root path.</code></pre>
-<div class="sourceCode" id="cb824"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb824-1"><a href="packaging.html#cb824-1"></a><span class="op">&gt;</span> <span class="ex">Separate</span> source and build directories (y/n) [<span class="ex">n</span>]: n</span></code></pre></div>
+<div class="sourceCode" id="cb825"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb825-1"><a href="packaging.html#cb825-1"></a><span class="op">&gt;</span> <span class="ex">Separate</span> source and build directories (y/n) [<span class="ex">n</span>]: n</span></code></pre></div>
 <pre class="text"><code>The project name will occur in several places in the built
 documentation.</code></pre>
-<div class="sourceCode" id="cb826"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb826-1"><a href="packaging.html#cb826-1"></a><span class="op">&gt;</span> <span class="ex">Project</span> name: pyzipf</span>
-<span id="cb826-2"><a href="packaging.html#cb826-2"></a><span class="op">&gt;</span> <span class="ex">Author</span> name(s)<span class="bu">:</span> Amira Khan</span>
-<span id="cb826-3"><a href="packaging.html#cb826-3"></a><span class="op">&gt;</span> <span class="ex">Project</span> release []: 0.1</span></code></pre></div>
+<div class="sourceCode" id="cb827"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb827-1"><a href="packaging.html#cb827-1"></a><span class="op">&gt;</span> <span class="ex">Project</span> name: pyzipf</span>
+<span id="cb827-2"><a href="packaging.html#cb827-2"></a><span class="op">&gt;</span> <span class="ex">Author</span> name(s)<span class="bu">:</span> Amira Khan</span>
+<span id="cb827-3"><a href="packaging.html#cb827-3"></a><span class="op">&gt;</span> <span class="ex">Project</span> release []: 0.1</span></code></pre></div>
 <pre class="text"><code>If the documents are to be written in a language other than
 English, you can select a language here by its language code.
 Sphinx will then translate text that it generates into that
@@ -1628,7 +1637,7 @@ language.
 
 For a list of supported codes, see
 https://www.sphinx-doc.org/en/master/usage/configuration.html</code></pre>
-<div class="sourceCode" id="cb828"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb828-1"><a href="packaging.html#cb828-1"></a><span class="op">&gt;</span> <span class="ex">Project</span> language [en]:</span></code></pre></div>
+<div class="sourceCode" id="cb829"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb829-1"><a href="packaging.html#cb829-1"></a><span class="op">&gt;</span> <span class="ex">Project</span> language [en]:</span></code></pre></div>
 <pre class="text"><code>Creating file /Users/amira/pyzipf/docs/conf.py.
 Creating file /Users/amira/pyzipf/docs/index.rst.
 Creating file /Users/amira/pyzipf/docs/Makefile.
@@ -1656,18 +1665,18 @@ The first change relates to the “path setup” section near the head of the fi
 our modules (i.e., <code>countwords.py</code>, <code>utilities.py</code>, etc.) are located in the <code>../pyzipf</code> directory.
 We therefore need to uncomment the relevant lines of the path setup section in <code>conf.py</code>
 to tell Sphinx where those modules are:</p>
-<div class="sourceCode" id="cb831"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb831-1"><a href="packaging.html#cb831-1"></a><span class="im">import</span> os</span>
-<span id="cb831-2"><a href="packaging.html#cb831-2"></a><span class="im">import</span> sys</span>
-<span id="cb831-3"><a href="packaging.html#cb831-3"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">&#39;../pyzipf&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb832"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb832-1"><a href="packaging.html#cb832-1"></a><span class="im">import</span> os</span>
+<span id="cb832-2"><a href="packaging.html#cb832-2"></a><span class="im">import</span> sys</span>
+<span id="cb832-3"><a href="packaging.html#cb832-3"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">&#39;../pyzipf&#39;</span>))</span></code></pre></div>
 <p>We will also change the “general configuration” section
 to add <code>autodoc</code> to the list of Sphinx extensions we want:</p>
-<div class="sourceCode" id="cb832"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb832-1"><a href="packaging.html#cb832-1"></a>extensions <span class="op">=</span> [<span class="st">&#39;sphinx.ext.autodoc&#39;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb833"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb833-1"><a href="packaging.html#cb833-1"></a>extensions <span class="op">=</span> [<span class="st">&#39;sphinx.ext.autodoc&#39;</span>]</span></code></pre></div>
 <div style="page-break-after: always;"></div>
 <p>With those edits complete,
 we can now generate a Sphinx <code>autodoc</code> script
 that generates information about each of our modules
 and puts it in corresponding <code>.rst</code> files in the <code>docs/source</code> directory:</p>
-<div class="sourceCode" id="cb833"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb833-1"><a href="packaging.html#cb833-1"></a><span class="ex">sphinx-apidoc</span> -o source/ ../pyzipf</span></code></pre></div>
+<div class="sourceCode" id="cb834"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb834-1"><a href="packaging.html#cb834-1"></a><span class="ex">sphinx-apidoc</span> -o source/ ../pyzipf</span></code></pre></div>
 <pre class="text"><code>Creating file source/collate.rst.
 Creating file source/countwords.rst.
 Creating file source/plotcounts.rst.
@@ -1700,21 +1709,21 @@ Figure 14.4: The countwords documentation.
 </div>
 <p>The landing page for the website is the perfect place for the content of our README file,
 so we can add the line <code>.. include:: ../README.rst</code> to the <code>docs/index.rst</code> file to insert it:</p>
-<div class="sourceCode" id="cb835"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb835-1"><a href="packaging.html#cb835-1"></a>Welcome to pyzipf&#39;s documentation!</span>
-<span id="cb835-2"><a href="packaging.html#cb835-2"></a>==================================</span>
-<span id="cb835-3"><a href="packaging.html#cb835-3"></a></span>
-<span id="cb835-4"><a href="packaging.html#cb835-4"></a>.. include:: ../README.rst</span>
-<span id="cb835-5"><a href="packaging.html#cb835-5"></a></span>
-<span id="cb835-6"><a href="packaging.html#cb835-6"></a>.. toctree::</span>
-<span id="cb835-7"><a href="packaging.html#cb835-7"></a>   :maxdepth: 2</span>
-<span id="cb835-8"><a href="packaging.html#cb835-8"></a>   :caption: Contents:</span>
-<span id="cb835-9"><a href="packaging.html#cb835-9"></a></span>
-<span id="cb835-10"><a href="packaging.html#cb835-10"></a>Indices and tables</span>
-<span id="cb835-11"><a href="packaging.html#cb835-11"></a>==================</span>
-<span id="cb835-12"><a href="packaging.html#cb835-12"></a></span>
-<span id="cb835-13"><a href="packaging.html#cb835-13"></a>* <span class="st">:ref:</span><span class="bn">`genindex`</span></span>
-<span id="cb835-14"><a href="packaging.html#cb835-14"></a><span class="st">* :ref:</span><span class="bn">`modindex`</span></span>
-<span id="cb835-15"><a href="packaging.html#cb835-15"></a><span class="st">* :ref:</span><span class="bn">`search`</span></span></code></pre></div>
+<div class="sourceCode" id="cb836"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb836-1"><a href="packaging.html#cb836-1"></a>Welcome to pyzipf&#39;s documentation!</span>
+<span id="cb836-2"><a href="packaging.html#cb836-2"></a>==================================</span>
+<span id="cb836-3"><a href="packaging.html#cb836-3"></a></span>
+<span id="cb836-4"><a href="packaging.html#cb836-4"></a>.. include:: ../README.rst</span>
+<span id="cb836-5"><a href="packaging.html#cb836-5"></a></span>
+<span id="cb836-6"><a href="packaging.html#cb836-6"></a>.. toctree::</span>
+<span id="cb836-7"><a href="packaging.html#cb836-7"></a>   :maxdepth: 2</span>
+<span id="cb836-8"><a href="packaging.html#cb836-8"></a>   :caption: Contents:</span>
+<span id="cb836-9"><a href="packaging.html#cb836-9"></a></span>
+<span id="cb836-10"><a href="packaging.html#cb836-10"></a>Indices and tables</span>
+<span id="cb836-11"><a href="packaging.html#cb836-11"></a>==================</span>
+<span id="cb836-12"><a href="packaging.html#cb836-12"></a></span>
+<span id="cb836-13"><a href="packaging.html#cb836-13"></a>* <span class="st">:ref:</span><span class="bn">`genindex`</span></span>
+<span id="cb836-14"><a href="packaging.html#cb836-14"></a><span class="st">* :ref:</span><span class="bn">`modindex`</span></span>
+<span id="cb836-15"><a href="packaging.html#cb836-15"></a><span class="st">* :ref:</span><span class="bn">`search`</span></span></code></pre></div>
 <p>If we re-run <code>make html</code>,
 we now get an updated set of web pages that
 re-uses our README as the introduction to the documentation (Figure <a href="packaging.html#fig:packaging-sphinx-landing-page">14.5</a>).</p>
@@ -1763,8 +1772,8 @@ and <code>docs/index.rst</code>.
 We also need to create and save a
 <a href="https://docs.readthedocs.io/en/stable/config-file/v2.html">Read the Docs configuration file</a>
 in the root directory of our <code>pyzipf</code> package:</p>
-<div class="sourceCode" id="cb837"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb837-1"><a href="packaging.html#cb837-1"></a>$ <span class="bu">cd</span> ~/pyzipf</span>
-<span id="cb837-2"><a href="packaging.html#cb837-2"></a>$ <span class="fu">cat</span> .readthedocs.yml</span></code></pre></div>
+<div class="sourceCode" id="cb838"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb838-1"><a href="packaging.html#cb838-1"></a>$ <span class="bu">cd</span> ~/pyzipf</span>
+<span id="cb838-2"><a href="packaging.html#cb838-2"></a>$ <span class="fu">cat</span> .readthedocs.yml</span></code></pre></div>
 <pre class="text"><code># .readthedocs.yml
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html
@@ -1821,7 +1830,7 @@ to the associated GitHub repository
 (alongside <code>README</code>, <code>LICENSE</code>, <code>CONDUCT</code> and similar files discussed in Section <a href="getting-started.html#getting-started-boilerplate">1.1.1</a>),
 containing a plain text citation that can be copied and pasted into email
 as well as entries formatted for various bibliographic systems like <a href="http://www.bibtex.org/">BibTeX</a>.</p>
-<div class="sourceCode" id="cb839"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb839-1"><a href="packaging.html#cb839-1"></a>$ <span class="fu">cat</span> CITATION.md</span></code></pre></div>
+<div class="sourceCode" id="cb840"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb840-1"><a href="packaging.html#cb840-1"></a>$ <span class="fu">cat</span> CITATION.md</span></code></pre></div>
 <pre class="text"><code># Citation
 
 If you use the pyzipf package for work/research presented in a
@@ -1885,38 +1894,38 @@ and see how the Zipf’s Law package would rate on each criteria.</p>
 <h3><span class="header-section-number">14.9.4</span> Packaging quotations</h3>
 <p>Each chapter in this book opens with a quote from the British author Terry Pratchett.
 This script <code>quotes.py</code> contains a function <code>random_quote</code> which prints a random Pratchett quote:</p>
-<div class="sourceCode" id="cb841"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb841-1"><a href="packaging.html#cb841-1"></a><span class="im">import</span> random</span>
-<span id="cb841-2"><a href="packaging.html#cb841-2"></a></span>
-<span id="cb841-3"><a href="packaging.html#cb841-3"></a></span>
-<span id="cb841-4"><a href="packaging.html#cb841-4"></a>quote_list <span class="op">=</span> [<span class="st">&quot;It&#39;s still magic even if you know how it&#39;s done.&quot;</span>,</span>
-<span id="cb841-5"><a href="packaging.html#cb841-5"></a>              <span class="st">&quot;Everything starts somewhere, &quot;</span>\</span>
-<span id="cb841-6"><a href="packaging.html#cb841-6"></a>              <span class="st">&quot;though many physicists disagree.&quot;</span>,</span>
-<span id="cb841-7"><a href="packaging.html#cb841-7"></a>              <span class="st">&quot;Ninety percent of most magic merely consists &quot;</span>\</span>
-<span id="cb841-8"><a href="packaging.html#cb841-8"></a>              <span class="st">&quot;of knowing one extra fact.&quot;</span>,</span>
-<span id="cb841-9"><a href="packaging.html#cb841-9"></a>              <span class="st">&quot;Wisdom comes from experience. &quot;</span>\</span>
-<span id="cb841-10"><a href="packaging.html#cb841-10"></a>              <span class="st">&quot;Experience is often a result of lack of wisdom.&quot;</span>,</span>
-<span id="cb841-11"><a href="packaging.html#cb841-11"></a>              <span class="st">&quot;There isn&#39;t a way things should be. &quot;</span>\</span>
-<span id="cb841-12"><a href="packaging.html#cb841-12"></a>              <span class="st">&quot;There&#39;s just what happens, and what we do.&quot;</span>,</span>
-<span id="cb841-13"><a href="packaging.html#cb841-13"></a>              <span class="st">&quot;Multiple exclamation marks are a sure sign &quot;</span>\</span>
-<span id="cb841-14"><a href="packaging.html#cb841-14"></a>              <span class="st">&quot;of a diseased mind.&quot;</span>,</span>
-<span id="cb841-15"><a href="packaging.html#cb841-15"></a>              <span class="st">&quot;+++ Divide By Cucumber Error. &quot;</span>\</span>
-<span id="cb841-16"><a href="packaging.html#cb841-16"></a>              <span class="st">&quot;Please Reinstall Universe And Reboot +++&quot;</span>,</span>
-<span id="cb841-17"><a href="packaging.html#cb841-17"></a>              <span class="st">&quot;It&#39;s got three keyboards and a hundred extra &quot;</span>\</span>
-<span id="cb841-18"><a href="packaging.html#cb841-18"></a>              <span class="st">&quot;knobs, including twelve with ‘?&#39; on them.&quot;</span>,</span>
-<span id="cb841-19"><a href="packaging.html#cb841-19"></a>             ]</span>
-<span id="cb841-20"><a href="packaging.html#cb841-20"></a></span>
-<span id="cb841-21"><a href="packaging.html#cb841-21"></a></span>
-<span id="cb841-22"><a href="packaging.html#cb841-22"></a><span class="kw">def</span> random_quote():</span>
-<span id="cb841-23"><a href="packaging.html#cb841-23"></a>    <span class="co">&quot;&quot;&quot;Print a random Pratchett quote.&quot;&quot;&quot;</span></span>
-<span id="cb841-24"><a href="packaging.html#cb841-24"></a>    <span class="bu">print</span>(random.choice(quote_list))</span></code></pre></div>
+<div class="sourceCode" id="cb842"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb842-1"><a href="packaging.html#cb842-1"></a><span class="im">import</span> random</span>
+<span id="cb842-2"><a href="packaging.html#cb842-2"></a></span>
+<span id="cb842-3"><a href="packaging.html#cb842-3"></a></span>
+<span id="cb842-4"><a href="packaging.html#cb842-4"></a>quote_list <span class="op">=</span> [<span class="st">&quot;It&#39;s still magic even if you know how it&#39;s done.&quot;</span>,</span>
+<span id="cb842-5"><a href="packaging.html#cb842-5"></a>              <span class="st">&quot;Everything starts somewhere, &quot;</span>\</span>
+<span id="cb842-6"><a href="packaging.html#cb842-6"></a>              <span class="st">&quot;though many physicists disagree.&quot;</span>,</span>
+<span id="cb842-7"><a href="packaging.html#cb842-7"></a>              <span class="st">&quot;Ninety percent of most magic merely consists &quot;</span>\</span>
+<span id="cb842-8"><a href="packaging.html#cb842-8"></a>              <span class="st">&quot;of knowing one extra fact.&quot;</span>,</span>
+<span id="cb842-9"><a href="packaging.html#cb842-9"></a>              <span class="st">&quot;Wisdom comes from experience. &quot;</span>\</span>
+<span id="cb842-10"><a href="packaging.html#cb842-10"></a>              <span class="st">&quot;Experience is often a result of lack of wisdom.&quot;</span>,</span>
+<span id="cb842-11"><a href="packaging.html#cb842-11"></a>              <span class="st">&quot;There isn&#39;t a way things should be. &quot;</span>\</span>
+<span id="cb842-12"><a href="packaging.html#cb842-12"></a>              <span class="st">&quot;There&#39;s just what happens, and what we do.&quot;</span>,</span>
+<span id="cb842-13"><a href="packaging.html#cb842-13"></a>              <span class="st">&quot;Multiple exclamation marks are a sure sign &quot;</span>\</span>
+<span id="cb842-14"><a href="packaging.html#cb842-14"></a>              <span class="st">&quot;of a diseased mind.&quot;</span>,</span>
+<span id="cb842-15"><a href="packaging.html#cb842-15"></a>              <span class="st">&quot;+++ Divide By Cucumber Error. &quot;</span>\</span>
+<span id="cb842-16"><a href="packaging.html#cb842-16"></a>              <span class="st">&quot;Please Reinstall Universe And Reboot +++&quot;</span>,</span>
+<span id="cb842-17"><a href="packaging.html#cb842-17"></a>              <span class="st">&quot;It&#39;s got three keyboards and a hundred extra &quot;</span>\</span>
+<span id="cb842-18"><a href="packaging.html#cb842-18"></a>              <span class="st">&quot;knobs, including twelve with ‘?&#39; on them.&quot;</span>,</span>
+<span id="cb842-19"><a href="packaging.html#cb842-19"></a>             ]</span>
+<span id="cb842-20"><a href="packaging.html#cb842-20"></a></span>
+<span id="cb842-21"><a href="packaging.html#cb842-21"></a></span>
+<span id="cb842-22"><a href="packaging.html#cb842-22"></a><span class="kw">def</span> random_quote():</span>
+<span id="cb842-23"><a href="packaging.html#cb842-23"></a>    <span class="co">&quot;&quot;&quot;Print a random Pratchett quote.&quot;&quot;&quot;</span></span>
+<span id="cb842-24"><a href="packaging.html#cb842-24"></a>    <span class="bu">print</span>(random.choice(quote_list))</span></code></pre></div>
 <p>Create a new <code>conda</code> development environment called <code>pratchett</code>
 and use <code>pip</code> to install a new package called <code>pratchett</code> into that environment.
 The package should contain <code>quotes.py</code>,
 and once the package has been installed the user should be able to run:</p>
-<div class="sourceCode" id="cb842"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb842-1"><a href="packaging.html#cb842-1"></a><span class="im">from</span> pratchett <span class="im">import</span> quotes</span>
-<span id="cb842-2"><a href="packaging.html#cb842-2"></a></span>
-<span id="cb842-3"><a href="packaging.html#cb842-3"></a></span>
-<span id="cb842-4"><a href="packaging.html#cb842-4"></a>quotes.random_quote()</span></code></pre></div>
+<div class="sourceCode" id="cb843"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb843-1"><a href="packaging.html#cb843-1"></a><span class="im">from</span> pratchett <span class="im">import</span> quotes</span>
+<span id="cb843-2"><a href="packaging.html#cb843-2"></a></span>
+<span id="cb843-3"><a href="packaging.html#cb843-3"></a></span>
+<span id="cb843-4"><a href="packaging.html#cb843-4"></a>quotes.random_quote()</span></code></pre></div>
 </div>
 </div>
 <div id="packaging-keypoints" class="section level2">

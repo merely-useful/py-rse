@@ -272,6 +272,15 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="6.11.6" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-multiple"><i class="fa fa-check"></i><b>6.11.6</b> Committing multiple files</a></li>
 <li class="chapter" data-level="6.11.7" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-timestamp"><i class="fa fa-check"></i><b>6.11.7</b> GitHub timestamps</a></li>
 <li class="chapter" data-level="6.11.8" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-history"><i class="fa fa-check"></i><b>6.11.8</b> Workflow and history</a></li>
+<li class="chapter" data-level="6.11.9" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-ignore-nested"><i class="fa fa-check"></i><b>6.11.9</b> Ignoring nested files</a></li>
+<li class="chapter" data-level="6.11.10" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-include"><i class="fa fa-check"></i><b>6.11.10</b> Including specific files</a></li>
+<li class="chapter" data-level="6.11.11" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-github-interface"><i class="fa fa-check"></i><b>6.11.11</b> Exploring the GitHub interface</a></li>
+<li class="chapter" data-level="6.11.12" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-push-commit"><i class="fa fa-check"></i><b>6.11.12</b> Push versus commit</a></li>
+<li class="chapter" data-level="6.11.13" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-boilerplate"><i class="fa fa-check"></i><b>6.11.13</b> License and README files</a></li>
+<li class="chapter" data-level="6.11.14" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-recover"><i class="fa fa-check"></i><b>6.11.14</b> Recovering older versions of a file</a></li>
+<li class="chapter" data-level="6.11.15" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-diff"><i class="fa fa-check"></i><b>6.11.15</b> Understanding <code>git diff</code></a></li>
+<li class="chapter" data-level="6.11.16" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-unstage"><i class="fa fa-check"></i><b>6.11.16</b> Getting rid of staged changes</a></li>
+<li class="chapter" data-level="6.11.17" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-ex-blame"><i class="fa fa-check"></i><b>6.11.17</b> Figuring out who did what</a></li>
 </ul></li>
 <li class="chapter" data-level="6.12" data-path="git-cmdline.html"><a href="git-cmdline.html#git-cmdline-keypoints"><i class="fa fa-check"></i><b>6.12</b> Key Points</a></li>
 </ul></li>
@@ -746,7 +755,7 @@ Each branch is a parallel timeline;
 changes made on the branch only affect that branch
 unless and until we explicitly combine them with work done in another branch.</p>
 <p>We can see what branches exist in a repository using this command:</p>
-<div class="sourceCode" id="cb473"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb473-1"><a href="git-advanced.html#cb473-1"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
+<div class="sourceCode" id="cb474"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb474-1"><a href="git-advanced.html#cb474-1"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
 <pre class="text"><code>* master</code></pre>
 <p>When we initialize a repository,
 Git automatically creates a branch called <code>master</code>.
@@ -770,42 +779,42 @@ as well as who manages it.</p>
 we foreshadowed some experimental changes that we could try and make to <code>plotcounts.py</code>.</p>
 <p>Making sure our project directory is our working directory,
 we can inspect our current <code>plotcounts.py</code>:</p>
-<div class="sourceCode" id="cb475"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb475-1"><a href="git-advanced.html#cb475-1"></a>$ <span class="bu">cd</span> ~/zipf</span>
-<span id="cb475-2"><a href="git-advanced.html#cb475-2"></a>$ <span class="fu">cat</span> bin/plotcounts.py</span></code></pre></div>
-<div class="sourceCode" id="cb476"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb476-1"><a href="git-advanced.html#cb476-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
-<span id="cb476-2"><a href="git-advanced.html#cb476-2"></a></span>
-<span id="cb476-3"><a href="git-advanced.html#cb476-3"></a><span class="im">import</span> argparse</span>
-<span id="cb476-4"><a href="git-advanced.html#cb476-4"></a></span>
-<span id="cb476-5"><a href="git-advanced.html#cb476-5"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb476-6"><a href="git-advanced.html#cb476-6"></a></span>
-<span id="cb476-7"><a href="git-advanced.html#cb476-7"></a></span>
-<span id="cb476-8"><a href="git-advanced.html#cb476-8"></a><span class="kw">def</span> main(args):</span>
-<span id="cb476-9"><a href="git-advanced.html#cb476-9"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb476-10"><a href="git-advanced.html#cb476-10"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb476-11"><a href="git-advanced.html#cb476-11"></a>                     names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
-<span id="cb476-12"><a href="git-advanced.html#cb476-12"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb476-13"><a href="git-advanced.html#cb476-13"></a>                                           method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
-<span id="cb476-14"><a href="git-advanced.html#cb476-14"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>,</span>
-<span id="cb476-15"><a href="git-advanced.html#cb476-15"></a>                         y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb476-16"><a href="git-advanced.html#cb476-16"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>],</span>
-<span id="cb476-17"><a href="git-advanced.html#cb476-17"></a>                         grid<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb476-18"><a href="git-advanced.html#cb476-18"></a>                         xlim<span class="op">=</span>args.xlim)</span>
-<span id="cb476-19"><a href="git-advanced.html#cb476-19"></a>    ax.figure.savefig(args.outfile)</span>
-<span id="cb476-20"><a href="git-advanced.html#cb476-20"></a></span>
-<span id="cb476-21"><a href="git-advanced.html#cb476-21"></a></span>
-<span id="cb476-22"><a href="git-advanced.html#cb476-22"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb476-23"><a href="git-advanced.html#cb476-23"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb476-24"><a href="git-advanced.html#cb476-24"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
-<span id="cb476-25"><a href="git-advanced.html#cb476-25"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
-<span id="cb476-26"><a href="git-advanced.html#cb476-26"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
-<span id="cb476-27"><a href="git-advanced.html#cb476-27"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>,</span>
-<span id="cb476-28"><a href="git-advanced.html#cb476-28"></a>                        default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
-<span id="cb476-29"><a href="git-advanced.html#cb476-29"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
-<span id="cb476-30"><a href="git-advanced.html#cb476-30"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb476-31"><a href="git-advanced.html#cb476-31"></a>                        metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
-<span id="cb476-32"><a href="git-advanced.html#cb476-32"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
-<span id="cb476-33"><a href="git-advanced.html#cb476-33"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb476-34"><a href="git-advanced.html#cb476-34"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb476"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb476-1"><a href="git-advanced.html#cb476-1"></a>$ <span class="bu">cd</span> ~/zipf</span>
+<span id="cb476-2"><a href="git-advanced.html#cb476-2"></a>$ <span class="fu">cat</span> bin/plotcounts.py</span></code></pre></div>
+<div class="sourceCode" id="cb477"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb477-1"><a href="git-advanced.html#cb477-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
+<span id="cb477-2"><a href="git-advanced.html#cb477-2"></a></span>
+<span id="cb477-3"><a href="git-advanced.html#cb477-3"></a><span class="im">import</span> argparse</span>
+<span id="cb477-4"><a href="git-advanced.html#cb477-4"></a></span>
+<span id="cb477-5"><a href="git-advanced.html#cb477-5"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb477-6"><a href="git-advanced.html#cb477-6"></a></span>
+<span id="cb477-7"><a href="git-advanced.html#cb477-7"></a></span>
+<span id="cb477-8"><a href="git-advanced.html#cb477-8"></a><span class="kw">def</span> main(args):</span>
+<span id="cb477-9"><a href="git-advanced.html#cb477-9"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb477-10"><a href="git-advanced.html#cb477-10"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb477-11"><a href="git-advanced.html#cb477-11"></a>                     names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
+<span id="cb477-12"><a href="git-advanced.html#cb477-12"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb477-13"><a href="git-advanced.html#cb477-13"></a>                                           method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
+<span id="cb477-14"><a href="git-advanced.html#cb477-14"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>,</span>
+<span id="cb477-15"><a href="git-advanced.html#cb477-15"></a>                         y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb477-16"><a href="git-advanced.html#cb477-16"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>],</span>
+<span id="cb477-17"><a href="git-advanced.html#cb477-17"></a>                         grid<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb477-18"><a href="git-advanced.html#cb477-18"></a>                         xlim<span class="op">=</span>args.xlim)</span>
+<span id="cb477-19"><a href="git-advanced.html#cb477-19"></a>    ax.figure.savefig(args.outfile)</span>
+<span id="cb477-20"><a href="git-advanced.html#cb477-20"></a></span>
+<span id="cb477-21"><a href="git-advanced.html#cb477-21"></a></span>
+<span id="cb477-22"><a href="git-advanced.html#cb477-22"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb477-23"><a href="git-advanced.html#cb477-23"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb477-24"><a href="git-advanced.html#cb477-24"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
+<span id="cb477-25"><a href="git-advanced.html#cb477-25"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
+<span id="cb477-26"><a href="git-advanced.html#cb477-26"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
+<span id="cb477-27"><a href="git-advanced.html#cb477-27"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>,</span>
+<span id="cb477-28"><a href="git-advanced.html#cb477-28"></a>                        default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
+<span id="cb477-29"><a href="git-advanced.html#cb477-29"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
+<span id="cb477-30"><a href="git-advanced.html#cb477-30"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb477-31"><a href="git-advanced.html#cb477-31"></a>                        metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
+<span id="cb477-32"><a href="git-advanced.html#cb477-32"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
+<span id="cb477-33"><a href="git-advanced.html#cb477-33"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb477-34"><a href="git-advanced.html#cb477-34"></a>    main(args)</span></code></pre></div>
 <p>We used this version of <code>plotcounts.py</code>
 to display the word counts for <em>Dracula</em> on a log-log plot
 (Figure <a href="git-cmdline.html#fig:git-cmdline-loglog-plot">6.4</a>).
@@ -823,9 +832,9 @@ we can decide if we want to merge our changes back into the <code>master</code> 
 <h2><span class="header-section-number">7.2</span> Creating a Branch</h2>
 <p>To create a new branch called <code>fit</code>,
 we run:</p>
-<div class="sourceCode" id="cb477"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb477-1"><a href="git-advanced.html#cb477-1"></a>$ <span class="fu">git</span> branch fit</span></code></pre></div>
+<div class="sourceCode" id="cb478"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb478-1"><a href="git-advanced.html#cb478-1"></a>$ <span class="fu">git</span> branch fit</span></code></pre></div>
 <p>We can check that the branch exists by running <code>git branch</code> again:</p>
-<div class="sourceCode" id="cb478"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb478-1"><a href="git-advanced.html#cb478-1"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
+<div class="sourceCode" id="cb479"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb479-1"><a href="git-advanced.html#cb479-1"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
 <pre class="text"><code>* master
   fit</code></pre>
 <p>Our branch is there,
@@ -834,13 +843,13 @@ but the asterisk <code>*</code> shows that we are still in the <code>master</cod
 creating a new directory doesn’t automatically move us into that directory.)
 As a further check,
 let’s see what our repository’s status is:</p>
-<div class="sourceCode" id="cb480"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb480-1"><a href="git-advanced.html#cb480-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
+<div class="sourceCode" id="cb481"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb481-1"><a href="git-advanced.html#cb481-1"></a>$ <span class="fu">git</span> status</span></code></pre></div>
 <pre class="text"><code>On branch master
 nothing to commit, working directory clean</code></pre>
 <p>To switch to our new branch we can use the <code>checkout</code> command
 that we first saw in Chapter <a href="git-cmdline.html#git-cmdline">6</a>:</p>
-<div class="sourceCode" id="cb482"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb482-1"><a href="git-advanced.html#cb482-1"></a>$ <span class="fu">git</span> checkout fit</span>
-<span id="cb482-2"><a href="git-advanced.html#cb482-2"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
+<div class="sourceCode" id="cb483"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb483-1"><a href="git-advanced.html#cb483-1"></a>$ <span class="fu">git</span> checkout fit</span>
+<span id="cb483-2"><a href="git-advanced.html#cb483-2"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
 <pre class="text"><code>  master
 * fit</code></pre>
 <p>In this case,
@@ -928,53 +937,53 @@ or equivalently the largest value of the rank.</p>
 <div style="page-break-after: always;"></div>
 <p>Expressed as a Python function,
 the negative log likelihood function is:</p>
-<div class="sourceCode" id="cb484"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb484-1"><a href="git-advanced.html#cb484-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb484-2"><a href="git-advanced.html#cb484-2"></a></span>
-<span id="cb484-3"><a href="git-advanced.html#cb484-3"></a></span>
-<span id="cb484-4"><a href="git-advanced.html#cb484-4"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
-<span id="cb484-5"><a href="git-advanced.html#cb484-5"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
-<span id="cb484-6"><a href="git-advanced.html#cb484-6"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb484-7"><a href="git-advanced.html#cb484-7"></a>                          <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
-<span id="cb484-8"><a href="git-advanced.html#cb484-8"></a>    <span class="cf">return</span> likelihood</span></code></pre></div>
+<div class="sourceCode" id="cb485"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb485-1"><a href="git-advanced.html#cb485-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb485-2"><a href="git-advanced.html#cb485-2"></a></span>
+<span id="cb485-3"><a href="git-advanced.html#cb485-3"></a></span>
+<span id="cb485-4"><a href="git-advanced.html#cb485-4"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
+<span id="cb485-5"><a href="git-advanced.html#cb485-5"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
+<span id="cb485-6"><a href="git-advanced.html#cb485-6"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb485-7"><a href="git-advanced.html#cb485-7"></a>                          <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
+<span id="cb485-8"><a href="git-advanced.html#cb485-8"></a>    <span class="cf">return</span> likelihood</span></code></pre></div>
 <p>Obtaining an estimate of <span class="math inline">\(\beta\)</span> (and thus <span class="math inline">\(\alpha\)</span>)
 then becomes a numerical optimization problem,
 for which we can use the <a href="https://docs.scipy.org/doc/scipy/reference/optimize.html"><code>scipy.optimize</code></a> library.
 Again following <span class="citation">Moreno-Sánchez, Font-Clos, and Corral (<a href="references.html#ref-More2016" role="doc-biblioref">2016</a>)</span>,
 we use Brent’s Method with <span class="math inline">\(1 &lt; \beta \leq 4\)</span>.</p>
-<div class="sourceCode" id="cb485"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb485-1"><a href="git-advanced.html#cb485-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
-<span id="cb485-2"><a href="git-advanced.html#cb485-2"></a></span>
-<span id="cb485-3"><a href="git-advanced.html#cb485-3"></a></span>
-<span id="cb485-4"><a href="git-advanced.html#cb485-4"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
-<span id="cb485-5"><a href="git-advanced.html#cb485-5"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
-<span id="cb485-6"><a href="git-advanced.html#cb485-6"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood,</span>
-<span id="cb485-7"><a href="git-advanced.html#cb485-7"></a>                          bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
-<span id="cb485-8"><a href="git-advanced.html#cb485-8"></a>                          args<span class="op">=</span>word_counts,</span>
-<span id="cb485-9"><a href="git-advanced.html#cb485-9"></a>                          method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
-<span id="cb485-10"><a href="git-advanced.html#cb485-10"></a>    beta <span class="op">=</span> mle.x</span>
-<span id="cb485-11"><a href="git-advanced.html#cb485-11"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb485-12"><a href="git-advanced.html#cb485-12"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
+<div class="sourceCode" id="cb486"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb486-1"><a href="git-advanced.html#cb486-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
+<span id="cb486-2"><a href="git-advanced.html#cb486-2"></a></span>
+<span id="cb486-3"><a href="git-advanced.html#cb486-3"></a></span>
+<span id="cb486-4"><a href="git-advanced.html#cb486-4"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
+<span id="cb486-5"><a href="git-advanced.html#cb486-5"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
+<span id="cb486-6"><a href="git-advanced.html#cb486-6"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood,</span>
+<span id="cb486-7"><a href="git-advanced.html#cb486-7"></a>                          bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
+<span id="cb486-8"><a href="git-advanced.html#cb486-8"></a>                          args<span class="op">=</span>word_counts,</span>
+<span id="cb486-9"><a href="git-advanced.html#cb486-9"></a>                          method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
+<span id="cb486-10"><a href="git-advanced.html#cb486-10"></a>    beta <span class="op">=</span> mle.x</span>
+<span id="cb486-11"><a href="git-advanced.html#cb486-11"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb486-12"><a href="git-advanced.html#cb486-12"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
 <p>We can then plot the fitted curve on the plot axes (<code>ax</code>)
 defined in the <code>plotcounts.py</code> script:</p>
-<div class="sourceCode" id="cb486"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb486-1"><a href="git-advanced.html#cb486-1"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
-<span id="cb486-2"><a href="git-advanced.html#cb486-2"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb486-3"><a href="git-advanced.html#cb486-3"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
-<span id="cb486-4"><a href="git-advanced.html#cb486-4"></a></span>
-<span id="cb486-5"><a href="git-advanced.html#cb486-5"></a><span class="co">    Parameters</span></span>
-<span id="cb486-6"><a href="git-advanced.html#cb486-6"></a><span class="co">    ----------</span></span>
-<span id="cb486-7"><a href="git-advanced.html#cb486-7"></a><span class="co">    curve_xmin : float</span></span>
-<span id="cb486-8"><a href="git-advanced.html#cb486-8"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
-<span id="cb486-9"><a href="git-advanced.html#cb486-9"></a><span class="co">    curve_xmax : float</span></span>
-<span id="cb486-10"><a href="git-advanced.html#cb486-10"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
-<span id="cb486-11"><a href="git-advanced.html#cb486-11"></a><span class="co">    max_rank : int</span></span>
-<span id="cb486-12"><a href="git-advanced.html#cb486-12"></a><span class="co">        Maximum word frequency rank.</span></span>
-<span id="cb486-13"><a href="git-advanced.html#cb486-13"></a><span class="co">    alpha : float</span></span>
-<span id="cb486-14"><a href="git-advanced.html#cb486-14"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
-<span id="cb486-15"><a href="git-advanced.html#cb486-15"></a><span class="co">    ax : matplotlib axes</span></span>
-<span id="cb486-16"><a href="git-advanced.html#cb486-16"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
-<span id="cb486-17"><a href="git-advanced.html#cb486-17"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb486-18"><a href="git-advanced.html#cb486-18"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
-<span id="cb486-19"><a href="git-advanced.html#cb486-19"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
-<span id="cb486-20"><a href="git-advanced.html#cb486-20"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb487"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb487-1"><a href="git-advanced.html#cb487-1"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
+<span id="cb487-2"><a href="git-advanced.html#cb487-2"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb487-3"><a href="git-advanced.html#cb487-3"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
+<span id="cb487-4"><a href="git-advanced.html#cb487-4"></a></span>
+<span id="cb487-5"><a href="git-advanced.html#cb487-5"></a><span class="co">    Parameters</span></span>
+<span id="cb487-6"><a href="git-advanced.html#cb487-6"></a><span class="co">    ----------</span></span>
+<span id="cb487-7"><a href="git-advanced.html#cb487-7"></a><span class="co">    curve_xmin : float</span></span>
+<span id="cb487-8"><a href="git-advanced.html#cb487-8"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
+<span id="cb487-9"><a href="git-advanced.html#cb487-9"></a><span class="co">    curve_xmax : float</span></span>
+<span id="cb487-10"><a href="git-advanced.html#cb487-10"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
+<span id="cb487-11"><a href="git-advanced.html#cb487-11"></a><span class="co">    max_rank : int</span></span>
+<span id="cb487-12"><a href="git-advanced.html#cb487-12"></a><span class="co">        Maximum word frequency rank.</span></span>
+<span id="cb487-13"><a href="git-advanced.html#cb487-13"></a><span class="co">    alpha : float</span></span>
+<span id="cb487-14"><a href="git-advanced.html#cb487-14"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
+<span id="cb487-15"><a href="git-advanced.html#cb487-15"></a><span class="co">    ax : matplotlib axes</span></span>
+<span id="cb487-16"><a href="git-advanced.html#cb487-16"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
+<span id="cb487-17"><a href="git-advanced.html#cb487-17"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb487-18"><a href="git-advanced.html#cb487-18"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
+<span id="cb487-19"><a href="git-advanced.html#cb487-19"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
+<span id="cb487-20"><a href="git-advanced.html#cb487-20"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span></code></pre></div>
 <p>where the maximum word frequency rank corresponds to <span class="math inline">\(c\)</span>,
 and <span class="math inline">\(-1 / \alpha\)</span> the exponent in the power law.
 We have followed the <a href="https://numpydoc.readthedocs.io/en/latest/"><code>numpydoc</code></a> format for the detailed docstring
@@ -985,101 +994,101 @@ about docstring formats.</p>
 <h2><span class="header-section-number">7.4</span> Verifying Zipf’s Law</h2>
 <p>Now that we can fit a curve to our word count plots,
 we can update <code>plotcounts.py</code> so the entire script reads as follows:</p>
-<div class="sourceCode" id="cb487"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb487-1"><a href="git-advanced.html#cb487-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
-<span id="cb487-2"><a href="git-advanced.html#cb487-2"></a></span>
-<span id="cb487-3"><a href="git-advanced.html#cb487-3"></a><span class="im">import</span> argparse</span>
-<span id="cb487-4"><a href="git-advanced.html#cb487-4"></a></span>
-<span id="cb487-5"><a href="git-advanced.html#cb487-5"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb487-6"><a href="git-advanced.html#cb487-6"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb487-7"><a href="git-advanced.html#cb487-7"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
-<span id="cb487-8"><a href="git-advanced.html#cb487-8"></a></span>
-<span id="cb487-9"><a href="git-advanced.html#cb487-9"></a></span>
-<span id="cb487-10"><a href="git-advanced.html#cb487-10"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
-<span id="cb487-11"><a href="git-advanced.html#cb487-11"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
-<span id="cb487-12"><a href="git-advanced.html#cb487-12"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb487-13"><a href="git-advanced.html#cb487-13"></a>                          <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
-<span id="cb487-14"><a href="git-advanced.html#cb487-14"></a>    <span class="cf">return</span> likelihood</span>
-<span id="cb487-15"><a href="git-advanced.html#cb487-15"></a></span>
-<span id="cb487-16"><a href="git-advanced.html#cb487-16"></a></span>
-<span id="cb487-17"><a href="git-advanced.html#cb487-17"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
-<span id="cb487-18"><a href="git-advanced.html#cb487-18"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
-<span id="cb487-19"><a href="git-advanced.html#cb487-19"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood,</span>
-<span id="cb487-20"><a href="git-advanced.html#cb487-20"></a>                          bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
-<span id="cb487-21"><a href="git-advanced.html#cb487-21"></a>                          args<span class="op">=</span>word_counts,</span>
-<span id="cb487-22"><a href="git-advanced.html#cb487-22"></a>                          method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
-<span id="cb487-23"><a href="git-advanced.html#cb487-23"></a>    beta <span class="op">=</span> mle.x</span>
-<span id="cb487-24"><a href="git-advanced.html#cb487-24"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb487-25"><a href="git-advanced.html#cb487-25"></a>    <span class="cf">return</span> alpha</span>
-<span id="cb487-26"><a href="git-advanced.html#cb487-26"></a></span>
-<span id="cb487-27"><a href="git-advanced.html#cb487-27"></a></span>
-<span id="cb487-28"><a href="git-advanced.html#cb487-28"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
-<span id="cb487-29"><a href="git-advanced.html#cb487-29"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb487-30"><a href="git-advanced.html#cb487-30"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
-<span id="cb487-31"><a href="git-advanced.html#cb487-31"></a></span>
-<span id="cb487-32"><a href="git-advanced.html#cb487-32"></a><span class="co">    Parameters</span></span>
-<span id="cb487-33"><a href="git-advanced.html#cb487-33"></a><span class="co">    ----------</span></span>
-<span id="cb487-34"><a href="git-advanced.html#cb487-34"></a><span class="co">    curve_xmin : float</span></span>
-<span id="cb487-35"><a href="git-advanced.html#cb487-35"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
-<span id="cb487-36"><a href="git-advanced.html#cb487-36"></a><span class="co">    curve_xmax : float</span></span>
-<span id="cb487-37"><a href="git-advanced.html#cb487-37"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
-<span id="cb487-38"><a href="git-advanced.html#cb487-38"></a><span class="co">    max_rank : int</span></span>
-<span id="cb487-39"><a href="git-advanced.html#cb487-39"></a><span class="co">        Maximum word frequency rank.</span></span>
-<span id="cb487-40"><a href="git-advanced.html#cb487-40"></a><span class="co">    alpha : float</span></span>
-<span id="cb487-41"><a href="git-advanced.html#cb487-41"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
-<span id="cb487-42"><a href="git-advanced.html#cb487-42"></a><span class="co">    ax : matplotlib axes</span></span>
-<span id="cb487-43"><a href="git-advanced.html#cb487-43"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
-<span id="cb487-44"><a href="git-advanced.html#cb487-44"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb487-45"><a href="git-advanced.html#cb487-45"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
-<span id="cb487-46"><a href="git-advanced.html#cb487-46"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
-<span id="cb487-47"><a href="git-advanced.html#cb487-47"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span>
-<span id="cb487-48"><a href="git-advanced.html#cb487-48"></a></span>
-<span id="cb487-49"><a href="git-advanced.html#cb487-49"></a></span>
-<span id="cb487-50"><a href="git-advanced.html#cb487-50"></a><span class="kw">def</span> main(args):</span>
-<span id="cb487-51"><a href="git-advanced.html#cb487-51"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
-<span id="cb487-52"><a href="git-advanced.html#cb487-52"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb487-53"><a href="git-advanced.html#cb487-53"></a>                     names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
-<span id="cb487-54"><a href="git-advanced.html#cb487-54"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb487-55"><a href="git-advanced.html#cb487-55"></a>                                           method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
-<span id="cb487-56"><a href="git-advanced.html#cb487-56"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>,</span>
-<span id="cb487-57"><a href="git-advanced.html#cb487-57"></a>                         y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb487-58"><a href="git-advanced.html#cb487-58"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>],</span>
-<span id="cb487-59"><a href="git-advanced.html#cb487-59"></a>                         grid<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb487-60"><a href="git-advanced.html#cb487-60"></a>                         xlim<span class="op">=</span>args.xlim)</span>
-<span id="cb487-61"><a href="git-advanced.html#cb487-61"></a></span>
-<span id="cb487-62"><a href="git-advanced.html#cb487-62"></a>    word_counts <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].to_numpy()</span>
-<span id="cb487-63"><a href="git-advanced.html#cb487-63"></a>    alpha <span class="op">=</span> get_power_law_params(word_counts)</span>
-<span id="cb487-64"><a href="git-advanced.html#cb487-64"></a>    <span class="bu">print</span>(<span class="st">&#39;alpha:&#39;</span>, alpha)</span>
-<span id="cb487-65"><a href="git-advanced.html#cb487-65"></a></span>
-<span id="cb487-66"><a href="git-advanced.html#cb487-66"></a>    <span class="co"># Since the ranks are already sorted, we can take the last</span></span>
-<span id="cb487-67"><a href="git-advanced.html#cb487-67"></a>    <span class="co"># one instead of computing which row has the highest rank</span></span>
-<span id="cb487-68"><a href="git-advanced.html#cb487-68"></a>    max_rank <span class="op">=</span> df[<span class="st">&#39;rank&#39;</span>].to_numpy()[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb487-69"><a href="git-advanced.html#cb487-69"></a></span>
-<span id="cb487-70"><a href="git-advanced.html#cb487-70"></a>    <span class="co"># Use the range of the data as the boundaries</span></span>
-<span id="cb487-71"><a href="git-advanced.html#cb487-71"></a>    <span class="co"># when drawing the power law curve</span></span>
-<span id="cb487-72"><a href="git-advanced.html#cb487-72"></a>    curve_xmin <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">min</span>()</span>
-<span id="cb487-73"><a href="git-advanced.html#cb487-73"></a>    curve_xmax <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">max</span>()</span>
-<span id="cb487-74"><a href="git-advanced.html#cb487-74"></a></span>
-<span id="cb487-75"><a href="git-advanced.html#cb487-75"></a>    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)</span>
-<span id="cb487-76"><a href="git-advanced.html#cb487-76"></a>    ax.figure.savefig(args.outfile)</span>
-<span id="cb487-77"><a href="git-advanced.html#cb487-77"></a></span>
-<span id="cb487-78"><a href="git-advanced.html#cb487-78"></a></span>
-<span id="cb487-79"><a href="git-advanced.html#cb487-79"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
-<span id="cb487-80"><a href="git-advanced.html#cb487-80"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
-<span id="cb487-81"><a href="git-advanced.html#cb487-81"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
-<span id="cb487-82"><a href="git-advanced.html#cb487-82"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
-<span id="cb487-83"><a href="git-advanced.html#cb487-83"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
-<span id="cb487-84"><a href="git-advanced.html#cb487-84"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>,</span>
-<span id="cb487-85"><a href="git-advanced.html#cb487-85"></a>                        default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
-<span id="cb487-86"><a href="git-advanced.html#cb487-86"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
-<span id="cb487-87"><a href="git-advanced.html#cb487-87"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb487-88"><a href="git-advanced.html#cb487-88"></a>                        metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
-<span id="cb487-89"><a href="git-advanced.html#cb487-89"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
-<span id="cb487-90"><a href="git-advanced.html#cb487-90"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb487-91"><a href="git-advanced.html#cb487-91"></a>    main(args)</span></code></pre></div>
+<div class="sourceCode" id="cb488"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb488-1"><a href="git-advanced.html#cb488-1"></a><span class="co">&quot;&quot;&quot;Plot word counts.&quot;&quot;&quot;</span></span>
+<span id="cb488-2"><a href="git-advanced.html#cb488-2"></a></span>
+<span id="cb488-3"><a href="git-advanced.html#cb488-3"></a><span class="im">import</span> argparse</span>
+<span id="cb488-4"><a href="git-advanced.html#cb488-4"></a></span>
+<span id="cb488-5"><a href="git-advanced.html#cb488-5"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb488-6"><a href="git-advanced.html#cb488-6"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb488-7"><a href="git-advanced.html#cb488-7"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
+<span id="cb488-8"><a href="git-advanced.html#cb488-8"></a></span>
+<span id="cb488-9"><a href="git-advanced.html#cb488-9"></a></span>
+<span id="cb488-10"><a href="git-advanced.html#cb488-10"></a><span class="kw">def</span> nlog_likelihood(beta, counts):</span>
+<span id="cb488-11"><a href="git-advanced.html#cb488-11"></a>    <span class="co">&quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
+<span id="cb488-12"><a href="git-advanced.html#cb488-12"></a>    likelihood <span class="op">=</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.log((<span class="dv">1</span><span class="op">/</span>counts)<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb488-13"><a href="git-advanced.html#cb488-13"></a>                          <span class="op">-</span> (<span class="dv">1</span><span class="op">/</span>(counts <span class="op">+</span> <span class="dv">1</span>))<span class="op">**</span>(beta <span class="op">-</span> <span class="dv">1</span>)))</span>
+<span id="cb488-14"><a href="git-advanced.html#cb488-14"></a>    <span class="cf">return</span> likelihood</span>
+<span id="cb488-15"><a href="git-advanced.html#cb488-15"></a></span>
+<span id="cb488-16"><a href="git-advanced.html#cb488-16"></a></span>
+<span id="cb488-17"><a href="git-advanced.html#cb488-17"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
+<span id="cb488-18"><a href="git-advanced.html#cb488-18"></a>    <span class="co">&quot;&quot;&quot;Get the power law parameters.&quot;&quot;&quot;</span></span>
+<span id="cb488-19"><a href="git-advanced.html#cb488-19"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood,</span>
+<span id="cb488-20"><a href="git-advanced.html#cb488-20"></a>                          bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
+<span id="cb488-21"><a href="git-advanced.html#cb488-21"></a>                          args<span class="op">=</span>word_counts,</span>
+<span id="cb488-22"><a href="git-advanced.html#cb488-22"></a>                          method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
+<span id="cb488-23"><a href="git-advanced.html#cb488-23"></a>    beta <span class="op">=</span> mle.x</span>
+<span id="cb488-24"><a href="git-advanced.html#cb488-24"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb488-25"><a href="git-advanced.html#cb488-25"></a>    <span class="cf">return</span> alpha</span>
+<span id="cb488-26"><a href="git-advanced.html#cb488-26"></a></span>
+<span id="cb488-27"><a href="git-advanced.html#cb488-27"></a></span>
+<span id="cb488-28"><a href="git-advanced.html#cb488-28"></a><span class="kw">def</span> plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span>
+<span id="cb488-29"><a href="git-advanced.html#cb488-29"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb488-30"><a href="git-advanced.html#cb488-30"></a><span class="co">    Plot the power law curve that was fitted to the data.</span></span>
+<span id="cb488-31"><a href="git-advanced.html#cb488-31"></a></span>
+<span id="cb488-32"><a href="git-advanced.html#cb488-32"></a><span class="co">    Parameters</span></span>
+<span id="cb488-33"><a href="git-advanced.html#cb488-33"></a><span class="co">    ----------</span></span>
+<span id="cb488-34"><a href="git-advanced.html#cb488-34"></a><span class="co">    curve_xmin : float</span></span>
+<span id="cb488-35"><a href="git-advanced.html#cb488-35"></a><span class="co">        Minimum x-bound for fitted curve</span></span>
+<span id="cb488-36"><a href="git-advanced.html#cb488-36"></a><span class="co">    curve_xmax : float</span></span>
+<span id="cb488-37"><a href="git-advanced.html#cb488-37"></a><span class="co">        Maximum x-bound for fitted curve</span></span>
+<span id="cb488-38"><a href="git-advanced.html#cb488-38"></a><span class="co">    max_rank : int</span></span>
+<span id="cb488-39"><a href="git-advanced.html#cb488-39"></a><span class="co">        Maximum word frequency rank.</span></span>
+<span id="cb488-40"><a href="git-advanced.html#cb488-40"></a><span class="co">    alpha : float</span></span>
+<span id="cb488-41"><a href="git-advanced.html#cb488-41"></a><span class="co">        Estimated alpha parameter for the power law.</span></span>
+<span id="cb488-42"><a href="git-advanced.html#cb488-42"></a><span class="co">    ax : matplotlib axes</span></span>
+<span id="cb488-43"><a href="git-advanced.html#cb488-43"></a><span class="co">        Scatter plot to which the power curve will be added.</span></span>
+<span id="cb488-44"><a href="git-advanced.html#cb488-44"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb488-45"><a href="git-advanced.html#cb488-45"></a>    xvals <span class="op">=</span> np.arange(curve_xmin, curve_xmax)</span>
+<span id="cb488-46"><a href="git-advanced.html#cb488-46"></a>    yvals <span class="op">=</span> max_rank <span class="op">*</span> (xvals<span class="op">**</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> alpha))</span>
+<span id="cb488-47"><a href="git-advanced.html#cb488-47"></a>    ax.loglog(xvals, yvals, color<span class="op">=</span><span class="st">&#39;grey&#39;</span>)</span>
+<span id="cb488-48"><a href="git-advanced.html#cb488-48"></a></span>
+<span id="cb488-49"><a href="git-advanced.html#cb488-49"></a></span>
+<span id="cb488-50"><a href="git-advanced.html#cb488-50"></a><span class="kw">def</span> main(args):</span>
+<span id="cb488-51"><a href="git-advanced.html#cb488-51"></a>    <span class="co">&quot;&quot;&quot;Run the command line program.&quot;&quot;&quot;</span></span>
+<span id="cb488-52"><a href="git-advanced.html#cb488-52"></a>    df <span class="op">=</span> pd.read_csv(args.infile, header<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb488-53"><a href="git-advanced.html#cb488-53"></a>                     names<span class="op">=</span>(<span class="st">&#39;word&#39;</span>, <span class="st">&#39;word_frequency&#39;</span>))</span>
+<span id="cb488-54"><a href="git-advanced.html#cb488-54"></a>    df[<span class="st">&#39;rank&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].rank(ascending<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb488-55"><a href="git-advanced.html#cb488-55"></a>                                           method<span class="op">=</span><span class="st">&#39;max&#39;</span>)</span>
+<span id="cb488-56"><a href="git-advanced.html#cb488-56"></a>    ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">&#39;word_frequency&#39;</span>,</span>
+<span id="cb488-57"><a href="git-advanced.html#cb488-57"></a>                         y<span class="op">=</span><span class="st">&#39;rank&#39;</span>, loglog<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb488-58"><a href="git-advanced.html#cb488-58"></a>                         figsize<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">6</span>],</span>
+<span id="cb488-59"><a href="git-advanced.html#cb488-59"></a>                         grid<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb488-60"><a href="git-advanced.html#cb488-60"></a>                         xlim<span class="op">=</span>args.xlim)</span>
+<span id="cb488-61"><a href="git-advanced.html#cb488-61"></a></span>
+<span id="cb488-62"><a href="git-advanced.html#cb488-62"></a>    word_counts <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].to_numpy()</span>
+<span id="cb488-63"><a href="git-advanced.html#cb488-63"></a>    alpha <span class="op">=</span> get_power_law_params(word_counts)</span>
+<span id="cb488-64"><a href="git-advanced.html#cb488-64"></a>    <span class="bu">print</span>(<span class="st">&#39;alpha:&#39;</span>, alpha)</span>
+<span id="cb488-65"><a href="git-advanced.html#cb488-65"></a></span>
+<span id="cb488-66"><a href="git-advanced.html#cb488-66"></a>    <span class="co"># Since the ranks are already sorted, we can take the last</span></span>
+<span id="cb488-67"><a href="git-advanced.html#cb488-67"></a>    <span class="co"># one instead of computing which row has the highest rank</span></span>
+<span id="cb488-68"><a href="git-advanced.html#cb488-68"></a>    max_rank <span class="op">=</span> df[<span class="st">&#39;rank&#39;</span>].to_numpy()[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb488-69"><a href="git-advanced.html#cb488-69"></a></span>
+<span id="cb488-70"><a href="git-advanced.html#cb488-70"></a>    <span class="co"># Use the range of the data as the boundaries</span></span>
+<span id="cb488-71"><a href="git-advanced.html#cb488-71"></a>    <span class="co"># when drawing the power law curve</span></span>
+<span id="cb488-72"><a href="git-advanced.html#cb488-72"></a>    curve_xmin <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">min</span>()</span>
+<span id="cb488-73"><a href="git-advanced.html#cb488-73"></a>    curve_xmax <span class="op">=</span> df[<span class="st">&#39;word_frequency&#39;</span>].<span class="bu">max</span>()</span>
+<span id="cb488-74"><a href="git-advanced.html#cb488-74"></a></span>
+<span id="cb488-75"><a href="git-advanced.html#cb488-75"></a>    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)</span>
+<span id="cb488-76"><a href="git-advanced.html#cb488-76"></a>    ax.figure.savefig(args.outfile)</span>
+<span id="cb488-77"><a href="git-advanced.html#cb488-77"></a></span>
+<span id="cb488-78"><a href="git-advanced.html#cb488-78"></a></span>
+<span id="cb488-79"><a href="git-advanced.html#cb488-79"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb488-80"><a href="git-advanced.html#cb488-80"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span>__doc__)</span>
+<span id="cb488-81"><a href="git-advanced.html#cb488-81"></a>    parser.add_argument(<span class="st">&#39;infile&#39;</span>, <span class="bu">type</span><span class="op">=</span>argparse.FileType(<span class="st">&#39;r&#39;</span>),</span>
+<span id="cb488-82"><a href="git-advanced.html#cb488-82"></a>                        nargs<span class="op">=</span><span class="st">&#39;?&#39;</span>, default<span class="op">=</span><span class="st">&#39;-&#39;</span>,</span>
+<span id="cb488-83"><a href="git-advanced.html#cb488-83"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Word count csv file name&#39;</span>)</span>
+<span id="cb488-84"><a href="git-advanced.html#cb488-84"></a>    parser.add_argument(<span class="st">&#39;--outfile&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>,</span>
+<span id="cb488-85"><a href="git-advanced.html#cb488-85"></a>                        default<span class="op">=</span><span class="st">&#39;plotcounts.png&#39;</span>,</span>
+<span id="cb488-86"><a href="git-advanced.html#cb488-86"></a>                        <span class="bu">help</span><span class="op">=</span><span class="st">&#39;Output image file name&#39;</span>)</span>
+<span id="cb488-87"><a href="git-advanced.html#cb488-87"></a>    parser.add_argument(<span class="st">&#39;--xlim&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, nargs<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb488-88"><a href="git-advanced.html#cb488-88"></a>                        metavar<span class="op">=</span>(<span class="st">&#39;XMIN&#39;</span>, <span class="st">&#39;XMAX&#39;</span>),</span>
+<span id="cb488-89"><a href="git-advanced.html#cb488-89"></a>                        default<span class="op">=</span><span class="va">None</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&#39;X-axis limits&#39;</span>)</span>
+<span id="cb488-90"><a href="git-advanced.html#cb488-90"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb488-91"><a href="git-advanced.html#cb488-91"></a>    main(args)</span></code></pre></div>
 <p>We can then run the script to obtain the <span class="math inline">\(\alpha\)</span> value for <em>Dracula</em>
 and a new plot with a line fitted.</p>
-<div class="sourceCode" id="cb488"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb488-1"><a href="git-advanced.html#cb488-1"></a>$ <span class="ex">python</span> bin/plotcounts.py results/dracula.csv --outfile</span>
-<span id="cb488-2"><a href="git-advanced.html#cb488-2"></a>  <span class="ex">results/dracula.png</span></span></code></pre></div>
+<div class="sourceCode" id="cb489"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb489-1"><a href="git-advanced.html#cb489-1"></a>$ <span class="ex">python</span> bin/plotcounts.py results/dracula.csv --outfile</span>
+<span id="cb489-2"><a href="git-advanced.html#cb489-2"></a>  <span class="ex">results/dracula.png</span></span></code></pre></div>
 <pre class="text"><code>alpha: 1.0866646252515038</code></pre>
 <p>So according to our fit,
 the most frequent word will occur approximately <span class="math inline">\(2^{1.1}=2.1\)</span> times
@@ -1094,34 +1103,34 @@ Figure 7.1: Word frequency distribution for Dracula.
 </div>
 <p>The script appears to be working as we’d like,
 so we can go ahead and commit our changes to the <code>fit</code> development branch:</p>
-<div class="sourceCode" id="cb490"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb490-1"><a href="git-advanced.html#cb490-1"></a>$ <span class="fu">git</span> add bin/plotcounts.py results/dracula.png</span>
-<span id="cb490-2"><a href="git-advanced.html#cb490-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Added fit to word count data&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb491"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb491-1"><a href="git-advanced.html#cb491-1"></a>$ <span class="fu">git</span> add bin/plotcounts.py results/dracula.png</span>
+<span id="cb491-2"><a href="git-advanced.html#cb491-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Added fit to word count data&quot;</span></span></code></pre></div>
 <pre class="text"><code>[fit 38c209b] Added fit to word count data
  2 files changed, 57 insertions(+)
  rewrite results/dracula.png (99%)</code></pre>
 <p>If we look at the last couple of commits using <code>git log</code>,
 we see our most recent change:</p>
-<div class="sourceCode" id="cb492"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb492-1"><a href="git-advanced.html#cb492-1"></a>$ <span class="fu">git</span> log --oneline -n 2</span></code></pre></div>
+<div class="sourceCode" id="cb493"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb493-1"><a href="git-advanced.html#cb493-1"></a>$ <span class="fu">git</span> log --oneline -n 2</span></code></pre></div>
 <pre class="text"><code>38c209b (HEAD -&gt; fit) Added fit to word count data
 ddb00fb (origin/master, master) removing inverse rank
         calculation</code></pre>
 <p>(We use <code>--oneline</code> and <code>-n 2</code> to shorten the log display.)
 But if we switch back to the <code>master</code> branch:</p>
-<div class="sourceCode" id="cb494"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb494-1"><a href="git-advanced.html#cb494-1"></a>$ <span class="fu">git</span> checkout master</span>
-<span id="cb494-2"><a href="git-advanced.html#cb494-2"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
+<div class="sourceCode" id="cb495"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb495-1"><a href="git-advanced.html#cb495-1"></a>$ <span class="fu">git</span> checkout master</span>
+<span id="cb495-2"><a href="git-advanced.html#cb495-2"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
 <pre class="text"><code>  fit
 * master</code></pre>
 <p>and look at the log,
 our change is not there:</p>
-<div class="sourceCode" id="cb496"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb496-1"><a href="git-advanced.html#cb496-1"></a>$ <span class="fu">git</span> log --oneline -n 2</span></code></pre></div>
+<div class="sourceCode" id="cb497"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb497-1"><a href="git-advanced.html#cb497-1"></a>$ <span class="fu">git</span> log --oneline -n 2</span></code></pre></div>
 <pre class="text"><code>ddb00fb (HEAD -&gt; master, origin/master) removing inverse rank
         calculation
 7de9877 ignoring __pycache__</code></pre>
 <p>We have not lost our work:
 it just isn’t included in this branch.
 We can prove this by switching back to the <code>fit</code> branch and checking the log again:</p>
-<div class="sourceCode" id="cb498"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb498-1"><a href="git-advanced.html#cb498-1"></a>$ <span class="fu">git</span> checkout fit</span>
-<span id="cb498-2"><a href="git-advanced.html#cb498-2"></a>$ <span class="fu">git</span> log --oneline -n 2</span></code></pre></div>
+<div class="sourceCode" id="cb499"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb499-1"><a href="git-advanced.html#cb499-1"></a>$ <span class="fu">git</span> checkout fit</span>
+<span id="cb499-2"><a href="git-advanced.html#cb499-2"></a>$ <span class="fu">git</span> log --oneline -n 2</span></code></pre></div>
 <pre class="text"><code>38c209b (HEAD -&gt; fit) Added fit to word count data
 ddb00fb (origin/master, master) removing inverse rank
         calculation</code></pre>
@@ -1131,130 +1140,130 @@ that change will also go into the <code>fit</code> branch.
 For instance,
 we could add some additional information to one of our docstrings
 to make it clear what equations were used in estimating <span class="math inline">\(\alpha\)</span>.</p>
-<div class="sourceCode" id="cb500"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb500-1"><a href="git-advanced.html#cb500-1"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
-<span id="cb500-2"><a href="git-advanced.html#cb500-2"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb500-3"><a href="git-advanced.html#cb500-3"></a><span class="co">    Get the power law parameters.</span></span>
-<span id="cb500-4"><a href="git-advanced.html#cb500-4"></a></span>
-<span id="cb500-5"><a href="git-advanced.html#cb500-5"></a><span class="co">    References</span></span>
-<span id="cb500-6"><a href="git-advanced.html#cb500-6"></a><span class="co">    ----------</span></span>
-<span id="cb500-7"><a href="git-advanced.html#cb500-7"></a><span class="co">    Moreno-Sanchez et al (2016) define alpha (Eq. 1),</span></span>
-<span id="cb500-8"><a href="git-advanced.html#cb500-8"></a><span class="co">      beta (Eq. 2) and the maximum likelihood estimation (mle)</span></span>
-<span id="cb500-9"><a href="git-advanced.html#cb500-9"></a><span class="co">      of beta (Eq. 6).</span></span>
-<span id="cb500-10"><a href="git-advanced.html#cb500-10"></a></span>
-<span id="cb500-11"><a href="git-advanced.html#cb500-11"></a><span class="co">    Moreno-Sanchez I, Font-Clos F, Corral A (2016)</span></span>
-<span id="cb500-12"><a href="git-advanced.html#cb500-12"></a><span class="co">      Large-Scale Analysis of Zipf&#39;s Law in English Texts.</span></span>
-<span id="cb500-13"><a href="git-advanced.html#cb500-13"></a><span class="co">      PLoS ONE 11(1): e0147073.</span></span>
-<span id="cb500-14"><a href="git-advanced.html#cb500-14"></a><span class="co">      https://doi.org/10.1371/journal.pone.0147073</span></span>
-<span id="cb500-15"><a href="git-advanced.html#cb500-15"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb500-16"><a href="git-advanced.html#cb500-16"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood,</span>
-<span id="cb500-17"><a href="git-advanced.html#cb500-17"></a>                          bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
-<span id="cb500-18"><a href="git-advanced.html#cb500-18"></a>                          args<span class="op">=</span>word_counts,</span>
-<span id="cb500-19"><a href="git-advanced.html#cb500-19"></a>                          method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
-<span id="cb500-20"><a href="git-advanced.html#cb500-20"></a>    beta <span class="op">=</span> mle.x</span>
-<span id="cb500-21"><a href="git-advanced.html#cb500-21"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb500-22"><a href="git-advanced.html#cb500-22"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
-<div class="sourceCode" id="cb501"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb501-1"><a href="git-advanced.html#cb501-1"></a>$ <span class="fu">git</span> add bin/plotcounts.py</span>
-<span id="cb501-2"><a href="git-advanced.html#cb501-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Adding Moreno-Sanchez et al (2016) reference&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb501"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb501-1"><a href="git-advanced.html#cb501-1"></a><span class="kw">def</span> get_power_law_params(word_counts):</span>
+<span id="cb501-2"><a href="git-advanced.html#cb501-2"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb501-3"><a href="git-advanced.html#cb501-3"></a><span class="co">    Get the power law parameters.</span></span>
+<span id="cb501-4"><a href="git-advanced.html#cb501-4"></a></span>
+<span id="cb501-5"><a href="git-advanced.html#cb501-5"></a><span class="co">    References</span></span>
+<span id="cb501-6"><a href="git-advanced.html#cb501-6"></a><span class="co">    ----------</span></span>
+<span id="cb501-7"><a href="git-advanced.html#cb501-7"></a><span class="co">    Moreno-Sanchez et al (2016) define alpha (Eq. 1),</span></span>
+<span id="cb501-8"><a href="git-advanced.html#cb501-8"></a><span class="co">      beta (Eq. 2) and the maximum likelihood estimation (mle)</span></span>
+<span id="cb501-9"><a href="git-advanced.html#cb501-9"></a><span class="co">      of beta (Eq. 6).</span></span>
+<span id="cb501-10"><a href="git-advanced.html#cb501-10"></a></span>
+<span id="cb501-11"><a href="git-advanced.html#cb501-11"></a><span class="co">    Moreno-Sanchez I, Font-Clos F, Corral A (2016)</span></span>
+<span id="cb501-12"><a href="git-advanced.html#cb501-12"></a><span class="co">      Large-Scale Analysis of Zipf&#39;s Law in English Texts.</span></span>
+<span id="cb501-13"><a href="git-advanced.html#cb501-13"></a><span class="co">      PLoS ONE 11(1): e0147073.</span></span>
+<span id="cb501-14"><a href="git-advanced.html#cb501-14"></a><span class="co">      https://doi.org/10.1371/journal.pone.0147073</span></span>
+<span id="cb501-15"><a href="git-advanced.html#cb501-15"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb501-16"><a href="git-advanced.html#cb501-16"></a>    mle <span class="op">=</span> minimize_scalar(nlog_likelihood,</span>
+<span id="cb501-17"><a href="git-advanced.html#cb501-17"></a>                          bracket<span class="op">=</span>(<span class="dv">1</span> <span class="op">+</span> <span class="fl">1e-10</span>, <span class="dv">4</span>),</span>
+<span id="cb501-18"><a href="git-advanced.html#cb501-18"></a>                          args<span class="op">=</span>word_counts,</span>
+<span id="cb501-19"><a href="git-advanced.html#cb501-19"></a>                          method<span class="op">=</span><span class="st">&#39;brent&#39;</span>)</span>
+<span id="cb501-20"><a href="git-advanced.html#cb501-20"></a>    beta <span class="op">=</span> mle.x</span>
+<span id="cb501-21"><a href="git-advanced.html#cb501-21"></a>    alpha <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (beta <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb501-22"><a href="git-advanced.html#cb501-22"></a>    <span class="cf">return</span> alpha</span></code></pre></div>
+<div class="sourceCode" id="cb502"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb502-1"><a href="git-advanced.html#cb502-1"></a>$ <span class="fu">git</span> add bin/plotcounts.py</span>
+<span id="cb502-2"><a href="git-advanced.html#cb502-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Adding Moreno-Sanchez et al (2016) reference&quot;</span></span></code></pre></div>
 <pre class="text"><code>[fit 1577404] Adding Moreno-Sanchez et al (2016) reference
  1 file changed, 14 insertions(+), 1 deletion(-)</code></pre>
 <p>Finally,
 if we want to see the differences between two branches,
 we can use <code>git diff</code> with the same double-dot <code>..</code> syntax
 used to view differences between two revisions:</p>
-<div class="sourceCode" id="cb503"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb503-1"><a href="git-advanced.html#cb503-1"></a>$ <span class="fu">git</span> diff master..fit</span></code></pre></div>
-<div class="sourceCode" id="cb504"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb504-1"><a href="git-advanced.html#cb504-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
-<span id="cb504-2"><a href="git-advanced.html#cb504-2"></a>index c511da1..6905b6e 100644</span>
-<span id="cb504-3"><a href="git-advanced.html#cb504-3"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
-<span id="cb504-4"><a href="git-advanced.html#cb504-4"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
-<span id="cb504-5"><a href="git-advanced.html#cb504-5"></a><span class="dt">@@ -2,7 +2,62 @@</span></span>
-<span id="cb504-6"><a href="git-advanced.html#cb504-6"></a> </span>
-<span id="cb504-7"><a href="git-advanced.html#cb504-7"></a> import argparse</span>
-<span id="cb504-8"><a href="git-advanced.html#cb504-8"></a> </span>
-<span id="cb504-9"><a href="git-advanced.html#cb504-9"></a><span class="va">+import numpy as np</span></span>
-<span id="cb504-10"><a href="git-advanced.html#cb504-10"></a> import pandas as pd</span>
-<span id="cb504-11"><a href="git-advanced.html#cb504-11"></a><span class="va">+from scipy.optimize import minimize_scalar</span></span>
-<span id="cb504-12"><a href="git-advanced.html#cb504-12"></a><span class="va">+</span></span>
-<span id="cb504-13"><a href="git-advanced.html#cb504-13"></a><span class="va">+</span></span>
-<span id="cb504-14"><a href="git-advanced.html#cb504-14"></a><span class="va">+def nlog_likelihood(beta, counts):</span></span>
-<span id="cb504-15"><a href="git-advanced.html#cb504-15"></a><span class="va">+    &quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
-<span id="cb504-16"><a href="git-advanced.html#cb504-16"></a><span class="va">+    likelihood = - np.sum(np.log((1/counts)**(beta - 1)</span></span>
-<span id="cb504-17"><a href="git-advanced.html#cb504-17"></a><span class="va">+                          - (1/(counts + 1))**(beta - 1)))</span></span>
-<span id="cb504-18"><a href="git-advanced.html#cb504-18"></a><span class="va">+    return likelihood</span></span>
-<span id="cb504-19"><a href="git-advanced.html#cb504-19"></a><span class="va">+</span></span>
-<span id="cb504-20"><a href="git-advanced.html#cb504-20"></a><span class="va">+</span></span>
-<span id="cb504-21"><a href="git-advanced.html#cb504-21"></a><span class="va">+def get_power_law_params(word_counts):</span></span>
-<span id="cb504-22"><a href="git-advanced.html#cb504-22"></a><span class="va">+    &quot;&quot;&quot;</span></span>
-<span id="cb504-23"><a href="git-advanced.html#cb504-23"></a><span class="va">+    Get the power law parameters.</span></span>
-<span id="cb504-24"><a href="git-advanced.html#cb504-24"></a><span class="va">+</span></span>
-<span id="cb504-25"><a href="git-advanced.html#cb504-25"></a><span class="va">+    References</span></span>
-<span id="cb504-26"><a href="git-advanced.html#cb504-26"></a><span class="va">+    ----------</span></span>
-<span id="cb504-27"><a href="git-advanced.html#cb504-27"></a><span class="va">+    Moreno-Sanchez et al (2016) define alpha (Eq. 1),</span></span>
-<span id="cb504-28"><a href="git-advanced.html#cb504-28"></a><span class="va">+      beta (Eq. 2) and the maximum likelihood estimation (mle)</span></span>
-<span id="cb504-29"><a href="git-advanced.html#cb504-29"></a><span class="va">+      of beta (Eq. 6).</span></span>
-<span id="cb504-30"><a href="git-advanced.html#cb504-30"></a><span class="va">+</span></span>
-<span id="cb504-31"><a href="git-advanced.html#cb504-31"></a><span class="va">+    Moreno-Sanchez I, Font-Clos F, Corral A (2016)</span></span>
-<span id="cb504-32"><a href="git-advanced.html#cb504-32"></a><span class="va">+      Large-Scale Analysis of Zipf&#39;s Law in English Texts.</span></span>
-<span id="cb504-33"><a href="git-advanced.html#cb504-33"></a><span class="va">+      PLoS ONE 11(1): e0147073.</span></span>
-<span id="cb504-34"><a href="git-advanced.html#cb504-34"></a><span class="va">+      https://doi.org/10.1371/journal.pone.0147073</span></span>
-<span id="cb504-35"><a href="git-advanced.html#cb504-35"></a><span class="va">+    &quot;&quot;&quot;</span></span>
-<span id="cb504-36"><a href="git-advanced.html#cb504-36"></a><span class="va">+    mle = minimize_scalar(nlog_likelihood,</span></span>
-<span id="cb504-37"><a href="git-advanced.html#cb504-37"></a><span class="va">+                          bracket=(1 + 1e-10, 4),</span></span>
-<span id="cb504-38"><a href="git-advanced.html#cb504-38"></a><span class="va">+                          args=word_counts,</span></span>
-<span id="cb504-39"><a href="git-advanced.html#cb504-39"></a><span class="va">+                          method=&#39;brent&#39;)</span></span>
-<span id="cb504-40"><a href="git-advanced.html#cb504-40"></a><span class="va">+    beta = mle.x</span></span>
-<span id="cb504-41"><a href="git-advanced.html#cb504-41"></a><span class="va">+    alpha = 1 / (beta - 1)</span></span>
-<span id="cb504-42"><a href="git-advanced.html#cb504-42"></a><span class="va">+    return alpha</span></span>
-<span id="cb504-43"><a href="git-advanced.html#cb504-43"></a><span class="va">+</span></span>
-<span id="cb504-44"><a href="git-advanced.html#cb504-44"></a><span class="va">+</span></span>
-<span id="cb504-45"><a href="git-advanced.html#cb504-45"></a><span class="va">+def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span></span>
-<span id="cb504-46"><a href="git-advanced.html#cb504-46"></a><span class="va">+    &quot;&quot;&quot;</span></span>
-<span id="cb504-47"><a href="git-advanced.html#cb504-47"></a><span class="va">+    Plot the power law curve that was fitted to the data.</span></span>
-<span id="cb504-48"><a href="git-advanced.html#cb504-48"></a><span class="va">+</span></span>
-<span id="cb504-49"><a href="git-advanced.html#cb504-49"></a><span class="va">+    Parameters</span></span>
-<span id="cb504-50"><a href="git-advanced.html#cb504-50"></a><span class="va">+    ----------</span></span>
-<span id="cb504-51"><a href="git-advanced.html#cb504-51"></a><span class="va">+    curve_xmin : float</span></span>
-<span id="cb504-52"><a href="git-advanced.html#cb504-52"></a><span class="va">+        Minimum x-bound for fitted curve</span></span>
-<span id="cb504-53"><a href="git-advanced.html#cb504-53"></a><span class="va">+    curve_xmax : float</span></span>
-<span id="cb504-54"><a href="git-advanced.html#cb504-54"></a><span class="va">+        Maximum x-bound for fitted curve</span></span>
-<span id="cb504-55"><a href="git-advanced.html#cb504-55"></a><span class="va">+    max_rank : int</span></span>
-<span id="cb504-56"><a href="git-advanced.html#cb504-56"></a><span class="va">+        Maximum word frequency rank.</span></span>
-<span id="cb504-57"><a href="git-advanced.html#cb504-57"></a><span class="va">+    alpha : float</span></span>
-<span id="cb504-58"><a href="git-advanced.html#cb504-58"></a><span class="va">+        Estimated alpha parameter for the power law.</span></span>
-<span id="cb504-59"><a href="git-advanced.html#cb504-59"></a><span class="va">+    ax : matplotlib axes</span></span>
-<span id="cb504-60"><a href="git-advanced.html#cb504-60"></a><span class="va">+        Scatter plot to which the power curve will be added.</span></span>
-<span id="cb504-61"><a href="git-advanced.html#cb504-61"></a><span class="va">+    &quot;&quot;&quot;</span></span>
-<span id="cb504-62"><a href="git-advanced.html#cb504-62"></a><span class="va">+    xvals = np.arange(curve_xmin, curve_xmax)</span></span>
-<span id="cb504-63"><a href="git-advanced.html#cb504-63"></a><span class="va">+    yvals = max_rank * (xvals**(-1 / alpha))</span></span>
-<span id="cb504-64"><a href="git-advanced.html#cb504-64"></a><span class="va">+    ax.loglog(xvals, yvals, color=&#39;grey&#39;)</span></span>
-<span id="cb504-65"><a href="git-advanced.html#cb504-65"></a> </span>
-<span id="cb504-66"><a href="git-advanced.html#cb504-66"></a> </span>
-<span id="cb504-67"><a href="git-advanced.html#cb504-67"></a> def main(args):</span>
-<span id="cb504-68"><a href="git-advanced.html#cb504-68"></a><span class="dt">@@ -16,6 +71,21 @@ def main(args):</span></span>
-<span id="cb504-69"><a href="git-advanced.html#cb504-69"></a>                          figsize=[12, 6],</span>
-<span id="cb504-70"><a href="git-advanced.html#cb504-70"></a>                          grid=True,</span>
-<span id="cb504-71"><a href="git-advanced.html#cb504-71"></a>                          xlim=args.xlim)</span>
-<span id="cb504-72"><a href="git-advanced.html#cb504-72"></a><span class="va">+</span></span>
-<span id="cb504-73"><a href="git-advanced.html#cb504-73"></a><span class="va">+    word_counts = df[&#39;word_frequency&#39;].to_numpy()</span></span>
-<span id="cb504-74"><a href="git-advanced.html#cb504-74"></a><span class="va">+    alpha = get_power_law_params(word_counts)</span></span>
-<span id="cb504-75"><a href="git-advanced.html#cb504-75"></a><span class="va">+    print(&#39;alpha:&#39;, alpha)</span></span>
-<span id="cb504-76"><a href="git-advanced.html#cb504-76"></a><span class="va">+</span></span>
-<span id="cb504-77"><a href="git-advanced.html#cb504-77"></a><span class="va">+    # Since the ranks are already sorted, we can take the last</span></span>
-<span id="cb504-78"><a href="git-advanced.html#cb504-78"></a><span class="va">+    # one instead of computing which row has the highest rank</span></span>
-<span id="cb504-79"><a href="git-advanced.html#cb504-79"></a><span class="va">+    max_rank = df[&#39;rank&#39;].to_numpy()[-1]</span></span>
-<span id="cb504-80"><a href="git-advanced.html#cb504-80"></a><span class="va">+</span></span>
-<span id="cb504-81"><a href="git-advanced.html#cb504-81"></a><span class="va">+    # Use the range of the data as the boundaries</span></span>
-<span id="cb504-82"><a href="git-advanced.html#cb504-82"></a><span class="va">+    # when drawing the power law curve</span></span>
-<span id="cb504-83"><a href="git-advanced.html#cb504-83"></a><span class="va">+    curve_xmin = df[&#39;word_frequency&#39;].min()</span></span>
-<span id="cb504-84"><a href="git-advanced.html#cb504-84"></a><span class="va">+    curve_xmax = df[&#39;word_frequency&#39;].max()</span></span>
-<span id="cb504-85"><a href="git-advanced.html#cb504-85"></a><span class="va">+</span></span>
-<span id="cb504-86"><a href="git-advanced.html#cb504-86"></a><span class="va">+    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)</span></span>
-<span id="cb504-87"><a href="git-advanced.html#cb504-87"></a>     ax.figure.savefig(args.outfile)</span>
-<span id="cb504-88"><a href="git-advanced.html#cb504-88"></a> </span>
-<span id="cb504-89"><a href="git-advanced.html#cb504-89"></a> </span>
-<span id="cb504-90"><a href="git-advanced.html#cb504-90"></a><span class="kw">diff --git a/results/dracula.png b/results/dracula.png</span></span>
-<span id="cb504-91"><a href="git-advanced.html#cb504-91"></a>index 57a7b70..5f10271 100644</span>
-<span id="cb504-92"><a href="git-advanced.html#cb504-92"></a>Binary files a/results/dracula.png and b/results/dracula.png</span>
-<span id="cb504-93"><a href="git-advanced.html#cb504-93"></a><span class="kw">differ</span></span></code></pre></div>
+<div class="sourceCode" id="cb504"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb504-1"><a href="git-advanced.html#cb504-1"></a>$ <span class="fu">git</span> diff master..fit</span></code></pre></div>
+<div class="sourceCode" id="cb505"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb505-1"><a href="git-advanced.html#cb505-1"></a><span class="kw">diff --git a/bin/plotcounts.py b/bin/plotcounts.py</span></span>
+<span id="cb505-2"><a href="git-advanced.html#cb505-2"></a>index c511da1..6905b6e 100644</span>
+<span id="cb505-3"><a href="git-advanced.html#cb505-3"></a><span class="dt">--- a/bin/plotcounts.py</span></span>
+<span id="cb505-4"><a href="git-advanced.html#cb505-4"></a><span class="dt">+++ b/bin/plotcounts.py</span></span>
+<span id="cb505-5"><a href="git-advanced.html#cb505-5"></a><span class="dt">@@ -2,7 +2,62 @@</span></span>
+<span id="cb505-6"><a href="git-advanced.html#cb505-6"></a> </span>
+<span id="cb505-7"><a href="git-advanced.html#cb505-7"></a> import argparse</span>
+<span id="cb505-8"><a href="git-advanced.html#cb505-8"></a> </span>
+<span id="cb505-9"><a href="git-advanced.html#cb505-9"></a><span class="va">+import numpy as np</span></span>
+<span id="cb505-10"><a href="git-advanced.html#cb505-10"></a> import pandas as pd</span>
+<span id="cb505-11"><a href="git-advanced.html#cb505-11"></a><span class="va">+from scipy.optimize import minimize_scalar</span></span>
+<span id="cb505-12"><a href="git-advanced.html#cb505-12"></a><span class="va">+</span></span>
+<span id="cb505-13"><a href="git-advanced.html#cb505-13"></a><span class="va">+</span></span>
+<span id="cb505-14"><a href="git-advanced.html#cb505-14"></a><span class="va">+def nlog_likelihood(beta, counts):</span></span>
+<span id="cb505-15"><a href="git-advanced.html#cb505-15"></a><span class="va">+    &quot;&quot;&quot;Log-likelihood function.&quot;&quot;&quot;</span></span>
+<span id="cb505-16"><a href="git-advanced.html#cb505-16"></a><span class="va">+    likelihood = - np.sum(np.log((1/counts)**(beta - 1)</span></span>
+<span id="cb505-17"><a href="git-advanced.html#cb505-17"></a><span class="va">+                          - (1/(counts + 1))**(beta - 1)))</span></span>
+<span id="cb505-18"><a href="git-advanced.html#cb505-18"></a><span class="va">+    return likelihood</span></span>
+<span id="cb505-19"><a href="git-advanced.html#cb505-19"></a><span class="va">+</span></span>
+<span id="cb505-20"><a href="git-advanced.html#cb505-20"></a><span class="va">+</span></span>
+<span id="cb505-21"><a href="git-advanced.html#cb505-21"></a><span class="va">+def get_power_law_params(word_counts):</span></span>
+<span id="cb505-22"><a href="git-advanced.html#cb505-22"></a><span class="va">+    &quot;&quot;&quot;</span></span>
+<span id="cb505-23"><a href="git-advanced.html#cb505-23"></a><span class="va">+    Get the power law parameters.</span></span>
+<span id="cb505-24"><a href="git-advanced.html#cb505-24"></a><span class="va">+</span></span>
+<span id="cb505-25"><a href="git-advanced.html#cb505-25"></a><span class="va">+    References</span></span>
+<span id="cb505-26"><a href="git-advanced.html#cb505-26"></a><span class="va">+    ----------</span></span>
+<span id="cb505-27"><a href="git-advanced.html#cb505-27"></a><span class="va">+    Moreno-Sanchez et al (2016) define alpha (Eq. 1),</span></span>
+<span id="cb505-28"><a href="git-advanced.html#cb505-28"></a><span class="va">+      beta (Eq. 2) and the maximum likelihood estimation (mle)</span></span>
+<span id="cb505-29"><a href="git-advanced.html#cb505-29"></a><span class="va">+      of beta (Eq. 6).</span></span>
+<span id="cb505-30"><a href="git-advanced.html#cb505-30"></a><span class="va">+</span></span>
+<span id="cb505-31"><a href="git-advanced.html#cb505-31"></a><span class="va">+    Moreno-Sanchez I, Font-Clos F, Corral A (2016)</span></span>
+<span id="cb505-32"><a href="git-advanced.html#cb505-32"></a><span class="va">+      Large-Scale Analysis of Zipf&#39;s Law in English Texts.</span></span>
+<span id="cb505-33"><a href="git-advanced.html#cb505-33"></a><span class="va">+      PLoS ONE 11(1): e0147073.</span></span>
+<span id="cb505-34"><a href="git-advanced.html#cb505-34"></a><span class="va">+      https://doi.org/10.1371/journal.pone.0147073</span></span>
+<span id="cb505-35"><a href="git-advanced.html#cb505-35"></a><span class="va">+    &quot;&quot;&quot;</span></span>
+<span id="cb505-36"><a href="git-advanced.html#cb505-36"></a><span class="va">+    mle = minimize_scalar(nlog_likelihood,</span></span>
+<span id="cb505-37"><a href="git-advanced.html#cb505-37"></a><span class="va">+                          bracket=(1 + 1e-10, 4),</span></span>
+<span id="cb505-38"><a href="git-advanced.html#cb505-38"></a><span class="va">+                          args=word_counts,</span></span>
+<span id="cb505-39"><a href="git-advanced.html#cb505-39"></a><span class="va">+                          method=&#39;brent&#39;)</span></span>
+<span id="cb505-40"><a href="git-advanced.html#cb505-40"></a><span class="va">+    beta = mle.x</span></span>
+<span id="cb505-41"><a href="git-advanced.html#cb505-41"></a><span class="va">+    alpha = 1 / (beta - 1)</span></span>
+<span id="cb505-42"><a href="git-advanced.html#cb505-42"></a><span class="va">+    return alpha</span></span>
+<span id="cb505-43"><a href="git-advanced.html#cb505-43"></a><span class="va">+</span></span>
+<span id="cb505-44"><a href="git-advanced.html#cb505-44"></a><span class="va">+</span></span>
+<span id="cb505-45"><a href="git-advanced.html#cb505-45"></a><span class="va">+def plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax):</span></span>
+<span id="cb505-46"><a href="git-advanced.html#cb505-46"></a><span class="va">+    &quot;&quot;&quot;</span></span>
+<span id="cb505-47"><a href="git-advanced.html#cb505-47"></a><span class="va">+    Plot the power law curve that was fitted to the data.</span></span>
+<span id="cb505-48"><a href="git-advanced.html#cb505-48"></a><span class="va">+</span></span>
+<span id="cb505-49"><a href="git-advanced.html#cb505-49"></a><span class="va">+    Parameters</span></span>
+<span id="cb505-50"><a href="git-advanced.html#cb505-50"></a><span class="va">+    ----------</span></span>
+<span id="cb505-51"><a href="git-advanced.html#cb505-51"></a><span class="va">+    curve_xmin : float</span></span>
+<span id="cb505-52"><a href="git-advanced.html#cb505-52"></a><span class="va">+        Minimum x-bound for fitted curve</span></span>
+<span id="cb505-53"><a href="git-advanced.html#cb505-53"></a><span class="va">+    curve_xmax : float</span></span>
+<span id="cb505-54"><a href="git-advanced.html#cb505-54"></a><span class="va">+        Maximum x-bound for fitted curve</span></span>
+<span id="cb505-55"><a href="git-advanced.html#cb505-55"></a><span class="va">+    max_rank : int</span></span>
+<span id="cb505-56"><a href="git-advanced.html#cb505-56"></a><span class="va">+        Maximum word frequency rank.</span></span>
+<span id="cb505-57"><a href="git-advanced.html#cb505-57"></a><span class="va">+    alpha : float</span></span>
+<span id="cb505-58"><a href="git-advanced.html#cb505-58"></a><span class="va">+        Estimated alpha parameter for the power law.</span></span>
+<span id="cb505-59"><a href="git-advanced.html#cb505-59"></a><span class="va">+    ax : matplotlib axes</span></span>
+<span id="cb505-60"><a href="git-advanced.html#cb505-60"></a><span class="va">+        Scatter plot to which the power curve will be added.</span></span>
+<span id="cb505-61"><a href="git-advanced.html#cb505-61"></a><span class="va">+    &quot;&quot;&quot;</span></span>
+<span id="cb505-62"><a href="git-advanced.html#cb505-62"></a><span class="va">+    xvals = np.arange(curve_xmin, curve_xmax)</span></span>
+<span id="cb505-63"><a href="git-advanced.html#cb505-63"></a><span class="va">+    yvals = max_rank * (xvals**(-1 / alpha))</span></span>
+<span id="cb505-64"><a href="git-advanced.html#cb505-64"></a><span class="va">+    ax.loglog(xvals, yvals, color=&#39;grey&#39;)</span></span>
+<span id="cb505-65"><a href="git-advanced.html#cb505-65"></a> </span>
+<span id="cb505-66"><a href="git-advanced.html#cb505-66"></a> </span>
+<span id="cb505-67"><a href="git-advanced.html#cb505-67"></a> def main(args):</span>
+<span id="cb505-68"><a href="git-advanced.html#cb505-68"></a><span class="dt">@@ -16,6 +71,21 @@ def main(args):</span></span>
+<span id="cb505-69"><a href="git-advanced.html#cb505-69"></a>                          figsize=[12, 6],</span>
+<span id="cb505-70"><a href="git-advanced.html#cb505-70"></a>                          grid=True,</span>
+<span id="cb505-71"><a href="git-advanced.html#cb505-71"></a>                          xlim=args.xlim)</span>
+<span id="cb505-72"><a href="git-advanced.html#cb505-72"></a><span class="va">+</span></span>
+<span id="cb505-73"><a href="git-advanced.html#cb505-73"></a><span class="va">+    word_counts = df[&#39;word_frequency&#39;].to_numpy()</span></span>
+<span id="cb505-74"><a href="git-advanced.html#cb505-74"></a><span class="va">+    alpha = get_power_law_params(word_counts)</span></span>
+<span id="cb505-75"><a href="git-advanced.html#cb505-75"></a><span class="va">+    print(&#39;alpha:&#39;, alpha)</span></span>
+<span id="cb505-76"><a href="git-advanced.html#cb505-76"></a><span class="va">+</span></span>
+<span id="cb505-77"><a href="git-advanced.html#cb505-77"></a><span class="va">+    # Since the ranks are already sorted, we can take the last</span></span>
+<span id="cb505-78"><a href="git-advanced.html#cb505-78"></a><span class="va">+    # one instead of computing which row has the highest rank</span></span>
+<span id="cb505-79"><a href="git-advanced.html#cb505-79"></a><span class="va">+    max_rank = df[&#39;rank&#39;].to_numpy()[-1]</span></span>
+<span id="cb505-80"><a href="git-advanced.html#cb505-80"></a><span class="va">+</span></span>
+<span id="cb505-81"><a href="git-advanced.html#cb505-81"></a><span class="va">+    # Use the range of the data as the boundaries</span></span>
+<span id="cb505-82"><a href="git-advanced.html#cb505-82"></a><span class="va">+    # when drawing the power law curve</span></span>
+<span id="cb505-83"><a href="git-advanced.html#cb505-83"></a><span class="va">+    curve_xmin = df[&#39;word_frequency&#39;].min()</span></span>
+<span id="cb505-84"><a href="git-advanced.html#cb505-84"></a><span class="va">+    curve_xmax = df[&#39;word_frequency&#39;].max()</span></span>
+<span id="cb505-85"><a href="git-advanced.html#cb505-85"></a><span class="va">+</span></span>
+<span id="cb505-86"><a href="git-advanced.html#cb505-86"></a><span class="va">+    plot_fit(curve_xmin, curve_xmax, max_rank, alpha, ax)</span></span>
+<span id="cb505-87"><a href="git-advanced.html#cb505-87"></a>     ax.figure.savefig(args.outfile)</span>
+<span id="cb505-88"><a href="git-advanced.html#cb505-88"></a> </span>
+<span id="cb505-89"><a href="git-advanced.html#cb505-89"></a> </span>
+<span id="cb505-90"><a href="git-advanced.html#cb505-90"></a><span class="kw">diff --git a/results/dracula.png b/results/dracula.png</span></span>
+<span id="cb505-91"><a href="git-advanced.html#cb505-91"></a>index 57a7b70..5f10271 100644</span>
+<span id="cb505-92"><a href="git-advanced.html#cb505-92"></a>Binary files a/results/dracula.png and b/results/dracula.png</span>
+<span id="cb505-93"><a href="git-advanced.html#cb505-93"></a><span class="kw">differ</span></span></code></pre></div>
 <blockquote>
 <p><strong>Why Branch?</strong></p>
 <p>Why go to all this trouble?
@@ -1281,13 +1290,13 @@ the second will lead to a bewildering proliferation of branches,
 but the third option is simple, fast, and reliable.
 To start,
 let’s make sure we’re in the <code>master</code> branch:</p>
-<div class="sourceCode" id="cb505"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb505-1"><a href="git-advanced.html#cb505-1"></a>$ <span class="fu">git</span> checkout master</span>
-<span id="cb505-2"><a href="git-advanced.html#cb505-2"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
+<div class="sourceCode" id="cb506"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb506-1"><a href="git-advanced.html#cb506-1"></a>$ <span class="fu">git</span> checkout master</span>
+<span id="cb506-2"><a href="git-advanced.html#cb506-2"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
 <pre class="text"><code>  fit
 * master</code></pre>
 <p>We can now merge the changes in the <code>fit</code> branch into our current branch
 with a single command:</p>
-<div class="sourceCode" id="cb507"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb507-1"><a href="git-advanced.html#cb507-1"></a>$ <span class="fu">git</span> merge fit</span></code></pre></div>
+<div class="sourceCode" id="cb508"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb508-1"><a href="git-advanced.html#cb508-1"></a>$ <span class="fu">git</span> merge fit</span></code></pre></div>
 <pre class="text"><code>Updating ddb00fb..1577404
 Fast-forward
  bin/plotcounts.py   |  70 ++++++++++++++++++++++++++++++++++++++
@@ -1297,7 +1306,7 @@ Fast-forward
 <p>Merging doesn’t change the source branch <code>fit</code>,
 but once the merge is done,
 all of the changes made in <code>fit</code> are also in the history of <code>master</code>:</p>
-<div class="sourceCode" id="cb509"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb509-1"><a href="git-advanced.html#cb509-1"></a>$ <span class="fu">git</span> log --oneline -n 4</span></code></pre></div>
+<div class="sourceCode" id="cb510"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb510-1"><a href="git-advanced.html#cb510-1"></a>$ <span class="fu">git</span> log --oneline -n 4</span></code></pre></div>
 <pre class="text"><code>1577404 (HEAD -&gt; master, fit) Adding Moreno-Sanchez et al
         (2016) reference
 38c209b Added fit to word count data
@@ -1311,7 +1320,7 @@ because there aren’t any differences to show.</p>
 <p>Now that we have merged all of the changes from <code>fit</code> into <code>master</code>
 there is no need to keep the <code>fit</code> branch,
 so we can delete it:</p>
-<div class="sourceCode" id="cb511"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb511-1"><a href="git-advanced.html#cb511-1"></a>$ <span class="fu">git</span> branch -d fit</span></code></pre></div>
+<div class="sourceCode" id="cb512"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb512-1"><a href="git-advanced.html#cb512-1"></a>$ <span class="fu">git</span> branch -d fit</span></code></pre></div>
 <pre class="text"><code>Deleted branch fit (was 1577404).</code></pre>
 <blockquote>
 <p><strong>Not Just the Command Line</strong></p>
@@ -1336,10 +1345,10 @@ we must learn how to merge conflicts.</p>
 use <code>nano</code> to add the project’s title to
 a new file called <code>README.md</code> in the <code>master</code> branch,
 which we can then view:</p>
-<div class="sourceCode" id="cb513"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb513-1"><a href="git-advanced.html#cb513-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
+<div class="sourceCode" id="cb514"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb514-1"><a href="git-advanced.html#cb514-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
 <pre class="text"><code># Zipf&#39;s Law</code></pre>
-<div class="sourceCode" id="cb515"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb515-1"><a href="git-advanced.html#cb515-1"></a>$ <span class="fu">git</span> add README.md</span>
-<span id="cb515-2"><a href="git-advanced.html#cb515-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Initial commit of README file&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb516"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb516-1"><a href="git-advanced.html#cb516-1"></a>$ <span class="fu">git</span> add README.md</span>
+<span id="cb516-2"><a href="git-advanced.html#cb516-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Initial commit of README file&quot;</span></span></code></pre></div>
 <pre class="text"><code>[master 232b564] Initial commit of README file
  1 file changed, 1 insertion(+)
  create mode 100644 README.md</code></pre>
@@ -1347,9 +1356,9 @@ which we can then view:</p>
 to work on improving the documentation for our code.
 We will use <code>git checkout -b</code> to create a new branch and switch to it
 in a single step:</p>
-<div class="sourceCode" id="cb517"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb517-1"><a href="git-advanced.html#cb517-1"></a>$ <span class="fu">git</span> checkout -b docs</span></code></pre></div>
+<div class="sourceCode" id="cb518"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb518-1"><a href="git-advanced.html#cb518-1"></a>$ <span class="fu">git</span> checkout -b docs</span></code></pre></div>
 <pre class="text"><code>Switched to a new branch &#39;docs&#39;</code></pre>
-<div class="sourceCode" id="cb519"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb519-1"><a href="git-advanced.html#cb519-1"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
+<div class="sourceCode" id="cb520"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb520-1"><a href="git-advanced.html#cb520-1"></a>$ <span class="fu">git</span> branch</span></code></pre></div>
 <pre class="text"><code>* docs
   master</code></pre>
 <p>On this new branch,
@@ -1358,16 +1367,16 @@ let’s add some information to the README file:</p>
 
 These Zipf&#39;s Law scripts tally the occurrences of words in text
 files and plot each word&#39;s rank versus its frequency.</code></pre>
-<div class="sourceCode" id="cb522"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb522-1"><a href="git-advanced.html#cb522-1"></a>$ <span class="fu">git</span> add README.md</span>
-<span id="cb522-2"><a href="git-advanced.html#cb522-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Added repository overview&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb523"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb523-1"><a href="git-advanced.html#cb523-1"></a>$ <span class="fu">git</span> add README.md</span>
+<span id="cb523-2"><a href="git-advanced.html#cb523-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Added repository overview&quot;</span></span></code></pre></div>
 <pre class="text"><code>[docs a0b88e5] Added repository overview
  1 file changed, 3 insertions(+)</code></pre>
 <p>In order to create a conflict,
 let’s switch back to the <code>master</code> branch.
 The changes we made in the <code>docs</code> branch are not present:</p>
-<div class="sourceCode" id="cb524"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb524-1"><a href="git-advanced.html#cb524-1"></a>$ <span class="fu">git</span> checkout master</span></code></pre></div>
+<div class="sourceCode" id="cb525"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb525-1"><a href="git-advanced.html#cb525-1"></a>$ <span class="fu">git</span> checkout master</span></code></pre></div>
 <pre class="text"><code>Switched to branch &#39;master&#39;</code></pre>
-<div class="sourceCode" id="cb526"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb526-1"><a href="git-advanced.html#cb526-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
+<div class="sourceCode" id="cb527"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb527-1"><a href="git-advanced.html#cb527-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
 <pre class="text"><code># Zipf&#39;s Law</code></pre>
 <p>Let’s add some information about the contributors to our work:</p>
 <pre class="text"><code># Zipf&#39;s Law
@@ -1382,29 +1391,29 @@ $ git commit -m &quot;Added contributor list&quot;</code></pre>
 <p>We now have two branches,
 <code>master</code> and <code>docs</code>,
 in which we have changed <code>README.md</code> in different ways:</p>
-<div class="sourceCode" id="cb531"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb531-1"><a href="git-advanced.html#cb531-1"></a>$ <span class="fu">git</span> diff docs..master</span></code></pre></div>
-<div class="sourceCode" id="cb532"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb532-1"><a href="git-advanced.html#cb532-1"></a><span class="kw">diff --git a/README.md b/README.md</span></span>
-<span id="cb532-2"><a href="git-advanced.html#cb532-2"></a>index f40e895..71f67db 100644</span>
-<span id="cb532-3"><a href="git-advanced.html#cb532-3"></a><span class="dt">--- a/README.md</span></span>
-<span id="cb532-4"><a href="git-advanced.html#cb532-4"></a><span class="dt">+++ b/README.md</span></span>
-<span id="cb532-5"><a href="git-advanced.html#cb532-5"></a><span class="dt">@@ -1,4 +1,5 @@</span></span>
-<span id="cb532-6"><a href="git-advanced.html#cb532-6"></a> # Zipf&#39;s Law</span>
-<span id="cb532-7"><a href="git-advanced.html#cb532-7"></a> </span>
-<span id="cb532-8"><a href="git-advanced.html#cb532-8"></a><span class="st">-These Zipf&#39;s Law scripts tally occurrences of words in text</span></span>
-<span id="cb532-9"><a href="git-advanced.html#cb532-9"></a><span class="st">-files and plot each word&#39;s rank versus its frequency.</span></span>
-<span id="cb532-10"><a href="git-advanced.html#cb532-10"></a><span class="va">+## Contributors</span></span>
-<span id="cb532-11"><a href="git-advanced.html#cb532-11"></a><span class="va">+</span></span>
-<span id="cb532-12"><a href="git-advanced.html#cb532-12"></a><span class="va">+- Amira Khan &lt;amira@zipf.org&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb532"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb532-1"><a href="git-advanced.html#cb532-1"></a>$ <span class="fu">git</span> diff docs..master</span></code></pre></div>
+<div class="sourceCode" id="cb533"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb533-1"><a href="git-advanced.html#cb533-1"></a><span class="kw">diff --git a/README.md b/README.md</span></span>
+<span id="cb533-2"><a href="git-advanced.html#cb533-2"></a>index f40e895..71f67db 100644</span>
+<span id="cb533-3"><a href="git-advanced.html#cb533-3"></a><span class="dt">--- a/README.md</span></span>
+<span id="cb533-4"><a href="git-advanced.html#cb533-4"></a><span class="dt">+++ b/README.md</span></span>
+<span id="cb533-5"><a href="git-advanced.html#cb533-5"></a><span class="dt">@@ -1,4 +1,5 @@</span></span>
+<span id="cb533-6"><a href="git-advanced.html#cb533-6"></a> # Zipf&#39;s Law</span>
+<span id="cb533-7"><a href="git-advanced.html#cb533-7"></a> </span>
+<span id="cb533-8"><a href="git-advanced.html#cb533-8"></a><span class="st">-These Zipf&#39;s Law scripts tally occurrences of words in text</span></span>
+<span id="cb533-9"><a href="git-advanced.html#cb533-9"></a><span class="st">-files and plot each word&#39;s rank versus its frequency.</span></span>
+<span id="cb533-10"><a href="git-advanced.html#cb533-10"></a><span class="va">+## Contributors</span></span>
+<span id="cb533-11"><a href="git-advanced.html#cb533-11"></a><span class="va">+</span></span>
+<span id="cb533-12"><a href="git-advanced.html#cb533-12"></a><span class="va">+- Amira Khan &lt;amira@zipf.org&gt;</span></span></code></pre></div>
 <p>When we try to merge <code>docs</code> into <code>master</code>,
 Git doesn’t know which of these changes to keep:</p>
-<div class="sourceCode" id="cb533"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb533-1"><a href="git-advanced.html#cb533-1"></a>$ <span class="fu">git</span> merge docs master</span></code></pre></div>
+<div class="sourceCode" id="cb534"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb534-1"><a href="git-advanced.html#cb534-1"></a>$ <span class="fu">git</span> merge docs master</span></code></pre></div>
 <pre class="text"><code>Auto-merging README.md
 CONFLICT (content): Merge conflict in README.md
 Automatic merge failed; fix conflicts and then commit the result.</code></pre>
 <p>If we look in <code>README.md</code>,
 we see that Git has kept both sets of changes,
 but has marked which came from where:</p>
-<div class="sourceCode" id="cb535"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb535-1"><a href="git-advanced.html#cb535-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
+<div class="sourceCode" id="cb536"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb536-1"><a href="git-advanced.html#cb536-1"></a>$ <span class="fu">cat</span> README.md</span></code></pre></div>
 <pre class="text"><code># Zipf&#39;s Law
 
 &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
@@ -1438,19 +1447,19 @@ files and plot each word&#39;s rank versus its frequency.
 - Amira Khan &lt;amira@zipf.org&gt;</code></pre>
 <p>We can now add the file and commit the change,
 just as we would after any other edit:</p>
-<div class="sourceCode" id="cb538"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb538-1"><a href="git-advanced.html#cb538-1"></a>$ <span class="fu">git</span> add README.md</span>
-<span id="cb538-2"><a href="git-advanced.html#cb538-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Merging README additions&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb539"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb539-1"><a href="git-advanced.html#cb539-1"></a>$ <span class="fu">git</span> add README.md</span>
+<span id="cb539-2"><a href="git-advanced.html#cb539-2"></a>$ <span class="fu">git</span> commit -m <span class="st">&quot;Merging README additions&quot;</span></span></code></pre></div>
 <pre class="text"><code>[master 55c63d0] Merging README additions</code></pre>
 <p>Our branch’s history now shows a single sequence of commits,
 with the <code>master</code> changes on top of the earlier <code>docs</code> changes:</p>
-<div class="sourceCode" id="cb540"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb540-1"><a href="git-advanced.html#cb540-1"></a>$ <span class="fu">git</span> log --oneline -n 4</span></code></pre></div>
+<div class="sourceCode" id="cb541"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb541-1"><a href="git-advanced.html#cb541-1"></a>$ <span class="fu">git</span> log --oneline -n 4</span></code></pre></div>
 <pre class="text"><code>55c63d0 (HEAD -&gt; master) Merging README additions
 45a576b Added contributor list
 a0b88e5 (docs) Added repository overview
 232b564 Initial commit of README file</code></pre>
 <p>If we want to see what really happened,
 we can add the <code>--graph</code> option to <code>git log</code>:</p>
-<div class="sourceCode" id="cb542"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb542-1"><a href="git-advanced.html#cb542-1"></a>$ <span class="fu">git</span> log --oneline --graph -n 4</span></code></pre></div>
+<div class="sourceCode" id="cb543"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb543-1"><a href="git-advanced.html#cb543-1"></a>$ <span class="fu">git</span> log --oneline --graph -n 4</span></code></pre></div>
 <pre class="text"><code>*   55c63d0 (HEAD -&gt; master) Merging README additions
 |\  
 | * a0b88e5 (docs) Added repository overview
@@ -1458,7 +1467,7 @@ we can add the <code>--graph</code> option to <code>git log</code>:</p>
 |/  
 * 232b564 Initial commit of README file</code></pre>
 <p>At this point we can delete the <code>docs</code> branch:</p>
-<div class="sourceCode" id="cb544"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb544-1"><a href="git-advanced.html#cb544-1"></a>$ <span class="fu">git</span> branch -d docs</span></code></pre></div>
+<div class="sourceCode" id="cb545"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb545-1"><a href="git-advanced.html#cb545-1"></a>$ <span class="fu">git</span> branch -d docs</span></code></pre></div>
 <pre class="text"><code>Deleted branch docs (was a0b88e5).</code></pre>
 <p>Alternatively,
 we can keep using <code>docs</code> for documentation updates.
@@ -1598,7 +1607,7 @@ We will modify Sami’s prompt to include their desktop user ID (<code>sami</cod
 and working directory (initially <code>~</code>)
 to make it easier to follow what’s happening:</p>
 <div style="page-break-after: always;"></div>
-<div class="sourceCode" id="cb546"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb546-1"><a href="git-advanced.html#cb546-1"></a><span class="ex">sami</span>:~ $ git clone https://github.com/sami-virtanen/zipf.git</span></code></pre></div>
+<div class="sourceCode" id="cb547"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb547-1"><a href="git-advanced.html#cb547-1"></a><span class="ex">sami</span>:~ $ git clone https://github.com/sami-virtanen/zipf.git</span></code></pre></div>
 <pre class="text"><code>Cloning into &#39;zipf&#39;...
 remote: Enumerating objects: 64, done.
 remote: Counting objects: 100% (64/64), done.
@@ -1610,10 +1619,10 @@ Resolving deltas: 100% (20/20), done.</code></pre>
 i.e., <code>zipf</code>.
 When Sami goes into this directory and runs <code>ls</code> and <code>git log</code>,
 they see that all of the project’s files and history are there:</p>
-<div class="sourceCode" id="cb548"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb548-1"><a href="git-advanced.html#cb548-1"></a><span class="ex">sami</span>:~ $ cd zipf</span>
-<span id="cb548-2"><a href="git-advanced.html#cb548-2"></a><span class="ex">sami</span>:~/zipf $ ls</span></code></pre></div>
+<div class="sourceCode" id="cb549"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb549-1"><a href="git-advanced.html#cb549-1"></a><span class="ex">sami</span>:~ $ cd zipf</span>
+<span id="cb549-2"><a href="git-advanced.html#cb549-2"></a><span class="ex">sami</span>:~/zipf $ ls</span></code></pre></div>
 <pre class="text"><code>README.md       bin             data             results</code></pre>
-<div class="sourceCode" id="cb550"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb550-1"><a href="git-advanced.html#cb550-1"></a><span class="ex">sami</span>:~/zipf $ git log --oneline -n 4</span></code></pre></div>
+<div class="sourceCode" id="cb551"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb551-1"><a href="git-advanced.html#cb551-1"></a><span class="ex">sami</span>:~/zipf $ git log --oneline -n 4</span></code></pre></div>
 <pre class="text"><code>55c63d0 (HEAD -&gt; master, origin/master, origin/HEAD) 
         Merging README additions
 45a576b Added contributor list
@@ -1621,14 +1630,14 @@ a0b88e5 Added repository overview
 232b564 Initial commit of README file</code></pre>
 <p>Sami also sees that Git has automatically created a <a href="glossary.html#git_remote">remote</a> for their repository
 that points back at their repository on GitHub:</p>
-<div class="sourceCode" id="cb552"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb552-1"><a href="git-advanced.html#cb552-1"></a><span class="ex">sami</span>:~/zipf $ git remote -v</span></code></pre></div>
+<div class="sourceCode" id="cb553"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb553-1"><a href="git-advanced.html#cb553-1"></a><span class="ex">sami</span>:~/zipf $ git remote -v</span></code></pre></div>
 <pre class="text"><code>origin  https://github.com/sami-virtanen/zipf.git (fetch)
 origin  https://github.com/sami-virtanen/zipf.git (push)</code></pre>
 <p>Sami can pull changes from their fork and push work back there,
 but needs to do one more thing before getting the changes from Amira’s repository:</p>
-<div class="sourceCode" id="cb554"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb554-1"><a href="git-advanced.html#cb554-1"></a><span class="ex">sami</span>:~/zipf $ git remote add upstream</span>
-<span id="cb554-2"><a href="git-advanced.html#cb554-2"></a>              <span class="ex">https</span>://github.com/amira-khan/zipf.git</span>
-<span id="cb554-3"><a href="git-advanced.html#cb554-3"></a><span class="ex">sami</span>:~/zipf $ git remote -v</span></code></pre></div>
+<div class="sourceCode" id="cb555"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb555-1"><a href="git-advanced.html#cb555-1"></a><span class="ex">sami</span>:~/zipf $ git remote add upstream</span>
+<span id="cb555-2"><a href="git-advanced.html#cb555-2"></a>              <span class="ex">https</span>://github.com/amira-khan/zipf.git</span>
+<span id="cb555-3"><a href="git-advanced.html#cb555-3"></a><span class="ex">sami</span>:~/zipf $ git remote -v</span></code></pre></div>
 <pre class="text"><code>origin      https://github.com/sami-virtanen/zipf.git (fetch)
 origin      https://github.com/sami-virtanen/zipf.git (push)
 upstream    https://github.com/amira-khan/zipf.git (fetch)
@@ -1653,10 +1662,10 @@ files and plot each word&#39;s rank versus its frequency.
 - Amira Khan &lt;amira@zipf.org&gt;
 - Sami Virtanen</code></pre>
 <p>Amira commits her changes and pushes them to <em>her</em> repository on GitHub:</p>
-<div class="sourceCode" id="cb557"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb557-1"><a href="git-advanced.html#cb557-1"></a><span class="ex">amira</span>:~/zipf $ git commit -a -m <span class="st">&quot;Adding Sami as a contributor&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb558"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb558-1"><a href="git-advanced.html#cb558-1"></a><span class="ex">amira</span>:~/zipf $ git commit -a -m <span class="st">&quot;Adding Sami as a contributor&quot;</span></span></code></pre></div>
 <pre class="text"><code>[master 35fca86] Adding Sami as a contributor
  1 file changed, 1 insertion(+)</code></pre>
-<div class="sourceCode" id="cb559"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb559-1"><a href="git-advanced.html#cb559-1"></a><span class="ex">amira</span>:~/zipf $ git push origin master</span></code></pre></div>
+<div class="sourceCode" id="cb560"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb560-1"><a href="git-advanced.html#cb560-1"></a><span class="ex">amira</span>:~/zipf $ git push origin master</span></code></pre></div>
 <pre class="text"><code>Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 4 threads
@@ -1673,7 +1682,7 @@ but not in either of Sami’s repositories (local or remote).
 Since Sami has created a remote that points at Amira’s GitHub repository,
 though,
 they can easily pull those changes to their desktop:</p>
-<div class="sourceCode" id="cb561"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb561-1"><a href="git-advanced.html#cb561-1"></a><span class="ex">sami</span>:~/zipf $ git pull upstream master</span></code></pre></div>
+<div class="sourceCode" id="cb562"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb562-1"><a href="git-advanced.html#cb562-1"></a><span class="ex">sami</span>:~/zipf $ git pull upstream master</span></code></pre></div>
 <pre class="text"><code>From https://github.com/amira-khan/zipf
  * branch            master     -&gt; FETCH_HEAD
  * [new branch]      master     -&gt; upstream/master
@@ -1722,27 +1731,27 @@ which makes pull requests the review system we all wish journals actually had.</
 <p>To see this in action,
 suppose Sami wants to add their email address to <code>README.md</code>.
 They create a new branch and switch to it:</p>
-<div class="sourceCode" id="cb563"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb563-1"><a href="git-advanced.html#cb563-1"></a><span class="ex">sami</span>:~/zipf $ git checkout -b adding-email</span></code></pre></div>
+<div class="sourceCode" id="cb564"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb564-1"><a href="git-advanced.html#cb564-1"></a><span class="ex">sami</span>:~/zipf $ git checkout -b adding-email</span></code></pre></div>
 <pre class="text"><code>Switched to a new branch &#39;adding-email&#39;</code></pre>
 <p>then make a change and commit it:</p>
-<div class="sourceCode" id="cb565"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb565-1"><a href="git-advanced.html#cb565-1"></a><span class="ex">sami</span>:~/zipf $ git commit -a -m <span class="st">&quot;Adding my email address&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb566"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb566-1"><a href="git-advanced.html#cb566-1"></a><span class="ex">sami</span>:~/zipf $ git commit -a -m <span class="st">&quot;Adding my email address&quot;</span></span></code></pre></div>
 <pre class="text"><code>[adding-email 3e73dc0] Adding my email address
  1 file changed, 1 insertion(+), 1 deletion(-)</code></pre>
-<div class="sourceCode" id="cb567"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb567-1"><a href="git-advanced.html#cb567-1"></a><span class="ex">sami</span>:~/zipf $ git diff HEAD~1</span></code></pre></div>
-<div class="sourceCode" id="cb568"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb568-1"><a href="git-advanced.html#cb568-1"></a><span class="kw">diff --git a/README.md b/README.md</span></span>
-<span id="cb568-2"><a href="git-advanced.html#cb568-2"></a>index e8281ee..e1bf630 100644</span>
-<span id="cb568-3"><a href="git-advanced.html#cb568-3"></a><span class="dt">--- a/README.md</span></span>
-<span id="cb568-4"><a href="git-advanced.html#cb568-4"></a><span class="dt">+++ b/README.md</span></span>
-<span id="cb568-5"><a href="git-advanced.html#cb568-5"></a><span class="dt">@@ -6,4 +6,4 @@ and plot each word&#39;s rank versus its frequency.</span></span>
-<span id="cb568-6"><a href="git-advanced.html#cb568-6"></a> ## Contributors</span>
-<span id="cb568-7"><a href="git-advanced.html#cb568-7"></a> </span>
-<span id="cb568-8"><a href="git-advanced.html#cb568-8"></a> - Amira Khan &lt;amira@zipf.org&gt;</span>
-<span id="cb568-9"><a href="git-advanced.html#cb568-9"></a><span class="st">-- Sami Virtanen</span></span>
-<span id="cb568-10"><a href="git-advanced.html#cb568-10"></a><span class="va">+- Sami Virtanen &lt;sami@zipf.org&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb568"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb568-1"><a href="git-advanced.html#cb568-1"></a><span class="ex">sami</span>:~/zipf $ git diff HEAD~1</span></code></pre></div>
+<div class="sourceCode" id="cb569"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb569-1"><a href="git-advanced.html#cb569-1"></a><span class="kw">diff --git a/README.md b/README.md</span></span>
+<span id="cb569-2"><a href="git-advanced.html#cb569-2"></a>index e8281ee..e1bf630 100644</span>
+<span id="cb569-3"><a href="git-advanced.html#cb569-3"></a><span class="dt">--- a/README.md</span></span>
+<span id="cb569-4"><a href="git-advanced.html#cb569-4"></a><span class="dt">+++ b/README.md</span></span>
+<span id="cb569-5"><a href="git-advanced.html#cb569-5"></a><span class="dt">@@ -6,4 +6,4 @@ and plot each word&#39;s rank versus its frequency.</span></span>
+<span id="cb569-6"><a href="git-advanced.html#cb569-6"></a> ## Contributors</span>
+<span id="cb569-7"><a href="git-advanced.html#cb569-7"></a> </span>
+<span id="cb569-8"><a href="git-advanced.html#cb569-8"></a> - Amira Khan &lt;amira@zipf.org&gt;</span>
+<span id="cb569-9"><a href="git-advanced.html#cb569-9"></a><span class="st">-- Sami Virtanen</span></span>
+<span id="cb569-10"><a href="git-advanced.html#cb569-10"></a><span class="va">+- Sami Virtanen &lt;sami@zipf.org&gt;</span></span></code></pre></div>
 <p>Sami’s changes are only in their local repository.
 They cannot create a pull request until those changes are on GitHub,
 so they push their new branch to their repository on GitHub:</p>
-<div class="sourceCode" id="cb569"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb569-1"><a href="git-advanced.html#cb569-1"></a><span class="ex">sami</span>:~/zipf $ git push origin adding-email</span></code></pre></div>
+<div class="sourceCode" id="cb570"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb570-1"><a href="git-advanced.html#cb570-1"></a><span class="ex">sami</span>:~/zipf $ git push origin adding-email</span></code></pre></div>
 <pre class="text"><code>Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 4 threads
@@ -1909,7 +1918,7 @@ Figure 7.17: After a successful merge.
 <p>To get those changes from GitHub to her desktop repository,
 Amira uses <code>git pull</code>:</p>
 <div style="page-break-after: always;"></div>
-<div class="sourceCode" id="cb571"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb571-1"><a href="git-advanced.html#cb571-1"></a><span class="ex">amira</span>:~/zipf $ git pull origin master</span></code></pre></div>
+<div class="sourceCode" id="cb572"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb572-1"><a href="git-advanced.html#cb572-1"></a><span class="ex">amira</span>:~/zipf $ git pull origin master</span></code></pre></div>
 <pre class="text"><code>From https://github.com/amira-khan/zipf
  * branch            master     -&gt; FETCH_HEAD
 Updating 35fca86..a04e3b9
@@ -1922,10 +1931,10 @@ It’s a little clearer,
 though,
 if they also use <code>git pull</code> from their <code>upstream</code> repository (i.e., Amira’s repository)
 so that they’re sure to get any other changes that Amira may have merged:</p>
-<div class="sourceCode" id="cb573"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb573-1"><a href="git-advanced.html#cb573-1"></a><span class="ex">sami</span>:~/zipf $ git checkout master</span></code></pre></div>
+<div class="sourceCode" id="cb574"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb574-1"><a href="git-advanced.html#cb574-1"></a><span class="ex">sami</span>:~/zipf $ git checkout master</span></code></pre></div>
 <pre class="text"><code>Switched to branch &#39;master&#39;
 Your branch is up to date with &#39;origin/master&#39;.</code></pre>
-<div class="sourceCode" id="cb575"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb575-1"><a href="git-advanced.html#cb575-1"></a><span class="ex">sami</span>:~/zipf $ git pull upstream master</span></code></pre></div>
+<div class="sourceCode" id="cb576"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb576-1"><a href="git-advanced.html#cb576-1"></a><span class="ex">sami</span>:~/zipf $ git pull upstream master</span></code></pre></div>
 <pre class="text"><code>From https://github.com/amira-khan/zipf
  * branch            master     -&gt; FETCH_HEAD
 Updating 35fca86..a04e3b9
@@ -1935,7 +1944,7 @@ Fast-forward
 <p>Finally,
 Sami can push their changes back to the <code>master</code> branch
 in their own remote repository:</p>
-<div class="sourceCode" id="cb577"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb577-1"><a href="git-advanced.html#cb577-1"></a><span class="ex">sami</span>:~/zipf $ git push origin master</span></code></pre></div>
+<div class="sourceCode" id="cb578"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb578-1"><a href="git-advanced.html#cb578-1"></a><span class="ex">sami</span>:~/zipf $ git push origin master</span></code></pre></div>
 <pre class="text"><code>Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
 To https://github.com/sami-virtanen/zipf.git
    35fca86..a04e3b9  master -&gt; master</code></pre>

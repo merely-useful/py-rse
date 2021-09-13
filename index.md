@@ -7054,7 +7054,8 @@ $ cat motivation.txt
 
 2. `Documenting major milestones.`
 
-3. ```text
+3. 
+```text
 Sharing information about myself.
 Documenting major milestones.
 ```
