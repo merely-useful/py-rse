@@ -1600,7 +1600,7 @@ $ man wc
 > To quit, press <kbd>Q</kbd>.
 
 Manual pages contain a lot of information---often more than we really want.
-Figure \@ref(fig:bash-basics-nano)
+Figure \@ref(fig:bash-basics-manual)
 includes excerpts from the manual on your screen,
 and highlights a few of features useful for beginners.
 
@@ -2092,7 +2092,7 @@ We can now use `sort` to sort the lines in this file:
 \newpage
 
 ```bash
-$ sort lengths.txt -n
+$ sort -n lengths.txt
 ```
 
 ```text
@@ -2120,7 +2120,7 @@ We can therefore put the sorted list of lines in another temporary file called `
 using `>` once again:
 
 ```bash
-$ sort lengths.txt > sorted-lengths.txt
+$ sort -n lengths.txt > sorted-lengths.txt
 ```
 
 > **Redirecting to the Same File**
