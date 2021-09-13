@@ -1352,7 +1352,7 @@ $ cp docs backup
 ```
 
 ```text
-cp: docs is a directory (not copied).
+cp: analysis is a directory (not copied).
 ```
 
 If we really want to copy everything,
@@ -17821,7 +17821,7 @@ It is useful for creating the output directories for build rules.
 
 ### Exercise \@ref(automate-ex-print) {-}
 
-The build rule for generating the result for any book should now be:
+The build rule for generated the result for any book should now be:
 
 ```makefile
 ## results/%.csv : regenerate result for any book.
