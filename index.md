@@ -2,7 +2,7 @@
 title: "Research Software Engineering with Python"
 subtitle: "Building software that makes research possible"
 author: "Damien Irving, Kate Hertweck, Luke Johnston, Joel Ostblom, Charlotte Wickham, and Greg Wilson"
-date: "2021-08-04"
+date: "2021-09-13"
 documentclass: krantz
 bibliography: book.bib
 cover-image: "tugboats-800x600.jpg"
@@ -2050,7 +2050,7 @@ $ wc -l *.txt
 ```
 
 Which of these books is shortest?
-We can check by eye when there are only 16 files,
+We can check by eye when there are only seven files,
 but what if there were eight thousand?
 
 Our first step toward a solution is to run this command:
@@ -17821,7 +17821,7 @@ It is useful for creating the output directories for build rules.
 
 ### Exercise \@ref(automate-ex-print) {-}
 
-The build rule for generated the result for any book should now be:
+The build rule for generating the result for any book should now be:
 
 ```makefile
 ## results/%.csv : regenerate result for any book.
