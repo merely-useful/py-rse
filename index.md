@@ -2092,7 +2092,7 @@ We can now use `sort` to sort the lines in this file:
 \newpage
 
 ```bash
-$ sort -n lengths.txt
+$ sort lengths.txt -n
 ```
 
 ```text
@@ -2120,7 +2120,7 @@ We can therefore put the sorted list of lines in another temporary file called `
 using `>` once again:
 
 ```bash
-$ sort -n lengths.txt > sorted-lengths.txt
+$ sort lengths.txt > sorted-lengths.txt
 ```
 
 > **Redirecting to the Same File**
