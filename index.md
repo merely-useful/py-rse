@@ -1352,7 +1352,7 @@ $ cp docs backup
 ```
 
 ```text
-cp: analysis is a directory (not copied).
+cp: docs is a directory (not copied).
 ```
 
 If we really want to copy everything,
