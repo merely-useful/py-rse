@@ -12,7 +12,7 @@ This repository contains material for a semester-long course on computing skills
 Please see <https://merely-useful.tech/py-rse/> for the rendered version.
 
 For contributors, please follow our [contributing guidelines](.github/CONTRIBUTING.md)
-as well as our [Code of Conduct](CONDUCT.md).
+as well as our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ```
 @book{rse-py,
