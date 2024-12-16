@@ -9,7 +9,7 @@
 > -- A research professor speaking about an early version of this material.
 
 This repository contains material for a semester-long course on computing skills for researchers.
-Please see <https://merely-useful.tech/py-rse/> for the rendered version.
+Please see <http://third-bit.com/py-rse/> for the rendered version.
 
 For contributors, please follow our [contributing guidelines](.github/CONTRIBUTING.md)
 as well as our [Code of Conduct](CODE_OF_CONDUCT.md).
@@ -21,6 +21,6 @@ as well as our [Code of Conduct](CODE_OF_CONDUCT.md).
   publisher = {CRC Press/Taylor and Francis},
   year = {2021},
   isbn = {978-0367698348},
-  link = {https://merely-useful.tech/py-rse/}
+  link = {http://third-bit.com/py-rse/}
 }
 ```
